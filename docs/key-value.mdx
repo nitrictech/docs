@@ -1,0 +1,52 @@
+Most applications have a need to persist and retrieve state. Nitric strives to make this process as easy as possible, using a key/value API
+Key/Value collections provide a highly efficient way to store and retrieve application state based on unique keys. Nitric provides an interface to create, retrieve and query collections of key/value records, as well as mechanisms to define and deploy these collections to supported infrastructure.
+
+## Key concepts
+
+- **Keys**
+- **Values**
+- **Collections**
+- **Queries**
+
+## Create Collections
+
+Collections are a resource defined in a Nitric stack definition (`nitric.yaml`). At the root level of the stack file, add a `collectsions` key, which contains an array of collections.
+
+```yaml
+collections:
+  orders:
+    attributes:
+      pk: string
+      price: string
+      number: string
+      value: string
+    indexes:
+      unique: pk
+```
+
+## Defining Indexes
+
+### Composite Indexes
+
+Defining Composite Keys
+
+```yaml
+collections:
+  application:
+    attributes:
+      pk: string
+      sk: string
+      created: string
+      value: string
+    indexes:
+      composite: [ pk, sk ]
+```
+
+## Granting Access
+
+## Writing Values
+
+## Reading Values
+
+## Queries
+

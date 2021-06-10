@@ -1,0 +1,213 @@
+Nitric Functions are a type of [service](./overview) that offers a provider independent way to develop Function as a Service (FaaS) applications, which may be deployed to Serverless Runtimes such as AWS Lambda and Google CloudRun.
+
+## Create Functions
+
+Functions are created the same way as [services](./overview) but use specialized templates for easy scaffolding and maintenance.
+
+These templates are available in the Nitric [function templates](https://github.com/nitrictech/function-templates) repository. This can be retrieved with the Nitric CLI by using.
+
+`nitric templates:repos:add function`
+
+You can then add a function to your existing application using:
+
+`nitric add:service`
+
+The newly available function templates should be visible in the list to select from `function/<template-name>`.
+
+Currently available function templates are:
+
+* golang15
+* python37
+* nodejs12
+* nodets12
+* java11
+
+## Function Entrypoint
+
+Functions are simple programs that host a server to receive requests and return responses, via the Nitric Membrane.
+
+> see [Overview](./overview)
+
+The Nitric SDKs provide methods that accept a function and then run that function as a server. Find examples for available SDKs below:
+
+<CodeExamples
+	languages={[
+	{
+		label: "Typescript",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang={"node"}>
+
+```typescript
+// import the event client library
+import { faas } from '@nitric/sdk';
+
+interface HelloWorldRequest {
+	greeting?: string;
+	name: string;
+}
+
+async function handler(request: faas.NitricRequest<HelloWorldRequest>): string {
+	const { name, greeting = "Hello" } = request.getObject();
+
+	return `${greeing} ${name}!`;
+}
+
+faas.start(handler);
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.faas import start, Request, Response
+
+# Define a handler function which will accept incoming requests (HTTP, Events, etc.) 
+# process them and return a `Response`.
+def handler(request: Request) -> Response:
+    order = request.get_object()
+
+	// Processing the request...
+
+	// Return a successful response
+    return Response("It worked!")
+
+# Start the handler, this should occur as soon as possible, 
+# avoid any lengthy pre-processes or incoming requests could timeout while waiting.
+if __name__ == "__main__":
+    start(handler)
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+package com.example;
+
+import io.nitric.faas.Faas;
+import io.nitric.faas.NitricEvent;
+import io.nitric.faas.NitricFunction;
+import io.nitric.faas.NitricResponse;
+import io.nitric.api.event.Event;
+import java.util.Map;
+
+public class MyFirstFunction implements NitricFunction {
+
+	@Override
+	public NitricResponse handle(NitricEvent event) {
+		return NitricResponse.build("Hello World!");
+	}
+
+	public static void main(String[] args) {
+		new Faas().start(new MyFirstFunction());
+	}
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+package main
+
+import (
+	"github.com/nitrictech/go-sdk/faas"
+)
+
+// NitricFunction - Handles individual function requests (http, events, etc.)
+func NitricFunction(request *faas.NitricRequest) *faas.NitricResponse {
+	// Do something interesting...
+	return &faas.NitricResponse{
+		Status: 200,
+		Body:   []byte("Hello World!"),
+	}
+}
+
+func main() {
+	faas.Start(NitricFunction)
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using System;
+using Nitric.Api.Faas;
+
+namespace Nitric.Template.HelloWorld
+{
+    class HelloWorld : INitricFunction
+    {
+        public NitricResponse Handle(NitricEvent event){
+            return NitricResponse.Builder()
+                .Build("Hello World");
+        }
+        static void Main(string[] args)
+        {
+            new Faas().start(new HelloWorld());
+        }
+    }
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+namespace App\Function;
+
+use Nitric\V1\Faas\Faas;
+
+
+$handler = function(Request $request): Response
+{
+	return new Response("Nitric PHP 8 Template - Success");
+}
+
+Faas::start($handler);
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+## Function Requests & Responses
+
+Nitric functions provide a request and response model that is completely trigger agnostic. Whether receiving an event from a topic or an HTTP Request, you will always receive the same kind of request object and return the same kind of response object.
+
+The interfaces for each of these are idiomatic to the runtime they were written for, for more information and examples on using them
+checkout out our github [repository](https://github.com/nitrictech) for the SDK for your favorite language.
+
+## Running & Triggering Functions
+
+Functions can be configured and tested using the same mechanisms as other [services](./overview#running-services).

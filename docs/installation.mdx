@@ -1,0 +1,106 @@
+## Get the Nitric CLI
+
+The Nitric CLI assists with most tasks you'll perform while developing with Nitric. You can use the CLI to create new projects and services, run a project locally, build a project for one or more providers and deploy your projects to the cloud.
+
+### Step 1: Install CLI
+
+Install the CLI using one of the options below:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "NPM",
+		value: "npm"
+	},
+	{
+		label: "Windows",
+		value: "win"
+	}, {
+		label: "macOS",
+		value: "mac"
+	}, {
+		label: "Linux",
+		value: "linux"
+	}
+	]}
+	defaultLang="npm"
+>
+<CodeExample lang="npm">
+
+```bash
+npm install -g @nitric/cli;
+```
+
+</CodeExample>
+<CodeExample lang={"win"}>
+
+```bash
+TODO: Add windows binary install instructions
+```
+
+</CodeExample>
+<CodeExample lang={"mac"}>
+
+```bash
+curl -o- -L https://nitric.io/install | bash
+```
+
+</CodeExample>
+<CodeExample lang={"linux"}>
+
+```bash
+curl -o- -L https://nitric.io/install | bash
+```
+
+</CodeExample>
+</CodeExamples>
+
+### Step 2: Verify the installation
+
+```bash
+nitric --version
+```
+
+The output should be something like:
+
+```bash
+CLI tool for nitric applications
+
+VERSION
+  @nitric/cli/0.0.22 darwin-x64 node-v15.13.0
+
+USAGE
+  $ nitric [COMMAND]
+
+TOPICS
+  deploy     Plugin commands to deploy on supported providers. E.g. `$ nitric plugins:install @nitric/plugin-aws`
+  doctor     Checks environment for configuration and pre-requisite software
+  down       Plugin commands to tear down deployments on supported providers. E.g. `$ nitric plugins:install @nitric/plugin-aws`
+  make       Commands to make new projects and assets.
+  plugins    list installed plugins
+  templates  Commands for template management
+
+COMMANDS
+  build    Builds a project
+  doctor   Checks environment for configuration and pre-requisite software
+  help     display help for nitric
+  plugins  list installed plugins
+  run      Builds and runs a project
+```
+
+### Step 3: Verify dependencies
+
+The Nitric CLI depends on some other software for activities like building container images and deployment. You can verify that dependent software is installed using the `doctor` command. You'll be prompted to install any missing software.
+
+```bash
+nitric doctor
+```
+
+The output should be:
+
+```bash
+Installed?
+☁️  pulumi
+🐳 docker
+Good to go 👍 Enjoy using Nitric 🎉
+```
