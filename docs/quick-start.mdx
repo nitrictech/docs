@@ -1,4 +1,4 @@
-In this Quick Start guide you will be creating two nitric functions that communicate with each other via a topic, and are invoked via an API
+In this Quick Start guide you will be creating two nitric services that communicate with each other via a topic, and are invoked via an API
 
 
 ## Creating a Nitric Project
@@ -9,36 +9,37 @@ The Nitric CLI provides helper commands to create [projects](./projects) and the
 nitric make:project my-project
 ```
 
-You'll be asked whether you'd like to include an initial function in the project. Select the function runtime of your choice:
+You'll be asked whether you'd like to include an initial service in the project. Select the service runtime of your choice:
 
 ```bash
-? Include an example function? (Use arrow keys)
-❯ official/golang15 
-  official/python37 
-  official/nodejs12 
-  official/nodets12 
-  official/java11 
+? Include an example service? (Use arrow keys)
+❯ function/golang15 
+  function/python37 
+  function/nodejs12 
+  function/nodets12 
+  function/java11 
+  server/nextjs-typescript
   none 
 ```
 
-Next, you'll be asked for a name for the function. Once that's provided the project and initial function will be scaffolded, along with the `nitric.yaml` project configuration file.
+Next, you'll be asked for a name for the service. Once that's provided the project and initial service will be scaffolded, along with the `nitric.yaml` project configuration file.
 
 ```bash
-? Function name my-function
+? Service name my-service
 ✔ Making Project my-project
-✔ Making Function my-function
+✔ Making Service my-service
 
 cd ./my-project
 ```
 
-The initial `nitric.yaml` file should contain your project name and the initial function definition:
+The initial `nitric.yaml` file should contain your project name and the initial service definition:
 
 ```yaml
 name: my-first-project
-functions:
-  - name: my-first-function
-    path: my-first-function
-    runtime: official/nodets12
+services:
+  my-service:
+    path: my-service
+    runtime: function/nodets12
 ```
 
 ## Test it out
@@ -48,23 +49,23 @@ You can run and test your project locally using the Nitric CLI `run` command:
 ```bash
 nitric run
 ```
-> Your initial run may take some time to build your functions, subsequent runs will be faster once dependencies have been cached.
+> Your initial run may take some time to build your services, subsequent runs will be faster once dependencies have been cached.
 
 Once built and running you should see the following output
 ```bash
 ✔ Staging stack hello-nitric
-✔ Building Functions 
+✔ Building Services 
 ✔ Creating docker network
 ✔ Creating Volume: hello-nitric-vol
-✔ Running Functions
-Function					Port  
-my-first-function			<port> 
-Functions Running press ctrl-C quit...
+✔ Running Services
+Service					Port  
+my-service			       <port> 
+Services Running press ctrl-C quit...
 ```
 
-Try invoking your function
+Try invoking your service
 
-> Functions are allocated ports on your local machine. Substitute the port number below with the port provided in the output of the `run` command.
+> Services are allocated ports on your local machine. Substitute the port number below with the port provided in the output of the `run` command.
 
 ```bash
 	curl http://localhost:<port>
