@@ -1,0 +1,64 @@
+Nitric services are a provider independent compute offering, that allows you to write code in
+a variety of popular languages and frameworks without the need to worry about servers, scaling,
+integrating with event/topic services, or managing the underlying runtime software.
+
+## How it works
+
+1. Create a new service using the Nitric CLI in a language/runtime of your choice
+2. Write your service, which handles requests and returns responses
+3. Run your application locally, Nitric will package each of your services into a container and wire them together, so they can access resources such as topics, queues, storage, etc.
+4. Use the build and deploy commands to build your services for a provider and deploy to that provider for testing, staging or production release.
+
+## Create Services
+
+Services are defined in a project's `nitric.yaml` file and code and other files are stored in a subdirectory of the project. The easiest way to generate a new service is with the `add:service` CLI command.
+
+This command will guide you through choosing the runtime/language and name for your service, then scaffold it and update the `nitric.yaml` file.
+
+```bash
+nitric add:service
+```
+
+## Service Anatomy
+
+Nitric services are packaged into Docker containers, along with the Nitric membrane.
+This insulates your services from cloud and infrastructure concerns.
+
+<img
+  src="../assets/img/membrane-architecture.svg"
+  height="500"
+  alt="Service Anatomy"
+/>
+
+## Running Services
+
+The Nitric CLI provides the [`run` command](./nitric-cli) specifically for running applications on a local machine. This command builds your application into containers, sets up a simulated provider environment and executes the application.
+
+From the root of your project run the following command:
+
+```bash
+nitric run
+```
+
+## Triggering Services
+
+Services can run in response to various triggers including Requests, [Events](./events) and [Schedules](./schedules).
+
+These are wired up using the `triggers` property of the service in the nitric.yaml definition.
+
+Example triggering a service using a Nitric Topic:
+
+```yaml
+name: my-nitric-app
+
+services:
+	example:
+		path: example
+		runtime: function/golang15
+		triggers:
+			topics:
+				- exampleTopic
+
+topics:
+	exampleTopic: {}
+```

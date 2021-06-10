@@ -1,0 +1,255 @@
+Asynchronous messages (events) are one of the primary ways Microservices and Functions communicate. Nitric provides an interface to message-oriented middleware and message brokers to facilitate low-latency, highly available, "atleast once" message delivery.
+
+<img
+  src="../assets/img/topics-overview.svg"
+  height="334"
+  alt="topic overview diagram"
+/>
+
+## Key concepts
+
+- **Topics** are a named resource and target for publishing events. They typically define the _subject_ of the messages being published and subscribed.
+- **Events** are a combination of metadata and a payload, produced by publishers and delivered to subscribers. Typically, these take the form of a JSON document with a standard format.
+- **Publishers** produce events by sending them to a topic. Publishers are unaware of the topic's subscribers, providing strong decoupling.
+- **Subscriptions** define the subscribers of a particular topic. Each subscription defines a subscriber, and the topic they subscribe to.
+- **Subscribers** are consumers of events, typically in the form of a request that must handled.
+
+## Create Topics
+
+Topics are a resource defined in a Nitric Stack file, such as `nitric.yaml`. At the root level of the stack file, add a `topics` key, which contains an array of topics.
+
+```yaml
+topics:
+	# A Topic with default options
+	my-topic: {}
+```
+
+### Syntax
+
+To define a topic in your Nitric Stack, use the following syntax:
+
+**_YAML_**
+
+```yaml
+topics:
+	topicName: Properties
+```
+
+**_Properties_**
+
+> Additional configuration for topics will be available in future
+> Have a property or customization option that you need? Let us know at our [github](https://github.com/nitrictech/cli)
+
+## Setup Subscribers
+
+Resources that can subscribe to a topic provide a `triggers` property defining their triggers. Adding a new triggers object under the `topic` keyword, followed by the name of the topic will set up a subscription between the resource and the topic. In the case of services, this causes the topic to act as a trigger for the service.
+
+### Syntax
+
+The following is an example subscribing a `Service` to a `Topic`.
+
+```yaml
+services:
+	my-subscribed-function:
+		path: mysubscribedfunction
+		runtime: function/python37
+		triggers:
+			topics:
+				- my-first-topic
+```
+
+## Supported Subscriber Resources
+
+The following Nitric Stack resource support the `triggers` property, and the ability to subscribe to topics.
+
+- [Services](./services/overview.md)
+
+## Publish Events
+
+Once a topic has been defined, services can publish to it using one of the Nitric SDKs.
+
+<CodeExamples>
+<CodeExample lang={"node"}>
+
+```typescript
+// import the event client library
+import { faas, EventClient } from "@nitric/sdk";
+
+faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
+  // Create a new instance of the event client
+  const eventClient = new EventClient();
+
+  // Publish an event to the topic you created above
+  // Note: The event payload will be serialized automatically.
+  eventClient.publish("my-first-topic", {
+    payload: {
+      amazing: "thing happened!",
+    },
+  });
+
+  // return success
+  return "Successfully published message";
+});
+```
+
+</CodeExample>
+<CodeExample lang={"python"}>
+
+```python
+from nitric.faas import start, Request, Response
+# Import the Event client library
+from nitric.api import EventClient
+
+
+def handler(request: Request) -> Response:
+	# Create a new Event Client with default settings
+	eventClient = EventClient()
+
+	# Publish an event to the topic you created above
+	# Note: The event payload will be serialized automatically.
+	eventClient.publish("my-first-topic", payload={amazing: "thing happened!"})
+
+    return Response("Successfully published message")
+
+
+if __name__ == "__main__":
+    start(handler)
+```
+
+</CodeExample>
+
+<CodeExample lang={"java"}>
+
+```java
+package com.example;
+
+import io.nitric.faas.Faas;
+import io.nitric.faas.NitricEvent;
+import io.nitric.faas.NitricFunction;
+import io.nitric.faas.NitricResponse;
+import io.nitric.faas.NitricResponse;
+import io.nitric.api.event.EventClient;
+import io.nitric.api.event.Event;
+import java.util.Map;
+
+public class MyFirstFunction implements NitricFunction {
+
+	@Override
+	public NitricResponse handle(NitricEvent event) {
+			var eventClient = EventClient
+				.newBuilder()
+				.build();
+
+			eventClient.publish("my-first-topic", Event.build(Map.of(
+				"amazing", "thing happend!"
+			)));
+
+		return NitricResponse.build("Successfully published message");
+	}
+
+	public static void main(String[] args) {
+		new Faas().start(new MyFirstFunction());
+	}
+
+}
+```
+
+</CodeExample>
+<CodeExample lang={"go"}>
+
+```go
+package main
+
+import (
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/api"
+	"github.com/nitrictech/go-sdk/eventclient"
+)
+
+// NitricFunction - Handles individual function requests (http, events, etc.)
+func NitricFunction(request *faas.NitricRequest) *faas.NitricResponse {
+
+	client, err := api.New()
+
+	if err != nil {
+		// TODO handle ze error...
+	}
+
+	client.Event().Publish(&eventclient.PublishOptions{
+		Topic: "my-first-topic",
+		Event: &eventclient.Event{
+			Payload: map[string]interface{}{
+				"amazing": "thing happened!",
+			},
+		},
+	})
+	// Do something interesting...
+	return &faas.NitricResponse{
+		Status: 200,
+		Body:   []byte("Successfully published message"),
+	}
+}
+
+func main() {
+	faas.Start(NitricFunction)
+}
+```
+
+</CodeExample>
+
+<CodeExample lang={"php"}>
+
+```php
+<?php
+namespace App\Function;
+
+use Nitric\Faas\Faas;
+use Nitric\Api\EventClient;
+
+
+$handler = function(Request $request): Response
+{
+	// Create a new Event Client with default settings
+	$eventClient = new EventClient();
+
+	// Publish an event to the topic you created above
+	// Note: The event payload will be serialized automatically.
+	$eventClient->publish(
+		topicName: "my-first-topic",
+		payload: [
+			"amazing" => "thing happened!",
+		]);
+
+	return new Response();
+}
+
+Faas::start($handler);
+```
+
+</CodeExample>
+
+<CodeExample lang={"c-sharp"}>
+
+```csharp
+using System;
+using Nitric.Api.Faas;
+
+namespace Com.Example.Function
+{
+    class NitricFunction : INitricFunction
+    {
+        public NitricResponse Handle(NitricEvent event){
+            return NitricResponse.Builder()
+                .Build("Hello World");
+        }
+        static void Main(string[] args)
+        {
+            new Faas().start(new NitricFunction());
+        }
+    }
+}
+```
+
+</CodeExample>
+
+</CodeExamples>

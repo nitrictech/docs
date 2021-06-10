@@ -1,0 +1,71 @@
+In this Quick Start guide you will be creating two nitric functions that communicate with each other via a topic, and are invoked via an API
+
+
+## Creating a Nitric Project
+
+The Nitric CLI provides helper commands to create [projects](./projects) and the resources that define them. Using the `make:project` command, will guide you through the creation of an initial Nitric project.
+
+```bash
+nitric make:project my-project
+```
+
+You'll be asked whether you'd like to include an initial function in the project. Select the function runtime of your choice:
+
+```bash
+? Include an example function? (Use arrow keys)
+❯ official/golang15 
+  official/python37 
+  official/nodejs12 
+  official/nodets12 
+  official/java11 
+  none 
+```
+
+Next, you'll be asked for a name for the function. Once that's provided the project and initial function will be scaffolded, along with the `nitric.yaml` project configuration file.
+
+```bash
+? Function name my-function
+✔ Making Project my-project
+✔ Making Function my-function
+
+cd ./my-project
+```
+
+The initial `nitric.yaml` file should contain your project name and the initial function definition:
+
+```yaml
+name: my-first-project
+functions:
+  - name: my-first-function
+    path: my-first-function
+    runtime: official/nodets12
+```
+
+## Test it out
+
+You can run and test your project locally using the Nitric CLI `run` command:
+
+```bash
+nitric run
+```
+> Your initial run may take some time to build your functions, subsequent runs will be faster once dependencies have been cached.
+
+Once built and running you should see the following output
+```bash
+✔ Staging stack hello-nitric
+✔ Building Functions 
+✔ Creating docker network
+✔ Creating Volume: hello-nitric-vol
+✔ Running Functions
+Function					Port  
+my-first-function			<port> 
+Functions Running press ctrl-C quit...
+```
+
+Try invoking your function
+
+> Functions are allocated ports on your local machine. Substitute the port number below with the port provided in the output of the `run` command.
+
+```bash
+	curl http://localhost:<port>
+```

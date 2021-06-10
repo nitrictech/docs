@@ -1,0 +1,424 @@
+Nitric provides resources and SDK clients for secure object storage. 
+This is typically used to read and write items such as static website content, images, files and other binary data.
+
+### Key concepts
+
+- **Buckets** are named data stores which contain stored objects.
+- **Accessors** is the name used for readers and writers of object data from buckets.
+
+## Defining Buckets
+
+Buckets are a top-level resource defined in the stack definition. Before reading or writing objects you can add a bucket to the `nitric.yaml` or equivalent:
+
+```yaml
+buckets:
+	my-bucket: {}
+```
+
+## Setup Accessors
+> Coming Soon: The capability to lock down readers/writers of buckets within a stack
+
+## Usage
+
+Using one of the provided Nitric SDKs for your language is the easiest way to work with buckets.
+
+## Writing objects
+
+To write an object use a `StorageClient` to `write` an object to a bucket:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { StorageClient } from "@nitric/sdk";
+
+// Construct a new storage client with default settings
+const storageClient = new StorageClient();
+
+// Example byte array
+const content = new Uint8Array();
+
+// Write a byte array to a bucket
+storageClient.write("my-bucket", "path/to/item", content)
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.api import StorageClient
+
+# Construct a new storage client with default settings
+storage_client = StorageClient()
+
+# Example byte array
+content = b"example content"
+
+# Write a byte array to a bucket
+await storage_client.write("my-bucket", "path/to/item", content);
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+import io.nitric.api.storage.StorageClient;
+...
+
+var object = StorageClient.newBuilder()
+	.bucket("my-bucket")
+	.build()
+	.write("/path/to/item", "Hello World!".getBytes("utf-8"));
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+import (
+    "github.com/nitrictech/go-sdk/api"
+    "github.com/nitrictech/go-sdk/storageclient"
+)
+
+...
+
+_, err := client.Storage().Write(&storageclient.WriteOptions{
+	Bucket: "my-bucket",
+	Key: "path/to/item",
+	Data: []byte("Hello World!")
+})
+
+if err != nil {
+	// Handle error
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+use Nitric\Api\StorageClient;
+
+$client = new StorageClient();
+
+// Data to write
+$data = ...
+
+// Returns bytes as string
+$client->write("my-bucket", "path/to/item", $data);
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using Nitric.Api.Storage;
+
+...
+
+// []byte data to write
+var data = ...
+
+new StorageClient.Builder()
+	.BucketName("my-bucket")
+	.Build()
+	.Write("path/to/item", data)
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+### Reading objects
+
+To retrieve an object use a `StorageClient` to `read` an object from a bucket:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { StorageClient } from "@nitric/sdk";
+
+// Construct a new storage client with default settings
+const storageClient = new StorageClient();
+
+// Read a byte array from a bucket
+const content = storageClient.read("my-bucket", "path/to/item");
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.api import StorageClient
+
+# Construct a new storage client with default settings
+storage_client = StorageClient()
+
+# Read a byte array from a bucket
+content = storage_client.read("my-bucket", "path/to/item")
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+import io.nitric.api.storage.StorageClient;
+
+...
+
+var object = StorageClient.newBuilder()
+	.bucket("my-bucket")
+	.build()
+	.read("/path/to/item");
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+import (
+    "github.com/nitrictech/go-sdk/api"
+    "github.com/nitrictech/go-sdk/storageclient"
+)
+
+...
+
+result, err := client.Storage().Read(&storageclient.ReadOptions{
+	Bucket: "my-bucket",
+	Key: "path/to/item",
+})
+
+if err != nil {
+	// Handle error
+}
+
+// Read the data
+data := result.Data
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+use Nitric\Api\StorageClient;
+
+$client = new StorageClient();
+
+// Returns bytes as string
+$bytes = $client->read("my-bucket", "path/to/item");
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using Nitric.Api.Storage;
+
+...
+
+var bytes = new StorageClient.Builder()
+	.BucketName("my-bucket")
+	.Build()
+	.Read("path/to/item")
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+### Deleting objects
+
+To delete an object use a `StorageClient` to `delete` an object from a bucket:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { StorageClient } from "@nitric/sdk";
+
+// Construct a new storage client with default settings
+const storageClient = new StorageClient();
+
+// Read a byte array from a bucket
+const content = storageClient.delete("my-bucket", "path/to/item");
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.api import StorageClient
+
+# Construct a new storage client with default settings
+storage_client = StorageClient()
+
+# Read a byte array from a bucket
+content = storage_client.delete("my-bucket", "path/to/item")
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+import io.nitric.api.storage.StorageClient;
+
+...
+
+var object = StorageClient.newBuilder()
+	.bucket("my-bucket")
+	.build()
+	.delete("/path/to/item");
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+import (
+    "github.com/nitrictech/go-sdk/api"
+    "github.com/nitrictech/go-sdk/storageclient"
+)
+
+...
+
+_, err := client.Storage().Delete(&storageclient.DeleteOptions{
+	Bucket: "my-bucket",
+	Key: "path/to/item",
+})
+
+if err != nil {
+	// Handle error
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+use Nitric\Api\StorageClient;
+
+$client = new StorageClient();
+
+$client->delete("my-bucket", "path/to/item");
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using Nitric.Api.Storage;
+
+...
+
+new StorageClient.Builder()
+	.BucketName("my-bucket")
+	.Build()
+	.Delete("path/to/item")
+```
+
+</CodeExample>
+
+</CodeExamples>
