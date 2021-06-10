@@ -1,7 +1,11 @@
 Nitric Queues are designed to facilitate **_pull_** based workloads, where tasks are sent by producers and received by consumers. Both ends of the transaction are requests, i.e. the consumer asks the queue for more tasks, the queue doesn't push tasks to the consumers.
 This flow is useful in situations such as batch processing or when consumers aren't always available.
 
-<img height="134" src="/img/queues-overview.svg" alt="queue overview diagram" />
+<img
+  height="134"
+  src="../assets/img/queues-overview.svg"
+  alt="queue overview diagram"
+/>
 
 ## Key concepts
 
@@ -71,15 +75,15 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 <CodeExample lang="node">
 
 ```typescript
-import { QueueClient } from '@nitric/sdk';
+import { QueueClient } from "@nitric/sdk";
 
 // Construct a new queue client with default settings
 const queueClient = new QueueClient();
 
 // Publish a task to a queue
 await queueClient.send(
-  'my-queue',
-  new Task((payload = { example: 'payload' }))
+  "my-queue",
+  new Task((payload = { example: "payload" }))
 );
 ```
 
@@ -117,7 +121,7 @@ QueueClient.newBuilder()
 			.id("1234")
 			.payloadType("test-payload")
 			.payload(Map.of(
-				"example", "payload" 
+				"example", "payload"
 			))
 			.build()
 	);
@@ -224,19 +228,19 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 <CodeExample lang="node">
 
 ```typescript
-import { QueueClient } from '@nitric/sdk';
+import { QueueClient } from "@nitric/sdk";
 
 // Construct a new queue client with default settings
 const queueClient = new QueueClient();
 
 // Receive tasks from the queue
-const tasks = await queueClient.receive('my-queue', 5);
+const tasks = await queueClient.receive("my-queue", 5);
 
 tasks.forEach((task) => {
   // Work on a task...
 
   // Complete the task
-  queueClient.complete('my-queue', task);
+  queueClient.complete("my-queue", task);
 });
 ```
 

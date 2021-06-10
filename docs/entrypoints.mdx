@@ -1,10 +1,15 @@
 Nitric allows you to map a number of resources that can be hosted together and a single frontend/origin.
 
 ### How it works
+
 Nitric entrypoints can be mapped to a number of managed services in the cloud in order to facilitate single origin application routing
 and unlock CDN capability.
 
-<img src="/img/nitric-entrypoints.svg" height="500" alt="entrypoint overview diagram" />
+<img
+  src="../assets/img/nitric-entrypoints.svg"
+  height="500"
+  alt="entrypoint overview diagram"
+/>
 
 ### Adding a new Entrypoint
 
@@ -17,15 +22,16 @@ For example: `nitric add:entrypoint / site:example`
 This will add a new default entrypoint that references a site in your nitric yaml stack.\
 
 Supported resource types are:
-* [Functions](./functions)
-* [Sites](./sites)
-* [Apis](./apis)
+
+- [Functions](./functions)
+- [Sites](./sites)
+- [Apis](./apis)
 
 > When defining entrypoints a default entrypoint `'/'` **MUST** be specified
 
 ### APIs as entrypoints
-When adding an API as a non-default entrypoint it is important that the leading part of the entrypoint path **MUST** match the leading part of the API path.
 
+When adding an API as a non-default entrypoint it is important that the leading part of the entrypoint path **MUST** match the leading part of the API path.
 
 <CodeExamples
 languages={[
@@ -74,9 +80,9 @@ apis:
           x-nitric-target:
             name: example
             type: function
-          description: Says random quote             
+          description: Says random quote
           responses:
-            '200':
+            "200":
               description: Successful response
 
 # Define nitric application entrypoints here
@@ -84,7 +90,7 @@ entrypoints:
   /:
     name: app
     type: site
-	# 👍 Matches the base path of the above API
+  # 👍 Matches the base path of the above API
   /exampleapi/:
     name: exampleapi
     type: api
@@ -125,9 +131,9 @@ apis:
           x-nitric-target:
             name: example
             type: function
-          description: Says random quote             
+          description: Says random quote
           responses:
-            '200':
+            "200":
               description: Successful response
 
 # Define nitric application entrypoints here
@@ -135,7 +141,7 @@ entrypoints:
   /:
     name: app
     type: site
-	# 👎 Doesn't match the base path of the above API
+  # 👎 Doesn't match the base path of the above API
   /myapi/:
     name: exampleapi
     type: api

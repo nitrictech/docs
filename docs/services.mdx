@@ -1,5 +1,5 @@
 Nitric services are a provider independent compute offering, that allows you to write code in
-a variety of popular languages and frameworks without the need to worry about servers, scaling, 
+a variety of popular languages and frameworks without the need to worry about servers, scaling,
 integrating with event/topic services, or managing the underlying runtime software.
 
 ## How it works
@@ -20,10 +20,15 @@ nitric add:service
 ```
 
 ## Service Anatomy
+
 Nitric services are packaged into Docker containers, along with the Nitric membrane.
 This insulates your services from cloud and infrastructure concerns.
 
-<img src="/img/membrane-architecture.svg" height="500" alt="Service Anatomy" />
+<img
+  src="../assets/img/membrane-architecture.svg"
+  height="500"
+  alt="Service Anatomy"
+/>
 
 ## Running Services
 
@@ -42,6 +47,7 @@ Services can run in response to various triggers including Requests, [Events](./
 These are wired up using the `triggers` property of the service in the nitric.yaml definition.
 
 Example triggering a service using a Nitric Topic:
+
 ```yaml
 name: my-nitric-app
 

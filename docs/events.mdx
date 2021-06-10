@@ -1,6 +1,10 @@
 Asynchronous messages (events) are one of the primary ways Microservices and Functions communicate. Nitric provides an interface to message-oriented middleware and message brokers to facilitate low-latency, highly available, "atleast once" message delivery.
 
-<img src="/img/topics-overview.svg" height="334" alt="topic overview diagram" />
+<img
+  src="../assets/img/topics-overview.svg"
+  height="334"
+  alt="topic overview diagram"
+/>
 
 ## Key concepts
 
@@ -69,25 +73,23 @@ Once a topic has been defined, services can publish to it using one of the Nitri
 
 ```typescript
 // import the event client library
-import { faas, EventClient } from '@nitric/sdk';
+import { faas, EventClient } from "@nitric/sdk";
 
-faas.start(
-  async (_: faas.NitricRequest<string>): Promise<string> => {
-    // Create a new instance of the event client
-    const eventClient = new EventClient();
+faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
+  // Create a new instance of the event client
+  const eventClient = new EventClient();
 
-    // Publish an event to the topic you created above
-    // Note: The event payload will be serialized automatically.
-    eventClient.publish('my-first-topic', {
-      payload: {
-        amazing: 'thing happened!',
-      },
-    });
+  // Publish an event to the topic you created above
+  // Note: The event payload will be serialized automatically.
+  eventClient.publish("my-first-topic", {
+    payload: {
+      amazing: "thing happened!",
+    },
+  });
 
-    // return success
-    return 'Successfully published message';
-  }
-);
+  // return success
+  return "Successfully published message";
+});
 ```
 
 </CodeExample>
@@ -251,5 +253,3 @@ namespace Com.Example.Function
 </CodeExample>
 
 </CodeExamples>
-
-
