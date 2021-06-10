@@ -1,6 +1,6 @@
-<div style="text-align: center;">
+<p align="center">
     <img src="./assets/img/nitric-logo.svg">
-</div>
+</p>
 
 ## The official Nitric documentation repo
 
