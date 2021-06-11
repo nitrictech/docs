@@ -1,6 +1,5 @@
 In this Quick Start guide you will be creating two nitric services that communicate with each other via a topic, and are invoked via an API
 
-
 ## Creating a Nitric Project
 
 The Nitric CLI provides helper commands to create [projects](./projects) and the resources that define them. Using the `make:project` command, will guide you through the creation of an initial Nitric project.
@@ -13,19 +12,19 @@ You'll be asked whether you'd like to include an initial service in the project.
 
 ```bash
 ? Include an example service? (Use arrow keys)
-❯ function/golang15 
-  function/python37 
-  function/nodejs12 
-  function/nodets12 
-  function/java11 
+❯ function/golang15
+  function/python37
+  function/nodejs12
+  function/nodets12
+  function/java11
   server/nextjs-typescript
-  none 
+  none
 ```
 
 Next, you'll be asked for a name for the service. Once that's provided the project and initial service will be scaffolded, along with the `nitric.yaml` project configuration file.
 
 ```bash
-? Service name my-service
+? Name for the example service? my-service
 ✔ Making Project my-project
 ✔ Making Service my-service
 
@@ -35,7 +34,7 @@ cd ./my-project
 The initial `nitric.yaml` file should contain your project name and the initial service definition:
 
 ```yaml
-name: my-first-project
+name: my-project
 services:
   my-service:
     path: my-service
@@ -49,17 +48,20 @@ You can run and test your project locally using the Nitric CLI `run` command:
 ```bash
 nitric run
 ```
+
 > Your initial run may take some time to build your services, subsequent runs will be faster once dependencies have been cached.
 
 Once built and running you should see the following output
+
 ```bash
-✔ Staging stack hello-nitric
-✔ Building Services 
+✔ Building Services
 ✔ Creating docker network
-✔ Creating Volume: hello-nitric-vol
+✔ Creating Volume: my-project-vol
 ✔ Running Services
-Service					Port  
-my-service			       <port> 
+✔ Starting API Gateways
+✔ Starting Entrypoints
+Service    Port
+my-service 49152
 Services Running press ctrl-C quit...
 ```
 
