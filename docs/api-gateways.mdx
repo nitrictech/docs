@@ -1,11 +1,12 @@
-Nitric provides a standard way to define an API via the [Open API 3.0](https://swagger.io/specification/) specification to 
-simplify the deployment of a managed API Gateway for your Nitric services, unlocking the benefits of those managed API Gateway services such as monitoring, scale, authentication, tracing, etc.
+Nitric's API Gateway resource provides a convenient option for configuring and deploying RESTful APIs in front of your application's [Service](./services)/[Functions](./services-functions). These APIs are then deployed to the managed API Gateway services of each supported cloud provider to ensure their reliability, scalability and security.
 
-By default, services (such as serverless functions) in a Nitric application aren't exposed publicly when they're deployed to a cloud provider. Instead, they can to be exposed via an [entrypoint](./entrypoints) and/or an API.
+APIs are defined using [Open API 3.0](https://swagger.io/specification/) specifications, ensuring they conform to a standard shared by many providers.
 
-## How does it work
+To improve application security, the [Services](./services) in a Nitric application aren't exposed publicly when they're deployed to a cloud provider. Instead, they can to be exposed via an [Entrypoint](./entrypoints) an API or both. When combining related [Functions](./services-functions) into a cohesive API, an API Gateway is often the best choice to aggregate these services, secure them and map their behavior onto API paths and HTTP Methods.
 
-Nitric uses the standard Open API spec with well-defined extensions `x-nitric-target`, that are defined at the operation level of the spec.
+## How it works
+
+Nitric uses the standard Open API spec with well-defined `x-nitric-target` extensions, that are included at the operation level of the spec.
 
 Example extension definition:
 ```yaml
@@ -14,11 +15,11 @@ x-nitric-target:
 	type: service
 ```
 
-> Currently, only [services](./services) are supported as targets for Nitric APIs
+> Currently, only [Services](./services) _(including Functions)_ are supported as targets for Nitric APIs
 
 ## Defining an API
 
-To add an API to an existing application, create or update the `apis` section of the project `nitric.yaml`. The following is an example of a simple API for a GET request to an example function.
+To add an API to an existing application, create or update the `apis` section of the project stack definition, e.g. `nitric.yaml`. The following is an example of a simple API for a GET request to an `example` function.
 
 ```yaml
 services:
@@ -28,24 +29,24 @@ services:
 
 apis:
 	example:
-    openapi: 3.0.0
-    info:
-      version: 1.0.0
-      title: Sample API
-      description: A sample API to illustrate OpenAPI concepts
-    paths:
-      /exampleapi/example:
-        get:
-          operationId: quote
-          # 👀 Note the use of extension here to target the
-          # service defined above
-          x-nitric-target:
-            name: example
-            type: service
-          description: Says random quote             
-          responses:
-            '200':
-              description: Successful response
+        openapi: 3.0.0
+        info:
+          version: 1.0.0
+          title: Sample API
+          description: A sample API to illustrate OpenAPI concepts
+        paths:
+          /exampleapi/example:
+            get:
+              operationId: quote
+              # 👀 Note the use of extension here to target the
+              # service defined above
+              x-nitric-target:
+                name: example
+                type: service
+              description: Says random quote
+              responses:
+                '200':
+                  description: Successful response
 ```
 
 ### Binding API operations to services
@@ -64,7 +65,9 @@ The x-nitric-target extension consists of the following properties:
 
 The easiest way to test your API is running it locally.
 
-`nitric run`
+```bash
+nitric run
+```
 
 In the output you should see the local port mapping for your configured APIs:
 ```
