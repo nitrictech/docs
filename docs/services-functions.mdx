@@ -1,32 +1,26 @@
-Nitric Functions are a type of [service](./overview) that offers a provider independent way to develop Function as a Service (FaaS) applications, which may be deployed to Serverless Runtimes such as AWS Lambda and Google CloudRun.
+Nitric Functions are a type of [Service](./overview) that offers a portable way to develop function as a service (FaaS) applications, which may be deployed to Serverless Runtimes such as AWS Lambda and Google CloudRun. This provides a convenient way to write applications based on or including Serverless Functions, with familiar languages like TypeScript, JavaScript, Python, Go, Java, C# and PHP, without concerns for the underlying servers, scaling, underlying runtime software, containerization or deployment.
+
+This development model is analogous to existing function as a service offerings such as AWS Lambda, Azure Functions, Google Cloud Functions and more, without programming to the proprietary interfaces of those platforms. Nitric Functions are built and deployed as Containers, with the [Nitric Membrane](./nitric-membrane) handling i/o standardization to ensure portability across cloud providers or container runtimes.
 
 ## Create Functions
 
-Functions are created the same way as [services](./overview) but use specialized templates for easy scaffolding and maintenance.
+Functions are created the same way as [Services](./overview) but use specialized [Templates](./services-templates) for easy scaffolding and maintenance. Before creating a Function, you'll need to install the function template repository:
 
-These templates are available in the Nitric [function templates](https://github.com/nitrictech/function-templates) repository. This can be retrieved with the Nitric CLI by using.
+```bash
+nitric templates:repos:add function
+```
 
-`nitric templates:repos:add function`
+You can then add a function to your existing application using the `make:service` command, which will guide you through choosing the template and name for your service:
 
-You can then add a function to your existing application using:
-
-`nitric add:service`
-
-The newly available function templates should be visible in the list to select from `function/<template-name>`.
-
-Currently available function templates are:
-
-* golang15
-* python37
-* nodejs12
-* nodets12
-* java11
+```
+nitric make:service
+```
 
 ## Function Entrypoint
 
 Functions are simple programs that host a server to receive requests and return responses, via the Nitric Membrane.
 
-> see [Overview](./overview)
+> see [Service Anatomy](./services#service-anatomy)
 
 The Nitric SDKs provide methods that accept a function and then run that function as a server. Find examples for available SDKs below:
 
@@ -210,4 +204,4 @@ checkout out our github [repository](https://github.com/nitrictech) for the SDK 
 
 ## Running & Triggering Functions
 
-Functions can be configured and tested using the same mechanisms as other [services](./overview#running-services).
+Functions can be configured and tested using the same mechanisms as other [Services](./services#running-services).
