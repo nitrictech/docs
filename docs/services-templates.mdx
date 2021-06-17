@@ -1,0 +1,61 @@
+Nitric Templates provide standard scaffolding and build processes for [Services](./services) and [Functions](./services-functions). When you add a new Service/Function to your project you'll be asked which template to build it from, the template contents will be copied into the src directory for your new service to be used as a starting point for development.
+
+Later, when using the `run`, `build` or `deploy` commands with the Nitric CLI, the template will be referenced again to determine how your Service/Function should be built into a container and configured to execute with the [Nitric Membrane](./nitric-membrane). For this reason, every service you add to a Nitric projects will maintain a reference to the template it's based on.
+
+## Template Repositories
+
+Templates are retrieved from `repos`, which are Git repositories containing one or more templates, along with a configuration file describing the templates within the repo. The Nitric team currently provides two official template repos [server](#server-templates) and [function](#function-templates), which contain general Service/Server/Framework and Function-as-a-Service templates respectively. In fact, when we reference `Functions` in other areas of the documentation, what we're really referring to are Services based on the Templates in the Functions template repo, which are all designed to operate as Serverless Functions with a standard programming model.
+
+### Installing Repos
+
+Prior to adding Services/Functions to a Nitric project you'll need to have at least one Template Repo installed (downloaded). The Nitric CLI provides commands to facilitate this installation process.
+
+When running `nitric doctor`, if no repos are currently installed, you'll be prompted to install the official Server and Function repos.
+
+If you prefer to install an individual repo, you can use the following command, which will give you a list of available repos and let you select which one to download:
+
+```bash
+nitric templates:repos:add
+```
+
+### Function Templates
+
+The function template repository is available on [GitHub](https://github.com/nitrictech/function-templates) and contains the official Nitric Function-as-a-Service templates, for creating Serverless Functions in a variety of languages.
+
+The templates available in this repository at the time of writing are:
+
+| Language   | Runtime     | Identifier        |
+| ---------- | ----------- | ----------------- |
+| TypeScript | Node.js 12  | function/nodets12 |
+| JavaScript | Node.js 12  | function/nodejs12 |
+| Python 3   | CPython 3.7 | function/python37 |
+| Java       | OpenJDK 11  | function/java11   |
+| Go         | Go 1.5      | function/golang15 |
+
+> Check the [GitHub repository](https://github.com/nitrictech/function-templates) for the latest available templates.
+
+#### Installation
+
+```bash
+nitric templates:repos:add function
+```
+
+### Server Templates
+
+The server template repository is available on [GitHub](https://github.com/nitrictech/server-templates) and contains the official Nitric templates for more traditional or full-featured server implementations such as MVC frameworks, front-end frameworks, etc.
+
+> The Server Templates repository is very new and quite empty. We intend to add templates to assist with development with many popular frameworks and tools such as Gatsby, Laravel, Rails, Django, etc. Have a suggestion on what to build or want to help out? [Get in touch](https://community.nitric.io) or [raise an issue](https://github.com/nitrictech/server-templates/issues).
+
+The templates available in this repository at the time of writing are:
+
+| Framework/Server | Runtime/Language      | Identifier               |
+| ---------------- | --------------------- | ------------------------ |
+| Next.js          | Node.js 14/TypeScript | server/nextjs-typescript |
+
+> Check the [GitHub repository](https://github.com/nitrictech/server-templates) for the latest available templates.
+
+#### Installation
+
+```bash
+nitric templates:repos:add server
+```
