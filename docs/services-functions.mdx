@@ -64,7 +64,7 @@ interface HelloWorldRequest {
 	name: string;
 }
 
-async function handler(request: faas.NitricRequest<HelloWorldRequest>): string {
+async function handler(request: faas.NitricTrigger<HelloWorldRequest>): Promise<string> {
 	const { name, greeting = "Hello" } = request.getObject();
 
 	return `${greeing} ${name}!`;
@@ -77,17 +77,17 @@ faas.start(handler);
 <CodeExample lang="python">
 
 ```python
-from nitric.faas import start, Request, Response
+from nitric.faas import start, Trigger, Response
 
 # Define a handler function which will accept incoming requests (HTTP, Events, etc.) 
 # process them and return a `Response`.
-def handler(request: Request) -> Response:
+def handler(trigger: Trigger) -> Response:
     order = request.get_object()
 
 	// Processing the request...
 
 	// Return a successful response
-    return Response("It worked!")
+    return "It worked!"
 
 # Start the handler, this should occur as soon as possible, 
 # avoid any lengthy pre-processes or incoming requests could timeout while waiting.
@@ -103,17 +103,16 @@ if __name__ == "__main__":
 package com.example;
 
 import io.nitric.faas.Faas;
-import io.nitric.faas.NitricEvent;
+import io.nitric.faas.Trigger;
 import io.nitric.faas.NitricFunction;
-import io.nitric.faas.NitricResponse;
-import io.nitric.api.event.Event;
+import io.nitric.faas.Response;
 import java.util.Map;
 
 public class MyFirstFunction implements NitricFunction {
 
 	@Override
-	public NitricResponse handle(NitricEvent event) {
-		return NitricResponse.build("Hello World!");
+	public NitricResponse handle(Trigger trigger) {
+		return trigger.defaultResponse("Hello World!".getBytes());
 	}
 
 	public static void main(String[] args) {
@@ -134,12 +133,14 @@ import (
 )
 
 // NitricFunction - Handles individual function requests (http, events, etc.)
-func NitricFunction(request *faas.NitricRequest) *faas.NitricResponse {
+func NitricFunction(request *faas.NitricTrigger) (*faas.NitricResponse, error) {
 	// Do something interesting...
-	return &faas.NitricResponse{
-		Status: 200,
-		Body:   []byte("Hello World!"),
-	}
+
+	response := trigger.DefaultResponse()
+
+	response.SetData([]byte("Hello World!"))
+
+	return response, nil
 }
 
 func main() {
@@ -154,14 +155,16 @@ func main() {
 ```csharp
 using System;
 using Nitric.Api.Faas;
+using System.Text;
 
 namespace Nitric.Template.HelloWorld
 {
     class HelloWorld : INitricFunction
     {
-        public NitricResponse Handle(NitricEvent event){
-            return NitricResponse.Builder()
-                .Build("Hello World");
+        public Response Handle(Trigger trigger){
+						return trigger.DefaultResponse(
+							Encoding.UTF8.GetBytes("Hello World!")
+						);
         }
         static void Main(string[] args)
         {
@@ -185,7 +188,7 @@ use Nitric\V1\Faas\Faas;
 
 $handler = function(Request $request): Response
 {
-	return new Response("Nitric PHP 8 Template - Success");
+	return "Nitric PHP 8 Template - Success";
 }
 
 Faas::start($handler);
