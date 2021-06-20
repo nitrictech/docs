@@ -1,1 +1,315 @@
-> 🚧 Check back soon, this tutorial is under construction 🚧
+> DRAFT - This tutorial is under construction.
+
+## What we'll do
+
+1. Create a new Nitric project
+2. Create [functions](../services-functions) to handle API operations
+3. Create a [key/value](../key-value) collection to store data
+4. Set up an [API gateway](../api-gateways) and bind it to the functions
+5. Get it all running locally for testing
+6. Deploy to a cloud of your choice _(optional)_
+
+| *Method* | *Route* |
+| --- | --- |
+| GET: | /orders |
+| GET: | /orders/{$orderId} |
+| POST: | /orders |
+
+## Getting started
+
+This tutorial assumes you have the Nitric CLI installed, if not you can follow the [installation guide](/docs/installation).
+
+You'll also want to ensure your environment is set up for local run, with any prerequisite software installed. Use the `nitric doctor` command to check and automatically set up your machine.
+
+If you’d like to deploy the results to a cloud environment *(optional)*, you’ll also need to set up your credentials and any other details for [AWS](/docs/provider-aws), [GCP](/docs/provider-gcp), [DigitalOcean](../provider-digitalocean) or [Azure](/docs/provider-azure).
+
+> TODO: Add links to cloud setup documentation pages
+
+## New project
+
+We’ll start by creating a new project for the REST API. During this process we'll also add our first serverless function, choose `function/nodets12` as the template and enter `orders_create` as the name.
+
+```bash
+nitric make:project my-rest-api
+```
+
+```bash
+? Include an example service? function/nodets12
+? Name for the example function? orders_create
+✔ Making Project my-rest-api
+✔ Making Function orders_create
+```
+
+Next, open the project in your editor of choice, it should have the following structure:
+
+```text
+my-rest-api/
+|
++--nitric.yaml
++--orders_create/
+   |
+   +--node_modules/
+   +--.gitignore
+   +--index.ts
+   +--package.json
+   +--tsconfig.json
+```
+
+You can test the project scaffold with the `run` command.
+
+```bash
+nitric run
+```
+
+```bash
+✔ Staging stack my-rest-api
+✔ Building Functions
+✔ Creating docker network
+✔ Creating Volume: my-rest-api-vol
+✔ Running Services
+✔ Starting API Gateways
+Function      Port  
+orders_create 49152
+Functions Running press ctrl-C quit... ⣟
+```
+
+Once running, use your browser to navigate to localhost on the port provided for the `orders_create` function, e.g. `http://localhost:49152/`. You should receive a success response from the function.
+
+## Add an orders key/value collection
+
+Before updating the function code, we'll need to be able to store and retrieve orders. In this example, we'll use a Key/Value collection to persist our orders using a unique `orderId` as the key.
+
+Adding a collection to our application is easy with Nitric, there's no cloud IAM roles to create or identifiers/credentials to push into environment variables. We just let Nitric know we want a collection and which services should be able to read/write to that collection. During deployment Nitric will take care of the rest, ensuring the services can connect to the datastore and have the appropriate roles/permissions for the access they need.
+
+> Learn more: [Key/Value Documentation](/docs/key-value)
+
+To add an `orders` collection, update the `nitric.yaml` file like so:
+
+```YAML
+name: my-rest-api
+
+services:
+	orders:
+		path: orders_create
+		runtime: function/nodets12
+		# TODO: Add read/write access when feature available
+
+# TODO: update once feature complete
+collections:
+	order: {}
+```
+
+## Create orders
+
+Next, let's turn that first `orders_create` function into the handler for a `POST: /orders` method, which adds new orders to the datastore. Since every new order will need a unique order id, for the purposes of this tutorial we'll generate a uuid to serve as the id.
+
+Start by adding the uuid dependency to the function:
+
+```bash
+cd orders_create
+yarn install
+yarn add uuid
+```
+
+Next, update the `orders_create` function to receive a order create request, create the order and store it in the `orders` collection.
+
+```typescript
+// index.ts
+
+import { faas, KeyValueClient } from "@nitric/sdk";
+import { v4 as uuidv4 } from "uuid";
+
+// Assume we receive a valid OrderCreate request object.
+interface Order {
+  id: string;
+  dateOrdered: string;
+  itemId: string;
+  customerId: string;
+}
+
+// Requests to create a new order won't have an id or order date
+interface CreateRequest extends Omit<Order, "id" | "dateOrdered"> {}
+
+interface CreateResponse {
+  message: string;
+  orderId?: string;
+}
+
+faas.start(async (request: faas.NitricRequest<CreateRequest>): Promise<faas.NitricResponse<CreateResponse>> => {
+  const createRequest = request.getObject();
+
+  const order = {
+    ...createRequest,
+    id: uuidv4(),
+    dateOrdered: new Date().toJSON(),
+  };
+
+  const orders = new KeyValueClient<Order>("orders");
+
+  try {
+    await orders.put(order.id, order);
+    return {
+      status: 200, headers: {},
+      body: { message: "success", orderId: order.id },
+    };
+  } catch {
+    return {
+      status: 500, headers: {},
+      body: { message: "failed to create order" },
+    };
+  }
+});
+```
+
+
+## Retrieve an order
+
+Now that we can store new orders, let's add the function for `GET: /orders/{$orderId}`, which will retrieve an order by its ID.
+
+First, create the new function called `orders_get` using the CLI:
+
+```bash
+nitric make:service function/typescript orders_get
+```
+
+Then, update the `index.ts` file for this new function so that it gets the orderId from the URL path parameters, then retrieves and returns the order.
+
+```typescript
+// index.ts
+
+import { faas, KeyValueClient } from "@nitric/sdk";
+
+faas.start(async (request: faas.NitricRequest<void>): Promise<faas.NitricResponse<Object>> => {
+  // TODO: Under Construction - mapping URL params to a function trigger is currently not supported. Update this when it is.
+  const orderId = request.getParams("/orders/:orderId").path.orderId;
+
+  const orders = new KeyValueClient("orders");
+
+  try {
+    const order = await orders.get(orderId);
+    return {
+      status: 200, headers: {},
+      body: order,
+    };
+  } catch {
+    return {
+      status: 500, headers: {},
+      body: { message: "failed to retrieve order"},
+    };
+  }
+});
+```
+
+## List all orders
+
+> Under Construction
+
+The `all` and `query` methods for collections is still in development. However, performing operations that retrieve every record in a collection can be slow and costly depending on the cloud and underlying product.
+
+## Add the API Gateway
+
+Now that we have functions to handle our API operations, we can add the API definition to our project. This will make the functions accessible and trigger them in response to specific requests to the API URL.
+
+> Learn more: [API Gateways Documentation](/docs/api-gateways)
+
+Update your `nitric.yaml` file to the following:
+
+```YAML
+name: my-rest-api
+
+services:
+	orders_create:
+		path: orders_create
+		runtime: function/nodets12
+		# TODO: Add read/write access
+	orders_get:
+		path: orders_get
+		runtime: function/nodets12
+		# TODO: Add read/write access
+
+# TODO: check this is correct
+collections:
+	order: {}
+
+# Note: APIs are defined in OpenAPI Spec 3. The following is basic example, but can be extended using the specification standards.
+apis:
+	orders:
+		openapi: 3.0.0
+		info:
+			version: 1.0.0
+			title: Orders API
+			description: Tutorial orders API
+		paths:
+			/orders:
+				post:
+					operationId: orders_create
+					x-nitric-target:
+						name: orders_create
+						type: service
+					description: Creates and persists new orders
+					responses:
+						"200":
+							description: Successful response
+					requestBody:
+						required: true
+						content:
+							application/json:
+								schema:
+									$ref: "#/components/schemas/OrderCreate"
+			/orders/{orderId}:
+				get:
+					operationId: order_get
+					x-nitric-target:
+						name: orders_get
+						type: service
+					description: Retrieve an existing order by its ID
+					responses:
+						"200":
+							description: Successful response
+		components:
+			schemas:
+				OrderCreate:
+					type: object
+					properties:
+						itemId:
+							type: string
+						customerId:
+							type: string
+```
+
+## Run it!
+
+Now that you have an API defined and functions built to handle each of its methods, it's time to test it out locally before deploying to the cloud.
+
+Try out your application with the `run` command:
+
+```bash
+nitric run
+```
+
+> *Note:* In this case, `run` starts a container to act as an API gateway, as well as a container for each of the services/functions.
+
+Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP to test the API.
+
+```bash
+# Create an order
+curl -H "Content-Type: application/json" -X POST -d '{"itemId":"test-item","customerId": "test-customer"}' http://localhost:YOUR_API_PORT/orders
+
+# Retrieve an order
+curl http://localhost:5403/orders/YOUR_ORDER_ID
+```
+
+## Deploy to the cloud
+
+Once you're happy that everything is running correctly, you can deploy your API application to a cloud provider of your choice.
+
+```bash
+# Deploy to AWS
+nitric deploy:aws
+
+# Deploy to Google Cloud
+nitric deploy:gcp
+
+# Deploy to Azure
+nitric deploy:azure
+```
