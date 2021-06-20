@@ -4,42 +4,59 @@ The Nitric CLI assists with most tasks you'll perform while developing with Nitr
 
 ### Step 1: Install CLI
 
-Install the CLI using one of the options below:
-
 <CodeExamples 
 	languages={[
 	{
-		label: "NPM",
-		value: "npm"
-	},
-	{
-		label: "Windows",
-		value: "win"
-	}, {
 		label: "macOS",
 		value: "mac"
+	}, {
+		label: "Windows",
+		value: "win"
 	}, {
 		label: "Linux",
 		value: "linux"
 	}
 	]}
-	defaultLang="npm"
+	defaultLang="mac"
 >
-<CodeExample lang="npm">
+<CodeExample lang={"win"}>
+
+#### NPM
+
+You can install Nitric using the [Node Package Manager](https://www.npmjs.com/)
 
 ```bash
 npm install -g @nitric/cli
 ```
 
-</CodeExample>
-<CodeExample lang={"win"}>
+#### Chocolatey
+
+You can install Nitric using the [Chocolatey package manager](https://chocolatey.org/):
 
 ```bash
 choco install nitric
 ```
 
+Future updates can be install using the `upgrade` command:
+
+```bash
+choco upgrade nitric
+```
+
 </CodeExample>
 <CodeExample lang={"mac"}>
+
+#### NPM
+
+You can install Nitric using the [Node Package Manager](https://www.npmjs.com/):
+
+```bash
+npm install -g @nitric/cli
+```
+
+#### Installation Script
+
+Alternatively, you download and execute our install script:
 
 ```bash
 curl -o- -L https://nitric.io/install | bash
@@ -48,12 +65,31 @@ curl -o- -L https://nitric.io/install | bash
 </CodeExample>
 <CodeExample lang={"linux"}>
 
+#### NPM
+
+You can install Nitric using the [Node Package Manager](https://www.npmjs.com/):
+
+```bash
+npm install -g @nitric/cli
+```
+
+#### Installation Script
+
+Alternatively, you download and execute our install script:
+
 ```bash
 curl -o- -L https://nitric.io/install | bash
 ```
 
 </CodeExample>
 </CodeExamples>
+
+#### Manual installation
+
+Alternatively, if you prefer not to use one of the automated methods above, you can download the Nitric CLI binary.
+
+1. Download the appropriate binary for your system from our [GitHub Releases](https://github.com/nitrictech/cli/releases/latest).
+2. Add the binary to your system's PATH or move it to a folder already included in your PATH.
 
 ### Step 2: Verify the installation
 
