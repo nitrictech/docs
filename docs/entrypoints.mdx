@@ -13,15 +13,9 @@ and unlock CDN capability.
 
 ### Adding a new Entrypoint
 
-Entrypoints are defined in a projects nitric.yaml file. The easiest way to add a new entrypoint is the `add:entrypoint` CLI command.
+Entrypoints are defined in a projects nitric.yaml file.
 
-`nitric add:entrypoint <path> <type>:<name>`
-
-For example: `nitric add:entrypoint / site:example`
-
-This will add a new default entrypoint that references a site in your nitric yaml stack.\
-
-Supported resource types are:
+Supported resource types for entrypoints are:
 
 - [Services/Functions](./services)
 - [Sites](./sites)
@@ -87,13 +81,18 @@ apis:
 
 # Define nitric application entrypoints here
 entrypoints:
-  /:
-    name: app
-    type: site
-  # 👍 Matches the base path of the above API
-  /exampleapi/:
-    name: exampleapi
-    type: api
+  main:
+    paths:
+      /:
+        name: app
+        type: site
+      # 👍 Matches the base path of the above API
+      /exampleapi/:
+        name: exampleapi
+        type: api
+    # You can also add custom domains to your entrypoints as well
+    domains:
+      - test.example.com
 ```
 
 </CodeExample>
@@ -138,13 +137,18 @@ apis:
 
 # Define nitric application entrypoints here
 entrypoints:
-  /:
-    name: app
-    type: site
-  # 👎 Doesn't match the base path of the above API
-  /myapi/:
-    name: exampleapi
-    type: api
+  main:
+    paths:
+      /:
+        name: app
+        type: site
+      # 👎 Doesn't match the base path of the above API
+      /myapi/:
+        name: exampleapi
+        type: api
+    # You can also add custom domains to your entrypoints as well
+    domains:
+      - test.example.com
 ```
 
 </CodeExample>
