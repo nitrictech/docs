@@ -111,12 +111,12 @@ import java.util.Map;
 public class MyFirstFunction implements NitricFunction {
 
 	@Override
-	public NitricResponse handle(Trigger trigger) {
-		return trigger.defaultResponse("Hello World!".getBytes());
+	public Response handle(Trigger trigger) {
+		return trigger.buildResponse("Hello World!");
 	}
 
 	public static void main(String[] args) {
-		new Faas().start(new MyFirstFunction());
+		Faas.start(new MyFirstFunction());
 	}
 }
 ```
