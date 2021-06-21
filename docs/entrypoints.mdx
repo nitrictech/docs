@@ -13,15 +13,9 @@ and unlock CDN capability.
 
 ### Adding a new Entrypoint
 
-Entrypoints are defined in a projects nitric.yaml file. The easiest way to add a new entrypoint is the `add:entrypoint` CLI command.
+Entrypoints are defined in a projects nitric.yaml file.
 
-`nitric add:entrypoint <path> <type>:<name>`
-
-For example: `nitric add:entrypoint / site:example`
-
-This will add a new default entrypoint that references a site in your nitric yaml stack.\
-
-Supported resource types are:
+Supported resource types for entrypoints are:
 
 - [Services/Functions](./services)
 - [Sites](./sites)
@@ -87,13 +81,15 @@ apis:
 
 # Define nitric application entrypoints here
 entrypoints:
-  /:
-    name: app
-    type: site
-  # 👍 Matches the base path of the above API
-  /exampleapi/:
-    name: exampleapi
-    type: api
+  main:
+    paths:
+      /:
+        target: app
+        type: site
+      # 👍 Matches the base path of the above API
+      /exampleapi/:
+        target: exampleapi
+        type: api
 ```
 
 </CodeExample>
@@ -138,17 +134,42 @@ apis:
 
 # Define nitric application entrypoints here
 entrypoints:
-  /:
-    name: app
-    type: site
-  # 👎 Doesn't match the base path of the above API
-  /myapi/:
-    name: exampleapi
-    type: api
+  main:
+    paths:
+      /:
+        target: app
+        type: site
+      # 👎 Doesn't match the base path of the above API
+      /myapi/:
+        target: exampleapi
+        type: api
 ```
 
 </CodeExample>
 </CodeExamples>
+
+### Adding a Domain to entrypoints
+Custom domains can be added to entrypoints, and will be configured for clouds you deploy to
+
+To define a domain for an entrypoint, you need to add it under `domains`.
+
+```yaml
+# Define nitric application entrypoints here
+entrypoints:
+  main:
+    paths:
+      /:
+        target: app
+        type: site
+      # 👎 Doesn't match the base path of the above API
+      /myapi/:
+        target: exampleapi
+        type: api
+    domains:
+      - example.com
+```
+
+> Adding domains may require additional configuration to update DNS records, this can vary between cloud providers.
 
 ### Testing your entrypoints
 
