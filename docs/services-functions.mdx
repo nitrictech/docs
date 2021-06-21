@@ -154,7 +154,7 @@ func main() {
 
 ```csharp
 using System;
-using Nitric.Api.Faas;
+using Nitric.Faas;
 using System.Text;
 
 namespace Nitric.Template.HelloWorld
@@ -168,7 +168,7 @@ namespace Nitric.Template.HelloWorld
         }
         static void Main(string[] args)
         {
-            new Faas().start(new HelloWorld());
+            Faas().start(new HelloWorld());
         }
     }
 }
