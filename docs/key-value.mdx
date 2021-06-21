@@ -1,51 +1,413 @@
-Most applications have a need to persist and retrieve state. Nitric strives to make this process as easy as possible, using a key/value API
-Key/Value collections provide a highly efficient way to store and retrieve application state based on unique keys. Nitric provides an interface to create, retrieve and query collections of key/value records, as well as mechanisms to define and deploy these collections to supported infrastructure.
+The Key/Value service provides applications with the ability to store and retrieve application state. 
+Nitric strives to make this process as easy as possible, using a key/value API. Application code simply specifies
+the name of the collection and a unique key to access the individual values.
+
+Nitric will automatically providing any required infrastructure with your cloud provider.
+
+> **Note** a new Document Service is being development which provides a superset of Key/Value service functionality.
 
 ## Key concepts
 
-- **Keys**
-- **Values**
-- **Collections**
-- **Queries**
+- **Collections** are a logical group to store like values. In SQL database terms a collections equate to tables.
+- **Keys** provide unique identifiers to store and retrieve items in a collection. Keys must be unique within the scope of 
+        the collection.
+- **Values** are the value items stored in the collection.
 
-## Create Collections
 
-Collections are a resource defined in a Nitric stack definition (`nitric.yaml`). At the root level of the stack file, add a `collections` key, which contains an array of collections.
+## Usage
 
-```yaml
-collections:
-  orders:
-    attributes:
-      pk: string
-      price: string
-      number: string
-      value: string
-    indexes:
-      unique: pk
+Using one of the provided Nitric SDKs for your language is the easiest way to work with collections.
+
+## Putting Values
+
+To store a value use `KeyValueClient` to `put` a value into a collection:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { KeyValueClient } from "@nitric/sdk";
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+}
+
+const client = new KeyValueClient<Product>("products");
+
+await client.put("nitric", {
+  id: "nitric",
+  name: "nitric",
+  description: "A development framework!",
+});
 ```
 
-## Defining Indexes
+</CodeExample>
+<CodeExample lang="python">
 
-### Composite Indexes
+```python
+from nitric.api import KeyValueClient
 
-Defining Composite Keys
+client = KeyValueClient()
 
-```yaml
-collections:
-  application:
-    attributes:
-      pk: string
-      sk: string
-      created: string
-      value: string
-    indexes:
-      composite: [ pk, sk ]
+product = ...
+
+await client.put("products", "nitric", product);
 ```
 
-## Granting Access
+</CodeExample>
 
-## Writing Values
+<CodeExample lang="java">
 
-## Reading Values
+```java
+import io.nitric.api.kv.KeyValueClient;
+...
 
-## Queries
+var client = KeyValueClient.newBuilder(Product.class)
+	.collection("products")
+	.build();
+
+var product = new Product();
+
+client.put("nitric", product);
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+import (
+    "github.com/nitrictech/go-sdk/api"
+    "github.com/nitrictech/go-sdk/kvclient"
+)
+...
+
+kvClient := client.KV()
+
+product := map[string]interface{}{
+	"id":          "nitric",
+	"name":        "nitric",
+	"description": "A development framework!",
+}
+
+kvClient.PutKey("products", "nitric", product)
+
+if err != nil {
+	// Handle error
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+use Nitric\Api\KeyValueClient;
+
+$client = new KeyValueClient();
+
+$product = ...
+
+$client->put("products", "nitric", $product);
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using Nitric.Api.KeyValue;
+...
+
+var client = new KeyValueClient<Product>.NewBuilder()
+	.Collection("products")
+	.Build();
+
+var product = new Product();
+
+client.Put("nitric", product);
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+### Getting Values
+
+To retrieve a value use `KeyValueClient` to `get` an value from a collection:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { KeyValueClient } from "@nitric/sdk";
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+}
+
+const client = new KeyValueClient<Product>("products");
+
+const product = await client.get("nitric");
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.api import KeyValueClient
+
+client = KeyValueClient()
+
+product = client.get("products", "nitric")
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+import io.nitric.api.kv.KeyValueClient;
+...
+
+var client = KeyValueClient.newBuilder(Product.class)
+	.collection("products")
+	.build();
+
+var product = client.get("nitric");
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+import (
+    "github.com/nitrictech/go-sdk/api"
+    "github.com/nitrictech/go-sdk/kvclient"
+)
+
+kvClient := client.KV()
+
+product, err := kvclient.get("products", "nitric")
+
+if err != nil {
+	// Handle error
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+use Nitric\Api\KeyValueClient;
+
+$client = new KeyValueClient();
+
+$product = $client->get("products", "nitric");
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using Nitric.Api.KeyValue;
+...
+
+var client =  new KeyValueClient<Product>.NewBuilder()
+	.Collection("products")
+	.Build();
+
+var product = client.Get("nitric")
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+### Deleting Values
+
+To delete a value use `KeyValueClient` to `delete` a value from a collection:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { KeyValueClient } from "@nitric/sdk";
+
+const client = new KeyValueClient<any>("products");
+
+await client.delete("nitric");
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.api import KeyValueClient
+
+client = KeyValueClient()
+
+client.delete("products", "nitric")
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+import io.nitric.api.kv.KeyValueClient;
+...
+
+var client = KeyValueClient.newBuilder(Product.class)
+	.collection("products")
+	.build();
+	
+client.delete("nitric");
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+import (
+    "github.com/nitrictech/go-sdk/api"
+    "github.com/nitrictech/go-sdk/kvclient"
+)
+
+kvclient := client.KV()
+
+err := kvclient.Delete("nitric")
+
+if err != nil {
+	// Handle error
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+use Nitric\Api\KeyValueClient;
+
+$client = new KeyValueClient();
+
+$client->delete("nitric");
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using Nitric.Api.KeyValue;
+...
+
+var client =  new KeyValueClient<Product>.NewBuilder()
+	.Collection("products")
+	.Build();
+
+client.Delete("nitric");
+```
+
+</CodeExample>
+
+</CodeExamples>
