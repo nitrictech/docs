@@ -42,9 +42,9 @@ Next, we'll be asked for a name for the service. We will name it greeter.
 ? Name for the example service? greeter
 ✔ Making Project my-project
 ✔ Making Service my-service
+```
 
 The project structure should now look like this:
-
 ```bash
 nitric-greeter
 |-- .nitric
@@ -79,8 +79,6 @@ yarn add @nitric/sdk
 
 We then open up the index.ts file under the greeter directory. This is where we build the code for our greeter service.
 
-<CodeExample lang={"node"}>
-
 ```typescript
 // import the Nitric FaaS library
 import { faas } from '@nitric/sdk';
@@ -103,8 +101,6 @@ async function handler(request: faas.NitricTrigger<HelloWorldRequest>): Promise<
 faas.start(handler);
 ```
 
-</CodeExample>
-
 Using this handler function we can now provide it a `HelloWorldRequest` and recieve a HelloWorldResponse. The `faas.start` hosts your function so that it can take requests. We can access this using a HTTP Request, such as cURL or Postman.
 
 First we will start our service using this command:
@@ -123,8 +119,8 @@ Once built and running you should see the following output:
 ✔ Starting API Gateways
 ✔ Starting Entrypoints
 Service    Port
-greeter 49152
-Services Running press ctrl-C quit...
+greeter    49152
+Running, press 'Q' to clean up and exit...
 ```
 
 Run the cURL command substituing the port 49152 with the outputted port from the `nitric run` command:
@@ -171,8 +167,6 @@ greeter-ui
 |-- yarn.lock
 ```
 
-<CodeExample lang={"html"}>
-
 ```html
 <!--/public/index.html/-->
 <!DOCTYPE html>
@@ -189,10 +183,6 @@ greeter-ui
 
 ```
 
-</CodeExample>
-
-<CodeExample lang={"node"}>
-
 ```typescript
 // /src/index.tsx
 import React from 'react';
@@ -206,11 +196,7 @@ ReactDOM.render(
 
 ```
 
-</CodeExample>
-
 And in the App.tsx file we will create our new app. For this we will start by setting up some basic input and a button to get the greeting.
-
-<CodeExample lang={"node"}>
 
 ```typescript
 // /src/App.tsx
@@ -240,8 +226,6 @@ const App = () => {
 
 export default App;
 ```
-
-</CodeExample>
 
 This produces a simple form where a user could input a name and a greeting and hit a button. But currently this button doesn't do anything. That's where our greeter service comes in.
 
@@ -295,8 +279,6 @@ This tells the Nitric CLI how to build the paths and where they point. Our first
 
 This can be done using a fetch statement in a new function that is called by our button. The fetch statement will make a HTTP request to our service and we will receive back our response.
 
-<CodeExample lang={"node"}>
-
 ```typescript
 // /src/App.tsx
 import React, { useState } from 'react';
@@ -339,7 +321,5 @@ const App = () => {
 export default App;
 
 ```
-
-</CodeExample>
 
 If we now use our `nitric run` command we should get a URL at the bottom. If we go to this URL in our browser it will open up into our app.
