@@ -56,7 +56,7 @@ The Nitric SDKs provide methods that accept a function and then run that functio
 <CodeExample lang={"node"}>
 
 ```typescript
-// import the event client library
+// import the Nitric FaaS library
 import { faas } from '@nitric/sdk';
 
 interface HelloWorldRequest {
@@ -65,9 +65,9 @@ interface HelloWorldRequest {
 }
 
 async function handler(request: faas.NitricTrigger<HelloWorldRequest>): Promise<string> {
-	const { name, greeting = "Hello" } = request.getObject();
+	const { name, greeting = "Hello" } = request.dataAsObject();
 
-	return `${greeing} ${name}!`;
+	return `${greeting} ${name}!`;
 }
 
 faas.start(handler);
