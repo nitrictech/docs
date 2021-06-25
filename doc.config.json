@@ -1,0 +1,138 @@
+{
+  "versions": [
+    {
+      "version": "0.1.0",
+      "routes": [
+        {
+          "title": "Getting Started",
+          "routes": [
+            {
+              "path": "/docs/overview.mdx"
+            },
+            {
+              "path": "/docs/installation.mdx"
+            },
+            {
+              "path": "/docs/quick-start.mdx"
+            }
+          ]
+        },
+        {
+          "title": "Basics",
+          "routes": [
+            {
+              "title": "CLI",
+              "path": "/docs/nitric-cli.mdx"
+            },
+            {
+              "path": "/docs/projects.mdx"
+            },
+            {
+              "title": "Unified APIs",
+              "path": "/docs/nitric-apis.mdx"
+            },
+            {
+              "path": "/docs/nitric-membrane.mdx"
+            },
+            {
+              "title": "SDKs",
+              "path": "/docs/sdks.mdx"
+            }
+          ]
+        },
+        {
+          "title": "Services",
+          "routes": [
+            {
+              "title": "Compute",
+              "routes": [
+                {
+                  "path": "/docs/services.mdx"
+                },
+                {
+                  "title": "Functions",
+                  "path": "/docs/services-functions.mdx"
+                },
+                {
+                  "title": "Templates",
+                  "path": "/docs/services-templates.mdx"
+                }
+              ]
+            },
+            {
+              "title": "API Gateways",
+              "path": "/docs/api-gateways.mdx"
+            },
+            {
+              "title": "Entrypoints",
+              "path": "/docs/entrypoints.mdx"
+            },
+            {
+              "title": "Key/Value",
+              "path": "/docs/key-value.mdx"
+            },
+            {
+              "path": "/docs/events.mdx"
+            },
+            {
+              "path": "/docs/queues.mdx"
+            },
+            {
+              "path": "/docs/storage.mdx"
+            },
+            {
+              "path": "/docs/schedules.mdx"
+            },
+            {
+              "title": "Static Sites",
+              "path": "/docs/sites.mdx"
+            }
+          ]
+        },
+        {
+          "title": "Providers",
+          "routes": [
+            {
+              "title": "AWS",
+              "path": "/docs/provider-aws.mdx"
+            },
+            {
+              "title": "Google Cloud",
+              "path": "/docs/provider-gcp.mdx"
+            },
+            {
+              "title": "Azure",
+              "path": "/docs/provider-azure.mdx"
+            },
+            {
+              "title": "DigitalOcean",
+              "path": "/docs/provider-digitalocean.mdx"
+            },
+            {
+              "title": "Local Run",
+              "path": "/docs/provider-local.mdx"
+            }
+          ]
+        },
+        {
+          "title": "Tutorials",
+          "routes": [
+            {
+              "title": "REST API",
+              "path": "/docs/tutorials/rest-api.mdx"
+            },
+            {
+              "title": "TypeScript",
+              "routes": [
+                {
+                  "title": "Express.js REST API",
+                  "path": "/docs/tutorials/typescript/expressjs-rest-api.mdx"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
