@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "test": "ajv validate -s test/schema.json -d doc.config.json"
+  },
+  "devDependencies": {
+    "ajv-cli": "^5.0.0"
+  }
+}
