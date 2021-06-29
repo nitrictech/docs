@@ -118,17 +118,12 @@
           "title": "Tutorials",
           "routes": [
             {
-              "title": "REST API",
-              "path": "/docs/tutorials/rest-api.mdx"
+              "title": "Quickstart: React",
+              "path": "/docs/tutorials/with-react.mdx"
             },
             {
-              "title": "TypeScript",
-              "routes": [
-                {
-                  "title": "Express.js REST API",
-                  "path": "/docs/tutorials/typescript/expressjs-rest-api.mdx"
-                }
-              ]
+              "title": "REST API",
+              "path": "/docs/tutorials/rest-api.mdx"
             }
           ]
         }
