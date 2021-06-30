@@ -141,10 +141,10 @@ greeter    49152
 Running, press 'Q' to clean up and exit...
 ```
 
-Run the cURL command substituing the port 49152 with the outputted port from the `nitric run` command:
+Run the cURL command substituting the port 49152 with the outputted port from the `nitric run` command:
 
 ```bash
-curl -H "Content-Type: application/json" -d '{"name":"Nitric"}' http://localhost:49152/
+curl -H "Content-Type: application/json" -d "{\"name\":\"Nitric\"}" http://localhost:49152/
 ```
 
 This will give us a response JSON:
@@ -188,11 +188,15 @@ greeter-ui
 |-- yarn.lock
 ```
 
-### Set up a greeting form
+And one optional step is to update the CSS file `src/index.css` to make our app look beautiful. You can find the full contents of this file <a href="https://raw.githubusercontent.com/nitrictech/docs/main/assets/tutorial-styles.css" target="_blank" rel="noopener noreferrer">here.</a>
 
-After a user has visited our app we can allow them to enter a name and greeting to send to our service.
+### Set up greeting component
 
-Let's create this form within `src/App.tsx` For this we will start by setting up some basic input and a button to get the greeting.
+When a user has visited our app we can provide a form for them to enter a name and greeting to send to our service.
+
+Let's create this form within `src/App.tsx`.
+
+Start by setting up some basic inputs, a function to handle the service call and a button to initiate the call.
 
 ```tsx
 import React, { SyntheticEvent, useState } from "react";
@@ -200,31 +204,63 @@ import React, { SyntheticEvent, useState } from "react";
 const App = () => {
   const [name, setName] = useState("Nitric");
   const [greeting, setGreeting] = useState("Hello");
+  const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
 
+  async function updateGreeting(e: SyntheticEvent) {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const rawResponse = await fetch("/greeter/", {
+        method: "POST",
+        body: JSON.stringify({
+          name: name,
+          greeting: greeting,
+        }),
+      });
+      const content = await rawResponse.json();
+      setResponse(content.response);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div>
-      <form>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Greeting:
-          <input
-            type="text"
-            value={greeting}
-            onChange={(e) => setGreeting(e.target.value)}
-          />
-        </label>
-        <br />
-        <button type="submit">Greetings World!</button>
-      </form>
+    <div className="center">
+      <div className="container grid">
+        <h1>Nitric + React</h1>
+        <div className="form-grid">
+          <div className="field">
+            <label htmlFor="name">Name</label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="greeting">Greeting</label>
+            <input
+              id="greeting"
+              type="text"
+              value={greeting}
+              onChange={(e) => setGreeting(e.target.value)}
+            />
+          </div>
+        </div>
+        <button className="primary" onClick={updateGreeting}>
+          {loading ? "Loading... " : "Send Greetings "}
+          <div className={loading ? "loader loading" : "loader"}>🚀</div>
+        </button>
+        {response && (
+          <h2 className="greeting">
+            {response} <div className="wave">👋</div>
+          </h2>
+        )}
+      </div>
     </div>
   );
 };
@@ -232,9 +268,7 @@ const App = () => {
 export default App;
 ```
 
-### Launch!
-
-To launch our new greeting app, we require a couple of steps:
+Before we launch our new greeting app, we require a couple of steps:
 
 First, we need to add the site to our `nitric.yaml` file under `sites`:
 
@@ -286,65 +320,18 @@ This tells the Nitric CLI how to build the paths and where they point. Our first
 
 This can be done using a fetch statement in a new function that is called by our form. The fetch statement will make a HTTP request to our service and we will receive back our response.
 
-Back in our `src/App.tsx` component let's make some changes to make this happen:
+### Launch!
 
-```tsx
-import React, { SyntheticEvent, useState } from "react";
+Now that we have the component and logic in place, we can run our app:
 
-const App = () => {
-  const [name, setName] = useState("Nitric");
-  const [greeting, setGreeting] = useState("Hello");
-  const [response, setResponse] = useState("");
-
-  async function getResponse(event: SyntheticEvent) {
-    event.preventDefault();
-
-    const rawResponse = await fetch("/greeter/", {
-      method: "POST",
-      body: JSON.stringify({
-        name: name,
-        greeting: greeting,
-      }),
-    });
-    const content = await rawResponse.json();
-    setResponse(content.response);
-  }
-
-  return (
-    <div>
-      <form onSubmit={getResponse}>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Greeting:
-          <input
-            type="text"
-            value={greeting}
-            onChange={(e) => setGreeting(e.target.value)}
-          />
-        </label>
-        <br />
-        <button type="submit">Greetings World!</button>
-      </form>
-      <h1>{response}</h1>
-    </div>
-  );
-};
-
-export default App;
+```bash
+nitric run
 ```
 
-If we now use our `nitric run` command we should get a URL at the bottom. If we go to this URL in our browser it will open up into our app.
+And then open the browser to <a href="localhost:49152" target="_blank">localhost:49152</a> and you should see the completed app.
 
 <img
   height="600"
-  src="../../assets/img/react-app.png"
+  src="../../assets/img/react-tutorial.jpg"
   alt="Greeter React App"
 />
