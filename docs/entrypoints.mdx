@@ -149,6 +149,7 @@ entrypoints:
 </CodeExamples>
 
 ### Adding a Domain to entrypoints
+
 Custom domains can be added to entrypoints, and will be configured for clouds you deploy to
 
 To define a domain for an entrypoint, you need to add it under `domains`.
@@ -176,7 +177,7 @@ entrypoints:
 The easiest way to test your entrypoints locally is via the nitric run command. This will deploy an additional frontend along with your other stack
 resources in order to serve your stack under a single origin.
 
-`nitric dev run`
+`nitric run`
 
 In the output you should receive a link that indicates where you can reach your application via the nitric entrypoints.
 
