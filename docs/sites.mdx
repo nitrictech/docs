@@ -21,7 +21,7 @@ sites:
 | **Property** | **Value** | **Description**                                                         |
 | ------------ | --------- | ----------------------------------------------------------------------- |
 | path         | string    | path of the static site project relative to root of your nitric project |
-| assetPath    | string    | location of static site assets once site is built                       |
+| assetPath    | string    | location of static site assets once site is built relative to path      |
 | buildScripts | string[]  | Scripts to run in order to build static site assets                     |
 
 ## Connecting your site to your stack
@@ -48,10 +48,10 @@ entrypoints:
 		paths:
 			/:
 				type: site
-				name: example-site
+				target: example-site
 			/example/:
 				type: service
-				name: example-service
+				target: example-service
 ```
 
 In the above example your site would now be able to call the example-service, by simply making a request to `/example/`, as these two resources will be served under a single origin together.
