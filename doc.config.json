@@ -118,6 +118,10 @@
           "title": "Tutorials",
           "routes": [
             {
+              "title": "Quickstart: Next.js",
+              "path": "/docs/tutorials/with-nextjs.mdx"
+            },
+            {
               "title": "Quickstart: React",
               "path": "/docs/tutorials/with-react.mdx"
             },

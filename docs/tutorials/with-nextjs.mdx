@@ -1,0 +1,244 @@
+## Introduction
+
+<p>
+  <a href="https://nextjs.org/" target="_blank">
+    Next.js
+  </a>{" "}
+  is a{" "}
+  <a href="https://reactjs.org/" target="_blank">
+    React
+  </a>{" "}
+  framework that provides everything you need for production applications such
+  as hybrid static & server rendering, TypeScript support, smart bundling, route
+  pre-fetching, and more.
+</p>
+
+Using the Nitric framework we can build a production ready react application more efficiently and can then distribute it to any cloud.
+For this tutorial you will require <a href="https://nodejs.org/" target="_blank">Node.</a> To check if you have Node installed, run this command in your terminal:
+
+```bash
+node -v
+```
+
+If Node is installed, it should produce a version number like `v14.16.0`.
+
+It is also assumed that you have already installed the Nitric CLI. If not visit the [installation instructions](../installation.mdx).
+
+## Project set up
+
+For this project we will make a simple Next.js app which greets a user based on a name provided.
+
+Using the Nitric CLI we start by creating the project.
+
+```bash
+nitric make:project nitric-greeter
+```
+
+Next we'll be asked if we want an initial service in the project and what template the service will use. For this project we will want a service. This service will handle requests for greeting and respond to the greetings. For this we will use the `nextjs-typescript` template.
+
+```bash
+? Include an example service?
+  function/java11
+  function/golang15
+  function/php8
+❯ server/nextjs-typescript
+  none
+  function/nodets12
+  function/nodejs12
+(Move up and down to reveal more choices)
+```
+
+Next, we'll be asked for a name for the service. We will name it `greeter-ui`.
+
+```bash
+? Name for the example service? greeter-ui
+✔ Making Project nitric-greeter
+✔ Making Service greeter-ui
+```
+
+Under the `nitric-greeter` directory you will see the `.nitric` folder which contains your local nitric files and a `greeter-ui` folder containing the Next.js template.
+
+## Building the App
+
+Let's start building the service that can return a greeting with a name.
+
+One optional step is to add the CSS file `greeter-ui/global.css` to make our app look beautiful. You can find the full contents of this file <a href="https://raw.githubusercontent.com/nitrictech/docs/main/assets/tutorial-styles.css" target="_blank" rel="noopener noreferrer">here.</a> Then add it to a custom App component called `pages/_app.tsx` as shown below:
+
+```tsx
+import type { AppProps } from "next/app";
+import "../global.css";
+
+// This default export is required in a new `pages/_app.js` file.
+export default function MyApp({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}
+```
+
+### Initialize service
+
+Before we start building we need to install our dependencies. Firstly go into the `nitric-greeter/greeter` service directory:
+
+```bash
+cd nitric-greeter/greeter-ui
+
+yarn install
+# OR
+npm install
+```
+
+We will utilize the <a href="https://nextjs.org/docs/api-routes/introduction" target="_blank">API routes</a> feature of Next.js to create our greeter service.
+
+Under the `pages/api` folder. Create a file called `greeter.ts`, this is where we build the code for our greeter service.
+
+```typescript
+import type { NextApiRequest, NextApiResponse } from "next";
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { name, greeting = "Hello" } = JSON.parse(req.body);
+  res.status(200).json({ response: `${greeting} ${name}!` });
+}
+```
+
+Beyond this tutorial, we will want to utilize Nitric services by installing the <a href="https://github.com/nitrictech/node-sdk" target="_blank">nitric/sdk</a> as follows:
+
+```bash
+yarn add @nitric/sdk
+# OR
+npm install @nitric/sdk
+```
+
+For information on building service integrations with Next.js and Nitric, follow the documentation found here:
+
+- [Key/Value](../key-value.mdx)
+- [Events](../events.mdx)
+- [Queues](../queues.mdx)
+- [Storage](../storage.mdx)
+- [Schedules](../schedules.mdx)
+
+### Set up greeting component
+
+When a user has visited our app we can provide a form for them to enter a name and greeting to send to our service.
+
+Let's create this form within `pages/index.tsx`.
+
+Start by setting up some basic inputs, a function to handle the service call and a button to initiate the call.
+
+```tsx
+import React, { SyntheticEvent, useState } from "react";
+
+const App = () => {
+  const [name, setName] = useState("Nitric");
+  const [greeting, setGreeting] = useState("Hello");
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState("");
+
+  async function updateGreeting(e: SyntheticEvent) {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const rawResponse = await fetch("/api/greeter/", {
+        method: "POST",
+        body: JSON.stringify({
+          name: name,
+          greeting: greeting,
+        }),
+      });
+      const content = await rawResponse.json();
+      setResponse(content.response);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="center">
+      <div className="container grid">
+        <h1>Nitric + React</h1>
+        <div className="form-grid">
+          <div className="field">
+            <label htmlFor="name">Name</label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="greeting">Greeting</label>
+            <input
+              id="greeting"
+              type="text"
+              value={greeting}
+              onChange={(e) => setGreeting(e.target.value)}
+            />
+          </div>
+        </div>
+        <button className="primary" onClick={updateGreeting}>
+          {loading ? "Loading... " : "Send Greetings "}
+          <div className={loading ? "loader loading" : "loader"}>🚀</div>
+        </button>
+        {response && (
+          <h2 className="greeting">
+            {response} <div className="wave">👋</div>
+          </h2>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;
+```
+
+Before we launch our new greeting app, we require an entry point for the Next.js service:
+
+Add the entry point to our `nitric.yaml` file under `entrypoints`:
+
+```yaml
+name: nitric-greeter
+services:
+  greeter-ui:
+    path: greeter-ui
+    runtime: server/nextjs-typescript
+
+entrypoints:
+  main:
+    paths:
+      /:
+        target: greeter-ui
+        type: service
+```
+
+This tells the Nitric CLI how to build the paths and where they point. Our first path will be the greeter-ui service, which will be at the root. The Next.js API routes will sit relative to the site and so we can use our greeter function that way.
+
+### Launch!
+
+Now that we have the component and logic in place, we can run our app:
+
+```bash
+nitric run
+```
+
+And then click and open the `main` entry point localhost url and you should see the completed app:
+
+```bash
+✔ Starting Entrypoints
+ Service Port
+ ─────── ─────
+ greeter-ui 49152
+ Entrypoint Url
+ ────────── ──────────────────────
+ main       http://localhost:59770
+```
+
+<img
+  height="600"
+  src="../../assets/img/next-tutorial.png"
+  alt="Greeter Next App"
+/>
