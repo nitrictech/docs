@@ -126,6 +126,10 @@
               "path": "/docs/tutorials/with-react.mdx"
             },
             {
+              "title": "Quickstart: Vue 3",
+              "path": "/docs/tutorials/with-vue.mdx"
+            },
+            {
               "title": "REST API",
               "path": "/docs/tutorials/rest-api.mdx"
             }
