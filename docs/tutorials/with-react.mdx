@@ -1,9 +1,12 @@
 ## Introduction
 
-React is a JavaScript library that allows for building fast and complex web apps or websites.
+<a href="https://reactjs.org/" target="_blank">
+  React
+</a> is a JavaScript library that allows for building fast and complex web apps or
+websites.
 
 Using the Nitric framework we can build a simple react application more efficiently and can then distribute it to any cloud.
-For this tutorial you will require Node. To check if you have Node installed, run this command in your terminal:
+For this tutorial you will require <a href="https://nodejs.org/" target="_blank">Node.</a> To check if you have Node installed, run this command in your terminal:
 
 ```bash
 node -v
@@ -26,7 +29,7 @@ nitric make:project nitric-greeter
 Next we'll be asked if we want an initial service in the project and what template the service will use. For this project we will want a service. This service will handle requests for greeting and respond to the greetings. For this we will use the `nodets12` template.
 
 ```bash
-? Include an example service? (Use arrow keys)
+? Include an example service?
 ❯ function/nodets12
   function/nodejs12
   function/python37
@@ -34,6 +37,7 @@ Next we'll be asked if we want an initial service in the project and what templa
   function/golang15
   function/php8
   server/nextjs-typescript
+(Move up and down to reveal more choices)
 ```
 
 Next, we'll be asked for a name for the service. We will name it `greeter`.
@@ -44,30 +48,7 @@ Next, we'll be asked for a name for the service. We will name it `greeter`.
 ✔ Making Service greeter
 ```
 
-The project structure should now look like this:
-
-```bash
-nitric-greeter
-|-- .nitric
-|   |-- templates
-|       |-- function
-|           |-- nodets12
-|               |-- template
-|                   |-- .gitignore
-|                   |-- index.ts
-|                   |-- package.json
-|                   |-- tsconfig.json
-|               |-- .gitignore
-|               |-- Dockerfile
-|               |-- Dockerfile.dockerignore
-|               |-- README.md
-|-- greeter
-|   |-- .gitignore
-|   |-- index.ts
-|   |-- package.json
-|   |-- tsconfig.json
-|-- nitric.yaml
-```
+Under the `nitric-greeter` directory you will see the `.nitric` folder which contains your local nitric files and a `greeter` folder containing the service.
 
 ## Building the service
 
@@ -75,7 +56,7 @@ Let's start building the service that can return a greeting with a name.
 
 ### Initialize service
 
-Before we start building we need to install our dependencies. Firsly go into the `nitric-greeter/greeter` service directory:
+Before we start building we need to install our dependencies. Firstly go into the `nitric-greeter/greeter` service directory:
 
 ```bash
 cd nitric-greeter/greeter
@@ -117,7 +98,7 @@ async function handler(
 faas.start(handler);
 ```
 
-Using this handler function we can now provide it a `HelloWorldRequest` and recieve a `HelloWorldResponse`. The `faas.start` hosts your function so that it can take requests. We can access this using a HTTP Request, such as cURL or Postman.
+Using this handler function we can now provide it a `HelloWorldRequest` and receive a `HelloWorldResponse`. The `faas.start` hosts your function so that it can take requests. We can access this using a HTTP Request, such as cURL or Postman.
 
 ### Run the service
 
@@ -318,8 +299,6 @@ entrypoints:
 
 This tells the Nitric CLI how to build the paths and where they point. Our first path will be the site, which will be at the root. The next path is the `/greeter/` path, which is where the greeter service is hosted. This greeter service will sit relative to the site and so we can use our function that way.
 
-This can be done using a fetch statement in a new function that is called by our form. The fetch statement will make a HTTP request to our service and we will receive back our response.
-
 ### Launch!
 
 Now that we have the component and logic in place, we can run our app:
@@ -342,6 +321,6 @@ And then click and open the `main` entrypoint localhost url and you should see t
 
 <img
   height="600"
-  src="../../assets/img/react-tutorial.jpg"
+  src="../../assets/img/react-tutorial.png"
   alt="Greeter React App"
 />
