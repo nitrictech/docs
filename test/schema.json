@@ -9,33 +9,39 @@
           "version": {
             "type": "string"
           },
-          "routes": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "type": "string"
-                },
-                "routes": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "title": {
-                        "type": "string"
-                      },
-                      "path": {
-                        "type": "string"
+          "sidebars": {
+            "type": "object",
+            "patternProperties": {
+              "^[a-z]+$": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "routes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string"
+                          },
+                          "path": {
+                            "type": "string"
+                          }
+                        }
                       }
                     }
                   }
                 }
               }
-            }
+            },
+            "required": ["docs"]
           }
         },
-        "required": ["version", "routes"]
+        "required": ["version", "sidebars"]
       }
     }
   },
