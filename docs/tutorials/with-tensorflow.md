@@ -90,11 +90,9 @@ The site starts the communication, by calling the training requester to make a m
 
 <img
   height="600"
-  width="100%"
   src="../../assets/img/tensorflow-sequence.svg"
   alt="Tensorflow Sequence"
 />
-
 
 As seen in the sequence diagram, the project will also require a bucket, KV store and queue. It will also need to publish an event between the `training-requester` and the `train-model` services. These are simply added in the `nitric.yaml` file, as seen below:
 
@@ -131,12 +129,21 @@ Throughout the training process there will be status logs pushed to the KV store
 
 ```python
 #index.py
-async def trainNewModel(id, dataset_url):
-    kvClient = KeyValueClient()
+import tensorflow as tf
+import pathlib
+from tensorflow import keras
+from tensorflow.keras import layers
+from tensorflow.keras.models import Sequential
+from nitric.faas import start, Trigger
+from nitric.api import Storage, KeyValueClient, Queueing
 
-    await kvClient.put("training-updates", id, "Loading Images...")
-    data_dir = tf.keras.utils.get_file(fname=id, origin=dataset_url, untar=True, cache_dir='datasets')
-    await kvClient.put("training-updates", id, "Images Loaded! Starting image preprocessing...")
+async def trainNewModel(id, dataset_url):
+    kvClient = KeyValueClient('training-updates')
+
+    file_name = dataset_url.split('/')[-1].split('.')[0]
+    await kvClient.put(id, { "update": "Loading Images..." })
+    data_dir = tf.keras.utils.get_file(fname=file_name, origin=dataset_url, untar=True, cache_dir="nitric", cache_subdir="buckets/datasets")
+    await kvClient.put(id, { "update": "Images Loaded! Starting image preprocessing..." })
     data_dir = pathlib.Path(data_dir)
 
     batch_size = 32
@@ -160,14 +167,14 @@ async def trainNewModel(id, dataset_url):
         batch_size=batch_size)
 
     class_names = train_ds.class_names
-    await kvClient.put("training-updates", id, "Images processed! Classes found: {class_names}. Building model...")
+    await kvClient.put(id, { "update": "Images processed! Classes found: %s. Building model..."%class_names })
 
     AUTOTUNE = tf.data.AUTOTUNE
 
     train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
     val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
-    num_classes = 5
+    num_classes = len(class_names)
 
     model = Sequential([
         layers.experimental.preprocessing.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
@@ -183,71 +190,46 @@ async def trainNewModel(id, dataset_url):
         layers.Dense(num_classes)
     ])
 
-    await kvClient.put("training-updates", id, "Model Built! Compiling...")
+    await kvClient.put(id, { "update": "Model Built! Compiling..." })
     model.compile(optimizer='adam',
                     loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                     metrics=['accuracy'])
 
-    await kvClient.put("training-updates", id, "Model Compiled! Training model...")
-    epochs = 10
+    await kvClient.put(id, { "update": "Model Compiled! Training model..." })
+    epochs = 1
     model.fit(
         train_ds,
-        callbacks=[LossAndErrorPrintingCallback(id)],
         validation_data=val_ds,
         epochs=epochs
     )
-    await kvClient.put("training-updates", id, "Training Complete! Saving model...")
+    await kvClient.put(id, { "update": "Training Complete! Saving model..." })
     model.save('trained_model.h5')
-    storage_client = StorageClient()
-    storage_client.bucket('datasets').file('{id}-model.h5').write(pathlib.Path('trained_model.h5').read_bytes())
-    await kvClient.put("training-updates", id, "Model Saved!")
+    saved_model = open('trained_model.h5', 'rb')
+    storage_client = Storage()
+    model_bytes = saved_model.read()
+    await storage_client.bucket('datasets').file(id + '-model.h5').write(model_bytes)
+    await kvClient.put(id, { "update": "Model Saved!" })
 ```
 At the end of this function call, the final saved model is being written to the bucket. This model is saved as a HDF5 file and can then be used later on to make image predictions.
 
-You may also notice that within the `model.fit` function, there are callbacks defined. These will also log statuses to the KV store so that the user is getting updates within the training itself.
-
-```python
-#index.py
-class LossAndErrorPrintingCallback(keras.callbacks.Callback):
-    def __init__(self, id):
-        super(LossAndErrorPrintingCallback, self).__init__()
-        self.kvClient = KeyValueClient()
-        self.id = id
-    async def on_train_batch_end(self, batch, logs=None):
-        await self.kvClient.put('training-updates', self.id, "For batch {}, loss is {:7.2f}.".format(batch, logs["loss"]))
-
-    async def on_test_batch_end(self, batch, logs=None):
-        await self.kvClient.put('training-updates', self.id, "For batch {}, loss is {:7.2f}.".format(batch, logs["loss"]))
-
-    async def on_epoch_end(self, epoch, logs=None):
-        await self.kvClient.put('training-updates', self.id,
-            "The average loss for epoch {} is {:7.2f} "
-            "and mean absolute error is {:7.2f}.".format(
-                epoch, logs["loss"], logs["mean_absolute_error"]
-            )
-        )
-```
-We now need to write the FaaS handler to go along with this service. This service is set up with the intention that is triggered by the `new-model` topic. Thus, when this service is triggered it should poll the queue and complete that task.
+We now need to write the FaaS handler to go along with this service. This service is set up with the intention that is triggered by the `new-model` topic. The `new-model` topic will be triggered by the training requester, which also pushes a new task onto the queue. Thus, when the train-model service is triggered, there will always be a task it can use. This design has fault tolerance, as if the service fails and doesn't complete the task, a new service can still complete the task.
 
 ```python
 # Called on new-model topic being triggered
 async def handler(trigger: Trigger):
     # Get Event off of the queue
-    queueClient = QueueClient()
+    queueClient = Queueing()
     for task in await queueClient.queue("training-queue").receive():
-        print(queueClient.queue("training-queue"))
-        print(task)
         id = task.id
-        print(id)
 
         # Get training information from bucket
-        storageClient = StorageClient()
-        dataset_url = await storageClient.bucket('datasets').file('{id}-url').read()
+        storageClient = Storage()
+        dataset_url = await storageClient.bucket('datasets').file(id + "-url").read()
 
-        kvClient = KeyValueClient()
-        await kvClient.put("training-updates", id, "Training Starting...")
-        await trainNewModel(id, dataset_url) #takes the name of a dataset
-        await kvClient.put("training-updates", id, "Model trained!")
+        kvClient = KeyValueClient("training-updates")
+        await kvClient.put(id, { "update": "Training Starting..." })
+        await trainNewModel(id, dataset_url.decode('utf-8')) #takes the name of a dataset
+        await kvClient.put(id, { "update": "Model trained!" })
 
         await task.complete()
     return "Model trained"
@@ -269,29 +251,30 @@ interface TrainingRequest {
   dataset_url: string; 
 }
 
+// Start your function here
 faas.start(async (request: faas.NitricTrigger<TrainingRequest>): Promise<string> => {
   const { dataset_url } = request.dataAsObject();
   const id = uuid();
 
-  // Write information to bucket
+  //Write information to bucket
   const storage_client = new StorageClient();
   await storage_client.write('datasets', `${id}-url`, Buffer.from(dataset_url));
 
-  // Write to KV Store
+  //Write to KV Store
   const kv_client = new KeyValueClient('training-updates');
   await kv_client.put(id, {
-    name: 'Request',
-    description: 'Training Pending...'
+    update: 'Training Pending...'
   });
 
-  // Send task to queue
+  //Send task to queue
   const queue_client = new QueueClient();
   await queue_client.send('training-queue', { id: id });
 
   const event_client = new EventClient();
   event_client.publish("new-model", {
-    id: id,
     payload: {
+      id: id,
+      worker_index: 0,
       value: "Train new model please :)"
     }
   });
@@ -344,7 +327,7 @@ sites:
 We will then start writing our files.
 
 ```html
-<!--Index.html-->
+<!--index.html-->
 <!DOCTYPE html>
 <html>
   <head>
@@ -377,7 +360,6 @@ We will then start writing our files.
     <script src="index.js"></script>
   </body>
 </html>
-
 ```
 The `index.js` file will handle making a request, and then awaiting status updates. 
 
@@ -406,41 +388,45 @@ async function trainModel() {
 }
 document.getElementById('train').addEventListener("click", trainModel)
 ```
+
+The second function `awaitStatus` is in a loop, that polls that status update every 500ms. This can be lowered for more frequent polling, but increases the network traffic. The function makes a HTTP request, with the id, to the status updater. It responds with the status update, and then appends this to the status section of the site if this is a new update.
+
 ```js
 //index.js
 const waitFor = delay => new Promise(resolve => setTimeout(resolve, delay));
 
 async function awaitStatus(id){
   const statusForm = document.getElementById('status-section')
-  const lineBreak = document.createElement('br');
   while(true){
     await waitFor(500);
-    //Requests a status update, providing the id
+    //Makes a request to the status updater
     const statusUpdate = await fetch('/status/', {
       method: "POST",
       body: JSON.stringify({
         id: id,
       })
     });
-    const response = await statusUpdate.json();
-    const statusText = response.description;
+    const statusText = await statusUpdate.text();
     const status = document.getElementById('status-update')
-    //If the new status is not the same as the previous
+    //Checks if this new status is not the same as the previous
     if (status.innerHTML !== statusText) {
-      //Creates a new status message, adding it under the old message
-      statusForm.appendChild(lineBreak);
       status.id = ""
+      //Creates a new element, and appends it to the form
       const newStatus = document.createElement('p')
       newStatus.innerHTML = statusText;
       newStatus.id = "status-update";
       newStatus.className = "status-message";
       statusForm.appendChild(newStatus)
     }
+    //When the model is trained, stops polling the status updater.
+    if (statusText === "Model Trained!"){
+      break;
+    }
   }
 }
 ```
 ### Setting up the Entrypoints
-For each of our services, we want an entrypoint that is relative to the site. This functionality is added in the `nitric.yaml` file by using the entrypoints key.
+For each of our services, we want an entrypoint that is relative to the site. This functionality is added in the `nitric.yaml` file by using the entrypoints key. We don't need an entrypoint for the `train-model` service as that is triggered via its topic subscription.
 ```yaml
 entrypoints:
   main:
@@ -453,9 +439,6 @@ entrypoints:
         type: service
       /status/:
         target: status-updater
-        type: service
-      /trainmodel/:
-        target: train-model
         type: service
 ```
 
@@ -473,9 +456,9 @@ And then click and open the `main` entrypoint localhost url and you should see t
 ✔ Starting Entrypoints
  Service            Port  
  ────────────────── ───── 
- status-updater     49155 
+ status-updater     49152 
  train-model        49153 
- training-requester 49156 
+ training-requester 49154 
  Entrypoint Url                    
  ────────── ────────────────────── 
  main       http://localhost:63562 
