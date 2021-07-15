@@ -75,16 +75,15 @@ storageClient.write('my-bucket', 'path/to/item', content);
 <CodeExample lang="python">
 
 ```python
-from nitric.api import StorageClient
+from nitric.api import Storage
 
 # Construct a new storage client with default settings
-storage_client = StorageClient()
+storage = Storage()
 
-# Example byte array
-content = b"example content"
+file_ref = storage.bucket("my-bucket").file("path/to/item")
 
-# Write a byte array to a bucket
-await storage_client.write("my-bucket", "path/to/item", content);
+# Write bytes to the file
+await file_ref.write(b"example content");
 ```
 
 </CodeExample>
@@ -213,13 +212,15 @@ const content = storageClient.read('my-bucket', 'path/to/item');
 <CodeExample lang="python">
 
 ```python
-from nitric.api import StorageClient
+from nitric.api import Storage
 
 # Construct a new storage client with default settings
-storage_client = StorageClient()
+storage = Storage()
 
-# Read a byte array from a bucket
-content = storage_client.read("my-bucket", "path/to/item")
+file_ref = storage.bucket("my-bucket").file("path/to/item")
+
+# Read bytes from the file
+file = await file_ref.read();
 ```
 
 </CodeExample>
@@ -345,13 +346,13 @@ const content = storageClient.delete('my-bucket', 'path/to/item');
 <CodeExample lang="python">
 
 ```python
-from nitric.api import StorageClient
+from nitric.api import Storage
 
 # Construct a new storage client with default settings
-storage_client = StorageClient()
+storage = Storage()
 
-# Read a byte array from a bucket
-content = storage_client.delete("my-bucket", "path/to/item")
+# Delete the file
+await storage.bucket("my-bucket").file("path/to/item").delete();
 ```
 
 </CodeExample>
