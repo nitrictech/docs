@@ -69,8 +69,7 @@
                 "path": "/docs/entrypoints.mdx"
               },
               {
-                "title": "Key/Value",
-                "path": "/docs/key-value.mdx"
+                "path": "/docs/documents.mdx"
               },
               {
                 "path": "/docs/events.mdx"
