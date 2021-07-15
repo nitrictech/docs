@@ -106,20 +106,21 @@ var object = StorageClient.newBuilder()
 
 ```go
 import (
-    "github.com/nitrictech/go-sdk/api"
-    "github.com/nitrictech/go-sdk/storageclient"
+    "github.com/nitrictech/go-sdk/storage"
 )
 
 ...
 
-_, err := client.Storage().Write(&storageclient.WriteOptions{
-	Bucket: "my-bucket",
-	Key: "path/to/item",
-	Data: []byte("Hello World!")
-})
+sc, err := storage.New()
 
 if err != nil {
-	// Handle error
+	// handle error retrieving the storage client
+}
+
+err := sc.Bucket("my-bucket").File("path/to/file").Write([]byte("Hello World!"))
+
+if err != nil {
+	// Handle error writing the file
 }
 ```
 
@@ -245,23 +246,20 @@ var object = StorageClient.newBuilder()
 
 ```go
 import (
-    "github.com/nitrictech/go-sdk/api"
-    "github.com/nitrictech/go-sdk/storageclient"
+    "github.com/nitrictech/go-sdk/storage"
 )
 
 ...
 
-result, err := client.Storage().Read(&storageclient.ReadOptions{
-	Bucket: "my-bucket",
-	Key: "path/to/item",
-})
+sc, _ := storage.New()
+
+f, err := sc.Bucket("my-bucket").File("path/to/item").Read()
 
 if err != nil {
-	// Handle error
+	// handle file read error
 }
 
-// Read the data
-data := result.Data
+// handle file content ([]byte)
 ```
 
 </CodeExample>
@@ -378,19 +376,17 @@ var object = StorageClient.newBuilder()
 
 ```go
 import (
-    "github.com/nitrictech/go-sdk/api"
-    "github.com/nitrictech/go-sdk/storageclient"
+    "github.com/nitrictech/go-sdk/storage"
 )
 
 ...
 
-_, err := client.Storage().Delete(&storageclient.DeleteOptions{
-	Bucket: "my-bucket",
-	Key: "path/to/item",
-})
+sc, _ := storage.New()
+
+err := sc.Bucket("my-delete").File("path/to/item").Delete()
 
 if err != nil {
-	// Handle error
+	// Handle deletion error
 }
 ```
 
