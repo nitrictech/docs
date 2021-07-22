@@ -2,7 +2,11 @@ Nitric's events service and API provides an intuitive approach to asynchronous m
 
 The Nitric events API provides an interface to message-oriented middleware and message brokers such as AWS SNS & Google PubSub to facilitate low-latency, highly available, "at-least once" message delivery.
 
-<img src="../assets/img/topics-overview.svg" height="334" alt="topic overview diagram" />
+<img
+  src="../assets/img/topics-overview.svg"
+  height="334"
+  alt="topic overview diagram"
+/>
 
 ## Key concepts
 
@@ -66,22 +70,20 @@ Once a topic has been defined, services can publish to it using one of the Nitri
 // import the event client library
 import { faas, EventClient } from '@nitric/sdk';
 
-faas.start(
-  async (_: faas.NitricRequest<string>): Promise<string> => {
-    // Create a new instance of the event client
-    const eventClient = new EventClient();
+faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
+  // Create a new instance of the event client
+  const eventClient = new EventClient();
 
-    // Publish an event to the topic 'my-topic'
-    // Note: The event payload will be serialized automatically.
-    await eventClient.publish('my-topic', {
-      payload: {
-        amazing: 'thing happened!',
-      },
-    });
+  // Publish an event to the topic 'my-topic'
+  // Note: The event payload will be serialized automatically.
+  await eventClient.publish('my-topic', {
+    payload: {
+      amazing: 'thing happened!',
+    },
+  });
 
-    return 'Successfully published message';
-  }
-);
+  return 'Successfully published message';
+});
 ```
 
 </CodeExample>
@@ -230,22 +232,20 @@ It's essential that every event can be uniquely identified so that subscribers c
 // import the event client library
 import { faas, EventClient } from '@nitric/sdk';
 
-faas.start(
-    async (_: faas.NitricRequest<string>): Promise<string> => {
-        const eventClient = new EventClient();
+faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
+  const eventClient = new EventClient();
 
-        await eventClient.publish('my-topic', {
-            // Note: the event id should be generated using a process
-            // that's guaranteed to be unique for practical purposes.
-            id: 'unique-event-id',
-            payload: {
-                amazing: 'thing happened!',
-            },
-        });
+  await eventClient.publish('my-topic', {
+    // Note: the event id should be generated using a process
+    // that's guaranteed to be unique for practical purposes.
+    id: 'unique-event-id',
+    payload: {
+      amazing: 'thing happened!',
+    },
+  });
 
-        return 'Successfully published message';
-    }
-);
+  return 'Successfully published message';
+});
 ```
 
 </CodeExample>
@@ -397,4 +397,3 @@ Faas::start($handler);
 #### Atomicity of Events
 
 When implementing design patterns in order to ensure atomic state changes and event publishing, such as [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html), it's critical that any attempt to 'republish' an event due to a failure reuses the same event ID as any previous attempts. This ensures duplicate event deliveries won't contain mismatching IDs in the case that a previous attempt silently succeeded, while appearing to fail. In these cases we recommend generating your own event ID and storing it in the outbox record.
-

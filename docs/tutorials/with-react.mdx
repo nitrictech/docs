@@ -76,7 +76,7 @@ Open up the `greeter/index.ts` file. This is where we build the code for our gre
 
 ```typescript
 // import the Nitric FaaS library
-import { faas } from "@nitric/sdk";
+import { faas } from '@nitric/sdk';
 
 interface HelloWorldRequest {
   name: string;
@@ -90,7 +90,7 @@ interface HelloWorldResponse {
 async function handler(
   request: faas.NitricTrigger<HelloWorldRequest>
 ): Promise<HelloWorldResponse> {
-  const { name, greeting = "Hello" } = request.dataAsObject();
+  const { name, greeting = 'Hello' } = request.dataAsObject();
 
   return { response: `${greeting} ${name}!` };
 }
@@ -180,20 +180,20 @@ Let's create this form within `src/App.tsx`.
 Start by setting up some basic inputs, a function to handle the service call and a button to initiate the call.
 
 ```tsx
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useState } from 'react';
 
 const App = () => {
-  const [name, setName] = useState("Nitric");
-  const [greeting, setGreeting] = useState("Hello");
+  const [name, setName] = useState('Nitric');
+  const [greeting, setGreeting] = useState('Hello');
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState('');
 
   async function updateGreeting(e: SyntheticEvent) {
     e.preventDefault();
     try {
       setLoading(true);
-      const rawResponse = await fetch("/greeter/", {
-        method: "POST",
+      const rawResponse = await fetch('/greeter/', {
+        method: 'POST',
         body: JSON.stringify({
           name: name,
           greeting: greeting,
@@ -233,8 +233,8 @@ const App = () => {
           </div>
         </div>
         <button className="primary" onClick={updateGreeting}>
-          {loading ? "Loading... " : "Send Greetings "}
-          <div className={loading ? "loader loading" : "loader"}>🚀</div>
+          {loading ? 'Loading... ' : 'Send Greetings '}
+          <div className={loading ? 'loader loading' : 'loader'}>🚀</div>
         </button>
         {response && (
           <h2 className="greeting">

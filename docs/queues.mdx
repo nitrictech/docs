@@ -75,15 +75,15 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 <CodeExample lang="node">
 
 ```typescript
-import { QueueClient } from "@nitric/sdk";
+import { QueueClient } from '@nitric/sdk';
 
 // Construct a new queue client with default settings
 const queueClient = new QueueClient();
 
 // Publish a task to a queue
 await queueClient.send(
-  "my-queue",
-  new Task((payload = { example: "payload" }))
+  'my-queue',
+  new Task((payload = { example: 'payload' }))
 );
 ```
 
@@ -228,19 +228,19 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 <CodeExample lang="node">
 
 ```typescript
-import { QueueClient } from "@nitric/sdk";
+import { QueueClient } from '@nitric/sdk';
 
 // Construct a new queue client with default settings
 const queueClient = new QueueClient();
 
 // Receive tasks from the queue
-const tasks = await queueClient.receive("my-queue", 5);
+const tasks = await queueClient.receive('my-queue', 5);
 
 tasks.forEach((task) => {
   // Work on a task...
 
   // Complete the task
-  queueClient.complete("my-queue", task);
+  queueClient.complete('my-queue', task);
 });
 ```
 

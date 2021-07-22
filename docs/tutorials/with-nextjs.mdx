@@ -3,11 +3,11 @@
 <p>
   <a href="https://nextjs.org/" target="_blank">
     Next.js
-  </a>{" "}
-  is a{" "}
+  </a>{' '}
+  is a{' '}
   <a href="https://reactjs.org/" target="_blank">
     React
-  </a>{" "}
+  </a>{' '}
   framework that provides everything you need for production applications such
   as hybrid static & server rendering, TypeScript support, smart bundling, route
   pre-fetching, and more.
@@ -65,8 +65,8 @@ Let's start building the service that can return a greeting with a name.
 One optional step is to add the CSS file `greeter-ui/global.css` to make our app look beautiful. You can find the full contents of this file <a href="https://raw.githubusercontent.com/nitrictech/docs/main/assets/tutorial-styles.css" target="_blank" rel="noopener noreferrer">here.</a> Then add it to a custom App component called `pages/_app.tsx` as shown below:
 
 ```tsx
-import type { AppProps } from "next/app";
-import "../global.css";
+import type { AppProps } from 'next/app';
+import '../global.css';
 
 // This default export is required in a new `pages/_app.js` file.
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -91,13 +91,13 @@ We will utilize the <a href="https://nextjs.org/docs/api-routes/introduction" ta
 Under the `pages/api` folder. Create a file called `greeter.ts`, this is where we build the code for our greeter service.
 
 ```typescript
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { name, greeting = "Hello" } = JSON.parse(req.body);
+  const { name, greeting = 'Hello' } = JSON.parse(req.body);
   res.status(200).json({ response: `${greeting} ${name}!` });
 }
 ```
@@ -127,20 +127,20 @@ Let's create this form within `pages/index.tsx`.
 Start by setting up some basic inputs, a function to handle the service call and a button to initiate the call.
 
 ```tsx
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useState } from 'react';
 
 const App = () => {
-  const [name, setName] = useState("Nitric");
-  const [greeting, setGreeting] = useState("Hello");
+  const [name, setName] = useState('Nitric');
+  const [greeting, setGreeting] = useState('Hello');
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState('');
 
   async function updateGreeting(e: SyntheticEvent) {
     e.preventDefault();
     try {
       setLoading(true);
-      const rawResponse = await fetch("/api/greeter/", {
-        method: "POST",
+      const rawResponse = await fetch('/api/greeter/', {
+        method: 'POST',
         body: JSON.stringify({
           name: name,
           greeting: greeting,
@@ -180,8 +180,8 @@ const App = () => {
           </div>
         </div>
         <button className="primary" onClick={updateGreeting}>
-          {loading ? "Loading... " : "Send Greetings "}
-          <div className={loading ? "loader loading" : "loader"}>🚀</div>
+          {loading ? 'Loading... ' : 'Send Greetings '}
+          <div className={loading ? 'loader loading' : 'loader'}>🚀</div>
         </button>
         {response && (
           <h2 className="greeting">

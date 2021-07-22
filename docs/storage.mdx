@@ -1,4 +1,4 @@
-Nitric provides resources and SDK clients for secure object storage. 
+Nitric provides resources and SDK clients for secure object storage.
 This is typically used to read and write items such as static website content, images, files and other binary data.
 
 ### Key concepts
@@ -16,6 +16,7 @@ buckets:
 ```
 
 ## Setup Accessors
+
 > Coming Soon: The capability to lock down readers/writers of buckets within a stack
 
 ## Usage
@@ -58,7 +59,7 @@ To write an object use a `StorageClient` to `write` an object to a bucket:
 <CodeExample lang="node">
 
 ```typescript
-import { StorageClient } from "@nitric/sdk";
+import { StorageClient } from '@nitric/sdk';
 
 // Construct a new storage client with default settings
 const storageClient = new StorageClient();
@@ -67,7 +68,7 @@ const storageClient = new StorageClient();
 const content = new Uint8Array();
 
 // Write a byte array to a bucket
-storageClient.write("my-bucket", "path/to/item", content)
+storageClient.write('my-bucket', 'path/to/item', content);
 ```
 
 </CodeExample>
@@ -199,13 +200,13 @@ To retrieve an object use a `StorageClient` to `read` an object from a bucket:
 <CodeExample lang="node">
 
 ```typescript
-import { StorageClient } from "@nitric/sdk";
+import { StorageClient } from '@nitric/sdk';
 
 // Construct a new storage client with default settings
 const storageClient = new StorageClient();
 
 // Read a byte array from a bucket
-const content = storageClient.read("my-bucket", "path/to/item");
+const content = storageClient.read('my-bucket', 'path/to/item');
 ```
 
 </CodeExample>
@@ -331,13 +332,13 @@ To delete an object use a `StorageClient` to `delete` an object from a bucket:
 <CodeExample lang="node">
 
 ```typescript
-import { StorageClient } from "@nitric/sdk";
+import { StorageClient } from '@nitric/sdk';
 
 // Construct a new storage client with default settings
 const storageClient = new StorageClient();
 
 // Read a byte array from a bucket
-const content = storageClient.delete("my-bucket", "path/to/item");
+const content = storageClient.delete('my-bucket', 'path/to/item');
 ```
 
 </CodeExample>
