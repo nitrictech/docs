@@ -125,7 +125,7 @@ docs, _ := documents.New()
 // Create a reference to a new collection named 'products'
 products := docs.Collection("products")
 
-// Create a reference to a new documenbt named 'nitric'
+// Create a reference to a new document named 'nitric'
 nitric := products.Doc("nitric")
 ```
 
@@ -134,7 +134,15 @@ nitric := products.Doc("nitric")
 <CodeExample lang="php">
 
 ```php
-// Todo
+use Nitric\Api\Documents;
+
+$docs = new Documents();
+
+// Create a reference to a new collection named 'products'
+$products = $docs->collection("products")
+
+// Create a reference to a new document named 'nitric'
+$docRef = $products->doc("nitric");
 ```
 
 </CodeExample>
@@ -229,7 +237,6 @@ await products.doc("nitric").set({
 ```
 
 </CodeExample>
-
 <CodeExample lang="java">
 
 ```java
@@ -246,7 +253,6 @@ client.put("nitric", product);
 ```
 
 </CodeExample>
-
 <CodeExample lang="go">
 
 ```go
@@ -261,7 +267,7 @@ docs, _ := documents.New()
 // Create a reference to a new collection named 'products'
 products := docs.Collection("products")
 
-// Create a reference to a new documenbt named 'nitric'
+// Create a reference to a new document named 'nitric'
 nitric := products.Doc("nitric")
 
 err := nitric.Set(map[string]inteface{}{
@@ -276,15 +282,27 @@ if err != nil {
 ```
 
 </CodeExample>
-
 <CodeExample lang="php">
 
 ```php
-// Todo
+use Nitric\Api\Documents;
+
+$docs = new Documents();
+
+// Create a reference to a new collection named 'products'
+$products = $docs->collection("products")
+
+// Create a reference to a new document named 'nitric'
+$docRef = $products->doc("nitric");
+
+$docRef->set([
+    "id" => "nitric",
+    "name" => "Nitric Framework",
+    "description" => "A development framework",
+]);
 ```
 
 </CodeExample>
-
 <CodeExample lang="c-sharp">
 
 ```csharp
@@ -301,7 +319,6 @@ client.Put("nitric", product);
 ```
 
 </CodeExample>
-
 </CodeExamples>
 
 ### Update a document
@@ -362,7 +379,6 @@ await documents.collection("products").doc("nitric").delete()
 ```
 
 </CodeExample>
-
 <CodeExample lang="java">
 
 ```java
@@ -377,7 +393,6 @@ client.delete("nitric");
 ```
 
 </CodeExample>
-
 <CodeExample lang="go">
 
 ```go
@@ -392,7 +407,7 @@ docs, _ := documents.New()
 // Create a reference to a new collection named 'products'
 products := docs.Collection("products")
 
-// Create a reference to a new documenbt named 'nitric'
+// Create a reference to a new document named 'nitric'
 nitric := products.Doc("nitric")
 
 err := nitric.Delete()
@@ -403,19 +418,23 @@ if err != nil {
 ```
 
 </CodeExample>
-
 <CodeExample lang="php">
 
 ```php
-use Nitric\Api\KeyValueClient;
+use Nitric\Api\Documents;
 
-$client = new KeyValueClient();
+$docs = new Documents();
 
-$client->delete("nitric");
+// Create a reference to a new collection named 'products'
+$products = $docs->collection("products")
+
+// Create a reference to a new document named 'nitric'
+$docRef = $products->doc("nitric");
+
+$docRef->delete();
 ```
 
 </CodeExample>
-
 <CodeExample lang="c-sharp">
 
 ```csharp
@@ -430,7 +449,6 @@ client.Delete("nitric");
 ```
 
 </CodeExample>
-
 </CodeExamples>
 
 ## Read data
@@ -498,7 +516,6 @@ product.content["name"] = "new nitric"
 ```
 
 </CodeExample>
-
 <CodeExample lang="java">
 
 ```java
@@ -513,7 +530,6 @@ var product = client.get("nitric");
 ```
 
 </CodeExample>
-
 <CodeExample lang="go">
 
 ```go
@@ -532,19 +548,17 @@ if err != nil {
 ```
 
 </CodeExample>
-
 <CodeExample lang="php">
 
 ```php
-use Nitric\Api\KeyValueClient;
+use Nitric\Api\Documents;
 
-$client = new KeyValueClient();
+$docs = new Documents();
 
-$product = $client->get("products", "nitric");
+$doc = $docs->collection("products")->doc("nitric")->get();
 ```
 
 </CodeExample>
-
 <CodeExample lang="c-sharp">
 
 ```csharp
@@ -559,7 +573,6 @@ var product = client.Get("nitric")
 ```
 
 </CodeExample>
-
 </CodeExamples>
 
 ### Queries
@@ -649,7 +662,7 @@ query := docs.Collection("customers").Query().Where(
 	Condition("age").Gt("21")
 )
 
-// Create a reference to a new documenbt named 'nitric'
+// Create a reference to a new document named 'nitric'
 result, err := query.Fetch()
 ```
 
@@ -658,7 +671,18 @@ result, err := query.Fetch()
 <CodeExample lang="php">
 
 ```php
-TODO
+use Nitric\Api\Documents;
+
+$docs = new Documents();
+
+// Construct a query against the 'customers' collection
+$query = $docs
+    ->collection("customers")
+    ->query()
+    ->where("country", "==", "Australia");
+
+// Retrieve a page of query results
+$results = $query->fetch();
 ```
 
 </CodeExample>
@@ -757,7 +781,7 @@ query := docs.Collection("customers").Query().Where(
 	Condition("age").Gt("21")
 )
 
-// Create a reference to a new documenbt named 'nitric'
+// Execute the query
 result, err := query.Fetch()
 ```
 
@@ -766,7 +790,19 @@ result, err := query.Fetch()
 <CodeExample lang="php">
 
 ```php
-TODO
+use Nitric\Api\Documents;
+
+$docs = new Documents();
+
+// Construct a query against the 'customers' collection
+$query = $docs
+    ->collection("customers")
+    ->query()
+    ->where("country", "==", "Australia")
+    ->where("age", ">=", 21);
+
+// Execute the query and retrieve a page of results
+$results = $query->fetch();
 ```
 
 </CodeExample>
@@ -876,7 +912,7 @@ docs, _ := documents.New()
 // Create a reference to a new collection named 'products'
 query := docs.Collection("customers").Query().Limit(10)
 
-// Create a reference to a new documenbt named 'nitric'
+// Execute the query
 result, err := query.Fetch()
 ```
 
@@ -885,7 +921,18 @@ result, err := query.Fetch()
 <CodeExample lang="php">
 
 ```php
-TODO
+use Nitric\Api\Documents;
+
+$docs = new Documents();
+
+// Construct a query against the 'customers' collection
+$query = $docs
+    ->collection("customers")
+    ->query()
+    ->limit(10);
+
+// Execute the query and retrieve up to 10 customers
+$results = $query->fetch();
 ```
 
 </CodeExample>
