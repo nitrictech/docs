@@ -87,7 +87,6 @@ await file_ref.write(b"example content");
 ```
 
 </CodeExample>
-
 <CodeExample lang="java">
 
 ```java
@@ -101,7 +100,6 @@ var object = StorageClient.newBuilder()
 ```
 
 </CodeExample>
-
 <CodeExample lang="go">
 
 ```go
@@ -125,19 +123,18 @@ if err != nil {
 ```
 
 </CodeExample>
-
 <CodeExample lang="php">
 
 ```php
-use Nitric\Api\StorageClient;
+use Nitric\Api\Storage;
 
-$client = new StorageClient();
+$storage = new Storage();
 
-// Data to write
-$data = ...
+// Create a reference to the bucket
+$bucket = $storage->bucket('my-bucket');
 
-// Returns bytes as string
-$client->write("my-bucket", "path/to/item", $data);
+// Create a new file with contents
+$bucket->file("some/file.txt")->write("file contents");
 ```
 
 </CodeExample>
@@ -267,12 +264,15 @@ if err != nil {
 <CodeExample lang="php">
 
 ```php
-use Nitric\Api\StorageClient;
+use Nitric\Api\Storage;
 
-$client = new StorageClient();
+$storage = new Storage();
 
-// Returns bytes as string
-$bytes = $client->read("my-bucket", "path/to/item");
+// Create a reference to the bucket
+$bucket = $storage->bucket('my-bucket');
+
+// Read contents from a file
+$contents = $bucket->file("some/file.txt")->read();
 ```
 
 </CodeExample>
@@ -395,11 +395,15 @@ if err != nil {
 <CodeExample lang="php">
 
 ```php
-use Nitric\Api\StorageClient;
+use Nitric\Api\Storage;
 
-$client = new StorageClient();
+$storage = new Storage();
 
-$client->delete("my-bucket", "path/to/item");
+// Create a reference to the bucket
+$bucket = $storage->bucket('my-bucket');
+
+// Delete a file from the bucket
+$bucket->file("some/file.txt")->delete();
 ```
 
 </CodeExample>
