@@ -114,7 +114,19 @@ TODO
 <CodeExample lang="go">
 
 ```go
-TODO
+import (
+	"github.com/nitrictech/go-sdk/api/documents"
+)
+
+...
+
+docs, _ := documents.New()
+
+// Create a reference to a new collection named 'products'
+products := docs.Collection("products")
+
+// Create a reference to a new documenbt named 'nitric'
+nitric := products.Doc("nitric")
 ```
 
 </CodeExample>
@@ -239,23 +251,27 @@ client.put("nitric", product);
 
 ```go
 import (
-    "github.com/nitrictech/go-sdk/api"
-    "github.com/nitrictech/go-sdk/kvclient"
+	"github.com/nitrictech/go-sdk/api/documents"
 )
+
 ...
 
-kvClient := client.KV()
+docs, _ := documents.New()
 
-product := map[string]interface{}{
-	"id":          "nitric",
-	"name":        "nitric",
-	"description": "A development framework!",
-}
+// Create a reference to a new collection named 'products'
+products := docs.Collection("products")
 
-kvClient.PutKey("products", "nitric", product)
+// Create a reference to a new documenbt named 'nitric'
+nitric := products.Doc("nitric")
+
+err := nitric.Set(map[string]inteface{}{
+	"id": "nitric",
+	"name": "Nitric Framework",
+	"description": "A development framework",
+})
 
 if err != nil {
-	// Handle error
+	// handle error
 }
 ```
 
@@ -366,16 +382,23 @@ client.delete("nitric");
 
 ```go
 import (
-    "github.com/nitrictech/go-sdk/api"
-    "github.com/nitrictech/go-sdk/kvclient"
+	"github.com/nitrictech/go-sdk/api/documents"
 )
 
-kvclient := client.KV()
+...
 
-err := kvclient.Delete("nitric")
+docs, _ := documents.New()
+
+// Create a reference to a new collection named 'products'
+products := docs.Collection("products")
+
+// Create a reference to a new documenbt named 'nitric'
+nitric := products.Doc("nitric")
+
+err := nitric.Delete()
 
 if err != nil {
-	// Handle error
+	// handle error
 }
 ```
 
@@ -613,7 +636,21 @@ TODO
 <CodeExample lang="go">
 
 ```go
-TODO
+import (
+	"github.com/nitrictech/go-sdk/api/documents"
+)
+
+...
+
+docs, _ := documents.New()
+
+// Create a reference to a new collection named 'products'
+query := docs.Collection("customers").Query().Where(
+	Condition("age").Gt("21")
+)
+
+// Create a reference to a new documenbt named 'nitric'
+result, err := query.Fetch()
 ```
 
 </CodeExample>
@@ -706,7 +743,22 @@ TODO
 <CodeExample lang="go">
 
 ```go
-TODO
+import (
+	"github.com/nitrictech/go-sdk/api/documents"
+)
+
+...
+
+docs, _ := documents.New()
+
+// Create a reference to a new collection named 'products'
+query := docs.Collection("customers").Query().Where(
+	Condition("country").Eq("Australia")
+	Condition("age").Gt("21")
+)
+
+// Create a reference to a new documenbt named 'nitric'
+result, err := query.Fetch()
 ```
 
 </CodeExample>
@@ -813,7 +865,19 @@ TODO
 <CodeExample lang="go">
 
 ```go
-TODO
+import (
+	"github.com/nitrictech/go-sdk/api/documents"
+)
+
+...
+
+docs, _ := documents.New()
+
+// Create a reference to a new collection named 'products'
+query := docs.Collection("customers").Query().Limit(10)
+
+// Create a reference to a new documenbt named 'nitric'
+result, err := query.Fetch()
 ```
 
 </CodeExample>
