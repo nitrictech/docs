@@ -145,7 +145,7 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 
 To add a new document to a collection, use the `set()` method with an explicitly specifying a document identifier:
 
-### Add a document
+### Set a document
 
 <CodeExamples 
 	languages={[
@@ -290,11 +290,12 @@ client.Put("nitric", product);
 
 ### Update a document
 
-> This functionality is coming soon ⚠️
+> Check back soon! We are working on it ⚠️
 
-### Delete data
+### Delete documents
 
-To delete a document from a collection, use the `delete()` method:
+To delete a document from a collection, use the `delete()` method.
+When you delete a document, the Nitric API will automatically delete all documents within its subcollections.
 
 <CodeExamples 
 	languages={[
@@ -419,6 +420,8 @@ There are three ways to retrieve data, any of these methods can be used with doc
 
 ### Get data once
 
+The following example shows how to retrieve the contents of a single document using `get()`:
+
 <CodeExamples 
 	languages={[
 	{
@@ -451,17 +454,11 @@ There are three ways to retrieve data, any of these methods can be used with doc
 <CodeExample lang="node">
 
 ```typescript
-import { KeyValueClient } from '@nitric/sdk';
+import { documents } from '@nitric/sdk';
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-}
+const client = documents();
 
-const client = new KeyValueClient<Product>('products');
-
-const product = await client.get('nitric');
+const product = await client.collection('products').doc('nitric').get();
 ```
 
 </CodeExample>
@@ -542,10 +539,307 @@ var product = client.Get("nitric")
 
 </CodeExamples>
 
-### Simple and compound queries
+### Queries
+
+The documents API provides powerful query functionality for specifying which documents you want to retrieve from a collection.
+This queries can be executed with the `fetch()` and `stream()` methods.
+
+#### Simple queries
+
+The following query returns all customers who are 21 years old or older:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { documents } from '@nitric/sdk';
+
+const client = documents();
+
+const query = await client
+  .collection('customers')
+  .query()
+  .where('age', '>=', 21);
+
+// Execute query
+const documents = await query.fetch();
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+TODO
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+#### Compound queries
+
+You can chain multiple equality operator methods to create specific queries.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { documents } from '@nitric/sdk';
+
+const client = documents();
+
+const query = await client
+  .collection('customers')
+  .query()
+  .where('country', '==', 'Australia');
+  .where('age', '>=', 21);
+
+// Execute query
+const documents = await query.fetch();
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+TODO
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+### Query operators
+
+To query documents, the `where()` method can be used. It takes three parameters: a field to filter on, a comparison operator, and a value.
+
+The document service supports the following comparison operators:
+
+- `<` less than
+
+- `<=` less than or equal to
+
+- `==` equal to
+
+- `>` greater than
+
+- `>=` greater than or equal to
+
+- `!=` not equal to
 
 ### Limit data
 
+By default all documents that are returned by the query are retrieved. You can limit the number of documents retrieved using the `limit()` method:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { documents } from '@nitric/sdk';
+
+const client = documents();
+
+const query = await client.collection('customers').query().limit(10);
+
+// Get up to 10 customers
+const documents = await query.fetch();
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+TODO
+```
+
+</CodeExample>
+
+</CodeExamples>
+
 ### Paginate data
 
+> Check back soon! We are working on it ⚠️
+
 ### Stream data
+
+> Check back soon! We are working on it ⚠️
