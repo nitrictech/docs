@@ -60,14 +60,16 @@ The Nitric SDKs provide methods that accept a function and then run that functio
 import { faas } from '@nitric/sdk';
 
 interface HelloWorldRequest {
-	greeting?: string;
-	name: string;
+  greeting?: string;
+  name: string;
 }
 
-async function handler(request: faas.NitricTrigger<HelloWorldRequest>): Promise<string> {
-	const { name, greeting = "Hello" } = request.dataAsObject();
+async function handler(
+  request: faas.NitricTrigger<HelloWorldRequest>
+): Promise<string> {
+  const { name, greeting = 'Hello' } = request.dataAsObject();
 
-	return `${greeting} ${name}!`;
+  return `${greeting} ${name}!`;
 }
 
 faas.start(handler);
@@ -79,7 +81,7 @@ faas.start(handler);
 ```python
 from nitric.faas import start, Trigger, Response
 
-# Define a handler function which will accept incoming requests (HTTP, Events, etc.) 
+# Define a handler function which will accept incoming requests (HTTP, Events, etc.)
 # process them and return a `Response`.
 def handler(trigger: Trigger) -> Response:
     order = request.get_object()
@@ -89,7 +91,7 @@ def handler(trigger: Trigger) -> Response:
 	// Return a successful response
     return "It worked!"
 
-# Start the handler, this should occur as soon as possible, 
+# Start the handler, this should occur as soon as possible,
 # avoid any lengthy pre-processes or incoming requests could timeout while waiting.
 if __name__ == "__main__":
     start(handler)

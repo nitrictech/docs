@@ -1,20 +1,18 @@
-The Key/Value service provides applications with the ability to store and retrieve application state. 
+The Key/Value service provides applications with the ability to store and retrieve application state.
 Nitric strives to make this process as easy as possible, using a key/value API. Application code simply specifies
 the name of the collection and a unique key to access the individual values.
 
 Nitric will automatically providing any required infrastructure with your cloud provider.
 
 > ⚠️ **Note** a new Document Service is being development which provides a superset of Key Value service functionality.
-When the Document Service is released the Key Value service will be deprecated.
-
+> When the Document Service is released the Key Value service will be deprecated.
 
 ## Key concepts
 
 - **Collections** are a logical group to store like values. In SQL database terms a collections equate to tables.
-- **Keys** provide unique identifiers to store and retrieve items in a collection. Keys must be unique within the scope of 
-        the collection.
+- **Keys** provide unique identifiers to store and retrieve items in a collection. Keys must be unique within the scope of
+  the collection.
 - **Values** are the value items stored in the collection.
-
 
 ## Usage
 
@@ -56,7 +54,7 @@ To store a value use `KeyValueClient` to `put` a value into a collection:
 <CodeExample lang="node">
 
 ```typescript
-import { KeyValueClient } from "@nitric/sdk";
+import { KeyValueClient } from '@nitric/sdk';
 
 interface Product {
   id: string;
@@ -64,12 +62,12 @@ interface Product {
   description: string;
 }
 
-const client = new KeyValueClient<Product>("products");
+const client = new KeyValueClient<Product>('products');
 
-await client.put("nitric", {
-  id: "nitric",
-  name: "nitric",
-  description: "A development framework!",
+await client.put('nitric', {
+  id: 'nitric',
+  name: 'nitric',
+  description: 'A development framework!',
 });
 ```
 
@@ -202,7 +200,7 @@ To retrieve a value use `KeyValueClient` to `get` an value from a collection:
 <CodeExample lang="node">
 
 ```typescript
-import { KeyValueClient } from "@nitric/sdk";
+import { KeyValueClient } from '@nitric/sdk';
 
 interface Product {
   id: string;
@@ -210,9 +208,9 @@ interface Product {
   description: string;
 }
 
-const client = new KeyValueClient<Product>("products");
+const client = new KeyValueClient<Product>('products');
 
-const product = await client.get("nitric");
+const product = await client.get('nitric');
 ```
 
 </CodeExample>
@@ -329,11 +327,11 @@ To delete a value use `KeyValueClient` to `delete` a value from a collection:
 <CodeExample lang="node">
 
 ```typescript
-import { KeyValueClient } from "@nitric/sdk";
+import { KeyValueClient } from '@nitric/sdk';
 
-const client = new KeyValueClient<any>("products");
+const client = new KeyValueClient<any>('products');
 
-await client.delete("nitric");
+await client.delete('nitric');
 ```
 
 </CodeExample>
@@ -358,7 +356,7 @@ import io.nitric.api.kv.KeyValueClient;
 var client = KeyValueClient.newBuilder(Product.class)
 	.collection("products")
 	.build();
-	
+
 client.delete("nitric");
 ```
 
