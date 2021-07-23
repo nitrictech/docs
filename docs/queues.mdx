@@ -135,28 +135,31 @@ QueueClient.newBuilder()
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/api"
-	"github.com/nitrictech/go-sdk/queueclient"
+	"github.com/nitrictech/go-sdk/queues"
 )
 
 ...
 
-client := api.New()
+client := queues.New()
 
-_, err := client.Queue().Send(&queueclient.SendOptions{
-	Queue: "my-queue",
-	Task: &queueClient.Task{
+ftasks, err := queues.Queue("my-queue").Send([]*queues.Task{
+	&queues.Task{
 		ID: "1234",
 		PayloadType: "test-payload",
 		Payload: map[string]interface{}{
 			"example": "payload",
 		},
-	},
+	}
 })
 
 if err != nil {
 	// handle error...
 }
+
+for _, ft := range ftasks {
+	// enumerate tasks that failed to queue
+}
+
 ```
 
 </CodeExample>
@@ -303,33 +306,28 @@ for (Task task: tasks) {
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/api"
-	"github.com/nitrictech/go-sdk/queueclient"
+	"github.com/nitrictech/go-sdk/queues"
 )
 
 ...
 
 // Construct a new queue client with default settings
-client := api.New()
+qc := queues.New()
 
 // Receive tasks from the queue
-response, err := client.Queue().Receive(&queueclient.ReceiveOptions{
-	Queue: "my-queue",
-	Depth: 1,
-})
+tasks, err := qc.Queue("my-queue").Recieve()
 
 if err != nil {
 	// handle error...
 }
 
-for _, task := range response.Tasks {
-	// process tasks...
-
-
-	client.Queue().Complete(&queueclient.CompleteOptions{
-		Queue: "my-queue",
-		Task: task,
-	})
+for _, task := range tasks {
+	// process the task
+	// complete the task
+	err := task.Complete()
+	if err != nil {
+		// task failed to complete
+	}
 }
 ```
 

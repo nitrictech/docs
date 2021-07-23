@@ -146,32 +146,30 @@ package main
 
 import (
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/api"
-	"github.com/nitrictech/go-sdk/eventclient"
+	"github.com/nitrictech/go-sdk/api/events"
 )
 
 // NitricFunction - Handles individual function requests (http, events, etc.)
-func NitricFunction(request *faas.NitricRequest) *faas.NitricResponse {
-
-	client, err := api.New()
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+	// Create a new events client
+	ec, err := events.New()
 
 	if err != nil {
 		// ...handle the error
 	}
 
-	client.Event().Publish(&eventclient.PublishOptions{
-		Topic: "my-topic",
-		Event: &eventclient.Event{
-			Payload: map[string]interface{}{
-				"amazing": "thing happened!",
-			},
+	// Publish an event to my-topic
+	ec.Topic("my-topic").Publish(&events.Event{
+		PayloadType: "my-payload",
+		Payload: map[string]interface{}{
+			"amazing": "thing happened!",
 		},
-	})
-
-	return &faas.NitricResponse{
-		Status: 200,
-		Body:   []byte("Successfully published message"),
 	}
+
+	resp := trigger.DefaultResponse()
+	resp.SetData([]byte("Successfully Published Message"))
+
+	return resp, nil
 }
 
 func main() {
@@ -306,35 +304,30 @@ package main
 
 import (
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/api"
-	"github.com/nitrictech/go-sdk/eventclient"
+	"github.com/nitrictech/go-sdk/events"
 )
 
 // NitricFunction - Handles individual function requests (http, events, etc.)
-func NitricFunction(request *faas.NitricRequest) *faas.NitricResponse {
-
-	client, err := api.New()
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+	ec, err := events.New()
 
 	if err != nil {
 		// ...handle the error
 	}
 
-	client.Event().Publish(&eventclient.PublishOptions{
-		Topic: "my-topic",
-		Event: &eventclient.Event{
-            // Note: the event id should be generated using a process
-            // that's guaranteed to be unique for practical purposes.
-            ID: "unique-event-id",
+	_, err := ec.Topic("my-topic").Publish(&events.Event{
+			ID: "unique-event-id",
 			Payload: map[string]interface{}{
 				"amazing": "thing happened!",
 			},
-		},
 	})
 
-	return &faas.NitricResponse{
-		Status: 200,
-		Body:   []byte("Successfully published message"),
-	}
+	msg := "Successfully Published Message"
+
+	resp := trigger.DefaultResponse()
+	resp.SetData([]byte("Successfully Published Message"))
+
+	return resp, nil
 }
 
 func main() {
