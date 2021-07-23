@@ -294,7 +294,7 @@ client.Put("nitric", product);
 
 ### Delete data
 
-To delete a value use `KeyValueClient` to `delete` a value from a collection:
+To delete a document from a collection, use the `delete()` method:
 
 <CodeExamples 
 	languages={[
@@ -328,11 +328,9 @@ To delete a value use `KeyValueClient` to `delete` a value from a collection:
 <CodeExample lang="node">
 
 ```typescript
-import { KeyValueClient } from '@nitric/sdk';
+import { documents } from '@nitric/sdk';
 
-const client = new KeyValueClient<any>('products');
-
-await client.delete('nitric');
+await documents().collection('products').doc('nitric').delete();
 ```
 
 </CodeExample>
