@@ -90,24 +90,15 @@ faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
 <CodeExample lang={"python"}>
 
 ```python
-from nitric.faas import start, Request, Response
-# Import the Event client library
-from nitric.api import EventClient
+from nitric.api import Events
 
+# Create a new Event Client with default settings
+topic = Events().topic("my-topic")
 
-def handler(request: Request) -> Response:
-	# Create a new Event Client with default settings
-	eventClient = EventClient()
+payload = {"content": "of event"}
 
-	# Publish an event to the topic 'my-topic'
-	# Note: The event payload will be serialized automatically.
-	eventClient.publish("my-topic", payload={amazing: "thing happened!"})
-
-    return Response("Successfully published message")
-
-
-if __name__ == "__main__":
-    start(handler)
+# Publish an event to the topic 'my-topic'
+event = await topic.publish(Event(payload=payload))
 ```
 
 </CodeExample>
@@ -192,7 +183,6 @@ func main() {
 <CodeExample lang={"php"}>
 
 ```php
-<?php
 namespace App\Function;
 
 use Nitric\Faas\Faas;
@@ -219,6 +209,7 @@ Faas::start($handler);
 ```
 
 </CodeExample>
+
 </CodeExamples>
 
 ### Event IDs
@@ -252,23 +243,14 @@ faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
 <CodeExample lang={"python"}>
 
 ```python
-from nitric.faas import start, Request, Response
-# Import the Event client library
-from nitric.api import EventClient
+from nitric.api import Events, Event
 
+events = Events()
 
-def handler(request: Request) -> Response:
-    eventClient = EventClient()
+payload = {"content": "of event"}
 
-    # Note: the event id should be generated using a process
-    # that's guaranteed to be unique for practical purposes.
-    eventClient.publish("my-topic", event_id='unique-event-id', payload={amazing: "thing happened!"})
-
-    return Response("Successfully published message")
-
-
-if __name__ == "__main__":
-    start(handler)
+# Note: the event id should be generated using a process that's guaranteed to be unique for practical purposes.
+await events.topic("my-topic").publish(Event(id="unique-event-id", payload=payload))
 ```
 
 </CodeExample>
@@ -364,7 +346,6 @@ func main() {
 <CodeExample lang={"php"}>
 
 ```php
-<?php
 namespace App\Function;
 
 use Nitric\Faas\Faas;
