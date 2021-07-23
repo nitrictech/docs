@@ -68,15 +68,15 @@ Once a topic has been defined, services can publish to it using one of the Nitri
 
 ```typescript
 // import the event client library
-import { faas, EventClient } from '@nitric/sdk';
+import { faas, events } from '@nitric/sdk';
 
 faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
   // Create a new instance of the event client
-  const eventClient = new EventClient();
+  const eventsClient = events();
 
   // Publish an event to the topic 'my-topic'
   // Note: The event payload will be serialized automatically.
-  await eventClient.publish('my-topic', {
+  await eventsClient.publish('my-topic', {
     payload: {
       amazing: 'thing happened!',
     },
@@ -221,12 +221,12 @@ It's essential that every event can be uniquely identified so that subscribers c
 
 ```typescript
 // import the event client library
-import { faas, EventClient } from '@nitric/sdk';
+import { faas, events } from '@nitric/sdk';
 
 faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
-  const eventClient = new EventClient();
+  const eventsClient = events();
 
-  await eventClient.publish('my-topic', {
+  await eventsClient.publish('my-topic', {
     // Note: the event id should be generated using a process
     // that's guaranteed to be unique for practical purposes.
     id: 'unique-event-id',

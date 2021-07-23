@@ -59,16 +59,16 @@ To write an object use a `StorageClient` to `write` an object to a bucket:
 <CodeExample lang="node">
 
 ```typescript
-import { StorageClient } from '@nitric/sdk';
+import { storage } from '@nitric/sdk';
 
 // Construct a new storage client with default settings
-const storageClient = new StorageClient();
+const storageClient = storage();
 
 // Example byte array
-const content = new Uint8Array();
+const contents = new Uint8Array();
 
 // Write a byte array to a bucket
-storageClient.write('my-bucket', 'path/to/item', content);
+storageClient.bucket('my-bucket').file('path/to/item').write(contents);
 ```
 
 </CodeExample>
@@ -197,13 +197,16 @@ To retrieve an object use a `StorageClient` to `read` an object from a bucket:
 <CodeExample lang="node">
 
 ```typescript
-import { StorageClient } from '@nitric/sdk';
+import { storage } from '@nitric/sdk';
 
 // Construct a new storage client with default settings
-const storageClient = new StorageClient();
+const storageClient = storage();
 
 // Read a byte array from a bucket
-const content = storageClient.read('my-bucket', 'path/to/item');
+const bytes = await storageClient
+  .bucket('my-bucket')
+  .file('path/to/item')
+  .read();
 ```
 
 </CodeExample>
@@ -329,13 +332,16 @@ To delete an object use a `StorageClient` to `delete` an object from a bucket:
 <CodeExample lang="node">
 
 ```typescript
-import { StorageClient } from '@nitric/sdk';
+import { storage } from '@nitric/sdk';
 
 // Construct a new storage client with default settings
-const storageClient = new StorageClient();
+const storageClient = storage();
 
 // Read a byte array from a bucket
-const content = storageClient.delete('my-bucket', 'path/to/item');
+const bytes = await storageClient
+  .bucket('my-bucket')
+  .file('path/to/item')
+  .delete();
 ```
 
 </CodeExample>
