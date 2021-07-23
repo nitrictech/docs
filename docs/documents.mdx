@@ -2,7 +2,7 @@ The Documents service provides applications with the ability to store and retrie
 Nitric strives to make this process as easy as possible, using a documents API. Application code can specify
 the name of the collection and use a set of powerful methods to query and manage the documents.
 
-Nitric will automatically providing any required infrastructure with your cloud provider.
+Nitric will automatically provision any required infrastructure with your cloud provider.
 
 ## Key concepts
 
@@ -74,13 +74,20 @@ await collection.doc('nitric').set({
 <CodeExample lang="python">
 
 ```python
-from nitric.api import KeyValueClient
+from nitric.api import Documents
 
-client = KeyValueClient()
+# construct a documents client with default options
+documents = Documents()
 
-product = ...
+# create a reference to a collection named 'products'
+products = documents.collection("products")
 
-await client.put("products", "nitric", product);
+# create/update a document with the id 'nitric', in the products collection
+await products.doc("nitric").set({
+    "id": "nitric",
+    "name": "Nitric Framework",
+    "description": "A development framework",
+})
 ```
 
 </CodeExample>
@@ -131,15 +138,7 @@ if err != nil {
 <CodeExample lang="php">
 
 ```php
-<?php
-
-use Nitric\Api\KeyValueClient;
-
-$client = new KeyValueClient();
-
-$product = ...
-
-$client->put("products", "nitric", $product);
+// Todo
 ```
 
 </CodeExample>
@@ -214,11 +213,11 @@ await client.delete('nitric');
 <CodeExample lang="python">
 
 ```python
-from nitric.api import KeyValueClient
+from nitric.api import Documents
 
-client = KeyValueClient()
+documents = Documents()
 
-client.delete("products", "nitric")
+await documents.collection("products").doc("nitric").delete()
 ```
 
 </CodeExample>
@@ -260,8 +259,6 @@ if err != nil {
 <CodeExample lang="php">
 
 ```php
-<?php
-
 use Nitric\Api\KeyValueClient;
 
 $client = new KeyValueClient();
@@ -347,11 +344,13 @@ const product = await client.get('nitric');
 <CodeExample lang="python">
 
 ```python
-from nitric.api import KeyValueClient
+from nitric.api import Documents
 
-client = KeyValueClient()
+documents = Documents()
 
-product = client.get("products", "nitric")
+product = await documents.collection("products").doc("nitric").get()
+
+product.content["name"] = "new nitric"
 ```
 
 </CodeExample>
@@ -393,8 +392,6 @@ if err != nil {
 <CodeExample lang="php">
 
 ```php
-<?php
-
 use Nitric\Api\KeyValueClient;
 
 $client = new KeyValueClient();

@@ -91,13 +91,15 @@ await queueClient.send(
 <CodeExample lang="python">
 
 ```python
-from nitric.api import QueueClient, Task
+from nitric.api import Queues, Task
 
 # Construct a new queue client with default settings
-queue_client = QueueClient()
+queues = Queues()
+
+payload = {"content": "of task"}
 
 # Publish a task to a queue
-queue_client.send("my-queue", { payload: { example: "payload" } });
+queues.queue("my-queue").send(Task(payload=payload))
 ```
 
 </CodeExample>
@@ -161,7 +163,6 @@ if err != nil {
 <CodeExample lang={"php"}>
 
 ```php
-<?php
 use Nitric\Faas\Faas;
 use Nitric\Api\QueueClient;
 use Nitric\Api\Task;
@@ -248,17 +249,18 @@ tasks.forEach((task) => {
 <CodeExample lang="python">
 
 ```python
-from nitric.api import QueueClient, Task
+from nitric.api import Queues, Task
 
 # Construct a new queue client with default settings
-queue_client = QueueClient()
+queue = Queues().queue("my-queue")
 
 # Receive tasks from the queue
-for task in queue_client.receive("my-queue", 5):
+tasks = await queue.receive()
+for task in tasks:
 	// Work on a task...
 
-	// Complete the task
-	queue_client.complete("my-queue", task)
+	// Complete the task if it was processed successfully
+	task.complete()
 ```
 
 </CodeExample>
@@ -334,7 +336,6 @@ for _, task := range response.Tasks {
 <CodeExample lang={"php"}>
 
 ```php
-<?php
 use Nitric\Faas\Faas;
 use Nitric\Api\QueueClient;
 use Nitric\Api\Task;
