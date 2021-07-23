@@ -7,9 +7,8 @@ Nitric will automatically provision any required infrastructure with your cloud 
 ## Key concepts
 
 - **Collections** are a logical group to store like values. In SQL database terms a collections equate to tables.
-- **Keys** provide unique identifiers to store and retrieve items in a collection. Keys must be unique within the scope of
-  the collection.
-- **Values** are the value items stored in the collection.
+- **Documents** are the unit of storage within a collection. They are a lightweight record that contains fields, which map to values. Each document is identified by a unique id.
+- **References** are a uniquely identifiable location within a database. A reference can be created regardless of whether data exists and does not perform any network calls. You can create document and collection references.
 
 ## Usage
 
@@ -164,7 +163,7 @@ client.Put("nitric", product);
 
 ### Update a document
 
-> this functionality is coming soon ⚠️
+> This functionality is coming soon ⚠️
 
 ### Delete data
 
