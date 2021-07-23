@@ -1,0 +1,414 @@
+The Documents service provides applications with the ability to store and retrieve application state.
+Nitric strives to make this process as easy as possible, using a documents API. Application code can specify
+the name of the collection and use a set of powerful methods to query and manage the documents.
+
+Nitric will automatically providing any required infrastructure with your cloud provider.
+
+## Key concepts
+
+- **Collections** are a logical group to store like values. In SQL database terms a collections equate to tables.
+- **Keys** provide unique identifiers to store and retrieve items in a collection. Keys must be unique within the scope of
+  the collection.
+- **Values** are the value items stored in the collection.
+
+## Usage
+
+Using one of the provided Nitric SDKs for your language is the easiest way to work with collections.
+
+## Set data
+
+To add a new document to a collection, use the `set()` method with an explicitly specifying a document identifier:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { documents } from '@nitric/sdk';
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+}
+
+const collection = documents().collection<Product>('products');
+
+await collection.doc('nitric').set({
+  id: 'nitric',
+  name: 'nitric',
+  description: 'A development framework!',
+});
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.api import KeyValueClient
+
+client = KeyValueClient()
+
+product = ...
+
+await client.put("products", "nitric", product);
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+import io.nitric.api.kv.KeyValueClient;
+...
+
+var client = KeyValueClient.newBuilder(Product.class)
+	.collection("products")
+	.build();
+
+var product = new Product();
+
+client.put("nitric", product);
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+import (
+    "github.com/nitrictech/go-sdk/api"
+    "github.com/nitrictech/go-sdk/kvclient"
+)
+...
+
+kvClient := client.KV()
+
+product := map[string]interface{}{
+	"id":          "nitric",
+	"name":        "nitric",
+	"description": "A development framework!",
+}
+
+kvClient.PutKey("products", "nitric", product)
+
+if err != nil {
+	// Handle error
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+use Nitric\Api\KeyValueClient;
+
+$client = new KeyValueClient();
+
+$product = ...
+
+$client->put("products", "nitric", $product);
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using Nitric.Api.KeyValue;
+...
+
+var client = new KeyValueClient<Product>.NewBuilder()
+	.Collection("products")
+	.Build();
+
+var product = new Product();
+
+client.Put("nitric", product);
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+## Get data
+
+There are three ways to retrieve data, any of these methods can be used with documents, collections of documents, or the results of queries:
+
+- Call the `get()` method to retrieve a single document.
+
+- Call the `fetch()` or `stream()` methods to retrieve multiple documents.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { KeyValueClient } from '@nitric/sdk';
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+}
+
+const client = new KeyValueClient<Product>('products');
+
+const product = await client.get('nitric');
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.api import KeyValueClient
+
+client = KeyValueClient()
+
+product = client.get("products", "nitric")
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+import io.nitric.api.kv.KeyValueClient;
+...
+
+var client = KeyValueClient.newBuilder(Product.class)
+	.collection("products")
+	.build();
+
+var product = client.get("nitric");
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+import (
+    "github.com/nitrictech/go-sdk/api"
+    "github.com/nitrictech/go-sdk/kvclient"
+)
+
+kvClient := client.KV()
+
+product, err := kvclient.get("products", "nitric")
+
+if err != nil {
+	// Handle error
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+use Nitric\Api\KeyValueClient;
+
+$client = new KeyValueClient();
+
+$product = $client->get("products", "nitric");
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using Nitric.Api.KeyValue;
+...
+
+var client =  new KeyValueClient<Product>.NewBuilder()
+	.Collection("products")
+	.Build();
+
+var product = client.Get("nitric")
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+## Delete data
+
+To delete a value use `KeyValueClient` to `delete` a value from a collection:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { KeyValueClient } from '@nitric/sdk';
+
+const client = new KeyValueClient<any>('products');
+
+await client.delete('nitric');
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.api import KeyValueClient
+
+client = KeyValueClient()
+
+client.delete("products", "nitric")
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+import io.nitric.api.kv.KeyValueClient;
+...
+
+var client = KeyValueClient.newBuilder(Product.class)
+	.collection("products")
+	.build();
+
+client.delete("nitric");
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+import (
+    "github.com/nitrictech/go-sdk/api"
+    "github.com/nitrictech/go-sdk/kvclient"
+)
+
+kvclient := client.KV()
+
+err := kvclient.Delete("nitric")
+
+if err != nil {
+	// Handle error
+}
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+<?php
+
+use Nitric\Api\KeyValueClient;
+
+$client = new KeyValueClient();
+
+$client->delete("nitric");
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+using Nitric.Api.KeyValue;
+...
+
+var client =  new KeyValueClient<Product>.NewBuilder()
+	.Collection("products")
+	.Build();
+
+client.Delete("nitric");
+```
+
+</CodeExample>
+
+</CodeExamples>
