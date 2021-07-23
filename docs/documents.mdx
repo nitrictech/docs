@@ -6,9 +6,136 @@ Nitric will automatically provision any required infrastructure with your cloud 
 
 ## Key concepts
 
-- **Collections** are a logical group to store like values. In SQL database terms a collections equate to tables.
-- **Documents** are the unit of storage within a collection. They are a lightweight record that contains fields, which map to values. Each document is identified by a unique id.
-- **References** are a uniquely identifiable location within a database. A reference can be created regardless of whether data exists and does not perform any network calls. You can create document and collection references.
+### Documents
+
+Documents are the unit of storage within a collection. They are a lightweight record that contains fields, which map to values. Each document is identified by a unique id.
+
+A document representing an actor `downeyjr` might look like this:
+
+```json
+📄 downeyjr
+{
+  "first": "Robert",
+  "last": "Downey Jr",
+  "born": 1965
+}
+```
+
+TODO talk about data types and nested documents briefly
+
+### Collections
+
+Collections are simply containers for documents. In SQL database terms a collections equate to tables.
+
+For example, you could have an actors collection to contain various actors, each represented by a document:
+
+```json
+🗂️ actors
+    📄 downeyjr
+    {
+     "first": "Robert",
+     "last": "Downey Jr",
+     "born": 1965
+    }
+    📄 johansson
+    {
+     "first": "Scarlett",
+     "last": "Johansson",
+     "born": 1984
+    }
+```
+
+The ids of documents within a collection are unique. You also do not need to create or delete collections as this is automatically handled when a document is created or all documents in a collection are deleted.
+
+### References
+
+References are a uniquely identifiable location within a database. A reference can be created regardless of whether data exists and does not perform any network calls. You can create document and collection references.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+// create a reference to a collection named 'products'
+const collection = documents().collection('products');
+
+// create a reference to a document named 'nitric'
+const nitric = collection.doc('nitric');
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+# create a reference to a collection named 'products'
+products = documents.collection("products")
+
+# create a reference to a document named 'nitric'
+nitric = products.doc("nitric")
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+// Todo
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+TODO
+```
+
+</CodeExample>
+
+</CodeExamples>
 
 ## Usage
 
