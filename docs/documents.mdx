@@ -626,7 +626,7 @@ const query = await client
   .where('age', '>=', 21);
 
 // Execute query
-const documents = await query.fetch();
+const results = await query.fetch();
 ```
 
 </CodeExample>
@@ -878,7 +878,7 @@ const client = documents();
 const query = await client.collection('customers').query().limit(10);
 
 // Get up to 10 customers
-const documents = await query.fetch();
+const results = await query.fetch();
 ```
 
 </CodeExample>
