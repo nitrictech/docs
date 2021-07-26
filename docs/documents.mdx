@@ -839,6 +839,8 @@ The document service supports the following comparison operators:
 
 - `!=` not equal to
 
+- `startsWith` text value starts with
+
 ### Limit data
 
 By default all documents that are returned by the query are retrieved. You can limit the number of documents retrieved using the `limit()` method:
@@ -879,7 +881,7 @@ import { documents } from '@nitric/sdk';
 
 const client = documents();
 
-const query = await client.collection('customers').query().limit(10);
+const query = client.collection('customers').query().limit(10);
 
 // Get up to 10 customers
 const results = await query.fetch();
@@ -953,7 +955,98 @@ TODO
 
 ### Paginate data
 
-> Check back soon! We are working on it ⚠️
+You can split the data returned by a query into batches by combinding query `pagingToken` with the `limit()` method.
+
+For example, use the `pagingFrom` token from a batch as the `pagingFrom` token for the next batch.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { documents } from '@nitric/sdk';
+
+const client = documents();
+
+// Get 25 customers query
+const query = client.collection('customers').query().limit(25);
+
+// First 25
+const first = await query.fetch();
+
+// Next 25
+const next = await query.pagingFrom(first.pagingToken).fetch();
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+```go
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="php">
+
+```php
+TODO
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```csharp
+TODO
+```
+
+</CodeExample>
+
+</CodeExamples>
 
 ### Stream data
 
