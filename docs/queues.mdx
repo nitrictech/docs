@@ -167,23 +167,17 @@ for _, ft := range ftasks {
 <CodeExample lang={"php"}>
 
 ```php
-use Nitric\Faas\Faas;
-use Nitric\Api\QueueClient;
+use Nitric\Api\Queues;
 use Nitric\Api\Task;
 
-...
+$queues = new Queues();
 
-$queueClient = new QueueClient();
+$task = (new Task())
+    ->setPayload([
+        "example" => "payload"
+    ]);
 
-$task = new Task();
-
-$payload
-
-$task->setId("1234");
-$task->setPayloadType("example-payload");
-$task->setPayload((object)array("example" => "payload"));
-
-$queueClient->send("my-queue", $task);
+$queues->queue("my-queue")->send($task);
 ```
 
 </CodeExample>
@@ -336,19 +330,16 @@ for _, task := range tasks {
 <CodeExample lang={"php"}>
 
 ```php
-use Nitric\Faas\Faas;
-use Nitric\Api\QueueClient;
+use Nitric\Api\Queues;
 use Nitric\Api\Task;
 
-...
+$queues = new Queues();
 
-$queueClient = new QueueClient();
-
-$tasks = $queueClient.receive("my-queue")
+$tasks = $queues->queue("my-queue")->receive();
 
 foreach($tasks as $task) {
 	// process the task here...
-	$queueClient->complete("my-queue", $task->getLeaseId())
+	$task->complete();
 }
 ```
 

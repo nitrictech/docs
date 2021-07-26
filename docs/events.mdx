@@ -181,29 +181,18 @@ func main() {
 <CodeExample lang={"php"}>
 
 ```php
-namespace App\Function;
+use Nitric\Api\Events;
 
-use Nitric\Faas\Faas;
-use Nitric\Api\EventClient;
+$events = new Events();
 
+$event = $events->topic("my-topic")->publish(
+    (new Event())
+        ->setPayload([
+            "key" => "value",
+        ])
+    );
 
-$handler = function(Request $request): Response
-{
-	// Create a new Event Client with default settings
-	$eventClient = new EventClient();
-
-	// Publish an event to the topic 'my-topic'
-	// Note: The event payload will be serialized automatically.
-	$eventClient->publish(
-		topicName: "my-topic",
-		payload: [
-			"amazing" => "thing happened!",
-		]);
-
-	return new Response();
-}
-
-Faas::start($handler);
+echo "Generated Event ID is: " . $event->getId();
 ```
 
 </CodeExample>
@@ -339,30 +328,17 @@ func main() {
 <CodeExample lang={"php"}>
 
 ```php
-namespace App\Function;
+use Nitric\Api\Events;
 
-use Nitric\Faas\Faas;
-use Nitric\Api\EventClient;
+$events = new Events();
 
-
-$handler = function(Request $request): Response
-{
-	$eventClient = new EventClient();
-
-	$eventClient->publish(
-		topicName: "my-topic",
-		payload: [
-			"amazing" => "thing happened!",
-		]
-        // Note: the event id should be generated using a process
-        // that's guaranteed to be unique for practical purposes.
-        id: "unique-event-id"
+$event = $events->topic("my-topic")->publish(
+    (new Event())
+        ->setPayload([
+            "key" => "value",
+        ])
+        ->setId("abc-123")
     );
-
-	return new Response();
-}
-
-Faas::start($handler);
 ```
 
 </CodeExample>
