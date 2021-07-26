@@ -25,7 +25,7 @@ You can nest complex objects like arrays or maps within documents. However if yo
 
 ### Collections
 
-Collections are simply containers for documents. In SQL database terms a collections equate to tables.
+Collections are simply containers for documents. In SQL database terms a collection equates to a table.
 
 For example, you could have an actors collection to contain various actors, each represented by a document:
 
@@ -45,7 +45,11 @@ For example, you could have an actors collection to contain various actors, each
     }
 ```
 
-The ids of documents within a collection are unique. You also do not need to create or delete collections as this is automatically handled when a document is created or all documents in a collection are deleted.
+#### Subcollections
+
+Subcollections allow you to structure data hierarchically, making data easier to access. This is perfect when you have data that expands over time.
+
+The advantages of Subcollections are that the parent collection size doesn't change when your Subcollections grow and you also get full query capabilities.
 
 ### References
 
@@ -163,7 +167,7 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 
 ## Add and manage data
 
-To add a new document to a collection, use the `set()` method with an explicitly specifying a document identifier:
+To add a new document to a collection, use the `set()` method on a document reference:
 
 ### Set a document
 
@@ -578,7 +582,11 @@ var product = client.Get("nitric")
 ### Queries
 
 The documents API provides powerful query functionality for specifying which documents you want to retrieve from a collection.
-This queries can be executed with the `fetch()` and `stream()` methods.
+Queries can be executed with the `fetch()` and `stream()` methods:
+
+- The **fetch** method queries the document collection and fetches the results. The results include a documents list and a pagingToken, the later can be used for pagination.
+
+- The **stream** method queries the document collection and streams the results one by one, this will reduce your memory consumption.
 
 #### Simple queries
 
