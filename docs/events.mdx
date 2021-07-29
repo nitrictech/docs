@@ -76,7 +76,7 @@ faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
 
   // Publish an event to the topic 'my-topic'
   // Note: The event payload will be serialized automatically.
-  await eventsClient.publish('my-topic', {
+  await eventsClient.topic('my-topic').publish({
     payload: {
       amazing: 'thing happened!',
     },
@@ -213,7 +213,7 @@ import { faas, events } from '@nitric/sdk';
 faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
   const eventsClient = events();
 
-  await eventsClient.publish('my-topic', {
+  await eventsClient.topic('my-topic').publish({
     // Note: the event id should be generated using a process
     // that's guaranteed to be unique for practical purposes.
     id: 'unique-event-id',
