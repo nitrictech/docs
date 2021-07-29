@@ -1,0 +1,14 @@
+## Updating Nitric
+
+If you're ready to upgrade your projects to a newer version of Nitric
+
+- Start by removing any versions of the membrane which are currently residing on Docker `docker system prune -a`
+- Update your local store of templates `nitric templates:repos:add`
+- In your project(s) remove the templates folder which resides in .nitric 
+- Create a new project for each of the templates which you are using `nitric make:service` this will update the .nitric folder with the appropriate templates.
+- Fix dependencies which have been broken in your existing projects. 
+
+    - E.g. in a go project, you'll need to delete the .sum file and update the .mod file to point to the correct version.
+    
+    `require github.com/nitrictech/go-sdk v0.3.0` --> `require github.com/nitrictech/go-sdk v0.4.0`
+

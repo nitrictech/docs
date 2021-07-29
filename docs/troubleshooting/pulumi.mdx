@@ -1,0 +1,15 @@
+## Troubleshooting a deploment failure
+
+When a deploy command is interupted by the user or a system failure, it can be difficult to know where to start to get back on track
+
+- The first step is to determine the state of the deployment
+We can do this by locating the tmp directory which holds the pulumi.yaml file of the most recent deploy
+- Use your OS filesystem to locate this directory, you might be able to correlate the name of the folder with the ID of the deployment in the pulumi console
+- Next you can try to cancel the previous attempt with the following command `pulumi cancel`
+
+If you receive an error at this point, then you'll need to examine the stack
+
+- Examine the state of the pending operations by exporting the stack `pulumi stack export --file state.json`
+- Edit the state file and remove the operations which are failing (if unsure, then remove all), they will be located @ "pending_operations": []
+- Reimport the stack `pulumi stack import --file state.json`
+- Re-run the deploy command which failed e.g. `nitric deploy:aws`
