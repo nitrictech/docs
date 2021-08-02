@@ -76,7 +76,7 @@ Open up the `greeter/index.ts` file. This is where we build the code for our gre
 
 ```typescript
 // import the Nitric FaaS library
-import { faas } from "@nitric/sdk";
+import { faas } from '@nitric/sdk';
 
 interface HelloWorldRequest {
   name: string;
@@ -90,7 +90,7 @@ interface HelloWorldResponse {
 async function handler(
   request: faas.NitricTrigger<HelloWorldRequest>
 ): Promise<HelloWorldResponse> {
-  const { name, greeting = "Hello" } = request.dataAsObject();
+  const { name, greeting = 'Hello' } = request.dataAsObject();
 
   return { response: `${greeting} ${name}!` };
 }
@@ -173,11 +173,11 @@ And one optional step is to add the CSS file `src/assets/main.css` to make our a
 Then simply import it in your `main.ts` file.
 
 ```ts
-import { createApp } from "vue";
-import App from "./App.vue";
-import "./assets/main.css";
+import { createApp } from 'vue';
+import App from './App.vue';
+import './assets/main.css';
 
-createApp(App).mount("#app");
+createApp(App).mount('#app');
 ```
 
 ### Set up greeting component
@@ -216,20 +216,20 @@ Start by setting up some basic inputs, a function to handle the service call and
 </template>
 
 <script lang="ts">
-  import { ref } from "vue";
+  import { ref } from 'vue';
 
   export default {
     setup() {
       const loading = ref(false);
-      const name = ref("Nitric");
-      const greeting = ref("Hello");
-      const response = ref("");
+      const name = ref('Nitric');
+      const greeting = ref('Hello');
+      const response = ref('');
 
       const updateGreeting = async () => {
         try {
           loading.value = true;
-          const rawResponse = await fetch("/greeter/", {
-            method: "POST",
+          const rawResponse = await fetch('/greeter/', {
+            method: 'POST',
             body: JSON.stringify({
               name: name.value,
               greeting: greeting.value,

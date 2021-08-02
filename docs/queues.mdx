@@ -75,29 +75,32 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 <CodeExample lang="node">
 
 ```typescript
-import { QueueClient } from "@nitric/sdk";
+import { queues } from '@nitric/sdk';
 
-// Construct a new queue client with default settings
-const queueClient = new QueueClient();
+// Construct a new queue client
+const queuesClient = queues();
 
-// Publish a task to a queue
-await queueClient.send(
-  "my-queue",
-  new Task((payload = { example: "payload" }))
-);
+// Publish a task to the queue
+await queuesClient.queue('my-queue').send({
+  payload: {
+    example: 'payload',
+  },
+});
 ```
 
 </CodeExample>
 <CodeExample lang="python">
 
 ```python
-from nitric.api import QueueClient, Task
+from nitric.api import Queues, Task
 
 # Construct a new queue client with default settings
-queue_client = QueueClient()
+queues = Queues()
+
+payload = {"content": "of task"}
 
 # Publish a task to a queue
-queue_client.send("my-queue", { payload: { example: "payload" } });
+queues.queue("my-queue").send(Task(payload=payload))
 ```
 
 </CodeExample>
@@ -132,28 +135,31 @@ QueueClient.newBuilder()
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/api"
-	"github.com/nitrictech/go-sdk/queueclient"
+	"github.com/nitrictech/go-sdk/api/queues"
 )
 
 ...
 
-client := api.New()
+client := queues.New()
 
-_, err := client.Queue().Send(&queueclient.SendOptions{
-	Queue: "my-queue",
-	Task: &queueClient.Task{
+ftasks, err := queues.Queue("my-queue").Send([]*queues.Task{
+	&queues.Task{
 		ID: "1234",
 		PayloadType: "test-payload",
 		Payload: map[string]interface{}{
 			"example": "payload",
 		},
-	},
+	}
 })
 
 if err != nil {
 	// handle error...
 }
+
+for _, ft := range ftasks {
+	// enumerate tasks that failed to queue
+}
+
 ```
 
 </CodeExample>
@@ -161,24 +167,17 @@ if err != nil {
 <CodeExample lang={"php"}>
 
 ```php
-<?php
-use Nitric\Faas\Faas;
-use Nitric\Api\QueueClient;
+use Nitric\Api\Queues;
 use Nitric\Api\Task;
 
-...
+$queues = new Queues();
 
-$queueClient = new QueueClient();
+$task = (new Task())
+    ->setPayload([
+        "example" => "payload"
+    ]);
 
-$task = new Task();
-
-$payload
-
-$task->setId("1234");
-$task->setPayloadType("example-payload");
-$task->setPayload((object)array("example" => "payload"));
-
-$queueClient->send("my-queue", $task);
+$queues->queue("my-queue")->send($task);
 ```
 
 </CodeExample>
@@ -228,37 +227,39 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 <CodeExample lang="node">
 
 ```typescript
-import { QueueClient } from "@nitric/sdk";
+import { queues } from '@nitric/sdk';
 
-// Construct a new queue client with default settings
-const queueClient = new QueueClient();
+const queueClient = queues();
 
 // Receive tasks from the queue
-const tasks = await queueClient.receive("my-queue", 5);
+const tasks = queueClient.queue('my-queue').receive();
 
-tasks.forEach((task) => {
-  // Work on a task...
+await Promise.all(
+  tasks.map((task) => {
+    // Work on a task...
 
-  // Complete the task
-  queueClient.complete("my-queue", task);
-});
+    // Complete the task
+    return task.complete();
+  })
+);
 ```
 
 </CodeExample>
 <CodeExample lang="python">
 
 ```python
-from nitric.api import QueueClient, Task
+from nitric.api import Queues, Task
 
 # Construct a new queue client with default settings
-queue_client = QueueClient()
+queue = Queues().queue("my-queue")
 
 # Receive tasks from the queue
-for task in queue_client.receive("my-queue", 5):
+tasks = await queue.receive()
+for task in tasks:
 	// Work on a task...
 
-	// Complete the task
-	queue_client.complete("my-queue", task)
+	// Complete the task if it was processed successfully
+	task.complete()
 ```
 
 </CodeExample>
@@ -299,33 +300,28 @@ for (Task task: tasks) {
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/api"
-	"github.com/nitrictech/go-sdk/queueclient"
+	"github.com/nitrictech/go-sdk/api/queues"
 )
 
 ...
 
 // Construct a new queue client with default settings
-client := api.New()
+qc := queues.New()
 
 // Receive tasks from the queue
-response, err := client.Queue().Receive(&queueclient.ReceiveOptions{
-	Queue: "my-queue",
-	Depth: 1,
-})
+tasks, err := qc.Queue("my-queue").Recieve()
 
 if err != nil {
 	// handle error...
 }
 
-for _, task := range response.Tasks {
-	// process tasks...
-
-
-	client.Queue().Complete(&queueclient.CompleteOptions{
-		Queue: "my-queue",
-		Task: task,
-	})
+for _, task := range tasks {
+	// process the task
+	// complete the task
+	err := task.Complete()
+	if err != nil {
+		// task failed to complete
+	}
 }
 ```
 
@@ -334,20 +330,16 @@ for _, task := range response.Tasks {
 <CodeExample lang={"php"}>
 
 ```php
-<?php
-use Nitric\Faas\Faas;
-use Nitric\Api\QueueClient;
+use Nitric\Api\Queues;
 use Nitric\Api\Task;
 
-...
+$queues = new Queues();
 
-$queueClient = new QueueClient();
-
-$tasks = $queueClient.receive("my-queue")
+$tasks = $queues->queue("my-queue")->receive();
 
 foreach($tasks as $task) {
 	// process the task here...
-	$queueClient->complete("my-queue", $task->getLeaseId())
+	$task->complete();
 }
 ```
 

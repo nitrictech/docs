@@ -2,7 +2,11 @@ Nitric's events service and API provides an intuitive approach to asynchronous m
 
 The Nitric events API provides an interface to message-oriented middleware and message brokers such as AWS SNS & Google PubSub to facilitate low-latency, highly available, "at-least once" message delivery.
 
-<img src="../assets/img/topics-overview.svg" height="334" alt="topic overview diagram" />
+<img
+  src="../assets/img/topics-overview.svg"
+  height="334"
+  alt="topic overview diagram"
+/>
 
 ## Key concepts
 
@@ -64,48 +68,37 @@ Once a topic has been defined, services can publish to it using one of the Nitri
 
 ```typescript
 // import the event client library
-import { faas, EventClient } from '@nitric/sdk';
+import { faas, events } from '@nitric/sdk';
 
-faas.start(
-  async (_: faas.NitricRequest<string>): Promise<string> => {
-    // Create a new instance of the event client
-    const eventClient = new EventClient();
+faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
+  // Create a new instance of the event client
+  const eventsClient = events();
 
-    // Publish an event to the topic 'my-topic'
-    // Note: The event payload will be serialized automatically.
-    await eventClient.publish('my-topic', {
-      payload: {
-        amazing: 'thing happened!',
-      },
-    });
+  // Publish an event to the topic 'my-topic'
+  // Note: The event payload will be serialized automatically.
+  await eventsClient.topic('my-topic').publish({
+    payload: {
+      amazing: 'thing happened!',
+    },
+  });
 
-    return 'Successfully published message';
-  }
-);
+  return 'Successfully published message';
+});
 ```
 
 </CodeExample>
 <CodeExample lang={"python"}>
 
 ```python
-from nitric.faas import start, Request, Response
-# Import the Event client library
-from nitric.api import EventClient
+from nitric.api import Events
 
+# Create a new Event Client with default settings
+topic = Events().topic("my-topic")
 
-def handler(request: Request) -> Response:
-	# Create a new Event Client with default settings
-	eventClient = EventClient()
+payload = {"content": "of event"}
 
-	# Publish an event to the topic 'my-topic'
-	# Note: The event payload will be serialized automatically.
-	eventClient.publish("my-topic", payload={amazing: "thing happened!"})
-
-    return Response("Successfully published message")
-
-
-if __name__ == "__main__":
-    start(handler)
+# Publish an event to the topic 'my-topic'
+event = await topic.publish(Event(payload=payload))
 ```
 
 </CodeExample>
@@ -153,32 +146,30 @@ package main
 
 import (
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/api"
-	"github.com/nitrictech/go-sdk/eventclient"
+	"github.com/nitrictech/go-sdk/api/events"
 )
 
 // NitricFunction - Handles individual function requests (http, events, etc.)
-func NitricFunction(request *faas.NitricRequest) *faas.NitricResponse {
-
-	client, err := api.New()
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+	// Create a new events client
+	ec, err := events.New()
 
 	if err != nil {
 		// ...handle the error
 	}
 
-	client.Event().Publish(&eventclient.PublishOptions{
-		Topic: "my-topic",
-		Event: &eventclient.Event{
-			Payload: map[string]interface{}{
-				"amazing": "thing happened!",
-			},
+	// Publish an event to my-topic
+	ec.Topic("my-topic").Publish(&events.Event{
+		PayloadType: "my-payload",
+		Payload: map[string]interface{}{
+			"amazing": "thing happened!",
 		},
-	})
-
-	return &faas.NitricResponse{
-		Status: 200,
-		Body:   []byte("Successfully published message"),
 	}
+
+	resp := trigger.DefaultResponse()
+	resp.SetData([]byte("Successfully Published Message"))
+
+	return resp, nil
 }
 
 func main() {
@@ -190,33 +181,22 @@ func main() {
 <CodeExample lang={"php"}>
 
 ```php
-<?php
-namespace App\Function;
+use Nitric\Api\Events;
 
-use Nitric\Faas\Faas;
-use Nitric\Api\EventClient;
+$events = new Events();
 
+$event = $events->topic("my-topic")->publish(
+    (new Event())
+        ->setPayload([
+            "key" => "value",
+        ])
+    );
 
-$handler = function(Request $request): Response
-{
-	// Create a new Event Client with default settings
-	$eventClient = new EventClient();
-
-	// Publish an event to the topic 'my-topic'
-	// Note: The event payload will be serialized automatically.
-	$eventClient->publish(
-		topicName: "my-topic",
-		payload: [
-			"amazing" => "thing happened!",
-		]);
-
-	return new Response();
-}
-
-Faas::start($handler);
+echo "Generated Event ID is: " . $event->getId();
 ```
 
 </CodeExample>
+
 </CodeExamples>
 
 ### Event IDs
@@ -228,47 +208,36 @@ It's essential that every event can be uniquely identified so that subscribers c
 
 ```typescript
 // import the event client library
-import { faas, EventClient } from '@nitric/sdk';
+import { faas, events } from '@nitric/sdk';
 
-faas.start(
-    async (_: faas.NitricRequest<string>): Promise<string> => {
-        const eventClient = new EventClient();
+faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
+  const eventsClient = events();
 
-        await eventClient.publish('my-topic', {
-            // Note: the event id should be generated using a process
-            // that's guaranteed to be unique for practical purposes.
-            id: 'unique-event-id',
-            payload: {
-                amazing: 'thing happened!',
-            },
-        });
+  await eventsClient.topic('my-topic').publish({
+    // Note: the event id should be generated using a process
+    // that's guaranteed to be unique for practical purposes.
+    id: 'unique-event-id',
+    payload: {
+      amazing: 'thing happened!',
+    },
+  });
 
-        return 'Successfully published message';
-    }
-);
+  return 'Successfully published message';
+});
 ```
 
 </CodeExample>
 <CodeExample lang={"python"}>
 
 ```python
-from nitric.faas import start, Request, Response
-# Import the Event client library
-from nitric.api import EventClient
+from nitric.api import Events, Event
 
+events = Events()
 
-def handler(request: Request) -> Response:
-    eventClient = EventClient()
+payload = {"content": "of event"}
 
-    # Note: the event id should be generated using a process
-    # that's guaranteed to be unique for practical purposes.
-    eventClient.publish("my-topic", event_id='unique-event-id', payload={amazing: "thing happened!"})
-
-    return Response("Successfully published message")
-
-
-if __name__ == "__main__":
-    start(handler)
+# Note: the event id should be generated using a process that's guaranteed to be unique for practical purposes.
+await events.topic("my-topic").publish(Event(id="unique-event-id", payload=payload))
 ```
 
 </CodeExample>
@@ -324,35 +293,30 @@ package main
 
 import (
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/api"
-	"github.com/nitrictech/go-sdk/eventclient"
+	"github.com/nitrictech/go-sdk/api/events"
 )
 
 // NitricFunction - Handles individual function requests (http, events, etc.)
-func NitricFunction(request *faas.NitricRequest) *faas.NitricResponse {
-
-	client, err := api.New()
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+	ec, err := events.New()
 
 	if err != nil {
 		// ...handle the error
 	}
 
-	client.Event().Publish(&eventclient.PublishOptions{
-		Topic: "my-topic",
-		Event: &eventclient.Event{
-            // Note: the event id should be generated using a process
-            // that's guaranteed to be unique for practical purposes.
-            ID: "unique-event-id",
+	_, err := ec.Topic("my-topic").Publish(&events.Event{
+			ID: "unique-event-id",
 			Payload: map[string]interface{}{
 				"amazing": "thing happened!",
 			},
-		},
 	})
 
-	return &faas.NitricResponse{
-		Status: 200,
-		Body:   []byte("Successfully published message"),
-	}
+	msg := "Successfully Published Message"
+
+	resp := trigger.DefaultResponse()
+	resp.SetData([]byte("Successfully Published Message"))
+
+	return resp, nil
 }
 
 func main() {
@@ -364,31 +328,17 @@ func main() {
 <CodeExample lang={"php"}>
 
 ```php
-<?php
-namespace App\Function;
+use Nitric\Api\Events;
 
-use Nitric\Faas\Faas;
-use Nitric\Api\EventClient;
+$events = new Events();
 
-
-$handler = function(Request $request): Response
-{
-	$eventClient = new EventClient();
-
-	$eventClient->publish(
-		topicName: "my-topic",
-		payload: [
-			"amazing" => "thing happened!",
-		]
-        // Note: the event id should be generated using a process
-        // that's guaranteed to be unique for practical purposes.
-        id: "unique-event-id"
+$event = $events->topic("my-topic")->publish(
+    (new Event())
+        ->setPayload([
+            "key" => "value",
+        ])
+        ->setId("abc-123")
     );
-
-	return new Response();
-}
-
-Faas::start($handler);
 ```
 
 </CodeExample>
@@ -397,4 +347,3 @@ Faas::start($handler);
 #### Atomicity of Events
 
 When implementing design patterns in order to ensure atomic state changes and event publishing, such as [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html), it's critical that any attempt to 'republish' an event due to a failure reuses the same event ID as any previous attempts. This ensures duplicate event deliveries won't contain mismatching IDs in the case that a previous attempt silently succeeded, while appearing to fail. In these cases we recommend generating your own event ID and storing it in the outbox record.
-
