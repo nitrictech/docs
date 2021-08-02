@@ -366,7 +366,7 @@ using Nitric.Api.Document;
 
 var docs = new Documents();
 
-var document = docs.Collection("products").Doc("nitric");
+var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
 
 var product = document.Get();
 ```
@@ -514,9 +514,9 @@ var docs = new Documents();
 
 var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
 
-document.Set(
-	TODO...
-);
+var product = ...
+
+document.Set(product);
 ```
 
 </CodeExample>
@@ -639,7 +639,7 @@ using Nitric.Api.Document;
 
 var docs = new Documents();
 
-var document = docs.Collection("products").Doc("nitric");
+var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
 
 document.Delete();
 ```
@@ -775,7 +775,7 @@ using Nitric.Api.Document;
 
 var docs = new Documents();
 
-var query = docs.Collection("Customers").Query();
+var query = docs.Collection<Dictionary<string, object>>("Customers").Query();
 
 // Execute query
 var nitric = query.Fetch();
@@ -907,7 +907,7 @@ using Nitric.Api.Document;
 
 var docs = new Documents();
 
-var query = docs.Collection("Customers")
+var query = docs.Collection<Dictionary<string, object>>("Customers")
 		.Collection("Orders")
 		.Query();
 
@@ -1042,7 +1042,7 @@ using Nitric.Api.Document;
 
 var docs = new Documents();
 
-var query = docs.Collection("customers")
+var query = docs.Collection<Dictionary<string, object>>("customers")
 		.Doc("apple")
 		.Collection("Orders")
 		.Query();
@@ -1206,7 +1206,7 @@ using Nitric.Api.Document;
 
 var docs = new Documents();
 
-var query = docs.Collection("Customers").Query()
+var query = docs.Collection<Dictionary<string, object>>("Customers").Query()
 	.Where("country", "==", "US")
 	.Where("age", ">=", 21);
 
@@ -1353,7 +1353,7 @@ using Nitric.Api.Document;
 
 var docs = new Documents();
 
-var query = docs.Collection("Customers")
+var query = docs.Collection<Dictionary<string, object>>("Customers")
 		.Collection("Orders")
 		.Query()
 		.Limit(1000);
@@ -1514,7 +1514,7 @@ using Nitric.Api.Document;
 
 var docs = new Documents();
 
-var query = docs.Collection("Customers")
+var query = docs.Collection<Dictionary<string, object>>("Customers")
 	.Query()
 	.Where("active", "==", true)
 	.Limit(100);
