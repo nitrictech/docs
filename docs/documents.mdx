@@ -1598,10 +1598,15 @@ async for doc in query.stream():
 
 <CodeExample lang="java">
 
-<br />
-The steam() method is not yet implemented. Please use the QueryResults foreach()
-method instead. To scroll over all collection results use the fetchAll() method.
+```java
+import io.nitric.api.document.Documents;
 
+var query = Documents.collection("Customers").query();
+
+query.stream().foreach(doc -> {
+	// Process doc stream
+});
+```
 </CodeExample>
 
 <CodeExample lang="go">
