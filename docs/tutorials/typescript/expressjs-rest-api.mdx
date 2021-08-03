@@ -2,18 +2,18 @@
 
 ## What we'll do
 
-1. Create a new project 
+1. Create a new project
 2. Create an Express.js function to handle API operations
 3. Create a Key/Value collection to store data
 4. Bind the Function to an Endpoint
 5. Get it all running locally for testing
 6. Deploy to your cloud of choice
 
-| METHOD | ROUTE |
-| --- | --- |
-| GET: | /orders |
-| GET: | /orders/{$orderId} |
-| POST: | /orders |
+| METHOD | ROUTE              |
+| ------ | ------------------ |
+| GET:   | /orders            |
+| GET:   | /orders/{$orderId} |
+| POST:  | /orders            |
 
 ## Getting started
 
@@ -55,23 +55,23 @@ my-rest-api/
 ```typescript
 // index.ts
 
-import { express } from "express";
+import { express } from 'express';
 
-const PORT = "8080";
+const PORT = '8080';
 const app = express();
 
 app.get('/', (_, res) => {
-	res.send('Hello World');
+  res.send('Hello World');
 });
 
 app.listen(PORT, () => {
-	console.log(`listening on port: ${PORT}`)
+  console.log(`listening on port: ${PORT}`);
 });
 ```
 
 ## Add a key/value collection
 
-In order to store and retrieve orders through our API, we'll need to store their state somewhere. In this example, we'll use a Nitric Key/Value collection to persist our orders by their unique `orderId`. 
+In order to store and retrieve orders through our API, we'll need to store their state somewhere. In this example, we'll use a Nitric Key/Value collection to persist our orders by their unique `orderId`.
 
 Adding a collection to our application is easy with Nitric, there's no IAM roles to create or identifiers/credentials to cram into environment variables. We just let Nitric know we want a collection and which services should be able to read/write to that collection. During deployment Nitric will take care of the rest, ensuring the services can connect to the datastore and have the appropriate roles/permissions for the access they need.
 
@@ -96,4 +96,3 @@ collections:
 ## Working with orders
 
 Now that we have a key/value store set up, and a serverless function to handle incoming requests, let's implement a few API endpoints and start storing and retrieving order objects.
-
