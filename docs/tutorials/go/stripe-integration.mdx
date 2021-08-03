@@ -1,0 +1,427 @@
+## Introduction
+
+This tutorial will help you get set up and running with your first integration with Stripe - a popular payments gateway.
+The code snippets in this tutorial are lightly modified versions of the Stripe QuickStart featuring React and Go.
+
+## Requirements
+
+- Confirm that you have Node installed with the following command `node --version`
+- It is also assumed that you have already installed the Nitric CLI. If not visit the [installation instructions](../installation.mdx).
+
+## Project set up
+
+For this project we will make a simple react app which redirect to the Stripe Payments Gateway.
+
+Using the Nitric CLI we start by creating the project.
+
+```bash
+nitric make:project nitric-stripe-payments
+```
+
+Next we'll be asked if we want an initial service in the project and what template the service will use.
+For this project we will want a service. This service will handle requests for greeting and respond to the greetings. For this we will use the `nodets12` template.
+
+x
+? Include an example service?
+function/nodets12
+function/nodejs12
+function/python37
+function/java11
+
+> function/golang15
+> function/php8
+> server/nextjs-typescript
+> (Move up and down to reveal more choices)
+
+````
+
+Next, we'll be asked for a name for the service. We will name it `payments`.
+
+```bash
+? Name for the example service? nitric-stripe-payments
+✔ Making Project nitric-stripe-payments
+✔ Making Service payments
+````
+
+Under the `payments` directory you will see the `.nitric` folder which contains your local nitric files and a `greeter` folder containing the service.
+
+Let's confirm that everything is working correctly
+
+```bash
+cd nitric-stripe-payments/
+nitric run
+```
+
+The result should look like this
+
+```
+✔ Building Services
+✔ Creating docker network
+✔ Creating Volume: nitric-stripe-payments-vol-27dba42d
+✔ Running Services
+✔ Starting API Gateways
+✔ Starting Entrypoints
+Service  Port
+──────── ─────
+payments 49153
+Exiting, please wait... done
+```
+
+You can test the service is running by using Postman or a browser GET request at http://localhost:49153.
+
+Ensure you change the port to the one which was output above.
+
+## Building the App
+
+Let's start building the service that will handle the stripe session creation and redirect.
+
+```golang15
+package main
+
+import (
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"net/url"
+	"strings"
+
+	"github.com/nitrictech/go-sdk/faas"
+	stripe "github.com/stripe/stripe-go/v72"
+	session "github.com/stripe/stripe-go/v72/checkout/session"
+)
+
+func main() {
+	stripe.Key = " ... "
+	faas.Start(NitricFunction)
+}
+
+// This example takes in a payload which looks like the following
+// {data={"product":"shirt","domain":{"href":"http://localhost:40497/","origin":"http://localhost:40497","protocol":"http:","host":"localhost:40497","hostname":"localhost","port":"40497","pathname":"/","search":"","hash":""}}}
+
+// Structs which represent the incoming data
+type Wrapper struct {
+	Data ReturnData
+}
+
+type ReturnData struct {
+	Product string
+	Domain  DomainData
+}
+
+type DomainData struct {
+	Href      string
+	Origin    string
+	Protocol  string
+	Localhost string
+	Hostname  string
+	Port      string
+	Pathname  string
+	Search    string
+	Hash      string
+}
+
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+
+	data, err := base64.StdEncoding.DecodeString(string(trigger.GetData()))
+	if err != nil {
+		data = trigger.GetData()
+	}
+
+	// Manually parse the data into a structured format which we can marshal
+	fd, _ := url.QueryUnescape(string(data))
+	fd = strings.Replace(fd, "=", ":", 1)
+	fd = strings.Replace(fd, "data", "\"data\"", 1)
+	fd = fmt.Sprintf("%v", "{"+fd+"}")
+
+	// Marshal the data into the structs defined previously
+	var w Wrapper
+	json.Unmarshal([]byte(fd), &w)
+
+	// Fetch the values from the BODY that we are interested in
+	domain := fmt.Sprintf("%v", w.Data.Domain.Origin)
+	product := fmt.Sprintf("%v", w.Data.Product)
+
+	// For the stripe demo, if no values are passed from the UI normally we would error out
+	// To allow it to function we set some dummy values
+	if domain == "" || product == "" {
+		domain = "http://www.google.com"
+        product = "Sample"
+	}
+
+    params := &stripe.CheckoutSessionParams{
+		PaymentMethodTypes: stripe.StringSlice([]string{
+			"card",
+		}),
+		LineItems: []*stripe.CheckoutSessionLineItemParams{
+			{
+				PriceData: &stripe.CheckoutSessionLineItemPriceDataParams{
+					Currency: stripe.String(string(stripe.CurrencyUSD)),
+					ProductData: &stripe.CheckoutSessionLineItemPriceDataProductDataParams{
+						Name: stripe.String(product),
+					},
+					UnitAmount: stripe.Int64(2000),
+				},
+				Quantity: stripe.Int64(1),
+			},
+		},
+		Mode:       stripe.String(string(stripe.CheckoutSessionModePayment)),
+		SuccessURL: stripe.String(domain + "?success=true"),
+		CancelURL:  stripe.String(domain + "?canceled=true"),
+	}
+
+	s, err := session.New(params)
+	if err != nil {
+		log.Printf("session.New: %v", err)
+	}
+
+	// Set up the response with data from the Stripe Session
+	// Stripe relies on a redirect, so we are overwriting the headers to status 303 'see other'
+	response := trigger.DefaultResponse()
+	response.GetContext().AsHttp().Status = http.StatusSeeOther
+	response.GetContext().AsHttp().Headers["Location"] = s.URL
+	response.SetData([]byte(""))
+	return response, nil
+}
+```
+
+## Building the App
+
+We will now look at creating a React app which will utilize our new `payments` service.
+
+### Initialize a React app
+
+Create a react project with the following resources
+
+Index.js
+
+```
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+
+ReactDOM.render(<App />, document.getElementById("root"));
+```
+
+App.js
+
+```TypeScript
+import React, { useState, useEffect } from "react";
+import "./App.css";
+
+const ProductDisplay = ({ data }) => (
+  <section>
+    <div className="product">
+      <img
+        src="https://i.imgur.com/EHyR2nP.png"
+        alt="The cover of Stubborn Attachments"
+      />
+      <div className="description">
+        <h3>Stubborn Attachments</h3>
+        <h5>$20.00</h5>
+      </div>
+    </div>
+    <form action="/create-checkout-session/" method="POST">
+      <input type="hidden" id="data" name="data" value={data} />
+      <button type="submit" id="checkout-button">
+        Checkout
+      </button>
+    </form>
+  </section>
+);
+
+const Message = ({ message }) => (
+  <section>
+    <p>{message}</p>
+  </section>
+);
+
+function getData() {
+  return JSON.stringify({
+    product: 'shirt',
+    domain: window.location
+  });
+}
+
+export default function App() {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+
+    if (query.get("success")) {
+      setMessage("Order placed! You will receive an email confirmation.");
+    }
+
+    if (query.get("canceled")) {
+      setMessage(
+        "Order canceled -- continue to shop around and checkout when you're ready."
+      );
+    }
+  }, []);
+
+  return message ? (
+    <Message message={message} />
+  ) : (
+    <ProductDisplay data={getData()} />
+  );
+}
+```
+
+App.css
+
+```
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #242d60;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+  'Helvetica Neue', 'Ubuntu', sans-serif;
+  height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+section {
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 112px;
+  border-radius: 6px;
+  justify-content: space-between;
+}
+.product {
+  display: flex;
+}
+.description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+p {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.154px;
+  color: #242d60;
+  height: 100%;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+img {
+  border-radius: 6px;
+  margin: 10px;
+  width: 54px;
+  height: 57px;
+}
+h3,
+h5 {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.154px;
+  color: #242d60;
+  margin: 0;
+}
+h5 {
+  opacity: 0.5;
+}
+#checkout-button {
+  height: 36px;
+  background: #556cd6;
+  color: white;
+  width: 100%;
+  font-size: 14px;
+  border: 0;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.6;
+  border-radius: 0 0 6px 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+}
+#checkout-button:hover {
+  opacity: 0.8;
+}
+```
+
+Before we launch our new greeting app, we require a couple of steps:
+
+First, we need to add the site to our `nitric.yaml` file under `sites`:
+
+```yaml
+name: nitric-greeter
+services:
+  greeter:
+    path: greeter
+    runtime: function/nodets12
+
+sites:
+  greeter-ui:
+    path: greeter-ui
+    assetPath: ./build
+    buildScripts:
+      - yarn build
+```
+
+> Note: `yarn` can be replaced with `npm` if that is your preferred package manager.
+
+We can then define entrypoints to our app:
+
+```yaml
+name: nitric-stripe-payments
+services:
+  payments:
+    path: payments
+    runtime: function/golang15
+
+sites:
+  greeter-ui:
+    path: payments-ui
+    assetPath: ./build
+    buildScripts:
+      - yarn build
+
+entrypoints:
+  main:
+    paths:
+      /:
+        type: site
+        target: payments-ui
+      /greeter/:
+        type: service
+        target: payments
+```
+
+This tells the Nitric CLI how to build the paths and where they point.
+
+### Launch!
+
+Now that we have the component and logic in place, we can run our app:
+
+```bash
+nitric run
+```
+
+And then click and open the `main` entrypoint localhost url and you should see the completed app:
+
+```bash
+✔ Starting Entrypoints
+ Service Port
+ ─────── ─────
+ payments 49152
+ Entrypoint Url
+ ────────── ──────────────────────
+ main       http://localhost:59770
+```

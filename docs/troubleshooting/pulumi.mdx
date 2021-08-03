@@ -3,7 +3,7 @@
 When a deploy command is interupted by the user or a system failure, it can be difficult to know where to start to get back on track
 
 - The first step is to determine the state of the deployment
-We can do this by locating the tmp directory which holds the pulumi.yaml file of the most recent deploy
+  We can do this by locating the tmp directory which holds the pulumi.yaml file of the most recent deploy
 - Use your OS filesystem to locate this directory, you might be able to correlate the name of the folder with the ID of the deployment in the pulumi console
 - Next you can try to cancel the previous attempt with the following command `pulumi cancel`
 
