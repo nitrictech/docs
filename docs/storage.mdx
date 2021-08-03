@@ -23,14 +23,14 @@ buckets:
 
 Using one of the provided Nitric SDKs for your language is the easiest way to work with buckets.
 
-## Writing objects
+### Writing objects
 
 To write an object use a `StorageClient` to `write` an object to a bucket:
 
 <CodeExamples 
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -59,10 +59,10 @@ To write an object use a `StorageClient` to `write` an object to a bucket:
 <CodeExample lang="node">
 
 ```typescript
-import { storage } from '@nitric/sdk';
+import { Storage } from '@nitric/sdk';
 
 // Construct a new storage client with default settings
-const storageClient = storage();
+const storageClient = Storage();
 
 // Example byte array
 const contents = new Uint8Array();
@@ -90,13 +90,11 @@ await file_ref.write(b"example content");
 <CodeExample lang="java">
 
 ```java
-import io.nitric.api.storage.StorageClient;
+import io.nitric.api.storage.Storage;
 ...
+var bucket = Storage.bucket("my-bucket");
+bucket.file("/path/to/file").write("Hello World".getBytes("utf-8"));
 
-var object = StorageClient.newBuilder()
-	.bucket("my-bucket")
-	.build()
-	.write("/path/to/item", "Hello World!".getBytes("utf-8"));
 ```
 
 </CodeExample>
@@ -147,12 +145,10 @@ using Nitric.Api.Storage;
 ...
 
 // []byte data to write
-var data = ...
+var data = Encoding.UTF8.GetBytes("Hello World");
 
-new StorageClient.Builder()
-	.BucketName("my-bucket")
-	.Build()
-	.Write("path/to/item", data)
+var bucket = new Storage().Bucket("my-bucket");
+bucket.File("/path/to/file").Write(data);
 ```
 
 </CodeExample>
@@ -195,10 +191,10 @@ To retrieve an object use a `StorageClient` to `read` an object from a bucket:
 <CodeExample lang="node">
 
 ```typescript
-import { storage } from '@nitric/sdk';
+import { Storage } from '@nitric/sdk';
 
 // Construct a new storage client with default settings
-const storageClient = storage();
+const storageClient = Storage();
 
 // Read a byte array from a bucket
 const bytes = await storageClient
@@ -227,14 +223,12 @@ file = await file_ref.read();
 <CodeExample lang="java">
 
 ```java
-import io.nitric.api.storage.StorageClient;
+import io.nitric.api.storage.Storage;
 
 ...
 
-var object = StorageClient.newBuilder()
-	.bucket("my-bucket")
-	.build()
-	.read("/path/to/item");
+var bucket = Storage.bucket("my-bucket");
+var file = bucket.file("/path/to/file").read();
 ```
 
 </CodeExample>
@@ -284,10 +278,8 @@ using Nitric.Api.Storage;
 
 ...
 
-var bytes = new StorageClient.Builder()
-	.BucketName("my-bucket")
-	.Build()
-	.Read("path/to/item")
+var bucket = new Storage().Bucket("my-bucket");
+var file = bucket.File("/path/to/file").Read();
 ```
 
 </CodeExample>
@@ -330,10 +322,10 @@ To delete an object use a `StorageClient` to `delete` an object from a bucket:
 <CodeExample lang="node">
 
 ```typescript
-import { storage } from '@nitric/sdk';
+import { Storage } from '@nitric/sdk';
 
 // Construct a new storage client with default settings
-const storageClient = storage();
+const storageClient = Storage();
 
 // Read a byte array from a bucket
 const bytes = await storageClient
@@ -364,10 +356,8 @@ import io.nitric.api.storage.StorageClient;
 
 ...
 
-var object = StorageClient.newBuilder()
-	.bucket("my-bucket")
-	.build()
-	.delete("/path/to/item");
+var bucket = Storage.bucket("my-bucket");
+bucket.file("/path/to/file").delete();
 ```
 
 </CodeExample>
@@ -415,10 +405,9 @@ using Nitric.Api.Storage;
 
 ...
 
-new StorageClient.Builder()
-	.BucketName("my-bucket")
-	.Build()
-	.Delete("path/to/item")
+var bucket = new Storage().Bucket("my-bucket");
+bucket.File("/path/to/file").Delete();
+
 ```
 
 </CodeExample>

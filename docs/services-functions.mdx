@@ -27,7 +27,7 @@ The Nitric SDKs provide methods that accept a function and then run that functio
 <CodeExamples
 	languages={[
 	{
-		label: "Typescript",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -152,32 +152,6 @@ func main() {
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
-
-```csharp
-using System;
-using Nitric.Faas;
-using System.Text;
-
-namespace Nitric.Template.HelloWorld
-{
-    class HelloWorld : INitricFunction
-    {
-        public Response Handle(Trigger trigger){
-						return trigger.DefaultResponse(
-							Encoding.UTF8.GetBytes("Hello World!")
-						);
-        }
-        static void Main(string[] args)
-        {
-            Faas().start(new HelloWorld());
-        }
-    }
-}
-```
-
-</CodeExample>
-
 <CodeExample lang="php">
 
 ```php
@@ -194,6 +168,30 @@ $handler = function(Request $request): Response
 }
 
 Faas::start($handler);
+```
+
+</CodeExample>
+
+<CodeExample lang={"csharp"}>
+
+```csharp
+import Nitric.Faas;
+import Nitric.Event;
+
+class MyFirstFunction : INitricFunction
+{
+	public Response Handle(Trigger request)
+	{
+		return request.DefaultResponse(
+				Encoding.UTF8.GetBytes("Smoke Test")
+		);	
+	}
+
+	public static void Main(string[] args) {
+		Faas().Start(new MyFirstFunction());
+	}
+
+}
 ```
 
 </CodeExample>

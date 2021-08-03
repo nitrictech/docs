@@ -67,7 +67,11 @@ _Type:_ String -->
 
 > Coming Soon: Capability to limit queue push capability to a subset of services
 
-## Sending Tasks
+## Usage
+Using one of the provided Nitric SDKs for your language is the easiest way to work with queues.
+
+
+### Sending Tasks
 
 Using one of the provided Nitric SDKs for your language is the easiest way to work with queues. First, start by importing the QueueClient.
 
@@ -75,10 +79,10 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 <CodeExample lang="node">
 
 ```typescript
-import { queues } from '@nitric/sdk';
+import { Queueing } from '@nitric/sdk';
 
 // Construct a new queue client
-const queuesClient = queues();
+const queuesClient = Queueing();
 
 // Publish a task to the queue
 await queuesClient.queue('my-queue').send({
@@ -105,33 +109,29 @@ queues.queue("my-queue").send(Task(payload=payload))
 
 </CodeExample>
 
-<CodeExample lang={"java"}>
+<CodeExample lang="java">
 
 ```java
 package com.example;
 
-import io.nitric.api.queue.QueueClient;
+import io.nitric.api.queue.Queues;
 import io.nitric.api.queue.Task;
 import java.util.Map;
 
 ...
 
-QueueClient.newBuilder()
-	.queue('my-queue')
-	.build()
-	.send(
-		Task.newBuilder()
-			.id("1234")
-			.payloadType("test-payload")
-			.payload(Map.of(
-				"example", "payload"
-			))
-			.build()
-	);
+var queue = Queues.queue("my-queue");
+queue.send(
+	Task.newBuilder()
+		.id("1234")
+		.payloads(Map.of("example", "payload")
+		.build()
+);
+
 ```
 
 </CodeExample>
-<CodeExample lang={"go"}>
+<CodeExample lang="go">
 
 ```go
 import (
@@ -140,16 +140,16 @@ import (
 
 ...
 
-client := queues.New()
+qc := queues.New()
 
-ftasks, err := queues.Queue("my-queue").Send([]*queues.Task{
+ftasks, err := qc.Queue("my-queue").Send([]*queues.Task{
 	&queues.Task{
 		ID: "1234",
 		PayloadType: "test-payload",
 		Payload: map[string]interface{}{
 			"example": "payload",
 		},
-	}
+	},
 })
 
 if err != nil {
@@ -164,7 +164,7 @@ for _, ft := range ftasks {
 
 </CodeExample>
 
-<CodeExample lang={"php"}>
+<CodeExample lang="php">
 
 ```php
 use Nitric\Api\Queues;
@@ -182,44 +182,56 @@ $queues->queue("my-queue")->send($task);
 
 </CodeExample>
 
-<CodeExample lang={"c-sharp"}>
+<CodeExample lang="c-sharp">
 
 ```csharp
-using System;
 using Nitric.Api.Faas;
 using Nitric.Api.Queue
 
 ...
 
-var client = QueueClient.NewBuilder()
-	.Queue("my-queue")
-	.Build()
+var queue = new Queues().Queue("my-queue")
 
 var task = Task.NewBuilder()
-	.Id("1234")
-	.PayloadType("example-payload")
-	.Payload(..TODO...);
+	.Id("my-task")
+	.Build();
 
-client.Send(task);
+queue.Send(task);
 ```
 
 </CodeExample>
 
 </CodeExamples>
 
-## Receiving & Completing Tasks
+### Receiving & Completing Tasks
 
 To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the process is asynchronous, the queue is unaware of whether the task was processed successfully. To ensure failed services don't result in lost tasks, tasks are not removed from a queue when they're received. Instead, tasks are hidden and receivers are granted a temporary `lease` for each task they receive. Once the task is complete, the receiver must make a second call to the queue to `complete` the task, which will remove it from the queue.
 
 <CodeExamples 
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
 		label: "Python",
 		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
 	}
 	]}
 	defaultLang="node"
@@ -227,21 +239,19 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 <CodeExample lang="node">
 
 ```typescript
-import { queues } from '@nitric/sdk';
+import { Queueing } from '@nitric/sdk';
 
-const queueClient = queues();
+const queueClient = Queueing();
 
 // Receive tasks from the queue
-const tasks = queueClient.queue('my-queue').receive();
+const tasks = await queueClient.queue('my-queue').receive();
 
-await Promise.all(
-  tasks.map((task) => {
-    // Work on a task...
+tasks.map((task) => {
+	// Work on a task...
 
-    // Complete the task
-    return task.complete();
-  })
-);
+	// Complete the task
+	return task.complete();
+});
 ```
 
 </CodeExample>
@@ -264,29 +274,29 @@ for task in tasks:
 
 </CodeExample>
 
-<CodeExample lang={"java"}>
+<CodeExample lang="java">
 
 ```java
 package com.example;
 
-import io.nitric.api.queue.QueueClient;
+import io.nitric.api.queue.Queues;
 import io.nitric.api.queue.Task;
 import java.util.Map;
 
 ...
 
 // Construct a new queue client for the 'example' queue
-var client = QueueClient.build("example");
+var queue = Queues.queue("my-queue");
 
 // Receive a list of tasks from the 'example' queue
-List<Task> tasks = client.receive(100);
+List<Task> tasks = queue.receive(1);
 
-for (Task task: tasks) {
+for (Task task : tasks) {
 	try {
 		// process task here
 		// processTask(task);
 
-		client.complete(task.getLeaseId());
+		task.Complete();
 	} catch (Exception e) {
 		// We don't need to requeue the task here
 		// we can simply log the error and move on
@@ -296,7 +306,7 @@ for (Task task: tasks) {
 ```
 
 </CodeExample>
-<CodeExample lang={"go"}>
+<CodeExample lang="go">
 
 ```go
 import (
@@ -309,7 +319,7 @@ import (
 qc := queues.New()
 
 // Receive tasks from the queue
-tasks, err := qc.Queue("my-queue").Recieve()
+tasks, err := qc.Queue("my-queue").Receive()
 
 if err != nil {
 	// handle error...
@@ -327,7 +337,7 @@ for _, task := range tasks {
 
 </CodeExample>
 
-<CodeExample lang={"php"}>
+<CodeExample lang="php">
 
 ```php
 use Nitric\Api\Queues;
@@ -345,26 +355,23 @@ foreach($tasks as $task) {
 
 </CodeExample>
 
-<CodeExample lang={"c-sharp"}>
+<CodeExample lang="c-sharp">
 
 ```csharp
-using System;
 using Nitric.Api.Faas;
 using Nitric.Api.Queue
 
 ...
 
-var client = QueueClient.NewBuilder()
-	.Queue("my-queue")
-	.Build()
+var queue = new Queues().queue("my-queue");
 
-var tasks = client.Receive(1);
+var tasks = queue.Receive(1);
 
-foreach (Task t in tasks) {
+foreach (Task task in tasks) {
 	// process tasks
 
 	// Complete the task
-	client.Complete(t.LeaseID);
+	task.Complete();
 }
 ```
 
