@@ -68,8 +68,8 @@ _Type:_ String -->
 > Coming Soon: Capability to limit queue push capability to a subset of services
 
 ## Usage
-Using one of the provided Nitric SDKs for your language is the easiest way to work with queues.
 
+Using one of the provided Nitric SDKs for your language is the easiest way to work with queues.
 
 ### Sending Tasks
 
@@ -247,10 +247,10 @@ const queueClient = Queueing();
 const tasks = await queueClient.queue('my-queue').receive();
 
 tasks.map((task) => {
-	// Work on a task...
+  // Work on a task...
 
-	// Complete the task
-	return task.complete();
+  // Complete the task
+  return task.complete();
 });
 ```
 
