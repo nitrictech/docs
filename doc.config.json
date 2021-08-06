@@ -78,10 +78,13 @@
                 "path": "/docs/queues.mdx"
               },
               {
-                "path": "/docs/storage.mdx"
+                "path": "/docs/schedules.mdx"
               },
               {
-                "path": "/docs/schedules.mdx"
+                "path": "/docs/secrets.mdx"
+              },
+              {
+                "path": "/docs/storage.mdx"
               },
               {
                 "title": "Static Sites",
