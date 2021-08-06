@@ -133,7 +133,7 @@ A reference can be created regardless of whether the document or collection exis
 <CodeExamples 
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -439,11 +439,11 @@ docs = Documents()
 
 document = docs.collection("products").doc("nitric")
 
-await document.set({
+await (document.set({
     "id": "nitric",
     "name": "Nitric Framework",
     "description": "A development framework",
-})
+}))
 ```
 
 </CodeExample>
@@ -514,7 +514,10 @@ var docs = new Documents();
 
 var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
 
-var product = ...
+var product = new Dictionary<string, object>();
+product.Add("id", "nitric");
+product.Add("name", "Nitric Framework");
+product.Add("description", "A development framework");
 
 document.Set(product);
 ```
@@ -717,7 +720,7 @@ docs = Documents()
 
 query = docs.collection("Customers").query()
 
-// Execute query
+# Execute query
 results = query.fetch()
 ```
 
@@ -786,18 +789,15 @@ var nitric = query.Fetch();
 
 #### Subcollection Queries
 
-Subcollection queries can be created either:
-
 1. under a collection's subcollection `collection.collection.query`, or
 2. under a collection document's subcollection `collection.document.collection.query`
 
-In the first example we are performing a collection subcollection query where we
-are fetching all "Orders" documents for all "Customers".
+In the first example we are performing a collection subcollection query where we are fetching all "Orders" documents for all "Customers".
 
 <CodeExamples 
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -825,105 +825,54 @@ are fetching all "Orders" documents for all "Customers".
 >
 <CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
-
-const docs = documents();
-
-const query = docs.collection('Customers').collection('Orders').query();
-
-const results = await query.fetch();
-```
+<br />
+Ability to query a collection's subcollection is in development.
 
 </CodeExample>
 <CodeExample lang="python">
 
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-query = docs.collection("Customers")
-		.collection("Orders")
-		.query()
-
-results = query.fetch()
-```
+<br />
+Ability to query a collection's subcollection is in development.
 
 </CodeExample>
-
 <CodeExample lang="java">
-
 ```java
 import io.nitric.api.document.Documents;
 
 var query = Documents.collection("Customers")
-		.collection("Orders")
-		.query();
+.collection("Orders")
+.query();
 
 var results = query.fetch();
-```
 
+````
 </CodeExample>
-
 <CodeExample lang="go">
 
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-query := docs.Collection("Customers")
-		.Collection("Orders")
-		.Query()
-
-results, err := query.Fetch()
-```
+<br />
+Ability to query a collection's subcollection is in development.
 
 </CodeExample>
-
 <CodeExample lang="php">
 
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")
-		->collection("Orders")
-		->query();
-
-$results = $query->fetch();
-```
+<br />
+Ability to query a collection's subcollection is in development.
 
 </CodeExample>
+<CodeExample lang="csharp">
 
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers")
-		.Collection("Orders")
-		.Query();
-
-var nitric = query.Fetch();
-```
+<br />
+Ability to query a collection's subcollection is in development.
 
 </CodeExample>
 </CodeExamples>
 
-In the second example we are performing a collection document subcollection query where we
-are fetching all the "Orders" for a specific "Customer" with the id of 'apple'.
+In the second example we are performing a collection document subcollection query where we are fetching all the "Orders" for a specific "Customer" with the id of 'apple'.
 
-<CodeExamples 
+<CodeExamples
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -963,7 +912,7 @@ const query = docs
   .query();
 
 const results = await query.fetch();
-```
+````
 
 </CodeExample>
 <CodeExample lang="python">
@@ -1091,7 +1040,7 @@ they have an age of 21 or older.
 <CodeExamples 
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -1141,9 +1090,9 @@ from nitric.api import Documents
 
 docs = Documents()
 
-query = docs.collection("Customers").query()
+query = (docs.collection("Customers").query()
 	.where("country", "==", "US")
-	.where("age", ">=", 21)
+	.where("age", ">=", 21))
 
 results = query.fetch()
 ```
@@ -1168,14 +1117,14 @@ var results = query.fetch();
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/api/documents"
+	. "github.com/nitrictech/go-sdk/api/documents"
 )
 
 docs, _ := documents.New()
 
 query := docs.Collection("Customers").Query().Where(
-	Condition("country").Eq("US")
-	Condition("age").Gt(21)
+	Condition("country").Eq(StringValue("US"))
+	Condition("age").Gt(NumberValue(21))
 )
 
 results, err := query.Fetch()
@@ -1436,10 +1385,10 @@ query = docs.collection("Customers")
 		.where('active', '==', true)
 		.limit(100)
 
-// Fetch first page
+# Fetch first page
 results = query.fetch()
 
-// Fetch next page
+# Fetch next page
 results = query.page_from(results.paging_token).fetch()
 ```
 
@@ -1591,7 +1540,7 @@ docs = Documents()
 query = docs.collection("Customers").query()
 
 async for doc in query.stream():
-    // Process doc stream...
+    # Process doc stream...
 ```
 
 </CodeExample>
@@ -1629,14 +1578,14 @@ itr, err := query.Stream()
 <CodeExample lang="php">
 
 <br />
-The steam() method is not yet implemented.
+The stream() method is not yet implemented.
 
 </CodeExample>
 
 <CodeExample lang="c-sharp">
 
 <br />
-The steam() method is not yet implemented.
+The stream() method is not yet implemented.
 
 </CodeExample>
 </CodeExamples>
