@@ -7,11 +7,11 @@
 5. Get it all running locally for testing
 6. Deploy to a cloud of your choice
 
-| _Method_ | _Route_            | _Description_                  |
-| -------- | ------------------ | ------------------------------ |
-| GET:     | /orders            | List all orders                |
-| GET:     | /orders/{$orderId} | Get a specific order by its ID |
-| POST:    | /orders            | Create a new order             |
+| **Method** | **Route**          | **Description**                |
+| ---------- | ------------------ | ------------------------------ |
+| `GET`      | /orders            | List all orders                |
+| `GET`      | /orders/{$orderId} | Get a specific order by its ID |
+| `POST`     | /orders            | Create a new order             |
 
 > This tutorial provides examples in TypeScript & Python
 
@@ -19,9 +19,9 @@
 
 This tutorial assumes you have the Nitric CLI installed, if not you can follow the [installation guide](/docs/installation).
 
-You'll also want to setup your environment to run and test Nitric applications locally by installing prerequisite software. Use the `nitric doctor` command to check and automatically set up your machine.
+You'll also want to setup your environment to run and test Nitric applications locally by installing prerequisite software. Use the `nitric doctor` command to check and automatically setup your machine.
 
-If you’d like to deploy the results to a cloud environment _(optional)_, you’ll also need to set up your credentials and any other cloud specific configuration: [AWS](/docs/provider-aws), [GCP](/docs/provider-gcp), or [Azure](/docs/provider-azure).
+If you’d like to deploy the results to a cloud environment _(optional)_, you’ll also need to setup your credentials and any other cloud specific configuration: [AWS](/docs/provider-aws), [GCP](/docs/provider-gcp), or [Azure](/docs/provider-azure).
 
 ## New project
 
@@ -435,6 +435,7 @@ async def handler(request: Trigger) -> list:
     while True:
         page = await orders.query().page_from(token).fetch()
         results += [{"content": doc.content, "id": doc.id} for doc in page.documents]
+        token = page.paging_token
         if not token:
             break
     return results
