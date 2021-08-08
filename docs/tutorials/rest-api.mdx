@@ -222,29 +222,29 @@ import uuid
 
 @dataclass(frozen=True)
 class OrderRequest:
-    itemId: str
-    customerId: str
-    id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    dateOrdered: str = field(default_factory=lambda: str(datetime.now()))
+  itemId: str
+  customerId: str
+  id: str = field(default_factory=lambda: str(uuid.uuid4()))
+  dateOrdered: str = field(default_factory=lambda: str(datetime.now()))
 
 
 async def handler(request: Trigger) -> Union[dict, Response]:
-    order = OrderRequest(**request.get_object())
+  order = OrderRequest(**request.get_object())
 
-    orders = Documents().collection('orders')
+  orders = Documents().collection('orders')
 
-    try:
-        await orders.doc(order.id).set(dataclasses.asdict(order))
-        return {"message": "success", "orderId": order.id}
-    except:
-        response = request.default_response()
-        response.context.as_http().status = 500
-        response.data = {"message": "failed to create order"}
-        return response
+  try:
+    await orders.doc(order.id).set(dataclasses.asdict(order))
+    return {"message": "success", "orderId": order.id}
+  except:
+    response = request.default_response()
+    response.context.as_http().status = 500
+    response.data = {"message": "failed to create order"}
+    return response
 
 
 if __name__ == "__main__":
-    start(handler)
+  start(handler)
 
 ```
 
@@ -321,26 +321,26 @@ from nitric.faas import start, Trigger, Response
 
 
 async def handler(request: Trigger) -> Union[dict, Response]:
-    order_id = request.context.as_http().path.split("/")[2]  # use a parser in a real project.
+  order_id = request.context.as_http().path.split("/")[2]  # use a parser in a real project.
 
-    orders = Documents().collection("orders")
+  orders = Documents().collection("orders")
 
-    try:
-        order = await orders.doc(order_id).get()
+  try:
+    order = await orders.doc(order_id).get()
 
-        return {
-            "id": order.id,
-            "order": order.content,
-        }
-    except:
-        response = request.default_response()
-        response.context.as_http().status = 404
-        response.data = {"message": f"order with id: {order_id} not found"}
-        return response
+    return {
+      "id": order.id,
+      "order": order.content,
+    }
+  except:
+    response = request.default_response()
+    response.context.as_http().status = 404
+    response.data = {"message": f"order with id: {order_id} not found"}
+    return response
 
 
 if __name__ == "__main__":
-    start(handler)
+  start(handler)
 
 ```
 
@@ -428,21 +428,21 @@ from nitric.faas import start, Trigger, Response
 
 
 async def handler(request: Trigger) -> list:
-    orders = Documents().collection("orders")
-    results = []
-    token = None
+  orders = Documents().collection("orders")
+  results = []
+  token = None
 
-    while True:
-        page = await orders.query().page_from(token).fetch()
-        results += [{"content": doc.content, "id": doc.id} for doc in page.documents]
-        token = page.paging_token
-        if not token:
-            break
-    return results
+  while True:
+    page = await orders.query().page_from(token).fetch()
+    results += [{"content": doc.content, "id": doc.id} for doc in page.documents]
+    token = page.paging_token
+    if not token:
+        break
+  return results
 
 
 if __name__ == "__main__":
-    start(handler)
+  start(handler)
 ```
 
 </CodeExample>
@@ -475,69 +475,69 @@ Update your `nitric.yaml` file to the following:
 name: my-rest-api
 
 services:
-	orders-create:
-		path: orders-create
-		runtime: function/nodets12
-	orders-get:
-		path: orders-get
-		runtime: function/nodets12
-	orders-list:
-		path: orders-list
-		runtime: function/nodets12
+  orders-create:
+    path: orders-create
+    runtime: function/nodets12
+  orders-get:
+    path: orders-get
+    runtime: function/nodets12
+  orders-list:
+    path: orders-list
+    runtime: function/nodets12
 
 # Note: APIs are defined in OpenAPI Spec 3. The following is a basic example, but can be extended using the specification standards.
 apis:
-	orders:
-		openapi: 3.0.0
-		info:
-			version: 1.0.0
-			title: Orders API
-			description: Tutorial orders API
-		paths:
-			/orders:
-				get:
-					operationId: orders-list
-					x-nitric-target:
-						name: orders-list
-						type: service
-					description: Retrieve all orders
-					responses:
-						"200":
-							description: Successful response
-				post:
-					operationId: orders-create
-					x-nitric-target:
-						name: orders-create
-						type: service
-					description: Creates and persists new orders
-					responses:
-						"200":
-							description: Successful response
-					requestBody:
-						required: true
-						content:
-							application/json:
-								schema:
-									$ref: "#/components/schemas/OrderCreate"
-			/orders/{orderId}:
-				get:
-					operationId: orders-get
-					x-nitric-target:
-						name: orders-get
-						type: service
-					description: Retrieve an existing order by its ID
-					responses:
-						"200":
-							description: Successful response
-		components:
-			schemas:
-				OrderCreate:
-					type: object
-					properties:
-						itemId:
-							type: string
-						customerId:
-							type: string
+  orders:
+    openapi: 3.0.0
+    info:
+      version: 1.0.0
+      title: Orders API
+      description: Tutorial orders API
+    paths:
+      /orders:
+        get:
+          operationId: orders-list
+          x-nitric-target:
+            name: orders-list
+            type: service
+          description: Retrieve all orders
+          responses:
+            '200':
+              description: Successful response
+        post:
+          operationId: orders-create
+          x-nitric-target:
+            name: orders-create
+            type: service
+          description: Creates and persists new orders
+          responses:
+            '200':
+              description: Successful response
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/OrderCreate'
+      /orders/{orderId}:
+        get:
+          operationId: orders-get
+          x-nitric-target:
+            name: orders-get
+            type: service
+          description: Retrieve an existing order by its ID
+          responses:
+            '200':
+              description: Successful response
+    components:
+      schemas:
+        OrderCreate:
+          type: object
+          properties:
+            itemId:
+              type: string
+            customerId:
+              type: string
 ```
 
 </CodeExample>
@@ -547,76 +547,76 @@ apis:
 name: my-rest-api
 
 services:
-	orders-create:
-		path: orders-create
-		runtime: function/python37
-	orders-get:
-		path: orders-get
-		runtime: function/python37
-	orders-list:
-		path: orders-list
-		runtime: function/python37
+  orders-create:
+    path: orders-create
+    runtime: function/python37
+  orders-get:
+    path: orders-get
+    runtime: function/python37
+  orders-list:
+    path: orders-list
+    runtime: function/python37
 
 # Note: APIs are defined in OpenAPI Spec 3. The following is a basic example, but can be extended using the specification standards.
 apis:
-	orders:
-		openapi: 3.0.0
-		info:
-			version: 1.0.0
-			title: Orders API
-			description: Tutorial orders API
-		paths:
-			/orders:
-			get:
-				operationId: orders-list
-				x-nitric-target:
-				name: orders-list
-				type: service
-				description: Retrieve all orders
-				responses:
-				"200":
-					description: Successful response
-			post:
-				operationId: orders-create
-				x-nitric-target:
-				name: orders-create
-				type: service
-				description: Creates and persists new orders
-				responses:
-				"200":
-					description: Successful response
-				requestBody:
-				required: true
-				content:
-					application/json:
-					schema:
-						$ref: "#/components/schemas/OrderCreate"
-			/orders/{orderId}:
-			get:
-				operationId: orders-get
-				x-nitric-target:
-				name: orders-get
-				type: service
-				description: Retrieve an existing order by its ID a
-				parameters:
-				- in: path
-					name: orderId
-					schema:
-					type: string
-					required: true
-					description: Unique ID of the order
-				responses:
-				"200":
-					description: Successful response
-		components:
-			schemas:
-			OrderCreate:
-				type: object
-				properties:
-				itemId:
-					type: string
-				customerId:
-					type: string
+  orders:
+    openapi: 3.0.0
+    info:
+      version: 1.0.0
+      title: Orders API
+      description: Tutorial orders API
+    paths:
+      /orders:
+        get:
+          operationId: orders-list
+          x-nitric-target:
+            name: orders-list
+            type: service
+          description: Retrieve all orders
+          responses:
+            '200':
+              description: Successful response
+        post:
+          operationId: orders-create
+          x-nitric-target:
+            name: orders-create
+            type: service
+          description: Creates and persists new orders
+          responses:
+            '200':
+              description: Successful response
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/OrderCreate'
+      /orders/{orderId}:
+        get:
+          operationId: orders-get
+          x-nitric-target:
+            name: orders-get
+            type: service
+          description: Retrieve an existing order by its ID a
+          parameters:
+            - in: path
+              name: orderId
+              schema:
+                type: string
+              required: true
+              description: Unique ID of the order
+          responses:
+            '200':
+              description: Successful response
+    components:
+      schemas:
+        OrderCreate:
+          type: object
+          properties:
+            itemId:
+              type: string
+            customerId:
+              type: string
 ```
 
 </CodeExample>
