@@ -198,8 +198,8 @@ echo "Generated Event ID is: " . $event->getId();
 <CodeExample lang={"c-sharp"}>
 
 ```csharp
-import Nitric.Faas;
-import Nitric.Event;
+using Nitric.Api.Faas;
+import Nitric.Api.Event;
 
 class MyFirstFunction : INitricFunction
 {
@@ -367,8 +367,8 @@ $event = $events->topic("my-topic")->publish(
 <CodeExample lang={"c-sharp"}>
 
 ```csharp
-import Nitric.Faas;
-import Nitric.Event;
+using Nitric.Api.Faas;
+using Nitric.Api.Event;
 
 class MyFirstFunction : INitricFunction
 {
