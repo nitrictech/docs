@@ -195,36 +195,7 @@ echo "Generated Event ID is: " . $event->getId();
 
 </CodeExample>
 
-<CodeExample lang={"csharp"}>
-
-```csharp
-import Nitric.Faas;
-import Nitric.Event;
-
-class MyFirstFunction : INitricFunction
-{
-	public Response Handle(Trigger request)
-	{
-		var examplePayload = new Dictionary<string, string>();
-		examplePayload.Add("Content", "of event");
-		var topic = new Events.Topic("my-topic");
-		topic.Publish(
-			Event.NewBuilder()
-				 .Payload(examplePayload)
-				 .Build()
-		);
-
-		return request.DefaultResponse(
-				Encoding.UTF8.GetBytes("Smoke Test")
-		);
-	}
-
-	public static void Main(string[] args) {
-		Faas().Start(new MyFirstFunction());
-	}
-
-}
-```
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/events/Publish.cs" />
 
 </CodeExample>
 
@@ -364,39 +335,8 @@ $event = $events->topic("my-topic")->publish(
 
 </CodeExample>
 
-<CodeExample lang={"csharp"}>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/events/EventIDs.cs" />
 
-```csharp
-import Nitric.Faas;
-import Nitric.Event;
-
-class MyFirstFunction : INitricFunction
-{
-	public Response Handle(Trigger request)
-	{
-		var examplePayload = new Dictionary<string, string>();
-		examplePayload.Add("Content", "of event");
-		var topic = new Events.Topic("my-topic");
-		topic.Publish(
-			Event.NewBuilder()
-				 .Id("1234")
-				 .Payload(examplePayload)
-				 .Build()
-		);
-
-		return request.DefaultResponse(
-				Encoding.UTF8.GetBytes("Smoke Test")
-		);
-	}
-
-	public static void Main(string[] args) {
-		Faas().Start(new MyFirstFunction());
-	}
-
-}
-```
-
-</CodeExample>
 </CodeExamples>
 
 #### Atomicity of Events

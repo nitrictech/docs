@@ -137,21 +137,7 @@ $bucket->file("some/file.txt")->write("file contents");
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Storage;
-
-...
-
-// []byte data to write
-var data = Encoding.UTF8.GetBytes("Hello World");
-
-var bucket = new Storage().Bucket("my-bucket");
-bucket.File("/path/to/file").Write(data);
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/storage/Write.cs" />
 
 </CodeExamples>
 
@@ -271,18 +257,7 @@ $contents = $bucket->file("some/file.txt")->read();
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Storage;
-
-...
-
-var bucket = new Storage().Bucket("my-bucket");
-var file = bucket.File("/path/to/file").Read();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/storage/Read.cs" />
 
 </CodeExamples>
 
@@ -400,15 +375,7 @@ $bucket->file("some/file.txt")->delete();
 
 <CodeExample lang="c-sharp">
 
-```csharp
-using Nitric.Api.Storage;
-
-...
-
-var bucket = new Storage().Bucket("my-bucket");
-bucket.File("/path/to/file").Delete();
-
-```
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/storage/Delete.cs" />
 
 </CodeExample>
 

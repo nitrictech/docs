@@ -236,21 +236,8 @@ $nitric = $products->doc("nitric");
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Refs.cs" />
 
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-// create a reference to a collection named 'products'
-var collection = docs.Collection<Dictionary<string, object>>("products");
-
-// create a reference to a document with the id 'nitric'
-var nitric = collection.Doc("nitric");
-```
-
-</CodeExample>
 </CodeExamples>
 
 ## Usage
@@ -332,19 +319,9 @@ $product = $document->get();
 ```
 
 </CodeExample>
-<CodeExample lang="c-sharp">
 
-```csharp
-using Nitric.Api.Document;
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Get.cs" />
 
-var docs = new Documents();
-
-var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
-
-var product = document.Get();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ### Set
@@ -436,26 +413,9 @@ $document->set([
 ```
 
 </CodeExample>
-<CodeExample lang="c-sharp">
 
-```csharp
-using System;
-using System.Collections.Generic;
-using Nitric.Api.Document;
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Set.cs" />
 
-var docs = new Documents();
-
-var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
-
-var product = new Dictionary<string, object>();
-product.Add("id", "nitric");
-product.Add("name", "Nitric Framework");
-product.Add("description", "A development framework");
-
-document.Set(product);
-```
-
-</CodeExample>
 </CodeExamples>
 
 > Coming Soon: `set()` options for document merge updates and conditional updates.
@@ -568,19 +528,9 @@ $document->delete();
 ```
 
 </CodeExample>
-<CodeExample lang="c-sharp">
 
-```csharp
-using Nitric.Api.Document;
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Delete.cs" />
 
-var docs = new Documents();
-
-var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
-
-document.Delete();
-```
-
-</CodeExample>
 </CodeExamples>
 
 When you delete a document any subcollection documents will also be deleted.
@@ -704,20 +654,8 @@ $results = $query->fetch();
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Query.cs" />
 
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers").Query();
-
-// Execute query
-var nitric = query.Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 #### Subcollection Queries
@@ -959,13 +897,7 @@ sub collection group query support is under development...
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
-
-```
-sub collection group query support is under development...
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/SubDocQuery.cs" />
 
 </CodeExamples>
 
@@ -1115,21 +1047,8 @@ $results = $query->fetch();
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/QueryFilter.cs" />
 
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers").Query()
-	.Where("country", "==", "US")
-	.Where("age", ">=", 21);
-
-var results = query.Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ##### Expression Limitations
@@ -1262,22 +1181,8 @@ $results = $query->fetch();
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/QueryLimits.cs" />
 
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers")
-		.Collection("Orders")
-		.Query()
-		.Limit(1000);
-
-var nitric = query.Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ### Paged Results
@@ -1423,26 +1328,8 @@ $results = $query->pageFrom($results.pagingToken)->fetch();
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/PagedResults.cs" />
 
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers")
-	.Query()
-	.Where("active", "==", true)
-	.Limit(100);
-
-// Fetch first page
-var results = query.Fetch();
-
-// Fetch next page
-results = query.PagingFrom(results.PagingToken).Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ### Streamed Results

@@ -182,24 +182,7 @@ $queues->queue("my-queue")->send($task);
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Faas;
-using Nitric.Api.Queue
-
-...
-
-var queue = new Queues().Queue("my-queue")
-
-var task = Task.NewBuilder()
-	.Id("my-task")
-	.Build();
-
-queue.Send(task);
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/queues/Send.cs" />
 
 </CodeExamples>
 
@@ -355,26 +338,6 @@ foreach($tasks as $task) {
 
 </CodeExample>
 
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Faas;
-using Nitric.Api.Queue
-
-...
-
-var queue = new Queues().queue("my-queue");
-
-var tasks = queue.Receive(1);
-
-foreach (Task task in tasks) {
-	// process tasks
-
-	// Complete the task
-	task.Complete();
-}
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/queues/Receive.cs" />
 
 </CodeExamples>
