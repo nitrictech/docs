@@ -291,19 +291,8 @@ methods to marshal documents into typed objects.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
-
-const docs = documents();
-
-const document = docs.collection('products').doc('nitric');
-
-const product = await document.get();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/node-sdk/snippets/documents/get-document.ts" />
 
 <CodeExample lang="python">
 
@@ -327,25 +316,9 @@ var product = Documents.collection("products").doc("nitric").get();
 ```
 
 </CodeExample>
-<CodeExample lang="go">
 
-```go
-import (
-    "github.com/nitrictech/go-sdk/api/documents"
-)
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/get.go" />
 
-docs, _ := documents.New()
-
-document := docs.Collection("products").Doc("nitric")
-
-product, err := document.Get()
-
-if err != nil {
-	// Handle error
-}
-```
-
-</CodeExample>
 <CodeExample lang="php">
 
 ```php
@@ -407,29 +380,9 @@ To add a new document to a collection or update an existing document, use the `s
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/snippets/documents/set-document.ts" />
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-}
-
-const docs = documents();
-
-const document = docs.collection<Product>('products').doc('nitric');
-
-await document.set({
-  id: 'nitric',
-  name: 'nitric',
-  description: 'A development framework!',
-});
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python
@@ -463,29 +416,9 @@ document.set(Map.of(
 ```
 
 </CodeExample>
-<CodeExample lang="go">
 
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/set.go" />
 
-docs, _ := documents.New()
-
-document := docs.Collection("products").Doc("nitric")
-
-err := document.Set(map[string]inteface{}{
-	"id": "nitric",
-	"name": "Nitric Framework",
-	"description": "A development framework",
-})
-
-if err != nil {
-	// handle error
-}
-```
-
-</CodeExample>
 <CodeExample lang="php">
 
 ```php
