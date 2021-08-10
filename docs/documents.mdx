@@ -159,19 +159,9 @@ A reference can be created regardless of whether the document or collection exis
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/refs.ts" />
 
-// Create a reference to a collection named 'products'
-const products = documents().collection('products');
-
-// Create a reference to a document with the id 'nitric'
-const nitric = products.doc('nitric');
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python
@@ -279,7 +269,7 @@ methods to marshal documents into typed objects.
 	defaultLang="node"
 >
 
-<CodeSnippet snippet="nitrictech/node-sdk/snippets/documents/get-document.ts" />
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/get.ts" />
 
 <CodeExample lang="python">
 
@@ -358,7 +348,7 @@ To add a new document to a collection or update an existing document, use the `s
 	defaultLang="node"
 >
 
-<CodeSnippet snippet="nitrictech/node-sdk/snippets/documents/set-document.ts" />
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/set.ts" />
 
 <CodeExample lang="python">
 
@@ -461,19 +451,9 @@ To delete a document from a collection, use the `delete()` method.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/delete.ts" />
 
-const docs = documents();
-
-const document = docs.collection('products').doc('nitric');
-
-await document.delete();
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python
@@ -580,20 +560,9 @@ The example below will fetch all the documents in the 'Customers' collection.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query.ts" />
 
-const docs = documents();
-
-const query = docs.collection('Customers').query();
-
-// Execute query
-const results = await query.fetch();
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python
@@ -843,13 +812,9 @@ In the example below we are selecting all `Orders` for all `Customers`.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-sub collection group query support is under development...
-```
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-col-query.ts" />
 
-</CodeExample>
 <CodeExample lang="python">
 
 ```
@@ -936,7 +901,7 @@ This equates to the SQL:
 In the examples below we selecting `Customers` documents where the customer's country is equals to 'US' and
 they have an age of 21 or older.
 
-<CodeExamples 
+<CodeExamples
 	languages={[
 	{
 		label: "Node",
@@ -965,23 +930,9 @@ they have an age of 21 or older.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-filter.ts" />
 
-const docs = documents();
-
-const query = docs
-  .collection('Customers')
-  .query()
-  .where('country', '==', 'US')
-  .where('age', '>=', 21);
-
-const results = await query.fetch();
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python
@@ -1067,7 +1018,7 @@ To limit the number of document retrieved use the `limit()` method.
 
 In the example below we are fetching the first 1,000 customer order documents across all customers.
 
-<CodeExamples 
+<CodeExamples
 	languages={[
 	{
 		label: "Node.js",
@@ -1096,23 +1047,9 @@ In the example below we are fetching the first 1,000 customer order documents ac
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-limits.ts" />
 
-const docs = documents();
-
-const query = docs
-  .collection('Customers')
-  .collection('Orders')
-  .query()
-  .limit(1000);
-
-const results = await query.fetch();
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python
@@ -1195,7 +1132,7 @@ next query with the `pagingFrom()` method. This will enable the next query to co
 
 The example below selects active 'Customers' paging through the collection in sets of 100 document.
 
-<CodeExamples 
+<CodeExamples
 	languages={[
 	{
 		label: "Node.js",
@@ -1224,27 +1161,9 @@ The example below selects active 'Customers' paging through the collection in se
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-paginated.ts" />
 
-const docs = documents();
-
-const query = docs
-  .collection('Customers')
-  .query()
-  .where('active', '==', true)
-  .limit(100);
-
-// Fetch first page
-let results = await query.fetch();
-
-// Fetch next page
-results = await query.pagingFrom(results.pagingToken).fetch();
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python
@@ -1340,7 +1259,7 @@ reduce memory usage.
 
 Check your SDK for streaming support.
 
-<CodeExamples 
+<CodeExamples
 	languages={[
 	{
 		label: "Node.js",
@@ -1369,21 +1288,9 @@ Check your SDK for streaming support.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-stream.ts" />
 
-const docs = documents();
-
-const stream = docs.collection('Customers').query().stream();
-
-for await (const doc of stream) {
-  // Process doc stream...
-}
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python
@@ -1449,3 +1356,4 @@ stream() support is under development...
 <br />
 
 > Note a GRCP Document Service QueryStream query streaming method will be developed to better support SDKs.
+````
