@@ -76,23 +76,9 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 Using one of the provided Nitric SDKs for your language is the easiest way to work with queues. First, start by importing the QueueClient.
 
 <CodeExamples>
-<CodeExample lang="node">
 
-```typescript
-import { Queueing } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/queues/send.ts" />
 
-// Construct a new queue client
-const queuesClient = Queueing();
-
-// Publish a task to the queue
-await queuesClient.queue('my-queue').send({
-  payload: {
-    example: 'payload',
-  },
-});
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python
@@ -219,25 +205,9 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { Queueing } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/queues/receive.ts" />
 
-const queueClient = Queueing();
-
-// Receive tasks from the queue
-const tasks = await queueClient.queue('my-queue').receive();
-
-tasks.map((task) => {
-  // Work on a task...
-
-  // Complete the task
-  return task.complete();
-});
-```
-
-</CodeExample>
 <CodeExample lang="python">
 
 ```python

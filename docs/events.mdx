@@ -68,29 +68,9 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 Once a topic has been defined, services can publish to it using one of the Nitric SDKs. At minimum, a publish request requires the name of the topic to publish to, and the payload of the event to publish. An event's payload is typically a JSON string, however, the Nitric SDKs will often accept a 'plain old object' or map/dictionary value to simplify the code needed to publish events.
 
 <CodeExamples>
-<CodeExample lang={"node"}>
 
-```typescript
-// import the event client library
-import { faas, events } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/events/publish.ts" />
 
-faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
-  // Create a new instance of the event client
-  const eventsClient = events();
-
-  // Publish an event to the topic 'my-topic'
-  // Note: The event payload will be serialized automatically.
-  await eventsClient.topic('my-topic').publish({
-    payload: {
-      amazing: 'thing happened!',
-    },
-  });
-
-  return 'Successfully published message';
-});
-```
-
-</CodeExample>
 <CodeExample lang={"python"}>
 
 ```python
@@ -106,6 +86,7 @@ event = await topic.publish(Event(payload=payload))
 ```
 
 </CodeExample>
+
 <CodeExample lang={"java"}>
 
 ```java
@@ -137,6 +118,7 @@ public class MyFirstFunction implements NitricFunction {
 ```
 
 </CodeExample>
+
 <CodeExample lang={"go"}>
 
 ```go
@@ -206,29 +188,9 @@ echo "Generated Event ID is: " . $event->getId();
 It's essential that every event can be uniquely identified so that subscribers can be idempotent. To assist with this, Nitric Events include an ID property which should contain the unique ID for that event. By default, the [Nitric Membrane](./nitric-membrane) will automatically generate this ID as a v4 UUID for every published event if it doesn't already contain an ID. Custom ID creation can be implemented by your code by simply providing this ID during publishing:
 
 <CodeExamples>
-<CodeExample lang={"node"}>
 
-```typescript
-// import the event client library
-import { faas, events } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/events/publish-ids.ts" />
 
-faas.start(async (_: faas.NitricRequest<string>): Promise<string> => {
-  const eventsClient = events();
-
-  await eventsClient.topic('my-topic').publish({
-    // Note: the event id should be generated using a process
-    // that's guaranteed to be unique for practical purposes.
-    id: 'unique-event-id',
-    payload: {
-      amazing: 'thing happened!',
-    },
-  });
-
-  return 'Successfully published message';
-});
-```
-
-</CodeExample>
 <CodeExample lang={"python"}>
 
 ```python
