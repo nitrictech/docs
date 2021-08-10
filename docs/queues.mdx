@@ -117,38 +117,8 @@ queue.send(
 ```
 
 </CodeExample>
-<CodeExample lang="go">
 
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/queues"
-)
-
-...
-
-qc := queues.New()
-
-ftasks, err := qc.Queue("my-queue").Send([]*queues.Task{
-	&queues.Task{
-		ID: "1234",
-		PayloadType: "test-payload",
-		Payload: map[string]interface{}{
-			"example": "payload",
-		},
-	},
-})
-
-if err != nil {
-	// handle error...
-}
-
-for _, ft := range ftasks {
-	// enumerate tasks that failed to queue
-}
-
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/go-sdk/examples/queues/send.go" />
 
 <CodeExample lang="php">
 
@@ -259,36 +229,8 @@ for (Task task : tasks) {
 ```
 
 </CodeExample>
-<CodeExample lang="go">
 
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/queues"
-)
-
-...
-
-// Construct a new queue client with default settings
-qc := queues.New()
-
-// Receive tasks from the queue
-tasks, err := qc.Queue("my-queue").Receive()
-
-if err != nil {
-	// handle error...
-}
-
-for _, task := range tasks {
-	// process the task
-	// complete the task
-	err := task.Complete()
-	if err != nil {
-		// task failed to complete
-	}
-}
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/go-sdk/examples/queues/receive.go" />
 
 <CodeExample lang="php">
 

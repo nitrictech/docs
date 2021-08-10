@@ -85,29 +85,9 @@ bucket.file("/path/to/file").write("Hello World".getBytes("utf-8"));
 ```
 
 </CodeExample>
-<CodeExample lang="go">
 
-```go
-import (
-    "github.com/nitrictech/go-sdk/api/storage"
-)
+<CodeSnippet snippet="nitrictech/go-sdk/examples/storage/write.go" />
 
-...
-
-sc, err := storage.New()
-
-if err != nil {
-	// handle error retrieving the storage client
-}
-
-err := sc.Bucket("my-bucket").File("path/to/file").Write([]byte("Hello World!"))
-
-if err != nil {
-	// Handle error writing the file
-}
-```
-
-</CodeExample>
 <CodeExample lang="php">
 
 ```php
@@ -193,27 +173,7 @@ var file = bucket.file("/path/to/file").read();
 
 </CodeExample>
 
-<CodeExample lang="go">
-
-```go
-import (
-    "github.com/nitrictech/go-sdk/api/storage"
-)
-
-...
-
-sc, _ := storage.New()
-
-f, err := sc.Bucket("my-bucket").File("path/to/item").Read()
-
-if err != nil {
-	// handle file read error
-}
-
-// handle file content ([]byte)
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/go-sdk/examples/storage/read.go" />
 
 <CodeExample lang="php">
 
@@ -298,25 +258,7 @@ bucket.file("/path/to/file").delete();
 
 </CodeExample>
 
-<CodeExample lang="go">
-
-```go
-import (
-    "github.com/nitrictech/go-sdk/api/storage"
-)
-
-...
-
-sc, _ := storage.New()
-
-err := sc.Bucket("my-delete").File("path/to/item").Delete()
-
-if err != nil {
-	// Handle deletion error
-}
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/go-sdk/examples/storage/delete.go" />
 
 <CodeExample lang="php">
 

@@ -119,45 +119,8 @@ public class MyFirstFunction implements NitricFunction {
 
 </CodeExample>
 
-<CodeExample lang={"go"}>
+<CodeSnippet snippet="nitrictech/go-sdk/examples/events/publish.go" />
 
-```go
-package main
-
-import (
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/api/events"
-)
-
-// NitricFunction - Handles individual function requests (http, events, etc.)
-func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
-	// Create a new events client
-	ec, err := events.New()
-
-	if err != nil {
-		// ...handle the error
-	}
-
-	// Publish an event to my-topic
-	ec.Topic("my-topic").Publish(&events.Event{
-		PayloadType: "my-payload",
-		Payload: map[string]interface{}{
-			"amazing": "thing happened!",
-		},
-	}
-
-	resp := trigger.DefaultResponse()
-	resp.SetData([]byte("Successfully Published Message"))
-
-	return resp, nil
-}
-
-func main() {
-	faas.Start(NitricFunction)
-}
-```
-
-</CodeExample>
 <CodeExample lang={"php"}>
 
 ```php
@@ -240,45 +203,9 @@ public class MyFirstFunction implements NitricFunction {
 ```
 
 </CodeExample>
-<CodeExample lang={"go"}>
 
-```go
-package main
+<CodeSnippet snippet="nitrictech/go-sdk/examples/events/publish_id.go" />
 
-import (
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/api/events"
-)
-
-// NitricFunction - Handles individual function requests (http, events, etc.)
-func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
-	ec, err := events.New()
-
-	if err != nil {
-		// ...handle the error
-	}
-
-	_, err := ec.Topic("my-topic").Publish(&events.Event{
-			ID: "unique-event-id",
-			Payload: map[string]interface{}{
-				"amazing": "thing happened!",
-			},
-	})
-
-	msg := "Successfully Published Message"
-
-	resp := trigger.DefaultResponse()
-	resp.SetData([]byte("Successfully Published Message"))
-
-	return resp, nil
-}
-
-func main() {
-	faas.Start(NitricFunction)
-}
-```
-
-</CodeExample>
 <CodeExample lang={"php"}>
 
 ```php
