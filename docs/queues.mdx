@@ -81,28 +81,7 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/queues/send.py" />
 
-<CodeExample lang="java">
-
-```java
-package com.example;
-
-import io.nitric.api.queue.Queues;
-import io.nitric.api.queue.Task;
-import java.util.Map;
-
-...
-
-var queue = Queues.queue("my-queue");
-queue.send(
-	Task.newBuilder()
-		.id("1234")
-		.payloads(Map.of("example", "payload")
-		.build()
-);
-
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/queues/Send.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/queues/send.go" />
 
@@ -166,38 +145,7 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/queues/receive.py" />
 
-<CodeExample lang="java">
-
-```java
-package com.example;
-
-import io.nitric.api.queue.Queues;
-import io.nitric.api.queue.Task;
-import java.util.Map;
-
-...
-
-// Construct a new queue client for the 'example' queue
-var queue = Queues.queue("my-queue");
-
-// Receive a list of tasks from the 'example' queue
-List<Task> tasks = queue.receive(1);
-
-for (Task task : tasks) {
-	try {
-		// process task here
-		// processTask(task);
-
-		task.Complete();
-	} catch (Exception e) {
-		// We don't need to requeue the task here
-		// we can simply log the error and move on
-		// the task will automatically requeue itself
-	}
-}
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/queues/Receive.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/queues/receive.go" />
 

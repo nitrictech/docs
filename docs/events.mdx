@@ -73,37 +73,7 @@ Once a topic has been defined, services can publish to it using one of the Nitri
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/events/publish.py" />
 
-<CodeExample lang={"java"}>
-
-```java
-package com.example;
-
-import io.nitric.faas.Faas;
-import io.nitric.faas.Trigger;
-import io.nitric.faas.NitricFunction;
-import io.nitric.faas.Response;
-import io.nitric.api.event.Events;
-import io.nitric.api.event.Event;
-import java.util.Map;
-
-public class MyFirstFunction implements NitricFunction {
-
-	@Override
-	public Response handle(Trigger trigger) {
-		var topic = Events.topic("my-topic");
-		topic.publish(Event.build(Map.of("Content", "of event")));
-
-		return trigger.buildResponse("Successfully published message");
-	}
-
-	public static void main(String[] args) {
-		new Faas().start(new MyFirstFunction());
-	}
-
-}
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/events/PublishExample.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/events/publish.go" />
 
@@ -142,41 +112,7 @@ It's essential that every event can be uniquely identified so that subscribers c
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/events/event_ids.py" />
 
-<CodeExample lang={"java"}>
-
-```java
-package com.example;
-
-import io.nitric.faas.Faas;
-import io.nitric.faas.Trigger;
-import io.nitric.faas.NitricFunction;
-import io.nitric.faas.Response;
-import io.nitric.api.event.Events;
-import io.nitric.api.event.Event;
-import java.util.Map;
-
-public class MyFirstFunction implements NitricFunction {
-
-	@Override
-	public Response handle(Trigger trigger) {
-		var topic = Events.topic("my-topic");
-		topic.publish(
-			Event.newBuilder()
-				 .id("1234")
-				 .payload(Map.of("Content", "of event"))
-				 .build()
-			);
-
-		return trigger.buildResponse("Successfully published message");
-	}
-
-	public static void main(String[] args) {
-		new Faas().start(new MyFirstFunction());
-	}
-}
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/events/EventIDsExample.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/events/publish_id.go" />
 

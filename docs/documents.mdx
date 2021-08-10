@@ -164,19 +164,7 @@ A reference can be created regardless of whether the document or collection exis
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/refs.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-// create a reference to a collection named 'products'
-var products = Documents.collection("products");
-
-// create a reference to a document with the id 'nitric'
-var nitric = products.doc("nitric");
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Refs.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/refs.go" />
 
@@ -243,15 +231,7 @@ methods to marshal documents into typed objects.
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/get.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var product = Documents.collection("products").doc("nitric").get();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Get.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/get.go" />
 
@@ -311,22 +291,7 @@ To add a new document to a collection or update an existing document, use the `s
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/set.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-import java.util.Map;
-
-var document = Documents.collection("products").doc("nitric");
-
-document.set(Map.of(
-	"id", "nitric",
-    "name", "Nitric Framework",
-    "description", "A development framework"
-));
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Set.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/set.go" />
 
@@ -400,15 +365,7 @@ To delete a document from a collection, use the `delete()` method.
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/delete.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-Documents.collection("products").doc("nitric").delete();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Delete.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/delete.go" />
 
@@ -482,18 +439,7 @@ The example below will fetch all the documents in the 'Customers' collection.
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers").query();
-
-// Execute query
-var results = query.fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Query.java" />
 
 <CodeSnippet snippet="nitrictech/examples/documents/query.go" />
 
@@ -594,20 +540,7 @@ results = query.fetch()
 
 </CodeExample>
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers")
-		.doc("apple")
-		.collection("Orders")
-		.query();
-
-var results = query.fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/SubColQuery.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_col_query.go" />
 
@@ -689,19 +622,7 @@ In the example below we are selecting all `Orders` for all `Customers`.
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/sub_doc_query.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers")
-    .collection("Orders")
-    .query();
-
-var results = query.fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/SubDocQuery.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_doc_query.go" />
 
@@ -786,19 +707,7 @@ they have an age of 21 or older.
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query_filter.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers").query()
-	.where("country", "==", "US")
-	.where("age", ">=", 21);
-
-var results = query.fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/QueryFilter.java" />
 
 <CodeSnippet snippet="nitrictech/examples/documents/query_filter.go" />
 
@@ -872,20 +781,7 @@ In the example below we are fetching the first 1,000 customer order documents ac
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query_limits.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers")
-		.collection("Orders")
-		.query()
-		.limit(1000);
-
-var results = query.fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/QueryLimits.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/query_limits.go" />
 
@@ -954,24 +850,7 @@ The example below selects active 'Customers' paging through the collection in se
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/paged_results.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers")
-		.query()
-		.where("active", "==", true)
-		.limit(100);
-
-// Fetch first page
-var results = query.fetch();
-
-// Fetch next page
-results = query.pagingFrom(results.getPagingToken()).fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/PagedResults.java" />
 
 <CodeSnippet snippet="nitrictech/examples/documents/paged_results.go" />
 
@@ -1042,19 +921,7 @@ Check your SDK for streaming support.
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/documents/streamed.py" />
 
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers").query();
-
-query.stream().foreach(doc -> {
-	// Process doc stream
-});
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Streamed.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/stream_results.go" />
 
