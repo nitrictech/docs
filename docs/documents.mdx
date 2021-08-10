@@ -855,10 +855,10 @@ from nitric.api import Documents
 
 docs = Documents()
 
-query = docs.collection("Customers")
+query = (docs.collection("Customers")
 		.doc("apple")
 		.collection("Orders")
-		.query()
+		.query())
 
 results = query.fetch()
 ```
