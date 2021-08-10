@@ -59,21 +59,8 @@ To write an object use a `StorageClient` to `write` an object to a bucket:
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/storage/write.ts" />
 
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/python-sdk/examples/storage/write.py" />
 
-```python
-from nitric.api import Storage
-
-# Construct a new storage client with default settings
-storage = Storage()
-
-file_ref = storage.bucket("my-bucket").file("path/to/item")
-
-# Write bytes to the file
-await file_ref.write(b"example content");
-```
-
-</CodeExample>
 <CodeExample lang="java">
 
 ```java
@@ -144,21 +131,7 @@ To retrieve an object use a `StorageClient` to `read` an object from a bucket:
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/storage/read.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Storage
-
-# Construct a new storage client with default settings
-storage = Storage()
-
-file_ref = storage.bucket("my-bucket").file("path/to/item")
-
-# Read bytes from the file
-file = await file_ref.read();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/storage/read.py" />
 
 <CodeExample lang="java">
 
@@ -231,19 +204,7 @@ To delete an object use a `StorageClient` to `delete` an object from a bucket:
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/storage/delete.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Storage
-
-# Construct a new storage client with default settings
-storage = Storage()
-
-# Delete the file
-await storage.bucket("my-bucket").file("path/to/item").delete();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/storage/delete.py" />
 
 <CodeExample lang="java">
 

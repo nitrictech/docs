@@ -71,21 +71,7 @@ Once a topic has been defined, services can publish to it using one of the Nitri
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/events/publish.ts" />
 
-<CodeExample lang={"python"}>
-
-```python
-from nitric.api import Events, Event
-
-# Create a new Event Client with default settings
-topic = Events().topic("my-topic")
-
-payload = {"content": "of event"}
-
-# Publish an event to the topic 'my-topic'
-event = await topic.publish(Event(payload=payload))
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/events/publish.py" />
 
 <CodeExample lang={"java"}>
 
@@ -154,20 +140,8 @@ It's essential that every event can be uniquely identified so that subscribers c
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/events/publish-ids.ts" />
 
-<CodeExample lang={"python"}>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/events/event_ids.py" />
 
-```python
-from nitric.api import Events, Event
-
-events = Events()
-
-payload = {"content": "of event"}
-
-# Note: the event id should be generated using a process that's guaranteed to be unique for practical purposes.
-await events.topic("my-topic").publish(Event(id="unique-event-id", payload=payload))
-```
-
-</CodeExample>
 <CodeExample lang={"java"}>
 
 ```java

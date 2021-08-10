@@ -79,21 +79,7 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/queues/send.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Queues, Task
-
-# Construct a new queue client with default settings
-queues = Queues()
-
-payload = {"content": "of task"}
-
-# Publish a task to a queue
-queues.queue("my-queue").send(Task(payload=payload))
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/queues/send.py" />
 
 <CodeExample lang="java">
 
@@ -178,24 +164,7 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/queues/receive.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Queues, Task
-
-# Construct a new queue client with default settings
-queue = Queues().queue("my-queue")
-
-# Receive tasks from the queue
-tasks = await queue.receive()
-for task in tasks:
-	// Work on a task...
-
-	// Complete the task if it was processed successfully
-	task.complete()
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/queues/receive.py" />
 
 <CodeExample lang="java">
 

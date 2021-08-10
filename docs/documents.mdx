@@ -162,21 +162,7 @@ A reference can be created regardless of whether the document or collection exis
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/documents/refs.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-# create a reference to a collection named 'products'
-products = docs.collection("products")
-
-# create a reference to a document with the id 'nitric'
-nitric = products.doc("nitric")
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/refs.py" />
 
 <CodeExample lang="java">
 
@@ -255,19 +241,8 @@ methods to marshal documents into typed objects.
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/documents/get.ts" />
 
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/get.py" />
 
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-document = docs.collection("products").doc("nitric")
-
-product = await document.get()
-```
-
-</CodeExample>
 <CodeExample lang="java">
 
 ```java
@@ -334,23 +309,8 @@ To add a new document to a collection or update an existing document, use the `s
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/documents/set.ts" />
 
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/set.py" />
 
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-document = docs.collection("products").doc("nitric")
-
-await (document.set({
-    "id": "nitric",
-    "name": "Nitric Framework",
-    "description": "A development framework",
-}))
-```
-
-</CodeExample>
 <CodeExample lang="java">
 
 ```java
@@ -438,19 +398,8 @@ To delete a document from a collection, use the `delete()` method.
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/documents/delete.ts" />
 
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/delete.py" />
 
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-document = docs.collection("products").doc("nitric")
-
-await document.delete()
-```
-
-</CodeExample>
 <CodeExample lang="java">
 
 ```java
@@ -531,20 +480,7 @@ The example below will fetch all the documents in the 'Customers' collection.
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-query = docs.collection("Customers").query()
-
-# Execute query
-results = query.fetch()
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query.py" />
 
 <CodeExample lang="java">
 
@@ -749,15 +685,9 @@ In the example below we are selecting all `Orders` for all `Customers`.
 	defaultLang="node"
 >
 
-<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-doc-query.ts" />
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-collection-query.ts" />
 
-<CodeExample lang="python">
-
-```
-sub collection group query support is under development...
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/sub_doc_query.py" />
 
 <CodeExample lang="java">
 
@@ -854,21 +784,7 @@ they have an age of 21 or older.
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-filter.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-query = (docs.collection("Customers").query()
-	.where("country", "==", "US")
-	.where("age", ">=", 21))
-
-results = query.fetch()
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query_filter.py" />
 
 <CodeExample lang="java">
 
@@ -954,22 +870,7 @@ In the example below we are fetching the first 1,000 customer order documents ac
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-limits.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-query = docs.collection("Customers")
-		.collection("Orders")
-		.query()
-		.limit(1000)
-
-results = query.fetch()
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query_limits.py" />
 
 <CodeExample lang="java">
 
@@ -1051,26 +952,7 @@ The example below selects active 'Customers' paging through the collection in se
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-paginated.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-query = docs.collection("Customers")
-		.query()
-		.where('active', '==', true)
-		.limit(100)
-
-# Fetch first page
-results = query.fetch()
-
-# Fetch next page
-results = query.page_from(results.paging_token).fetch()
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/paged_results.py" />
 
 <CodeExample lang="java">
 
@@ -1158,20 +1040,7 @@ Check your SDK for streaming support.
 
 <CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-stream.ts" />
 
-<CodeExample lang="python">
-
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-query = docs.collection("Customers").query()
-
-async for doc in query.stream():
-    # Process doc stream...
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/streamed.py" />
 
 <CodeExample lang="java">
 
