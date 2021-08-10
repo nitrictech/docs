@@ -131,10 +131,26 @@
               {
                 "title": "Quickstart: Vue 3",
                 "path": "/docs/tutorials/with-vue.mdx"
-              },
+              }
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "title": "Guides",
+            "routes": [
+              {
+                "title": "Overview",
+                "path": "/docs/guides.mdx"
+              }
+            ]
+          },
+          {
+            "title": "Services",
+            "routes": [
               {
                 "title": "REST API",
-                "path": "/docs/tutorials/rest-api.mdx"
+                "path": "/docs/guides/rest-api.mdx"
               }
             ]
           }
