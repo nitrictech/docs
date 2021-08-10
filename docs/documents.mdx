@@ -251,7 +251,6 @@ var nitric = collection.Doc("nitric");
 ```
 
 </CodeExample>
-
 </CodeExamples>
 
 ## Usage
@@ -305,6 +304,7 @@ const product = await document.get();
 ```
 
 </CodeExample>
+
 <CodeExample lang="python">
 
 ```python
@@ -789,85 +789,18 @@ var nitric = query.Fetch();
 
 #### Subcollection Queries
 
-1. under a collection's subcollection `collection.collection.query`, or
-2. under a collection document's subcollection `collection.document.collection.query`
+Query objects can also be created under subcollections. There are two types of subcollection queries:
 
-In the first example we are performing a collection subcollection query where we are fetching all "Orders" documents for all "Customers".
+1. Document Subcollection Queries
+2. Subcollection Group Queries
 
-<CodeExamples 
-	languages={[
-	{
-		label: "Node",
-		value: "node"
-	},
-	{
-		label: "Python",
-		value: "python"
-	},
-	{
-		label: "Java",
-		value: "java"
-	},
-	{
-		label: "Go",
-		value: "go"
-	},
-	{
-		label: "PHP",
-		value: "php"
-	},
-	{
-		label: "C#",
-		value: "c-sharp"
-	}
-	]}
-	defaultLang="node"
->
-<CodeExample lang="node">
+##### Document Subcollection Queries
 
-<br />
-Ability to query a collection's subcollection is in development.
+Document subcollection queries can only select the subcollection documents under the parent document:
 
-</CodeExample>
-<CodeExample lang="python">
+`collection.document.collection.query`
 
-<br />
-Ability to query a collection's subcollection is in development.
-
-</CodeExample>
-<CodeExample lang="java">
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers")
-.collection("Orders")
-.query();
-
-var results = query.fetch();
-
-````
-</CodeExample>
-<CodeExample lang="go">
-
-<br />
-Ability to query a collection's subcollection is in development.
-
-</CodeExample>
-<CodeExample lang="php">
-
-<br />
-Ability to query a collection's subcollection is in development.
-
-</CodeExample>
-<CodeExample lang="csharp">
-
-<br />
-Ability to query a collection's subcollection is in development.
-
-</CodeExample>
-</CodeExamples>
-
-In the second example we are performing a collection document subcollection query where we are fetching all the "Orders" for a specific "Customer" with the id of 'apple'.
+In the example below we are selecting all `Orders` under the parent `Customers` document with the id `apple`.
 
 <CodeExamples
 	languages={[
@@ -912,7 +845,7 @@ const query = docs
   .query();
 
 const results = await query.fetch();
-````
+```
 
 </CodeExample>
 <CodeExample lang="python">
@@ -922,10 +855,10 @@ from nitric.api import Documents
 
 docs = Documents()
 
-query = docs.collection("Customers")
+query = (docs.collection("Customers")
 		.doc("apple")
 		.collection("Orders")
-		.query()
+		.query())
 
 results = query.fetch()
 ```
@@ -991,7 +924,7 @@ using Nitric.Api.Document;
 
 var docs = new Documents();
 
-var query = docs.Collection<Dictionary<string, object>>("customers")
+var query = docs.Collection<Dictionary<string, object>>("Customers")
 		.Doc("apple")
 		.Collection("Orders")
 		.Query();
@@ -1000,6 +933,107 @@ var results = query.Fetch();
 ```
 
 </CodeExample>
+</CodeExamples>
+
+##### Subcollection Group Queries
+
+Subcollection Group queries can select all the documents in the collection subcollection group:
+
+`collection.collection.query`
+
+In the example below we are selecting all `Orders` for all `Customers`.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+sub collection group query support is under development...
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```
+sub collection group query support is under development...
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+```java
+import io.nitric.api.document.Documents;
+
+var query = Documents.collection("Customers")
+    .collection("Orders")
+    .query();
+
+var results = query.fetch();
+```
+
+</CodeExample>
+<CodeExample lang="go">
+
+```go
+import (
+	"fmt"
+	"github.com/nitrictech/go-sdk/api/documents"
+)
+
+docs, _ := documents.New()
+
+collection := docs.Collection("Customers").Collection("Orders")
+
+query := collection.Query()
+
+results, err := query.Fetch()
+```
+
+</CodeExample>
+<CodeExample lang="php">
+
+```
+sub collection group query support is under development...
+```
+
+</CodeExample>
+
+<CodeExample lang="c-sharp">
+
+```
+sub collection group query support is under development...
+```
+
+</CodeExample>
+
 </CodeExamples>
 
 ### Where Filter Expressions
@@ -1577,15 +1611,17 @@ itr, err := query.Stream()
 
 <CodeExample lang="php">
 
-<br />
-The stream() method is not yet implemented.
+```
+stream() support is under development...
+```
 
 </CodeExample>
 
 <CodeExample lang="c-sharp">
 
-<br />
-The stream() method is not yet implemented.
+```
+stream() support is under development...
+```
 
 </CodeExample>
 </CodeExamples>
