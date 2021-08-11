@@ -134,6 +134,19 @@
                 "path": "/docs/tutorials/rest-api.mdx"
               }
             ]
+          },
+          {
+            "title": "Troubleshooting",
+            "routes": [
+              {
+                "title": "Interupted Deploment",
+                "path": "/docs/troubleshooting/pulumi.mdx"
+              },
+              {
+                "title": "Updating Nitric",
+                "path": "/docs/troubleshooting/updating-nitric.mdx"
+              }
+            ]
           }
         ]
       }
