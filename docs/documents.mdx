@@ -168,21 +168,7 @@ A reference can be created regardless of whether the document or collection exis
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/refs.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-// Create a reference to a new collection named 'products'
-$products = $docs->collection("products")
-
-// Create a reference to a document with the id 'nitric'
-$nitric = $products->doc("nitric");
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Ref.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Refs.cs" />
 
@@ -235,19 +221,7 @@ methods to marshal documents into typed objects.
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/get.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$document = $docs->collection("products")->doc("nitric");
-
-$product = $document->get();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Get.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Get.cs" />
 
@@ -295,23 +269,7 @@ To add a new document to a collection or update an existing document, use the `s
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/set.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$document = $docs->collection("products")->doc("nitric");
-
-$document->set([
-    "id" => "nitric",
-    "name" => "Nitric Framework",
-    "description" => "A development framework",
-]);
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Set.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Set.cs" />
 
@@ -369,19 +327,7 @@ To delete a document from a collection, use the `delete()` method.
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/delete.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$document = $docs->collection("products")->doc("nitric");
-
-$document->delete();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Delete.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Delete.cs" />
 
@@ -443,20 +389,7 @@ The example below will fetch all the documents in the 'Customers' collection.
 
 <CodeSnippet snippet="nitrictech/examples/documents/query.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")->query();
-
-// Execute query
-$results = $query->fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Query.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/Query.cs" />
 
@@ -506,78 +439,19 @@ In the example below we are selecting all `Orders` under the parent `Customers` 
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-doc-query.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/sub_doc_query.py" />
 
-const query = docs
-  .collection('Customers')
-  .doc('apple')
-  .collection('Orders')
-  .query();
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/SubDocQuery.java" />
 
-const results = await query.fetch();
-```
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_doc_query.go" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/SubDocQuery.php" />
 
-```python
-from nitric.api import Documents
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/SubDocQuery.cs" />
 
-docs = Documents()
-
-query = (docs.collection("Customers")
-		.doc("apple")
-		.collection("Orders")
-		.query())
-
-results = query.fetch()
-```
-
-</CodeExample>
-
-<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/SubColQuery.java" />
-
-<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_col_query.go" />
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")
-		->doc("apple")
-		->collection("Orders")
-		->query();
-
-// Execute query
-$results = $query->fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers")
-		.Doc("apple")
-		.Collection("Orders")
-		.Query();
-
-var results = query.Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ##### Subcollection Group Queries
@@ -618,23 +492,17 @@ In the example below we are selecting all `Orders` for all `Customers`.
 	defaultLang="node"
 >
 
-<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-collection-query.ts" />
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-col-query.ts" />
 
-<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/sub_doc_query.py" />
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/sub_col_query.py" />
 
-<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/SubDocQuery.java" />
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/SubColQuery.java" />
 
-<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_doc_query.go" />
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_col_query.go" />
 
-<CodeExample lang="php">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/SubColQuery.php" />
 
-```
-sub collection group query support is under development...
-```
-
-</CodeExample>
-
-<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/SubDocQuery.cs" />
+<CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/SubColQuery.cs" />
 
 </CodeExamples>
 
@@ -711,21 +579,7 @@ they have an age of 21 or older.
 
 <CodeSnippet snippet="nitrictech/examples/documents/query_filter.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")->query()
-	->where("country", "==", "US")
-	->where("age", ">=", 21);
-
-$results = $query->fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/QueryFilter.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/QueryFilter.cs" />
 
@@ -785,22 +639,7 @@ In the example below we are fetching the first 1,000 customer order documents ac
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/documents/query_limits.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")
-		->collection("Orders")
-		->query()
-		->limit(1000);
-
-$results = $query->fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/QueryLimits.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/QueryLimits.cs" />
 
@@ -854,26 +693,7 @@ The example below selects active 'Customers' paging through the collection in se
 
 <CodeSnippet snippet="nitrictech/examples/documents/paged_results.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")
-		->query()
-		->where("active", "==", true)
-		->limit(100);
-
-// Fetch first page
-$results = $query->fetch();
-
-// Fetch next page
-$results = $query->pageFrom($results.pagingToken)->fetch();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/PagedResults.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/documents/PagedResults.cs" />
 
@@ -945,7 +765,3 @@ stream() support is under development...
 <br />
 
 > Note a GRCP Document Service QueryStream query streaming method will be developed to better support SDKs.
-
-```
-
-```
