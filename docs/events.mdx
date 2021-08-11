@@ -77,24 +77,7 @@ Once a topic has been defined, services can publish to it using one of the Nitri
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/events/publish.go" />
 
-<CodeExample lang={"php"}>
-
-```php
-use Nitric\Api\Events;
-
-$events = new Events();
-
-$event = $events->topic("my-topic")->publish(
-    (new Event())
-        ->setPayload([
-            "key" => "value",
-        ])
-    );
-
-echo "Generated Event ID is: " . $event->getId();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/events/Publish.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/events/Publish.cs" />
 
@@ -116,23 +99,7 @@ It's essential that every event can be uniquely identified so that subscribers c
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/events/publish_id.go" />
 
-<CodeExample lang={"php"}>
-
-```php
-use Nitric\Api\Events;
-
-$events = new Events();
-
-$event = $events->topic("my-topic")->publish(
-    (new Event())
-        ->setPayload([
-            "key" => "value",
-        ])
-        ->setId("abc-123")
-    );
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/events/EventIDs.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/events/EventIDs.cs" />
 

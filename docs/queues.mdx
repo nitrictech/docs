@@ -85,23 +85,7 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/queues/send.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Queues;
-use Nitric\Api\Task;
-
-$queues = new Queues();
-
-$task = (new Task())
-    ->setPayload([
-        "example" => "payload"
-    ]);
-
-$queues->queue("my-queue")->send($task);
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/queues/Send.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/queues/Send.cs" />
 
@@ -149,23 +133,7 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/queues/receive.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Queues;
-use Nitric\Api\Task;
-
-$queues = new Queues();
-
-$tasks = $queues->queue("my-queue")->receive();
-
-foreach($tasks as $task) {
-	// process the task here...
-	$task->complete();
-}
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/queues/Receive.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/queues/Receive.cs" />
 

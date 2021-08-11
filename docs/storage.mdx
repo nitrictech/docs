@@ -65,21 +65,7 @@ To write an object use a `StorageClient` to `write` an object to a bucket:
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/storage/write.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Storage;
-
-$storage = new Storage();
-
-// Create a reference to the bucket
-$bucket = $storage->bucket('my-bucket');
-
-// Create a new file with contents
-$bucket->file("some/file.txt")->write("file contents");
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/storage/Write.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/storage/Write.cs" />
 
@@ -127,21 +113,7 @@ To retrieve an object use a `StorageClient` to `read` an object from a bucket:
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/storage/read.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Storage;
-
-$storage = new Storage();
-
-// Create a reference to the bucket
-$bucket = $storage->bucket('my-bucket');
-
-// Read contents from a file
-$contents = $bucket->file("some/file.txt")->read();
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/php-sdk/examples/storage/Read.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/storage/Read.cs" />
 
@@ -189,26 +161,8 @@ To delete an object use a `StorageClient` to `delete` an object from a bucket:
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/storage/delete.go" />
 
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Storage;
-
-$storage = new Storage();
-
-// Create a reference to the bucket
-$bucket = $storage->bucket('my-bucket');
-
-// Delete a file from the bucket
-$bucket->file("some/file.txt")->delete();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/storage/Delete.php" />
 
 <CodeSnippet snippet="nitrictech/dotnet-sdk/examples/storage/Delete.cs" />
-
-</CodeExample>
 
 </CodeExamples>
