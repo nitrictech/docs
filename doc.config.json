@@ -38,6 +38,10 @@
               {
                 "title": "SDKs",
                 "path": "/docs/sdks.mdx"
+              },
+              {
+                "title": "Debugging",
+                "path": "/docs/debugging.mdx"
               }
             ]
           },

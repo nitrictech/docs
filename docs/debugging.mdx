@@ -1,0 +1,56 @@
+There are many different ways to debug your Nitric applications depending on the language and runtime you choose.
+
+Below are examples of debug configurations:
+
+## Node.js Configuration
+
+### Updating the Dockerfile
+
+We must update the Dockerfile to add the `--inspect` switch, a Node.js process that listens for a debugging client.
+
+Within `.nitric/templates/function/nodets12`, change the CMD line to:
+
+```docker
+CMD ["node", "--inspect=0.0.0.0", "index.js"]
+```
+
+> Note: do not use this for production builds
+
+### Visual Studio Code
+
+To start debugging the service in VS Code, go into your workspace and add the launch snippet under `.vscode/launch.json`.
+
+This launch snippet tells VSCode to attach to the Node debugger running on `localhost:9229`.
+
+```json
+{
+  "configurations": [
+    {
+      "name": "Nitric: Attach to Node",
+      "address": "localhost",
+      "port": 9229,
+      "request": "attach",
+      "type": "node",
+      "sourceMapPathOverrides": {
+        "../*": "${workspaceRoot}/node-project/user/*"
+      },
+      "skipFiles": [
+        "${workspaceFolder}/node-project/user/node_modules/**/*.js",
+        "<node_internals>/**/*.js"
+      ]
+    }
+  ]
+}
+```
+
+### Expose the port
+
+By using the the `--expose` flag on the `run` command, we can expose and bind ports that can be used for debugging.
+
+Run the service, with port `9229` exposed and bound:
+
+```bash
+nitric run --expose 9229:9229
+```
+
+Then go ahead and run the `Nitric: Attach to Node` debug config. Happy coding! 🐱‍💻
