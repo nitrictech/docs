@@ -59,7 +59,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -203,6 +202,8 @@ Otherwise we can set up the re-direct headers to send our user to the stripe pay
 	response.GetContext().AsHttp().Status = http.StatusSeeOther
 	response.GetContext().AsHttp().Headers["Location"] = s.URL
 	response.SetData([]byte(""))
+
+	return response, nil
 ```
 
 ## Building the App
@@ -212,6 +213,8 @@ We will now look at creating a React app which will utilize our new `signup` ser
 ### Initialize a React app
 
 Here we're going to be using the Stripe Quickstart, lightly modified to work with our payments service.
+Let's start in our 'nitric-stripe-payments' folder where we will use npm to initialize a project.
+
 ```bash
 npm init react-app payments-ui
 cd payments-ui
@@ -428,8 +431,11 @@ h5 {
 
 ## Updating our yaml file
 
+We'll need to add our new site to the Nitric yaml file and expose it via an entry point.
+
+
 ```yaml
-name: stripe
+name: stripe-quickstart
 services:
   payments:
     path: payments
@@ -452,22 +458,45 @@ entrypoints:
 ```
 This tells the Nitric CLI how to build the paths and where they point.
 
-### Launch!
+# Run the service
 
-Now that we have the component and logic in place, we can run our app:
+Time to run our project and see it in action!
 
 ```bash
 nitric run
 ```
 
-And then click and open the `main` entrypoint localhost url and you should see the completed app:
+Take note of the entry point URL, paste it in a browser to test it out.
+Stripe requires a credit card number of "4242 4242 4242 4242" to pass it's validation.
 
 ```bash
+✔ Building Services
+✔ Creating docker network
+✔ Creating Volume: my-signup-app-vol-930352ad
+✔ Running Services
+✔ Starting API Gateways
 ✔ Starting Entrypoints
  Service Port
  ─────── ─────
- payments 49152
+ signup  36721
+ Api        Port
+ ────────── ─────
+ onboarding 49155
  Entrypoint Url
  ────────── ──────────────────────
- main       http://localhost:59770
+ main       http://localhost:33881
+ Running, press 'Q' to clean up and exit...
+```
+
+Once you're happy that everything is running correctly, you can deploy your API application to a cloud provider of your choice.
+
+```bash
+# Deploy to AWS
+nitric deploy:aws
+
+# Deploy to Google Cloud
+nitric deploy:gcp
+
+# Deploy to Azure
+nitric deploy:azure
 ```
