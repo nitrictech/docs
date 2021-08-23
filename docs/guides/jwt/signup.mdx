@@ -1,4 +1,5 @@
 ## Introduction
+
 A sample project which demonstrates a basic sign up form using Nitric FaaS and Collections.
 This code serves as a tutorial for educational purposes and non production usage.
 
@@ -36,7 +37,7 @@ nitric make:project my-signup-app
 ✔ Making Function signup
 ```
 
-Next, open the project in your editor of choice. The scaffolded project should have the following structure:  
+Next, open the project in your editor of choice. The scaffolded project should have the following structure:
 
 ```text
 my-signup-app/
@@ -51,9 +52,10 @@ my-signup-app/
 
 ## Coding
 
-Open the main.go file, and let's start coding - 
+Open the main.go file, and let's start coding -
 
 We'll need the following import statements:
+
 ```golang15
 package main
 
@@ -68,17 +70,17 @@ import (
 	satori "github.com/satori/go.uuid"
 )
 ```
+
 ## Constants and Structs
 
-Now let's create some contants and structs to define the data being used: 
+Now let's create some contants and structs to define the data being used:
 
-| **Name**       | **Description**                |
-| -----------------| ------------------------------ |
-| COLLECTION_USER  | Name of the Users document collection (must match definition in .yaml config                |
-| InputData        | A struct to store the input json of format - { "email": "abc@abc.com", "password": "top-secret" } |
-| UserRow          | The format of the data which we'll preserve in our Users collection            |
-| Resp             | The format we'll store our response in
-
+| **Name**        | **Description**                                                                                   |
+| --------------- | ------------------------------------------------------------------------------------------------- |
+| COLLECTION_USER | Name of the Users document collection (must match definition in .yaml config                      |
+| InputData       | A struct to store the input json of format - { "email": "abc@abc.com", "password": "top-secret" } |
+| UserRow         | The format of the data which we'll preserve in our Users collection                               |
+| Resp            | The format we'll store our response in                                                            |
 
 ```golang15
 const (
@@ -99,24 +101,23 @@ type UserRow struct {
 	PwsHash  string
 }
 
-// Response format 
+// Response format
 type Resp struct {
 	Status  string
 	Message string
 }
 ```
-## Helper functions 
+
+## Helper functions
 
 Now let's create some functions which will help us get a user created:
 
-| **Name**       | **Description**                |
-| -----------------| ------------------------------ |
-| marshalInput     | Construct our InputData Struct with base64 (optional) encoded json                |
-| responseMessage  | Construct return json { "status": "ok", "message": "body" }  |
-| userExists       | Check the collection for the existence of a user with "email" input            |
-| main             | Run NitricFunction - Nitric Function as a Service operations            |
-
-
+| **Name**        | **Description**                                                     |
+| --------------- | ------------------------------------------------------------------- |
+| marshalInput    | Construct our InputData Struct with base64 (optional) encoded json  |
+| responseMessage | Construct return json { "status": "ok", "message": "body" }         |
+| userExists      | Check the collection for the existence of a user with "email" input |
+| main            | Run NitricFunction - Nitric Function as a Service operations        |
 
 ```golang15
 // Marshal the input data into a struct for ease of use
@@ -128,7 +129,7 @@ func marshalInput(trigger *faas.NitricTrigger, ed *InputData) {
 	json.Unmarshal(td, &ed)
 }
 
-// Create a response []byte containing the status and message 
+// Create a response []byte containing the status and message
 func responseMessage(status string, message string) []byte {
 	r1 := &Resp{Status: status, Message: message}
 	r2, _ := json.Marshal(r1)
@@ -167,8 +168,8 @@ Let's pull it all together, modify or create the 'NitricFunction' function -
 // NitricFunction - Handles individual function requests (http, events, etc.)
 func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 
-	// Add the code for the following steps here 
-	
+	// Add the code for the following steps here
+
 }
 ```
 
@@ -182,7 +183,7 @@ We first initialize our input data, create a user id and set up our Collection t
 	// Create a new user ID
 	uid := satori.NewV4().String()
 
-	// Initialize the User Collection 
+	// Initialize the User Collection
 	docs, _ := documents.New()
 	appData := docs.Collection(COLLECTION_USER).Doc(uid)
 ```
@@ -197,10 +198,10 @@ Next we'll set up our User Row, we'll keep it simple here by storing our passwor
 		Password: inputData.Password,
 		PwsHash:  "TODO",
 	}
-  
+
 ```
 
-Finally, attempt to store the user in our collection and return a response 
+Finally, attempt to store the user in our collection and return a response
 
 ```golang15
 	// Initialize our default response (HTTP Status OK)
@@ -224,7 +225,7 @@ Finally, attempt to store the user in our collection and return a response
 	return response, nil
 ```
 
-The final code should look like this: 
+The final code should look like this:
 
 ```golang15
 // NitricFunction - Handles individual function requests (http, events, etc.)
@@ -237,7 +238,7 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 	// Create a new user ID
 	uid := satori.NewV4().String()
 
-	// Initialize the User Collection 
+	// Initialize the User Collection
 	docs, _ := documents.New()
 	appData := docs.Collection(COLLECTION_USER).Doc(uid)
 
@@ -248,7 +249,7 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 		Password: inputData.Password,
 		PwsHash:  "TODO",
 	}
-  
+
 	// Initialize our default response (HTTP Status OK)
 	response := trigger.DefaultResponse()
 
@@ -274,11 +275,13 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 Optional - you might want to trigger an event at this point to inform services who subscribe to topic "user-created".
 
 Import statement:
+
 ```
 	"github.com/nitrictech/go-sdk/api/events"
 ```
 
 Event triggering code:
+
 ```
 	e, _ := events.New()
 	_, err = e.Topic("user-created").Publish(&events.Event{
@@ -287,7 +290,8 @@ Event triggering code:
 			"email":   inputData.Email,
 		},
 	})
-```		
+```
+
 Don't forget to add the topic to the nitric.yaml file
 
 ```json
@@ -300,13 +304,13 @@ services:
 collections:
   Users: {}
 topics:
-  user-created: {}  
+  user-created: {}
 
   ...
 
 ```
 
-## Updating our yaml file 
+## Updating our yaml file
 
 We'll need to get our Collection and API configured in our nitric.yaml file:
 
@@ -334,14 +338,14 @@ apis:
             type: service
           description: Create a username and password combination
           responses:
-            "200":
+            '200':
               description: Successful response
 entrypoints:
   main:
-    paths:    
+    paths:
       /signup/:
         type: service
-        target: signup			  
+        target: signup
 ```
 
 ## Run the service
@@ -387,7 +391,8 @@ On second run with the same identity, you should receive:
 We now know our service is working the way we want and can move on to building the react app.
 
 As a challenge, you may want to add
-- Error handling for invalid json 
+
+- Error handling for invalid json
 - Password hashing
 
 ## Building the App
@@ -405,7 +410,7 @@ npx create-react-app signup-ui --template typescript
 cd signup-ui
 ```
 
-Let's strip it down to the essentials, delete all files until the structure is as shown below: 
+Let's strip it down to the essentials, delete all files until the structure is as shown below:
 
 ```bash
 signup-ui
@@ -463,8 +468,7 @@ ReactDOM.render(
 );
 ```
 
-
-Optional - Update the CSS file contents - index.css  
+Optional - Update the CSS file contents - index.css
 
 <details>
 	<summary>Click to expand</summary>
@@ -472,12 +476,12 @@ Optional - Update the CSS file contents - index.css
 ```css
 html,
 body {
-  --theme-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --theme-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   --theme-bg-color: #fff;
   --theme-text-color: #48486a;
-  --theme-box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
-    0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  --theme-box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0
+          0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
   --theme-color-brand: #ff9b01;
   --theme-color-secondary: #5c629e;
   --theme-border: 1px solid var(--theme-color-secondary);
@@ -625,12 +629,8 @@ button > .loader.loading {
   padding: 0px 15px;
   animation: wave 2.4s linear infinite;
 }
-```	
-		
+```
 
-
-
-	
 </details>
 
 Finally, let's build our App.tsx
@@ -639,15 +639,14 @@ Finally, let's build our App.tsx
 import React, { SyntheticEvent, useState } from 'react';
 
 const App = () => {
-
-  // Store state of email, password, loading status, signup message  
+  // Store state of email, password, loading status, signup message
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [signupResponse, setSignupResponse] = useState('');
 
-  // Invoke POST operation on signup service  
+  // Invoke POST operation on signup service
   async function signup(e: SyntheticEvent) {
     e.preventDefault();
     try {
@@ -707,7 +706,6 @@ const App = () => {
         </div>
       </div>
     </div>
-      
   );
 };
 
@@ -750,10 +748,10 @@ sites:
       - yarn build
 entrypoints:
   main:
-    paths:   
+    paths:
       /:
         type: site
-        target: signup-ui 
+        target: signup-ui
       /signup/:
         type: service
         target: signup
@@ -768,6 +766,7 @@ nitric run
 ```
 
 Take note of the entry point URL, paste it in a browser to test it out.
+
 ```bash
 ✔ Building Services
 ✔ Creating docker network
@@ -775,15 +774,15 @@ Take note of the entry point URL, paste it in a browser to test it out.
 ✔ Running Services
 ✔ Starting API Gateways
 ✔ Starting Entrypoints
- Service Port  
- ─────── ───── 
- signup  36721 
- Api        Port  
- ────────── ───── 
- onboarding 49155 
- Entrypoint Url                    
- ────────── ────────────────────── 
- main       http://localhost:33881 
+ Service Port
+ ─────── ─────
+ signup  36721
+ Api        Port
+ ────────── ─────
+ onboarding 49155
+ Entrypoint Url
+ ────────── ──────────────────────
+ main       http://localhost:33881
  Running, press 'Q' to clean up and exit...
 ```
 
@@ -799,7 +798,3 @@ nitric deploy:gcp
 # Deploy to Azure
 nitric deploy:azure
 ```
-
-
-
-

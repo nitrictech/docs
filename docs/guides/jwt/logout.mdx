@@ -1,6 +1,6 @@
 ## Introduction
 
-This guide will expand upon the signup & login tutorial. 
+This guide will expand upon the signup & login tutorial.
 Users can now signup and login, let's let them logout.
 
 ## What we'll do
@@ -22,7 +22,7 @@ This guide assumes you have successfully completed the signup & login tutorials.
 We’ll start by creating a new service within our signup project
 
 ```bash
-nitric make:service 
+nitric make:service
 ```
 
 ```text
@@ -33,9 +33,10 @@ nitric make:service
 
 ## Coding
 
-Open the main.go file in the logout directory, and let's start coding - 
+Open the main.go file in the logout directory, and let's start coding -
 
 We'll need the following import statements:
+
 ```golang15
 package main
 
@@ -51,18 +52,17 @@ import (
 	"github.com/nitrictech/go-sdk/faas"
 )
 ```
+
 ## Constants and Structs
 
-Now let's create some contants and structs to define the data being used: 
+Now let's create some contants and structs to define the data being used:
 
-
-| **Name**       | **Description**                |
-| -----------------| ------------------------------ |
-| COLLECTION_USER    | Name of the Users document collection (must match definition in .yaml config                |
-| COLLECTION_TOKENS  | Name of the Token document collection (must match definition in .yaml config                |
-| TokenRow           | The format of the data which we'll preserve in our Token collection            |
-| Resp               | The format we'll store our response in
-
+| **Name**          | **Description**                                                              |
+| ----------------- | ---------------------------------------------------------------------------- |
+| COLLECTION_USER   | Name of the Users document collection (must match definition in .yaml config |
+| COLLECTION_TOKENS | Name of the Token document collection (must match definition in .yaml config |
+| TokenRow          | The format of the data which we'll preserve in our Token collection          |
+| Resp              | The format we'll store our response in                                       |
 
 ```golang15
 const (
@@ -83,22 +83,21 @@ type Resp struct {
 	Message string
 }
 ```
-## Helper functions 
+
+## Helper functions
 
 Now let's create some functions which will help us get a token created for our user:
 
-| **Name**               | **Description**                |
-| -----------------------| ------------------------------ |
-| responseMessage        | Construct return json { "status": "ok", "refreshtoken": "token ...", "message": "body" }  |
-| ExtractToken           | Extract the token from the headers |
-| Auth                   | Verify the claims in the token |
-| VerifyToken            | Verify the signing method of the token as SigningMethodHMAC |
-| TokenExists            | Confirm that the token exists in the Tokens collection |
-| RemoveTokenDetails     | Remove the row associated with the token passed in
-| RemoveAllTokensForUser | Remove any other lingering tokens for the user
-| main                   | Run NitricFunction - Nitric Function as a Service operations            |
-
-
+| **Name**               | **Description**                                                                          |
+| ---------------------- | ---------------------------------------------------------------------------------------- |
+| responseMessage        | Construct return json { "status": "ok", "refreshtoken": "token ...", "message": "body" } |
+| ExtractToken           | Extract the token from the headers                                                       |
+| Auth                   | Verify the claims in the token                                                           |
+| VerifyToken            | Verify the signing method of the token as SigningMethodHMAC                              |
+| TokenExists            | Confirm that the token exists in the Tokens collection                                   |
+| RemoveTokenDetails     | Remove the row associated with the token passed in                                       |
+| RemoveAllTokensForUser | Remove any other lingering tokens for the user                                           |
+| main                   | Run NitricFunction - Nitric Function as a Service operations                             |
 
 ```golang15
 // Fetch the token from the cookie property in the HEADER map
@@ -200,13 +199,12 @@ func main() {
 
 Let's pull it all together, modify or create the 'NitricFunction' function -
 
-
 ```golang15
 // NitricFunction - Handles individual function requests (http, events, etc.)
 func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 
-	// Add the code for the following steps here 
-	
+	// Add the code for the following steps here
+
 }
 ```
 
@@ -241,7 +239,7 @@ Otherwise, proceed by removing all tokens associated with the user
 	return response, nil
 ```
 
-The final code should look like this: 
+The final code should look like this:
 
 ```golang15
 // NitricFunction - Handles individual function requests (http, events, etc.)
@@ -274,10 +272,12 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 
 ## Update the Nitric yaml file
 
-Add the following to our configuration 
+Add the following to our configuration
+
 - Logout service
 - Logout entrypoint
 - Logout API definition (Note: this is a GET operation)
+
 ```
 name: my-signup-app
 services:
@@ -289,7 +289,7 @@ services:
     runtime: function/golang15
   logout:
     path: logout
-    runtime: function/golang15          
+    runtime: function/golang15
 collections:
   Users: {}
   Tokens: {}
@@ -339,10 +339,10 @@ sites:
       - yarn build
 entrypoints:
   main:
-    paths:   
+    paths:
       /:
         type: site
-        target: signup-ui 
+        target: signup-ui
       /signup/:
         type: service
         target: signup
@@ -351,8 +351,9 @@ entrypoints:
         target: login
       /logout/:
         type: service
-        target: logout        
+        target: logout
 ```
+
 ## Modify our react app
 
 Finally, let's modify our App.tsx to add a login section.
@@ -528,6 +529,7 @@ nitric run
 ```
 
 Take note of the entry point URL, ctrl+click the link or paste it in a browser to test it out.
+
 ```bash
 ✔ Building Services
 ✔ Creating docker network
@@ -535,16 +537,16 @@ Take note of the entry point URL, ctrl+click the link or paste it in a browser t
 ✔ Running Services
 ✔ Starting API Gateways
 ✔ Starting Entrypoints
- Service Port  
- ─────── ───── 
+ Service Port
+ ─────── ─────
  login   40415
- signup  36721 
- Api        Port  
- ────────── ───── 
- onboarding 49155 
- Entrypoint Url                    
- ────────── ────────────────────── 
- main       http://localhost:33881 
+ signup  36721
+ Api        Port
+ ────────── ─────
+ onboarding 49155
+ Entrypoint Url
+ ────────── ──────────────────────
+ main       http://localhost:33881
  Running, press 'Q' to clean up and exit...
 ```
 

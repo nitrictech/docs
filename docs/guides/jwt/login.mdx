@@ -1,6 +1,6 @@
 ## Introduction
 
-This guide will expand upon the signup tutorial. 
+This guide will expand upon the signup tutorial.
 Now that we have created a user in our Users Collection, let's let users login and assign them a JWT.
 
 ## What we'll do
@@ -22,7 +22,7 @@ This guide assumes you have successfully completed the signup tutorial.
 We’ll start by creating a new service within our signup project
 
 ```bash
-nitric make:service 
+nitric make:service
 ```
 
 ```text
@@ -33,9 +33,10 @@ nitric make:service
 
 ## Coding
 
-Open the main.go file in the login directory, and let's start coding - 
+Open the main.go file in the login directory, and let's start coding -
 
 We'll need the following import statements:
+
 ```golang15
 package main
 
@@ -53,21 +54,21 @@ import (
 	satori "github.com/satori/go.uuid"
 )
 ```
+
 ## Constants and Structs
 
-Now let's create some contants and structs to define the data being used: 
+Now let's create some contants and structs to define the data being used:
 
-| **Name**       | **Description**                |
-| -----------------| ------------------------------ |
-| COLLECTION_USER    | Name of the Users document collection (must match definition in .yaml config                |
-| COLLECTION_TOKENS  | Name of the Token document collection (must match definition in .yaml config                |
-| TOKEN_VALIDITY     | Time limit for token to be set up                                                           |
-| InputData          | A struct to store the input json of format - { "email": "abc@abc.com", "password": "top-secret" } |
-| UserRow            | The format of the data which we'll preserve in our Users collection            |
-| TokenRow           | The format of the data which we'll preserve in our Token collection            |
-| Resp               | The format we'll store our response in
-| TokenDetails       | A struct to store the token defailts for access and refresh tokens |
-
+| **Name**          | **Description**                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------- |
+| COLLECTION_USER   | Name of the Users document collection (must match definition in .yaml config                      |
+| COLLECTION_TOKENS | Name of the Token document collection (must match definition in .yaml config                      |
+| TOKEN_VALIDITY    | Time limit for token to be set up                                                                 |
+| InputData         | A struct to store the input json of format - { "email": "abc@abc.com", "password": "top-secret" } |
+| UserRow           | The format of the data which we'll preserve in our Users collection                               |
+| TokenRow          | The format of the data which we'll preserve in our Token collection                               |
+| Resp              | The format we'll store our response in                                                            |
+| TokenDetails      | A struct to store the token defailts for access and refresh tokens                                |
 
 ```golang15
 const (
@@ -114,21 +115,20 @@ type TokenRow struct {
 	Userid string
 }
 ```
-## Helper functions 
+
+## Helper functions
 
 Now let's create some functions which will help us get a token created for our user:
 
-| **Name**        | **Description**                |
-| ------------------| ------------------------------ |
-| marshalInput      | Construct our InputData Struct with base64 (optional) encoded json                |
-| responseMessage   | Construct return json { "status": "ok", "refreshtoken": "token ...", "message": "body" }  |
-| login             | Check the collection for the existence of a user with "email" input            |
-| PersistTokenDetails| Store the tokens in the Tokens collection |
-| CreateTokenRefresh | Create a token and its refresh token using the secrets and userid provided |
-| PersistTokenDetails| Store the tokens in the Tokens collection |
-| main              | Run NitricFunction - Nitric Function as a Service operations            |
-
-
+| **Name**            | **Description**                                                                          |
+| ------------------- | ---------------------------------------------------------------------------------------- |
+| marshalInput        | Construct our InputData Struct with base64 (optional) encoded json                       |
+| responseMessage     | Construct return json { "status": "ok", "refreshtoken": "token ...", "message": "body" } |
+| login               | Check the collection for the existence of a user with "email" input                      |
+| PersistTokenDetails | Store the tokens in the Tokens collection                                                |
+| CreateTokenRefresh  | Create a token and its refresh token using the secrets and userid provided               |
+| PersistTokenDetails | Store the tokens in the Tokens collection                                                |
+| main                | Run NitricFunction - Nitric Function as a Service operations                             |
 
 ```golang15
 // Save the token to the Tokens Collection.
@@ -186,7 +186,7 @@ func CreateTokenRefresh(userid string) (*TokenDetails, error) {
 	return td, nil
 }
 
-// Create a response []byte containing the status, refresh token and message 
+// Create a response []byte containing the status, refresh token and message
 func responseMessage(status string, rt string, message string) []byte {
 	r1 := &Resp{Status: status, RefreshToken: rt, Message: message}
 	r2, _ := json.Marshal(r1)
@@ -238,13 +238,12 @@ func main() {
 
 Let's pull it all together, modify or create the 'NitricFunction' function -
 
-
 ```golang15
 // NitricFunction - Handles individual function requests (http, events, etc.)
 func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 
-	// Add the code for the following steps here 
-	
+	// Add the code for the following steps here
+
 }
 ```
 
@@ -292,7 +291,7 @@ Otherwise, if succesful, then we'll create a Cookie and set it to the Response h
 	return response, nil
 ```
 
-The final code should look like this: 
+The final code should look like this:
 
 ```golang15
 // NitricFunction - Handles individual function requests (http, events, etc.)
@@ -334,11 +333,13 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 
 ## Update the Nitric yaml file
 
-Add the following to our configuration 
+Add the following to our configuration
+
 - Tokens Collection
 - Login service
 - Login entrypoint
 - Login API definition
+
 ```
 name: my-signup-app
 services:
@@ -347,7 +348,7 @@ services:
     runtime: function/golang15
   login:
     path: login
-    runtime: function/golang15    
+    runtime: function/golang15
 collections:
   Users: {}
   Tokens: {}
@@ -387,10 +388,10 @@ sites:
       - yarn build
 entrypoints:
   main:
-    paths:   
+    paths:
       /:
         type: site
-        target: signup-ui 
+        target: signup-ui
       /signup/:
         type: service
         target: signup
@@ -398,6 +399,7 @@ entrypoints:
         type: service
         target: login
 ```
+
 ## Modify our react app
 
 Finally, let's modify our App.tsx to add a login section.
@@ -552,6 +554,7 @@ nitric run
 ```
 
 Take note of the entry point URL, ctrl+click the link or paste it in a browser to test it out.
+
 ```bash
 ✔ Building Services
 ✔ Creating docker network
@@ -559,16 +562,16 @@ Take note of the entry point URL, ctrl+click the link or paste it in a browser t
 ✔ Running Services
 ✔ Starting API Gateways
 ✔ Starting Entrypoints
- Service Port  
- ─────── ───── 
+ Service Port
+ ─────── ─────
  login   40415
- signup  36721 
- Api        Port  
- ────────── ───── 
- onboarding 49155 
- Entrypoint Url                    
- ────────── ────────────────────── 
- main       http://localhost:33881 
+ signup  36721
+ Api        Port
+ ────────── ─────
+ onboarding 49155
+ Entrypoint Url
+ ────────── ──────────────────────
+ main       http://localhost:33881
  Running, press 'Q' to clean up and exit...
 ```
 
