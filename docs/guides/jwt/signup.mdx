@@ -1,14 +1,13 @@
 ## Introduction
-
-This sample project will demonstrate signing up Users in a Nitric Document Collection.
+A sample project which demonstrates a basic sign up form using Nitric FaaS and Collections.
+This code serves as a tutorial for educational purposes and non production usage.
 
 ## What we'll do
 
 - Create a new Nitric project
 - Create [functions](../services-functions.mdx) to handle the signup operation
 - Create a [documents](../documents.mdx) collection to store data
-- Set up a basic react app to consume the signup operation
-- Set up an [API gateway](../api-gateways.mdx) and bind it to the functions
+- Create basic react app to consume the signup operation
 - Get it all running locally for testing
 - Deploy to a cloud of your choice
 
@@ -269,6 +268,42 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 	return response, nil
 }
 ```
+
+Optional - you might want to trigger an event at this point to inform services who subscribe to topic "user-created".
+
+Import statement:
+```
+	"github.com/nitrictech/go-sdk/api/events"
+```
+
+Event triggering code:
+```
+	e, _ := events.New()
+	_, err = e.Topic("user-created").Publish(&events.Event{
+		Payload: map[string]interface{}{
+			"eventid": satori.NewV4().String(),
+			"email":   inputData.Email,
+		},
+	})
+```		
+Don't forget to add the topic to the nitric.yaml file
+
+```json
+
+name: my-signup-app
+services:
+  signup:
+    path: signup
+    runtime: function/golang15
+collections:
+  Users: {}
+topics:
+  user-created: {}  
+
+  ...
+
+```
+
 ## Updating our yaml file 
 
 We'll need to get our Collection and API configured in our nitric.yaml file:
@@ -365,7 +400,7 @@ In the `my-signup-app` project directory run:
 
 ```bash
 npx create-react-app signup-ui --template typescript
-cd greeter-ui
+cd signup-ui
 ```
 
 Let's strip it down to the essentials, delete all files until the structure is as shown below: 
@@ -730,7 +765,7 @@ Time to run our project, and see it in action!
 nitric run
 ```
 
-Take note of the entry point URL, by control clicking we will launch into our site.
+Take note of the entry point URL, paste it in a browser to test it out.
 ```bash
 ✔ Building Services
 ✔ Creating docker network
