@@ -15,11 +15,11 @@ Users can now signup and login, let's let them logout.
 
 ## Getting started
 
-This tutorial assumes you have successfully completed the signup & login tutorials.
+This guide assumes you have successfully completed the signup & login tutorials.
 
-## New project
+## New service
 
-We’ll start by creating a new service 
+We’ll start by creating a new service within our signup project
 
 ```bash
 nitric make:service 
@@ -42,7 +42,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -54,11 +53,13 @@ import (
 ```
 ## Constants and Structs
 
+Now let's create some contants and structs to define the data being used: 
+
+
 | **Name**       | **Description**                |
 | -----------------| ------------------------------ |
 | COLLECTION_USER    | Name of the Users document collection (must match definition in .yaml config                |
 | COLLECTION_TOKENS  | Name of the Token document collection (must match definition in .yaml config                |
-| InputData          | A struct to store the input json of format - { "email": "abc@abc.com", "password": "top-secret" } |
 | TokenRow           | The format of the data which we'll preserve in our Token collection            |
 | Resp               | The format we'll store our response in
 
@@ -69,17 +70,17 @@ const (
 	COLLECTION_TOKENS = "Tokens"
 )
 
-// Format of outgoing JSON Data
-type Resp struct {
-	Status  string
-	Message string
-}
-
 // Format of data to be stored in Tokens Collection
 type TokenRow struct {
 	Token  string
 	Expiry string
 	Userid string
+}
+
+// Format of outgoing JSON Data
+type Resp struct {
+	Status  string
+	Message string
 }
 ```
 ## Helper functions 
@@ -240,28 +241,6 @@ Otherwise, proceed by removing all tokens associated with the user
 	return response, nil
 ```
 
-Otherwise, if succesful, then we'll create a Cookie and set it to the Response header
-
-```
-    // Create the cookie with some standard settings.
-	cookie := &http.Cookie{
-		Name:     "tokens",
-		Value:    tokenDetails.AccessToken,
-		MaxAge:   300,
-		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode,
-		Path:     "/",
-	}
-
-	// Set up the response headers, setting cookie information and permissions.
-	response.GetContext().AsHttp().Headers["Set-Cookie"] = cookie.String()
-	response.GetContext().AsHttp().Headers["Access-Control-Allow-Credentials"] = "true"
-	response.GetContext().AsHttp().Headers["Access-Control-Allow-Origin"] = "*"
-	response.GetContext().AsHttp().Status = http.StatusOK
-	response.SetData(responseMessage("Success", tokenDetails.RefreshToken, "Successfully logged in."))
-	return response, nil
-```
-
 The final code should look like this: 
 
 ```golang15
@@ -296,10 +275,9 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 ## Update the Nitric yaml file
 
 Add the following to our configuration 
-- Tokens Collection
-- Login service
-- Login entrypoint
-- Login API definition
+- Logout service
+- Logout entrypoint
+- Logout API definition (Note: this is a GET operation)
 ```
 name: my-signup-app
 services:
