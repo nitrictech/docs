@@ -1,0 +1,421 @@
+## Introduction
+
+This guide will expand upon the signup tutorial. 
+Now that we have created a user in our Users Collection, let's let users login and assign them a JWT.
+
+## What we'll do
+
+- Create a new Nitric project
+- Create [functions](../services-functions.mdx) to handle the login operation
+- Udate a basic react app to consume the login operation
+- Get it all running locally for testing
+- Deploy to a cloud of your choice
+
+> This tutorial provides examples in TypeScript & Go
+
+## Getting started
+
+This tutorial assumes you have successfully completed the signup tutorial.
+
+## New project
+
+We’ll start by creating a new service 
+
+```bash
+nitric make:service 
+```
+
+```text
+? Service template function/golang15
+? Service name login
+✔ Making Service login
+```
+
+## Coding
+
+Open the main.go file in the login directory, and let's start coding - 
+
+We'll need the following import statements:
+```golang15
+package main
+
+import (
+	"encoding/base64"
+	"encoding/json"
+	"net/http"
+	"os"
+	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/fatih/structs"
+	"github.com/nitrictech/go-sdk/api/documents"
+	"github.com/nitrictech/go-sdk/faas"
+	satori "github.com/satori/go.uuid"
+)
+```
+## Constants and Structs
+
+| **Name**       | **Description**                |
+| -----------------| ------------------------------ |
+| COLLECTION_USER    | Name of the Users document collection (must match definition in .yaml config                |
+| COLLECTION_TOKENS  | Name of the Token document collection (must match definition in .yaml config                |
+| TOKEN_VALIDITY     | Time limit for token to be set up                                                           |
+| InputData          | A struct to store the input json of format - { "email": "abc@abc.com", "password": "top-secret" } |
+| UserRow            | The format of the data which we'll preserve in our Users collection            |
+| TokenRow           | The format of the data which we'll preserve in our Token collection            |
+| Resp               | The format we'll store our response in
+| TokenDetails       | A struct to store the token defailts for access and refresh tokens |
+
+
+```golang15
+const (
+	COLLECTION_USER   = "Users"
+	COLLECTION_TOKENS = "Tokens"
+	TOKEN_VALIDITY    = 15
+)
+
+// Format of incoming JSON Data
+type InputData struct {
+	Email    string
+	Password string
+}
+
+// Format of data to be stored in User Collection
+type UserRow struct {
+	Userid   string
+	Email    string
+	Password string
+	PwsHash  string
+}
+
+// Format of outgoing JSON Data
+type Resp struct {
+	Status       string
+	Message      string
+	RefreshToken string
+}
+
+// Struct to keep track of token information
+type TokenDetails struct {
+	AccessToken  string
+	RefreshToken string
+	AccessUuid   string
+	RefreshUuid  string
+	AtExpires    int64
+	RtExpires    int64
+}
+
+// Format of data to be stored in Tokens Collection
+type TokenRow struct {
+	Token  string
+	Expiry string
+	Userid string
+}
+```
+## Helper functions 
+
+Now let's create some functions which will help us get a token created for our user:
+
+| **Method**        | **Description**                |
+| ------------------| ------------------------------ |
+| marshalInput      | Construct our InputData Struct with base64 (optional) encoded json                |
+| responseMessage   | Construct return json { "status": "ok", "refreshtoken": "token ...", "message": "body" }  |
+| login             | Check the collection for the existence of a user with "email" input            |
+| PersistTokenDetails| Store the tokens in the Tokens collection |
+| CreateTokenRefresh | Create a token and its refresh token using the secrets and userid provided |
+| PersistTokenDetails| Store the tokens in the Tokens collection |
+| main              | Run NitricFunction - Nitric Function as a Service operations            |
+
+
+
+```golang15
+// Save the token to the Tokens Collection.
+func PersistTokenDetails(userid string, td *TokenDetails) {
+
+	//converting Unix to UTC(to Time object)
+	at := time.Unix(td.AtExpires, 0)
+	rt := time.Unix(td.RtExpires, 0)
+
+	// Persist the tokens using Collections.
+	docs, _ := documents.New()
+	tokenData := docs.Collection(COLLECTION_TOKENS).Doc(td.AccessUuid)
+
+	atRow := &TokenRow{Expiry: at.String(), Token: td.AccessToken, Userid: userid}
+	tokenData.Set(structs.Map(atRow))
+
+	tokenData = docs.Collection(COLLECTION_TOKENS).Doc(td.RefreshUuid)
+	rtRow := &TokenRow{Expiry: rt.String(), Token: td.RefreshToken, Userid: userid}
+	tokenData.Set(structs.Map(rtRow))
+}
+
+// Create a Primary and Refresh token and store back to TokenDetails
+func CreateTokenRefresh(userid string) (*TokenDetails, error) {
+	td := &TokenDetails{}
+	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
+	td.AccessUuid = satori.NewV4().String()
+
+	td.RtExpires = time.Now().Add(time.Hour * 24 * 7).Unix()
+	td.RefreshUuid = satori.NewV4().String()
+
+	var err error
+
+	//Creating Access Token
+	atClaims := jwt.MapClaims{}
+	atClaims["authorized"] = true
+	atClaims["access_uuid"] = td.AccessUuid
+	atClaims["user_id"] = userid
+	atClaims["exp"] = td.AtExpires
+	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
+	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	if err != nil {
+		return nil, err
+	}
+
+	//Creating Refresh Token
+	rtClaims := jwt.MapClaims{}
+	rtClaims["refresh_uuid"] = td.RefreshUuid
+	rtClaims["user_id"] = userid
+	rtClaims["exp"] = td.RtExpires
+	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
+	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))
+	if err != nil {
+		return nil, err
+	}
+	return td, nil
+}
+
+// Create a response []byte containing the status and message 
+func responseMessage(status string, rt string, message string) []byte {
+	r1 := &Resp{Status: status, RefreshToken: rt, Message: message}
+	r2, _ := json.Marshal(r1)
+	return r2
+}
+
+// Compare a email and password with those stored in the Users Collection
+// TODO: Use a Where clause to fetch the data, rather than looping
+// TODO: Store a password hash instead of a plain text comparison
+func login(email string, password string) (bool, *TokenDetails) {
+	docs, _ := documents.New()
+	query := docs.Collection(COLLECTION_USER).Query()
+	results, _ := query.Fetch()
+
+	for _, result := range results.Documents {
+		var row UserRow
+		result.Decode(&row)
+
+		if row.Email == email && row.Password == password {
+			tokenDetails, _ := CreateTokenRefresh(row.Userid)
+			PersistTokenDetails(row.Userid, tokenDetails)
+			return true, tokenDetails
+		}
+	}
+	return false, nil
+}
+
+// Marshal the input data into a struct for ease of use
+func marshalInput(trigger *faas.NitricTrigger, ed *InputData) {
+	td, err := base64.StdEncoding.DecodeString(string(trigger.GetData()))
+	if err != nil {
+		td = trigger.GetData()
+	}
+	json.Unmarshal(td, &ed)
+}
+
+// Set up the environment secrets and run the Nitric function
+func main() {
+	//TODO: These values should be stored in SECRETS or ENV
+	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd")
+	os.Setenv("REFRESH_SECRET", "mcmvmkmsdnfsdmfdsjf")
+
+	faas.Start(NitricFunction)
+}
+
+```
+
+## Nitric Function
+
+Let's pull it all together, modify or create the 'NitricFunction' function -
+
+
+```golang15
+// NitricFunction - Handles individual function requests (http, events, etc.)
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+
+	// Add the code for the following steps here 
+	
+}
+```
+
+We first initialize our input data, and call login
+
+```golang15
+	var inputData InputData
+	marshalInput(trigger, &inputData)
+```
+
+If this is not a success, we'll throw a 403.
+
+```golang15
+    response := trigger.DefaultResponse()
+
+	// Attempt to log the user with their credentials
+	success, tokenDetails := login(inputData.Email, inputData.Password)
+
+	if !success {
+		response.GetContext().AsHttp().Status = http.StatusUnauthorized
+		response.SetData(responseMessage("Error", "", "Incorrect username or password."))
+		return response, nil
+	}
+```
+
+Otherwise, if succesful, then we'll create a Cookie and set it to the Response header
+
+```
+    // Create the cookie with some standard settings.
+	cookie := &http.Cookie{
+		Name:     "tokens",
+		Value:    tokenDetails.AccessToken,
+		MaxAge:   300,
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+	}
+
+	// Set up the response headers, setting cookie information and permissions.
+	response.GetContext().AsHttp().Headers["Set-Cookie"] = cookie.String()
+	response.GetContext().AsHttp().Headers["Access-Control-Allow-Credentials"] = "true"
+	response.GetContext().AsHttp().Headers["Access-Control-Allow-Origin"] = "*"
+	response.GetContext().AsHttp().Status = http.StatusOK
+	response.SetData(responseMessage("Success", tokenDetails.RefreshToken, "Successfully logged in."))
+	return response, nil
+```
+
+The final code should look like this: 
+
+```golang15
+// NitricFunction - Handles individual function requests (http, events, etc.)
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+
+	var inputData InputData
+	marshalInput(trigger, &inputData)
+
+	response := trigger.DefaultResponse()
+
+	// Attempt to log the user with their credentials
+	success, tokenDetails := login(inputData.Email, inputData.Password)
+
+	if !success {
+		response.GetContext().AsHttp().Status = http.StatusUnauthorized
+		response.SetData(responseMessage("Error", "", "Incorrect username or password."))
+		return response, nil
+	}
+
+	// Create the cookie with some standard settings.
+	cookie := &http.Cookie{
+		Name:     "tokens",
+		Value:    tokenDetails.AccessToken,
+		MaxAge:   300,
+		HttpOnly: true,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+	}
+
+	// Set up the response headers, setting cookie information and permissions.
+	response.GetContext().AsHttp().Headers["Set-Cookie"] = cookie.String()
+	response.GetContext().AsHttp().Headers["Access-Control-Allow-Credentials"] = "true"
+	response.GetContext().AsHttp().Headers["Access-Control-Allow-Origin"] = "*"
+	response.GetContext().AsHttp().Status = http.StatusOK
+	response.SetData(responseMessage("Success", tokenDetails.RefreshToken, "Successfully logged in."))
+	return response, nil
+}
+```
+
+## Update the Nitric yaml file
+
+Add the following to our configuration 
+- Tokens Collection
+- Login service
+- Login entrypoint
+- Login API definition
+```
+name: my-signup-app
+services:
+  signup:
+    path: signup
+    runtime: function/golang15
+  login:
+    path: login
+    runtime: function/golang15    
+collections:
+  Users: {}
+  Tokens: {}
+apis:
+  onboarding:
+    openapi: 3.0.0
+    info:
+      version: 1.0.0
+      title: Onboarding API
+      description: Handle all onboarding requests
+    paths:
+      /login:
+        post:
+          operationId: login
+          x-nitric-target:
+            name: login
+            type: service
+          description: Test a username against a password in the system
+          responses:
+            "200":
+              description: Successful response
+      /signup:
+        post:
+          operationId: signup
+          x-nitric-target:
+            name: signup
+            type: service
+          description: Create a username and password combination
+          responses:
+            "200":
+              description: Successful response
+sites:
+  signup-ui:
+    path: signup-ui
+    assetPath: ./build
+    buildScripts:
+      - yarn build
+entrypoints:
+  main:
+    paths:   
+      /:
+        type: site
+        target: signup-ui 
+      /signup/:
+        type: service
+        target: signup
+      /login/:
+        type: service
+        target: login
+```
+
+## Run the service
+
+First we will start our service using this command:
+
+```bash
+nitric run
+```
+
+Once built and running you should see the following output:
+
+```bash
+✔ Building Services
+✔ Creating docker network
+✔ Creating Volume: my-login-app
+✔ Running Services
+✔ Starting API Gateways
+✔ Starting Entrypoints
+Service    Port
+main    49152
+Running, press 'Q' to clean up and exit...
+```
+
