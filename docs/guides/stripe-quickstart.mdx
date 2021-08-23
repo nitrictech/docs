@@ -69,7 +69,8 @@ import (
 )
 ```
 
-The sample react website that stripe provides sends data in the following format 
+The sample react website that stripe provides sends data in the following format
+
 ```
 {data={"product":"shirt","domain":{"href":"http://localhost:40497/","origin":"http://localhost:40497","protocol":"http:","host":"localhost:40497","hostname":"localhost","port":"40497","pathname":"/","search":"","hash":""}}}
 ```
@@ -125,7 +126,6 @@ func marshalInput(trigger *faas.NitricTrigger, ed *Wrapper) {
 }
 ```
 
-
 Now let's modify the main function to include the stripe key.
 You'll need to obtain this value from your stripe credentials page.
 
@@ -158,7 +158,7 @@ First let's get the information out of the request which we need, this is produc
 	product := fmt.Sprintf("%v", inputData.Data.Product)
 ```
 
-Next let's set up the Stripe session 
+Next let's set up the Stripe session
 
 ```
 	params := &stripe.CheckoutSessionParams{
@@ -187,6 +187,7 @@ Next let's set up the Stripe session
 ```
 
 If an error occured, then let's send back a bad request status to the CheckoutSessionLineItemParams
+
 ```golang15
 	response := trigger.DefaultResponse()
 	if err != nil {
@@ -238,7 +239,7 @@ payments-ui
 |-- yarn.lock
 ```
 
-Update index.html with - 
+Update index.html with -
 
 ```html
 <!DOCTYPE html>
@@ -266,7 +267,7 @@ Update index.html with -
 </html>
 ```
 
-Update App.js 
+Update App.js
 
 ```JavaScript
 import React, { useState, useEffect } from "react";
@@ -299,7 +300,7 @@ const Message = ({ message }) => (
   </section>
 );
 
-function getData() { 
+function getData() {
   return JSON.stringify({
     product: 'shirt',
     domain: window.location
@@ -308,7 +309,7 @@ function getData() {
 
 export default function App() {
   const [message, setMessage] = useState("");
-    
+
   useEffect(() => {
 
     // Check to see if this is a redirect back from Checkout
@@ -352,7 +353,7 @@ body {
   align-items: center;
   background: #242d60;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-  'Helvetica Neue', 'Ubuntu', sans-serif;
+    'Helvetica Neue', 'Ubuntu', sans-serif;
   height: 100vh;
   margin: 0;
   -webkit-font-smoothing: antialiased;
@@ -426,13 +427,11 @@ h5 {
 #checkout-button:hover {
   opacity: 0.8;
 }
-
 ```
 
 ## Updating our yaml file
 
 We'll need to add our new site to the Nitric yaml file and expose it via an entry point.
-
 
 ```yaml
 name: stripe-quickstart
@@ -456,6 +455,7 @@ entrypoints:
         type: service
         target: payments
 ```
+
 This tells the Nitric CLI how to build the paths and where they point.
 
 # Run the service
