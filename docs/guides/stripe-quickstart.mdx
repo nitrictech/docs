@@ -8,72 +8,49 @@ The code snippets in this tutorial are lightly modified versions of the Stripe Q
 - Confirm that you have Node installed with the following command `node --version`
 - It is also assumed that you have already installed the Nitric CLI. If not visit the [installation instructions](../installation.mdx).
 
-## Project set up
+> This tutorial provides examples in TypeScript & Go
 
-For this project we will make a simple react app which redirect to the Stripe Payments Gateway.
+## Getting started
 
-Using the Nitric CLI we start by creating the project.
+This guide assumes you have the Nitric CLI installed, if not you can follow the [installation guide](/docs/installation).
+
+You'll also want to setup your environment to run and test Nitric applications locally by installing prerequisite software. Use the `nitric doctor` command to check and automatically setup your machine.
+
+If you’d like to deploy the results to a cloud environment _(optional)_, you’ll also need to setup your credentials and any other cloud specific configuration: [AWS](/docs/provider-aws), [GCP](/docs/provider-gcp), or [Azure](/docs/provider-azure).
+
+## New project
+
+We’ll start by creating a new project.
 
 ```bash
 nitric make:project nitric-stripe-payments
 ```
 
-Next we'll be asked if we want an initial service in the project and what template the service will use.
-For this project we will want a service. This service will handle requests for greeting and respond to the greetings. For this we will use the `nodets12` template.
-
-x
-? Include an example service?
-function/nodets12
-function/nodejs12
-function/python37
-function/java11
-
-> function/golang15
-> function/php8
-> server/nextjs-typescript
-> (Move up and down to reveal more choices)
-
-````
-
-Next, we'll be asked for a name for the service. We will name it `payments`.
-
-```bash
-? Name for the example service? nitric-stripe-payments
+```text
+? Include an example service? function/golang15
+? Name for the example function? nitric-stripe-payments
 ✔ Making Project nitric-stripe-payments
-✔ Making Service payments
-````
-
-Under the `payments` directory you will see the `.nitric` folder which contains your local nitric files and a `greeter` folder containing the service.
-
-Let's confirm that everything is working correctly
-
-```bash
-cd nitric-stripe-payments/
-nitric run
+✔ Making Function payments
 ```
 
-The result should look like this
+Next, open the project in your editor of choice. The scaffolded project should have the following structure:
 
-```
-✔ Building Services
-✔ Creating docker network
-✔ Creating Volume: nitric-stripe-payments-vol-27dba42d
-✔ Running Services
-✔ Starting API Gateways
-✔ Starting Entrypoints
-Service  Port
-──────── ─────
-payments 49153
-Exiting, please wait... done
+```text
+nitric-stripe-payments/
+|
++--nitric.yaml
++--payments/
+   |
+   +--go.mod
+   +--go.sum
+   +--main.go
 ```
 
-You can test the service is running by using Postman or a browser GET request at http://localhost:49153.
+## Coding
 
-Ensure you change the port to the one which was output above.
+Open the main.go file, and let's start coding -
 
-## Building the App
-
-Let's start building the service that will handle the stripe session creation and redirect.
+We'll need the following import statements:
 
 ```golang15
 package main
@@ -91,25 +68,30 @@ import (
 	stripe "github.com/stripe/stripe-go/v72"
 	session "github.com/stripe/stripe-go/v72/checkout/session"
 )
+```
 
-func main() {
-	stripe.Key = " ... "
-	faas.Start(NitricFunction)
-}
+The sample react website that stripe provides sends data in the following format 
+```
+{data={"product":"shirt","domain":{"href":"http://localhost:40497/","origin":"http://localhost:40497","protocol":"http:","host":"localhost:40497","hostname":"localhost","port":"40497","pathname":"/","search":"","hash":""}}}
+```
 
-// This example takes in a payload which looks like the following
-// {data={"product":"shirt","domain":{"href":"http://localhost:40497/","origin":"http://localhost:40497","protocol":"http:","host":"localhost:40497","hostname":"localhost","port":"40497","pathname":"/","search":"","hash":""}}}
+This is a form-action POST with key "data" and a value with json content, so we'll have to do some marshalling.
+Let's set up our structs to handle this data.
+
+```golang15
 
 // Structs which represent the incoming data
 type Wrapper struct {
 	Data ReturnData
 }
 
+// Struct which represents the outgoing data
 type ReturnData struct {
 	Product string
 	Domain  DomainData
 }
 
+// Struct which represents the Domain data
 type DomainData struct {
 	Href      string
 	Origin    string
@@ -121,9 +103,13 @@ type DomainData struct {
 	Search    string
 	Hash      string
 }
+```
 
-func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+Now let's create a function "marshalData" which will get the data into a format we can work with.
 
+```golang15
+// Marshal the input data into a struct for ease of use
+func marshalInput(trigger *faas.NitricTrigger, ed *Wrapper) {
 	data, err := base64.StdEncoding.DecodeString(string(trigger.GetData()))
 	if err != nil {
 		data = trigger.GetData()
@@ -136,21 +122,47 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 	fd = fmt.Sprintf("%v", "{"+fd+"}")
 
 	// Marshal the data into the structs defined previously
-	var w Wrapper
-	json.Unmarshal([]byte(fd), &w)
+	json.Unmarshal([]byte(fd), &ed)
+}
+```
+
+
+Now let's modify the main function to include the stripe key.
+You'll need to obtain this value from your stripe credentials page.
+
+```golang15
+func main() {
+	stripe.Key = "sk_test_51JEyxJD8J1JQDwlM7ZiLB28L .... "
+	faas.Start(NitricFunction)
+}
+```
+
+Finally, let's modify or create the 'NitricFunction' function -
+
+```golang15
+// NitricFunction - Handles individual function requests (http, events, etc.)
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+
+	// Add the code for the following steps here
+
+}
+```
+
+First let's get the information out of the request which we need, this is product and domain information.
+
+```golang15
+	var inputData Wrapper
+	marshalInput(trigger, &inputData)
 
 	// Fetch the values from the BODY that we are interested in
-	domain := fmt.Sprintf("%v", w.Data.Domain.Origin)
-	product := fmt.Sprintf("%v", w.Data.Product)
+	domain := fmt.Sprintf("%v", inputData.Data.Domain.Origin)
+	product := fmt.Sprintf("%v", inputData.Data.Product)
+```
 
-	// For the stripe demo, if no values are passed from the UI normally we would error out
-	// To allow it to function we set some dummy values
-	if domain == "" || product == "" {
-		domain = "http://www.google.com"
-        product = "Sample"
-	}
+Next let's set up the Stripe session 
 
-    params := &stripe.CheckoutSessionParams{
+```
+	params := &stripe.CheckoutSessionParams{
 		PaymentMethodTypes: stripe.StringSlice([]string{
 			"card",
 		}),
@@ -159,6 +171,7 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 				PriceData: &stripe.CheckoutSessionLineItemPriceDataParams{
 					Currency: stripe.String(string(stripe.CurrencyUSD)),
 					ProductData: &stripe.CheckoutSessionLineItemPriceDataProductDataParams{
+						//Name: stripe.String("T-shirt"),
 						Name: stripe.String(product),
 					},
 					UnitAmount: stripe.Int64(2000),
@@ -170,43 +183,89 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 		SuccessURL: stripe.String(domain + "?success=true"),
 		CancelURL:  stripe.String(domain + "?canceled=true"),
 	}
-
 	s, err := session.New(params)
-	if err != nil {
-		log.Printf("session.New: %v", err)
-	}
 
-	// Set up the response with data from the Stripe Session
-	// Stripe relies on a redirect, so we are overwriting the headers to status 303 'see other'
+```
+
+If an error occured, then let's send back a bad request status to the CheckoutSessionLineItemParams
+```golang15
 	response := trigger.DefaultResponse()
+	if err != nil {
+		response.GetContext().AsHttp().Status = http.StatusBadRequest
+		return response, nil
+	}
+```
+
+Otherwise we can set up the re-direct headers to send our user to the stripe payment gateway.
+
+```golang15
+	// Stripe relies on a redirect, so we are overwriting the headers to status 303 'see other'
 	response.GetContext().AsHttp().Status = http.StatusSeeOther
 	response.GetContext().AsHttp().Headers["Location"] = s.URL
 	response.SetData([]byte(""))
-	return response, nil
-}
 ```
 
 ## Building the App
 
-We will now look at creating a React app which will utilize our new `payments` service.
+We will now look at creating a React app which will utilize our new `signup` service.
 
 ### Initialize a React app
 
-Create a react project with the following resources
-
-Index.js
-
-```
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-
-ReactDOM.render(<App />, document.getElementById("root"));
+Here we're going to be using the Stripe Quickstart, lightly modified to work with our payments service.
+```bash
+npm init react-app payments-ui
+cd payments-ui
 ```
 
-App.js
+Let's strip it down to the essentials, delete all files until the structure is as shown below:
 
-```TypeScript
+```bash
+payments-ui
+|-- node_modules
+|-- public
+|   |-- index.html
+|-- src
+|   |-- App.js
+|   |-- App.css
+|   |-- index.js
+|-- .gitignore
+|-- package.json
+|-- README.md
+|-- tsconfig.json
+|-- yarn.lock
+```
+
+Update index.html with - 
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="A demo of a card payment on Stripe" />
+    <title>Accept a card payment</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
+```
+
+Update App.js 
+
+```JavaScript
 import React, { useState, useEffect } from "react";
 import "./App.css";
 
@@ -237,7 +296,7 @@ const Message = ({ message }) => (
   </section>
 );
 
-function getData() {
+function getData() { 
   return JSON.stringify({
     product: 'shirt',
     domain: window.location
@@ -246,7 +305,7 @@ function getData() {
 
 export default function App() {
   const [message, setMessage] = useState("");
-
+    
   useEffect(() => {
 
     // Check to see if this is a redirect back from Checkout
@@ -271,9 +330,19 @@ export default function App() {
 }
 ```
 
-App.css
+Update index.js
 
+```JavaScript
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+
+ReactDOM.render(<App />, document.getElementById("root"));
 ```
+
+Update App.css
+
+```css
 body {
   display: flex;
   justify-content: center;
@@ -354,56 +423,33 @@ h5 {
 #checkout-button:hover {
   opacity: 0.8;
 }
+
 ```
 
-Before we launch our new greeting app, we require a couple of steps:
-
-First, we need to add the site to our `nitric.yaml` file under `sites`:
+## Updating our yaml file
 
 ```yaml
-name: nitric-greeter
-services:
-  greeter:
-    path: greeter
-    runtime: function/nodets12
-
-sites:
-  greeter-ui:
-    path: greeter-ui
-    assetPath: ./build
-    buildScripts:
-      - yarn build
-```
-
-> Note: `yarn` can be replaced with `npm` if that is your preferred package manager.
-
-We can then define entrypoints to our app:
-
-```yaml
-name: nitric-stripe-payments
+name: stripe
 services:
   payments:
     path: payments
     runtime: function/golang15
-
 sites:
-  greeter-ui:
+  payments-ui:
     path: payments-ui
     assetPath: ./build
     buildScripts:
       - yarn build
-
 entrypoints:
-  main:
+  payments:
     paths:
       /:
         type: site
         target: payments-ui
-      /greeter/:
+      /create-checkout-session/:
         type: service
         target: payments
 ```
-
 This tells the Nitric CLI how to build the paths and where they point.
 
 ### Launch!
