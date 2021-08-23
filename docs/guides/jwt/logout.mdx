@@ -1,7 +1,7 @@
 ## Introduction
 
-This guide will expand upon the signup tutorial. 
-Now that we have created a user in our Users Collection, let's let users login and assign them a JWT.
+This guide will expand upon the signup & login tutorial. 
+Users can now signup and login, let's let them logout.
 
 ## What we'll do
 
@@ -15,11 +15,11 @@ Now that we have created a user in our Users Collection, let's let users login a
 
 ## Getting started
 
-This tutorial assumes you have successfully completed the signup tutorial.
+This tutorial assumes you have successfully completed the signup & login tutorials.
 
-## New service
+## New project
 
-We’ll start by creating a new service within our signup project
+We’ll start by creating a new service 
 
 ```bash
 nitric make:service 
@@ -27,30 +27,29 @@ nitric make:service
 
 ```text
 ? Service template function/golang15
-? Service name login
-✔ Making Service login
+? Service name logout
+✔ Making Service logout
 ```
 
 ## Coding
 
-Open the main.go file in the login directory, and let's start coding - 
+Open the main.go file in the logout directory, and let's start coding - 
 
 We'll need the following import statements:
 ```golang15
 package main
 
 import (
-	"encoding/base64"
 	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 	"os"
-	"time"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/fatih/structs"
 	"github.com/nitrictech/go-sdk/api/documents"
 	"github.com/nitrictech/go-sdk/faas"
-	satori "github.com/satori/go.uuid"
 )
 ```
 ## Constants and Structs
@@ -59,50 +58,21 @@ import (
 | -----------------| ------------------------------ |
 | COLLECTION_USER    | Name of the Users document collection (must match definition in .yaml config                |
 | COLLECTION_TOKENS  | Name of the Token document collection (must match definition in .yaml config                |
-| TOKEN_VALIDITY     | Time limit for token to be set up                                                           |
 | InputData          | A struct to store the input json of format - { "email": "abc@abc.com", "password": "top-secret" } |
-| UserRow            | The format of the data which we'll preserve in our Users collection            |
 | TokenRow           | The format of the data which we'll preserve in our Token collection            |
 | Resp               | The format we'll store our response in
-| TokenDetails       | A struct to store the token defailts for access and refresh tokens |
 
 
 ```golang15
 const (
 	COLLECTION_USER   = "Users"
 	COLLECTION_TOKENS = "Tokens"
-	TOKEN_VALIDITY    = 15
 )
-
-// Format of incoming JSON Data
-type InputData struct {
-	Email    string
-	Password string
-}
-
-// Format of data to be stored in User Collection
-type UserRow struct {
-	Userid   string
-	Email    string
-	Password string
-	PwsHash  string
-}
 
 // Format of outgoing JSON Data
 type Resp struct {
-	Status       string
-	Message      string
-	RefreshToken string
-}
-
-// Struct to keep track of token information
-type TokenDetails struct {
-	AccessToken  string
-	RefreshToken string
-	AccessUuid   string
-	RefreshUuid  string
-	AtExpires    int64
-	RtExpires    int64
+	Status  string
+	Message string
 }
 
 // Format of data to be stored in Tokens Collection
@@ -116,109 +86,102 @@ type TokenRow struct {
 
 Now let's create some functions which will help us get a token created for our user:
 
-| **Name**        | **Description**                |
-| ------------------| ------------------------------ |
-| marshalInput      | Construct our InputData Struct with base64 (optional) encoded json                |
-| responseMessage   | Construct return json { "status": "ok", "refreshtoken": "token ...", "message": "body" }  |
-| login             | Check the collection for the existence of a user with "email" input            |
-| PersistTokenDetails| Store the tokens in the Tokens collection |
-| CreateTokenRefresh | Create a token and its refresh token using the secrets and userid provided |
-| PersistTokenDetails| Store the tokens in the Tokens collection |
-| main              | Run NitricFunction - Nitric Function as a Service operations            |
+| **Name**               | **Description**                |
+| -----------------------| ------------------------------ |
+| responseMessage        | Construct return json { "status": "ok", "refreshtoken": "token ...", "message": "body" }  |
+| ExtractToken           | Extract the token from the headers |
+| Auth                   | Verify the claims in the token |
+| VerifyToken            | Verify the signing method of the token as SigningMethodHMAC |
+| TokenExists            | Confirm that the token exists in the Tokens collection |
+| RemoveTokenDetails     | Remove the row associated with the token passed in
+| RemoveAllTokensForUser | Remove any other lingering tokens for the user
+| main                   | Run NitricFunction - Nitric Function as a Service operations            |
 
 
 
 ```golang15
-// Save the token to the Tokens Collection.
-func PersistTokenDetails(userid string, td *TokenDetails) {
-
-	//converting Unix to UTC(to Time object)
-	at := time.Unix(td.AtExpires, 0)
-	rt := time.Unix(td.RtExpires, 0)
-
-	// Persist the tokens using Collections.
-	docs, _ := documents.New()
-	tokenData := docs.Collection(COLLECTION_TOKENS).Doc(td.AccessUuid)
-
-	atRow := &TokenRow{Expiry: at.String(), Token: td.AccessToken, Userid: userid}
-	tokenData.Set(structs.Map(atRow))
-
-	tokenData = docs.Collection(COLLECTION_TOKENS).Doc(td.RefreshUuid)
-	rtRow := &TokenRow{Expiry: rt.String(), Token: td.RefreshToken, Userid: userid}
-	tokenData.Set(structs.Map(rtRow))
+// Fetch the token from the cookie property in the HEADER map
+func ExtractToken(headers map[string]string) string {
+	cookie := headers["Cookie"]
+	if cookie != "" {
+		strArr := strings.Split(cookie, "=")
+		if len(strArr) == 2 {
+			return strArr[1]
+		}
+	}
+	return ""
 }
 
-// Create a Primary and Refresh token and store back to TokenDetails
-func CreateTokenRefresh(userid string) (*TokenDetails, error) {
-	td := &TokenDetails{}
-	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
-	td.AccessUuid = satori.NewV4().String()
+// Verify the Authenticity of the Token
+func Auth(tokenString string, secret string) (bool, jwt.MapClaims) {
+	token, err := VerifyToken(tokenString, secret)
+	if err != nil || !token.Valid {
+		return false, nil
+	}
 
-	td.RtExpires = time.Now().Add(time.Hour * 24 * 7).Unix()
-	td.RefreshUuid = satori.NewV4().String()
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return false, nil
+	}
+	return true, claims
+}
 
-	var err error
-
-	//Creating Access Token
-	atClaims := jwt.MapClaims{}
-	atClaims["authorized"] = true
-	atClaims["access_uuid"] = td.AccessUuid
-	atClaims["user_id"] = userid
-	atClaims["exp"] = td.AtExpires
-	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+// Verify that the token information is valid and confirms to "SigningMethodHMAC"
+func VerifyToken(tokenString string, secret string) (*jwt.Token, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secret), nil
+	})
 	if err != nil {
 		return nil, err
 	}
-
-	//Creating Refresh Token
-	rtClaims := jwt.MapClaims{}
-	rtClaims["refresh_uuid"] = td.RefreshUuid
-	rtClaims["user_id"] = userid
-	rtClaims["exp"] = td.RtExpires
-	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
-	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))
-	if err != nil {
-		return nil, err
-	}
-	return td, nil
+	return token, nil
 }
 
-// Create a response []byte containing the status, refresh token and message 
-func responseMessage(status string, rt string, message string) []byte {
-	r1 := &Resp{Status: status, RefreshToken: rt, Message: message}
-	r2, _ := json.Marshal(r1)
-	return r2
-}
-
-// Compare a email and password with those stored in the Users Collection
-// TODO: Use a Where clause to fetch the data, rather than looping
-// TODO: Store a password hash instead of a plain text comparison
-func login(email string, password string) (bool, *TokenDetails) {
+// Verify that the token exists in the Collection
+func TokenExists(uuid string, uid string) bool {
 	docs, _ := documents.New()
-	query := docs.Collection(COLLECTION_USER).Query()
+	row, err := docs.Collection(COLLECTION_TOKENS).Doc(uuid).Get()
+
+	if err != nil {
+		return false
+	}
+
+	var rr TokenRow
+	row.Decode(&rr)
+	return rr.Userid == uid
+}
+
+// Remove the row associated with the token passed in
+func RemoveTokenDetails(tokenid string) error {
+	docs, _ := documents.New()
+	tokenData := docs.Collection(COLLECTION_TOKENS).Doc(tokenid)
+	return tokenData.Delete()
+}
+
+// Remove the row associated with the user
+func RemoveAllTokensForUser(userid string) {
+	docs, _ := documents.New()
+	query := docs.Collection(COLLECTION_TOKENS).Query()
 	results, _ := query.Fetch()
 
 	for _, result := range results.Documents {
-		var row UserRow
+		var row TokenRow
 		result.Decode(&row)
 
-		if row.Email == email && row.Password == password {
-			tokenDetails, _ := CreateTokenRefresh(row.Userid)
-			PersistTokenDetails(row.Userid, tokenDetails)
-			return true, tokenDetails
+		if row.Userid == userid {
+			result.Ref().Delete()
 		}
 	}
-	return false, nil
 }
 
 // Marshal the input data into a struct for ease of use
-func marshalInput(trigger *faas.NitricTrigger, ed *InputData) {
-	td, err := base64.StdEncoding.DecodeString(string(trigger.GetData()))
-	if err != nil {
-		td = trigger.GetData()
-	}
-	json.Unmarshal(td, &ed)
+func responseMessage(status string, message string) []byte {
+	r1 := &Resp{Status: status, Message: message}
+	r2, _ := json.Marshal(r1)
+	return r2
 }
 
 // Set up the environment secrets and run the Nitric function
@@ -246,26 +209,35 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 }
 ```
 
-We first initialize our input data
+Verify the authenticity of the token and check it exists in our Tokens collection, throw a 403 if we are unable to verify the token information.
 
 ```golang15
-	var inputData InputData
-	marshalInput(trigger, &inputData)
-```
+	response := trigger.DefaultResponse()
 
-Then we'll make a call to login, to compare our input data vs stored data. If this is not a success, we'll throw a 403.
-
-```golang15
-    response := trigger.DefaultResponse()
-
-	// Attempt to log the user with their credentials
-	success, tokenDetails := login(inputData.Email, inputData.Password)
-
-	if !success {
+	// Verify the authenticity of the token and check it exists
+	ok, claims := Auth(ExtractToken(trigger.GetContext().AsHttp().Headers), os.Getenv("ACCESS_SECRET"))
+	uid, _ := claims["user_id"].(string)
+	aid, _ := claims["access_uuid"].(string)
+	if !ok || !TokenExists(aid, uid) {
+		response.SetData(responseMessage("Error", "Authorization token not found or is not valid."))
 		response.GetContext().AsHttp().Status = http.StatusUnauthorized
-		response.SetData(responseMessage("Error", "", "Incorrect username or password."))
 		return response, nil
 	}
+```
+
+Otherwise, proceed by removing all tokens associated with the user
+
+```golang15
+	err := RemoveTokenDetails(claims["access_uuid"].(string))
+	if err != nil {
+		response.SetData(responseMessage("Error", "Authorization token not found or is not valid. 2"))
+		response.GetContext().AsHttp().Status = http.StatusUnauthorized
+		return response, nil
+	}
+
+	RemoveAllTokensForUser(claims["user_id"].(string))
+	response.SetData(responseMessage("Success", "Logout successful!!!"))
+	return response, nil
 ```
 
 Otherwise, if succesful, then we'll create a Cookie and set it to the Response header
@@ -296,36 +268,27 @@ The final code should look like this:
 // NitricFunction - Handles individual function requests (http, events, etc.)
 func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 
-	var inputData InputData
-	marshalInput(trigger, &inputData)
-
 	response := trigger.DefaultResponse()
 
-	// Attempt to log the user with their credentials
-	success, tokenDetails := login(inputData.Email, inputData.Password)
-
-	if !success {
+	// Verify the authenticity of the token and check it exists
+	ok, claims := Auth(ExtractToken(trigger.GetContext().AsHttp().Headers), os.Getenv("ACCESS_SECRET"))
+	uid, _ := claims["user_id"].(string)
+	aid, _ := claims["access_uuid"].(string)
+	if !ok || !TokenExists(aid, uid) {
+		response.SetData(responseMessage("Error", "Authorization token not found or is not valid."))
 		response.GetContext().AsHttp().Status = http.StatusUnauthorized
-		response.SetData(responseMessage("Error", "", "Incorrect username or password."))
 		return response, nil
 	}
 
-	// Create the cookie with some standard settings.
-	cookie := &http.Cookie{
-		Name:     "tokens",
-		Value:    tokenDetails.AccessToken,
-		MaxAge:   300,
-		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode,
-		Path:     "/",
+	err := RemoveTokenDetails(claims["access_uuid"].(string))
+	if err != nil {
+		response.SetData(responseMessage("Error", "Authorization token not found or is not valid. 2"))
+		response.GetContext().AsHttp().Status = http.StatusUnauthorized
+		return response, nil
 	}
 
-	// Set up the response headers, setting cookie information and permissions.
-	response.GetContext().AsHttp().Headers["Set-Cookie"] = cookie.String()
-	response.GetContext().AsHttp().Headers["Access-Control-Allow-Credentials"] = "true"
-	response.GetContext().AsHttp().Headers["Access-Control-Allow-Origin"] = "*"
-	response.GetContext().AsHttp().Status = http.StatusOK
-	response.SetData(responseMessage("Success", tokenDetails.RefreshToken, "Successfully logged in."))
+	RemoveAllTokensForUser(claims["user_id"].(string))
+	response.SetData(responseMessage("Success", "Logout successful!!!"))
 	return response, nil
 }
 ```
@@ -345,7 +308,10 @@ services:
     runtime: function/golang15
   login:
     path: login
-    runtime: function/golang15    
+    runtime: function/golang15
+  logout:
+    path: logout
+    runtime: function/golang15          
 collections:
   Users: {}
   Tokens: {}
@@ -357,6 +323,16 @@ apis:
       title: Onboarding API
       description: Handle all onboarding requests
     paths:
+      /logout:
+        get:
+          operationId: login
+          x-nitric-target:
+            name: login
+            type: service
+          description: Removes all tokens associated with the user
+          responses:
+            "200":
+              description: Successful response
       /login:
         post:
           operationId: login
@@ -395,6 +371,9 @@ entrypoints:
       /login/:
         type: service
         target: login
+      /logout/:
+        type: service
+        target: logout        
 ```
 ## Modify our react app
 
@@ -432,6 +411,23 @@ const App = () => {
       const resp = await rawResponse.json();
       setLoginResponse(resp.Message);
       setRefreshToken(resp.RefreshToken);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function logout(e: SyntheticEvent) {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const rawResponse = await fetch('/logout/', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const resp = await rawResponse.json();
+      setLoginResponse(resp.Message);
     } catch (error) {
       alert(error.message);
     } finally {
@@ -523,6 +519,10 @@ const App = () => {
           <div className="form-grid">
             <button className="primary" onClick={login}>
               {loading ? 'Loading... ' : 'Login'}
+              <div className={loading ? 'loader loading' : 'loader'}>🚀</div>
+            </button>
+            <button className="primary" onClick={logout}>
+              {loading ? 'Loading... ' : 'Logout'}
               <div className={loading ? 'loader loading' : 'loader'}>🚀</div>
             </button>
           </div>
