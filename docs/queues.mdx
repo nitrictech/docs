@@ -67,307 +67,74 @@ _Type:_ String -->
 
 > Coming Soon: Capability to limit queue push capability to a subset of services
 
-## Sending Tasks
+## Usage
+
+Using one of the provided Nitric SDKs for your language is the easiest way to work with queues.
+
+### Sending Tasks
 
 Using one of the provided Nitric SDKs for your language is the easiest way to work with queues. First, start by importing the QueueClient.
 
 <CodeExamples>
-<CodeExample lang="node">
 
-```typescript
-import { queues } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/queues/send.ts" />
 
-// Construct a new queue client
-const queuesClient = queues();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/queues/send.py" />
 
-// Publish a task to the queue
-await queuesClient.queue('my-queue').send({
-  payload: {
-    example: 'payload',
-  },
-});
-```
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/queues/Send.java" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/go-sdk/examples/queues/send.go" />
 
-```python
-from nitric.api import Queues, Task
+<CodeSnippet snippet="nitrictech/php-sdk/examples/queues/Send.php" />
 
-# Construct a new queue client with default settings
-queues = Queues()
-
-payload = {"content": "of task"}
-
-# Publish a task to a queue
-queues.queue("my-queue").send(Task(payload=payload))
-```
-
-</CodeExample>
-
-<CodeExample lang={"java"}>
-
-```java
-package com.example;
-
-import io.nitric.api.queue.QueueClient;
-import io.nitric.api.queue.Task;
-import java.util.Map;
-
-...
-
-QueueClient.newBuilder()
-	.queue('my-queue')
-	.build()
-	.send(
-		Task.newBuilder()
-			.id("1234")
-			.payloadType("test-payload")
-			.payload(Map.of(
-				"example", "payload"
-			))
-			.build()
-	);
-```
-
-</CodeExample>
-<CodeExample lang={"go"}>
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/queues"
-)
-
-...
-
-client := queues.New()
-
-ftasks, err := queues.Queue("my-queue").Send([]*queues.Task{
-	&queues.Task{
-		ID: "1234",
-		PayloadType: "test-payload",
-		Payload: map[string]interface{}{
-			"example": "payload",
-		},
-	}
-})
-
-if err != nil {
-	// handle error...
-}
-
-for _, ft := range ftasks {
-	// enumerate tasks that failed to queue
-}
-
-```
-
-</CodeExample>
-
-<CodeExample lang={"php"}>
-
-```php
-use Nitric\Api\Queues;
-use Nitric\Api\Task;
-
-$queues = new Queues();
-
-$task = (new Task())
-    ->setPayload([
-        "example" => "payload"
-    ]);
-
-$queues->queue("my-queue")->send($task);
-```
-
-</CodeExample>
-
-<CodeExample lang={"c-sharp"}>
-
-```csharp
-using System;
-using Nitric.Api.Faas;
-using Nitric.Api.Queue
-
-...
-
-var client = QueueClient.NewBuilder()
-	.Queue("my-queue")
-	.Build()
-
-var task = Task.NewBuilder()
-	.Id("1234")
-	.PayloadType("example-payload")
-	.Payload(..TODO...);
-
-client.Send(task);
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/queues/Send.cs" />
 
 </CodeExamples>
 
-## Receiving & Completing Tasks
+### Receiving & Completing Tasks
 
 To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the process is asynchronous, the queue is unaware of whether the task was processed successfully. To ensure failed services don't result in lost tasks, tasks are not removed from a queue when they're received. Instead, tasks are hidden and receivers are granted a temporary `lease` for each task they receive. Once the task is complete, the receiver must make a second call to the queue to `complete` the task, which will remove it from the queue.
 
 <CodeExamples 
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
 		label: "Python",
 		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	{
+		label: "PHP",
+		value: "php"
+	},
+	{
+		label: "C#",
+		value: "c-sharp"
 	}
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { queues } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/queues/receive.ts" />
 
-const queueClient = queues();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/queues/receive.py" />
 
-// Receive tasks from the queue
-const tasks = queueClient.queue('my-queue').receive();
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/queues/Receive.java" />
 
-await Promise.all(
-  tasks.map((task) => {
-    // Work on a task...
+<CodeSnippet snippet="nitrictech/go-sdk/examples/queues/receive.go" />
 
-    // Complete the task
-    return task.complete();
-  })
-);
-```
+<CodeSnippet snippet="nitrictech/php-sdk/examples/queues/Receive.php" />
 
-</CodeExample>
-<CodeExample lang="python">
-
-```python
-from nitric.api import Queues, Task
-
-# Construct a new queue client with default settings
-queue = Queues().queue("my-queue")
-
-# Receive tasks from the queue
-tasks = await queue.receive()
-for task in tasks:
-	// Work on a task...
-
-	// Complete the task if it was processed successfully
-	task.complete()
-```
-
-</CodeExample>
-
-<CodeExample lang={"java"}>
-
-```java
-package com.example;
-
-import io.nitric.api.queue.QueueClient;
-import io.nitric.api.queue.Task;
-import java.util.Map;
-
-...
-
-// Construct a new queue client for the 'example' queue
-var client = QueueClient.build("example");
-
-// Receive a list of tasks from the 'example' queue
-List<Task> tasks = client.receive(100);
-
-for (Task task: tasks) {
-	try {
-		// process task here
-		// processTask(task);
-
-		client.complete(task.getLeaseId());
-	} catch (Exception e) {
-		// We don't need to requeue the task here
-		// we can simply log the error and move on
-		// the task will automatically requeue itself
-	}
-}
-```
-
-</CodeExample>
-<CodeExample lang={"go"}>
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/queues"
-)
-
-...
-
-// Construct a new queue client with default settings
-qc := queues.New()
-
-// Receive tasks from the queue
-tasks, err := qc.Queue("my-queue").Recieve()
-
-if err != nil {
-	// handle error...
-}
-
-for _, task := range tasks {
-	// process the task
-	// complete the task
-	err := task.Complete()
-	if err != nil {
-		// task failed to complete
-	}
-}
-```
-
-</CodeExample>
-
-<CodeExample lang={"php"}>
-
-```php
-use Nitric\Api\Queues;
-use Nitric\Api\Task;
-
-$queues = new Queues();
-
-$tasks = $queues->queue("my-queue")->receive();
-
-foreach($tasks as $task) {
-	// process the task here...
-	$task->complete();
-}
-```
-
-</CodeExample>
-
-<CodeExample lang={"c-sharp"}>
-
-```csharp
-using System;
-using Nitric.Api.Faas;
-using Nitric.Api.Queue
-
-...
-
-var client = QueueClient.NewBuilder()
-	.Queue("my-queue")
-	.Build()
-
-var tasks = client.Receive(1);
-
-foreach (Task t in tasks) {
-	// process tasks
-
-	// Complete the task
-	client.Complete(t.LeaseID);
-}
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/queues/Receive.cs" />
 
 </CodeExamples>

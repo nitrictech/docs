@@ -23,14 +23,14 @@ buckets:
 
 Using one of the provided Nitric SDKs for your language is the easiest way to work with buckets.
 
-## Writing objects
+### Writing objects
 
 To write an object use a `StorageClient` to `write` an object to a bucket:
 
 <CodeExamples 
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -56,106 +56,18 @@ To write an object use a `StorageClient` to `write` an object to a bucket:
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { storage } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/storage/write.ts" />
 
-// Construct a new storage client with default settings
-const storageClient = storage();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/storage/write.py" />
 
-// Example byte array
-const contents = new Uint8Array();
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/storage/Write.java" />
 
-// Write a byte array to a bucket
-storageClient.bucket('my-bucket').file('path/to/item').write(contents);
-```
+<CodeSnippet snippet="nitrictech/go-sdk/examples/storage/write.go" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/storage/Write.php" />
 
-```python
-from nitric.api import Storage
-
-# Construct a new storage client with default settings
-storage = Storage()
-
-file_ref = storage.bucket("my-bucket").file("path/to/item")
-
-# Write bytes to the file
-await file_ref.write(b"example content");
-```
-
-</CodeExample>
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.storage.StorageClient;
-...
-
-var object = StorageClient.newBuilder()
-	.bucket("my-bucket")
-	.build()
-	.write("/path/to/item", "Hello World!".getBytes("utf-8"));
-```
-
-</CodeExample>
-<CodeExample lang="go">
-
-```go
-import (
-    "github.com/nitrictech/go-sdk/api/storage"
-)
-
-...
-
-sc, err := storage.New()
-
-if err != nil {
-	// handle error retrieving the storage client
-}
-
-err := sc.Bucket("my-bucket").File("path/to/file").Write([]byte("Hello World!"))
-
-if err != nil {
-	// Handle error writing the file
-}
-```
-
-</CodeExample>
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Storage;
-
-$storage = new Storage();
-
-// Create a reference to the bucket
-$bucket = $storage->bucket('my-bucket');
-
-// Create a new file with contents
-$bucket->file("some/file.txt")->write("file contents");
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Storage;
-
-...
-
-// []byte data to write
-var data = ...
-
-new StorageClient.Builder()
-	.BucketName("my-bucket")
-	.Build()
-	.Write("path/to/item", data)
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/storage/Write.cs" />
 
 </CodeExamples>
 
@@ -192,105 +104,18 @@ To retrieve an object use a `StorageClient` to `read` an object from a bucket:
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { storage } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/storage/read.ts" />
 
-// Construct a new storage client with default settings
-const storageClient = storage();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/storage/read.py" />
 
-// Read a byte array from a bucket
-const bytes = await storageClient
-  .bucket('my-bucket')
-  .file('path/to/item')
-  .read();
-```
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/storage/Read.java" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/go-sdk/examples/storage/read.go" />
 
-```python
-from nitric.api import Storage
+<CodeSnippet snippet="nitrictech/php-sdk/examples/storage/Read.php" />
 
-# Construct a new storage client with default settings
-storage = Storage()
-
-file_ref = storage.bucket("my-bucket").file("path/to/item")
-
-# Read bytes from the file
-file = await file_ref.read();
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.storage.StorageClient;
-
-...
-
-var object = StorageClient.newBuilder()
-	.bucket("my-bucket")
-	.build()
-	.read("/path/to/item");
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-    "github.com/nitrictech/go-sdk/api/storage"
-)
-
-...
-
-sc, _ := storage.New()
-
-f, err := sc.Bucket("my-bucket").File("path/to/item").Read()
-
-if err != nil {
-	// handle file read error
-}
-
-// handle file content ([]byte)
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Storage;
-
-$storage = new Storage();
-
-// Create a reference to the bucket
-$bucket = $storage->bucket('my-bucket');
-
-// Read contents from a file
-$contents = $bucket->file("some/file.txt")->read();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Storage;
-
-...
-
-var bytes = new StorageClient.Builder()
-	.BucketName("my-bucket")
-	.Build()
-	.Read("path/to/item")
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/storage/Read.cs" />
 
 </CodeExamples>
 
@@ -327,100 +152,17 @@ To delete an object use a `StorageClient` to `delete` an object from a bucket:
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { storage } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/storage/delete.ts" />
 
-// Construct a new storage client with default settings
-const storageClient = storage();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/storage/delete.py" />
 
-// Read a byte array from a bucket
-const bytes = await storageClient
-  .bucket('my-bucket')
-  .file('path/to/item')
-  .delete();
-```
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/storage/Delete.java" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/go-sdk/examples/storage/delete.go" />
 
-```python
-from nitric.api import Storage
+<CodeSnippet snippet="nitrictech/php-sdk/examples/storage/Delete.php" />
 
-# Construct a new storage client with default settings
-storage = Storage()
-
-# Delete the file
-await storage.bucket("my-bucket").file("path/to/item").delete();
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.storage.StorageClient;
-
-...
-
-var object = StorageClient.newBuilder()
-	.bucket("my-bucket")
-	.build()
-	.delete("/path/to/item");
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-    "github.com/nitrictech/go-sdk/api/storage"
-)
-
-...
-
-sc, _ := storage.New()
-
-err := sc.Bucket("my-delete").File("path/to/item").Delete()
-
-if err != nil {
-	// Handle deletion error
-}
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Storage;
-
-$storage = new Storage();
-
-// Create a reference to the bucket
-$bucket = $storage->bucket('my-bucket');
-
-// Delete a file from the bucket
-$bucket->file("some/file.txt")->delete();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Storage;
-
-...
-
-new StorageClient.Builder()
-	.BucketName("my-bucket")
-	.Build()
-	.Delete("path/to/item")
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/storage/Delete.cs" />
 
 </CodeExamples>

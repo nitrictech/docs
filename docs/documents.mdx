@@ -133,7 +133,7 @@ A reference can be created regardless of whether the document or collection exis
 <CodeExamples 
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -159,98 +159,18 @@ A reference can be created regardless of whether the document or collection exis
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/refs.ts" />
 
-// Create a reference to a collection named 'products'
-const products = documents().collection('products');
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/refs.py" />
 
-// Create a reference to a document with the id 'nitric'
-const nitric = products.doc('nitric');
-```
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Refs.java" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/refs.go" />
 
-```python
-from nitric.api import Documents
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Ref.php" />
 
-docs = Documents()
-
-# create a reference to a collection named 'products'
-products = docs.collection("products")
-
-# create a reference to a document with the id 'nitric'
-nitric = products.doc("nitric")
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-// create a reference to a collection named 'products'
-var products = Documents.collection("products");
-
-// create a reference to a document with the id 'nitric'
-var nitric = products.doc("nitric");
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-    "github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-// create a reference to a new collection named 'products'
-products := docs.Collection("products")
-
-// create a reference to a document with the id 'nitric'
-nitric := products.Doc("nitric")
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-// Create a reference to a new collection named 'products'
-$products = $docs->collection("products")
-
-// Create a reference to a document with the id 'nitric'
-$nitric = $products->doc("nitric");
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-// create a reference to a collection named 'products'
-var collection = docs.Collection<Dictionary<string, object>>("products");
-
-// create a reference to a document with the id 'nitric'
-var nitric = collection.Doc("nitric");
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/Refs.cs" />
 
 </CodeExamples>
 
@@ -292,86 +212,19 @@ methods to marshal documents into typed objects.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/get.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/get.py" />
 
-const document = docs.collection('products').doc('nitric');
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Get.java" />
 
-const product = await document.get();
-```
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/get.go" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Get.php" />
 
-```python
-from nitric.api import Documents
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/Get.cs" />
 
-docs = Documents()
-
-document = docs.collection("products").doc("nitric")
-
-product = await document.get()
-```
-
-</CodeExample>
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var product = Documents.collection("products").doc("nitric").get();
-```
-
-</CodeExample>
-<CodeExample lang="go">
-
-```go
-import (
-    "github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-document := docs.Collection("products").Doc("nitric")
-
-product, err := document.Get()
-
-if err != nil {
-	// Handle error
-}
-```
-
-</CodeExample>
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$document = $docs->collection("products")->doc("nitric");
-
-$product = $document->get();
-```
-
-</CodeExample>
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
-
-var product = document.Get();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ### Set
@@ -407,119 +260,19 @@ To add a new document to a collection or update an existing document, use the `s
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/set.ts" />
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-}
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/set.py" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Set.java" />
 
-const document = docs.collection<Product>('products').doc('nitric');
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/set.go" />
 
-await document.set({
-  id: 'nitric',
-  name: 'nitric',
-  description: 'A development framework!',
-});
-```
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Set.php" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/Set.cs" />
 
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-document = docs.collection("products").doc("nitric")
-
-await document.set({
-    "id": "nitric",
-    "name": "Nitric Framework",
-    "description": "A development framework",
-})
-```
-
-</CodeExample>
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-import java.util.Map;
-
-var document = Documents.collection("products").doc("nitric");
-
-document.set(Map.of(
-	"id", "nitric",
-    "name", "Nitric Framework",
-    "description", "A development framework"
-));
-```
-
-</CodeExample>
-<CodeExample lang="go">
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-document := docs.Collection("products").Doc("nitric")
-
-err := document.Set(map[string]inteface{}{
-	"id": "nitric",
-	"name": "Nitric Framework",
-	"description": "A development framework",
-})
-
-if err != nil {
-	// handle error
-}
-```
-
-</CodeExample>
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$document = $docs->collection("products")->doc("nitric");
-
-$document->set([
-    "id" => "nitric",
-    "name" => "Nitric Framework",
-    "description" => "A development framework",
-]);
-```
-
-</CodeExample>
-<CodeExample lang="c-sharp">
-
-```csharp
-using System;
-using System.Collections.Generic;
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
-
-var product = ...
-
-document.Set(product);
-```
-
-</CodeExample>
 </CodeExamples>
 
 > Coming Soon: `set()` options for document merge updates and conditional updates.
@@ -565,86 +318,19 @@ To delete a document from a collection, use the `delete()` method.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/delete.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/delete.py" />
 
-const document = docs.collection('products').doc('nitric');
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Delete.java" />
 
-await document.delete();
-```
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/delete.go" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Delete.php" />
 
-```python
-from nitric.api import Documents
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/Delete.cs" />
 
-docs = Documents()
-
-document = docs.collection("products").doc("nitric")
-
-await document.delete()
-```
-
-</CodeExample>
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-Documents.collection("products").doc("nitric").delete();
-```
-
-</CodeExample>
-<CodeExample lang="go">
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-document := docs.Collection("products").Doc("nitric")
-
-err := document.Delete()
-
-if err != nil {
-	// handle error
-}
-```
-
-</CodeExample>
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$document = $docs->collection("products")->doc("nitric");
-
-$document->delete();
-```
-
-</CodeExample>
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var document = docs.Collection<Dictionary<string, object>>("products").Doc("nitric");
-
-document.Delete();
-```
-
-</CodeExample>
 </CodeExamples>
 
 When you delete a document any subcollection documents will also be deleted.
@@ -694,110 +380,40 @@ The example below will fetch all the documents in the 'Customers' collection.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query.py" />
 
-const query = docs.collection('Customers').query();
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Query.java" />
 
-// Execute query
-const results = await query.fetch();
-```
+<CodeSnippet snippet="nitrictech/examples/documents/query.go" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/Query.php" />
 
-```python
-from nitric.api import Documents
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/Query.cs" />
 
-docs = Documents()
-
-query = docs.collection("Customers").query()
-
-// Execute query
-results = query.fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers").query();
-
-// Execute query
-var results = query.fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-query := docs.Collection("Customers").Query()
-
-// Execute query
-results, err := query.Fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")->query();
-
-// Execute query
-$results = $query->fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers").Query();
-
-// Execute query
-var nitric = query.Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 #### Subcollection Queries
 
-Subcollection queries can be created either:
+Query objects can also be created under subcollections. There are two types of subcollection queries:
 
-1. under a collection's subcollection `collection.collection.query`, or
-2. under a collection document's subcollection `collection.document.collection.query`
+1. Document Subcollection Queries
+2. Subcollection Group Queries
 
-In the first example we are performing a collection subcollection query where we
-are fetching all "Orders" documents for all "Customers".
+##### Document Subcollection Queries
 
-<CodeExamples 
+Document subcollection queries can only select the subcollection documents under the parent document:
+
+`collection.document.collection.query`
+
+In the example below we are selecting all `Orders` under the parent `Customers` document with the id `apple`.
+
+<CodeExamples
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -823,107 +439,33 @@ are fetching all "Orders" documents for all "Customers".
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-doc-query.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/sub_doc_query.py" />
 
-const query = docs.collection('Customers').collection('Orders').query();
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/SubDocQuery.java" />
 
-const results = await query.fetch();
-```
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_doc_query.go" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/SubDocQuery.php" />
 
-```python
-from nitric.api import Documents
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/SubDocQuery.cs" />
 
-docs = Documents()
-
-query = docs.collection("Customers")
-		.collection("Orders")
-		.query()
-
-results = query.fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers")
-		.collection("Orders")
-		.query();
-
-var results = query.fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-query := docs.Collection("Customers")
-		.Collection("Orders")
-		.Query()
-
-results, err := query.Fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")
-		->collection("Orders")
-		->query();
-
-$results = $query->fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers")
-		.Collection("Orders")
-		.Query();
-
-var nitric = query.Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
-In the second example we are performing a collection document subcollection query where we
-are fetching all the "Orders" for a specific "Customer" with the id of 'apple'.
+##### Subcollection Group Queries
+
+Subcollection Group queries can select all the documents in the collection subcollection group:
+
+`collection.collection.query`
+
+In the example below we are selecting all `Orders` for all `Customers`.
 
 <CodeExamples 
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -949,108 +491,19 @@ are fetching all the "Orders" for a specific "Customer" with the id of 'apple'.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-col-query.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/sub_col_query.py" />
 
-const query = docs
-  .collection('Customers')
-  .doc('apple')
-  .collection('Orders')
-  .query();
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/SubColQuery.java" />
 
-const results = await query.fetch();
-```
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_col_query.go" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/SubColQuery.php" />
 
-```python
-from nitric.api import Documents
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/SubColQuery.cs" />
 
-docs = Documents()
-
-query = docs.collection("Customers")
-		.doc("apple")
-		.collection("Orders")
-		.query()
-
-results = query.fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers")
-		.doc("apple")
-		.collection("Orders")
-		.query();
-
-var results = query.fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-query := docs.Collection("Customers")
-		.Doc("apple")
-		.Collection("Orders")
-		.Query()
-
-results, err := query.Fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")
-		->doc("apple")
-		->collection("Orders")
-		->query();
-
-// Execute query
-$results = $query->fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("customers")
-		.Doc("apple")
-		.Collection("Orders")
-		.Query();
-
-var results = query.Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ### Where Filter Expressions
@@ -1088,10 +541,10 @@ This equates to the SQL:
 In the examples below we selecting `Customers` documents where the customer's country is equals to 'US' and
 they have an age of 21 or older.
 
-<CodeExamples 
+<CodeExamples
 	languages={[
 	{
-		label: "Node.js",
+		label: "Node",
 		value: "node"
 	},
 	{
@@ -1117,103 +570,19 @@ they have an age of 21 or older.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-filter.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query_filter.py" />
 
-const query = docs
-  .collection('Customers')
-  .query()
-  .where('country', '==', 'US')
-  .where('age', '>=', 21);
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/QueryFilter.java" />
 
-const results = await query.fetch();
-```
+<CodeSnippet snippet="nitrictech/examples/documents/query_filter.go" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/QueryFilter.php" />
 
-```python
-from nitric.api import Documents
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/QueryFilter.cs" />
 
-docs = Documents()
-
-query = docs.collection("Customers").query()
-	.where("country", "==", "US")
-	.where("age", ">=", 21)
-
-results = query.fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers").query()
-	.where("country", "==", "US")
-	.where("age", ">=", 21);
-
-var results = query.fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-query := docs.Collection("Customers").Query().Where(
-	Condition("country").Eq("US")
-	Condition("age").Gt(21)
-)
-
-results, err := query.Fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")->query()
-	->where("country", "==", "US")
-	->where("age", ">=", 21);
-
-$results = $query->fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers").Query()
-	.Where("country", "==", "US")
-	.Where("age", ">=", 21);
-
-var results = query.Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ##### Expression Limitations
@@ -1232,7 +601,7 @@ To limit the number of document retrieved use the `limit()` method.
 
 In the example below we are fetching the first 1,000 customer order documents across all customers.
 
-<CodeExamples 
+<CodeExamples
 	languages={[
 	{
 		label: "Node.js",
@@ -1261,107 +630,19 @@ In the example below we are fetching the first 1,000 customer order documents ac
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-limits.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query_limits.py" />
 
-const query = docs
-  .collection('Customers')
-  .collection('Orders')
-  .query()
-  .limit(1000);
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/QueryLimits.java" />
 
-const results = await query.fetch();
-```
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/query_limits.go" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/QueryLimits.php" />
 
-```python
-from nitric.api import Documents
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/QueryLimits.cs" />
 
-docs = Documents()
-
-query = docs.collection("Customers")
-		.collection("Orders")
-		.query()
-		.limit(1000)
-
-results = query.fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers")
-		.collection("Orders")
-		.query()
-		.limit(1000);
-
-var results = query.fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-query := docs.Collection("Customers")
-		.Collection("Orders")
-		.Query()
-		.Limit(1000);
-
-results, err := query.Fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")
-		->collection("Orders")
-		->query()
-		->limit(1000);
-
-$results = $query->fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers")
-		.Collection("Orders")
-		.Query()
-		.Limit(1000);
-
-var nitric = query.Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ### Paged Results
@@ -1374,7 +655,7 @@ next query with the `pagingFrom()` method. This will enable the next query to co
 
 The example below selects active 'Customers' paging through the collection in sets of 100 document.
 
-<CodeExamples 
+<CodeExamples
 	languages={[
 	{
 		label: "Node.js",
@@ -1403,130 +684,19 @@ The example below selects active 'Customers' paging through the collection in se
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-paginated.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/paged_results.py" />
 
-const query = docs
-  .collection('Customers')
-  .query()
-  .where('active', '==', true)
-  .limit(100);
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/PagedResults.java" />
 
-// Fetch first page
-let results = await query.fetch();
+<CodeSnippet snippet="nitrictech/examples/documents/paged_results.go" />
 
-// Fetch next page
-results = await query.pagingFrom(results.pagingToken).fetch();
-```
+<CodeSnippet snippet="nitrictech/php-sdk/examples/documents/PagedResults.php" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/documents/PagedResults.cs" />
 
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-query = docs.collection("Customers")
-		.query()
-		.where('active', '==', true)
-		.limit(100)
-
-// Fetch first page
-results = query.fetch()
-
-// Fetch next page
-results = query.page_from(results.paging_token).fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers")
-		.query()
-		.where("active", "==", true)
-		.limit(100);
-
-// Fetch first page
-var results = query.fetch();
-
-// Fetch next page
-results = query.pagingFrom(results.getPagingToken()).fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-query := docs.Collection("Customers").Query().Where(
-	Condition("active").Eq(true)
-).Limit(100)
-
-// Fetch first page
-results, err := query.Fetch()
-
-// Fetch next page
-results, err = query.FromPagingToken(results.PagingToken).Fetch()
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-use Nitric\Api\Documents;
-
-$docs = new Documents();
-
-$query = $docs->collection("Customers")
-		->query()
-		->where("active", "==", true)
-		->limit(100);
-
-// Fetch first page
-$results = $query->fetch();
-
-// Fetch next page
-$results = $query->pageFrom($results.pagingToken)->fetch();
-```
-
-</CodeExample>
-
-<CodeExample lang="c-sharp">
-
-```csharp
-using Nitric.Api.Document;
-
-var docs = new Documents();
-
-var query = docs.Collection<Dictionary<string, object>>("Customers")
-	.Query()
-	.Where("active", "==", true)
-	.Limit(100);
-
-// Fetch first page
-var results = query.Fetch();
-
-// Fetch next page
-results = query.PagingFrom(results.PagingToken).Fetch();
-```
-
-</CodeExample>
 </CodeExamples>
 
 ### Streamed Results
@@ -1537,7 +707,7 @@ reduce memory usage.
 
 Check your SDK for streaming support.
 
-<CodeExamples 
+<CodeExamples
 	languages={[
 	{
 		label: "Node.js",
@@ -1566,77 +736,28 @@ Check your SDK for streaming support.
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { documents } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-stream.ts" />
 
-const docs = documents();
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/streamed.py" />
 
-const stream = docs.collection('Customers').query().stream();
+<CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/documents/Streamed.java" />
 
-for await (const doc of stream) {
-  // Process doc stream...
-}
-```
-
-</CodeExample>
-<CodeExample lang="python">
-
-```python
-from nitric.api import Documents
-
-docs = Documents()
-
-query = docs.collection("Customers").query()
-
-async for doc in query.stream():
-    // Process doc stream...
-```
-
-</CodeExample>
-
-<CodeExample lang="java">
-
-```java
-import io.nitric.api.document.Documents;
-
-var query = Documents.collection("Customers").query();
-
-query.stream().foreach(doc -> {
-	// Process doc stream
-});
-```
-
-</CodeExample>
-
-<CodeExample lang="go">
-
-```go
-import (
-	"github.com/nitrictech/go-sdk/api/documents"
-)
-
-docs, _ := documents.New()
-
-query := docs.Collection("Customers").Query()
-
-itr, err := query.Stream()
-```
-
-</CodeExample>
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/stream_results.go" />
 
 <CodeExample lang="php">
 
-<br />
-The steam() method is not yet implemented.
+```
+stream() support is under development...
+```
 
 </CodeExample>
 
 <CodeExample lang="c-sharp">
 
-<br />
-The steam() method is not yet implemented.
+```
+stream() support is under development...
+```
 
 </CodeExample>
 </CodeExamples>
