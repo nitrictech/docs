@@ -166,7 +166,7 @@ Let's pull it all together, modify or create the golang15 function -
 // NitricFunction - Handles individual function requests (http, events, etc.)
 func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 
-	// Add the code for the folowing steps here 
+	// Add the code for the following steps here 
 	
 }
 ```
@@ -714,7 +714,7 @@ entrypoints:
 
 ## Run the service
 
-Once again we can run our service and site 
+Time to run our project, and see it in action!
 
 ```bash
 nitric run
@@ -740,6 +740,18 @@ Take note of the entry point URL, by control clicking we will launch into our si
  Running, press 'Q' to clean up and exit...
 ```
 
+Once you're happy that everything is running correctly, you can deploy your API application to a cloud provider of your choice.
+
+```bash
+# Deploy to AWS
+nitric deploy:aws
+
+# Deploy to Google Cloud
+nitric deploy:gcp
+
+# Deploy to Azure
+nitric deploy:azure
+```
 
 
 
