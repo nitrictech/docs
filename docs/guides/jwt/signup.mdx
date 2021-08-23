@@ -1,0 +1,312 @@
+## Introduction
+
+This sample project will demonstrate signing up Users in a Collection of the same name for a sign up page.
+
+## What we'll do
+
+1. Create a new Nitric project
+2. Create [functions](../services-functions.mdx) to handle API operations
+3. Create a [documents](../documents.mdx) collection to store data
+4. Set up an [API gateway](../api-gateways.mdx) and bind it to the functions
+5. Get it all running locally for testing
+6. Deploy to a cloud of your choice
+
+| **Method** | **Route**          | **Description**                |
+| ---------- | ------------------ | ------------------------------ |
+| `POST`     | /signup            | Add a user to the User Collection |
+
+> This tutorial provides examples in TypeScript & Go
+
+## Getting started
+
+This tutorial assumes you have the Nitric CLI installed, if not you can follow the [installation guide](/docs/installation).
+
+You'll also want to setup your environment to run and test Nitric applications locally by installing prerequisite software. Use the `nitric doctor` command to check and automatically setup your machine.
+
+If you’d like to deploy the results to a cloud environment _(optional)_, you’ll also need to setup your credentials and any other cloud specific configuration: [AWS](/docs/provider-aws), [GCP](/docs/provider-gcp), or [Azure](/docs/provider-azure).
+
+## New project
+
+We’ll start by creating a new project.
+
+```bash
+nitric make:project my-signup-app
+```
+
+```text
+? Include an example service? function/golang15
+? Name for the example function? signup
+✔ Making Project my-signup-app
+✔ Making Function signup
+```
+
+Next, open the project in your editor of choice. The scaffolded project should have the following structure:  
+
+```text
+my-signup-app/
+|
++--nitric.yaml
++--signup/
+   |
+   +--go.mod
+   +--go.sum
+   +--main.go
+```
+
+## Coding
+
+We'll need the following import statements:
+
+```golang15
+import (
+	"encoding/base64"
+	"encoding/json"
+	"net/http"
+
+	"github.com/fatih/structs"
+	"github.com/nitrictech/go-sdk/api/documents"
+	"github.com/nitrictech/go-sdk/faas"
+	satori "github.com/satori/go.uuid"
+)
+```
+## Constants and Structs
+
+| **Name**       | **Description**                |
+| -----------------| ------------------------------ |
+| COLLECTION_USER  | Name of the Users document collection (must match definition in .yaml config                |
+| InputData        | A struct to store the input json of format - { "email": "abc@abc.com", "password": "top-secret" } |
+| UserRow          | The format of the data which we'll preserve in our Users collection            |
+| Resp             | The format we'll store our response in
+
+
+```golang15
+const (
+	COLLECTION_USER = "Users"
+)
+
+// Format of incoming JSON Data
+type InputData struct {
+	Email    string
+	Password string
+}
+
+// Data to be stored in User Collection
+type UserRow struct {
+	Userid   string
+	Email    string
+	Password string
+	PwsHash  string
+}
+
+// Response format 
+type Resp struct {
+	Status  string
+	Message string
+}
+```
+## Helper functions 
+
+Now let's create some functions which will help us get a user created:
+
+| **Method**       | **Description**                |
+| -----------------| ------------------------------ |
+| marshalInput     | Construct our InputData Struct with base64 (optional) encoded json                |
+| responseMessage  | Construct return json { "status": "ok", "message": "body" }  |
+| userExists       | Check the collection for the existence of a user with "email" input            |
+| main             | Run NitricFunction - Nitric Function as a Service operations            |
+
+
+
+```golang15
+// Marshal the input data into a struct for ease of use
+func marshalInput(trigger *faas.NitricTrigger, ed *InputData) {
+	td, err := base64.StdEncoding.DecodeString(string(trigger.GetData()))
+	if err != nil {
+		td = trigger.GetData()
+	}
+	json.Unmarshal(td, &ed)
+}
+
+// Create a response []byte containing the status and message 
+func responseMessage(status string, message string) []byte {
+	r1 := &Resp{Status: status, Message: message}
+	r2, _ := json.Marshal(r1)
+	return r2
+}
+
+
+// Check the User Collection to see if the user already exists
+func userExists(email string) bool {
+	docs, _ := documents.New()
+
+	query := docs.Collection(COLLECTION_USER).Query()
+	results, _ := query.Fetch()
+
+	for _, result := range results.Documents {
+		var row UserRow
+		result.Decode(&row)
+
+		if row.Email == email {
+			return true
+		}
+	}
+	return false
+}
+
+func main() {
+	faas.Start(NitricFunction)
+}
+```
+
+## Nitric Function
+
+Let's pull it all together - 
+
+We first initialize our input data, create a user id and set up our Collection to be used.
+
+```golang15
+	// Convert the input data into a format we can easily consume
+	var inputData InputData
+	marshalInput(trigger, &inputData)
+
+	// Create a new user ID
+	uid := satori.NewV4().String()
+
+	// Initialize the User Collection 
+	docs, _ := documents.New()
+	appData := docs.Collection(COLLECTION_USER).Doc(uid)
+```
+
+Next we'll set up our User Row, we'll keep it simple here by storing our password in plain text.
+
+```
+	// Construct our User Row
+	userRow := &UserRow{
+		Userid:   uid,
+		Email:    inputData.Email,
+		Password: inputData.Password,
+		PwsHash:  "TODO",
+	}
+  
+```
+
+The final code should look like this: 
+
+```golang15
+// NitricFunction - Handles individual function requests (http, events, etc.)
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+
+	// Convert the input data into a format we can easily consume
+	var inputData InputData
+	marshalInput(trigger, &inputData)
+
+	// Create a new user ID
+	uid := satori.NewV4().String()
+
+	// Initialize the User Collection 
+	docs, _ := documents.New()
+	appData := docs.Collection(COLLECTION_USER).Doc(uid)
+
+	// Construct our User Row
+	userRow := &UserRow{
+		Userid:   uid,
+		Email:    inputData.Email,
+		Password: inputData.Password,
+		PwsHash:  "TODO",
+	}
+  
+	// Initialize our default response (HTTP Status OK)
+	response := trigger.DefaultResponse()
+
+	// Check to make sure the user doesn't already exist
+	if userExists(inputData.Email) {
+		response.GetContext().AsHttp().Status = http.StatusUnauthorized
+		response.SetData(responseMessage("Error", "Account already exists."))
+		return response, nil
+	}
+
+	// TODO: Handle this error more appropriately for a real world scenario
+	err := appData.Set(structs.Map(userRow))
+	if err != nil {
+		response.SetData(responseMessage("Error", "Oops something went wrong ..."))
+		return response, nil
+	}
+
+	response.SetData(responseMessage("Success", "Signup success !!!"))
+	return response, nil
+}
+```
+## Updating our yaml file 
+
+We'll need to get our Collection and API configured in our nitric.yaml file:
+
+```yaml
+name: my-signup-app
+services:
+  signup:
+    path: signup
+    runtime: function/golang15
+collections:
+  Users: {}
+apis:
+  onboarding:
+    openapi: 3.0.0
+    info:
+      version: 1.0.0
+      title: Onboarding API
+      description: Handle all onboarding requests
+    paths:
+      /signup:
+        post:
+          operationId: signup
+          x-nitric-target:
+            name: signup
+            type: service
+          description: Create a username and password combination
+          responses:
+            "200":
+              description: Successful response
+entrypoints:
+  main:
+    paths:    
+      /signup/:
+        type: service
+        target: signup			  
+```
+
+## Run the service
+
+First we will start our service using this command:
+
+```bash
+nitric run
+```
+
+Once built and running you should see the following output:
+
+```bash
+✔ Building Services
+✔ Creating docker network
+✔ Creating Volume: my-login-app
+✔ Running Services
+✔ Starting API Gateways
+✔ Starting Entrypoints
+Service    Port
+main    49152
+Running, press 'Q' to clean up and exit...
+```
+
+Run the cURL command substituting the port 49152 with the outputted port from the `nitric run` command:
+
+```bash
+curl -H "Content-Type: application/json" -d "{\"email\":\"test@nitric.io\", \"password\":\"Nitric\"}" http://localhost:49152/
+```
+
+This will give us a response JSON:
+
+```bash
+{"Status":"Success", "Message Signup success !!!"}
+```
+
+We now know our service is working the way we want and can move on to building the react app.
+
