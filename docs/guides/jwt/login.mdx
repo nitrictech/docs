@@ -184,7 +184,7 @@ func CreateTokenRefresh(userid string) (*TokenDetails, error) {
 	return td, nil
 }
 
-// Create a response []byte containing the status and message 
+// Create a response []byte containing the status, refresh token and message 
 func responseMessage(status string, rt string, message string) []byte {
 	r1 := &Resp{Status: status, RefreshToken: rt, Message: message}
 	r2, _ := json.Marshal(r1)
@@ -246,14 +246,14 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 }
 ```
 
-We first initialize our input data, and call login
+We first initialize our input data
 
 ```golang15
 	var inputData InputData
 	marshalInput(trigger, &inputData)
 ```
 
-If this is not a success, we'll throw a 403.
+Then we'll make a call to login, to compare our input data vs stored data. If this is not a success, we'll throw a 403.
 
 ```golang15
     response := trigger.DefaultResponse()
@@ -396,26 +396,189 @@ entrypoints:
         type: service
         target: login
 ```
+## Modify our react app
+
+Finally, let's modify our App.tsx to add a login section.
+
+```typescript
+import React, { SyntheticEvent, useState } from 'react';
+
+const App = () => {
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
+  const [loginResponse, setLoginResponse] = useState('');
+  const [signupResponse, setSignupResponse] = useState('');
+
+  const [refreshToken, setRefreshToken] = useState('');
+
+  async function login(e: SyntheticEvent) {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const rawResponse = await fetch('/login/', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          email: loginEmail,
+          password: loginPassword,
+        }),
+      });
+      const resp = await rawResponse.json();
+      setLoginResponse(resp.Message);
+      setRefreshToken(resp.RefreshToken);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function signup(e: SyntheticEvent) {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const rawResponse = await fetch('/signup/', {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({
+          email: signupEmail,
+          password: signupPassword,
+        }),
+      });
+      const resp = await rawResponse.json();
+      setSignupResponse(resp.Message);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div>
+      <div className="center">
+        <div className="container grid">
+          <h1>Signup</h1>
+          <div className="form-grid">
+            <div className="field">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="text"
+                value={signupEmail}
+                onChange={(e) => setSignupEmail(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                value={signupPassword}
+                onChange={(e) => setSignupPassword(e.target.value)}
+              />
+            </div>
+          </div>
+          <button className="primary" onClick={signup}>
+            {loading ? 'Loading... ' : 'Signup'}
+            <div className={loading ? 'loader loading' : 'loader'}>🚀</div>
+          </button>
+          {signupResponse && (
+            <h2 className="response">
+              {signupResponse} <div className="wave">👋</div>
+            </h2>
+          )}
+        </div>
+      </div>
+
+      <div className="center">
+        <div className="container grid">
+          <h1>Login</h1>
+          <div className="form-grid">
+            <div className="field">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="text"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="form-grid">
+            <button className="primary" onClick={login}>
+              {loading ? 'Loading... ' : 'Login'}
+              <div className={loading ? 'loader loading' : 'loader'}>🚀</div>
+            </button>
+          </div>
+
+          {loginResponse && (
+            <h2 className="response">
+              {loginResponse} <div className="wave">👋</div>
+            </h2>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
+```
 
 ## Run the service
 
-First we will start our service using this command:
+Time to run our project, and see it in action!
 
 ```bash
 nitric run
 ```
 
-Once built and running you should see the following output:
-
+Take note of the entry point URL, ctrl+click the link or paste it in a browser to test it out.
 ```bash
 ✔ Building Services
 ✔ Creating docker network
-✔ Creating Volume: my-login-app
+✔ Creating Volume: my-signup-app-vol-930352ad
 ✔ Running Services
 ✔ Starting API Gateways
 ✔ Starting Entrypoints
-Service    Port
-main    49152
-Running, press 'Q' to clean up and exit...
+ Service Port  
+ ─────── ───── 
+ login   40415
+ signup  36721 
+ Api        Port  
+ ────────── ───── 
+ onboarding 49155 
+ Entrypoint Url                    
+ ────────── ────────────────────── 
+ main       http://localhost:33881 
+ Running, press 'Q' to clean up and exit...
 ```
 
+Once you're happy that everything is running correctly, you can deploy your API application to a cloud provider of your choice.
+
+```bash
+# Deploy to AWS
+nitric deploy:aws
+
+# Deploy to Google Cloud
+nitric deploy:gcp
+
+# Deploy to Azure
+nitric deploy:azure
+```
