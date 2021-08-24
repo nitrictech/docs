@@ -194,24 +194,24 @@ func responseMessage(status string, rt string, message string) []byte {
 }
 
 // Compare a email and password with those stored in the Users Collection
-// TODO: Use a Where clause to fetch the data, rather than looping
 // TODO: Store a password hash instead of a plain text comparison
 func login(email string, password string) (bool, *TokenDetails) {
 	docs, _ := documents.New()
-	query := docs.Collection(COLLECTION_USER).Query()
-	results, _ := query.Fetch()
+	query := docs.Collection(COLLECTION_USER).Query().Where(
+		documents.Condition("Email").Eq(documents.StringValue(email)),
+		documents.Condition("Password").Eq(documents.StringValue(password)),
+	)
+	results, err := query.Fetch()
 
-	for _, result := range results.Documents {
-		var row UserRow
-		result.Decode(&row)
-
-		if row.Email == email && row.Password == password {
-			tokenDetails, _ := CreateTokenRefresh(row.Userid)
-			PersistTokenDetails(row.Userid, tokenDetails)
-			return true, tokenDetails
-		}
+	if err != nil || len(results.Documents) != 1 {
+		return false, nil
 	}
-	return false, nil
+
+	var row UserRow
+	results.Documents[0].Decode(&row)
+	tokenDetails, _ := CreateTokenRefresh(row.Userid)
+	PersistTokenDetails(row.Userid, tokenDetails)
+	return true, tokenDetails
 }
 
 // Marshal the input data into a struct for ease of use

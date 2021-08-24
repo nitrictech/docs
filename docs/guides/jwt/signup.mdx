@@ -140,20 +140,17 @@ func responseMessage(status string, message string) []byte {
 // Check the User Collection to see if the user already exists
 func userExists(email string) bool {
 	docs, _ := documents.New()
+	query := docs.Collection(COLLECTION_USER).Query().Where(
+		documents.Condition("Email").Eq(documents.StringValue(email)),
+	)
+	results, err := query.Fetch()
 
-	query := docs.Collection(COLLECTION_USER).Query()
-	results, _ := query.Fetch()
-
-	for _, result := range results.Documents {
-		var row UserRow
-		result.Decode(&row)
-
-		if row.Email == email {
-			return true
-		}
+	if err != nil || len(results.Documents) != 1 {
+		return false
 	}
-	return false
+	return true
 }
+
 
 func main() {
 	faas.Start(NitricFunction)

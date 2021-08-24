@@ -164,16 +164,13 @@ func RemoveTokenDetails(tokenid string) error {
 // Remove the row associated with the user
 func RemoveAllTokensForUser(userid string) {
 	docs, _ := documents.New()
-	query := docs.Collection(COLLECTION_TOKENS).Query()
+	query := docs.Collection(COLLECTION_TOKENS).Query().Where(
+		documents.Condition("Userid").Eq(documents.StringValue(userid)),
+	)
 	results, _ := query.Fetch()
 
 	for _, result := range results.Documents {
-		var row TokenRow
-		result.Decode(&row)
-
-		if row.Userid == userid {
-			result.Ref().Delete()
-		}
+		result.Ref().Delete()
 	}
 }
 
