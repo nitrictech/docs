@@ -1,0 +1,34 @@
+[
+  {
+    "title": "Stripe Example 1 - test",
+    "description": "This example implements blah blah",
+    "repo_url": "https://github.com/nitrictech/node-sdk",
+    "categories": ["Node", "Payments"],
+    "language": "JavaScript",
+    "level": "Beginner"
+  },
+  {
+    "title": "Stripe Example 2 - test",
+    "description": "This example implements blah blah",
+    "repo_url": "https://github.com/nitrictech/node-sdk",
+    "categories": ["Node"],
+    "language": "Java",
+    "level": "Advanced"
+  },
+  {
+    "title": "Stripe Example 3 - test",
+    "description": "This example implements blah blah",
+    "repo_url": "https://github.com/nitrictech/node-sdk",
+    "categories": ["Node"],
+    "language": "Go",
+    "level": "Intermediate"
+  },
+  {
+    "title": "Stripe Example 4 - test",
+    "description": "This example implements blah blah",
+    "repo_url": "https://github.com/nitrictech/node-sdk",
+    "categories": ["Node", "Payments"],
+    "language": "JavaScript",
+    "level": "Expert"
+  }
+]

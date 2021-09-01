@@ -1,0 +1,39 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "repo_url": {
+        "type": "string"
+      },
+      "language": {
+        "type": "string",
+        "enum": ["Go", "JavaScript", "TypeScript", "Java", "Python", "C#"]
+      },
+      "level": {
+        "type": "string",
+        "enum": ["Beginner", "Intermediate", "Advanced", "Expert"]
+      },
+      "categories": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "title",
+      "description",
+      "repo_url",
+      "language",
+      "level",
+      "categories"
+    ]
+  }
+}
