@@ -1,4 +1,4 @@
-Nitric Functions are a type of [Service](./overview) that offers a portable way to develop function as a service (FaaS) applications, which may be deployed to Serverless Runtimes such as AWS Lambda and Google CloudRun. This provides a convenient way to write applications based on or including Serverless Functions, with familiar languages like TypeScript, JavaScript, Python, Go, Java, C# and PHP, without concerns for the underlying servers, scaling, runtime software, containerization or deployment.
+Nitric Functions are a type of [Service](./overview) that offers a portable way to develop function as a service (FaaS) applications, which may be deployed to Serverless Runtimes such as AWS Lambda and Google CloudRun. This provides a convenient way to write applications based on or including Serverless Functions, with familiar languages like TypeScript, JavaScript, Python, Java and Go, without concerns for the underlying servers, scaling, runtime software, containerization or deployment.
 
 This development model is analogous to existing function as a service offerings such as AWS Lambda, Azure Functions, Google Cloud Functions and more, without programming to the proprietary interfaces of those platforms. Nitric Functions are built and deployed as Containers, with the [Nitric Membrane](./nitric-membrane) handling i/o standardization to ensure portability across cloud providers or container runtimes.
 
@@ -41,14 +41,6 @@ The Nitric SDKs provide methods that accept a function and then run that functio
 	{
 		label: "Go",
 		value: "go"
-	},
-	{
-		label: "C#",
-		value: "c-sharp"
-	},
-	{
-		label: "PHP",
-		value: "php"
 	}
 	]}
 	defaultLang="node"
@@ -147,50 +139,6 @@ func NitricFunction(request *faas.NitricTrigger) (*faas.NitricResponse, error) {
 
 func main() {
 	faas.Start(NitricFunction)
-}
-```
-
-</CodeExample>
-
-<CodeExample lang="php">
-
-```php
-<?php
-
-namespace App\Function;
-
-use Nitric\V1\Faas\Faas;
-
-
-$handler = function(Request $request): Response
-{
-	return "Nitric PHP 8 Template - Success";
-}
-
-Faas::start($handler);
-```
-
-</CodeExample>
-
-<CodeExample lang={"csharp"}>
-
-```csharp
-import Nitric.Faas;
-import Nitric.Event;
-
-class MyFirstFunction : INitricFunction
-{
-	public Response Handle(Trigger request)
-	{
-		return request.DefaultResponse(
-				Encoding.UTF8.GetBytes("Smoke Test")
-		);
-	}
-
-	public static void Main(string[] args) {
-		Faas().Start(new MyFirstFunction());
-	}
-
 }
 ```
 
