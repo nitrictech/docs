@@ -5,32 +5,36 @@ Before diving into projects lets first define some common terminology.
 ## Core Terminology
 
 ### Stack
+
 A Stack is a collection of resources defined using a `nitric.yaml`. Stacks typically define some code functions and cloud resources. Some stacks are infrastructure only, deploying shared resources and act as a dependency to other stacks. A REST API would typically be defined in a Stack.
 
 ### Service
-A Service is a cohesive set of functionality provided within the bounded-context of a *Stack*. A service may be implemented by one or more *Functions* / *Containers*, with their closely related cloud resources, such as buckets, queues, etc. An example Service would be a REST API or a Microservice in a larger enterprise architecture.
+
+A Service is a cohesive set of functionality provided within the bounded-context of a _Stack_. A service may be implemented by one or more _Functions_ / _Containers_, with their closely related cloud resources, such as buckets, queues, etc. An example Service would be a REST API or a Microservice in a larger enterprise architecture.
 
 ### Function
-A Function a deployable unit of code to handle a single purpose.  Functions are analogous to an AWS Lambda functions or GCP Cloud Functions and provide the code building blocks for creating larger *Services* and *Applications*.
+
+A Function a deployable unit of code to handle a single purpose. Functions are analogous to an AWS Lambda functions or GCP Cloud Functions and provide the code building blocks for creating larger _Services_ and _Applications_.
 
 Nitric Functions are packaged an deployed as separate OCI containers.
 
 An example Function could be a Get Customer Record method in a Customer REST API.
 
 ### Container
+
 A Container in Nitric is a deployable OCI container or Docker image. Containers are used to package and deploy Nitric Functions, but they can also be used to deploy full stack applications or microservices using frameworks like ExpressJS or SpringBoot.
 
 ### Application
-An Application is one or more Stacks which together provide all required functionality for a solution.
 
+An Application is one or more Stacks which together provide all required functionality for a solution.
 
 ## Project Types
 
 With Nitric there 3 primary types of projects:
 
-* Single Stack projects, which contains a single Stack definition
-* Resource Project, which contains a single Stack but no Functions
-* Multi Stack projects, which contain multiple Stack definitions
+- Single Stack projects, which contains a single Stack definition
+- Resource Project, which contains a single Stack but no Functions
+- Multi Stack projects, which contain multiple Stack definitions
 
 ### Single Stack
 
@@ -140,7 +144,7 @@ A Single Stack example is provided below:
 ```
 
 </CodeExample>
-</CodeExamples> 
+</CodeExamples>
 
 ### Resource Project
 
@@ -202,8 +206,8 @@ A Multi Stack example is provided below:
 |     +--api.yaml
 |     +--nitric.yaml
 |     +--package.json
-|       
-+--package.json 
+|
++--package.json
 ```
 
 </CodeExample>
@@ -278,7 +282,7 @@ A Multi Stack example is provided below:
 |     |
 |     +--api.yaml
 |     +--nitric.yaml
-|       
+|
 +--pom.xml
 ```
 
@@ -290,7 +294,7 @@ A Multi Stack example is provided below:
 |  +--*.go
 |
 +--services/
-|  +--customer/ 
+|  +--customer/
 |  |  +--functions/
 |  |  |  +--create/
 |  |  |  |  +--main.go
@@ -305,7 +309,7 @@ A Multi Stack example is provided below:
 |  |  +--nitric.yaml
 |  |  +--go.mod
 |  |
-|  +--order/ 
+|  +--order/
 |     +--functions/
 |     |  +--open/
 |     |  |  +--main.go
@@ -324,8 +328,7 @@ A Multi Stack example is provided below:
 ```
 
 </CodeExample>
-</CodeExamples> 
-
+</CodeExamples>
 
 # Project Solutions
 
@@ -337,9 +340,9 @@ Small solutions are generally developed by a single team. Examples of small solu
 
 For these types of projects a Single Stack is a good choice as it:
 
-* supports a cohesive set of functionality which is deployed together
-* enables easy code sharing across project functions
-* provides good team productivity, its easy to manage and easy to get started with
+- supports a cohesive set of functionality which is deployed together
+- enables easy code sharing across project functions
+- provides good team productivity, its easy to manage and easy to get started with
 
 #### Project Example
 
@@ -457,8 +460,7 @@ A Small Solution project example simply uses a Single Stack project repository.
 ```
 
 </CodeExample>
-</CodeExamples> 
-
+</CodeExamples>
 
 ## Large Solutions
 
@@ -466,8 +468,8 @@ Large Solutions are typically composed of multiple services, with multiple devel
 
 There are two recommended approaches for tackling these larger solutions.
 
-* **Multi-Repo**
-* **Mono Repo** 
+- **Multi-Repo**
+- **Mono Repo**
 
 ### Multi-Repo
 
@@ -475,9 +477,9 @@ The Multi-Repo strategy uses a separate project repository for each Service with
 
 The Multi-Repo strategy is a good choice for:
 
-* decoupled services
-* multiple development teams
-* supporting different service development programming languages
+- decoupled services
+- multiple development teams
+- supporting different service development programming languages
 
 With the Multi-Repo strategy code sharing within a service is important. However, sharing code across services is intentionally eliminated to reduce coupling.
 
@@ -485,15 +487,16 @@ When common utility libraries need to be shared across services, this should be 
 
 Also note both Simple Solutions and Large Multi-Repos Solution use Single Stack projects, making it is easy for developers to migrate between these projects.
 
-While Multi-Repo provides a highly scalable strategy for building large solutions, it does require additional effort to managing development and deployment of services across teams. 
+While Multi-Repo provides a highly scalable strategy for building large solutions, it does require additional effort to managing development and deployment of services across teams.
 
 #### Multi-Repo Example
 
 Examples of a Multi-Repo strategy is provided below with separate repositories for:
-* Customer Service
-* Order Service
-* Shared Library
-* Website Resources
+
+- Customer Service
+- Order Service
+- Shared Library
+- Website Resources
 
 ##### Customer Service
 
@@ -603,7 +606,7 @@ A Customer Service developed in a Single Stack project repository.
 ```
 
 </CodeExample>
-</CodeExamples> 
+</CodeExamples>
 
 ##### Order Service
 
@@ -713,7 +716,7 @@ An Order Service is developed is a separate Single Stack project repository.
 ```
 
 </CodeExample>
-</CodeExamples> 
+</CodeExamples>
 
 ##### Shared Library
 
@@ -775,7 +778,7 @@ Utility libraries shared across services are developed in separate repositories 
 ```
 
 </CodeExample>
-</CodeExamples> 
+</CodeExamples>
 
 ##### Website Resources
 
@@ -793,22 +796,22 @@ The Mono-Repo strategy uses a single source code repository for all Services. Wh
 
 The Mono-Repo strategy is a good choice for:
 
-* larger applications composed of many services
-* services may have some coupling, and which should be deployed together
-* teams collaborating closely together to maximise productivity 
+- larger applications composed of many services
+- services may have some coupling, and which should be deployed together
+- teams collaborating closely together to maximise productivity
 
-Mono-Repo projects can be managed as rigorously as Multi-Repo projects, but they also provide the option to dial back some of separation. 
+Mono-Repo projects can be managed as rigorously as Multi-Repo projects, but they also provide the option to dial back some of separation.
 
 If your solution should be version together, then a Mono-Repo is probably a good fit.
 
 #### Project Example
 
-A Mono-Repo example of a is provided below using a Multi-Stack project.  This project includes:
+A Mono-Repo example of a is provided below using a Multi-Stack project. This project includes:
 
-* Customer Service with its own Stack
-* Order Service with its own Stack
-* Shared Library for common code
-* Website Resources
+- Customer Service with its own Stack
+- Order Service with its own Stack
+- Shared Library for common code
+- Website Resources
 
 <CodeExamples 
 	languages={[
@@ -858,7 +861,7 @@ A Mono-Repo example of a is provided below using a Multi-Stack project.  This pr
 +--website/
 |
 +--nitric.yml
-+--package.json 
++--package.json
 ```
 
 </CodeExample>
@@ -951,7 +954,7 @@ A Mono-Repo example of a is provided below using a Multi-Stack project.  This pr
 |  +--*.go
 |
 +--services/
-|  +--customer/ 
+|  +--customer/
 |  |  +--functions/
 |  |  |  +--create/
 |  |  |  |  +--main.go
@@ -966,7 +969,7 @@ A Mono-Repo example of a is provided below using a Multi-Stack project.  This pr
 |  |  +--nitric.yaml
 |  |  +--go.mod
 |  |
-|  +--order/ 
+|  +--order/
 |     +--functions/
 |     |  +--open/
 |     |  |  +--main.go
@@ -988,4 +991,4 @@ A Mono-Repo example of a is provided below using a Multi-Stack project.  This pr
 ```
 
 </CodeExample>
-</CodeExamples> 
+</CodeExamples>
