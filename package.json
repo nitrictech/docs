@@ -2,7 +2,7 @@
   "scripts": {
     "test": "yarn test:config && yarn test:mdx",
     "test:config": "ajv validate -s test/schema.json -d doc.config.json",
-    "test:samples-config": "ajv validate -s test/samples-schema.json -d samples.config.json",
+    "test:samples-config": "ajv validate -s test/samples-schema.json -d samples.json",
     "test:mdx": "node test/test",
     "format:check": "prettier --check docs",
     "format:fix": "prettier --write docs"
