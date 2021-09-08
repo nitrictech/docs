@@ -1,0 +1,60 @@
+Nitric Services are a portable compute offering that allows you to write code in a variety of popular languages and frameworks without needing to worry about servers, scaling, integrating with event/topic services, or managing the underlying runtime software.
+
+Nitric automatically builds Services into Containers and can run them locally for development or deploy them to leading Container-as-a-Service offerings such as AWS Lambda, Google Cloud Run and DigitalOcean App Platform.
+
+## How it works
+
+1. Create a new service using the Nitric CLI based on a [Template](./services-templates)
+2. Write your service, which handles requests and returns responses
+3. Run your application locally, Nitric will package each of your services into a container and wire them together, so they can access resources such as topics, queues, storage, etc.
+4. Use the build and deploy commands to build your services for a provider and deploy to that provider for testing, staging or production release.
+
+## Create Services
+
+Services are defined in a project's `nitric.yaml` file, then code and other files are stored in a subdirectory of the project. The easiest way to generate a new service is with the `make:service` CLI command. This command will guide you through choosing the template and name for your service, then scaffold it and update the `nitric.yaml` file.
+
+```bash
+nitric make:service
+```
+
+## Service Anatomy
+
+Nitric Services are packaged into Docker containers, along with the [Nitric Membrane](./nitric-membrane). This insulates your services from cloud and infrastructure concerns.
+
+<img
+  src="../assets/img/membrane-architecture.svg"
+  height="500"
+  alt="Service Anatomy"
+/>
+
+## Running Services
+
+The Nitric CLI provides the [`run` command](./nitric-cli) specifically for running applications on a local machine. This command builds your application into containers, sets up a simulated provider environment and executes the application.
+
+From the root of your project run the following command:
+
+```bash
+nitric run
+```
+
+## Triggering Services
+
+Services can run in response to various triggers including HTTP Requests, [Events](./events) and [Schedules](./schedules).
+
+### HTTP Requests
+
+Services will receive HTTP requests when run locally, without additional configuration, which is useful for general development and testing. Using the `nitric run` CLI command will run each service on a unique port. Use any HTTP client such as cURL, Postman or a Web Browser to make requests to the service via its port.
+
+For security, Services in an application that has been deployed to a cloud provider won't be accessible by default. Instead, they need to be exposed via an [API Gateway](./api-gateways) and/or [Entrypoint](./entrypoints), if you'd like your service to accept HTTP Requests review the documentation for those components.
+
+### Events
+
+Another method for triggering services is via [Events](./events), which are asynchronous messages from a `Topic`. To see how to trigger a service from an Event, see the [Subscribing to Events](./events#subscribing-to-events) section of the Events documentation.
+
+### Schedules
+
+Services can also be run on a schedule for batch and queue processing. See the [Schedules](./schedules) documentation for information on how to set up a schedule and use it to trigger a service.
+
+## Serverless Functions
+
+Nitric provides a collection of Function-as-a-Service templates, which are a particular type of Service. See the [Functions](./services-functions) documentation for more information on how to create and write serverless functions.

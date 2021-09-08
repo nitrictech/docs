@@ -1,0 +1,11 @@
+When you're ready to deploy your application to DigitalOcean, you can use the DigitalOcean CLI Plugin to automate the deployment process. Use the `deploy` command from the root of your project to start an interactive deployment process:
+
+```bash
+nitric deploy:do
+```
+
+To update an existing deployment, simply re-run the command.
+
+> ⚠️ **Warning:** A DigitalOcean "App" will be deployed for _each_ entrypoint in your Nitric application.
+
+Due to lack of component sharing between DigitalOcean App Platform Apps, duplicate containers will be created for each Nitric Service shared between entrypoints. As a result, you will be charged for each instance of the container, one for each entrypoint targeting that container. We recommend limiting the number of entrypoints in your application or having each entrypoint target a unique set of services.

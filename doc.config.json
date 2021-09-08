@@ -6,38 +6,156 @@
         "docs": [
           {
             "title": "Getting Started",
+            "path": "/docs/getting-started/_index.mdx",
             "routes": [
               {
-                "path": "/docs/overview.mdx"
+                "title": "Multi Cloud",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/getting-started/multi-cloud/_index.mdx"
+                  },
+                  {
+                    "title": "Create a New Stack",
+                    "path": "/docs/getting-started/multi-cloud/create-stack.mdx"
+                  },
+                  {
+                    "title": "Review the New Stack",
+                    "path": "/docs/getting-started/multi-cloud/review-stack.mdx"
+                  },
+                  {
+                    "title": "Develop Locally",
+                    "path": "/docs/getting-started/multi-cloud/develop.mdx"
+                  },
+                  {
+                    "title": "Deploy the Stack",
+                    "path": "/docs/getting-started/multi-cloud/deploy.mdx"
+                  },
+                  {
+                    "title": "Modify the Service",
+                    "path": "/docs/getting-started/multi-cloud/modify.mdx"
+                  },
+                  {
+                    "title": "Deploy the Changes",
+                    "path": "/docs/getting-started/multi-cloud/deploy-changes.mdx"
+                  },
+                  {
+                    "title": "Undeploy the Stack",
+                    "path": "/docs/getting-started/multi-cloud/undeploy.mdx"
+                  },
+                  {
+                    "title": "Next Steps",
+                    "path": "/docs/getting-started/multi-cloud/next-steps.mdx"
+                  }
+                ]
               },
+
               {
-                "path": "/docs/installation.mdx"
-              },
-              {
-                "path": "/docs/quick-start.mdx"
+                "path": "/docs/getting-started/installation.mdx"
               }
             ]
           },
           {
-            "title": "Basics",
+            "title": "Intro",
             "routes": [
               {
-                "title": "CLI",
-                "path": "/docs/nitric-cli.mdx"
+                "title": "Concepts",
+                "routes": [
+                  {
+                    "path": "/docs/intro/concepts/stacks.mdx"
+                  },
+                  {
+                    "path": "/docs/intro/concepts/projects.mdx"
+                  },
+                  {
+                    "path": "/docs/intro/concepts/services.mdx"
+                  },
+                  {
+                    "path": "/docs/intro/concepts/functions.mdx"
+                  },
+                  {
+                    "title": "Unified APIs",
+                    "path": "/docs/intro/concepts/nitric-apis.mdx"
+                  },
+                  {
+                    "title": "Nitric Architecture",
+                    "path": "/docs/intro/concepts/how-nitric-works.mdx"
+                  }
+                ]
               },
               {
-                "path": "/docs/projects.mdx"
+                "title": "Cloud Providers",
+                "routes": [
+                  {
+                    "title": "AWS",
+                    "path": "/docs/intro/cloud-providers/aws.mdx"
+                  },
+                  {
+                    "title": "Google Cloud",
+                    "path": "/docs/intro/cloud-providers/gcp.mdx"
+                  },
+                  {
+                    "title": "Azure",
+                    "path": "/docs/intro/cloud-providers/azure.mdx"
+                  },
+                  {
+                    "title": "DigitalOcean",
+                    "path": "/docs/intro/cloud-providers/digital-ocean.mdx"
+                  }
+                ]
               },
               {
-                "title": "Unified APIs",
-                "path": "/docs/nitric-apis.mdx"
+                "title": "Languages",
+                "routes": [
+                  {
+                    "title": "Node.js",
+                    "path": "/docs/intro/languages/node.mdx"
+                  },
+                  {
+                    "title": "Python",
+                    "path": "/docs/intro/languages/python.mdx"
+                  },
+                  {
+                    "title": "Go",
+                    "path": "/docs/intro/languages/go.mdx"
+                  },
+                  {
+                    "title": "Java",
+                    "path": "/docs/intro/languages/java.mdx"
+                  },
+                  {
+                    "title": "Other",
+                    "path": "/docs/intro/languages/other.mdx"
+                  }
+                ]
               },
               {
-                "path": "/docs/nitric-membrane.mdx"
-              },
+                "title": "Nitric vs. Others",
+                "routes": [
+                  {
+                    "title": "Terraform",
+                    "path": "/docs/intro/vs/terraform.mdx"
+                  },
+                  {
+                    "title": "Serverless",
+                    "path": "/docs/intro/vs/serverless.mdx"
+                  },
+                  {
+                    "title": "Custom Solutions",
+                    "path": "/docs/intro/vs/custom.mdx"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "title": "Guides",
+            "routes": [
               {
-                "title": "SDKs",
-                "path": "/docs/sdks.mdx"
+                "title": "Overview",
+                "path": "/docs/guides/_index.mdx"
               }
             ]
           },
@@ -45,80 +163,13 @@
             "title": "Services",
             "routes": [
               {
-                "title": "Compute",
-                "routes": [
-                  {
-                    "path": "/docs/services.mdx"
-                  },
-                  {
-                    "title": "Functions",
-                    "path": "/docs/services-functions.mdx"
-                  },
-                  {
-                    "title": "Templates",
-                    "path": "/docs/services-templates.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "API Gateways",
-                "path": "/docs/api-gateways.mdx"
-              },
-              {
-                "title": "Entrypoints",
-                "path": "/docs/entrypoints.mdx"
-              },
-              {
-                "path": "/docs/documents.mdx"
-              },
-              {
-                "path": "/docs/events.mdx"
-              },
-              {
-                "path": "/docs/queues.mdx"
-              },
-              {
-                "path": "/docs/schedules.mdx"
-              },
-              {
-                "path": "/docs/secrets.mdx"
-              },
-              {
-                "path": "/docs/storage.mdx"
-              },
-              {
-                "title": "Static Sites",
-                "path": "/docs/sites.mdx"
+                "title": "REST API",
+                "path": "/docs/guides/rest-api.mdx"
               }
             ]
           },
           {
-            "title": "Providers",
-            "routes": [
-              {
-                "title": "AWS",
-                "path": "/docs/provider-aws.mdx"
-              },
-              {
-                "title": "Google Cloud",
-                "path": "/docs/provider-gcp.mdx"
-              },
-              {
-                "title": "Azure",
-                "path": "/docs/provider-azure.mdx"
-              },
-              {
-                "title": "DigitalOcean",
-                "path": "/docs/provider-digitalocean.mdx"
-              },
-              {
-                "title": "Local Run",
-                "path": "/docs/provider-local.mdx"
-              }
-            ]
-          },
-          {
-            "title": "Tutorials",
+            "title": "Frontend Tutorials",
             "routes": [
               {
                 "title": "Quickstart: Next.js",
@@ -135,13 +186,40 @@
             ]
           }
         ],
-        "guides": [
+        "reference": [
           {
-            "title": "Guides",
+            "title": "Reference",
+            "path": "/docs/reference/_index.mdx",
             "routes": [
               {
-                "title": "Overview",
-                "path": "/docs/guides.mdx"
+                "title": "Nitric CLI",
+
+                "routes": [
+                  {
+                    "title": "About",
+                    "path": "/docs/reference/cli/_index.mdx"
+                  },
+                  {
+                    "title": "Quickstart",
+                    "path": "/docs/reference/cli/quick-start.mdx"
+                  },
+                  {
+                    "title": "Local Development",
+                    "path": "/docs/reference/cli/local.mdx"
+                  }
+                ]
+              },
+              {
+                "title": "Nitric SDK",
+                "path": "/docs/reference/sdks.mdx"
+              },
+              {
+                "title": "Project Configuration",
+                "path": "/docs/reference/project.mdx"
+              },
+              {
+                "title": "API Configuration",
+                "path": "/docs/reference/api.mdx"
               }
             ]
           },
@@ -149,8 +227,46 @@
             "title": "Services",
             "routes": [
               {
-                "title": "REST API",
-                "path": "/docs/guides/rest-api.mdx"
+                "title": "API Gateways",
+                "path": "/docs/reference/services/api-gateways.mdx"
+              },
+              {
+                "title": "Entrypoints",
+                "path": "/docs/reference/services/entrypoints.mdx"
+              },
+              {
+                "path": "/docs/reference/services/documents.mdx"
+              },
+              {
+                "path": "/docs/reference/services/events.mdx"
+              },
+              {
+                "path": "/docs/reference/services/queues.mdx"
+              },
+              {
+                "path": "/docs/reference/services/schedules.mdx"
+              },
+              {
+                "path": "/docs/reference/services/secrets.mdx"
+              },
+              {
+                "path": "/docs/reference/services/storage.mdx"
+              },
+              {
+                "title": "Static Sites",
+                "path": "/docs/reference/services/sites.mdx"
+              }
+            ]
+          }
+        ],
+        "support": [
+          {
+            "title": "Support",
+            "path": "/docs/support/_index.mdx",
+            "routes": [
+              {
+                "title": "Creating bug reports",
+                "path": "/docs/support/creating-bug-reports.mdx"
               }
             ]
           }
