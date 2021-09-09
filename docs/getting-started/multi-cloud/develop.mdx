@@ -1,6 +1,6 @@
-Nitric provides a local development experience that helps to emulate cloud environments, including running [Services](https://nitric.io/docs/services)/[Functions](https://nitric.io/docs/services-functions) as Containers with Docker and providing simulated or locally executable equivalents for most cloud services, such as [Events & Topics](https://nitric.io/docs/events), [Queues](https://nitric.io/docs/queues), [Storage](https://nitric.io/docs/storage), [KeyValue Stores](https://nitric.io/docs/key-value), [Entrypoints](https://nitric.io/docs/entrypoints) and [API Gateways](https://nitric.io/docs/api-gateways).
+Nitric provides a local development experience that helps to emulate cloud environments, including running [Services](/docs/intro/concepts/services)/[Functions](/docs/intro/concepts/functions) as Containers with Docker and providing simulated or locally executable equivalents for most cloud services, such as [Events & Topics](/docs/reference/services/events), [Queues](/docs/reference/services/queues), [Storage](/docs/reference/services/storage), [KeyValue Stores](/docs/reference/services/key-value), [Entrypoints](/docs/reference/services/entrypoints) and [API Gateways](/docs/reference/services/api-gateways).
 
-The local run functionality is included in the base [Nitric CLI](https://nitric.io/docs/nitric-cli), no additional setup steps or plugins are required beyond those in the [Installation Guide](https://nitric.io/docs/installation).
+The local run functionality is included in the base [Nitric CLI](/docs/reference/cli), no additional setup steps or plugins are required beyond those in the [Installation Guide](/docs/getting-started/installation).
 
 ## Checking Prerequisites
 
@@ -12,7 +12,7 @@ nitric doctor
 
 ## Run the stack!
 
-Let's start developing 🚀 use the `run` command to begin:
+Let's start developing, use the `run` command to begin:
 
 ```bash
 nitric run
@@ -31,7 +31,7 @@ nitric run
  read     54004
  Api     Port
  ─────── ─────
- example 49152
+ examples 49152
 Running, press 'Q' to clean up and exit... /
 ```
 
@@ -64,3 +64,5 @@ List all examples:
 ```bash
 curl http://localhost:49152/examples
 ```
+
+Next, you’ll deploy your stack to the cloud provider of your choice.

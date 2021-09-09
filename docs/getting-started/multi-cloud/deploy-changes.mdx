@@ -1,7 +1,385 @@
-When you're ready to deploy your application to AWS, you can use the AWS CLI Plugin to automate the deployment process. Use the `deploy` command from the root of your project to start an interactive deployment process, with prompts for Account ID & Region:
+---
+title: Modify & Deploy Changes
+---
+
+Now that your Stack has been deployed. Let's add the ability to remove example documents from our database via a new delete function.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	},
+	]}
+	defaultLang="node"
+>
+
+<CodeExample lang="node">
+
+## Add a new function
+
+First, from within your `functions` directory, create a new `delete.ts` file
+that contains your function code:
+
+```typescript
+import { faas, documents } from '@nitric/sdk';
+import { Example, path } from '../common';
+
+// Start your function here
+faas.start(
+  async (
+    request: faas.NitricTrigger<void>
+  ): Promise<faas.Response<Example | string>> => {
+    const ctx = request.context.asHttp();
+    const response: faas.Response<Example | string> = request.defaultResponse();
+
+    // get params from path
+    const { id } = path.test(ctx.path);
+
+    if (!id) {
+      response.data = 'Invalid Request';
+      response.context.asHttp().status = 400;
+    }
+
+    try {
+      console.log('removing doc id', id);
+      await documents().collection<Example>('example').doc(id).delete();
+      response.data = `Removed example with ID: ${id}`;
+    } catch (e) {
+      response.context.asHttp().status = 404;
+      response.data = `Example not found!: ${e.message}`;
+    }
+
+    return response;
+  }
+);
+```
+
+Now to add our new `delete` function to our Stack definition and API.
+
+## Add function handler to Stack
+
+First, you will modify your `nitric.yaml` file to add our `delete `function handler:
+
+```yaml
+name: nitric-tutorial
+# Nitric functions
+functions:
+  create:
+    handler: functions/create.ts
+  read:
+    handler: functions/read.ts
+  list:
+    handler: functions/list.ts
+  # new delete function here
+  delete:
+    handler: functions/delete.ts
+# Nitric collections
+collections:
+  examples: {}
+# Nitric APIs
+apis:
+  examples: api.yaml
+```
+
+</CodeExample>
+
+<CodeExample lang="python">
+
+## Add a new function
+
+First, from within your `functions` directory, create a new `delete.py` file
+that contains your function code:
+
+```python
+from nitric.api.exception import NotFoundException, NitricServiceException
+from nitric.faas import start, Trigger, Response
+from nitric.api import Documents
+
+
+async def handler(trigger: Trigger) -> Response:
+    ctx = trigger.context.as_http()
+    response = trigger.default_response()
+
+    # get id param from HTTP request path
+    try:
+        doc_id = ctx.path.split("/")[-1]
+    except IndexError:
+        response.data = "Invalid request"
+        response.context.as_http().status = 400
+        return response
+
+    try:
+        await Documents().collection("example").doc(doc_id).delete()
+        response.data = "Removed example " + doc_id
+    except NotFoundException:
+        response.context.as_http().status = 404
+        response.data = "Example not found"
+    except NitricServiceException:
+        response.context.as_http().status = 500
+        response.data = "An unexpected error occurred"
+
+    return response
+
+if __name__ == "__main__":
+    start(handler)
+```
+
+Now to add our new `delete` function to our Stack definition and API.
+
+## Add function handler to Stack
+
+First, you will modify your `nitric.yaml` file to add our `delete `function handler:
+
+```yaml
+name: nitric-tutorial-py
+# Nitric functions
+functions:
+  create:
+    handler: functions/create.py
+  read:
+    handler: functions/read.py
+  list:
+    handler: functions/list.py
+  # new delete function here
+  delete:
+    handler: functions/delete.py
+# Nitric collections
+collections:
+  examples: {}
+# Nitric APIs
+apis:
+  examples: api.yaml
+```
+
+</CodeExample>
+
+<CodeExample lang="java">
+
+TODO
+
+</CodeExample>
+
+<CodeExample lang="go">
+
+## Add a new function
+
+First, from within your `functions` directory, create a new `delete` directory. Then create a `main.go` file that contains your function code:
+
+```go
+package main
+
+import (
+	"fmt"
+	"path"
+
+	"github.com/nitrictech/go-sdk/api/documents"
+	"github.com/nitrictech/go-sdk/faas"
+)
+
+// NitricFunction - Handles individual function requests (http, events, etc.)
+func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
+	resp := trigger.DefaultResponse()
+
+	id := path.Base(trigger.GetContext().AsHttp().Path)
+
+	dc, err := documents.New()
+	if err != nil {
+		return nil, err
+	}
+
+	err = dc.Collection("example").Doc(id).Delete()
+	if err != nil {
+		resp.SetData([]byte("Error retrieving document"))
+		resp.GetContext().AsHttp().Status = 404
+		return resp, nil
+	}
+
+	resp.SetData([]byte("Removed example " + id))
+	resp.GetContext().AsHttp().Headers["Content-Type"] = "application/json"
+
+	return resp, nil
+}
+
+func main() {
+	if err := faas.Start(NitricFunction); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+Now to add our new `delete` function to our Stack definition and API.
+
+## Add function handler to Stack
+
+First, you will modify your `nitric.yaml` file to add our `delete `function handler:
+
+```yaml
+name: nitric-tutorial-go
+# Functions
+functions:
+  create:
+    handler: functions/create/main.go
+  read:
+    handler: functions/read/main.go
+  list:
+    handler: functions/list/main.go
+  # new delete function here
+  delete:
+    handler: functions/delete/main.go
+# Collections
+collections:
+  examples: {}
+# APIs
+apis:
+  examples: api.yaml
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+## Add operation to API
+
+Now we can update the `api.yaml` file with a new `delete` operator:
+
+```yaml
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Example API
+  description: Example API
+paths:
+  /examples:
+    get:
+      operationId: examples-list
+      x-nitric-target:
+        name: list
+        type: function
+      description: Retrieve all examples
+      responses:
+        '200':
+          description: Successful response
+    post:
+      operationId: examples-create
+      x-nitric-target:
+        name: create
+        type: function
+      description: Creates and persists new examples
+      responses:
+        '200':
+          description: Successful response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamplesCreate'
+  /examples/{exampleId}:
+    get:
+      operationId: examples-read
+      parameters:
+        - in: path
+          name: exampleId
+          schema:
+            type: string
+          required: true
+      x-nitric-target:
+        name: read
+        type: function
+      description: Retrieve an existing example by its ID
+      responses:
+        '200':
+          description: Successful response
+    # new delete operation here
+    delete:
+      operationId: examples-delete
+      parameters:
+        - in: path
+          name: exampleId
+          schema:
+            type: string
+          required: true
+      x-nitric-target:
+        name: delete
+        type: function
+      description: Remove an existing example by its ID
+      responses:
+        '200':
+          description: Successful response
+components:
+  schemas:
+    ExamplesCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+```
+
+## Deploy Changes
+
+Let's see those new changes up on the cloud! Simply re-run the `deploy` command for your chosen cloud provider:
+
+<CodeExamples 
+	languages={[
+	{
+		icon: <img src="/img/logos/aws.png" noMargin priority width={70} height={50} />,
+		value: "aws",
+	}, {
+		icon: <img src="/img/logos/gcp.svg" noMargin priority width={100} height={70} />,
+		value: "gcp"
+	}, {
+		icon: <img src="/img/logos/azure.png" noMargin priority width={100} height={70} />,
+		value: "azure"
+	}, {
+		icon: <img src="/img/logos/digital-ocean.png" noMargin priority width={100} height={70} />,
+		value: "do"
+	}
+	]}
+	defaultLang="aws"
+>
+<CodeExample lang={"aws"}>
 
 ```bash
 nitric deploy:aws
 ```
 
-To update an existing deployment, simply re-run the command.
+</CodeExample>
+<CodeExample lang={"gcp"}>
+
+```bash
+nitric deploy:gcp
+```
+
+</CodeExample>
+<CodeExample lang={"azure"}>
+
+<Box pt={4}>
+
+> 🚧 Support for Microsoft Azure is currently in development and will be available soon.
+
+</Box>
+
+</CodeExample>
+<CodeExample lang={"do"}>
+
+```bash
+nitric deploy:do
+```
+
+</CodeExample>
+</CodeExamples>
