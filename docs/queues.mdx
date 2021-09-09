@@ -75,8 +75,27 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 
 Using one of the provided Nitric SDKs for your language is the easiest way to work with queues. First, start by importing the QueueClient.
 
-<CodeExamples>
-
+<CodeExamples
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
 <CodeSnippet snippet="nitrictech/node-sdk/examples/queues/send.ts" />
 
 <CodeSnippet snippet="nitrictech/python-sdk/examples/queues/send.py" />
@@ -84,10 +103,6 @@ Using one of the provided Nitric SDKs for your language is the easiest way to wo
 <CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/queues/Send.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/queues/send.go" />
-
-<CodeSnippet snippet="nitrictech/php-sdk/examples/queues/Send.php" />
-
-<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/queues/Send.cs" />
 
 </CodeExamples>
 
@@ -112,14 +127,6 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 	{
 		label: "Go",
 		value: "go"
-	},
-	{
-		label: "PHP",
-		value: "php"
-	},
-	{
-		label: "C#",
-		value: "c-sharp"
 	}
 	]}
 	defaultLang="node"
@@ -132,9 +139,5 @@ To process tasks from a queue use a `QueueClient` to `receive` tasks. Since the 
 <CodeSnippet snippet="nitrictech/java-sdk/src/test/java/examples/queues/Receive.java" />
 
 <CodeSnippet snippet="nitrictech/go-sdk/examples/queues/receive.go" />
-
-<CodeSnippet snippet="nitrictech/php-sdk/examples/queues/Receive.php" />
-
-<CodeSnippet snippet="nitrictech/dotnet-sdk/Nitric.Test/examples/queues/Receive.cs" />
 
 </CodeExamples>
