@@ -1,4 +1,4 @@
-The Nitric framework enables building a wide range of multi-cloud solutions. This topic discusses how to organize your projects with Nitric to support a common cloud architectures and development practices.
+The Nitric framework enables building a wide range of multi-cloud solutions. This topic discusses how to organize your projects with Nitric to support common cloud architectures and development practices.
 
 Before diving into projects lets first define some common terminology.
 
@@ -14,9 +14,9 @@ A Service is a cohesive set of functionality provided within the bounded-context
 
 ### Function
 
-A Function a deployable unit of code to handle a single purpose. Functions are analogous to an AWS Lambda functions or GCP Cloud Functions and provide the code building blocks for creating larger _Services_ and _Applications_.
+A Function is a deployable unit of code to handle a single purpose. Functions are analogous to AWS Lambda functions or GCP Cloud Functions and provide the code building blocks for creating larger _Services_ and _Applications_.
 
-Nitric Functions are packaged an deployed as separate OCI containers.
+Nitric Functions are packaged and deployed as separate OCI containers.
 
 An example Function could be a Get Customer Record method in a Customer REST API.
 
@@ -32,8 +32,8 @@ An Application is one or more Stacks which together provide all required functio
 
 With Nitric there 3 primary types of projects:
 
-- Single Stack projects, which contains a single Stack definition
-- Resource Project, which contains a single Stack but no Functions
+- Single Stack projects, which contain a single Stack definition
+- Resource Project, which contain a single Stack but no Functions
 - Multi Stack projects, which contain multiple Stack definitions
 
 ### Single Stack
@@ -183,11 +183,14 @@ A Multi Stack example is provided below:
 <CodeExample lang={"node"}>
 
 ```bash
-+--common/
++--lib/
 |  +--*.ts
 |
 +--services/
 |  +--customer/
+|  |  +--common/
+|  |  |  +--*.ts
+|  |  |
 |  |  +--functions/
 |  |  |  +--create.ts
 |  |  |  +--list.ts
@@ -198,6 +201,9 @@ A Multi Stack example is provided below:
 |  |  +--package.json
 |  |
 |  +--order/
+|     +--common/
+|     |  +--*.ts
+|     |
 |     +--functions/
 |     |  +--open.ts
 |     |  +--search.ts
@@ -214,12 +220,16 @@ A Multi Stack example is provided below:
 <CodeExample lang={"python"}>
 
 ```bash
-+--commmon/
++--lib/
 |  +--__init__.py
 |  +--*.py
 |
 +--services/
 |  +--customer/
+|  |  +--common/
+|  |  |  +--__init__.py
+|  |  |  +--*.py
+|  |  |
 |  |  +--functions/
 |  |  |  +--__init__.py
 |  |  |  +--create.py
@@ -229,6 +239,10 @@ A Multi Stack example is provided below:
 |  |  +--nitric.yaml
 |  |
 |  +--order/
+|     +--common/
+|     |  +--__init__.py
+|     |  +--*.py
+|     |
 |     +--functions/
 |     |  +--__init__.py
 |     |  +--open.py
@@ -244,12 +258,16 @@ A Multi Stack example is provided below:
 <CodeExample lang={"java"}>
 
 ```bash
-+--commmon/
++--lib/
 |  +--src/
 |  +--pom.xml
 |
 +--services/
 |  +--customer/
+|  |  +--commmon/
+|  |  |  +--src/
+|  |  |  +--pom.xml
+|  |  |
 |  |  +--functions/
 |  |  |  +--create/
 |  |  |  |  +--src/
@@ -267,6 +285,10 @@ A Multi Stack example is provided below:
 |  |  +--nitric.yaml
 |  |
 |  +--order/
+|     +--commmon/
+|     |  +--src/
+|     |  +--pom.xml
+|     |
 |     +--functions/
 |     |  +--open/
 |     |  |  +--src/
@@ -290,11 +312,14 @@ A Multi Stack example is provided below:
 <CodeExample lang={"go"}>
 
 ```bash
-+--commmon/
++--lib/
 |  +--*.go
 |
 +--services/
 |  +--customer/
+|  |  +--commmon/
+|  |  |   +--*.go
+|  |  |
 |  |  +--functions/
 |  |  |  +--create/
 |  |  |  |  +--main.go
@@ -310,6 +335,9 @@ A Multi Stack example is provided below:
 |  |  +--go.mod
 |  |
 |  +--order/
+|     +--commmon/
+|     |   +--*.go
+|     |
 |     +--functions/
 |     |  +--open/
 |     |  |  +--main.go
@@ -483,7 +511,7 @@ The Multi-Repo strategy is a good choice for:
 
 With the Multi-Repo strategy code sharing within a service is important. However, sharing code across services is intentionally eliminated to reduce coupling.
 
-When common utility libraries need to be shared across services, this should be done through traditional public/private package manages such as NPM or Maven. These common libraries should follow rigours semantic version practices to ensure services can be developed and deployed independently.
+When common utility libraries need to be shared across services, this should be done through traditional public/private package managers such as NPM or Maven. These common libraries should follow rigorous semantic version practices to ensure services can be developed and deployed independently.
 
 Also note both Simple Solutions and Large Multi-Repos Solution use Single Stack projects, making it is easy for developers to migrate between these projects.
 
@@ -800,13 +828,13 @@ The Mono-Repo strategy is a good choice for:
 - services may have some coupling, and which should be deployed together
 - teams collaborating closely together to maximise productivity
 
-Mono-Repo projects can be managed as rigorously as Multi-Repo projects, but they also provide the option to dial back some of separation.
+Mono-Repo projects can be managed as rigorously as Multi-Repo projects, but they also provide the option to dial back some of the separation.
 
-If your solution should be version together, then a Mono-Repo is probably a good fit.
+If your solution should be versioned together, then a Mono-Repo is probably a good fit.
 
 #### Project Example
 
-A Mono-Repo example of a is provided below using a Multi-Stack project. This project includes:
+A Mono-Repo example is provided below using a Multi-Stack project. This project includes:
 
 - Customer Service with its own Stack
 - Order Service with its own Stack
