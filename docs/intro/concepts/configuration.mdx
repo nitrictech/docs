@@ -1,0 +1,61 @@
+Nitric allows you to configure your stack or stacks via key-value pairs in the nitirc.yaml file associated with your stack. Below is a breakdown of the different features configurable within this file.
+
+## Functions
+
+Functions are deployable units of code that handle a single purpose, the Nitric stack file requires references (relative to your stack file) for each of your function's code via handlers.
+
+```yaml
+functions:
+  create:
+    handler: functions/create.ts
+  read:
+    handler: functions/read.ts
+  list:
+    handler: functions/list.ts
+```
+
+The function keys can be referenced in APIs and Entrypoints.
+
+## Containers
+
+TODO
+
+## Collections
+
+Document collections can be defined in the stack as follows:
+
+```yaml
+collections:
+  customers: {}
+```
+
+This will create the collections if required during cloud deployment.
+
+## Topics
+
+TODO
+
+## Queues
+
+TODO
+
+## Buckets
+
+TODO
+
+## Schedules
+
+TODO
+
+## Sites
+
+TODO
+
+## APIs
+
+Nitric APIs are defined in a separate file for ease of use. The apis key used used to reference the file:
+
+```yaml
+apis:
+  customers: api.yaml
+```

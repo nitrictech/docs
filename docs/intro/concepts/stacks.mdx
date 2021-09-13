@@ -1,1 +1,22 @@
-TODO
+A Stack is a collection of resources defined using a stack file, named `nitric.yaml` by default. Stacks typically define some code functions and cloud resources. Some stacks are infrastructure only, deploying shared resources and act as a dependency to other stacks. A REST API would typically be defined in a Stack.
+
+## Create a Stack
+
+To create a new stack, use the `nitric make:stack` command. This will guide you through creating a new Stack in the language of your choice. 
+
+Stack names may only contain lowercase letters and dashes only e.g. orders-service.
+
+```bash
+nitric make:stack
+```
+
+Multiple project types are possible with the Nitric, such a single and multi stack projects. To view them, please see the [Project Types](/docs/intro/concepts/projects#project-types) section.
+
+## Deploy a stack
+
+To deploy a stack, run `nitric deploy:<your-provider>` within the stack's directory. View the [deployment section](/docs/getting-started/multi-cloud/deploy) of our Multi-Cloud tutorial to learn more.
+
+## Undeploy a Stack
+
+To remove all resources associated with the stack from the cloud. use the `nitric down:<your-provider>` command within the stack's direction.
+
