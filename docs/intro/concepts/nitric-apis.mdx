@@ -4,35 +4,20 @@ Applications built using Nitric have access to a variety of 'Virtual Cloud Servi
 
 Below is a list of the services currently offered by Nitric, and the underlying product/technology used for each on supported providers:
 
-<<<<<<< HEAD
-| **Nitric Service**                | **AWS**                 | **Google Cloud**           | **Azure**   | **DigitalOcean**   | **Local**                                               |
-| --------------------------------- | ----------------------- | -------------------------- | ----------- | ------------------ | ------------------------------------------------------- |
-| [Compute](./services)             | Lambda                  | CloudRun                   | App Service | App Platform       | Docker                                                  |
-| [Events](./events)                | SNS                     | PubSub                     |             |                    | Custom                                                  |
-| [Queues](./queues)                | SQS                     | PubSub (Pull Subscription) |             |                    | Custom                                                  |
-| [Storage](./storage)              | S3                      | Cloud Storage              |             |                    | Docker Volume Storage                                   |
-| [Documents](./documents)          | DynamoDB                | FireStore                  |             |                    | Scribble                                                |
-| [Schedules](./schedules)          | CloudWatch Event Bridge | Cloud Scheduler            |             |                    | _currently unavailable_                                 |
-| [API Gateway](./api-gateways)     | API Gateway             | API Gateway                |             |                    | [Custom](https://github.com/nitrictech/dev-api-gateway) |
-| [Entrypoints](./entrypoints)      | CloudFront              | Cloud Load Balancers + CDN |             | App Platform       | Nginx                                                   |
-| [Sites (Static Content)](./sites) | S3                      | Cloud Storage              |             |                    | Nginx                                                   |
-| Container Registry                | ECR                     | GCR                        |             | Container Registry | Docker                                                  |
-=======
-| **Nitric Service**                                    | **AWS**                 | **Google Cloud**           | **Azure**    | **DigitalOcean**   | **Local**                                               |
-| ---------------------------------                     | ----------------------- | -------------------------- | -----------  | ------------------ | ------------------------------------------------------- |
-| Compute                                               | Lambda                  | CloudRun                   | App Service  | App Platform       | Docker                                                  |
-| Container Registry                                    | ECR                     | GCR                        |              | Container Registry | Docker                                                  |
-| [API Gateway](../../reference/services/api-gateways)  | API Gateway             | API Gateway                |              |                    | [Custom](https://github.com/nitrictech/dev-api-gateway) |
-| [Documents](../../reference/services/documents)       | DynamoDB                | FireStore                  | Cosmos DB    | MongoDB            | Boltd                                                   |
-| [Emails](../../reference/services/emails)             | SES                     |                            |              |                    | Custom Test                                             |
-| [Entrypoints](../../reference/services/entrypoints)   | CloudFront              | Cloud Load Balancers + CDN |              | App Platform       | Nginx                                                   |
-| [Events](../../reference/services/events)             | SNS                     | PubSub                     |              |                    | Custom Test                                             |
-| [Queues](../../reference/services/queues)             | SQS                     | PubSub (Pull Subscription) |              |                    | Custom Test                                             |
-| [Schedules](../../reference/services/schedules)       | CloudWatch Event Bridge | Cloud Scheduler            |              |                    | _currently unavailable_                                 |
-| [Secrets](../../reference/services/secrets)           | Secrets Manager         | Secret Manager             | Key Vault    |                    | Custom Test                                             |
-| [Storage](../../reference/services/storage)           | S3                      | Cloud Storage              | Blob Storage |                    | Docker Volume Storage                                   |
-| [Static Sites](../../reference/services/sites)        | S3                      | Cloud Storage              |              |                    | Nginx                                                   |
->>>>>>> ae7464d (docs:fixed k/v references, links and service support)
+| **Nitric Service**                                   | **AWS**                 | **Google Cloud**           | **Azure**    | **DigitalOcean**   | **Local**                                               |
+| ---------------------------------------------------- | ----------------------- | -------------------------- | ------------ | ------------------ | ------------------------------------------------------- |
+| Compute                                              | Lambda                  | CloudRun                   | App Service  | App Platform       | Docker                                                  |
+| Container Registry                                   | ECR                     | GCR                        |              | Container Registry | Docker                                                  |
+| [API Gateway](../../reference/services/api-gateways) | API Gateway             | API Gateway                |              |                    | [Custom](https://github.com/nitrictech/dev-api-gateway) |
+| [Documents](../../reference/services/documents)      | DynamoDB                | FireStore                  | Cosmos DB    | MongoDB            | Boltd                                                   |
+| [Emails](../../reference/services/emails)            | SES                     |                            |              |                    | Custom Test                                             |
+| [Entrypoints](../../reference/services/entrypoints)  | CloudFront              | Cloud Load Balancers + CDN |              | App Platform       | Nginx                                                   |
+| [Events](../../reference/services/events)            | SNS                     | PubSub                     |              |                    | Custom Test                                             |
+| [Queues](../../reference/services/queues)            | SQS                     | PubSub (Pull Subscription) |              |                    | Custom Test                                             |
+| [Schedules](../../reference/services/schedules)      | CloudWatch Event Bridge | Cloud Scheduler            |              |                    | _currently unavailable_                                 |
+| [Secrets](../../reference/services/secrets)          | Secrets Manager         | Secret Manager             | Key Vault    |                    | Custom Test                                             |
+| [Storage](../../reference/services/storage)          | S3                      | Cloud Storage              | Blob Storage |                    | Docker Volume Storage                                   |
+| [Static Sites](../../reference/services/sites)       | S3                      | Cloud Storage              |              |                    | Nginx                                                   |
 
 ## What about different services on the same cloud?
 
