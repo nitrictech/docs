@@ -230,11 +230,14 @@
                 "path": "/docs/reference/services/api-gateways.mdx"
               },
               {
-                "title": "Entrypoints",
-                "path": "/docs/reference/services/entrypoints.mdx"
+                "path": "/docs/reference/services/documents.mdx"
               },
               {
-                "path": "/docs/reference/services/documents.mdx"
+                "path": "/docs/reference/services/emails.mdx"
+              },
+              {
+                "title": "Entrypoints",
+                "path": "/docs/reference/services/entrypoints.mdx"
               },
               {
                 "path": "/docs/reference/services/events.mdx"
