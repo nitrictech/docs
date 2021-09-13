@@ -58,10 +58,10 @@
                 "title": "Concepts",
                 "routes": [
                   {
-                    "path": "/docs/intro/concepts/stacks.mdx"
+                    "path": "/docs/intro/concepts/projects.mdx"
                   },
                   {
-                    "path": "/docs/intro/concepts/projects.mdx"
+                    "path": "/docs/intro/concepts/stacks.mdx"
                   },
                   {
                     "path": "/docs/intro/concepts/services.mdx"
