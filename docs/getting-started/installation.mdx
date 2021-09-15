@@ -29,8 +29,6 @@ You can install Nitric using the [Node Package Manager](https://www.npmjs.com/)
 npm install -g @nitric/cli
 ```
 
-> Standalone binary distributions will be made available soon.
-
 </CodeExample>
 <CodeExample lang={"mac"}>
 
@@ -42,8 +40,6 @@ You can install Nitric using the [Node Package Manager](https://www.npmjs.com/):
 npm install -g @nitric/cli
 ```
 
-> Standalone binary distributions will be made available soon.
-
 </CodeExample>
 <CodeExample lang={"linux"}>
 
@@ -54,8 +50,6 @@ You can install Nitric using the [Node Package Manager](https://www.npmjs.com/):
 ```bash
 npm install -g @nitric/cli
 ```
-
-> Standalone binary distributions will be made available soon.
 
 </CodeExample>
 </CodeExamples>
@@ -79,15 +73,19 @@ The output should be something like:
 CLI tool for nitric applications
 
 VERSION
-  @nitric/cli/0.0.58 win32-x64 node-v14.17.0
+  @nitric/cli/0.0.82 win32-x64 node-v16.4.0
 
 USAGE
   $ nitric [COMMAND]
 
 TOPICS
+  deploy     Plugin commands to deploy on supported providers. E.g. `$ nitric deploy:aws`
+  doctor     check environment for config and prerequisite software
+  down       Plugin commands to tear down deployments on supported providers. E.g. `$ nitric down:aws`
   make       Commands to make new projects and assets.
   plugins    list installed plugins
   templates  Commands for template management
+  token      convenience method to generate an access token for GCP
 
 COMMANDS
   build    build a project
@@ -111,11 +109,10 @@ The output should be:
 Doctor summary:
 ☁️ pulumi
 🐳 docker
-🚀 setup a nitric repository
 
 Good to go 👍 Enjoy using Nitric 🎉
 ```
 
 ### Step 4: Next Steps
 
-At this point you have everything setup and ready to build applications, then run and test them locally. You can read more about the [Nitric CLI](./nitric-cli), try out a [Tutorial](./quick-start) or if you're ready to deploy an application to a cloud environment, you can install the relevant [CLI Plugin](./nitric-cli#plugins) for [AWS](./provider-aws), [Google Cloud](./provider-gcp), [DigitalOcean](./provider-digitalocean) or [Microsoft Azure](./provider-azure).
+At this point you have everything setup and ready to build applications, then run and test them locally. You can read more about the [Nitric CLI](/docs/reference/cli), try out a [Tutorial](/docs/getting-started/multi-cloud) or if you're ready to deploy an application to a cloud environment, you can jump to the [deployment stage](/docs/getting-started/multi-cloud/deploy) of our tutorial or read more about our supported cloud providers [AWS](/docs/intro/cloud-providers/aws), [Google Cloud](/docs/intro/cloud-providers/gcp), [DigitalOcean](/docs/intro/cloud-providers/digital-ocean) or [Microsoft Azure](/docs/intro/cloud-providers/azure).

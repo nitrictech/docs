@@ -1,0 +1,77 @@
+The Nitric CLI provides helper commands to create **stacks** and the resources that define them. Using the `make:stack` command, will guide you through the creation of an initial Nitric stack.
+
+## Install Nitric
+
+<CodeExamples 
+	languages={[
+	{
+		label: "macOS",
+		value: "mac"
+	}, {
+		label: "Windows",
+		value: "win"
+	}, {
+		label: "Linux",
+		value: "linux"
+	}
+	]}
+	defaultLang="mac"
+>
+<CodeExample lang={"win"}>
+
+#### NPM
+
+You can install Nitric using the <a href="https://www.npmjs.com/" target="_blank">Node Package Manager</a>
+
+```bash
+npm install -g @nitric/cli
+```
+
+</CodeExample>
+<CodeExample lang={"mac"}>
+
+#### NPM
+
+You can install Nitric using the <a href="https://www.npmjs.com/" target="_blank">Node Package Manager</a>:
+
+```bash
+npm install -g @nitric/cli
+```
+
+</CodeExample>
+<CodeExample lang={"linux"}>
+
+#### NPM
+
+You can install Nitric using the <a href="https://www.npmjs.com/" target="_blank">Node Package Manager</a>:
+
+```bash
+npm install -g @nitric/cli
+```
+
+</CodeExample>
+</CodeExamples>
+
+If you prefer not to use one of the automated methods above, you can [download](/docs/getting-started/installation#manual-installation) the Nitric CLI binary.
+
+## Create a new Stack
+
+The `nitric make:stack` command will allow you to name your stack and choose a `Service template` in your preferred language:
+
+```bash
+nitric make:stack nitric-tutorial
+```
+
+### Choose a service template
+
+Following the prompts, name your stack and choose your preferred language:
+
+```bash
+? Service template (Use arrow keys)
+❯ official/TypeScript Stack
+  official/Python Stack
+  official/Java Stack
+  official/Go Stack
+```
+
+> If you would like more language options, please submit a feature request in our <a target="_blank" href="https://github.com/nitrictech/nitric/issues/new?assignees=&labels=&template=feature_request.md&title=">GitHub</a>

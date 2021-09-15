@@ -1,0 +1,34 @@
+[
+  {
+    "title": "Document API Starter Kit - Node",
+    "description": "This starter kit contains everything you need to start building an API in TypeScript for Node.js",
+    "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/typescript-stack",
+    "categories": ["Node", "Documents", "APIs", "Stacks"],
+    "language": "TypeScript",
+    "level": "Beginner"
+  },
+  {
+    "title": "Document API Starter Kit - Go",
+    "description": "This starter kit contains everything you need to start building an API in Go",
+    "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/go-stack",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Go",
+    "level": "Beginner"
+  },
+  {
+    "title": "Document API Starter Kit - Python",
+    "description": "This starter kit contains everything you need to start building an API in Python",
+    "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/python-stack",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Python",
+    "level": "Beginner"
+  },
+  {
+    "title": "Document API Starter Kit - Java",
+    "description": "This starter kit contains everything you need to start building an API in Java",
+    "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/java-stack",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Java",
+    "level": "Beginner"
+  }
+]

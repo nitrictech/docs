@@ -1,0 +1,171 @@
+Start by choosing your cloud provider:
+
+<CodeExamples 
+	languages={[
+	{
+		icon: <img src="/img/logos/aws.png" noMargin priority width={70} height={50} />,
+		value: "aws",
+	}, {
+		icon: <img src="/img/logos/gcp.svg" noMargin priority width={100} height={70} />,
+		value: "gcp"
+	}, {
+		icon: <img src="/img/logos/azure.png" noMargin priority width={100} height={70} />,
+		value: "azure"
+	}, {
+		icon: <img src="/img/logos/digital-ocean.png" noMargin priority width={100} height={70} />,
+		value: "do"
+	}
+	]}
+	defaultLang="aws"
+>
+<CodeExample lang={"aws"}>
+
+## Installing the CLI Plugin
+
+To deploy to AWS, let's install the official Nitric AWS Plugin:
+
+```bash
+nitric plugins:install @nitric/plugin-aws
+```
+
+This will download and install AWS specific commands for the cli.
+
+## Checking Prerequisites
+
+Next, you can check that any prerequisite software is also installed by using the doctor sub-command for AWS:
+
+```bash
+nitric doctor:aws
+```
+
+## Setup Credentials
+
+The Nitric AWS CLI Plugin is able to use standard AWS credential settings to authenticate with AWS. If you've set up local credentials for the AWS CLI or an SDK previously, these settings should work without modification.
+
+If you're setting up your credentials for the first time, there are several available methods. We recommend the standard AWS credentials file, which can be setup like so:
+
+- Create a new credentials files at one of these locations:
+  - `~/.aws/credentials` on Linux, macOS, or Unix
+  - `C:\Users\USERNAME\.aws\credentials` on Windows
+
+The file should contain the following:
+
+```toml
+[default]
+aws_access_key_id = your_access_key_id
+aws_secret_access_key = your_secret_access_key
+```
+
+Replace `your_access_key_id` and `your_secret_access_key` with your own values. You can create an Access Key by logging into the <a href="https://aws.amazon.com/console/" target="_blank">AWS console</a> and navigating to `Username Menu` > `My Security Credentials` > `Access keys` > `Create New Access Key`.
+
+> See <a target="_target" href="https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html">AWS documentation</a> for full details on credentials and configuration.
+
+## Deploy
+
+Let's go ahead and deploy your stack:
+
+```bash
+nitric deploy:aws
+```
+
+</CodeExample>
+<CodeExample lang={"gcp"}>
+
+## Installing the CLI Plugin
+
+To deploy to Google Cloud, let's install the official Nitric GCP Plugin:
+
+```bash
+nitric plugins:install @nitric/plugin-gcp
+```
+
+This will download and install Google Cloud specific commands for the cli.
+
+## Checking Prerequisites
+
+Next, you can check that any prerequisite software is also installed by using the doctor sub-command for GCP:
+
+```bash
+nitric doctor:gcp
+```
+
+## Setup Credentials
+
+For simplicity, we recommend installing the <a target="_blank" href="https://cloud.google.com/sdk/docs/install">Google Cloud SDK</a> when developing. You can then <a href="https://cloud.google.com/sdk/docs/authorizing#authorizing_with_a_user_account" target="_blank">authorize access with a user account</a>.
+
+A summary of the required steps include:
+
+- Download the Google Cloud SDK and add it to your PATH
+- Run `gcloud init` to initialize the SDK
+- Finally, obtain [Application Default Credentials](https://cloud.google.com/sdk/gcloud/reference/auth/application-default) with `gcloud auth application-default login`
+
+## Deploy
+
+Let's go ahead and deploy your stack:
+
+```bash
+nitric deploy:gcp
+```
+
+</CodeExample>
+<CodeExample lang={"azure"}>
+
+<Box pt={4}>
+
+> 🚧 Support for Microsoft Azure is currently in development and will be available soon.
+
+</Box>
+
+</CodeExample>
+<CodeExample lang={"do"}>
+
+<Box pt={4}>
+
+> 🚧 **Partial Support**: Nitric currently supports DigitalOcean for [Services](/docs/intro/concepts/services) and [Entrypoints](/docs/reference/services/entrypoints) only.
+
+</Box>
+
+## Installing the CLI Plugin
+
+To deploy to DigitalOcean, let's install the official Nitric DigitalOcean Plugin:
+
+```bash
+nitric plugins:install @nitric/plugin-do
+```
+
+This will download and install DigitalOcean specific commands for the cli.
+
+## Checking Prerequisites
+
+Next, you can check that any prerequisite software is also installed by using the doctor sub-command for DigitalOcean:
+
+```bash
+nitric doctor:do
+```
+
+## Setup Credentials
+
+The Nitric DigitalOcean CLI Plugin requires a Personal Access Token to authenticate with the DigitalOcean API. This can be provided via an environment variable, like so:
+
+```bash
+export DIGITALOCEAN_TOKEN=YOUR_TOKEN
+```
+
+Replace `YOUR_TOKEN` with your own token value. You can create a Personal Access Token by logging into the <a href="https://cloud.digitalocean.com/" target="_blank">DigitalOcean Console</a> and navigating to `API (under 'ACCOUNT')` > `Tokens/Keys` > `Personal Access Tokens` > `Generate New Token`.
+
+## Deploy
+
+Let's go ahead and deploy your stack:
+
+```bash
+nitric deploy:do
+```
+
+> ⚠️ **Warning:** A DigitalOcean "App" will be deployed for _each_ entrypoint in your Nitric application.
+
+Due to lack of component sharing between DigitalOcean App Platform Apps, duplicate containers will be created for each Nitric Service shared between entrypoints. As a result, you will be charged for each instance of the container, one for each entrypoint targeting that container. We recommend limiting the number of entrypoints in your application or having each entrypoint target a unique set of services.
+
+</CodeExample>
+</CodeExamples>
+
+Next you will modify the Stack and deploy the changes.
