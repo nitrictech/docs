@@ -1,6 +1,6 @@
 Now that you’ve seen how to deploy changes to our API service, let’s clean up and pull down the resources that are part of your stack.
 
-To destroy resources, run the following from the root of your project:
+To pull down all stack resources, run the following from the root of your project:
 
 <CodeExamples 
 	languages={[
@@ -23,14 +23,14 @@ To destroy resources, run the following from the root of your project:
 <CodeExample lang={"aws"}>
 
 ```bash
-nitric deploy:aws
+nitric down:aws
 ```
 
 </CodeExample>
 <CodeExample lang={"gcp"}>
 
 ```bash
-nitric deploy:gcp
+nitric down:gcp
 ```
 
 </CodeExample>
@@ -46,7 +46,7 @@ nitric deploy:gcp
 <CodeExample lang={"do"}>
 
 ```bash
-nitric deploy:do
+nitric down:do
 ```
 
 </CodeExample>
