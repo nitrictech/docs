@@ -10,6 +10,17 @@ You can check that any prerequisite software is installed using the doctor comma
 nitric doctor
 ```
 
+If you have all the prerequisite software installed, you will see the following message:
+
+```bash
+ Doctor summary:
+ ───────────────
+ ☁️ pulumi
+ 🐳 docker
+
+Good to go 👍 Enjoy using Nitric 🎉
+```
+
 ## Run the stack!
 
 Let's start developing, use the `run` command to begin:
@@ -50,7 +61,7 @@ Replace the `49152` PORT in the snippets below to yours if it is different.
 Create an example:
 
 ```bash
-curl -H "Content-Type: application/json" -X POST -d '{"name": "first example", "description":"Take me to the moon 🚀"}' http://localhost:49152/examples
+curl -H "Content-Type: application/json" -X POST -d '{"name":"first example", "description":"Take me to the moon 🚀"}' http://localhost:49152/examples
 ```
 
 Retrieve an example:

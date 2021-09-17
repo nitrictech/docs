@@ -80,7 +80,7 @@ faas.start(async (request: faas.NitricTrigger<Example>): Promise<string> => {
   const id = uuid();
 
   // Create a new example document
-  await documents().collection('example').doc(id).set(example);
+  await documents().collection('examples').doc(id).set(example);
 
   return `Created example with ID: ${id}`;
 });
@@ -102,9 +102,9 @@ async def handler(trigger: Trigger) -> str:
 
     doc_id = generate_id()
 
-    await Documents().collection("example").doc(doc_id).set(example)
+    await Documents().collection("examples").doc(doc_id).set(example)
 
-    return f'created example with ID: {doc_id}'
+    return f'Created example with ID: {doc_id}'
 
 
 if __name__ == "__main__":
@@ -132,6 +132,12 @@ import io.nitric.faas.Trigger;
 
 public class CreateFunction implements NitricFunction {
 
+    final Documents documents;
+
+    public CreateFunction(Documents documents) {
+        this.documents = documents;
+    }
+
     @Override
     public Response handle(Trigger trigger) {
         try {
@@ -139,7 +145,7 @@ public class CreateFunction implements NitricFunction {
             var example = new ObjectMapper().readValue(json, Example.class);
             var id = UUID.randomUUID().toString();
 
-            Documents.collection("example").doc(id, Example.class).set(example);
+            documents.collection("examples").doc(id, Example.class).set(example);
 
             var msg = String.format("Created example with ID: %s", id);
             return trigger.buildResponse(msg);
@@ -150,9 +156,8 @@ public class CreateFunction implements NitricFunction {
     }
 
     public static void main(String[] args) {
-        Faas.start(new CreateFunction());
+        Faas.start(new CreateFunction(new Documents()));
     }
-
 }
 ```
 
@@ -189,11 +194,11 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 		return nil, err
 	}
 
-	if err := dc.Collection("example").Doc(id).Set(example.Map()); err != nil {
+	if err := dc.Collection("examples").Doc(id).Set(example.Map()); err != nil {
 		return nil, err
 	}
 
-	resp.SetData([]byte(fmt.Sprintf("Successfully created example: %s", id)))
+	resp.SetData([]byte(fmt.Sprintf("Created example with ID: %s", id)))
 
 	return resp, nil
 }
@@ -213,6 +218,6 @@ This function achieves the following:
 
 - Takes an example from the request object.
 - Generates a unique id for the new document.
-- Creates the new example document in the `example` collection.
+- Creates the new example document in the `examples` collection.
 
 Next, you’ll run your stack locally. 🚀
