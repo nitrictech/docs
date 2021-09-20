@@ -1,0 +1,108 @@
+In addition to the default commands provided by the base CLI, additional commands can be added via plugins. By default, provider specific commands e.g. `deploy:azure` are added via provider plugins, this ensures the size of the CLI remains smaller when only targeting a subset of providers, it also enables new providers or community supported providers to be added without changing the base CLI.
+
+To view a list of currently installed plugins, run the `plugins` command directly:
+
+```bash
+nitric plugins
+```
+
+To install a new plugin use the `install` subcommand:
+
+```bash
+# Example of installing the default AWS provider plugin
+nitric plugins:install @nitric/plugin-aws
+```
+
+To update plugins use the `update` subcommand:
+
+```bash
+nitric plugins:update
+```
+
+{{#plugins}}
+
+## {{{plugin}}}
+
+{{#commands}}
+  
+### nitric {{id}}
+
+{{description}}
+
+{{#showArgs}}
+
+#### Arguments
+
+<table>
+    <th>
+       <strong>Argument</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    {{#args}}
+    <tr>
+      <td>{{name}}</td>
+      <td>
+        {{#required}}
+          Yes
+        {{/required}}
+        {{^required}}
+          No
+        {{/required}}
+      </td>
+      <td>{{description}}</td>
+    </tr>
+    {{/args}}
+</table>
+
+{{/showArgs}}
+
+{{#showOptions}}
+
+#### Options
+
+<table>
+    <th>
+       <strong>Option</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    {{#flags}}
+    <tr>
+      <td>--{{name}}</td>
+      <td>
+        {{#required}}
+          Yes
+        {{/required}}
+        {{^required}}
+          No
+        {{/required}}
+      </td>
+      <td>
+        {{description}}
+      </td>
+    </tr>
+    {{/flags}}
+</table>
+
+{{/showOptions}}
+
+#### Examples
+
+{{#examples}}
+```bash
+{{.}}
+```
+{{/examples}}
+  
+{{/commands}}
+
+{{/plugins}}

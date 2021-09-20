@@ -225,8 +225,10 @@
             "path": "/docs/reference/cli/_index.mdx",
             "routes": [
               {
-                "title": "Quickstart",
-                "path": "/docs/reference/cli/quick-start.mdx"
+                "path": "/docs/reference/cli/commands.mdx"
+              },
+              {
+                "path": "/docs/reference/cli/plugin-commands.mdx"
               },
               {
                 "title": "Local Development",
