@@ -16,7 +16,7 @@ python -m pip --version
 
 If python and pip are installed, it will produce 'pip 21.1.3 from /where/pip/is/installed'
 
-It is also assumed that you have already installed the Nitric CLI. If not visit the [installation instructions](../installation.mdx).
+It is also assumed that you have already installed the Nitric CLI. If not visit the [installation instructions](../getting-started/installation.mdx).
 
 ## Project set up
 
@@ -25,56 +25,41 @@ For this project we will make a simple website where a dataset url can be inputt
 Using the Nitric CLI we start by creating the project.
 
 ```bash
-nitric make:project nitric-image-classifier
+nitric make:stack nitric-image-classifier
 ```
 
-Next we'll be asked if we want an initial service in the project and what template the service will use. We will use the python template to create a tensorflow image-classifier.
+Next we'll be asked what template to use. We can pick any of them, because we'll delete most of the boilerplate anyways.
 
 ```bash
-? Include an example service? (Use arrow keys)
-  function/nodets12
-  function/nodejs12
-❯ function/python37
-  function/java11
-  function/golang15
-  function/php8
-  server/nextjs-typescript
+? Service template (Use arrow keys)
+❯ official/TypeScript Stack
+  official/Python Stack
+  official/Java Stack
+  official/Go Stack
 ```
 
-Next, we'll be asked for a name for the service. We will name it `train-model`.
-
-```bash
-? Name for the example service? train-model
-✔ Making Project nitric-image-classifier
-✔ Making Service train-model
-```
+Start by deleting the `common` folder, the files in the `functions` folder, `api.yaml`, and the contents after the name key in `nitric.yaml`.
 
 The project structure should now look like this:
 
-```bash
+```
 nitric-image-classifier
-|-- .nitric
-|   |-- templates
-|       |-- function
-|           |-- python37
-|               |-- template
-|                   |-- index.py
-|                   |-- requirements.txt
-|               |-- .gitignore
-|               |-- Dockerfile
-|               |-- Dockerfile.dockerignore
-|               |-- README.md
-|-- train-model
-|   |-- index.py
-|   |-- requirements.txt
+|-- functions/
+|-- .gitignore
 |-- nitric.yaml
+|-- package.json
+|-- yarn.lock
+```
+And the `nitric.yaml` file should now look like:
+```yaml
+name: nitric-image-classifier
 ```
 
 ### Understanding the structure
 
 For this project we will need a site and 3 services: one responsible for requesting training, one responsible for training, and one responsible for updating the site status.
 
-We will build the site in a later step, but for now build the services using the `nitric make:service` command. We have already built one in the make project step, so only the training requester and status updater are required.
+We will build the site in a later step, but for now build the services using the `nitric make:service` command.
 
 ```bash
 nitric make:service
@@ -90,7 +75,28 @@ nitric make:service
 ✔ Making Service status-updater
 ```
 
-The site starts the communication, by calling the training requester to make a model with the specified dataset. The requester will return an ID, and it is the sites responsiblity to maintain that ID for when accessing the model and its training status. The flow of communication looks like so:
+```bash
+nitric make:service
+? Service template function/python37
+? Service name train-model
+✔ Making Service train-model
+```
+
+Make sure the project structure looks like so:
+```
+nitric-image-classifier
+|-- functions/
+|   |-- status-updater.ts
+|   |-- train-model.py
+|   |-- training-requester.ts
+|-- .gitignore
+|-- nitric.yaml
+|-- package.json
+|-- requirements.txt
+|-- yarn.lock
+```
+
+The site starts the communication, by calling the `training requester` service to make a model with the specified dataset. The requester will return an ID, and it is the sites responsiblity to maintain that ID for when accessing the model and its training status. The flow of communication looks like so:
 
 <img
   height="600"
@@ -98,23 +104,20 @@ The site starts the communication, by calling the training requester to make a m
   alt="Tensorflow Sequence"
 />
 
-As seen in the sequence diagram, the project will also require a bucket, document and queue. It will also need to publish an event between the `training-requester` and the `train-model` services. These are simply added in the `nitric.yaml` file, as seen below:
+As seen in the sequence diagram, the project will also require a bucket, document and queue. It will also need to publish an event between the `training-requester` and the `train-model` functions. These are simply added in the `nitric.yaml` file, as seen below:
 
 ```yaml
 name: nitric-image-classification
-services:
+functions:
   train-model:
-    path: train-model
-    runtime: function/python37
+    handler: functions/train-model
     triggers:
       topics:
         - new-model
   training-requester:
-    path: training-requester
-    runtime: function/nodets12
+    handler: functions/training-requester
   status-updater:
-    path: status-updater
-    runtime: function/nodets12
+    handler: functions/status-updater
 topics:
   new-model: {}
 buckets:
@@ -123,7 +126,7 @@ queues:
   training-queue: {}
 ```
 
-The above changes sets up a bucket, topic, and queue. The service `train-model` will also be updated to be subscribed to the `new-model` topic. This means that when the `training-requester` fires an event, the `train-model` service will be listening waiting for that topic to be updated.
+The above changes sets up a bucket, topic, and queue. The function `train-model` will also be updated to be subscribed to the `new-model` topic. This means that when the `training-requester` fires an event, the `train-model` function will be listening waiting for that topic to be updated.
 
 ## Building the Services
 
@@ -131,7 +134,7 @@ The above changes sets up a bucket, topic, and queue. The service `train-model` 
 
 For this service we set up a simple image classification model using tensorflow.
 
-Throughout the training process there will be status logs pushed to a collection with the name as the id. When the status is updated, the most recent document will be returned and then deleted. This means it will be first in first out ordering for the status log.
+Throughout the training process there will be status logs pushed to a collection with the name as the id. When the status is updated, the most recent document will be returned and then deleted. This means it will be first in first out ordering for the status log. The names for the documents don't matter as long as they are unique. 
 
 ```python
 # index.py
@@ -219,9 +222,9 @@ async def trainNewModel(id, dataset_url):
 
 ### Building the Training Requester
 
-The training requester takes in a dataset URL and returns a unique ID. It uses this ID as an identifier for the other services to access the correct storage and the correct status logs.
+The training requester takes a dataset URL and returns a unique ID. It uses this ID as an identifier for the other services to access the correct storage and the correct status logs.
 
-On a request to this service it will write the dataset URL to a bucket with the ID as a prefix. It will then write a status update to the Document collection with the id as the collection name. The actual name of the document won't matter as long as it is unique. It then pushes a new task to the `training-queue` and finally fires an event to the `train-model` service to poll the queue.
+On a request to this service it will write the dataset URL to a bucket with the ID as a prefix. It will then write a status update to the Document collection with the id as the collection name. It then pushes a new task to the `training-queue` and finally fires an event to the `train-model` service to poll the queue.
 
 ```ts
 //index.ts
@@ -289,7 +292,7 @@ function uuid(): string {
 
 ### Building the Status Updater
 
-Finally, we will write the status updater. This service takes an ID when it receives a request and will return the latest status from the document collection with the same ID.
+Finally, we will write the status updater. This function takes an ID when it receives a request and will return the latest status from the document collection with the same ID.
 
 ```ts
 //index.ts
@@ -322,7 +325,7 @@ The site will be a simple form that accepts a dataset url and a button to submit
 
 One optional step is to add a CSS file `index.css` to make our app look beautiful. You can find the full contents of this file <a href="https://raw.githubusercontent.com/nitrictech/docs/main/assets/tutorial-styles.css" target="_blank" rel="noopener noreferrer">here.</a>
 
-Once this has been added, it needs to be registered as part of the Nitric stack. This is simply done by going to the `nitric.yaml` file and adding a site.
+Once this has been added, the site needs to be registered as part of the Nitric stack. This is simply done by going to the `nitric.yaml` file and adding a site.
 
 ```yaml
 sites:
@@ -402,7 +405,7 @@ async function trainModel() {
 document.getElementById('train').addEventListener('click', trainModel);
 ```
 
-The second function `awaitStatus` is in a loop, that polls that status update every second. This can be lowered for more frequent polling, but increases the network traffic. The function makes a HTTP request, with the id, to the status updater. It responds with the status update, and then appends this to the status section of the site if this is a new update.
+The second function `awaitStatus` is in a loop, that polls that status update every second. This can be lowered for more frequent polling, but increases the amount the `status-updater` service will be requested. The function makes a HTTP request, with the id, to the status updater. It responds with the status update, and then appends this to the status section of the site if this is a new update.
 
 ```js
 //index.js
@@ -444,14 +447,14 @@ entrypoints:
   main:
     paths:
       /:
-        target: training-site
+        target: functions/training-site
         type: site
       /train/:
-        target: training-requester
-        type: service
+        target: functions/training-requester
+        type: function
       /status/:
-        target: status-updater
-        type: service
+        target: functions/status-updater
+        type: function
 ```
 
 ### Launch!
