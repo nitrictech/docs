@@ -1,4 +1,3 @@
-
 Nitric provides a command-line interface (CLI) to assist with various tasks when building applications with Nitric. To view a list of available commands, you can call the CLI without specifying any subcommands or arguments:
 
 ```bash
@@ -41,308 +40,230 @@ nitric plugins:update
 
 ## Core Commands
 
-  
 ### nitric build
 
 build a project
 
-
 #### Arguments
 
 <table>
-    <th>
-       <strong>Argument</strong>
-    </th>
-    <th>
-       <strong>Required</strong> 
-    </th>
-    <th>
-       <strong>Description</strong>
-    </th>
-    <tr>
-      <td>directory</td>
-      <td>
-          No
-      </td>
-      <td>The project directory to build from</td>
-    </tr>
+  <th>
+    <strong>Argument</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>directory</td>
+    <td>No</td>
+    <td>The project directory to build from</td>
+  </tr>
 </table>
-
-
 
 #### Options
 
 <table>
-    <th>
-       <strong>Option</strong>
-    </th>
-    <th>
-       <strong>Required</strong> 
-    </th>
-    <th>
-       <strong>Description</strong>
-    </th>
-    <tr>
-      <td>--ci</td>
-      <td>
-          No
-      </td>
-      <td>
-        build a project
-      </td>
-    </tr>
-    <tr>
-      <td>--help</td>
-      <td>
-          No
-      </td>
-      <td>
-        show CLI help
-      </td>
-    </tr>
-    <tr>
-      <td>--file</td>
-      <td>
-          No
-      </td>
-      <td>
-        the stack definition file (default: .&#x2F;nitric.yaml)
-      </td>
-    </tr>
-    <tr>
-      <td>--provider</td>
-      <td>
-          No
-      </td>
-      <td>
-        the targeted provider for this build
-      </td>
-    </tr>
+  <th>
+    <strong>Option</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>--ci</td>
+    <td>No</td>
+    <td>build a project</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>No</td>
+    <td>show CLI help</td>
+  </tr>
+  <tr>
+    <td>--file</td>
+    <td>No</td>
+    <td>the stack definition file (default: .&#x2F;nitric.yaml)</td>
+  </tr>
+  <tr>
+    <td>--provider</td>
+    <td>No</td>
+    <td>the targeted provider for this build</td>
+  </tr>
 </table>
-
 
 #### Examples
 
 ```bash
 $ nitric build .
 ```
-  
-  
+
 ### nitric doctor
 
 check environment for config and prerequisite software
 
-
-
 #### Options
 
 <table>
-    <th>
-       <strong>Option</strong>
-    </th>
-    <th>
-       <strong>Required</strong> 
-    </th>
-    <th>
-       <strong>Description</strong>
-    </th>
-    <tr>
-      <td>--ci</td>
-      <td>
-          No
-      </td>
-      <td>
-        check environment for config and prerequisite software
-      </td>
-    </tr>
-    <tr>
-      <td>--help</td>
-      <td>
-          No
-      </td>
-      <td>
-        show CLI help
-      </td>
-    </tr>
+  <th>
+    <strong>Option</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>--ci</td>
+    <td>No</td>
+    <td>check environment for config and prerequisite software</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>No</td>
+    <td>show CLI help</td>
+  </tr>
 </table>
-
 
 #### Examples
 
 ```bash
 $ nitric doctor
 ```
-  
-  
+
 ### nitric run
 
 builds and runs a project locally for testing
 
-
 #### Arguments
 
 <table>
-    <th>
-       <strong>Argument</strong>
-    </th>
-    <th>
-       <strong>Required</strong> 
-    </th>
-    <th>
-       <strong>Description</strong>
-    </th>
-    <tr>
-      <td>directory</td>
-      <td>
-          No
-      </td>
-      <td>The project directory to build from</td>
-    </tr>
+  <th>
+    <strong>Argument</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>directory</td>
+    <td>No</td>
+    <td>The project directory to build from</td>
+  </tr>
 </table>
-
-
 
 #### Options
 
 <table>
-    <th>
-       <strong>Option</strong>
-    </th>
-    <th>
-       <strong>Required</strong> 
-    </th>
-    <th>
-       <strong>Description</strong>
-    </th>
-    <tr>
-      <td>--ci</td>
-      <td>
-          No
-      </td>
-      <td>
-        builds and runs a project locally for testing
-      </td>
-    </tr>
-    <tr>
-      <td>--help</td>
-      <td>
-          No
-      </td>
-      <td>
-        show CLI help
-      </td>
-    </tr>
-    <tr>
-      <td>--file</td>
-      <td>
-          No
-      </td>
-      <td>
-        the stack definition file (default: .&#x2F;nitric.yaml)
-      </td>
-    </tr>
-    <tr>
-      <td>--provider</td>
-      <td>
-          No
-      </td>
-      <td>
-        the targeted provider for this build
-      </td>
-    </tr>
+  <th>
+    <strong>Option</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>--ci</td>
+    <td>No</td>
+    <td>builds and runs a project locally for testing</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>No</td>
+    <td>show CLI help</td>
+  </tr>
+  <tr>
+    <td>--file</td>
+    <td>No</td>
+    <td>the stack definition file (default: .&#x2F;nitric.yaml)</td>
+  </tr>
+  <tr>
+    <td>--provider</td>
+    <td>No</td>
+    <td>the targeted provider for this build</td>
+  </tr>
 </table>
-
 
 #### Examples
 
 ```bash
 $ nitric run
 ```
-  
-  
+
 ### nitric make:stack
 
 Creates a new Nitric stack
 
-
 #### Arguments
 
 <table>
-    <th>
-       <strong>Argument</strong>
-    </th>
-    <th>
-       <strong>Required</strong> 
-    </th>
-    <th>
-       <strong>Description</strong>
-    </th>
-    <tr>
-      <td>name</td>
-      <td>
-          No
-      </td>
-      <td>the name of the new stack to create</td>
-    </tr>
-    <tr>
-      <td>template</td>
-      <td>
-          No
-      </td>
-      <td>Service template</td>
-    </tr>
+  <th>
+    <strong>Argument</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>name</td>
+    <td>No</td>
+    <td>the name of the new stack to create</td>
+  </tr>
+  <tr>
+    <td>template</td>
+    <td>No</td>
+    <td>Service template</td>
+  </tr>
 </table>
-
-
 
 #### Options
 
 <table>
-    <th>
-       <strong>Option</strong>
-    </th>
-    <th>
-       <strong>Required</strong> 
-    </th>
-    <th>
-       <strong>Description</strong>
-    </th>
-    <tr>
-      <td>--ci</td>
-      <td>
-          No
-      </td>
-      <td>
-        Creates a new Nitric stack
-      </td>
-    </tr>
-    <tr>
-      <td>--help</td>
-      <td>
-          No
-      </td>
-      <td>
-        show CLI help
-      </td>
-    </tr>
-    <tr>
-      <td>--force</td>
-      <td>
-          No
-      </td>
-      <td>
-        force the stack to be created, even in a folder with existing contents.
-      </td>
-    </tr>
+  <th>
+    <strong>Option</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>--ci</td>
+    <td>No</td>
+    <td>Creates a new Nitric stack</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>No</td>
+    <td>show CLI help</td>
+  </tr>
+  <tr>
+    <td>--force</td>
+    <td>No</td>
+    <td>
+      force the stack to be created, even in a folder with existing contents.
+    </td>
+  </tr>
 </table>
-
 
 #### Examples
 
 ```bash
 $ nitric make:stack
 ```
-  
 
 > For more documentation on our CLI, you can <a target="_target" href="https://github.com/nitrictech/cli">view the GitHub</a> Repository
 
