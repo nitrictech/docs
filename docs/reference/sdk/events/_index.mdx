@@ -1,0 +1,21 @@
+---
+title: 'Events Overview'
+---
+
+Nitric's events service and API provides an intuitive approach to asynchronous messaging allowing services, functions and more to communicate via topics with event messages. While synchronous request/response communication is quite common, events provide a more reliable mechanism for communication in distributed and serverless systems, with the added benefit that services can be decoupled from each other through a [publish/subscribe](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) relationship.
+
+The Nitric events API provides an interface to message-oriented middleware and message brokers such as AWS SNS & Google PubSub to facilitate low-latency, highly available, "at-least once" message delivery.
+
+<img
+  src="../assets/img/topics-overview.svg"
+  height="334"
+  alt="topic overview diagram"
+/>
+
+## Key concepts
+
+- **Topics** are a named resource and target for publishing events. They typically define the _subject_ of the messages being published and subscribed.
+- **Events** are a combination of metadata and a payload, produced by publishers and delivered to subscribers. Typically, these take the form of a JSON document with a standard format.
+- **Publishers** produce events by sending them to a topic. Publishers are unaware of the topic's subscribers, providing strong decoupling.
+- **Subscriptions** define the subscribers of a particular topic. Each subscription defines a subscriber, and the topic they subscribe to.
+- **Subscribers** are consumers of events, typically in the form of a request that must handled.

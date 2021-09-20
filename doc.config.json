@@ -191,30 +191,28 @@
             "path": "/docs/reference/_index.mdx",
             "routes": [
               {
-                "title": "Nitric CLI",
-
+                "title": "Project Configuration",
                 "routes": [
                   {
-                    "title": "About",
-                    "path": "/docs/reference/cli/_index.mdx"
+                    "title": "Stack Definition",
+                    "path": "/docs/reference/project/stack.mdx"
                   },
                   {
-                    "title": "Quickstart",
-                    "path": "/docs/reference/cli/quick-start.mdx"
+                    "title": "Entrypoints",
+                    "path": "/docs/reference/project/entrypoints.mdx"
                   },
                   {
-                    "title": "Local Development",
-                    "path": "/docs/reference/cli/local.mdx"
+                    "title": "API Gateways",
+                    "path": "/docs/reference/project/api-gateways.mdx"
+                  },
+                  {
+                    "title": "Static Sites",
+                    "path": "/docs/reference/project/sites.mdx"
                   }
                 ]
               },
               {
-                "title": "Nitric SDK",
-                "path": "/docs/reference/sdks.mdx"
-              },
-              {
-                "title": "Project Configuration",
-                "path": "/docs/reference/project.mdx"
+                "path": "/docs/reference/services/schedules.mdx"
               },
               {
                 "title": "API Configuration",
@@ -223,37 +221,123 @@
             ]
           },
           {
-            "title": "Services",
+            "title": "Nitric CLI",
+            "path": "/docs/reference/cli/_index.mdx",
             "routes": [
               {
-                "title": "API Gateways",
-                "path": "/docs/reference/services/api-gateways.mdx"
+                "title": "Quickstart",
+                "path": "/docs/reference/cli/quick-start.mdx"
               },
               {
-                "path": "/docs/reference/services/documents.mdx"
+                "title": "Local Development",
+                "path": "/docs/reference/cli/local.mdx"
+              }
+            ]
+          },
+          {
+            "title": "Nitric SDK",
+            "path": "/docs/reference/sdk/_index.mdx",
+            "routes": [
+              {
+                "title": "Documents",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/sdk/documents/_index.mdx"
+                  },
+                  {
+                    "title": "References",
+                    "path": "/docs/reference/sdk/documents/references.mdx"
+                  },
+                  {
+                    "title": "Set Data",
+                    "path": "/docs/reference/sdk/documents/set-data.mdx"
+                  },
+                  {
+                    "title": "Get and Query Data",
+                    "path": "/docs/reference/sdk/documents/get-query-data.mdx"
+                  },
+                  {
+                    "title": "Delete Data",
+                    "path": "/docs/reference/sdk/documents/delete-data.mdx"
+                  }
+                ]
               },
               {
-                "title": "Entrypoints",
-                "path": "/docs/reference/services/entrypoints.mdx"
+                "title": "Events",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/sdk/events/_index.mdx"
+                  },
+                  {
+                    "title": "Define Topics",
+                    "path": "/docs/reference/sdk/events/define-topics.mdx"
+                  },
+                  {
+                    "title": "Publish Events",
+                    "path": "/docs/reference/sdk/events/publish.mdx"
+                  }
+                ]
               },
               {
-                "path": "/docs/reference/services/events.mdx"
+                "title": "Queues",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/sdk/queues/_index.mdx"
+                  },
+                  {
+                    "title": "Define Queues",
+                    "path": "/docs/reference/sdk/queues/define-queues.mdx"
+                  },
+                  {
+                    "title": "Send Tasks",
+                    "path": "/docs/reference/sdk/queues/send-tasks.mdx"
+                  },
+                  {
+                    "title": "Receive and Complete Tasks",
+                    "path": "/docs/reference/sdk/queues/recieve-complete-tasks.mdx"
+                  }
+                ]
               },
               {
-                "path": "/docs/reference/services/queues.mdx"
+                "title": "Secrets",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/sdk/secrets/_index.mdx"
+                  },
+                  {
+                    "title": "Create Secrets",
+                    "path": "/docs/reference/sdk/secrets/create-secrets.mdx"
+                  },
+                  {
+                    "title": "Access Secrets",
+                    "path": "/docs/reference/sdk/secrets/access-secrets.mdx"
+                  }
+                ]
               },
               {
-                "path": "/docs/reference/services/schedules.mdx"
-              },
-              {
-                "path": "/docs/reference/services/secrets.mdx"
-              },
-              {
-                "path": "/docs/reference/services/storage.mdx"
-              },
-              {
-                "title": "Static Sites",
-                "path": "/docs/reference/services/sites.mdx"
+                "title": "Storage",
+                "routes": [
+                  {
+                    "title": "Define Buckets",
+                    "path": "/docs/reference/sdk/storage/define-buckets.mdx"
+                  },
+                  {
+                    "title": "Write Files",
+                    "path": "/docs/reference/sdk/storage/write-files.mdx"
+                  },
+                  {
+                    "title": "Read Files",
+                    "path": "/docs/reference/sdk/storage/read-files.mdx"
+                  },
+                  {
+                    "title": "Delete Files",
+                    "path": "/docs/reference/sdk/storage/delete-files.mdx"
+                  }
+                ]
               }
             ]
           }

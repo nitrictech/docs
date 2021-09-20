@@ -55,7 +55,7 @@ faas.start(
 
     try {
       console.log('removing doc id', id);
-      await documents().collection<Example>('example').doc(id).delete();
+      await documents().collection<Example>('examples').doc(id).delete();
       response.data = `Removed example with ID: ${id}`;
     } catch (e) {
       response.context.asHttp().status = 404;
@@ -122,7 +122,7 @@ async def handler(trigger: Trigger) -> Response:
         return response
 
     try:
-        await Documents().collection("example").doc(doc_id).delete()
+        await Documents().collection("examples").doc(doc_id).delete()
         response.data = "Removed example " + doc_id
     except NotFoundException:
         response.context.as_http().status = 404
@@ -168,7 +168,100 @@ apis:
 
 <CodeExample lang="java">
 
-TODO
+## Add a new function
+
+Let's make it easy for ourselves by copying an existing function directory as a starting point:
+
+1. From within your `functions` directory, copy the `read` directory and paste it under the same `functions` directory, then rename the copy to `delete`.
+2. Within the `pom.xml` file in your new function directory, under project replace the artifactId contents `example-read` with `example-delete`.
+
+```xml
+<artifactId>example-delete</artifactId>
+```
+
+3. Then replace the mainClass contents `com.example.service.ReadFunction` with `com.example.service.DeleteFunction`.
+
+```xml
+<mainClass>com.example.service.DeleteFunction</mainClass>
+```
+
+4. In the root `pom.xml` file, under modules add the new module:
+
+```xml
+<module>functions/delete</module>
+```
+
+5. In the `src/main/java/com/example/service` directory, rename the `ReadFunction.java` file to `DeleteFunction.java` and replace its contains with your new function code:
+
+```java
+package com.example.service;
+
+import io.nitric.api.NitricException;
+import io.nitric.api.document.Documents;
+import io.nitric.faas.Faas;
+import io.nitric.faas.Trigger;
+import io.nitric.faas.NitricFunction;
+import io.nitric.faas.Response;
+
+public class DeleteFunction implements NitricFunction {
+
+    final Documents documents;
+
+    public DeleteFunction(Documents documents) {
+        this.documents = documents;
+    }
+
+    @Override
+    public Response handle(Trigger trigger) {
+        var paths = trigger.getContext().asHttp().getPath().split("/");
+        var id = paths[paths.length - 1];
+
+        try {
+            documents.collection("examples").doc(id).delete();
+
+            var msg = String.format("Removed example with ID: %s", id);
+            return trigger.buildResponse(msg);
+        } catch (NitricException ne) {
+            var response = trigger.buildResponse("Error removing example: " + ne.toString());
+            response.getContext().asHttp().setStatus(500);
+            return response;
+        }
+    }
+
+    public static void main(String[] args) {
+        Faas.start(new DeleteFunction(new Documents()));
+    }
+}
+```
+
+Now to add our new `delete` function to our Stack definition and API.
+
+## Add function handler to Stack
+
+First, you will modify your `nitric.yaml` file to add our `delete `function handler:
+
+```yaml
+name: example-java-service
+
+# Nitric functions
+functions:
+  create:
+    handler: functions/create/target/example-create-1.0.jar
+  list:
+    handler: functions/list/target/example-list-1.0.jar
+  read:
+    handler: functions/read/target/example-read-1.0.jar
+  delete:
+    handler: functions/delete/target/example-delete-1.0.jar
+
+# Nitric collections
+collections:
+  examples: {}
+
+# Nitric APIs
+apis:
+  examples: api.yaml
+```
 
 </CodeExample>
 
@@ -200,7 +293,7 @@ func NitricFunction(trigger *faas.NitricTrigger) (*faas.NitricResponse, error) {
 		return nil, err
 	}
 
-	err = dc.Collection("example").Doc(id).Delete()
+	err = dc.Collection("examples").Doc(id).Delete()
 	if err != nil {
 		resp.SetData([]byte("Error retrieving document"))
 		resp.GetContext().AsHttp().Status = 404
@@ -329,6 +422,40 @@ components:
         description:
           type: string
 ```
+
+## Test Change Locally
+
+Remember before deployment, you can test your new function locally with `nitric run`.
+
+Testing the delete function with curl would look like this:
+
+1. Insert an example, that you will delete later:
+
+```bash
+curl -H "Content-Type: application/json" -X POST -d '{"name": "first example", "description":"Take me to the moon 🚀"}' http://localhost:49152/examples
+```
+
+2. Copy the ID from the response, it will look like this:
+
+```bash
+Created example with ID: 5446a712-27d5-49b6-b8fd-9c2b0b488733
+```
+
+3. Check the example is there by retrieving it by ID:
+
+```bash
+curl http://localhost:49152/examples/5446a712-27d5-49b6-b8fd-9c2b0b488733
+```
+
+The response should be: `{"name":"first example","description":"Take me to the moon 🚀"}`
+
+4. Delete the example using the ID copied from step 2:
+
+```bash
+curl -X DELETE http://localhost:49152/examples/5446a712-27d5-49b6-b8fd-9c2b0b488733
+```
+
+The response should be `Removed example with ID: 5446a712-27d5-49b6-b8fd-9c2b0b488733`.
 
 ## Deploy Changes
 

@@ -1,0 +1,35 @@
+To delete a document from a collection, use the `delete()` method.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/delete.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/delete.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/documents/Delete.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/delete.go" />
+
+</CodeExamples>
+
+> When you delete a document any subcollection documents will also be deleted.

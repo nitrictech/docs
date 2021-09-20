@@ -1,0 +1,41 @@
+---
+title: Defining Queues
+---
+
+The first step before tasks can be sent or received is to define a queue. Queues are a resource defined in a Nitric Stack file, such as `nitric.yaml`. At the root level of the stack definition, there can be a `queues` key, which contains and array of queues.
+
+The provider specific implementations for a queue are decided based on the best practices for implementing queue-like behavior in each environment.
+
+> For specific detail on how queues are implemented for each provider see here.
+
+```yaml
+queues:
+	# Create queues with default options
+	my-queue: {}
+	my-other-queue: {}
+```
+
+<!-- ### Syntax
+To define a queue in your Nitric Stack, use the following syntax:
+
+**_YAML_**
+
+```yaml
+- name: String
+```
+
+**_Properties_**
+
+`name`
+
+Defines the unique name of the queue, used in all future interactions with the queue via Nitric tooling and SDKs.
+
+> **Note:** must contain only letters, numbers and dashes.
+
+_Required:_ Yes
+
+_Type:_ String -->
+
+## Setup Producers
+
+> Coming Soon: Capability to limit queue push capability to a subset of services
