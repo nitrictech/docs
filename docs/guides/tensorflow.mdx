@@ -50,7 +50,9 @@ nitric-image-classifier
 |-- package.json
 |-- yarn.lock
 ```
+
 And the `nitric.yaml` file should now look like:
+
 ```yaml
 name: nitric-image-classifier
 ```
@@ -83,6 +85,7 @@ nitric make:service
 ```
 
 Make sure the project structure looks like so:
+
 ```
 nitric-image-classifier
 |-- functions/
@@ -134,7 +137,7 @@ The above changes sets up a bucket, topic, and queue. The function `train-model`
 
 For this service we set up a simple image classification model using tensorflow.
 
-Throughout the training process there will be status logs pushed to a collection with the name as the id. When the status is updated, the most recent document will be returned and then deleted. This means it will be first in first out ordering for the status log. The names for the documents don't matter as long as they are unique. 
+Throughout the training process there will be status logs pushed to a collection with the name as the id. When the status is updated, the most recent document will be returned and then deleted. This means it will be first in first out ordering for the status log. The names for the documents don't matter as long as they are unique.
 
 ```python
 # index.py
