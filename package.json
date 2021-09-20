@@ -4,7 +4,7 @@
     "test:config": "ajv validate -s test/schema.json -d doc.config.json",
     "test:samples-config": "ajv validate -s test/samples-schema.json -d samples.json",
     "test:mdx": "node test/test",
-    "generate:cli-commands": "node scripts/generate-cli-commands",
+    "generate:cli-commands": "node scripts/generate-cli-commands && yarn format:fix",
     "format:check": "prettier --check docs",
     "format:fix": "prettier --write docs"
   },
