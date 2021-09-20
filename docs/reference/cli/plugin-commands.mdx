@@ -1,0 +1,659 @@
+In addition to the default commands provided by the base CLI, additional commands can be added via plugins. By default, provider specific commands e.g. `deploy:azure` are added via provider plugins, this ensures the size of the CLI remains smaller when only targeting a subset of providers, it also enables new providers or community supported providers to be added without changing the base CLI.
+
+To view a list of currently installed plugins, run the `plugins` command directly:
+
+```bash
+nitric plugins
+```
+
+To install a new plugin use the `install` subcommand:
+
+```bash
+# Example of installing the default AWS provider plugin
+nitric plugins:install @nitric/plugin-aws
+```
+
+To update plugins use the `update` subcommand:
+
+```bash
+nitric plugins:update
+```
+
+
+## @nitric/plugin-aws
+
+  
+### nitric deploy:aws
+
+deploy a stack to Amazon Web Services (AWS)
+
+
+#### Arguments
+
+<table>
+    <th>
+       <strong>Argument</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>dir</td>
+      <td>
+          No
+      </td>
+      <td>deploy a stack to Amazon Web Services (AWS)</td>
+    </tr>
+</table>
+
+
+
+#### Options
+
+<table>
+    <th>
+       <strong>Option</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>--ci</td>
+      <td>
+          No
+      </td>
+      <td>
+        deploy a stack to Amazon Web Services (AWS)
+      </td>
+    </tr>
+    <tr>
+      <td>--help</td>
+      <td>
+          No
+      </td>
+      <td>
+        show CLI help
+      </td>
+    </tr>
+    <tr>
+      <td>--account</td>
+      <td>
+          No
+      </td>
+      <td>
+        AWS Account ID to deploy to (default: locally configured account)
+      </td>
+    </tr>
+    <tr>
+      <td>--region</td>
+      <td>
+          No
+      </td>
+      <td>
+        AWS Region to deploy to
+      </td>
+    </tr>
+    <tr>
+      <td>--file</td>
+      <td>
+          No
+      </td>
+      <td>
+        Nitric descriptor file location
+      </td>
+    </tr>
+</table>
+
+
+#### Examples
+
+```bash
+$ nitric deploy:aws
+```
+  
+  
+### nitric doctor:aws
+
+check environment for configuration for deployment to AWS
+
+
+
+#### Options
+
+<table>
+    <th>
+       <strong>Option</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>--ci</td>
+      <td>
+          No
+      </td>
+      <td>
+        check environment for configuration for deployment to AWS
+      </td>
+    </tr>
+    <tr>
+      <td>--help</td>
+      <td>
+          No
+      </td>
+      <td>
+        show CLI help
+      </td>
+    </tr>
+</table>
+
+
+#### Examples
+
+```bash
+$ nitric doctor:aws
+```
+  
+  
+### nitric down:aws
+
+Delete a stack from AWS that was deployed using &#x60;$ nitric deploy:aws&#x60;
+
+
+#### Arguments
+
+<table>
+    <th>
+       <strong>Argument</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>dir</td>
+      <td>
+          No
+      </td>
+      <td>project stack directory</td>
+    </tr>
+</table>
+
+
+
+#### Options
+
+<table>
+    <th>
+       <strong>Option</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>--ci</td>
+      <td>
+          No
+      </td>
+      <td>
+        Delete a stack from AWS that was deployed using &#x60;$ nitric deploy:aws&#x60;
+      </td>
+    </tr>
+    <tr>
+      <td>--help</td>
+      <td>
+          No
+      </td>
+      <td>
+        show CLI help
+      </td>
+    </tr>
+    <tr>
+      <td>--file</td>
+      <td>
+          No
+      </td>
+      <td>
+        file containing the stack definition of the stack to be torn down
+      </td>
+    </tr>
+</table>
+
+
+#### Examples
+
+```bash
+$ nitric down:aws
+```
+  
+
+
+## @nitric/plugin-gcp
+
+  
+### nitric deploy:gcp
+
+deploy a stack to Google Cloud Platform (GCP)
+
+
+#### Arguments
+
+<table>
+    <th>
+       <strong>Argument</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>dir</td>
+      <td>
+          No
+      </td>
+      <td>deploy a stack to Google Cloud Platform (GCP)</td>
+    </tr>
+</table>
+
+
+
+#### Options
+
+<table>
+    <th>
+       <strong>Option</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>--ci</td>
+      <td>
+          No
+      </td>
+      <td>
+        deploy a stack to Google Cloud Platform (GCP)
+      </td>
+    </tr>
+    <tr>
+      <td>--help</td>
+      <td>
+          No
+      </td>
+      <td>
+        show CLI help
+      </td>
+    </tr>
+    <tr>
+      <td>--project</td>
+      <td>
+          No
+      </td>
+      <td>
+        GCP project ID to deploy to (default: locally configured account)
+      </td>
+    </tr>
+    <tr>
+      <td>--region</td>
+      <td>
+          No
+      </td>
+      <td>
+        gcp region to deploy to
+      </td>
+    </tr>
+    <tr>
+      <td>--file</td>
+      <td>
+          No
+      </td>
+      <td>
+        deploy a stack to Google Cloud Platform (GCP)
+      </td>
+    </tr>
+    <tr>
+      <td>--nonInteractive</td>
+      <td>
+          No
+      </td>
+      <td>
+        deploy a stack to Google Cloud Platform (GCP)
+      </td>
+    </tr>
+</table>
+
+
+#### Examples
+
+```bash
+$ nitric deploy:gcp
+```
+  
+  
+### nitric doctor:gcp
+
+Checks environment for configuration for deployment to GCP
+
+
+
+#### Options
+
+<table>
+    <th>
+       <strong>Option</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>--ci</td>
+      <td>
+          No
+      </td>
+      <td>
+        Checks environment for configuration for deployment to GCP
+      </td>
+    </tr>
+    <tr>
+      <td>--help</td>
+      <td>
+          No
+      </td>
+      <td>
+        show CLI help
+      </td>
+    </tr>
+</table>
+
+
+#### Examples
+
+```bash
+$ nitric doctor:gcp
+```
+  
+  
+### nitric down:gcp
+
+tear down a stack from Google Cloud Platform (GCP) previously deployed with &#x60;$nitric deploy:gcp&#x60;
+
+
+#### Arguments
+
+<table>
+    <th>
+       <strong>Argument</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>dir</td>
+      <td>
+          No
+      </td>
+      <td>tear down a stack from Google Cloud Platform (GCP) previously deployed with &#x60;$nitric deploy:gcp&#x60;</td>
+    </tr>
+</table>
+
+
+
+#### Options
+
+<table>
+    <th>
+       <strong>Option</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>--ci</td>
+      <td>
+          No
+      </td>
+      <td>
+        tear down a stack from Google Cloud Platform (GCP) previously deployed with &#x60;$nitric deploy:gcp&#x60;
+      </td>
+    </tr>
+    <tr>
+      <td>--help</td>
+      <td>
+          No
+      </td>
+      <td>
+        show CLI help
+      </td>
+    </tr>
+    <tr>
+      <td>--file</td>
+      <td>
+          No
+      </td>
+      <td>
+        tear down a stack from Google Cloud Platform (GCP) previously deployed with &#x60;$nitric deploy:gcp&#x60;
+      </td>
+    </tr>
+    <tr>
+      <td>--nonInteractive</td>
+      <td>
+          No
+      </td>
+      <td>
+        tear down a stack from Google Cloud Platform (GCP) previously deployed with &#x60;$nitric deploy:gcp&#x60;
+      </td>
+    </tr>
+</table>
+
+
+#### Examples
+
+```bash
+$ nitric down:gcp
+```
+  
+
+
+## @nitric/plugin-do
+
+  
+### nitric deploy:do
+
+Deploy a Nitric application to Digital Ocean
+
+
+#### Arguments
+
+<table>
+    <th>
+       <strong>Argument</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>dir</td>
+      <td>
+          No
+      </td>
+      <td>Deploy a Nitric application to Digital Ocean</td>
+    </tr>
+</table>
+
+
+
+#### Options
+
+<table>
+    <th>
+       <strong>Option</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>--ci</td>
+      <td>
+          No
+      </td>
+      <td>
+        Deploy a Nitric application to Digital Ocean
+      </td>
+    </tr>
+    <tr>
+      <td>--help</td>
+      <td>
+          No
+      </td>
+      <td>
+        show CLI help
+      </td>
+    </tr>
+    <tr>
+      <td>--containerRegistry</td>
+      <td>
+          No
+      </td>
+      <td>
+        Digital Ocean Container Registry to deploy containers to
+      </td>
+    </tr>
+    <tr>
+      <td>--region</td>
+      <td>
+          No
+      </td>
+      <td>
+        Digital Ocean Region to deploy to
+      </td>
+    </tr>
+    <tr>
+      <td>--file</td>
+      <td>
+          No
+      </td>
+      <td>
+        Nitric descriptor file location
+      </td>
+    </tr>
+</table>
+
+
+#### Examples
+
+```bash
+$ nitric deploy:do . -r nyc1
+```
+  
+  
+### nitric down:do
+
+Delete a Stack on Digital Ocean deployed by $ nitric deploy:do
+
+
+#### Arguments
+
+<table>
+    <th>
+       <strong>Argument</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>dir</td>
+      <td>
+          No
+      </td>
+      <td>Delete a Stack on Digital Ocean deployed by $ nitric deploy:do</td>
+    </tr>
+</table>
+
+
+
+#### Options
+
+<table>
+    <th>
+       <strong>Option</strong>
+    </th>
+    <th>
+       <strong>Required</strong> 
+    </th>
+    <th>
+       <strong>Description</strong>
+    </th>
+    <tr>
+      <td>--ci</td>
+      <td>
+          No
+      </td>
+      <td>
+        Delete a Stack on Digital Ocean deployed by $ nitric deploy:do
+      </td>
+    </tr>
+    <tr>
+      <td>--help</td>
+      <td>
+          No
+      </td>
+      <td>
+        show CLI help
+      </td>
+    </tr>
+    <tr>
+      <td>--file</td>
+      <td>
+          No
+      </td>
+      <td>
+        Delete a Stack on Digital Ocean deployed by $ nitric deploy:do
+      </td>
+    </tr>
+</table>
+
+
+#### Examples
+
+```bash
+$ nitric down:do
+```
+  
+
