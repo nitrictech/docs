@@ -1,10 +1,12 @@
-Nitric provides a local development experience that helps to emulate cloud environments, including running [Services](./services)/[Functions](./services-functions) as Containers with Dockers and providing simulated or locally executable equivalents for most cloud services, such as [Events & Topics](./events), [Queues](./queues), [Storage](./storage), [KeyValue Stores](./key-value), [Entrypoints](./entrypoints) and [API Gateways](./api-gateways).
+Nitric provides a local development experience that helps to emulate cloud environments, including running [Services](/docs/intro/concepts/services)/[Functions](/docs/intro/concepts/functions) as Containers with Dockers and providing simulated or locally executable equivalents for most cloud services, such as [Events & Topics](/docs/reference/sdk/events), [Queues](/docs/reference/sdk/queues), [Storage](/docs/reference/sdk/storage), [Document Stores](/docs/reference/sdk/documents), [Entrypoints](/docs/reference/project/entrypoints) and [API Gateways](/docs/reference/project/api-gateways).
 
-The local run functionality is included in the base [Nitric CLI](./nitric-cli), no additional setup steps or plugins are required beyond those in the [Installation Guide](./installation).
+The local run functionality is included in the base [Nitric CLI](/docs/reference/cli), no additional setup steps or plugins are required beyond those in the [Installation Guide](/docs/getting-started/installation).
+
+> For a step by step guide on how develop locally, view our [Getting Started Tutorial](/docs/getting-started/multi-cloud).
 
 ## Checking Prerequisites
 
-You can check that any prerequisite software is installed using the `doctor` command. The prerequisite for local run is [Docker](https://docker.com):
+You can check that any prerequisite software is installed using the `doctor` command. The prerequisite for local run is <a target="_blank" href="https://docker.com">Docker</a>:
 
 ```bash
 nitric doctor
@@ -27,6 +29,11 @@ While your application is running you'll see a prompt saying **Running, press 'Q
 The only things persisted between runs are container images which helps speed up the start time on subsequent runs.
 
 ## Troubleshooting
+
+The Nitric framework logs all errors within the `.nitric/logs` directory, which is relative to your stack definition. These log files can be used to determine what went wrong.
+If you see an error, please feel free to <a target="_blank" href="https://github.com/nitrictech/nitric/issues/new?assignees=&labels=&template=bug_report.md&title=%27Create%20bug%20report%27">report an issue</a> in our GitHub and we will get back to you shortly.
+
+### Docker
 
 If an error occurs during runtime or cleanup, some Docker resources might fail to be cleaned up. The Nitric team is working to improve this, however, in the meantime you can safely delete any of these resources yourself manually.
 
