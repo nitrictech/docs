@@ -1,0 +1,32 @@
+---
+title: 'Queues Overview'
+---
+
+Nitric Queues are designed to facilitate **_pull_** based workloads, where tasks are sent by producers and received by consumers. Both ends of the transaction are requests, i.e. the consumer asks the queue for more tasks, the queue doesn't push tasks to the consumers.
+This flow is useful in situations such as batch processing or when consumers aren't always available.
+
+<img
+  height="134"
+  src="../assets/img/queues-overview.svg"
+  alt="queue overview diagram"
+/>
+
+## Key concepts
+
+- **Queues** are a named target for `sending` and `receiving` `tasks`. They're typically named based on the _subject_ of the tasks they will contain or the intended recipient.
+- **Tasks** are a combination of tasks metadata, a payload and when received a lease. Typically, a task payload will take the form of a JSON document.
+- **Producers** produce tasks by sending them to queues. Unlike Event Publishers, Producers may be aware of the intended consumer of a tasks, since a queue can be intended for single Consumer.
+- **Consumers** use receive requests to pull tasks from a queue. To ensure tasks aren't lost in the case of a failure, tasks are leased for a limited amount of time. Consumers must notify the queue that a tasks has been completed, otherwise it will requeue once the lease expires.
+
+### Task format
+
+Nitric uses named types for all messages to identify their intended purpose (e.g. tasks & events), a task is a message to be sent or received from a queue. Tasks typically define work to be done and are received and complete by services or functions. Task messages consist of payload, which is a custom object which defines the task, along with a limited set of metadata properties which assist in identifying tasks and ensuring they're processed correctly.
+
+When using one of the Nitric SDKs, typically only the `payload` is required. This is usually a standard object or a map/dictionary in the programming language being used. In the majority of cases, objects can be passed into and received from the SDK methods without prior conversion or serialization. Over the wire a `Struct` or JSON document will be used as the serialized format for the payload.
+
+| Property     | Type     | Description                                                                                                                                                                                                                                                                                                             |
+| ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ID           | `String` | The unique for the task, no two task should have the same id. However, the same ID may be received by consumers more than once in the case that a lease expires before a task is complete.                                                                                                                              |
+| Payload      | `Struct` | The task data payload. This is typically an Object or Map/Dictionary depending on the client language. Nitric SDKs will automatically convert objects to the required `Struct` format                                                                                                                                   |
+| Payload Type | `String` | Payload Type is an optional property which provides a location to store a typehint string for the payload. E.g. `io.nitric.example.task`. This data may be used to assist with deserialization of the payload `Struct`.                                                                                                 |
+| Lease ID     | `String` | `Read Only` Lease IDs are only present on tasks that have been received from a queue. Every request to receive a task will generate a unique lease id. This id is used when completing a task, extending a lease or releasing a task back to the queue. Only the latest lease id will be accepted for those operations. |

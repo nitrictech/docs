@@ -1,8 +1,16 @@
 ---
-title: Choose a data structure
+title: 'Documents Overview'
 ---
 
-## Documents
+The Documents service provides applications with the ability to store and retrieve application state.
+Nitric provides an expressive Document API to make this process as easy as possible.
+
+The Document service is provides a common programming interface across key Cloud document databases
+including AWS DynamoDB and GCP Firestore.
+
+> Support for Azure Cosmos and MongoDB is on the roadmap
+
+## Key concepts
 
 Documents are the unit of storage within a collection. They are a lightweight record that contains set of fields.
 Each document is identified by a unique id string.
@@ -42,7 +50,7 @@ Documents can also nest complex JSON objects like maps or arrays.
 }
 ```
 
-## Collections
+### Collections
 
 Collections provide containers for documents. In SQL database terms a collection equates to a table.
 
@@ -71,7 +79,7 @@ Continuing our example you could have an `Actors` collection for all your actor 
 ]
 ```
 
-#### Stack Definition
+### Stack Definition
 
 To use Collections you need to define them as a resource in a stack file, such as `nitric.yaml`. At the root level of the stack file,
 add a collections key, which contains an array of collections.
@@ -85,7 +93,7 @@ collections:
 Collections will be automatically created and configured with sensible defaults by the
 Nitric CLI when deploying to a cloud environment and emulated when running and testing locally.
 
-## Subcollections
+### Subcollections
 
 Subcollections allow you to structure documents hierarchically creating one-to-many parent/child relationships. Subcollections becomes extremely useful when:
 
@@ -115,6 +123,6 @@ associated order data.
 
 Subcollections also provided with query capabilities, enabling efficient lookups of subcollection documents.
 
-#### Subcollections Limitation
+### Notes
 
 - Nitric currently supports 1 level of subcollections under collections

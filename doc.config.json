@@ -242,20 +242,20 @@
                 "title": "Documents",
                 "routes": [
                   {
-                    "title": "Structure Data",
-                    "path": "/docs/reference/sdk/documents/structure-data.mdx"
+                    "title": "Overview",
+                    "path": "/docs/reference/sdk/documents/_index.mdx"
                   },
                   {
                     "title": "References",
                     "path": "/docs/reference/sdk/documents/references.mdx"
                   },
                   {
-                    "title": "Insert Data",
-                    "path": "/docs/reference/sdk/documents/insert-data.mdx"
+                    "title": "Set Data",
+                    "path": "/docs/reference/sdk/documents/set-data.mdx"
                   },
                   {
-                    "title": "Fetch Data",
-                    "path": "/docs/reference/sdk/documents/fetch-data.mdx"
+                    "title": "Get and Query Data",
+                    "path": "/docs/reference/sdk/documents/get-query-data.mdx"
                   },
                   {
                     "title": "Delete Data",
@@ -266,6 +266,10 @@
               {
                 "title": "Events",
                 "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/sdk/events/_index.mdx"
+                  },
                   {
                     "title": "Define Topics",
                     "path": "/docs/reference/sdk/events/define-topics.mdx"
@@ -279,6 +283,10 @@
               {
                 "title": "Queues",
                 "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/sdk/queues/_index.mdx"
+                  },
                   {
                     "title": "Define Queues",
                     "path": "/docs/reference/sdk/queues/define-queues.mdx"
@@ -296,6 +304,10 @@
               {
                 "title": "Secrets",
                 "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/sdk/secrets/_index.mdx"
+                  },
                   {
                     "title": "Create Secrets",
                     "path": "/docs/reference/sdk/secrets/create-secrets.mdx"
