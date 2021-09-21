@@ -115,12 +115,12 @@
                     "path": "/docs/intro/languages/python.mdx"
                   },
                   {
-                    "title": "Go",
-                    "path": "/docs/intro/languages/go.mdx"
-                  },
-                  {
                     "title": "Java",
                     "path": "/docs/intro/languages/java.mdx"
+                  },
+                  {
+                    "title": "Go",
+                    "path": "/docs/intro/languages/go.mdx"
                   },
                   {
                     "title": "Other",

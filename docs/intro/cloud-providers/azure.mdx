@@ -1,4 +1,79 @@
-> Support for Microsoft Azure is currently in development and will be available soon.
+Nitric applications are supported on Microsoft Azure by default. You can automatically deploy an existing application to AWS using the [Nitric CLI](/docs/reference/cli), with the AWS plugin.
+
+## Installing the CLI plugin
+
+To install the official Nitric AWS Plugin, running the following command:
+
+```bash
+nitric-dev plugins:install @nitric/plugin-azure
+```
+
+This will download and install Azure specific commands for the cli.
+
+## Checking Prerequisites
+
+Next, you can check that any prerequisite software is also installed by using the doctor sub-command for Azure:
+
+```bash
+nitric doctor:azure
+```
+
+##### Install Azure CLI
+
+Also ensure you have installed Azure CLI. For alternative Linux install options please see [Install the Azure CLI on Linux](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt).
+
+
+```bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+```
+
+Verify the Azure CLI install by:
+
+```bash
+az -v
+```
+
+##### Install Pulumi Azure Native Plugin
+
+Also ensure you also have installed the Pulumi azure-native plugin.
+
+```bash
+pulumi plugin install resource azure-native v1.19.0
+```
+
+## Setup Credentials
+
+The Nitric Azure CLI Plugin uses the standard Azure credentials to authenticate with Azure. If you've set up local credentials for the Azure CLI or an SDK previously, these settings should work without modification.
+
+If you're setting up your credentials for the first time, simply run the following command and finish the login via the browser:
+
+```bash
+az login
+```
+
+## Deploy
+
+When you're ready to deploy your application to Azure, you can use the Azure CLI Plugin to automate the deployment process. 
+
+Use the `deploy` command from the root of your project to start an interactive deployment process, with prompts for Azure region, org. name and admin email:
+
+```bash
+$ nitric deploy:azure
+```
+
+To update an existing deployment, simply re-run the command.
+
+## Undeploy
+
+To pull down a previously deployed application from Azure, run the down command from the root of your project.
+
+```bash
+nitric down:azure
+```
+
+## Troubleshooting Deployments
+
+> Under construction. Having trouble in the meantime? <a href="https://github.com/nitrictech/nitric/discussions/" target="_blank">Chat with us</a>
 
 ## Current Status
 
