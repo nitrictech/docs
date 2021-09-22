@@ -195,7 +195,7 @@
             "path": "/docs/reference/_index.mdx",
             "routes": [
               {
-                "title": "Project Configuration",
+                "title": "Project Config",
                 "routes": [
                   {
                     "title": "Stack Definition",
@@ -212,15 +212,122 @@
                   {
                     "title": "Static Sites",
                     "path": "/docs/reference/project/sites.mdx"
+                  },
+                  {
+                    "path": "/docs/reference/project/schedules.mdx"
+                  }    
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Nitric API",
+            "path": "/docs/reference/api/_index.mdx",
+            "routes": [
+              {
+                "title": "Documents",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/api/documents/_index.mdx"
+                  },
+                  {
+                    "title": "References",
+                    "path": "/docs/reference/api/documents/references.mdx"
+                  },
+                  {
+                    "title": "Set Data",
+                    "path": "/docs/reference/api/documents/set-data.mdx"
+                  },
+                  {
+                    "title": "Get and Query Data",
+                    "path": "/docs/reference/api/documents/get-query-data.mdx"
+                  },
+                  {
+                    "title": "Delete Data",
+                    "path": "/docs/reference/api/documents/delete-data.mdx"
                   }
                 ]
               },
               {
-                "path": "/docs/reference/services/schedules.mdx"
+                "title": "Events",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/api/events/_index.mdx"
+                  },
+                  {
+                    "title": "Define Topics",
+                    "path": "/docs/reference/api/events/define-topics.mdx"
+                  },
+                  {
+                    "title": "Publish Events",
+                    "path": "/docs/reference/api/events/publish.mdx"
+                  }
+                ]
               },
               {
-                "title": "API Configuration",
-                "path": "/docs/reference/api.mdx"
+                "title": "Queues",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/api/queues/_index.mdx"
+                  },
+                  {
+                    "title": "Define Queues",
+                    "path": "/docs/reference/api/queues/define-queues.mdx"
+                  },
+                  {
+                    "title": "Send Tasks",
+                    "path": "/docs/reference/api/queues/send-tasks.mdx"
+                  },
+                  {
+                    "title": "Receive and Complete Tasks",
+                    "path": "/docs/reference/api/queues/recieve-complete-tasks.mdx"
+                  }
+                ]
+              },
+              {
+                "title": "Secrets",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/api/secrets/_index.mdx"
+                  },
+                  {
+                    "title": "Create Secrets",
+                    "path": "/docs/reference/api/secrets/create-secrets.mdx"
+                  },
+                  {
+                    "title": "Access Secrets",
+                    "path": "/docs/reference/api/secrets/access-secrets.mdx"
+                  },
+                  {
+                    "title": "Examples",
+                    "path": "/docs/reference/api/secrets/examples.mdx"
+                  }
+                ]
+              },
+              {
+                "title": "Storage",
+                "routes": [
+                  {
+                    "title": "Overview",
+                    "path": "/docs/reference/api/storage/_index.mdx"
+                  },
+                  {
+                    "title": "Write Files",
+                    "path": "/docs/reference/api/storage/write-files.mdx"
+                  },
+                  {
+                    "title": "Read Files",
+                    "path": "/docs/reference/api/storage/read-files.mdx"
+                  },
+                  {
+                    "title": "Delete Files",
+                    "path": "/docs/reference/api/storage/delete-files.mdx"
+                  }
+                ]
               }
             ]
           },
@@ -237,117 +344,6 @@
               {
                 "title": "Local Development",
                 "path": "/docs/reference/cli/local.mdx"
-              }
-            ]
-          },
-          {
-            "title": "Nitric SDK",
-            "path": "/docs/reference/sdk/_index.mdx",
-            "routes": [
-              {
-                "title": "Documents",
-                "routes": [
-                  {
-                    "title": "Overview",
-                    "path": "/docs/reference/sdk/documents/_index.mdx"
-                  },
-                  {
-                    "title": "References",
-                    "path": "/docs/reference/sdk/documents/references.mdx"
-                  },
-                  {
-                    "title": "Set Data",
-                    "path": "/docs/reference/sdk/documents/set-data.mdx"
-                  },
-                  {
-                    "title": "Get and Query Data",
-                    "path": "/docs/reference/sdk/documents/get-query-data.mdx"
-                  },
-                  {
-                    "title": "Delete Data",
-                    "path": "/docs/reference/sdk/documents/delete-data.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Events",
-                "routes": [
-                  {
-                    "title": "Overview",
-                    "path": "/docs/reference/sdk/events/_index.mdx"
-                  },
-                  {
-                    "title": "Define Topics",
-                    "path": "/docs/reference/sdk/events/define-topics.mdx"
-                  },
-                  {
-                    "title": "Publish Events",
-                    "path": "/docs/reference/sdk/events/publish.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Queues",
-                "routes": [
-                  {
-                    "title": "Overview",
-                    "path": "/docs/reference/sdk/queues/_index.mdx"
-                  },
-                  {
-                    "title": "Define Queues",
-                    "path": "/docs/reference/sdk/queues/define-queues.mdx"
-                  },
-                  {
-                    "title": "Send Tasks",
-                    "path": "/docs/reference/sdk/queues/send-tasks.mdx"
-                  },
-                  {
-                    "title": "Receive and Complete Tasks",
-                    "path": "/docs/reference/sdk/queues/recieve-complete-tasks.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Secrets",
-                "routes": [
-                  {
-                    "title": "Overview",
-                    "path": "/docs/reference/sdk/secrets/_index.mdx"
-                  },
-                  {
-                    "title": "Create Secrets",
-                    "path": "/docs/reference/sdk/secrets/create-secrets.mdx"
-                  },
-                  {
-                    "title": "Access Secrets",
-                    "path": "/docs/reference/sdk/secrets/access-secrets.mdx"
-                  },
-                  {
-                    "title": "Examples",
-                    "path": "/docs/reference/sdk/secrets/examples.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Storage",
-                "routes": [
-                  {
-                    "title": "Define Buckets",
-                    "path": "/docs/reference/sdk/storage/define-buckets.mdx"
-                  },
-                  {
-                    "title": "Write Files",
-                    "path": "/docs/reference/sdk/storage/write-files.mdx"
-                  },
-                  {
-                    "title": "Read Files",
-                    "path": "/docs/reference/sdk/storage/read-files.mdx"
-                  },
-                  {
-                    "title": "Delete Files",
-                    "path": "/docs/reference/sdk/storage/delete-files.mdx"
-                  }
-                ]
               }
             ]
           }
