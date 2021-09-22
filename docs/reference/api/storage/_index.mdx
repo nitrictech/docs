@@ -9,3 +9,16 @@ This is typically used to read and write items such as static website content, i
 
 - **Buckets** are named data stores which contain stored objects.
 - **Accessors** is the name used for readers and writers of object data from buckets.
+
+## Defining Buckets
+
+Buckets are a top-level resource defined in the stack definition. Before reading or writing objects you can add a bucket to the `nitric.yaml` or equivalent:
+
+```yaml
+buckets:
+	my-bucket: {}
+```
+
+## Setup Accessors
+
+> Coming Soon: The capability to lock down readers/writers of buckets within a stack
