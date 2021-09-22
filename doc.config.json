@@ -321,6 +321,10 @@
                   {
                     "title": "Access Secrets",
                     "path": "/docs/reference/sdk/secrets/access-secrets.mdx"
+                  },
+                  {
+                    "title": "Examples",
+                    "path": "/docs/reference/sdk/secrets/examples.mdx"
                   }
                 ]
               },
