@@ -60,21 +60,3 @@ If you need to troubleshoot a specific service in your project you can use stand
 # View logs for a Nitric Service
 docker logs [service name from nitric.yaml]
 ```
-
-## Current Status
-
-Below is a list of the current support status for each Nitric Service, when executed locally using `nitric run`.
-
-| **Service**                             | **Status** | **Underlying Service** |
-| --------------------------------------- | ---------- | ---------------------- |
-| Compute                                 | Preview    | Docker (local)         |
-| Container Registry                      | Preview    | Docker (local)         |
-| [API Gateway](../services/api-gateways) | Preview    | Custom                 |
-| [Documents](../services/documents)      | Preview    | Boltd                  |
-| [Entrypoints](../services/entrypoints)  | Preview    | Nginx                  |
-| [Events](../services/events)            | Preview    | Custom Test            |
-| [Queues](../services/queues)            | Preview    | Custom Test            |
-| [Schedules](../services/schedules)      | Preview    | _unavailable_          |
-| [Secrets](../services/secrets)          | Preview    | Custom Test            |
-| [Storage](../services/storage)          | Preview    | Docker Volume Storage  |
-| [Static Sites](../services/sites)       | Preview    | Nginx                  |
