@@ -17,7 +17,8 @@ Entrypoints are defined in a projects nitric.yaml file.
 
 Supported resource types for entrypoints are:
 
-- [Services/Functions](./services)
+- [Containers](./containers)
+- [Functions](./functions)
 - [Sites](./sites)
 - [Apis](./api-gateways)
 
@@ -30,12 +31,16 @@ When adding an API as a non-default entrypoint it is important that the leading 
 <CodeExamples
 languages={[
 	{
-		label: "Good 👍",
+		label: "Good nitric.yaml 👍",
 		value: "good"
 	},
 	{
-		label: "Bad 👎",
+		label: "Bad nitric.yaml 👎",
 		value: "bad"
+	},
+  {
+		label: "api.yaml",
+		value: "api"
 	}
 	]}
 	defaultLang="good"
@@ -46,10 +51,9 @@ languages={[
 name: example
 
 # Define functions here
-services:
+functions:
   example:
-    path: example
-    runtime: official/golang15
+    handler: functions/get.ts
 
 # Define Sites here
 sites:
@@ -59,25 +63,9 @@ sites:
     buildScripts:
       - npm build
 
-# Define APIs here
-apis:
-  exampleapi:
-    openapi: 3.0.0
-    info:
-      version: 1.0.0
-      title: Sample API
-      description: A sample API to illustrate OpenAPI concepts
-    paths:
-      /exampleapi/example:
-        get:
-          operationId: example
-          x-nitric-target:
-            name: example
-            type: function
-          description: Says random quote
-          responses:
-            '200':
-              description: Successful response
+# Define APIs here (see api.yaml)
+apis: 
+  example: api.yaml
 
 # Define nitric application entrypoints here
 entrypoints:
@@ -86,7 +74,7 @@ entrypoints:
       /:
         target: app
         type: site
-      # 👍 Matches the base path of the above API
+      # 👍 Matches the base path of the above API (see api.yaml)
       /exampleapi/:
         target: exampleapi
         type: api
@@ -113,24 +101,8 @@ sites:
       - npm build
 
 # Define APIs here
-apis:
-  exampleapi:
-    openapi: 3.0.0
-    info:
-      version: 1.0.0
-      title: Sample API
-      description: A sample API to illustrate OpenAPI concepts
-    paths:
-      /exampleapi/example:
-        get:
-          operationId: example
-          x-nitric-target:
-            name: example
-            type: function
-          description: Says random quote
-          responses:
-            '200':
-              description: Successful response
+apis: 
+  example: api.yaml
 
 # Define nitric application entrypoints here
 entrypoints:
@@ -139,13 +111,38 @@ entrypoints:
       /:
         target: app
         type: site
-      # 👎 Doesn't match the base path of the above API
+      # 👎 Doesn't match the base path of the above API (see api.yaml)
       /myapi/:
         target: exampleapi
         type: api
 ```
 
 </CodeExample>
+
+<CodeExample lang="api">
+
+```yaml
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Sample API
+  description: A sample API to illustrate OpenAPI concepts
+paths:
+  # 👀 entrypoint path must match leading path of API '/exampleapi/'
+  /exampleapi/example:
+    get:
+      operationId: example
+      x-nitric-target:
+        name: example
+        type: function
+      description: Says random quote
+      responses:
+        '200':
+          description: Successful response
+```
+
+</CodeExample>
+
 </CodeExamples>
 
 ### Adding a Domain to entrypoints
@@ -162,8 +159,7 @@ entrypoints:
       /:
         target: app
         type: site
-      # 👎 Doesn't match the base path of the above API
-      /myapi/:
+      /exampleapi/:
         target: exampleapi
         type: api
     domains:
