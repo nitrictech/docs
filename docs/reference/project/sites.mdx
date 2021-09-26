@@ -9,11 +9,11 @@ Sites can be easily wired up to the rest of your stack by using [entrypoints](./
 ```yaml
 name: example-stack
 sites:
-	example-site:
-		path: example-site
-		assetPath: ./static
-		buildScripts:
-			- npm build
+  example-site:
+    path: example-site
+    assetPath: ./static
+    buildScripts:
+      - npm build
 ```
 
 ## Properties
@@ -32,25 +32,25 @@ To host and wire up your site to the rest of your stack you will need to use [en
 name: example-site
 
 functions:
-	example-function:
-		handler: functions/example.ts
+  example-function:
+    handler: functions/example.ts
 
 sites:
-	example-site:
-		path: example-site
-		assetPath: ./static
-		buildScripts:
-			- npm build
+  example-site:
+    path: example-site
+    assetPath: ./static
+    buildScripts:
+      - npm build
 
 entrypoints:
-	main:
-		paths:
-			/:
-				type: site
-				target: example-site
-			/example/:
-				type: function
-				target: example-service
+  main:
+    paths:
+      /:
+        type: site
+        target: example-site
+      /example/:
+        type: function
+        target: example-service
 ```
 
 In the above example your site would now be able to call the example-function, by simply making a request to `/example/`, as these two resources will be served under a single origin together.
