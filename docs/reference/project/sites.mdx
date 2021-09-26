@@ -2,7 +2,7 @@ Nitric sites allow static site content to be automatically uploaded to a bucket 
 
 Sites can be easily wired up to the rest of your stack by using [entrypoints](./entrypoints.mdx), allowing you to easily access other services directly from your site under a single origin.
 
-> Support for static sites is currently limited to a few providers, to see if a provider is compatible see the table [here](./nitric-apis.mdx)
+> Support for static sites is currently limited to a few providers, to see if a provider is compatible see the table [here](../../intro/concepts/nitric-apis.mdx)
 
 ## Example Site
 
@@ -31,10 +31,9 @@ To host and wire up your site to the rest of your stack you will need to use [en
 ```yaml
 name: example-site
 
-services:
-	example-service:
-		path: example-service
-		runtime: function/nodejs12
+functions:
+	example-function:
+		handler: functions/example.ts
 
 sites:
 	example-site:
@@ -50,8 +49,8 @@ entrypoints:
 				type: site
 				target: example-site
 			/example/:
-				type: service
+				type: function
 				target: example-service
 ```
 
-In the above example your site would now be able to call the example-service, by simply making a request to `/example/`, as these two resources will be served under a single origin together.
+In the above example your site would now be able to call the example-function, by simply making a request to `/example/`, as these two resources will be served under a single origin together.
