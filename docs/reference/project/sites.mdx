@@ -1,19 +1,21 @@
-Nitric sites allow static site content to be automatically uploaded to a bucket as part of your stack deployment.
+Static sites are a great way to use your favorite frameworks to host the front-end of your nitric application, and is generally a faster and cheaper way to host front-end content when compared to rendering your application through a server.
 
-Sites can be easily wired up to the rest of your stack by using [entrypoints](./entrypoints.mdx), allowing you to easily access other services directly from your site under a single origin.
+Nitric supports this capability by allowing you to configure your site into a nitric stack for automatic building and upload during deployments.
 
-> Support for static sites is currently limited to a few providers, to see if a provider is compatible see the table [here](./nitric-apis.mdx)
+Sites can be wired up to the rest of your stack by using [entrypoints](./entrypoints.mdx), allowing you to easily access other services directly from your site under a single origin.
+
+> Support for static sites is currently limited to a few providers, to see if a provider is compatible see the table [here](../../intro/concepts/nitric-apis.mdx)
 
 ## Example Site
 
 ```yaml
 name: example-stack
 sites:
-	example-site:
-		path: example-site
-		assetPath: ./static
-		buildScripts:
-			- npm build
+  example-site:
+    path: example-site
+    assetPath: ./static
+    buildScripts:
+      - npm build
 ```
 
 ## Properties
@@ -31,27 +33,26 @@ To host and wire up your site to the rest of your stack you will need to use [en
 ```yaml
 name: example-site
 
-services:
-	example-service:
-		path: example-service
-		runtime: function/nodejs12
+functions:
+  example-function:
+    handler: functions/example.ts
 
 sites:
-	example-site:
-		path: example-site
-		assetPath: ./static
-		buildScripts:
-			- npm build
+  example-site:
+    path: example-site
+    assetPath: ./static
+    buildScripts:
+      - npm build
 
 entrypoints:
-	main:
-		paths:
-			/:
-				type: site
-				target: example-site
-			/example/:
-				type: service
-				target: example-service
+  main:
+    paths:
+      /:
+        type: site
+        target: example-site
+      /example/:
+        type: function
+        target: example-service
 ```
 
-In the above example your site would now be able to call the example-service, by simply making a request to `/example/`, as these two resources will be served under a single origin together.
+In the above example your site would now be able to call the example-function, by simply making a request to `/example/`, as these two resources will be served under a single origin together.
