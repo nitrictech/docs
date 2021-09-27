@@ -464,16 +464,16 @@ Let's see those new changes up on the cloud! Simply re-run the `deploy` command 
 <CodeExamples 
 	languages={[
 	{
-		icon: <img src="/img/logos/aws.png" noMargin priority width={70} height={50} />,
+		icon: <img src="/img/logos/aws.svg" noMargin priority width={70} height={34} />,
 		value: "aws",
 	}, {
-		icon: <img src="/img/logos/gcp.svg" noMargin priority width={100} height={70} />,
+		icon: <img src="/img/logos/gcp-no-text.svg" noMargin priority width={100} height={40} />,
 		value: "gcp"
 	}, {
-		icon: <img src="/img/logos/azure.png" noMargin priority width={100} height={70} />,
+		icon: <img src="/img/logos/azure-no-text.svg" noMargin priority width={100} height={45} />,
 		value: "azure"
 	}, {
-		icon: <img src="/img/logos/digital-ocean.png" noMargin priority width={100} height={70} />,
+		icon: <img src="/img/logos/digital-ocean.svg" noMargin priority width={100} height={70} />,
 		value: "do"
 	}
 	]}
@@ -495,11 +495,9 @@ nitric deploy:gcp
 </CodeExample>
 <CodeExample lang={"azure"}>
 
-<Box pt={4}>
-
-> 🚧 Support for Microsoft Azure is currently in development and will be available soon.
-
-</Box>
+```bash
+nitric deploy:azure
+```
 
 </CodeExample>
 <CodeExample lang={"do"}>

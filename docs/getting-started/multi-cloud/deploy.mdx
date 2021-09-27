@@ -3,16 +3,16 @@ Start by choosing your cloud provider:
 <CodeExamples 
 	languages={[
 	{
-		icon: <img src="/img/logos/aws.png" noMargin priority width={70} height={50} />,
+		icon: <img src="/img/logos/aws.svg" noMargin priority width={70} height={34} />,
 		value: "aws",
 	}, {
-		icon: <img src="/img/logos/gcp.svg" noMargin priority width={100} height={70} />,
+		icon: <img src="/img/logos/gcp-no-text.svg" noMargin priority width={100} height={40} />,
 		value: "gcp"
 	}, {
-		icon: <img src="/img/logos/azure.png" noMargin priority width={100} height={70} />,
+		icon: <img src="/img/logos/azure-no-text.svg" noMargin priority width={100} height={45} />,
 		value: "azure"
 	}, {
-		icon: <img src="/img/logos/digital-ocean.png" noMargin priority width={100} height={70} />,
+		icon: <img src="/img/logos/digital-ocean.svg" noMargin priority width={100} height={70} />,
 		value: "do"
 	}
 	]}
@@ -110,11 +110,55 @@ nitric deploy:gcp
 </CodeExample>
 <CodeExample lang={"azure"}>
 
-<Box pt={4}>
+## Installing the CLI plugin
 
-> 🚧 Support for Microsoft Azure is currently in development and will be available soon.
+To install the official Nitric AWS Plugin, running the following command:
 
-</Box>
+```bash
+nitric-dev plugins:install @nitric/plugin-azure
+```
+
+This will download and install Azure specific commands for the cli.
+
+## Checking Prerequisites
+
+Next, you can check that any prerequisite software is also installed by using the doctor sub-command for Azure:
+
+```bash
+nitric doctor:azure
+```
+
+### Install Azure CLI
+
+Also ensure you have installed Azure CLI. For alternative Linux install options please see [Install the Azure CLI on Linux](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt).
+
+```bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+```
+
+Verify the Azure CLI install by:
+
+```bash
+az -v
+```
+
+## Setup Credentials
+
+The Nitric Azure CLI Plugin uses the standard Azure credentials to authenticate with Azure. If you've set up local credentials for the Azure CLI or an SDK previously, these settings should work without modification.
+
+If you're setting up your credentials for the first time, simply run the following command and finish the login via the browser:
+
+```bash
+az login
+```
+
+## Deploy
+
+Let's go ahead and deploy your stack:
+
+```bash
+nitric deploy:azure
+```
 
 </CodeExample>
 <CodeExample lang={"do"}>
