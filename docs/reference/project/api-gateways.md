@@ -84,8 +84,8 @@ The x-nitric-target extension consists of the following properties:
 
 | Property | Value    | Description                                                                                                                                                             |
 | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| name     | `string` | The name of another resource in the stack definition, such as a service. Requests to the API operation will be forwarded to this resource to be processed.              |
-| type     | `string` | The type of resource used for this target. This value must match a supported top level resource type in the stack definition. Currently supported values are: `service` |
+| name     | `string` | The name of another resource in the stack definition, such as a function. Requests to the API operation will be forwarded to this resource to be processed.              |
+| type     | `string` | The type of resource used for this target. This value must match a supported top level resource type in the stack definition. Currently supported values are: `functions`, `containers` |
 
 ## Testing your API
 
