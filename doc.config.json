@@ -303,7 +303,7 @@
                   },
                   {
                     "title": "Receive and Complete Tasks",
-                    "path": "/docs/reference/api/queues/recieve-complete-tasks.mdx"
+                    "path": "/docs/reference/api/queues/receive-complete-tasks.mdx"
                   }
                 ]
               },
