@@ -7,6 +7,7 @@ A nitric stack is described by its definition in a `nitric.yaml` file. A stack r
 | name        | A descriptive name of the stack                              | `string`                           |
 | functions   | zero or more functions to be deployed                        | map of [function](./functions)     |
 | containers  | zero or more containers to be deployed                       | map of [container](./containers)   |
+| collections | zero or more collections to be deployed                      | map of [collection](./collection)  |
 | topics      | zero or more topics to be deployed                           | map of [topic](./topics)           |
 | queues      | zero or more queues to be deployed                           | map of [queue](./queues)           |
 | buckets     | zero or more buckets to be deployed                          | map of [bucket](./buckets)         |
@@ -39,6 +40,9 @@ topics:
 buckets:
   raw-images: {}
   processed-images: {}
+
+collections:
+  process-configs: {}
 
 schedules:
   process:
