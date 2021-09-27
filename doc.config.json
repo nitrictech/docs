@@ -263,6 +263,10 @@
                   {
                     "title": "Publish Events",
                     "path": "/docs/reference/api/events/publish.mdx"
+                  },
+                  {
+                    "title": "Subscribe to Events",
+                    "path": "/docs/reference/api/events/subscribe.mdx"
                   }
                 ]
               },
