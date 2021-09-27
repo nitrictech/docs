@@ -214,6 +214,10 @@
                     "path": "/docs/reference/project/topics.mdx"
                   },
                   {
+                    "title": "Queues",
+                    "path": "/docs/reference/project/queues.mdx"
+                  },
+                  {
                     "title": "Buckets",
                     "path": "/docs/reference/project/buckets.mdx"
                   },
