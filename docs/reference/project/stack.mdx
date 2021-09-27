@@ -1,0 +1,73 @@
+A nitric stack is described by its definition in a `nitric.yaml` file. A stack represents a collection of resources that operate with each other and are deployed together.
+
+## Properties
+
+| **name**    | **description**                                              | **type**                           |
+| ----------- | ------------------------------------------------------------ | ---------------------------------- |
+| name        | A descriptive name of the stack                              | `string`                           |
+| functions   | zero or more functions to be deployed                        | map of [function](./functions)     |
+| containers  | zero or more containers to be deployed                       | map of [container](./containers)   |
+| topics      | zero or more topics to be deployed                           | map of [topic](./topics)           |
+| queues      | zero or more queues to be deployed                           | map of [queue](./queues)           |
+| buckets     | zero or more buckets to be deployed                          | map of [bucket](./buckets)         |
+| schedules   | zero or more schedules to trigger functions or containers on | map of [schedule](./schedules)     |
+| sites       | zero or more static sites to deploy                          | map of [site](./sites)             |
+| apis        | zero or more APIs to deploy                                  | map of [api](./api-gateways)       |
+| entrypoints | zero or more entrypoints to deploy                           | map of [entrypoint](./entrypoints) |
+
+## Full Example
+
+```yaml
+name: example-image-processor
+
+functions:
+  get-processed-image:
+    handler: functions/get.ts
+  store-image:
+    handler: functions/store.ts
+
+containers:
+  process-image:
+    context: containers/process
+    triggers:
+      topics:
+        - process-trigger
+
+topics:
+  process-trigger: {}
+
+buckets:
+  raw-images: {}
+  processed-images: {}
+
+schedules:
+  process:
+    expression: */5 * * * *
+      target:
+        type: topic
+        name: process-trigger
+      event:
+        payloadType: process-images
+        payload:
+          bucket: raw-images
+
+sites:
+  app:
+    path: app
+    assetPath: build
+    buildScripts:
+      - yarn build
+
+apis:
+  image-api: api.yaml
+
+entrypoints:
+  main:
+    paths:
+      /:
+        target: app
+        type: site
+      /api/:
+        target: image-api
+        type: api
+```

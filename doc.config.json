@@ -202,12 +202,20 @@
                     "path": "/docs/reference/project/stack.mdx"
                   },
                   {
-                    "title": "Entrypoints",
-                    "path": "/docs/reference/project/entrypoints.mdx"
+                    "title": "Functions",
+                    "path": "/docs/reference/project/functions.mdx"
                   },
                   {
-                    "title": "API Gateways",
-                    "path": "/docs/reference/project/api-gateways.mdx"
+                    "title": "Containers",
+                    "path": "/docs/reference/project/containers.mdx"
+                  },
+                  {
+                    "title": "Topics",
+                    "path": "/docs/reference/project/topics.mdx"
+                  },
+                  {
+                    "title": "Buckets",
+                    "path": "/docs/reference/project/buckets.mdx"
                   },
                   {
                     "title": "Static Sites",
@@ -215,7 +223,15 @@
                   },
                   {
                     "path": "/docs/reference/project/schedules.mdx"
-                  }    
+                  },
+                  {
+                    "title": "API Gateways",
+                    "path": "/docs/reference/project/api-gateways.mdx"
+                  },
+                  {
+                    "title": "Entrypoints",
+                    "path": "/docs/reference/project/entrypoints.mdx"
+                  }                  
                 ]
               }
             ]
