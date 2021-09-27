@@ -1,9 +1,9 @@
 ## What we'll do
 
-1. Create a new Nitric project
-2. Create [functions](../services-functions.mdx) to handle API operations
-3. Create a [documents](../documents.mdx) collection to store data
-4. Set up an [API gateway](../api-gateways.mdx) and bind it to the functions
+1. Create a new Nitric stack
+2. Create [functions](/docs/intro/concepts/functions) to handle API operations
+3. Create a [documents](/docs/reference/api/documents) collection to store data
+4. Set up an [API gateway](/reference/project/api-gateways) and bind it to the functions
 5. Get it all running locally for testing
 6. Deploy to a cloud of your choice
 
@@ -17,15 +17,15 @@
 
 ## Getting started
 
-This tutorial assumes you have the Nitric CLI installed, if not you can follow the [installation guide](/docs/installation).
+This tutorial assumes you have the Nitric CLI installed, if not you can follow the [installation guide](/docs/getting-started/installation).
 
 You'll also want to setup your environment to run and test Nitric applications locally by installing prerequisite software. Use the `nitric doctor` command to check and automatically setup your machine.
 
-If you’d like to deploy the results to a cloud environment _(optional)_, you’ll also need to setup your credentials and any other cloud specific configuration: [AWS](/docs/provider-aws), [GCP](/docs/provider-gcp), or [Azure](/docs/provider-azure).
+If you’d like to deploy the results to a cloud environment _(optional)_, you’ll also need to setup your credentials and any other cloud specific configuration: [AWS](/docs/intro/cloud-providers/aws), [GCP](/docs/intro/cloud-providers/gcp), or [Azure](/docs/intro/cloud-providers/azure).
 
-## New project
+## New stack
 
-We’ll start by creating a new project for the REST API.
+We’ll start by creating a new stack for the REST API.
 
 <CodeExamples 
 	languages={[
@@ -39,20 +39,26 @@ We’ll start by creating a new project for the REST API.
 	}
 	]}
 	defaultLang="node"
->
-<CodeExample lang="node">
-<br/>
-During this process we'll also add our first serverless function, choosing `function/nodets12` as the template and `orders-create` as the name.
+><CodeExample lang="node">
+
+<Box mt={4}>
+
+You can create your Stack by running the `make:stack` command below:
+
+</Box>
 
 ```bash
-nitric make:project my-rest-api
+nitric make:stack my-rest-api
 ```
 
+We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
+
 ```text
-? Include an example service? function/nodets12
-? Name for the example function? orders-create
-✔ Making Project my-rest-api
-✔ Making Function orders-create
+? Stack template (Use arrow keys)
+❯ official/TypeScript Stack
+  official/Python Stack
+  official/Java Stack
+  official/Go Stack
 ```
 
 Next, open the project in your editor of choice. The scaffolded project should have the following structure:
@@ -61,29 +67,42 @@ Next, open the project in your editor of choice. The scaffolded project should h
 my-rest-api/
 |
 +--nitric.yaml
-+--orders-create/
++--api.yaml
++--package.json
++--.gitignore
++--common/
    |
-   +--node_modules/
-   +--.gitignore
+   +--example.ts
    +--index.ts
-   +--package.json
-   +--tsconfig.json
+   +--path.ts
++--functions/
+   |
+   +--create.ts
+   +--list.ts
+   +--read.ts
 ```
 
 </CodeExample>
 <CodeExample lang="python">
-<br/>
-During this process we'll also add our first serverless function, choosing `function/python37` as the template and `orders-create` as the name.
+
+<Box mt={4}>
+
+You can create your Stack by running the `make:stack` command below:
+
+</Box>
 
 ```bash
-nitric make:project my-rest-api
+nitric make:stack my-rest-api
 ```
 
+We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
+
 ```text
-? Include an example service? function/python37
-? Name for the example function? orders-create
-✔ Making Project my-rest-api
-✔ Making Function orders-create
+? Stack template (Use arrow keys)
+  official/TypeScript Stack
+❯ official/Python Stack
+  official/Java Stack
+  official/Go Stack
 ```
 
 Next, open the project in your editor of choice. The scaffolded project should have the following structure:
@@ -92,40 +111,56 @@ Next, open the project in your editor of choice. The scaffolded project should h
 my-rest-api/
 |
 +--nitric.yaml
-+--orders-create/
++--api.yaml
++--requirements.txt
++--.gitignore
++--common/
    |
-   +--index.py
-   +--requirements.txt
+   +--__init__.py
+   +--example.py
++--functions/
+   |
+   +--__init__.py
+   +--create.py
+   +--list.py
+   +--read.py
 ```
 
 </CodeExample>
 </CodeExamples>
 
-You can test the project scaffold with the `run` command.
+The stack template already comes with a working API example, so we will use this example as a starter template for our orders API.
+
+You can test the example stack with the `run` command.
 
 ```bash
 nitric run
 ```
 
 ```bash
-✔ Staging stack my-rest-api
-✔ Building Functions
+✔ Building Services
 ✔ Creating docker network
-✔ Creating Volume: my-rest-api-vol
-✔ Running Services
+✔ Running Functions & Containers
 ✔ Starting API Gateways
-Function      Port
-orders-create 49152
-Functions Running press ctrl-C quit... ⣟
+✔ Starting Entrypoints
+ Function Port
+ ──────── ─────
+ create   54054
+ list     54055
+ read     54056
+ Api      Port
+ ──────── ─────
+ examples 49152
+Running, press 'Q' to clean up and exit... -
 ```
 
-Once running, use your browser to navigate to localhost on the port provided for the `orders-create` function, e.g. `http://localhost:49152/`. You should receive a success response from the function.
+Once running, use your browser to navigate to localhost on the port provided for the `examples` api, e.g. `http://localhost:49152/examples`. You should receive a success response from the api.
 
-> The first time you run a project or function it will take a moment longer to start while Docker image layers are downloaded and cached on your machine.
+> The first time you run a stack it will take a moment longer to start while Docker image layers are downloaded and cached on your machine.
 
 ## Create orders
 
-Next, let's turn the `orders-create` function into the handler for `POST: /orders`, by having it add new orders to a document collection called `orders`. Since every new order will need a unique order id, for the purposes of this tutorial we'll generate a uuid to serve as the id.
+Next, let's turn the `create` function into the handler for `POST: /orders`, by having it add new orders to a document collection called `orders`. Since every new order will need a unique order id, for the purposes of this tutorial we'll generate a uuid to serve as the id.
 
 <CodeExamples 
 	languages={[
@@ -141,22 +176,24 @@ Next, let's turn the `orders-create` function into the handler for `POST: /order
 	defaultLang="node"
 >
 <CodeExample lang="node">
-<br/>
-Start by adding the uuid dependency to the function:
+
+<Box mt={4}>
+
+The stack already comes with the `uuidv4` dependency for id generation, so let's install our dependencies from the root of the stack:
+
+</Box>
 
 ```bash
-cd orders-create
 yarn install
-yarn add uuid
 ```
 
-Next, update the `orders-create` function to receive an "order create request", create the order and store it in the `orders` collection.
+Next, update the `create.ts` function to receive an "order create request", create the order and store it in the `orders` collection. For simplicity we will keep our Typescript typings in the same file, but these could be moved into the common directory later.
 
 ```typescript
-// index.ts
+// functions/create.ts
 
 import { faas, documents } from '@nitric/sdk';
-import { v4 as uuidv4 } from 'uuid';
+import { uuid } from 'uuidv4';
 
 // Assume we receive a valid OrderCreate request object.
 interface Order {
@@ -174,13 +211,14 @@ interface CreateResponse {
   orderId?: string;
 }
 
+// Start your function here
 faas.start(
   async (
     request: faas.NitricTrigger<CreateRequest>
   ): Promise<faas.Response<CreateResponse>> => {
     const order = {
       ...request.dataAsObject(), // extract data from the request
-      id: uuidv4(),
+      id: uuid(), // generate a new uuid
       dateOrdered: new Date().toJSON(),
     };
 
@@ -203,12 +241,16 @@ faas.start(
 
 </CodeExample>
 <CodeExample lang="python">
-<br/>
 
-Update the order_create function so that it receives OrderRequests, then creates a new order, stores it in the `orders` collection and returns the new order's id.
+<Box mt={4}>
+
+Update the `create.py` function so that it receives OrderRequests, then creates a new order, stores it in the `orders` collection and returns the new order's id.
+We can re-use the generate_id method from the example stack to generate our id.
+
+</Box>
 
 ```python
-# index.py
+# functions/create.py
 
 import dataclasses
 from datetime import datetime
@@ -217,14 +259,14 @@ from typing import Union
 
 from nitric.faas import start, Trigger, Response
 from nitric.api import Documents
-import uuid
+from common.example import generate_id
 
 
 @dataclass(frozen=True)
 class OrderRequest:
   itemId: str
   customerId: str
-  id: str = field(default_factory=lambda: str(uuid.uuid4()))
+  id: str = field(default_factory=lambda: str(generate_id()))
   dateOrdered: str = field(default_factory=lambda: str(datetime.now()))
 
 
@@ -253,9 +295,7 @@ if __name__ == "__main__":
 
 ## Retrieve an order
 
-Now that we can store new orders, let's add the function for `GET: /orders/{$orderId}`, which will retrieve an order by its ID.
-
-First, create the new function called `orders-get` using the CLI:
+Now that we can store new orders, let's update the read function for `GET: /orders/{$orderId}`, which will retrieve an order by its ID.
 
 <CodeExamples 
 	languages={[
@@ -269,17 +309,16 @@ First, create the new function called `orders-get` using the CLI:
 	}
 	]}
 	defaultLang="node"
->
-<CodeExample lang="node">
+><CodeExample lang="node">
 
-```bash
-nitric make:service function/nodets12 orders-get
-```
+<Box mt={4}>
 
-Then, update the `index.ts` file for this new function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
+First, update the `read.ts` file for this function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
+
+</Box>
 
 ```typescript
-// index.ts
+// functions/read.ts
 
 import { faas, documents } from '@nitric/sdk';
 
@@ -305,14 +344,14 @@ faas.start(
 </CodeExample>
 <CodeExample lang="python">
 
-```bash
-nitric make:service function/python37 orders-get
-```
+<Box mt={4}>
 
-Then, update the `index.py` file for this new function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
+First, update the `read.py` file for this function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
+
+</Box>
 
 ```python
-# index.py
+# functions/read.py
 
 from typing import Union
 
@@ -349,9 +388,7 @@ if __name__ == "__main__":
 
 ## List all orders
 
-Finally, we'll create a function for `GET: /orders`, which will list every order.
-
-Create the new function `orders-list` with the CLI:
+Finally, we'll update the list function for `GET: /orders`, which will list every order.
 
 <CodeExamples 
 	languages={[
@@ -368,14 +405,14 @@ Create the new function `orders-list` with the CLI:
 >
 <CodeExample lang="node">
 
-```bash
-nitric make:service function/nodets12 orders-list
-```
+<Box mt={4}>
 
-Then, update the `index.ts` file for the list function so it retrieves every order from the `orders` collection.
+Update the `list.ts` file for the list function so it retrieves every order from the `orders` collection.
+
+</Box>
 
 ```typescript
-// index.ts
+// functions/list.ts
 
 import { faas, documents } from '@nitric/sdk';
 import { FetchResponse } from '@nitric/sdk/lib/api/documents/query';
@@ -393,9 +430,10 @@ faas.start(
           .pagingFrom(token)
           .fetch()) as FetchResponse<any>;
         results.push(
-          ...page.documents.map(({ id, content }) => {
-            id, content;
-          })
+          ...page.documents.map(({ id, content }) => ({
+            id,
+            content,
+          }))
         );
         if (!page.pagingToken) {
           break;
@@ -414,14 +452,14 @@ faas.start(
 </CodeExample>
 <CodeExample lang="python">
 
-```bash
-nitric make:service function/python37 orders-list
-```
+<Box mt={4}>
 
-Then, update the `index.py` file for the list function so it retrieves every order from the `orders` collection.
+Update the `list.py` file for the list function so it retrieves every order from the `orders` collection.
+
+</Box>
 
 ```python
-# index.py
+# functions/list.py
 
 from nitric.api import Documents
 from nitric.faas import start, Trigger, Response
@@ -452,9 +490,71 @@ if __name__ == "__main__":
 
 Now that we have functions to handle our API operations, we can add the API definition to our project. This will make the functions accessible and trigger them in response to specific requests to the API URL.
 
-> Learn more: [API Gateways Documentation](/docs/api-gateways)
+> Learn more: [API Gateways Documentation](/docs/reference/project/api-gateways)
 
-Update your `nitric.yaml` file to the following:
+Update your `api.yaml` file to the following:
+
+```yaml
+# Note: APIs are defined in OpenAPI Spec 3. The following is a basic example, but can be extended using the specification standards.
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Orders API
+  description: Tutorial orders API
+paths:
+  /orders:
+    get:
+      operationId: list
+      x-nitric-target:
+        name: list
+        type: function
+      description: Retrieve all orders
+      responses:
+        '200':
+          description: Successful response
+    post:
+      operationId: create
+      x-nitric-target:
+        name: create
+        type: function
+      description: Creates and persists new orders
+      responses:
+        '200':
+          description: Successful response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+  /orders/{orderId}:
+    get:
+      operationId: read
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: string
+          required: true
+      x-nitric-target:
+        name: read
+        type: function
+      description: Retrieve an existing order by its ID
+      responses:
+        '200':
+          description: Successful response
+components:
+  schemas:
+    OrderCreate:
+      type: object
+      properties:
+        itemId:
+          type: string
+        customerId:
+          type: string
+```
+
+Now lets add our `orders` collection and rename our API, update your `nitric.yaml` to the following:
 
 <CodeExamples 
 	languages={[
@@ -473,71 +573,20 @@ Update your `nitric.yaml` file to the following:
 
 ```yaml
 name: my-rest-api
-
-services:
-  orders-create:
-    path: orders-create
-    runtime: function/nodets12
-  orders-get:
-    path: orders-get
-    runtime: function/nodets12
-  orders-list:
-    path: orders-list
-    runtime: function/nodets12
-
-# Note: APIs are defined in OpenAPI Spec 3. The following is a basic example, but can be extended using the specification standards.
+# Nitric functions
+functions:
+  create:
+    handler: functions/create.ts
+  read:
+    handler: functions/read.ts
+  list:
+    handler: functions/list.ts
+# Nitric collections
+collections:
+  orders: {}
+# Nitric APIs
 apis:
-  orders:
-    openapi: 3.0.0
-    info:
-      version: 1.0.0
-      title: Orders API
-      description: Tutorial orders API
-    paths:
-      /orders:
-        get:
-          operationId: orders-list
-          x-nitric-target:
-            name: orders-list
-            type: service
-          description: Retrieve all orders
-          responses:
-            '200':
-              description: Successful response
-        post:
-          operationId: orders-create
-          x-nitric-target:
-            name: orders-create
-            type: service
-          description: Creates and persists new orders
-          responses:
-            '200':
-              description: Successful response
-          requestBody:
-            required: true
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/OrderCreate'
-      /orders/{orderId}:
-        get:
-          operationId: orders-get
-          x-nitric-target:
-            name: orders-get
-            type: service
-          description: Retrieve an existing order by its ID
-          responses:
-            '200':
-              description: Successful response
-    components:
-      schemas:
-        OrderCreate:
-          type: object
-          properties:
-            itemId:
-              type: string
-            customerId:
-              type: string
+  orders: api.yaml
 ```
 
 </CodeExample>
@@ -545,78 +594,20 @@ apis:
 
 ```yaml
 name: my-rest-api
-
-services:
-  orders-create:
-    path: orders-create
-    runtime: function/python37
-  orders-get:
-    path: orders-get
-    runtime: function/python37
-  orders-list:
-    path: orders-list
-    runtime: function/python37
-
-# Note: APIs are defined in OpenAPI Spec 3. The following is a basic example, but can be extended using the specification standards.
+# Nitric functions
+functions:
+  create:
+    handler: functions/create.py
+  read:
+    handler: functions/read.py
+  list:
+    handler: functions/list.py
+# Nitric collections
+collections:
+  orders: {}
+# Nitric APIs
 apis:
-  orders:
-    openapi: 3.0.0
-    info:
-      version: 1.0.0
-      title: Orders API
-      description: Tutorial orders API
-    paths:
-      /orders:
-        get:
-          operationId: orders-list
-          x-nitric-target:
-            name: orders-list
-            type: service
-          description: Retrieve all orders
-          responses:
-            '200':
-              description: Successful response
-        post:
-          operationId: orders-create
-          x-nitric-target:
-            name: orders-create
-            type: service
-          description: Creates and persists new orders
-          responses:
-            '200':
-              description: Successful response
-          requestBody:
-            required: true
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/OrderCreate'
-      /orders/{orderId}:
-        get:
-          operationId: orders-get
-          x-nitric-target:
-            name: orders-get
-            type: service
-          description: Retrieve an existing order by its ID a
-          parameters:
-            - in: path
-              name: orderId
-              schema:
-                type: string
-              required: true
-              description: Unique ID of the order
-          responses:
-            '200':
-              description: Successful response
-    components:
-      schemas:
-        OrderCreate:
-          type: object
-          properties:
-            itemId:
-              type: string
-            customerId:
-              type: string
+  orders: api.yaml
 ```
 
 </CodeExample>
@@ -651,13 +642,40 @@ curl http://localhost:YOUR_API_PORT/orders
 
 Once you're happy that everything is running correctly, you can deploy your API application to a cloud provider of your choice.
 
-```bash
-# Deploy to AWS
-nitric deploy:aws
-
-# Deploy to Google Cloud
-nitric deploy:gcp
-
-# Deploy to Azure
-nitric deploy:azure
-```
+<Box
+  sx={{
+    mb: 2,
+    px: 2,
+    borderRadius: '4px',
+    display: 'grid',
+    gap: {
+      md: 3,
+    },
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    backgroundColor: '#f4f4f4',
+    '& > a': {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      px: 1,
+      my: {
+        xs: 1,
+        md: 2,
+      },
+      transition: 'all 0.3s ease-in',
+      '&:hover, &:focus': {
+        backgroundColor: '#ececec',
+      },
+    },
+  }}
+>
+  <Link href="/docs/intro/cloud-providers/aws">
+    <img src="/img/logos/aws.svg" noMargin priority height={50} />
+  </Link>
+  <Link href="/docs/intro/cloud-providers/gcp">
+    <img src="/img/logos/gcp.svg" noMargin priority height={130} />
+  </Link>
+  <Link href="/docs/intro/cloud-providers/azure">
+    <img src="/img/logos/azure.svg" noMargin priority height={40} />
+  </Link>
+</Box>
