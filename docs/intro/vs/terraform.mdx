@@ -1,26 +1,31 @@
-Terraform is an open-source Infrastructure as Code (IaC) software tool created by HashiCorp. With Terraform users define and provide data center infrastructure using a declarative configuration language known as HashiCorp Configuration Language (HCL).
+Terraform is a powerful but narrowly focused cloud deployment "Infrastructure as Code" toolset. Terraform was created as an open-source project by HashiCorp. With Terraform users define and provide data centre infrastructure using a declarative configuration language known as HashiCorp Configuration Language (HCL).
 
-Terraform is a powerful toolset focused on cloud deployment. Nitric in comparison covers entires software development process, leveraging tools like Docker, Pulumi and others to enable mutli-cloud development.
+Nitric in comparison is a multi-cloud framework which enables the rapid development of solutions which can be deployed to cloud vendor providers.
 
-The diagram below illustrates coverage of Terraform and Nitric in mutli-cloud software development.
+The diagram below illustrates the relative coverage of Nitric and Terraform in mutli-cloud software development.
 
 <img
-  height="120"
+  height="200"
   src="../../../assets/img/pipeline-comparison.svg"
   alt="nitric vs terraform diagram"
 />
 
+Within Infrastructure as Code (IaC) space where there is some overlap between Nitric and Terraform, the Nitric stack definition provides a high-level application concept. Nitric is able to infer the intent of the application and provision the correct resources and permissions for each Cloud Vendor.
+
+With Terraform the HCL files developers have to explicitly define the specific Cloud Vendor's low-level resources and permissions to enable a solution stack.
+
 ## Feature Comparison
 
-| **Feature**                      | **Nitric** | **Terraform** |
-| -------------------------------- | ---------- | ------------- |
-| Open Source                      | Yes        | Yes           |
-| Infrastructure as Code           | Yes        | Yes           |
-| Stack Definition Format          | YAML       | HCL           |
-| Stack definitions cloud agnostic | Yes        | Mostly        |
-| Supported Clouds Providers       | 4          | 8             |
-| CLI                              | Yes        | Yes           |
-| Dev Project Templates            | Yes        | -             |
-| Dev Mutli Cloud API              | Yes        | -             |
-| Dev FaaS micro-framework         | Yes        | -             |
-| Dev Lanaguages Supported         | 4          | -             |
+| **Feature**                          | **Nitric** | **Terraform** |
+| ------------------------------------ | ---------- | ------------- |
+| Open Source                          | Yes        | Yes           |
+| Infrastructure as Code               | Yes        | Yes           |
+| Stack / resource definition format   | YAML       | HCL           |
+| Cloud agnostic definitions           | Yes        | Somewhat      |
+| Supported Clouds Providers           | 4          | 8             |
+| CLI                                  | Yes        | Yes           |
+| Membrane multi-cloud gateway/adaptor | Yes        | -             |
+| Multi-cloud API                      | Yes        | -             |
+| FaaS micro-framework                 | Yes        | -             |
+| Dev Languages supported              | 4          | -             |
+| Dev Language project scaffolding     | Yes        | -             |
