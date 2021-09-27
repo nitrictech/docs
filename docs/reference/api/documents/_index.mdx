@@ -5,14 +5,12 @@ title: 'Documents Overview'
 The Documents service provides applications with the ability to store and retrieve application state.
 Nitric provides an expressive Document API to make this process as easy as possible.
 
-The Document service is provides a common programming interface across key Cloud document databases
-including AWS DynamoDB and GCP Firestore.
-
-> Support for Azure Cosmos and MongoDB is on the roadmap
+The Document service provides a common programming interface across the major Cloud document databases
+including AWS DynamoDB, GCP Firestore, Azure CosmosDB, and MongoDB for DigitalOcean.
 
 ## Key concepts
 
-Documents are the unit of storage within a collection. They are a lightweight record that contains set of fields.
+Documents are the unit of storage within a collection. They are a lightweight record that contains a set of fields.
 Each document is identified by a unique id string.
 
 For example an actor document with the id `robert.downey@mavel.io` might look like this:
@@ -52,10 +50,10 @@ Documents can also nest complex JSON objects like maps or arrays.
 
 ### Collections
 
-Collections provide containers for documents. In SQL database terms a collection equates to a table.
+Collections provide containers for documents. In SQL database terms, a collection equates to a table.
 
-With the Documents service collections are schemaless and each document may contain an arbitary set of fields.
-However it is best practice for collections to have a well defined set of fields.
+With the Documents service, collections are schemaless and each document may contain an arbitary set of fields.
+However, it is best practice for collections to have a well defined set of fields.
 
 Continuing our example you could have an `Actors` collection for all your actor documents:
 
@@ -87,7 +85,7 @@ add a collections key, which contains an array of collections.
 ```yaml
 ---
 collections:
-  Actors: ~
+  Actors: {}
 ```
 
 Collections will be automatically created and configured with sensible defaults by the
@@ -95,11 +93,11 @@ Nitric CLI when deploying to a cloud environment and emulated when running and t
 
 ### Subcollections
 
-Subcollections allow you to structure documents hierarchically creating one-to-many parent/child relationships. Subcollections becomes extremely useful when:
+Subcollections allow you to structure documents hierarchically creating one-to-many parent/child relationships. Subcollections become extremely useful when:
 
-- you have a large number child items,
-- your application has different query access patterns, or
-- when you need to optimize performance or cost.
+- you have a large number of child items
+- your application has different query access patterns
+- when you need to optimize performance or cost
 
 Consider the example below:
 
@@ -117,11 +115,11 @@ Consider the example below:
 			📄 tsmc-ko-7ff-b003fb8a3f14
 ```
 
-Here we have a `Customers` collection with relatively small number of documents, but each customer has an `Orders` subcollection containing many
-thousands of documents. By using separating Customers and Order data we can efficiently retrieve customer records without having to pull all the
+Here we have a `Customers` collection with a relatively small number of documents, but each customer has an `Orders` subcollection containing many
+thousands of documents. By using separate Customers and Order data we can efficiently retrieve customer records without having to pull all the
 associated order data.
 
-Subcollections also provided with query capabilities, enabling efficient lookups of subcollection documents.
+Subcollections are also provided with query capabilities, enabling efficient lookups of subcollection documents.
 
 ### Notes
 
