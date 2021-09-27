@@ -42,11 +42,13 @@ Replace `your_access_key_id` and `your_secret_access_key` with your own values. 
 
 ## Deploy
 
-When you're ready to deploy your application to AWS, you can use the AWS CLI Plugin to automate the deployment process. Use the `deploy` command from the root of your project to start an interactive deployment process, with prompts for Account ID & Region:
+When you're ready to deploy your application to AWS, you can use the AWS CLI Plugin to automate the deployment process. Use the `deploy:aws` command from the root of your project to start an interactive deployment process, with prompts for Account ID & Region:
 
 ```bash
 nitric deploy:aws
 ```
+
+For automated build processes you can provide the prompt options on the command line.
 
 To update an existing deployment, simply re-run the command.
 

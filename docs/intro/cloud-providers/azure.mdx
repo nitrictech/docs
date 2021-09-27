@@ -46,11 +46,22 @@ az login
 
 When you're ready to deploy your application to Azure, you can use the Azure CLI Plugin to automate the deployment process.
 
-Use the `deploy` command from the root of your project to start an interactive deployment process, with prompts for Azure region, org. name and admin email:
+Use the `deploy:azure` command from the root of your project to start an interactive deployment process, with prompts for Azure region, org. name and admin email:
 
 ```bash
 $ nitric deploy:azure
 ```
+
+The `deploy:azure` command will prompt you for:
+
+- Azure region
+- AppService plan tier
+- organization name used in the developer portal and e-mail notifications
+- admin email to receive all system notifications
+
+See the Azure [API Managment](https://docs.microsoft.com/en-us/cli/azure/apim?view=azure-cli-latest#az_apim_create) for more details.
+
+For automated build processes you can provide the prompt options on the command line.
 
 To update an existing deployment, simply re-run the command.
 
