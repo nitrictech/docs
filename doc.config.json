@@ -346,6 +346,10 @@
                   {
                     "title": "Delete Files",
                     "path": "/docs/reference/api/storage/delete-files.mdx"
+                  },
+                  {
+                    "title": "Presign URLs",
+                    "path": "/docs/reference/api/storage/pre-signed-urls.mdx"
                   }
                 ]
               }

@@ -1,0 +1,68 @@
+Presigned URLS can be used with the Nitric API to give temporary read or write access to an object in a bucket. This URL can be distributed to anyone, without them requiring permissions or a google account.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "AWS",
+		value: "aws"
+	}, {
+		label: "GCP",
+		value: "gcp"
+	}, {
+		label: "Azure",
+		value: "azure"
+	}
+	]}
+	defaultLang="AWS"
+>
+<CodeExample lang={aws}></CodeExample/>
+<CodeExample lang={gcp}>
+
+To set up presigned-urls for GCP you first need to set up a service account that has access to the bucket. To do this, navigate to IAM & Admin > Service Accounts and press the big blue buttont hat says "Create Service Account".
+
+Once the service account is created, go into the service account and go to the keys tab. Then press Add Key > Create new key > JSON.
+
+This will download a JSON file that can be used to build the presigned url. Set the SERVICE_ACCOUNT_LOCATION environment variable to point
+to the location of the JSON file.
+
+### Limitations
+
+- The maximum expiry for a gcp presigned url is 604800 seconds (7 days)
+
+</CodeExample/>
+<CodeExample lang={azure}</CodeExample/>
+
+<CodeExamples
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/storage/presignedurl.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/storage/presigned_url.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/storage/PreSignedUrl.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/storage/presignedurl.go" />
+
+</CodeExamples>
+/>
