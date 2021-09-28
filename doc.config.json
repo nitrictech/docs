@@ -129,7 +129,7 @@
                 ]
               },
               {
-                "title": "Nitric vs. Others",
+                "title": "Nitric Compared to",
                 "routes": [
                   {
                     "title": "Terraform",
@@ -235,7 +235,7 @@
                   {
                     "title": "Entrypoints",
                     "path": "/docs/reference/project/entrypoints.mdx"
-                  }                  
+                  }
                 ]
               }
             ]
