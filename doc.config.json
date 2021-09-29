@@ -151,19 +151,15 @@
         "guides": [
           {
             "title": "Guides",
-            "routes": [
-              {
-                "title": "Overview",
-                "path": "/docs/guides/_index.mdx"
-              }
-            ]
-          },
-          {
-            "title": "Services",
+            "path": "/docs/guides/_index.mdx",
             "routes": [
               {
                 "title": "REST API",
                 "path": "/docs/guides/rest-api.mdx"
+              },
+              {
+                "title": "REST API with JWT Middleware",
+                "path": "/docs/guides/rest-api-jwt-middleware.mdx"
               },
               {
                 "title": "Image Processing with Tensorflow",
