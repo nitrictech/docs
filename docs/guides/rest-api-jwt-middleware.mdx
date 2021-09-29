@@ -1,0 +1,20 @@
+This guide describes how to add JWT middleware to your REST API and is a continuation of the [REST API guide](/docs/guides/rest-api).
+
+> Note: Middleware is currently only available with the [Nitric Node-SDK](https://github.com/nitrictech/node-sdk)
+
+## What we'll do
+
+1. Install the JWT Middleware to our existing API Stack
+2. Add basic JWT validation and scope verification using a HS256 secret
+
+## Install the middleware
+
+```bash
+npm install @nitric/middleware-jwt
+
+# OR
+
+yarn add @nitric/middleware-jwt
+```
+
+## Validating JWTs
