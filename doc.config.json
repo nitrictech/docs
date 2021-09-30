@@ -157,11 +157,11 @@
                 "title": "Build a REST API",
                 "routes": [
                   {
-                    "title": "1. Building your API",
+                    "title": "Building your API",
                     "path": "/docs/guides/api/rest-api.mdx"
                   },
                   {
-                    "title": "2. Protect API with Auth0",
+                    "title": "Protect API with Auth0",
                     "path": "/docs/guides/api/rest-api-auth0.mdx"
                   }
                 ]
