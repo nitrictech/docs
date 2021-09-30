@@ -154,12 +154,17 @@
             "path": "/docs/guides/_index.mdx",
             "routes": [
               {
-                "title": "REST API",
-                "path": "/docs/guides/rest-api.mdx"
-              },
-              {
-                "title": "REST API with JWT Middleware",
-                "path": "/docs/guides/rest-api-jwt-middleware.mdx"
+                "title": "Build a REST API",
+                "routes": [
+                  {
+                    "title": "1. Building your API",
+                    "path": "/docs/guides/api/rest-api.mdx"
+                  },
+                  {
+                    "title": "2. Protect API with Auth0",
+                    "path": "/docs/guides/api/rest-api-auth0.mdx"
+                  }
+                ]
               },
               {
                 "title": "Image Processing with Tensorflow",
