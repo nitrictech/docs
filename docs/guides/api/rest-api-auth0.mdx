@@ -288,7 +288,7 @@ faas
         } as CreateResponse);
       } catch {
         response.status = 500;
-        response.body = 'failed to create order';
+        response.body = new TextEncoder().encode('Invalid Request');
       }
 
       return ctx;
@@ -320,7 +320,7 @@ faas
       const { orderId } = path.test(ctx.req.path);
 
       if (!orderId) {
-        ctx.res.body = 'Invalid Request';
+        ctx.res.body = new TextEncoder().encode('Invalid Request');
         ctx.res.status = 400;
       }
 
