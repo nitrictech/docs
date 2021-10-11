@@ -1,0 +1,486 @@
+<Accordion title="Starting from this chapter?">
+
+Download the application repo:
+
+```bash
+ curl https://codeload.github.com/nitrictech/nitric-examples/tar.gz/main | tar -xz --strip=2 nitric-examples-main/typescript/rest-api
+```
+
+_If you're having issues extracting the tar, use Git Bash to execute the command_
+
+Next, ensure you are in the `rest-api` folder and install the dependencies:
+
+```bash
+cd rest-api
+
+yarn install
+```
+
+</Accordion>
+
+In this guide we'll show you how to secure your REST API with <a href="https://auth0.com" target="_blank">Auth0</a> and is a continuation of the [REST API Foundations guide](/docs/guides/api/rest-api).
+
+> Middleware is currently only available in Typescript with the [Nitric Node.js SDK](https://github.com/nitrictech/node-sdk)
+
+## What we'll do
+
+1. Setup Auth0 and define our permissions
+2. Add the <a href="https://github.com/nitrictech/node-jwt" target="_blank">Node JWT Middleware</a> to our existing stack functions
+
+## Setup Auth0
+
+Building authentication services from scratch is a challenging endeavour which presents a risk if done improperly. Choosing a third-party to provide this functionality is a great option to reduce the risk and minimize the effort required to secure your applications. <a href="https://auth0.com" target="_blank">Auth0</a> is a great option for this, with comprehensive features and free accounts to get things started. Many of the steps in the guide will apply similarly to other services.
+
+Start by creating a <a href="https://auth0.com/signup" target="_blank">free Auth0 account</a> if you don't already have one. Once your account is created, the next thing you'll do is create an <a href="https://auth0.com/docs/getting-started/create-tenant" target="_blank">Auth0 Tenant</a>, which is an isolated container for your auth configuration and users.
+
+Once you have an account and tenant, you'll need to create an API in Auth0. An Auth0 API is an entity representing some resource external to Auth0, in this guide we'll use it to represent your application's API (a collection of Nitric Functions). To create a new Auth0 API, navigate to the APIs page in the Auth0 Dashboard, you can find it under `Applications` > `APIs` in the left nav of the dashboard. From the APIs page click the `Create API` button and follow these steps:
+
+1. Add a **Name** to your API: e.g. `Orders API`
+2. Set the API's **Identifier**: e.g. `https://orders-api.example.com`
+3. Leave the signing algorithm as `RS256`, this is the best option for security
+4. Click the **Create** button
+
+<img
+  src="../../assets/img/auth0-createApi.png"
+  height="500"
+  alt="Service Anatomy"
+/>
+
+> **Identifiers** are unique strings that identify your APIs. Auth0 recommends using URLs, however, the URLs won't be called and don't need to be public
+
+Now that the API has been created, you'll need to record some details about the API for use in your Nitric application later. The two values you need are **Audience** and **Domain**, to get these values follow the steps below.
+
+### Get API Audience
+
+1. Click on the **Settings** tab
+2. Find the **Identifier** field
+3. Copy the identifier value and note it down for later
+
+<img
+  src="../../assets/img/auth0-api-identifier.png"
+  height="500"
+  alt="Service Anatomy"
+/>
+
+### Get API Domain
+
+1. Click on the **Test** tab
+2. Find the **cURL** example under **Asking Auth0 for tokens from my application**
+3. Copy your Auth0 domain and note it down for later
+
+> Note: The **_domain_** is just part of the `--url` parameter, ignore the `https://` protocol prefix and path suffix. E.g. `tenant.region.auth0.com`
+
+<img
+  src="../../assets/img/auth0-api-domain.png"
+  height="500"
+  alt="Service Anatomy"
+/>
+
+### Define Permissions
+
+Permissions let you define how resources can be accessed on behalf of the user with a given access token. For example you might choose to grant write access to the `orders` resource if users have administrator level and read access for users with the staff level.
+
+You can define permissions in the **Permissions** tab of the Auth0 Dashboard APIs section.
+
+Lets add `read:orders` and `create:orders` permissions (scopes) to our orders API:
+
+<img
+  src="../../assets/img/auth0-api-permissions.png"
+  height="500"
+  alt="API Permissions"
+/>
+
+### Enable RBAC
+
+To ensure that our scopes work and are included in the JWT, RBAC (Role Based Access Control) needs to be enabled.
+
+Go to the API Settings tab:
+
+<img
+  src="../../assets/img/auth0-api-settings-tab.png"
+  height="150"
+  alt="API Settings Tab"
+/>
+
+Ensure the following switches are enabled:
+
+<img
+  src="../../assets/img/auth0-api-settings-rbac.png"
+  height="300"
+  alt="API Settings RBAC"
+/>
+
+### Add Permissions to Test Application
+
+We will want to test our API, so lets ensure our test application is authorized to access the orders API:
+
+<img
+  src="../../assets/img/auth0-api-settings-machine-to-machine.png"
+  height="500"
+  alt="API Settings Machine to Machine"
+/>
+
+## Add Middleware to Functions
+
+You'll now create middleware to run before the handler of your function to protect your handler from unauthenticated or unauthorized requests. When using the `createHandler` function to combine a set of middleware with a handler function, the middleware and handler code will be executed in the order they're specified. When middleware are setup to run _before_ a handler, the middleware functions are able to _protect_ the handler by intercepting unwanted requests and returning a response before the handler is run.
+
+Start by adding these packages to your project:
+
+- <a
+    href="https://www.npmjs.com/package/@nitric/middleware-jwt"
+    target="_blank"
+  >
+    @nitric/middleware-jwt
+  </a>
+  : provides HTTP middleware which validates JWT tokens in requests, stores decoded
+  tokens in the `ctx` object making it easier to work with and validates permissions
+  (scopes) from the JWT to perform RBAC Authorization.
+- <a href="https://www.npmjs.com/package/jwks-rsa" target="_blank">
+    jwks-rsa
+  </a>
+  : provides the ability to retrieve RSA secrets from JWKS (JSON Web Key Set) endpoints.
+  In our case, this will retrieve the Auth0 secret used to validate JWT signatures.
+
+Install these libraries with npm.
+
+```bash
+npm install @nitric/middleware-jwt jwks-rsa
+```
+
+or yarn.
+
+```bash
+yarn add @nitric/middleware-jwt jwks-rsa
+```
+
+### Validate Access Tokens
+
+Since some elements of the JWT validation process will be specific to your project, instead of providing a JWT validation middleware directly, the `@nitric/middleware-jwt` package provides a higher order function, which returns a customized middleware function. Let's start by creating some common code to call the higher order function and return the JWT middleware specific to your project.
+
+Start by creating an `auth.ts` file under the `common` directory with the following code:
+
+```typescript
+// common/auth.ts
+
+import { jwt, GetSecretOptions } from '@nitric/middleware-jwt';
+import * as jwksRsa from 'jwks-rsa';
+
+const SUPPORTED_ALGOS = ['RS256'];
+
+const nitricJwtSecret = (options) => {
+  if (options === null || options === undefined) {
+    throw new Error(
+      'An options object must be provided when initializing expressJwtSecret'
+    );
+  }
+
+  const client = jwksRsa(options);
+
+  const secretProvider = async ({ ctx, header, payload }: GetSecretOptions) => {
+    if (!header || !SUPPORTED_ALGOS.includes(header.alg)) {
+      return null;
+    }
+
+    try {
+      const key = await client.getSigningKey(header.kid);
+
+      return key.getPublicKey();
+    } catch (err) {
+      throw err;
+    }
+  };
+  return secretProvider;
+};
+
+export interface Auth0Config {
+  domain: string;
+  audience: string;
+}
+
+export const checkJwt = ({ domain, audience }: Auth0Config) =>
+  jwt({
+    secret: nitricJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://${domain}/.well-known/jwks.json`,
+    }),
+    // Validate the audience and the issuer.
+    verifyOptions: {
+      audience,
+      issuer: `https://${domain}/`,
+    },
+    algorithms: ['RS256'],
+  });
+```
+
+Ensure our new auth helper method is exported from `common/index.ts`:
+
+```typescript
+export * from './auth';
+export * from './order';
+export * from './path';
+```
+
+### Protect API Functions
+
+Now that we have a common Http Middleware `common/auth.ts` to validate access tokens we can apply it to each of our functions as a handler.
+
+What we'll add to each of our function:
+
+1. Validate the JWT with our common middleware handler.
+2. Check the scopes provided by Auth0 with the `jwtScopes` handler, available from the `@nitric/middleware-jwt` package.
+
+#### Create Orders
+
+Add the following code to your `functions/create.ts` file, replacing the **domain** and **audience** options with your own:
+
+```typescript
+// functions/create.ts
+
+import { faas, documents } from '@nitric/sdk';
+import { jwtScopes } from '@nitric/middleware-jwt';
+import { uuid } from 'uuidv4';
+import { Order, checkJwt } from '../common';
+
+// Requests to create a new order won't have an id or order date
+type RequestData = Omit<Order, 'id' | 'dateOrdered'>;
+
+interface CreateContext extends faas.HttpContext {
+  req: faas.HttpRequest & {
+    body?: RequestData;
+  };
+}
+
+interface CreateResponse {
+  message: string;
+  orderId?: string;
+}
+
+// Start your function here
+faas
+  .http(
+    checkJwt({
+      domain: 'tenant.region.auth0.com',
+      audience: 'https://orders-api.example.com',
+    }),
+    jwtScopes(['create:orders']),
+    faas.json(), //  use json body parser middleware to decode data
+    async (ctx: CreateContext): Promise<faas.HttpContext> => {
+      const data = ctx.req.body;
+      const response = ctx.res;
+
+      const order: Order = {
+        ...data, // extract data from the request
+        id: uuid(), // generate a new uuid
+        dateOrdered: new Date().toJSON(),
+      };
+
+      const orders = documents().collection<Order>('orders');
+
+      try {
+        // Write the new order document to the orders collection
+        await orders.doc(order.id).set(order);
+        response.body = order.id;
+        response.json({
+          message: 'success',
+          orderId: order.id,
+        } as CreateResponse);
+      } catch {
+        response.status = 500;
+        response.body = new TextEncoder().encode('Invalid Request');
+      }
+
+      return ctx;
+    }
+  )
+  .start();
+```
+
+#### Read Orders
+
+Next, add the following code to your `functions/read.ts` file, again replacing the **domain** and **audience** options with your own:
+
+```typescript
+// functions/read.ts
+
+import { jwtScopes } from '@nitric/middleware-jwt';
+import { faas, documents } from '@nitric/sdk';
+import { checkJwt, path } from '../common';
+
+faas
+  .http(
+    checkJwt({
+      domain: 'tenant.region.auth0.com',
+      audience: 'https://orders-api.example.com',
+    }),
+    jwtScopes(['read:orders']),
+    async (ctx): Promise<faas.HttpContext> => {
+      // get params from path
+      const { orderId } = path.test(ctx.req.path);
+
+      if (!orderId) {
+        ctx.res.body = new TextEncoder().encode('Invalid Request');
+        ctx.res.status = 400;
+      }
+
+      const orders = documents().collection('orders');
+
+      try {
+        const order = await orders.doc(orderId).get();
+        ctx.res.json(order);
+      } catch {
+        ctx.res.status = 404;
+        ctx.res.json({ message: 'order not found' });
+      }
+
+      return ctx;
+    }
+  )
+  .start();
+```
+
+#### List Orders
+
+Our final function to protect is the list function, add the following code to your `functions/list.ts` file, again replacing the **domain** and **audience** options with your own:
+
+```typescript
+// functions/list.ts
+
+import { jwtScopes } from '@nitric/middleware-jwt';
+import { faas, documents } from '@nitric/sdk';
+import { Order, checkJwt } from '../common';
+
+interface Result {
+  id: string;
+  content: Order;
+}
+
+faas
+  .http(
+    checkJwt({
+      domain: 'tenant.region.auth0.com',
+      audience: 'https://orders-api.example.com',
+    }),
+    jwtScopes(['read:orders']),
+    async (ctx): Promise<faas.HttpContext> => {
+      const orders = documents().collection<Order>('orders');
+      const results: Result[] = [];
+      let token: any = null;
+      while (true) {
+        try {
+          const page = await orders.query().pagingFrom(token).fetch();
+
+          results.push(
+            ...page.documents.map(({ id, content }) => ({
+              id,
+              content,
+            }))
+          );
+
+          if (!page.pagingToken) {
+            break;
+          }
+
+          token = page.pagingToken;
+        } catch (e) {
+          ctx.res.status = 500;
+          return ctx.res.json({ message: e.stack });
+        }
+      }
+      return ctx.res.json(results);
+    }
+  )
+  .start();
+```
+
+## Run it!
+
+You can test your API in cURL, Auth0 provides a test token page where you can find a bearer token to test your API endpoints.
+
+Click the copy token button to get the token:
+
+<img
+  src="../../assets/img/auth0-get-token.png"
+  height="500"
+  alt="API Bearer Token"
+/>
+
+Let's try it, run your application with the `run` command:
+
+```bash
+nitric run
+```
+
+First, lets try our **create** orders endpoints without our token. If required swap port 49152 with your port.
+
+```
+curl -H "Content-Type: application/json" -X POST -d '{"itemId":"test-item","customerId": "test-customer"}' http://localhost:49152/orders
+```
+
+You will notice that we get a 401 Unauthorized response. This means our middleware is working and our API endpoint is protected.
+
+Now test it with your test token, ensure you add the token to the authorization header and if required swap port 49152 with your port:
+
+```bash
+curl -H "Authorization: Bearer YOUR_TOKEN" -H "Content-Type: application/json" -X POST -d '{"itemId":"test-item","customerId": "test-customer"}' http://localhost:49152/orders
+```
+
+You will see that we get a successful response. Hooray!
+
+## Deploy to the cloud
+
+Once you're happy that everything is running correctly, you can deploy your API application to a cloud provider of your choice.
+
+<Box
+  sx={{
+    mb: 2,
+    px: 2,
+    borderRadius: '4px',
+    display: 'grid',
+    gap: {
+      md: 3,
+    },
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    backgroundColor: '#f4f4f4',
+    '& > a': {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      px: 1,
+      my: {
+        xs: 1,
+        md: 2,
+      },
+      transition: 'all 0.3s ease-in',
+      '&:hover, &:focus': {
+        backgroundColor: '#ececec',
+      },
+    },
+  }}
+>
+  <Link href="/docs/intro/cloud-providers/aws">
+    <img src="/img/logos/aws.svg" noMargin priority height={50} />
+  </Link>
+  <Link href="/docs/intro/cloud-providers/gcp">
+    <img src="/img/logos/gcp.svg" noMargin priority height={130} />
+  </Link>
+  <Link href="/docs/intro/cloud-providers/azure">
+    <img src="/img/logos/azure.svg" noMargin priority height={40} />
+  </Link>
+</Box>
+
+## Next Steps
+
+Now that you have a solid API, you can continue to create new secure endpoints and deploy them to your cloud of choice.
+For more inspiration, check out our [samples](/docs/samples) page.
+
+## Reference
+
+The completed application code for this guide can downloaded via the command line:
+
+```bash
+ curl https://codeload.github.com/nitrictech/nitric-examples/tar.gz/main | tar -xz --strip=2 nitric-examples-main/typescript/rest-api-auth
+```
+
+> If you're having issues extracting the tar, use Git Bash to execute the command

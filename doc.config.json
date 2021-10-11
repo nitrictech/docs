@@ -151,19 +151,20 @@
         "guides": [
           {
             "title": "Guides",
+            "path": "/docs/guides/_index.mdx",
             "routes": [
               {
-                "title": "Overview",
-                "path": "/docs/guides/_index.mdx"
-              }
-            ]
-          },
-          {
-            "title": "Services",
-            "routes": [
-              {
-                "title": "REST API",
-                "path": "/docs/guides/rest-api.mdx"
+                "title": "Build a REST API",
+                "routes": [
+                  {
+                    "title": "API Foundations",
+                    "path": "/docs/guides/api/rest-api.mdx"
+                  },
+                  {
+                    "title": "Protect API with Auth0",
+                    "path": "/docs/guides/api/rest-api-auth0.mdx"
+                  }
+                ]
               },
               {
                 "title": "Image Processing with Tensorflow",

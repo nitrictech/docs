@@ -48,7 +48,7 @@ You can create your Stack by running the `make:stack` command below:
 </Box>
 
 ```bash
-nitric make:stack my-rest-api
+nitric make:stack rest-api
 ```
 
 We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
@@ -64,7 +64,7 @@ We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
 Next, open the project in your editor of choice. The scaffolded project should have the following structure:
 
 ```text
-my-rest-api/
+rest-api/
 |
 +--nitric.yaml
 +--api.yaml
@@ -92,7 +92,7 @@ You can create your Stack by running the `make:stack` command below:
 </Box>
 
 ```bash
-nitric make:stack my-rest-api
+nitric make:stack rest-api
 ```
 
 We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
@@ -108,7 +108,7 @@ We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
 Next, open the project in your editor of choice. The scaffolded project should have the following structure:
 
 ```text
-my-rest-api/
+rest-api/
 |
 +--nitric.yaml
 +--api.yaml
@@ -187,24 +187,39 @@ The stack already comes with the `uuidv4` dependency for id generation, so let's
 yarn install
 ```
 
-Next, update the `create.ts` function to receive an "order create request", create the order and store it in the `orders` collection. For simplicity we will keep our Typescript typings in the same file, but these could be moved into the common directory later.
+To improve our type safety, rename the `common/example.ts` file to be `common/order.ts` and replace its contents with our new `order` type:
 
 ```typescript
-// functions/create.ts
-
-import { faas, documents } from '@nitric/sdk';
-import { uuid } from 'uuidv4';
-
-// Assume we receive a valid OrderCreate request object.
-interface Order {
+export interface Order {
   id: string;
   dateOrdered: string;
   itemId: string;
   customerId: string;
 }
+```
+
+Ensure our Order interface is exported from `common/index.ts`:
+
+```typescript
+export * from './order';
+export * from './path';
+```
+
+Next, update the `create.ts` function to receive an "order create request", create the order and store it in the `orders` collection.
+
+```typescript
+import { faas, documents } from '@nitric/sdk';
+import { uuid } from 'uuidv4';
+import { Order } from '../common';
 
 // Requests to create a new order won't have an id or order date
-interface CreateRequest extends Omit<Order, 'id' | 'dateOrdered'> {}
+type RequestData = Omit<Order, 'id' | 'dateOrdered'>;
+
+interface CreateContext extends faas.HttpContext {
+  req: faas.HttpRequest & {
+    body?: RequestData;
+  };
+}
 
 interface CreateResponse {
   message: string;
@@ -212,31 +227,38 @@ interface CreateResponse {
 }
 
 // Start your function here
-faas.start(
-  async (
-    request: faas.NitricTrigger<CreateRequest>
-  ): Promise<faas.Response<CreateResponse>> => {
-    const order = {
-      ...request.dataAsObject(), // extract data from the request
-      id: uuid(), // generate a new uuid
-      dateOrdered: new Date().toJSON(),
-    };
+faas
+  .http(
+    faas.json(), //  use json body parser middleware to decode data
+    async (ctx: CreateContext): Promise<faas.HttpContext> => {
+      const data = ctx.req.body;
+      const response = ctx.res;
 
-    const orders = documents().collection<Order>('orders');
+      const order: Order = {
+        ...data, // extract data from the request
+        id: uuid(), // generate a new uuid
+        dateOrdered: new Date().toJSON(),
+      };
 
-    const response = request.defaultResponse() as faas.Response<CreateResponse>;
-    try {
-      // Write the new order document to the orders collection
-      await orders.doc(order.id).set(order);
-      response.data = { message: 'success', orderId: order.id };
-    } catch {
-      response.context.asHttp().status = 500;
-      response.data = { message: 'failed to create order' };
+      const orders = documents().collection<Order>('orders');
+
+      try {
+        // Write the new order document to the orders collection
+        await orders.doc(order.id).set(order);
+        response.body = order.id;
+        response.json({
+          message: 'success',
+          orderId: order.id,
+        } as CreateResponse);
+      } catch {
+        response.status = 500;
+        response.body = new TextEncoder().encode('failed to create order');
+      }
+
+      return ctx;
     }
-
-    return response;
-  }
-);
+  )
+  .start();
 ```
 
 </CodeExample>
@@ -313,7 +335,17 @@ Now that we can store new orders, let's update the read function for `GET: /orde
 
 <Box mt={4}>
 
-First, update the `read.ts` file for this function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
+First, we want to parse the path so we can obtain the order id. We can do this by using a 3rd party package such as `path-parser`. This is already setup in our stack template under `common/path.ts`, we just need to update the code to match our orders api:
+
+```typescript
+// common/path.ts
+
+import { Path } from 'path-parser';
+
+export const path = new Path('/orders/:orderId');
+```
+
+Next, update the `read.ts` file for this function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
 
 </Box>
 
@@ -321,24 +353,32 @@ First, update the `read.ts` file for this function so that it gets the orderId f
 // functions/read.ts
 
 import { faas, documents } from '@nitric/sdk';
+import { path } from '../common';
 
-faas.start(
-  async (request: faas.NitricTrigger<void>): Promise<faas.Response<Object>> => {
-    const orderId = request.context.asHttp().path.split('/')[2]; // use a parser in a real project.
+// Start your function here
+faas
+  .http(async (ctx: faas.HttpContext): Promise<faas.HttpContext> => {
+    // get params from path
+    const { orderId } = path.test(ctx.req.path);
+
+    if (!orderId) {
+      ctx.res.body = new TextEncoder().encode('Invalid Request');
+      ctx.res.status = 400;
+    }
 
     const orders = documents().collection('orders');
 
-    const response = request.defaultResponse() as faas.Response<Object>;
     try {
       const order = await orders.doc(orderId).get();
-      response.data = order;
+      ctx.res.json(order);
     } catch {
-      response.context.asHttp().status = 404;
-      response.data = { message: 'order not found' };
+      ctx.res.status = 404;
+      ctx.res.json({ message: 'order not found' });
     }
-    return response;
-  }
-);
+
+    return ctx;
+  })
+  .start();
 ```
 
 </CodeExample>
@@ -415,38 +455,42 @@ Update the `list.ts` file for the list function so it retrieves every order from
 // functions/list.ts
 
 import { faas, documents } from '@nitric/sdk';
-import { FetchResponse } from '@nitric/sdk/lib/api/documents/query';
+import { Order } from '../common';
 
-faas.start(
-  async (request: faas.NitricTrigger<void>): Promise<faas.Response<Object>> => {
-    const orders = documents().collection('orders');
-    const results: any[] = [];
-    const response = request.defaultResponse();
+interface Result {
+  id: string;
+  content: Order;
+}
+
+faas
+  .http(async (ctx: faas.HttpContext): Promise<faas.HttpContext> => {
+    const orders = documents().collection<Order>('orders');
+    const results: Result[] = [];
     let token: any = null;
     while (true) {
       try {
-        const page = (await orders
-          .query()
-          .pagingFrom(token)
-          .fetch()) as FetchResponse<any>;
+        const page = await orders.query().pagingFrom(token).fetch();
+
         results.push(
           ...page.documents.map(({ id, content }) => ({
             id,
             content,
           }))
         );
+
         if (!page.pagingToken) {
           break;
         }
+
         token = page.pagingToken;
       } catch (e) {
-        response.context.asHttp().status = 500;
-        response.data = { message: e.stack };
+        ctx.res.status = 500;
+        return ctx.res.json({ message: e.stack });
       }
     }
-    return response as faas.Response<Object>;
-  }
-);
+    return ctx.res.json(results);
+  })
+  .start();
 ```
 
 </CodeExample>
@@ -572,7 +616,7 @@ Now lets add our `orders` collection and rename our API, update your `nitric.yam
 <CodeExample lang="node">
 
 ```yaml
-name: my-rest-api
+name: rest-api
 # Nitric functions
 functions:
   create:
@@ -593,7 +637,7 @@ apis:
 <CodeExample lang="python">
 
 ```yaml
-name: my-rest-api
+name: rest-api
 # Nitric functions
 functions:
   create:
@@ -627,15 +671,24 @@ nitric run
 
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
 
+Replace the **49152** PORT below with your PORT (if applicable):
+
+#### Create an order
+
 ```bash
-# Create an order
-curl -H "Content-Type: application/json" -X POST -d '{"itemId":"test-item","customerId": "test-customer"}' http://localhost:YOUR_API_PORT/orders
+curl -H "Content-Type: application/json" -X POST -d '{"itemId":"test-item","customerId": "test-customer"}' http://localhost:49152/orders
+```
 
-# Retrieve an order
-curl http://localhost:YOUR_API_PORT/orders/YOUR_ORDER_ID
+#### Retrieve an order
 
-# List orders
-curl http://localhost:YOUR_API_PORT/orders
+```bash
+curl http://localhost:49152/orders/YOUR_ORDER_ID
+```
+
+#### List orders
+
+```bash
+curl http://localhost:49152/orders
 ```
 
 ## Deploy to the cloud
@@ -679,3 +732,17 @@ Once you're happy that everything is running correctly, you can deploy your API 
     <img src="/img/logos/azure.svg" noMargin priority height={40} />
   </Link>
 </Box>
+
+## Next Steps
+
+Time to validate user permissions and protect our API endpoints, [secure your API with Auth0](/docs/guides/api/rest-api-auth0).
+
+## Reference
+
+The completed application code for this guide can downloaded via the command line:
+
+```bash
+ curl https://codeload.github.com/nitrictech/nitric-examples/tar.gz/main | tar -xz --strip=2 nitric-examples-main/typescript/rest-api
+```
+
+> If you're having issues extracting the tar, use Git Bash to execute the command
