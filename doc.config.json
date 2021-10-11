@@ -70,6 +70,9 @@
                     "path": "/docs/intro/concepts/functions.mdx"
                   },
                   {
+                    "path": "/docs/intro/concepts/middleware.mdx"
+                  },
+                  {
                     "path": "/docs/intro/concepts/configuration.mdx"
                   },
                   {
