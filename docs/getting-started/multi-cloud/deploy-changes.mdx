@@ -34,37 +34,36 @@ First, from within your `functions` directory, create a new `delete.ts` file
 that contains your function code:
 
 ```typescript
+// functions/delete.ts
+
 import { faas, documents } from '@nitric/sdk';
 import { Example, path } from '../common';
 
 // Start your function here
-faas.start(
-  async (
-    request: faas.NitricTrigger<void>
-  ): Promise<faas.Response<Example | string>> => {
-    const ctx = request.context.asHttp();
-    const response: faas.Response<Example | string> = request.defaultResponse();
-
+faas
+  .http(async (ctx: faas.HttpContext): Promise<faas.HttpContext> => {
     // get params from path
-    const { id } = path.test(ctx.path);
+    const { id } = path.test(ctx.req.path);
 
     if (!id) {
-      response.data = 'Invalid Request';
-      response.context.asHttp().status = 400;
+      ctx.res.body = new TextEncoder().encode('Invalid Request');
+      ctx.res.status = 400;
     }
 
     try {
       console.log('removing doc id', id);
       await documents().collection<Example>('examples').doc(id).delete();
-      response.data = `Removed example with ID: ${id}`;
+      ctx.res.body = new TextEncoder().encode(`Removed example with ID: ${id}`);
     } catch (e) {
-      response.context.asHttp().status = 404;
-      response.data = `Example not found!: ${e.message}`;
+      ctx.res.status = 404;
+      ctx.res.body = new TextEncoder().encode(
+        `Example not found!: ${e.message}`
+      );
     }
 
-    return response;
-  }
-);
+    return ctx;
+  })
+  .start();
 ```
 
 Now to add our new `delete` function to our Stack definition and API.
