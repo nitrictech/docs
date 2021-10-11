@@ -157,7 +157,7 @@
                 "title": "Build a REST API",
                 "routes": [
                   {
-                    "title": "Building your API",
+                    "title": "API Foundations",
                     "path": "/docs/guides/api/rest-api.mdx"
                   },
                   {
