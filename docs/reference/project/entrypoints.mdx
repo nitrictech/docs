@@ -87,10 +87,9 @@ entrypoints:
 name: example
 
 # Define functions here
-services:
+functions:
   example:
-    path: example
-    runtime: official/golang15
+    handler: functions/get.ts
 
 # Define Sites here
 sites:
