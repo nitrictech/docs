@@ -114,7 +114,7 @@ In the examples above the `ctx` object provides access to the request and respon
 
 The middleware pattern allows you to build event processing pipelines using middleware components. Each middleware:
 
-- can chooses whether to pass the event to the next middleware in the pipeline
+- can choose whether to pass the event to the next middleware in the pipeline
 - can perform work before and after the next middleware in the pipeline is invoked
 
 The FaaS middleware contracts are outlined below. Note the `next` middleware parameter, which is the next middleware in the chain to be invoked.
