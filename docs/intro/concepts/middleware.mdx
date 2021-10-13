@@ -165,7 +165,10 @@ export type EventMiddleware = GenericMiddleware<EventContext>;
 <CodeExample lang="python">
 
 ```python
-TODO...
+C = TypeVar("C", TriggerContext, HttpContext, EventContext)
+
+Handler = Coroutine[Any, Any, C]
+Middleware = Callable[[C, Middleware], Handler]
 ```
 
 </CodeExample>
