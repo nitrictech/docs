@@ -47,7 +47,16 @@ faas
 <CodeExample lang="python">
 
 ```python
-TODO...
+from nitric.faas import HttpContext, start
+
+
+async def handler(ctx: HttpContext) -> HttpContext:
+  ctx.res.body = b'Hello World!'
+  return ctx
+
+
+if __name__ == "__main__":
+  start(handler)
 ```
 
 </CodeExample>
@@ -114,7 +123,7 @@ In the examples above the `ctx` object provides access to the request and respon
 
 The middleware pattern allows you to build event processing pipelines using middleware components. Each middleware:
 
-- can chooses whether to pass the event to the next middleware in the pipeline
+- can choose whether to pass the event to the next middleware in the pipeline
 - can perform work before and after the next middleware in the pipeline is invoked
 
 The FaaS middleware contracts are outlined below. Note the `next` middleware parameter, which is the next middleware in the chain to be invoked.
@@ -156,7 +165,10 @@ export type EventMiddleware = GenericMiddleware<EventContext>;
 <CodeExample lang="python">
 
 ```python
-TODO...
+C = TypeVar("C", TriggerContext, HttpContext, EventContext)
+
+Handler = Coroutine[Any, Any, C]
+Middleware = Callable[[C, Middleware], Handler]
 ```
 
 </CodeExample>
@@ -194,7 +206,7 @@ Middleware can abort further processing by simply not calling the next middlewar
 
 <img src="../../../assets/img/middleware-2.svg" alt="Middleware Sequence" />
 
-Another important use of middleware is processing requests and augmenting them additional information which next middlewares can use. Examples of this include:
+Another important use of middleware is processing requests and augmenting them with additional information which subsequent middleware can use. Examples of this include:
 
 - marshalling request data into typed objects
 - parsing URL paths into path parameters
