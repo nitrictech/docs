@@ -178,10 +178,10 @@ Let's make it easy for ourselves by copying an existing function directory as a 
 <artifactId>example-delete</artifactId>
 ```
 
-3. Then replace the mainClass contents `com.example.service.ReadFunction` with `com.example.service.DeleteFunction`.
+3. Then replace the mainClass contents `com.example.service.ReadHandler` with `com.example.service.DeleteHandler`.
 
 ```xml
-<mainClass>com.example.service.DeleteFunction</mainClass>
+<mainClass>com.example.service.DeleteHandler</mainClass>
 ```
 
 4. In the root `pom.xml` file, under modules add the new module:
@@ -190,45 +190,58 @@ Let's make it easy for ourselves by copying an existing function directory as a 
 <module>functions/delete</module>
 ```
 
-5. In the `src/main/java/com/example/service` directory, rename the `ReadFunction.java` file to `DeleteFunction.java` and replace its contains with your new function code:
+5. In the `src/main/java/com/example/service` directory, rename the `ReadHandler.java` file to `DeleteHandler.java` and replace its contains with your new function code:
 
 ```java
 package com.example.service;
 
-import io.nitric.api.NitricException;
+import com.example.service.middleware.LoggerMiddleware;
+
+import io.nitric.api.NotFoundException;
 import io.nitric.api.document.Documents;
 import io.nitric.faas.Faas;
-import io.nitric.faas.Trigger;
-import io.nitric.faas.NitricFunction;
-import io.nitric.faas.Response;
+import io.nitric.faas.http.HttpContext;
+import io.nitric.faas.http.HttpHandler;
 
-public class DeleteFunction implements NitricFunction {
+public class DeleteHandler implements HttpHandler {
 
     final Documents documents;
 
-    public DeleteFunction(Documents documents) {
+    public DeleteHandler(Documents documents) {
         this.documents = documents;
     }
 
     @Override
-    public Response handle(Trigger trigger) {
-        var paths = trigger.getContext().asHttp().getPath().split("/");
+    public HttpContext handle(HttpContext context) {
+
+        var paths = context.getRequest().getPath().split("/");
         var id = paths[paths.length - 1];
 
         try {
-            documents.collection("examples").doc(id).delete();
+            documents.collection("examples")
+                .doc(id)
+                .delete();
 
-            var msg = String.format("Removed example with ID: %s", id);
-            return trigger.buildResponse(msg);
-        } catch (NitricException ne) {
-            var response = trigger.buildResponse("Error removing example: " + ne.toString());
-            response.getContext().asHttp().setStatus(500);
-            return response;
+            context.getResponse()
+                .data("Deleted document: " + id);
+
+        } catch (NotFoundException nfe) {
+            context.getResponse()
+                .status(404)
+                .data("Document not found: " + id);
         }
+
+        return context;
     }
 
     public static void main(String[] args) {
-        Faas.start(new DeleteFunction(new Documents()));
+        var loggerMiddleware = new LoggerMiddleware();
+        var deleteHandler = new DeleteHandler(new Documents());
+
+        new Faas()
+            .http(loggerMiddleware)
+            .http(deleteHandler)
+            .start();
     }
 }
 ```
@@ -240,7 +253,7 @@ Now to add our new `delete` function to our Stack definition and API.
 First, you will modify your `nitric.yaml` file to add our `delete `function handler:
 
 ```yaml
-name: example-java-service
+name: java-example
 
 # Nitric functions
 functions:

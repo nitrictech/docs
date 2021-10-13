@@ -25,9 +25,9 @@ Before we start running our new stack locally, let's review some of the generate
 - `nitric.yaml` defines the [Stack](/docs/intro/concepts/stacks).
 - `api.yaml` defines the [API](/docs/intro/concepts/nitric-apis).
 - Three [Functions](/docs/intro/concepts/functions) are generated:
-  - `functions/create/**/CreateFunction.java` is the function that creates new documents.
-  - `functions/list/**/ListFunction.java` is the function that lists multiple documents.
-  - `functions/read/**/ReadFunction.java` is the function that can read a single document.
+  - `functions/create/**/CreateHandler.java` is the function that creates new documents.
+  - `functions/list/**/ListHandler.java` is the function that lists multiple documents.
+  - `functions/read/**/ReadHandler.java` is the function that can read a single document.
 
 </ShowIf>
 <ShowIf lang="go">
@@ -134,42 +134,52 @@ package com.example.service;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.example.service.middleware.LoggerMiddleware;
 import com.example.service.model.Example;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.nitric.api.document.Documents;
 import io.nitric.faas.Faas;
-import io.nitric.faas.NitricFunction;
-import io.nitric.faas.Response;
-import io.nitric.faas.Trigger;
+import io.nitric.faas.http.HttpContext;
+import io.nitric.faas.http.HttpHandler;
 
-public class CreateFunction implements NitricFunction {
+public class CreateHandler implements HttpHandler {
 
     final Documents documents;
 
-    public CreateFunction(Documents documents) {
+    public CreateHandler(Documents documents) {
         this.documents = documents;
     }
 
     @Override
-    public Response handle(Trigger trigger) {
+    public HttpContext handle(HttpContext context) {
         try {
-            var json = trigger.getDataAsText();
+            var json = context.getRequest().getDataAsText();
             var example = new ObjectMapper().readValue(json, Example.class);
             var id = UUID.randomUUID().toString();
 
             documents.collection("examples").doc(id, Example.class).set(example);
 
             var msg = String.format("Created example with ID: %s", id);
-            return trigger.buildResponse(msg);
+            context.getResponse().data(msg);
 
         } catch (IOException ioe) {
-            return trigger.buildResponse("error: " + ioe);
+            context.getResponse()
+                .status(500)
+                .data("error: " + ioe);
         }
+
+        return context;
     }
 
     public static void main(String[] args) {
-        Faas.start(new CreateFunction(new Documents()));
+        var loggerMiddleware = new LoggerMiddleware();
+        var createHandler = new CreateHandler(new Documents());
+
+        new Faas()
+            .http(loggerMiddleware)
+            .http(createHandler)
+            .start();
     }
 }
 ```
