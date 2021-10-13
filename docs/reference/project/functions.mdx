@@ -1,1 +1,36 @@
-TODO...
+A Nitric function is described by its definition in a `nitric.yaml` file. Nitric functions are a type of [Service](../../intro/services) that offers a portable way to develop function-as-a-service (FaaS) applications, which can then be deployed to
+popular Serverless offerings like AWS Lamda, Google CloudRun and Azure AppService.
+
+## Adding a new Function
+
+Start by fetching the latest function templates:
+
+```bash
+nitric templates:repos:add function
+```
+
+Then add the function:
+
+```bash
+nitric make:service
+```
+
+This will populate the `nitric.yaml` file with an entry for the function
+
+## Properties
+
+`name` the name of the Nitric function. Must be unique to the stack file as it is used as the reference to the function for entrypoints and apis.
+
+`handler` the path to the function handler, relative to the root of the project.
+
+```yaml
+name: example-stack
+
+functions:
+  example-function:
+    handler: functions/get.ts
+  other-example-function:
+    handler: functions/set.ts
+```
+
+See [Function Concepts]() for more information on interacting with functions.
