@@ -1,1 +1,16 @@
-TODO...
+A Nitric queue is described by its definition in a `nitric.yaml` file. A queue represents a category or tasks that are aysnchronously processed by a service.
+
+## Properties
+
+> Queues do not have properties at present and are represented only by their name at this time. This is subject to change as requirements around queue configuration emerge
+
+## Example
+
+```yaml
+name: example-stack
+
+queues:
+  example-queue: {}
+```
+
+See the [Queue API](../api/queues) reference for examples of interacting with defined queues.
