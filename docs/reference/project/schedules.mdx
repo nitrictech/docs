@@ -25,7 +25,8 @@ topics:
 # a schedule is defined for what, where and when to send
 schedules:
 	my-schedule:
-		expression: '*/5 * * * *'
+		# an aws example expression which runs every 15 mins
+		expression: '0/15 * * * ? *'
 		target:
 			type: topic
 			name: my-topic
@@ -35,7 +36,12 @@ schedules:
 				example: payload
 ```
 
-> Schedules are currently only supported on AWS and GCP. With support for other platforms coming soon.
+> Schedules are currently only supported on AWS and GCP as cron expressions. Support for other platforms is coming soon!
+
+> See the following references for documentation on how to define expressions:
+
+- https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules
+- https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
 
 > Currently, only triggers via topics are possible with triggers directly to services & queues coming soon.
 
