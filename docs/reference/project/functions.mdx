@@ -3,11 +3,11 @@ popular Serverless offerings like AWS Lamda, Google CloudRun and Azure AppServic
 
 ## Properties
 
-| Property | Value      | Required | Description                                                                                                                                      |
-| -------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------|
-| name     | `string`   | Yes      | The name of the Nitric function. Must be unique to the stack file as it is used as the reference to the function for entrypoints and apis.       |
-| handler  | `string`   | Yes      | The path to the function handler, relative to the root of the project.                                                                           |
-| triggers | `string[]` | No       | The [topic(s)](./topics.mdx) that this function subscribes to. The listed topics will trigger the function if a new event is published to them.  |
+| Property | Value      | Required | Description                                                                                                                                     |
+| -------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| name     | `string`   | Yes      | The name of the Nitric function. Must be unique to the stack file as it is used as the reference to the function for entrypoints and apis.      |
+| handler  | `string`   | Yes      | The path to the function handler, relative to the root of the project.                                                                          |
+| triggers | `string[]` | No       | The [topic(s)](./topics.mdx) that this function subscribes to. The listed topics will trigger the function if a new event is published to them. |
 
 ```yaml
 name: example-stack
