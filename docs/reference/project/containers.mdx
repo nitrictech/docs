@@ -1,1 +1,76 @@
-TODO...
+Containers provide a way to port existing application and use your favorite frameworks to build with Nitric.
+
+Nitric supports this capability by allowing you to write and specify your dockerfiles as part of your nitric stack.
+
+## Properties
+
+export interface NitricContainer<Ext> extends NitricComputeUnit<Ext> {
+  // The path to the Dockerfile to use to build this source
+  // relative to context
+  dockerfile: string;
+}
+
+| **Property** | **Value** | **Description**                                          |
+| ------------ | --------- | -------------------------------------------------------- |
+| dockerfile   | string    | relative path to the dockerfile describing the container |
+
+## Example Container Configuration
+
+```yaml
+name: example-stack
+
+containers:
+	example-container:
+		dockerfile: ./containers/example.dockerfile
+```
+
+## Example Dockerfile
+
+In order to fully utilize the Nitric framework the Nitric membrane should be included to isolate your application from its deployed environment.
+
+```dockerfile
+# When defined as part of a nitric stack docker builds will be provided with a 'provider' argument that can be used
+# to determine the provider the membrane will interact with
+ARG PROVIDER=dev
+ARG MEMBRANE_VERSION=v0.12.0-rc.21
+FROM node:alpine
+
+# Download the membrane and ensure it's executable
+# Use curl instead of ADD for caching
+RUN curl https://github.com/nitrictech/nitric/releases/download/${MEMBRANE_VERSION}/membrane-${PROVIDER} -o /usr/local/bin/membrane
+
+# Add the membrane binary
+RUN chmod +x-rw /usr/local/bin/membrane
+
+# Add binaries to the path
+ENV PATH="/usr/local/bin:${PATH}"
+
+# Copy and install dependencies before function code
+# this avoids reinstalling unchanged dependencies on each code change
+
+# Copy package.json and lock files
+COPY ./app/package.json /package.json
+COPY ./app/*.lock /
+
+# install dependencies
+RUN yarn install --production --frozen-lockfile
+
+# Copy code across
+COPY ./function/ .
+
+# Document membrane gateway port (for http based gateways)
+EXPOSE 9001/tcp
+
+WORKDIR /
+
+# Set the membrane communication mode
+# Using HTTP Proxy allows the membrane to communicate with existing HTTP servers/frameworks
+ENV MEMBRANE_MODE=HTTP_PROXY
+
+# Run the Nitric Membrane
+# This process will load membrane provider plugins and kick-off the userland process
+ENTRYPOINT ["/usr/local/bin/membrane"]
+
+# Set membrane child process command and args
+CMD ["node", "index.js"]
+```
