@@ -16,6 +16,22 @@
     "level": "Intermediate"
   },
   {
+    "title": "REST API - Go",
+    "description": "This example shows how to implement an orders REST API in Go",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/go/rest-api",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Go",
+    "level": "Beginner"
+  },
+  {
+    "title": "REST API - Python",
+    "description": "This example shows how to implement an orders REST API in Python",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/python/rest-api",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Python",
+    "level": "Beginner"
+  },
+  {
     "title": "REST API - Java",
     "description": "This example shows how to implement an orders REST API in Java",
     "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/java/rest-api",
