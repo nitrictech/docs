@@ -1,1 +1,27 @@
-TODO...
+A Nitric function is described by its definition in a `nitric.yaml` file. Nitric functions are a type of [Service](../../intro/services) that offers a portable way to develop function-as-a-service (FaaS) applications, which can then be deployed to
+popular Serverless offerings like AWS Lamda, Google CloudRun and Azure AppService.
+
+## Properties
+
+| Property | Value      | Required | Description                                                                                                                                     |
+| -------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| handler  | `string`   | Yes      | The path to the function handler, relative to the root of the project.                                                                          |
+| triggers | `string[]` | No       | The [topic(s)](./topics.mdx) that this function subscribes to. The listed topics will trigger the function if a new event is published to them. |
+
+```yaml
+name: example-stack
+
+functions:
+  example-function:
+    handler: functions/get.ts
+  subscribed-example-function:
+    handler: functions/set.ts
+    triggers:
+      topics:
+        - example-topic
+
+topics:
+  example-topic: {}
+```
+
+See [Function Concepts]() for more information on interacting with functions.
