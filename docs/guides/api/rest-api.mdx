@@ -40,6 +40,10 @@ We’ll start by creating a new stack for the REST API.
 	{
 		label: "Java",
 		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
 	}
 	]}
 	defaultLang="node"
@@ -171,6 +175,51 @@ rest-api
 ```
 
 </CodeExample>
+<CodeExample lang="go">
+
+<Box mt={4}>
+
+You can create your Stack by running the `make:stack` command below:
+
+</Box>
+
+```bash
+nitric make:stack rest-api
+```
+
+We love Go, so let's choose `official/Go Stack` as our template:
+
+```text
+? Stack template (Use arrow keys)
+  official/TypeScript Stack
+  official/Python Stack
+  official/Java Stack
+❯ official/Go Stack
+```
+
+Next, open the project in your editor of choice. The scaffolded project should have the following structure:
+
+```text
+rest-api
+├── common
+│   ├── json.go
+│   └── params.go
+├── functions
+│   ├── create
+│   │   └── main.go
+│   ├── list
+│   │   └── main.go
+│   └── read
+│       └── main.go
+├── .gitignore
+├── api.yaml
+├── nitric.yaml
+├── package.json
+├── go.mod
+└── go.sum
+```
+
+</CodeExample>
 </CodeExamples>
 
 The stack template already comes with a working API example, so we will use this example as a starter template for our orders API.
@@ -219,6 +268,10 @@ Next, let's turn the `create` function into the handler for `POST: /orders`, by 
 	{
 		label: "Java",
 		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
 	}]}
 	defaultLang="node"
 >
@@ -421,6 +474,101 @@ public class Create {
 ```
 
 </CodeExample>
+<CodeExample lang="go">
+
+<Box mt={4}>
+
+The stack already comes with the `uuid` dependency for id generation, so let's install our dependencies from the root of the stack:
+
+</Box>
+
+```bash
+go mod tidy -e
+```
+
+Next we'll define a common model to be used by our services for defining orders under `common/order.go` and add the following contents:
+
+```go
+package common
+
+type Order struct {
+	ID          string `json:"id"`
+	DateOrdered string `json:"dateOrdered"`
+	ItemID      string `json:"itemId"`
+	CustomerID  string `json:"customerId"`
+}
+```
+
+Next, update the `create/main.go` function to receive an "order create request", create the order and store it in the `orders` collection.
+
+```go
+// functions/create/main.go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/mitchellh/mapstructure"
+	"github.com/nitrictech/go-sdk/api/documents"
+	"github.com/nitrictech/go-sdk/faas"
+	"nitric.io/rest-api/common"
+)
+
+// Updates context with error information
+func httpError(ctx *faas.HttpContext, message string, status int) {
+	ctx.Response.Body = []byte(message)
+	ctx.Response.Status = status
+}
+
+func handler(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+	order := &common.Order{}
+	if err := json.Unmarshal(ctx.Request.Data(), order); err != nil {
+		httpError(ctx, "error decoding json body", 400)
+		return ctx, nil
+	}
+
+	// get the current time and set the order time
+	orderTime := time.Now()
+	order.DateOrdered = orderTime.Format(time.RFC3339)
+
+	// set the ID of the order
+	id := uuid.New().String()
+	order.ID = id
+
+	dc, _ := documents.New()
+
+	// Convert the document to a map[string]interface{}
+	// for storage, future iterations of the go-sdk may include direct interface{} storage as well
+	orderMap := make(map[string]interface{})
+	_ = mapstructure.Decode(order, &orderMap)
+
+	if err := dc.Collection("orders").Doc(id).Set(orderMap); err != nil {
+		httpError(ctx, "error writing orders document", 400)
+		return ctx, nil
+	}
+
+	ctx.Response.Status = 200
+	ctx.Response.Body = []byte(fmt.Sprintf("Created order with ID: %s", id))
+
+	return next(ctx)
+}
+
+func main() {
+	err := faas.New().Http(
+		// Actual Handler
+		handler,
+	).Start()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+</CodeExample>
 </CodeExamples>
 
 ## Retrieve an order
@@ -440,6 +588,10 @@ Now that we can store new orders, let's update the read function for `GET: /orde
 	{
 		label: "Java",
 		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
 	}
 	]}
 	defaultLang="node"
@@ -584,6 +736,75 @@ public class Read {
 ```
 
 </CodeExample>
+<CodeExample lang="node">
+
+<Box mt={4}>
+
+First, we want to parse the path so we can obtain the order id. We could use a third party library to achieve this.
+A parser is already setup in our stack template under `common/params.go`, we just need to update the code to match our orders api.
+
+</Box>
+
+```go
+// functions/read/main.go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/api/documents"
+	"github.com/nitrictech/go-sdk/faas"
+	"nitric.io/rest-api/common"
+)
+
+func handler(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+	params, ok := ctx.Extras["params"].(map[string]string)
+
+	if !ok || params == nil {
+		return nil, fmt.Errorf("error retrieving path params")
+	}
+
+	id := params["id"]
+
+	dc, err := documents.New()
+	if err != nil {
+		return nil, err
+	}
+
+	doc, err := dc.Collection("orders").Doc(id).Get()
+	if err != nil {
+		ctx.Response.Body = []byte("Error retrieving document")
+		ctx.Response.Status = 404
+	} else {
+		b, err := json.Marshal(doc.Content())
+		if err != nil {
+			return nil, err
+		}
+
+		ctx.Response.Headers["Content-Type"] = []string{"application/json"}
+		ctx.Response.Body = b
+	}
+
+	return next(ctx)
+}
+
+func main() {
+	err := faas.New().Http(
+		// Retrieve path parameters if available
+		common.PathParser("/orders/:id"),
+		// Actual Handler
+		handler,
+	).Start()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+```
+
+</CodeExample>
 </CodeExamples>
 
 ## List all orders
@@ -603,6 +824,10 @@ Finally, we'll update the list function for `GET: /orders`, which will list ever
 	{
 		label: "Java",
 		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
 	}
 	]}
 	defaultLang="node"
@@ -749,6 +974,70 @@ public class List {
 ```
 
 </CodeExample>
+<CodeExample lang="go">
+
+<Box mt={4}>
+
+Update the `list/main.go` file for the list function so it retrieves every order from the `orders` collection.
+
+</Box>
+
+```go
+// functions/list/main.go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/api/documents"
+	"github.com/nitrictech/go-sdk/faas"
+)
+
+func handler(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+	dc, err := documents.New()
+	if err != nil {
+		return nil, err
+	}
+
+	query := dc.Collection("orders").Query()
+	results, err := query.Fetch()
+
+	if err != nil {
+		return nil, err
+	}
+
+	docs := make([]map[string]interface{}, 0)
+
+	for _, doc := range results.Documents {
+		// handle documents
+		docs = append(docs, doc.Content())
+	}
+
+	b, err := json.Marshal(docs)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.Response.Body = b
+	ctx.Response.Headers["Content-Type"] = []string{"application/json"}
+
+	return next(ctx)
+}
+
+func main() {
+	err := faas.New().Http(
+		// Actual Handler
+		handler,
+	).Start()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+</CodeExample>
 </CodeExamples>
 
 ## Add the API Gateway
@@ -834,6 +1123,10 @@ Now lets add our `orders` collection and rename our API, update your `nitric.yam
 	{
 		label: "Java",
 		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
 	}
 	]}
 	defaultLang="node"
@@ -892,6 +1185,27 @@ functions:
     handler: target/list.jar
   read:
     handler: target/read.jar
+# Nitric collections
+collections:
+  orders: {}
+# Nitric APIs
+apis:
+  orders: api.yaml
+```
+
+</CodeExample>
+<CodeExample lang="go">
+
+```yaml
+name: rest-api
+# Nitric functions
+functions:
+  create:
+    handler: functions/create/main.go
+  read:
+    handler: functions/read/main.go
+  list:
+    handler: functions/list/main.go
 # Nitric collections
 collections:
   orders: {}
