@@ -1,5 +1,29 @@
 [
   {
+    "title": "REST API - Node",
+    "description": "This example shows how to implement an orders REST API in TypeScript for Node.js",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/typescript/rest-api",
+    "categories": ["Node", "Documents", "APIs", "Stacks"],
+    "language": "TypeScript",
+    "level": "Beginner"
+  },
+  {
+    "title": "REST API with Auth0",
+    "description": "This example shows how to implement an orders REST API and protect it with Auth0 in TypeScript for Node.js",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/typescript/rest-api-auth",
+    "categories": ["Node", "Documents", "APIs", "Stacks", "Security"],
+    "language": "TypeScript",
+    "level": "Intermediate"
+  },
+  {
+    "title": "REST API - Java",
+    "description": "This example shows how to implement an orders REST API in Java",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/java/rest-api",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Java",
+    "level": "Beginner"
+  },
+  {
     "title": "Document API Starter Kit - Node",
     "description": "This starter kit contains everything you need to start building an API in TypeScript for Node.js",
     "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/typescript-stack",
