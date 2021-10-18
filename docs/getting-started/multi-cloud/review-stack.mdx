@@ -149,18 +149,18 @@ public class Create {
                     var json = context.getRequest().getDataAsText();
                     var example = new ObjectMapper().readValue(json, Example.class);
                     var id = UUID.randomUUID().toString();
-        
+
                     new Documents().collection("examples").doc(id, Example.class).set(example);
-        
+
                     var msg = String.format("Created example with ID: %s", id);
                     context.getResponse().data(msg);
-        
+
                 } catch (IOException ioe) {
                     context.getResponse()
                         .status(500)
                         .data("error: " + ioe);
                 }
-        
+
                 return context;
             })
             .start();

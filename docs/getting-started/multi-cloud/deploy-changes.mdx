@@ -185,7 +185,7 @@ public class Delete {
             .http(context -> {
                 var paths = context.getRequest().getPath().split("/");
                 var id = paths[paths.length - 1];
-        
+
                 try {
                     new Documents().collection("examples")
                         .doc(id)
@@ -193,13 +193,13 @@ public class Delete {
 
                     context.getResponse()
                         .data("Removed example: " + id);
-                
+
                 } catch (NotFoundException nfe) {
                     context.getResponse()
                         .status(404)
                         .data("Document not found: " + id);
                 }
-        
+
                 return context;
             })
             .start();
