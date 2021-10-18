@@ -25,9 +25,9 @@ Before we start running our new stack locally, let's review some of the generate
 - `nitric.yaml` defines the [Stack](/docs/intro/concepts/stacks).
 - `api.yaml` defines the [API](/docs/intro/concepts/nitric-apis).
 - Three [Functions](/docs/intro/concepts/functions) are generated:
-  - `functions/create/**/CreateHandler.java` is the function that creates new documents.
-  - `functions/list/**/ListHandler.java` is the function that lists multiple documents.
-  - `functions/read/**/ReadHandler.java` is the function that can read a single document.
+  - `functions/Create.java` is the function that creates new documents.
+  - `functions/List.java` is the function that lists multiple documents.
+  - `functions/Read.java` is the function that can read a single document.
 
 </ShowIf>
 <ShowIf lang="go">
@@ -129,58 +129,43 @@ if __name__ == "__main__":
 <CodeExample lang="java">
 
 ```java
-package com.example.service;
+package function;
 
 import java.io.IOException;
 import java.util.UUID;
 
-import com.example.service.middleware.LoggerMiddleware;
-import com.example.service.model.Example;
+import common.Example;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.nitric.api.document.Documents;
 import io.nitric.faas.Faas;
-import io.nitric.faas.http.HttpContext;
-import io.nitric.faas.http.HttpHandler;
 
-public class CreateHandler implements HttpHandler {
-
-    final Documents documents;
-
-    public CreateHandler(Documents documents) {
-        this.documents = documents;
-    }
-
-    @Override
-    public HttpContext handle(HttpContext context) {
-        try {
-            var json = context.getRequest().getDataAsText();
-            var example = new ObjectMapper().readValue(json, Example.class);
-            var id = UUID.randomUUID().toString();
-
-            documents.collection("examples").doc(id, Example.class).set(example);
-
-            var msg = String.format("Created example with ID: %s", id);
-            context.getResponse().data(msg);
-
-        } catch (IOException ioe) {
-            context.getResponse()
-                .status(500)
-                .data("error: " + ioe);
-        }
-
-        return context;
-    }
+public class Create {
 
     public static void main(String[] args) {
-        var loggerMiddleware = new LoggerMiddleware();
-        var createHandler = new CreateHandler(new Documents());
-
         new Faas()
-            .http(loggerMiddleware)
-            .http(createHandler)
+            .http(context -> {
+                try {
+                    var json = context.getRequest().getDataAsText();
+                    var example = new ObjectMapper().readValue(json, Example.class);
+                    var id = UUID.randomUUID().toString();
+
+                    new Documents().collection("examples").doc(id, Example.class).set(example);
+
+                    var msg = String.format("Created example with ID: %s", id);
+                    context.getResponse().data(msg);
+
+                } catch (IOException ioe) {
+                    context.getResponse()
+                        .status(500)
+                        .data("error: " + ioe);
+                }
+
+                return context;
+            })
             .start();
     }
+
 }
 ```
 

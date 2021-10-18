@@ -169,107 +169,97 @@ apis:
 
 ## Add a new function
 
-Let's make it easy for ourselves by copying an existing function directory as a starting point:
-
-1. From within your `functions` directory, copy the `read` directory and paste it under the same `functions` directory, then rename the copy to `delete`.
-2. Within the `pom.xml` file in your new function directory, under project replace the artifactId contents `example-read` with `example-delete`.
-
-```xml
-<artifactId>example-delete</artifactId>
-```
-
-3. Then replace the mainClass contents `com.example.service.ReadHandler` with `com.example.service.DeleteHandler`.
-
-```xml
-<mainClass>com.example.service.DeleteHandler</mainClass>
-```
-
-4. In the root `pom.xml` file, under modules add the new module:
-
-```xml
-<module>functions/delete</module>
-```
-
-5. In the `src/main/java/com/example/service` directory, rename the `ReadHandler.java` file to `DeleteHandler.java` and replace its contains with your new function code:
+First, from within your `functions` directory, create a new `Delete.java` file that contains your function code:
 
 ```java
-package com.example.service;
-
-import com.example.service.middleware.LoggerMiddleware;
+package function;
 
 import io.nitric.api.NotFoundException;
 import io.nitric.api.document.Documents;
 import io.nitric.faas.Faas;
-import io.nitric.faas.http.HttpContext;
-import io.nitric.faas.http.HttpHandler;
 
-public class DeleteHandler implements HttpHandler {
-
-    final Documents documents;
-
-    public DeleteHandler(Documents documents) {
-        this.documents = documents;
-    }
-
-    @Override
-    public HttpContext handle(HttpContext context) {
-
-        var paths = context.getRequest().getPath().split("/");
-        var id = paths[paths.length - 1];
-
-        try {
-            documents.collection("examples")
-                .doc(id)
-                .delete();
-
-            context.getResponse()
-                .data("Deleted document: " + id);
-
-        } catch (NotFoundException nfe) {
-            context.getResponse()
-                .status(404)
-                .data("Document not found: " + id);
-        }
-
-        return context;
-    }
+public class Delete {
 
     public static void main(String[] args) {
-        var loggerMiddleware = new LoggerMiddleware();
-        var deleteHandler = new DeleteHandler(new Documents());
-
         new Faas()
-            .http(loggerMiddleware)
-            .http(deleteHandler)
+            .http(context -> {
+                var paths = context.getRequest().getPath().split("/");
+                var id = paths[paths.length - 1];
+
+                try {
+                    new Documents().collection("examples")
+                        .doc(id)
+                        .delete();
+
+                    context.getResponse()
+                        .data("Removed example: " + id);
+
+                } catch (NotFoundException nfe) {
+                    context.getResponse()
+                        .status(404)
+                        .data("Document not found: " + id);
+                }
+
+                return context;
+            })
             .start();
     }
 }
 ```
 
-Now to add our new `delete` function to our Stack definition and API.
+## Update Maven POM
+
+Next we updated our Maven POM to create a new executable JAR for our `delete` function.
+
+```xml
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.1</version>
+                <executions>
+                    ...
+                    <execution>
+                        <id>build-four</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>function.Delete</mainClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>delete</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+```
 
 ## Add function handler to Stack
 
-First, you will modify your `nitric.yaml` file to add our `delete `function handler:
+Next, you will modify your `nitric.yaml` file to add our `delete `function handler:
 
 ```yaml
-name: java-example
-
+name: nitric-tutorial
 # Nitric functions
 functions:
   create:
-    handler: functions/create/target/example-create-1.0.jar
+    handler: functions/create.jar
   list:
-    handler: functions/list/target/example-list-1.0.jar
+    handler: functions/list.jar
   read:
-    handler: functions/read/target/example-read-1.0.jar
+    handler: functions/read.jar
   delete:
-    handler: functions/delete/target/example-delete-1.0.jar
-
+    handler: functions/delete.jar
 # Nitric collections
 collections:
   examples: {}
-
 # Nitric APIs
 apis:
   examples: api.yaml
