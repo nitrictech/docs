@@ -13,7 +13,7 @@
 | `GET`      | /orders/{$orderId} | Get a specific order by its ID |
 | `POST`     | /orders            | Create a new order             |
 
-> This tutorial provides examples in TypeScript & Python
+> This tutorial provides examples in TypeScript, Python & Java.
 
 ## Getting started
 
@@ -36,6 +36,10 @@ We’ll start by creating a new stack for the REST API.
 	{
 		label: "Python",
 		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
 	}
 	]}
 	defaultLang="node"
@@ -64,22 +68,20 @@ We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
 Next, open the project in your editor of choice. The scaffolded project should have the following structure:
 
 ```text
-rest-api/
-|
-+--nitric.yaml
-+--api.yaml
-+--package.json
-+--.gitignore
-+--common/
-   |
-   +--example.ts
-   +--index.ts
-   +--path.ts
-+--functions/
-   |
-   +--create.ts
-   +--list.ts
-   +--read.ts
+rest-api
+├── common
+│   ├── example.ts
+│   ├── index.ts
+│   └── path.ts
+├── functions
+│   ├── create.ts
+│   ├── list.ts
+│   └── read.ts
+├── .gitignore
+├── api.yaml
+├── nitric.yaml
+├── package.json
+└── yarn.lock
 ```
 
 </CodeExample>
@@ -95,7 +97,7 @@ You can create your Stack by running the `make:stack` command below:
 nitric make:stack rest-api
 ```
 
-We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
+We love Python, so let's choose `official/Python Stack` as our template:
 
 ```text
 ? Stack template (Use arrow keys)
@@ -108,22 +110,64 @@ We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
 Next, open the project in your editor of choice. The scaffolded project should have the following structure:
 
 ```text
-rest-api/
-|
-+--nitric.yaml
-+--api.yaml
-+--requirements.txt
-+--.gitignore
-+--common/
-   |
-   +--__init__.py
-   +--example.py
-+--functions/
-   |
-   +--__init__.py
-   +--create.py
-   +--list.py
-   +--read.py
+rest-api
+├── common
+│   ├── __init__.py
+│   └── example.py
+├── functions
+│   ├── __init__.py
+│   ├── create.py
+│   ├── list.py
+│   └── read.py
+├── .gitignore
+├── api.yaml
+├── nitric.yaml
+└── requirements.txt
+```
+
+</CodeExample>
+<CodeExample lang="java">
+
+<Box mt={4}>
+
+You can create your Stack by running the `make:stack` command below:
+
+</Box>
+
+```bash
+nitric make:stack rest-api
+```
+
+We love Java, so let's choose `official/Java Stack` as our template:
+
+```text
+? Stack template (Use arrow keys)
+  official/TypeScript Stack
+  official/Python Stack
+❯ official/Java Stack
+  official/Java Stack (Multi Module)
+  official/Go Stack
+```
+
+> Note the `Java Stack (Multi Module)` option provides a multi module Maven project template. This template is more fully featured with unit tests and middleware, but is also more complex to get started with.
+
+Next, open the project in your editor of choice. The scaffolded project should have the following structure:
+
+```text
+rest-api
+├── src
+│   └── main
+│       └── java
+│           ├── common
+│           │   └── Example.java
+│           └── function
+│               ├── Create.java
+│               ├── List.java
+│               └── Read.java
+├── .gitignore
+├── api.yaml
+├── nitric.yaml
+└── pom.xml
 ```
 
 </CodeExample>
@@ -171,8 +215,11 @@ Next, let's turn the `create` function into the handler for `POST: /orders`, by 
 	{
 		label: "Python",
 		value: "python"
-	}
-	]}
+	},
+	{
+		label: "Java",
+		value: "java"
+	}]}
 	defaultLang="node"
 >
 <CodeExample lang="node">
@@ -313,6 +360,67 @@ if __name__ == "__main__":
 ```
 
 </CodeExample>
+<CodeExample lang="java">
+
+<Box mt={4}>
+
+To improve our type safety, rename the `common/Example.java` file to be `common/Order.java` and replace its contents with our new `Order` type:
+
+</Box>
+
+```java
+public class Order {
+  public String id;
+  public String dateOrdered;
+  public String itemId;
+  public String customerId;
+}
+```
+
+Next, update the `Create.java` function to receive an "order create request", create the order and store it in the `orders` collection.
+
+```java
+package function;
+
+import java.io.IOException;
+import java.util.UUID;
+
+import common.Order;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.nitric.api.document.Documents;
+import io.nitric.faas.Faas;
+
+public class Create {
+
+    public static void main(String[] args) {
+        new Faas()
+            .http(context -> {
+                try {
+                    var json = context.getRequest().getDataAsText();
+                    var order = new ObjectMapper().readValue(json, Order.class);
+                    var id = UUID.randomUUID().toString();
+
+                    new Documents().collection("orders").doc(id, Order.class).set(order);
+
+                    var msg = String.format("Created order with ID: %s", id);
+                    context.getResponse().data(msg);
+
+                } catch (IOException ioe) {
+                    context.getResponse()
+                        .status(500)
+                        .data("error: " + ioe);
+                }
+
+                return context;
+            })
+            .start();
+    }
+
+}
+```
+
+</CodeExample>
 </CodeExamples>
 
 ## Retrieve an order
@@ -328,6 +436,10 @@ Now that we can store new orders, let's update the read function for `GET: /orde
 	{
 		label: "Python",
 		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
 	}
 	]}
 	defaultLang="node"
@@ -424,6 +536,54 @@ if __name__ == "__main__":
 ```
 
 </CodeExample>
+<CodeExample lang="java">
+
+<Box mt={4}>
+
+First, update the `Read.java` file for this function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
+
+</Box>
+
+```java
+package function;
+
+import common.Order;
+
+import io.nitric.api.NotFoundException;
+import io.nitric.api.document.Documents;
+import io.nitric.faas.Faas;
+
+public class Read {
+
+    public static void main(String[] args) {
+        new Faas()
+            .http(context -> {
+                var paths = context.getRequest().getPath().split("/");
+                var id = paths[paths.length - 1];
+
+                try {
+                    var json = new Documents().collection("orders")
+                        .doc(id, Order.class)
+                        .getJson();
+
+                    context.getResponse()
+                        .contentType("application/json")
+                        .data(json);
+
+                } catch (NotFoundException nfe) {
+                    context.getResponse()
+                        .status(404)
+                        .data("Document not found: " + id);
+                }
+
+                return context;
+            })
+            .start();
+    }
+}
+```
+
+</CodeExample>
 </CodeExamples>
 
 ## List all orders
@@ -439,6 +599,10 @@ Finally, we'll update the list function for `GET: /orders`, which will list ever
 	{
 		label: "Python",
 		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
 	}
 	]}
 	defaultLang="node"
@@ -528,6 +692,63 @@ if __name__ == "__main__":
 ```
 
 </CodeExample>
+<CodeExample lang="java">
+
+<Box mt={4}>
+
+Update the `List.java` file for the list function so it retrieves every order from the `orders` collection.
+
+</Box>
+
+```java
+package function;
+
+import common.Order;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.nitric.api.document.Documents;
+import io.nitric.api.document.ResultDoc;
+import io.nitric.faas.Faas;
+
+import java.io.IOException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class List {
+
+    public static void main(String[] args) {
+        new Faas()
+            .http(context -> {
+                Stream<ResultDoc<Order>> stream = new Documents().collection("orders")
+                    .query(Order.class)
+                    .stream();
+
+                java.util.List<Order> orders = stream
+                    .map(ResultDoc::getContent)
+                    .collect(Collectors.toUnmodifiableList());
+
+                try {
+                    var json = new ObjectMapper().writeValueAsString(orders);
+
+                    context.getResponse()
+                        .contentType("application/json")
+                        .data(json);
+
+                } catch (IOException ioe) {
+                    context.getResponse()
+                        .status(500)
+                        .data("Error querying orders: " + ioe.toString());
+                }
+
+                return context;
+            })
+            .start();
+    }
+
+}
+```
+
+</CodeExample>
 </CodeExamples>
 
 ## Add the API Gateway
@@ -609,6 +830,10 @@ Now lets add our `orders` collection and rename our API, update your `nitric.yam
 	{
 		label: "Python",
 		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
 	}
 	]}
 	defaultLang="node"
@@ -646,6 +871,27 @@ functions:
     handler: functions/read.py
   list:
     handler: functions/list.py
+# Nitric collections
+collections:
+  orders: {}
+# Nitric APIs
+apis:
+  orders: api.yaml
+```
+
+</CodeExample>
+<CodeExample lang="java">
+
+```yaml
+name: rest-api
+# Nitric functions
+functions:
+  create:
+    handler: target/create.jar
+  list:
+    handler: target/list.jar
+  read:
+    handler: target/read.jar
 # Nitric collections
 collections:
   orders: {}
