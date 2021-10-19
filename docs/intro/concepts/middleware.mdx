@@ -1,6 +1,6 @@
 Nitric provides a powerful FaaS Middleware framework for creating applications.
 
-If you haven't used Middleware before, its a design pattern popularized by JavaScript frameworks such as [Express](https://expressjs.com/) and [Koa](https://koajs.com/). While in the Java space the JEE Servlet Filters actually use the middleware pattern.
+If you haven't used Middleware before, it is a design pattern popularized by JavaScript frameworks such as [Express](https://expressjs.com/) and [Koa](https://koajs.com/). While in the Java space the JEE Servlet Filters actually use the middleware pattern.
 
 Before diving into the FaaS middleware features, lets first take a look handlers which provide a simple way to get started with Nitric.
 
@@ -63,23 +63,20 @@ if __name__ == "__main__":
 <CodeExample lang="java">
 
 ```java
-package example.hello;
+package function;
 
 import io.nitric.faas.Faas;
 import io.nitric.faas.http.HttpContext;
-import io.nitric.faas.http.HttpHandler;
 
-public class HelloHandler implements HttpHandler {
-
-    public HttpContext handle(HttpContext ctx) {
-        ctx.getResponse().data("Hello World!")
-
-        return ctx;
-    }
+public class Hello {
 
     public static void main(String[] args) {
         new Faas()
-            .http(new HelloHandler())
+            .http(context -> {
+        		ctx.getResponse().data("Hello World!");
+
+        		return ctx;
+			})
             .start();
     }
 }
