@@ -4,12 +4,6 @@ Nitric supports this capability by allowing you to write and specify your docker
 
 ## Properties
 
-export interface NitricContainer<Ext> extends NitricComputeUnit<Ext> {
-  // The path to the Dockerfile to use to build this source
-  // relative to context
-  dockerfile: string;
-}
-
 | **Property** | **Value** | **Description**                                          |
 | ------------ | --------- | -------------------------------------------------------- |
 | dockerfile   | string    | relative path to the dockerfile describing the container |
