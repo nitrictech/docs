@@ -1,8 +1,18 @@
-Nitric allows you to configure your stack or stacks via key-value pairs in the nitirc.yaml file associated with your stack. Below is a breakdown of the different features configurable within this file.
+Nitric allows you to defined your stack using a straight forward YAML configuration file. 
+
+By default the Nitric configuration file is named `nitric.yaml`, but you can specify another name with the CLI `--file` option:
+
+```bash
+nitric --file myapp.yaml run
+```
+
+This topic provides a breakdown of all the Nitric features configured within this file.
 
 ## Functions
 
-Functions are deployable units of code that handle a single purpose, the Nitric stack file requires references (relative to your stack file) for each of your function's code via handlers.
+Functions are deployable units of code that handle a single purpose, the Nitric stack file requires references (relative to your stack file) for each of your function's code via handlers. 
+
+In the example below we have 3 function keys named `create`, `read` and `list`. The function handlers define the application code to be invoked.
 
 ```yaml
 functions:
@@ -14,13 +24,37 @@ functions:
     handler: functions/list.ts
 ```
 
-The function keys can be referenced in APIs and Entrypoints.
+The function name keys can be referenced in APIs and Entrypoints.
+
+Functions can also be triggered by topic events. In the example below we have an `orders` topic, when a new item is published to this topic it will trigger the invocation of the `create-order` function.
+
+```yaml
+functions:
+  create-order:
+    handler: functions/create-order.ts
+    triggers:
+      topics:
+        - orders
+
+topics:
+    orders: {}
+```
 
 For more details see [Functions Reference](/docs/reference/project/functions)
 
 ## Containers
 
-TODO
+Containers enable Nitric to deploy custom built Docker containers to the cloud, and be include in your Nitric stack.
+
+In the example below the `express-orders.dockerfile` Dockerfile will be build and deployed by Nitric as part of the stack.
+
+```
+name: orders-rest-api
+
+containers:
+    orders-container:
+        dockerfile: ./containers/express-orders.dockerfile
+```
 
 For more details see [Containers Reference](/docs/reference/project/containers)
 
@@ -30,6 +64,7 @@ Document collections can be defined in the stack as follows:
 
 ```yaml
 collections:
+  customers: {}
   customers: {}
 ```
 
@@ -77,4 +112,3 @@ apis:
 ```
 
 For more details see [Entrypoints Reference](/docs/reference/project/entrypoints)
-

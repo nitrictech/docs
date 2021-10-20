@@ -219,15 +219,20 @@
                     "path": "/docs/reference/project/queues.mdx"
                   },
                   {
+                    "title": "Collections",
+                    "path": "/docs/reference/project/collections.mdx"
+                  },
+                  {
                     "title": "Buckets",
                     "path": "/docs/reference/project/buckets.mdx"
                   },
                   {
-                    "title": "Static Sites",
-                    "path": "/docs/reference/project/sites.mdx"
+                    "title": "Schedules",
+                    "path": "/docs/reference/project/schedules.mdx"
                   },
                   {
-                    "path": "/docs/reference/project/schedules.mdx"
+                    "title": "Static Sites",
+                    "path": "/docs/reference/project/sites.mdx"
                   },
                   {
                     "title": "API Gateways",
