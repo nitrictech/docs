@@ -192,12 +192,12 @@ public class Delete {
                         .delete();
 
                     context.getResponse()
-                        .data("Removed example: " + id);
+                        .text("Removed example: %s", id);
 
                 } catch (NotFoundException nfe) {
                     context.getResponse()
                         .status(404)
-                        .data("Document not found: " + id);
+                        .text("Document not found: %s", id);
                 }
 
                 return context;
