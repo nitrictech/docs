@@ -714,7 +714,7 @@ public class Read {
             .http(context -> {
                 var paths = context.getRequest().getPath().split("/");
                 var id = paths[paths.length - 1];
-        
+
                 try {
                     var order = new Documents().collection("orders")
                         .doc(id)
@@ -725,7 +725,7 @@ public class Read {
                     context.getResponse()
                         .contentType("application/json")
                         .text(json);
-        
+
                 } catch (NotFoundException nfe) {
                     context.getResponse()
                         .status(404)
@@ -736,7 +736,7 @@ public class Read {
                         .status(500)
                         .text("Error getting order: %s", ioe);
                 }
-            
+
                 return context;
             })
             .start();
