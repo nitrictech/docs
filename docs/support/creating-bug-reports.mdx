@@ -1,1 +1,108 @@
-TBA
+## Overview
+
+You can help us improve Nitric by creating **bug reports**. When creating a bug report, it's important that you include as much information as possible about your issue. That way, it's easier to reproduce and fix the issue.
+
+> You can also create **feature requests** or ask a **question** via the issue templates on GitHub.
+
+## Where do I open the bug report?
+
+The Nitric framework has many different repositories in the <a href="https://github.com/nitrictech" target="_blank">nitrictech</a> organization on GitHub. If you have an issue with any component, you can open a new issue in the respective repo.
+
+If you're unsure where to open the GitHub issue, you can use our main <a href="https://github.com/nitrictech/nitric" target="_blank">nitrictech/nitric</a> repo. The Nitric team frequently monitors and triages new issues within this main repo and will move the issue to another repo if required.
+
+## Share reproduction of bug
+
+To best help us understand and tackle the issue effectively, provide a **standalone GitHub repository** in your report that can reproduce the issue.
+
+For information on how to create minimal, reproducible examples you can view this informative <a href="https://stackoverflow.com/help/minimal-reproducible-example" target="_blank">Stackoverflow guide</a>.
+
+## Best practices for writing the bug report
+
+If you don't have time to create a standalone repository, please include as much information as you can can about the issue, use the <a href="https://github.com/nitrictech/nitric/issues/new?assignees=&labels=&template=bug_report.md&title=%27Create%20bug%20report%27" target="_blank">Bug report template</a> from our main repo to help guide you.
+
+### Include .nitric log files
+
+Log files can be found in your stack directory under the `.nitric` folder.
+Including Log files will provide a ton of useful information logged during local run and cloud deployments.
+
+### Include bug description and reproduction
+
+When describing the bug, it's help to produce the following information:
+
+- A clear and concise description of what the bug is
+- Steps to reproduce the bug
+- A clear and concise description of what you expected to happen
+- Screenshots (if applicable)
+
+### Include environment and setup information
+
+Any information about your environment and setup will be important to help reproduce the bug. Please include the following:
+
+- Which version of the **Nitric CLI** you are using (run `nitric -v` to see your version)
+  - Running this command also provides your **Operating System** and **Node.js** version
+- Any nitric dependencies and their version such as SDKs or Middleware
+- Which cloud providers you are deploying to
+- Your `nitric.yaml` stack file
+
+### Example Report
+
+<Accordion title="Expand for a hypothetical bug report example">
+
+**Describe the bug:**
+
+Returning a JSON response in my list handler doesn't work, it returns nothing and times out.
+
+**Steps to reproduce:**
+
+I updated the nitric node stack list handler to set the response body to a JSON string.
+
+```typescript
+import { faas } from '@nitric/sdk';
+
+faas
+  .http(async (ctx) => {
+    ctx.res.body = JSON.stringify({ message: 'My Successful Response' });
+
+    return ctx;
+  })
+  .start();
+```
+
+Then I run `nitric run` to run nitric locally.
+
+I then use curl to test the handler's endpoint and don't get any response from the server:
+
+```bash
+curl http://localhost:49152/examples
+```
+
+**What I expected:**
+
+I expected to see the JSON response printed to my terminal in a readable format or at least an error explaining what I did wrong.
+
+**Environment and setup information:**
+
+- Nitric CLI version: `@nitric/cli/0.1.0 win32-x64 node-v16.4.0`
+- Dependencies used: @nitric/sdk@1.0.0
+- Cloud providers: AWS, Google Cloud
+- Nitric Stack file:
+
+```yaml
+name: my-stack
+
+functions:
+  create:
+    handler: functions/create.ts
+  read:
+    handler: functions/read.ts
+  list:
+    handler: functions/list.ts
+
+collections:
+  examples: {}
+
+apis:
+  examples: api.yaml
+```
+
+</Accordion>
