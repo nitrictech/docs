@@ -1,70 +1,154 @@
-Containers provide a way to port existing application and use your favorite frameworks to build with Nitric.
+Containers provide a way to port existing applications and use your favorite frameworks to build with Nitric.
 
 Nitric supports this capability by allowing you to write and specify your dockerfiles as part of your nitric stack.
 
 ## Properties
 
-| **Property** | **Value** | **Description**                                          |
-| ------------ | --------- | -------------------------------------------------------- |
-| dockerfile   | string    | relative path to the dockerfile describing the container |
+| **Property** | **Value**  | Required | **Description**                                              |
+| ------------ | ---------- | -------- | ------------------------------------------------------------ |
+| context      | `string`   | Yes      | relative path to the container context                       |
+| dockerfile   | `string`   | Yes      | relative path from the context to the dockerfile describing the container |
+| args         | `string[]` | No       | build arguments that will be added during the container build process |
 
 ## Example Container Configuration
 
 ```yaml
-name: example-stack
+name: example-container
 
 containers:
-	example-container:
-		dockerfile: ./containers/example.dockerfile
+  create:
+    context: .
+    dockerfile: docker/http.dockerfile
+    args:
+      HANDLER: functions/create_http/main.go
+  read:
+    context: .
+    dockerfile: docker/function.dockerfile
+    args:
+      HANDLER: functions/read/main.go
 ```
 
-## Example Dockerfile
+## Example Dockerfiles
 
 In order to fully utilize the Nitric framework the Nitric membrane should be included to isolate your application from its deployed environment.
 
+<Accordion title="Expand for a function handler example">
+
 ```dockerfile
-# When defined as part of a nitric stack docker builds will be provided with a 'provider' argument that can be used
-# to determine the provider the membrane will interact with
 ARG PROVIDER=dev
-ARG MEMBRANE_VERSION=v0.12.0-rc.21
-FROM node:alpine
+FROM golang:1.17-alpine3.13 as build
 
-# Download the membrane and ensure it's executable
-# Use curl instead of ADD for caching
-RUN curl https://github.com/nitrictech/nitric/releases/download/${MEMBRANE_VERSION}/membrane-${PROVIDER} -o /usr/local/bin/membrane
+ARG HANDLER
 
-# Add the membrane binary
-RUN chmod +x-rw /usr/local/bin/membrane
+RUN apk update
+RUN apk upgrade
+
+RUN apk add --no-cache git gcc g++ make
+
+WORKDIR /app/
+
+# Copy dependency files
+COPY go.mod *.sum ./
+
+# Install go dependencies
+RUN go mod download
+RUN go mod tidy
+
+# Copy the function source
+COPY . .
+
+# Build the function binary
+RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/function ./${HANDLER}
+
+# Fresh image to remove go build packages
+FROM alpine
+ARG PROVIDER
 
 # Add binaries to the path
 ENV PATH="/usr/local/bin:${PATH}"
 
-# Copy and install dependencies before function code
-# this avoids reinstalling unchanged dependencies on each code change
+COPY --from=build /bin/function /function
+RUN chmod +x-rw /function
 
-# Copy package.json and lock files
-COPY ./app/package.json /package.json
-COPY ./app/*.lock /
-
-# install dependencies
-RUN yarn install --production --frozen-lockfile
-
-# Copy code across
-COPY ./function/ .
-
-# Document membrane gateway port (for http based gateways)
+# Expose the gateways proxy port
 EXPOSE 9001/tcp
 
+# WORKDIR required to AWS lambda deployments
 WORKDIR /
 
-# Set the membrane communication mode
-# Using HTTP Proxy allows the membrane to communicate with existing HTTP servers/frameworks
+ADD https://github.com/nitrictech/nitric/releases/download/v0.12.0-rc.22/membrane-$PROVIDER /usr/local/bin/membrane
+RUN chmod +x-rw /usr/local/bin/membrane
+
+# Run the Nitric Membrane
+# This process will load membrane provider plugins and kick-off the userland process
+# full path Entrypoint required for AWS Lambda
+ENTRYPOINT ["/usr/local/bin/membrane"]
+
+# Set membrane child process command and args
+CMD ["/function"]
+```
+
+</Accordion>
+
+<Accordion title="Expand for a http proxy example">
+
+```dockerfile
+ARG PROVIDER=dev
+FROM golang:1.17-alpine3.13 as build
+
+ARG HANDLER
+
+RUN apk update
+RUN apk upgrade
+
+RUN apk add --no-cache git gcc g++ make
+
+WORKDIR /app/
+
+# Copy dependency files
+COPY go.mod *.sum ./
+
+# Install go dependencies
+RUN go mod download
+RUN go mod tidy
+
+# Copy the function source
+COPY . .
+
+# Build the function binary
+RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/function ./${HANDLER}
+
+# Fresh image to remove go build packages
+FROM alpine
+ARG PROVIDER
+
+# Add binaries to the path
+ENV PATH="/usr/local/bin:${PATH}"
+
+COPY --from=build /bin/function /function
+RUN chmod +x-rw /function
+
+# Expose the gateways proxy port
+EXPOSE 9001/tcp
+
+# WORKDIR required to AWS lambda deployments
+WORKDIR /
+
+ADD https://github.com/nitrictech/nitric/releases/download/v0.12.0-rc.22/membrane-$PROVIDER /usr/local/bin/membrane
+RUN chmod +x-rw /usr/local/bin/membrane
+
 ENV MEMBRANE_MODE=HTTP_PROXY
 
 # Run the Nitric Membrane
 # This process will load membrane provider plugins and kick-off the userland process
+# full path Entrypoint required for AWS Lambda
 ENTRYPOINT ["/usr/local/bin/membrane"]
 
 # Set membrane child process command and args
-CMD ["node", "index.js"]
+CMD ["/function"]
 ```
+
+</Accordion>
+
+It is also useful to include a `.dockerignore` file next to your `dockerfile` to exclude the `.nitric` folder and anything else you want excluded.
+This will reduce your image size.
