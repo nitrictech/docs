@@ -24,3 +24,43 @@ functions:
 ## Idempotent Subscribers
 
 Since Nitric Events are implemented using technologies that ensure [at-least-once delivery](./#at-least-once-delivery), your subscribers should typically be [idempotent](https://en.wikipedia.org/wiki/Idempotence#Computer_science_meaning). Every Event provides a unique `ID`, which is useful when implementing these patterns. Persisting the event id, alongside the results of processing the event, allows your application to check whether the id is already present before reprocessing duplicates.
+
+## Registering an event handler
+
+Nitrics FaaS framework comes with a simple method for registering handlers for incoming events:
+
+<CodeExamples
+  languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/faas/events.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/faas/events.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/faas/Events.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/faas/events.go" />
+
+</CodeExamples>
+
+### Registering event listeners for HTTP frameworks
+
+When operating as a HTTP proxy the nitric membrane will forward events it receives to `/subscriptions/{topic_name}`. So adding a handler for events is as simple as registering a route for this path.
