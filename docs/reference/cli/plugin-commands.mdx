@@ -176,12 +176,203 @@ Delete a stack from AWS that was deployed using &#x60;$ nitric deploy:aws&#x60;
     <td>No</td>
     <td>file containing the stack definition of the stack to be torn down</td>
   </tr>
+  <tr>
+    <td>--destroy</td>
+    <td>No</td>
+    <td>destroy all resources, including buckets, secrets, and collections</td>
+  </tr>
 </table>
 
 #### Examples
 
 ```bash
 $ nitric down:aws
+```
+
+## @nitric/plugin-azure
+
+### nitric deploy:azure
+
+deploy a stack to Microsoft Azure
+
+#### Arguments
+
+<table>
+  <th>
+    <strong>Argument</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>dir</td>
+    <td>No</td>
+    <td>directory containing the stack to be deployed</td>
+  </tr>
+</table>
+
+#### Options
+
+<table>
+  <th>
+    <strong>Option</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>--ci</td>
+    <td>No</td>
+    <td>deploy a stack to Microsoft Azure</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>No</td>
+    <td>show CLI help</td>
+  </tr>
+  <tr>
+    <td>--region</td>
+    <td>No</td>
+    <td>azure region to deploy to</td>
+  </tr>
+  <tr>
+    <td>--plan</td>
+    <td>No</td>
+    <td>azure appservice plan tier</td>
+  </tr>
+  <tr>
+    <td>--file</td>
+    <td>No</td>
+    <td>stack definition file to deploy</td>
+  </tr>
+  <tr>
+    <td>--orgName</td>
+    <td>No</td>
+    <td>deploy a stack to Microsoft Azure</td>
+  </tr>
+  <tr>
+    <td>--adminEmail</td>
+    <td>No</td>
+    <td>deploy a stack to Microsoft Azure</td>
+  </tr>
+</table>
+
+#### Examples
+
+```bash
+$ nitric deploy:azure
+```
+
+### nitric doctor:azure
+
+check environment for configuration for deployment to Azure
+
+#### Options
+
+<table>
+  <th>
+    <strong>Option</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>--ci</td>
+    <td>No</td>
+    <td>check environment for configuration for deployment to Azure</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>No</td>
+    <td>show CLI help</td>
+  </tr>
+</table>
+
+#### Examples
+
+```bash
+$ nitric doctor:azure
+```
+
+### nitric down:azure
+
+tear down a stack previously deployed to Azure using &#x60;$ nitric deploy:azure&#x60;
+
+#### Arguments
+
+<table>
+  <th>
+    <strong>Argument</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>dir</td>
+    <td>No</td>
+    <td>
+      tear down a stack previously deployed to Azure using &#x60;$ nitric
+      deploy:azure&#x60;
+    </td>
+  </tr>
+</table>
+
+#### Options
+
+<table>
+  <th>
+    <strong>Option</strong>
+  </th>
+  <th>
+    <strong>Required</strong>
+  </th>
+  <th>
+    <strong>Description</strong>
+  </th>
+  <tr>
+    <td>--ci</td>
+    <td>No</td>
+    <td>
+      tear down a stack previously deployed to Azure using &#x60;$ nitric
+      deploy:azure&#x60;
+    </td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>No</td>
+    <td>show CLI help</td>
+  </tr>
+  <tr>
+    <td>--file</td>
+    <td>No</td>
+    <td>
+      tear down a stack previously deployed to Azure using &#x60;$ nitric
+      deploy:azure&#x60;
+    </td>
+  </tr>
+  <tr>
+    <td>--destroy</td>
+    <td>No</td>
+    <td>destroy all resources, including buckets, secrets, and collections</td>
+  </tr>
+</table>
+
+#### Examples
+
+```bash
+$ nitric down:azure
 ```
 
 ## @nitric/plugin-gcp
@@ -353,6 +544,11 @@ tear down a stack from Google Cloud Platform (GCP) previously deployed with &#x6
     </td>
   </tr>
   <tr>
+    <td>--destroy</td>
+    <td>No</td>
+    <td>destroy all resources, including buckets, secrets, and collections</td>
+  </tr>
+  <tr>
     <td>--nonInteractive</td>
     <td>No</td>
     <td>
@@ -366,210 +562,6 @@ tear down a stack from Google Cloud Platform (GCP) previously deployed with &#x6
 
 ```bash
 $ nitric down:gcp
-```
-
-## @nitric/plugin-azure
-
-### nitric deploy:azure
-
-deploy a stack to Azure
-
-#### Arguments
-
-<table>
-  <th>
-    <strong>Argument</strong>
-  </th>
-  <th>
-    <strong>Required</strong>
-  </th>
-  <th>
-    <strong>Description</strong>
-  </th>
-  <tr>
-    <td>dir</td>
-    <td>No</td>
-    <td>deploy a stack to Azure</td>
-  </tr>
-</table>
-
-#### Options
-
-<table>
-  <th>
-    <strong>Option</strong>
-  </th>
-  <th>
-    <strong>Required</strong>
-  </th>
-  <th>
-    <strong>Description</strong>
-  </th>
-  <tr>
-    <td>--ci</td>
-    <td>No</td>
-    <td>deploy a stack to Azure</td>
-  </tr>
-  <tr>
-    <td>--help</td>
-    <td>No</td>
-    <td>show CLI help</td>
-  </tr>
-  <tr>
-    <td>--file</td>
-    <td>No</td>
-    <td>stack definition file to deploy to Azure</td>
-  </tr>
-  <tr>
-    <td>--nonInteractive</td>
-    <td>No</td>
-    <td>deploy a stack to Azure</td>
-  </tr>
-  <tr>
-    <td>--plan</td>
-    <td>No</td>
-    <td>Azure Appservice plan tier</td>
-  </tr>
-  <tr>
-    <td>--region</td>
-    <td>No</td>
-    <td>Azure region to deploy to</td>
-  </tr>
-  <tr>
-    <td>--orgName</td>
-    <td>No</td>
-    <td>The organisation name</td>
-  </tr>
-  <tr>
-    <td>--adminEmail</td>
-    <td>No</td>
-    <td>The admin email</td>
-  </tr>
-</table>
-
-#### Examples
-
-```bash
-$ nitric deploy:azure
-```
-
-```bash
-$ nitric deploy:azure --plan Basic-B1 --region australiasoutheast
-```
-
-### nitric doctor:azure
-
-Checks environment for configuration for deployment to Azure
-
-#### Options
-
-<table>
-  <th>
-    <strong>Option</strong>
-  </th>
-  <th>
-    <strong>Required</strong>
-  </th>
-  <th>
-    <strong>Description</strong>
-  </th>
-  <tr>
-    <td>--ci</td>
-    <td>No</td>
-    <td>Checks environment for configuration for deployment to Azure</td>
-  </tr>
-  <tr>
-    <td>--help</td>
-    <td>No</td>
-    <td>show CLI help</td>
-  </tr>
-</table>
-
-#### Examples
-
-```bash
-$ nitric doctor:azure
-```
-
-### nitric down:azure
-
-tear down a stack from Google Cloud Platform (GCP) previously deployed with &#x60;$nitric deploy:gcp&#x60;
-
-#### Arguments
-
-<table>
-  <th>
-    <strong>Argument</strong>
-  </th>
-  <th>
-    <strong>Required</strong>
-  </th>
-  <th>
-    <strong>Description</strong>
-  </th>
-  <tr>
-    <td>dir</td>
-    <td>No</td>
-    <td>
-      tear down a stack from Azure previously deployed with &#x60;$nitric
-      deploy:azure&#x60;
-    </td>
-  </tr>
-</table>
-
-#### Options
-
-<table>
-  <th>
-    <strong>Option</strong>
-  </th>
-  <th>
-    <strong>Required</strong>
-  </th>
-  <th>
-    <strong>Description</strong>
-  </th>
-  <tr>
-    <td>--ci</td>
-    <td>No</td>
-    <td>
-      tear down a stack from Azure previously deployed
-      with &#x60;$nitric deploy:azure&#x60;
-    </td>
-  </tr>
-  <tr>
-    <td>--help</td>
-    <td>No</td>
-    <td>show CLI help</td>
-  </tr>
-  <tr>
-    <td>--nonInteractive</td>
-    <td>No</td>
-    <td>
-      tear down a stack from Azure previously deployed
-      with &#x60;$nitric deploy:azure&#x60;
-    </td>
-  </tr>
-  <tr>
-    <td>--file</td>
-    <td>No</td>
-    <td>
-      the stack definition file previously deployed to Azure
-      with &#x60;$nitric deploy:azure&#x60;
-    </td>
-  </tr>
-  <tr>
-    <td>--destroy</td>
-    <td>No</td>
-    <td>Tear down the complete stack including buckets, collections and secrets</td>
-  </tr>
-
-</table>
-
-#### Examples
-
-```bash
-$ nitric down:azure
 ```
 
 ## @nitric/plugin-do
