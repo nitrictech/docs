@@ -1,12 +1,16 @@
-A Nitric function is described by its definition in a `nitric.yaml` file. Nitric functions are a type of [Service](../../intro/services) that offers a portable way to develop function-as-a-service (FaaS) applications, which can then be deployed to
-popular Serverless offerings like AWS Lamda, Google CloudRun and Azure AppService.
+Nitric functions are a type of Service that offers a portable way to develop function-as-a-service (FaaS) applications. You can learn more about the concepts of functions in the [Compute](/docs/intro/concepts/compute#functions) section.
 
 ## Properties
 
-| Property | Value      | Required | Description                                                                                                                                     |
-| -------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| handler  | `string`   | Yes      | The path to the function handler, relative to the root of the project.                                                                          |
-| triggers | `string[]` | No       | The [topic(s)](./topics.mdx) that this function subscribes to. The listed topics will trigger the function if a new event is published to them. |
+| Property | Value      | Required | Description                                                                                                                                                                                                                |
+| -------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| handler  | `string`   | Yes      | The path to the function handler, relative to the root of the project.                                                                                                                                                     |
+| version  | `string`   | No       | An optional property that Locks the function to a version of the nitric framework.                                                                                                                                         |
+| context  | `string`   | No       | Relative path to the container context, defaults to the root of the project.                                                                                                                                               |
+| triggers | `string[]` | No       | The [topic(s)](./topics.mdx) that this function subscribes to. The listed topics will trigger the function if a new event is published to them.                                                                            |
+| excludes | `string[]` | No       | A list of files and directories to exclude e.g. node_modules. The excludes property uses the <a href="https://linuxize.com/post/gitignore-ignoring-files-in-git/#literal-file-names" target="_blank">gitignore syntax</a>. |
+
+## Example Configuration
 
 ```yaml
 name: example-stack
@@ -24,4 +28,32 @@ topics:
   example-topic: {}
 ```
 
-See [Function Concepts]() for more information on interacting with functions.
+## Example using Context Property
+
+This [mono repo project](/docs/intro/concepts/projects#mono-repo) example utilizes the context property to the functions to help separate concerns between services and the website.
+
+```yaml
+name: example-stack
+
+functions:
+  example-function:
+    context: services
+    handler: functions/get.ts
+  subscribed-example-function:
+    context: services
+    handler: functions/set.ts
+    triggers:
+      topics:
+        - example-topic
+
+topics:
+  example-topic: {}
+
+sites:
+  website:
+    path: website
+    assetPath: ./build
+    buildScripts:
+      - yarn install --frozen-lockfile
+      - yarn build
+```

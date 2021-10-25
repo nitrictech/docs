@@ -19,7 +19,7 @@
     "prettier": "^2.3.2"
   },
   "lint-staged": {
-    "docs/**/*.{md,mdx}": "yarn format:fix"
+    "./**/*.{mdx,md}": "yarn format:fix"
   },
   "husky": {
     "hooks": {
