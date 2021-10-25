@@ -122,7 +122,7 @@ Nitric containers are packaged with the Nitric Membrane which provides a cloud i
 
 Containers are the second type of compute. With containers, development teams can leverage Nitric with existing applications.
 
-Nitric Containers are designed to support full-stack applications, micros-services and monoliths. Your application code can also use the Nitric [APIs](/docs/reference/api) to support cloud portability.
+Nitric Containers are designed to support full-stack applications, microservices and monoliths. Your application code can also use the Nitric [APIs](/docs/reference/api) to support cloud portability.
 
 Containers are specified in the Nitric stack definition:
 
@@ -137,7 +137,7 @@ containers:
       		HANDLER: target/fees-micro-service.jar
 ```
 
-As with Functions, the Nitric will automatically build containers dockerfiles and incorporate the Nitric Membrane proxy/gateway to ensure cloud portability.
+The Nitric CLI will automatically build stack dockerfiles, creating OCI Docker containers which incorporate the Nitric Membrane.
 
 ## Compute Architecture
 
