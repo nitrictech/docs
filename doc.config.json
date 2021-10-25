@@ -171,23 +171,6 @@
                 "path": "/docs/guides/tensorflow.mdx"
               }
             ]
-          },
-          {
-            "title": "Frontend Tutorials",
-            "routes": [
-              {
-                "title": "Quickstart: Next.js",
-                "path": "/docs/guides/with-nextjs.mdx"
-              },
-              {
-                "title": "Quickstart: React",
-                "path": "/docs/guides/with-react.mdx"
-              },
-              {
-                "title": "Quickstart: Vue 3",
-                "path": "/docs/guides/with-vue.mdx"
-              }
-            ]
           }
         ],
         "reference": [
