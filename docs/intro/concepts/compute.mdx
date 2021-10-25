@@ -1,13 +1,13 @@
 Nitric provides cloud portable compute with:
- * [Functions](/docs/reference/project/functions)
- * [Containers](/docs/reference/project/containers)
 
+- [Functions](/docs/reference/project/functions)
+- [Containers](/docs/reference/project/containers)
 
 ## Functions
 
-Functions provide lightweight and portable Lambda code. 
+Functions provide lightweight and portable Lambda code.
 
- Functions use the Nitric FaaS [Middleware](./middleware) framework and [APIs](/docs/reference/api) to provide a great developer experience and ensure cloud portability.
+Functions use the Nitric FaaS [Middleware](./middleware) framework and [APIs](/docs/reference/api) to provide a great developer experience and ensure cloud portability.
 
 <CodeExamples
 	languages={[
@@ -114,11 +114,9 @@ func main() {
 </CodeExample>
 </CodeExamples>
 
-
 Nitric automatically builds your functions into OCI compliant Docker containers and can run them locally for development or deploy them to leading Container-as-a-Service offerings such as AWS Lambda, Google Cloud Run and DigitalOcean App Platform.
 
 Nitric containers are packaged with the Nitric Membrane which provides a cloud integrating gateway and service proxy. This ensures your code to remain cloud portable.
-
 
 ## Containers
 
@@ -140,7 +138,6 @@ containers:
 ```
 
 As with Functions, the Nitric will automatically build containers dockerfiles and incorporate the Nitric Membrane proxy/gateway to ensure cloud portability.
-
 
 ## Compute Architecture
 
