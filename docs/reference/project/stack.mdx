@@ -2,19 +2,20 @@ A nitric stack is described by its definition in a `nitric.yaml` file. A stack r
 
 ## Properties
 
-| **name**    | **description**                                              | **type**                           |
-| ----------- | ------------------------------------------------------------ | ---------------------------------- |
-| name        | A descriptive name of the stack                              | `string`                           |
-| functions   | zero or more functions to be deployed                        | map of [function](./functions)     |
-| containers  | zero or more containers to be deployed                       | map of [container](./containers)   |
-| collections | zero or more collections to be deployed                      | map of [collection](./collection)  |
-| topics      | zero or more topics to be deployed                           | map of [topic](./topics)           |
-| queues      | zero or more queues to be deployed                           | map of [queue](./queues)           |
-| buckets     | zero or more buckets to be deployed                          | map of [bucket](./buckets)         |
-| schedules   | zero or more schedules to trigger functions or containers on | map of [schedule](./schedules)     |
-| sites       | zero or more static sites to deploy                          | map of [site](./sites)             |
-| apis        | zero or more APIs to deploy                                  | map of [api](./api-gateways)       |
-| entrypoints | zero or more entrypoints to deploy                           | map of [entrypoint](./entrypoints) |
+| **name**    | **description**                                                                | **type**                           |
+| ----------- | ------------------------------------------------------------------------------ | ---------------------------------- |
+| name        | A descriptive name of the stack                                                | `string`                           |
+| version     | An optional property that Locks the stack to a version of the nitric framework | `string`                           |
+| functions   | zero or more functions to be deployed                                          | map of [function](./functions)     |
+| containers  | zero or more containers to be deployed                                         | map of [container](./containers)   |
+| collections | zero or more collections to be deployed                                        | map of [collection](./collection)  |
+| topics      | zero or more topics to be deployed                                             | map of [topic](./topics)           |
+| queues      | zero or more queues to be deployed                                             | map of [queue](./queues)           |
+| buckets     | zero or more buckets to be deployed                                            | map of [bucket](./buckets)         |
+| schedules   | zero or more schedules to trigger functions or containers on                   | map of [schedule](./schedules)     |
+| sites       | zero or more static sites to deploy                                            | map of [site](./sites)             |
+| apis        | zero or more APIs to deploy                                                    | map of [api](./api-gateways)       |
+| entrypoints | zero or more entrypoints to deploy                                             | map of [entrypoint](./entrypoints) |
 
 ## Full Example
 
