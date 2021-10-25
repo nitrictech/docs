@@ -1,20 +1,153 @@
-Nitric provides portable Compute with Functions and custom Docker container builds allowing you to write code in a variety of popular languages and frameworks without needing to worry about servers, scaling, integrating with event/topic services, or managing the underlying runtime software.
+Nitric provides cloud portable compute with:
+ * [Functions](/docs/reference/project/functions)
+ * [Containers](/docs/reference/project/containers)
 
-Nitric automatically builds your code into OCI compliant Docker containers and can run them locally for development or deploy them to leading Container-as-a-Service offerings such as AWS Lambda, Google Cloud Run and DigitalOcean App Platform.
 
-## How it works
+## Functions
 
-1. Create a new stack using the Nitric CLI based on a [Stack](./stack)
-2. Write your function code, which handles events or HTTP requests and returns responses
-3. Run your application locally, Nitric will package each of your functions into a container and wire them together, so they can access resources such as topics, queues, storage, etc.
-4. Use the build and deploy commands to build your functtions for a provider and deploy to that provider for testing, staging or production release.
+Functions provide lightweight and portable Lambda code. 
+
+ Functions use the Nitric FaaS [Middleware](./middleware) framework and [APIs](/docs/reference/api) to provide a great developer experience and ensure cloud portability.
+
+<CodeExamples
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```typescript
+import { faas } from '@nitric/sdk';
+
+faas
+  .http(async (ctx: faas.HttpContext): Promise<faas.HttpContext> => {
+    ctx.res.body = 'Hello World!';
+
+    return ctx;
+  })
+  .start();
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```python
+from nitric.faas import HttpContext, start
+
+
+async def handler(ctx: HttpContext) -> HttpContext:
+  ctx.res.body = b'Hello World!'
+  return ctx
+
+
+if __name__ == "__main__":
+  start(handler)
+```
+
+</CodeExample>
+<CodeExample lang="java">
+
+```java
+package function;
+
+import io.nitric.faas.Faas;
+import io.nitric.faas.http.HttpContext;
+
+public class Hello {
+
+    public static void main(String[] args) {
+        new Faas()
+            .http(context -> {
+        		ctx.getResponse().text("Hello World!");
+        		return ctx;
+			})
+            .start();
+    }
+}
+```
+
+</CodeExample>
+<CodeExample lang="go">
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+)
+
+func handler(ctx *faas.HttpContext) (*faas.HttpContext, error) {
+	ctx.Response.Body = []byte("Hello World!")
+
+	return ctx, nil
+}
+
+func main() {
+	err := faas.New().Http(
+		handler,
+	).Start()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+</CodeExample>
+</CodeExamples>
+
+
+Nitric automatically builds your functions into OCI compliant Docker containers and can run them locally for development or deploy them to leading Container-as-a-Service offerings such as AWS Lambda, Google Cloud Run and DigitalOcean App Platform.
+
+Nitric containers are packaged with the Nitric Membrane which provides a cloud integrating gateway and service proxy. This ensures your code to remain cloud portable.
+
+
+## Containers
+
+Containers are the second type of compute. With containers, development teams can leverage Nitric with existing applications.
+
+Nitric Containers are designed to support full-stack applications, micros-services and monoliths. Your application code can also use the Nitric [APIs](/docs/reference/api) to support cloud portability.
+
+Containers are specified in the Nitric stack definition:
+
+```yaml
+name: fees-micro-service
+
+containers:
+    orders-container:
+    	context: .
+        dockerfile: ./containers/springboot-fees-service.dockerfile
+    	args:
+      		HANDLER: target/fees-micro-service.jar
+```
+
+As with Functions, the Nitric will automatically build containers dockerfiles and incorporate the Nitric Membrane proxy/gateway to ensure cloud portability.
+
 
 ## Compute Architecture
 
-Nitric Functions and custom Docker builds are packaged into Docker containers, along with the [Nitric Membrane](./nitric-membrane). This insulates your code from cloud and infrastructure concerns.
+Compute with Functions and custom Containers allows you to write code in a variety of popular languages and frameworks without needing to worry about servers, scaling, integrating with event/topic services, or managing the underlying runtime software.
 
 <img
   src="../assets/img/membrane-architecture.svg"
   height="500"
-  alt="Service Anatomy"
+  alt="Compute Architecture"
 />
