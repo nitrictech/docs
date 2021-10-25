@@ -7,6 +7,7 @@ const BASE_CLI_PKG = '@nitric/cli';
 
 const PLUGIN_PACKAGES = [
   '@nitric/plugin-aws',
+  '@nitric/plugin-azure',
   '@nitric/plugin-gcp',
   '@nitric/plugin-do',
 ];
