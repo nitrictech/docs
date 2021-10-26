@@ -374,15 +374,14 @@ We can re-use the generate_id method from the example stack to generate our id.
 ```python
 # functions/create.py
 
+import json
 import dataclasses
 from datetime import datetime
 from dataclasses import dataclass, field
-from typing import Union
 
-from nitric.faas import start, Trigger, Response
+from nitric.faas import HttpContext, http
 from nitric.api import Documents
 from common.example import generate_id
-
 
 @dataclass(frozen=True)
 class OrderRequest:
@@ -391,25 +390,22 @@ class OrderRequest:
   id: str = field(default_factory=lambda: str(generate_id()))
   dateOrdered: str = field(default_factory=lambda: str(datetime.now()))
 
-
-async def handler(request: Trigger) -> Union[dict, Response]:
-  order = OrderRequest(**request.get_object())
-
+async def httpHandler(ctx: HttpContext) -> HttpContext:
+  order = OrderRequest(**json.loads(ctx.req.data))
   orders = Documents().collection('orders')
 
   try:
     await orders.doc(order.id).set(dataclasses.asdict(order))
-    return {"message": "success", "orderId": order.id}
+    ctx.res.status = 200
+    ctx.res.body = f'Created example with ID: {order.id}'.encode('utf-8')
   except:
-    response = request.default_response()
-    response.context.as_http().status = 500
-    response.data = {"message": "failed to create order"}
-    return response
+    ctx.res.status = 500
+    ctx.res.body = b'Failed to create order'
 
+  return ctx
 
 if __name__ == "__main__":
-  start(handler)
-
+  http(httpHandler).start()
 ```
 
 </CodeExample>
@@ -657,34 +653,28 @@ First, update the `read.py` file for this function so that it gets the orderId f
 ```python
 # functions/read.py
 
-from typing import Union
+import json
 
+from nitric.faas import HttpContext, http
 from nitric.api import Documents
-from nitric.faas import start, Trigger, Response
 
-
-async def handler(request: Trigger) -> Union[dict, Response]:
-  order_id = request.context.as_http().path.split("/")[2]  # use a parser in a real project.
-
+async def httpHandler(ctx: HttpContext) -> HttpContext:
+  order_id = ctx.req.path.split("/")[-1]  # use a parser in a real project.
   orders = Documents().collection("orders")
 
   try:
     order = await orders.doc(order_id).get()
 
-    return {
-      "id": order.id,
-      "order": order.content,
-    }
+    ctx.res.status = 200
+    ctx.res.body = json.dumps(order.content).encode('utf-8')
   except:
-    response = request.default_response()
-    response.context.as_http().status = 404
-    response.data = {"message": f"order with id: {order_id} not found"}
-    return response
+    ctx.res.status = 404
+    ctx.res.body = 'Order with id: {order_id} not found'.encode("utf-8")
 
+  return ctx
 
 if __name__ == "__main__":
-  start(handler)
-
+  http(httpHandler).start()
 ```
 
 </CodeExample>
@@ -902,26 +892,33 @@ Update the `list.py` file for the list function so it retrieves every order from
 ```python
 # functions/list.py
 
+import json
+
+from nitric.faas import HttpContext, http
 from nitric.api import Documents
-from nitric.faas import start, Trigger, Response
 
-
-async def handler(request: Trigger) -> list:
+async def httpHandler(ctx: HttpContext) -> HttpContext:
   orders = Documents().collection("orders")
   results = []
   token = None
 
-  while True:
-    page = await orders.query().page_from(token).fetch()
-    results += [{"content": doc.content, "id": doc.id} for doc in page.documents]
-    token = page.paging_token
-    if not token:
+  try:
+    while True:
+      page = await orders.query().page_from(token).fetch()
+      results += [{"content": doc.content, "id": doc.id} for doc in page.documents]
+      token = page.paging_token
+      if not token:
+        ctx.res.status = 200
+        ctx.res.body = json.dumps(results).encode('utf-8')
         break
-  return results
+  except:
+    ctx.res.status = 500
+    ctx.res.body = json.dumps({"message":"Orders not found"}).encode('utf-8')
 
+  return ctx
 
 if __name__ == "__main__":
-  start(handler)
+  http(httpHandler).start()
 ```
 
 </CodeExample>
@@ -1335,7 +1332,9 @@ The completed application code for this guide can downloaded via the command lin
 </CodeExample>
 <CodeExample lang="python">
 
-Python reference coming soon!
+```bash
+ curl https://codeload.github.com/nitrictech/nitric-examples/tar.gz/main | tar -xz --strip=2 nitric-examples-main/python/rest-api
+```
 
 </CodeExample>
 <CodeExample lang="java">
@@ -1346,5 +1345,12 @@ Python reference coming soon!
 
 </CodeExample>
 </CodeExamples>
+<CodeExample lang="go">
+
+```bash
+ curl https://codeload.github.com/nitrictech/nitric-examples/tar.gz/main | tar -xz --strip=2 nitric-examples-main/go/rest-api
+```
+
+</CodeExample>
 
 > If you're having issues extracting the tar, use Git Bash to execute the command
