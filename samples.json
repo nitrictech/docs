@@ -40,6 +40,14 @@
     "level": "Beginner"
   },
   {
+    "title": "React with Node REST API",
+    "description": "This example shows how to implement a Node REST API with a React Front-end",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/sites/react-with-api",
+    "categories": ["Node", "React", "Front-end", "Documents", "APIs", "Stacks"],
+    "language": "TypeScript",
+    "level": "Beginner"
+  },
+  {
     "title": "Document API Starter Kit - Node",
     "description": "This starter kit contains everything you need to start building an API in TypeScript for Node.js",
     "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/typescript-stack",
