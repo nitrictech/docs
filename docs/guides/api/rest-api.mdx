@@ -456,13 +456,13 @@ public class Create {
 
                     new Documents().collection("orders").doc(id, Order.class).set(order);
 
-                    var msg = String.format("Created order with ID: %s", id);
-                    context.getResponse().data(msg);
+                    context.getResponse()
+                      .text("Created order with ID: %s", id);
 
                 } catch (IOException ioe) {
                     context.getResponse()
                         .status(500)
-                        .data("error: " + ioe);
+                        .text("error: %s", ioe);
                 }
 
                 return context;
@@ -699,11 +699,13 @@ First, update the `Read.java` file for this function so that it gets the orderId
 ```java
 package function;
 
-import common.Order;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.nitric.api.NotFoundException;
 import io.nitric.api.document.Documents;
 import io.nitric.faas.Faas;
+
+import java.io.IOException;
 
 public class Read {
 
@@ -714,18 +716,25 @@ public class Read {
                 var id = paths[paths.length - 1];
 
                 try {
-                    var json = new Documents().collection("orders")
-                        .doc(id, Order.class)
-                        .getJson();
+                    var order = new Documents().collection("orders")
+                        .doc(id)
+                        .get();
+
+                    var json = new ObjectMapper().writeValueAsString(order);
 
                     context.getResponse()
                         .contentType("application/json")
-                        .data(json);
+                        .text(json);
 
                 } catch (NotFoundException nfe) {
                     context.getResponse()
                         .status(404)
-                        .data("Document not found: " + id);
+                        .text("Document not found: %s", id);
+
+                } catch (IOException ioe) {
+                    context.getResponse()
+                        .status(500)
+                        .text("Error getting order: %s", ioe);
                 }
 
                 return context;
@@ -956,12 +965,12 @@ public class List {
 
                     context.getResponse()
                         .contentType("application/json")
-                        .data(json);
+                        .text(json);
 
                 } catch (IOException ioe) {
                     context.getResponse()
                         .status(500)
-                        .data("Error querying orders: " + ioe.toString());
+                        .text("Error querying orders: %s", ioe);
                 }
 
                 return context;

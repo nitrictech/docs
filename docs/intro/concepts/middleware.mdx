@@ -73,7 +73,7 @@ public class Hello {
     public static void main(String[] args) {
         new Faas()
             .http(context -> {
-        		ctx.getResponse().data("Hello World!");
+        		ctx.getResponse().text("Hello World!");
 
         		return ctx;
 			})
