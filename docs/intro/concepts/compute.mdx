@@ -30,88 +30,15 @@ Functions use the Nitric FaaS [Middleware](./middleware) framework and [APIs](/d
 	]}
 	defaultLang="node"
 >
-<CodeExample lang="node">
 
-```typescript
-import { faas } from '@nitric/sdk';
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/snippets/functions/hello.ts" />
 
-faas
-  .http(async (ctx: faas.HttpContext): Promise<faas.HttpContext> => {
-    ctx.res.body = 'Hello World!';
+<CodeSnippet snippet="nitrictech/nitric-examples/python/snippets/functions/hello.py" />
 
-    return ctx;
-  })
-  .start();
-```
+<CodeSnippet snippet="nitrictech/nitric-examples/java/snippets/src/main/java/function/Hello.java" />
 
-</CodeExample>
-<CodeExample lang="python">
+<CodeSnippet snippet="nitrictech/nitric-examples/go/snippets/functions/hello/main.go" />
 
-```python
-from nitric.faas import HttpContext, start
-
-
-async def handler(ctx: HttpContext) -> HttpContext:
-  ctx.res.body = b'Hello World!'
-  return ctx
-
-
-if __name__ == "__main__":
-  start(handler)
-```
-
-</CodeExample>
-<CodeExample lang="java">
-
-```java
-package function;
-
-import io.nitric.faas.Faas;
-import io.nitric.faas.http.HttpContext;
-
-public class Hello {
-
-    public static void main(String[] args) {
-        new Faas()
-            .http(context -> {
-        		ctx.getResponse().text("Hello World!");
-        		return ctx;
-			})
-            .start();
-    }
-}
-```
-
-</CodeExample>
-<CodeExample lang="go">
-
-```go
-package main
-
-import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/faas"
-)
-
-func handler(ctx *faas.HttpContext) (*faas.HttpContext, error) {
-	ctx.Response.Body = []byte("Hello World!")
-
-	return ctx, nil
-}
-
-func main() {
-	err := faas.New().Http(
-		handler,
-	).Start()
-
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-```
-
-</CodeExample>
 </CodeExamples>
 
 Nitric automatically builds your functions into OCI compliant Docker containers and can run them locally for development or deploy them to leading Container-as-a-Service offerings such as AWS Lambda, Google Cloud Run and DigitalOcean App Platform.
