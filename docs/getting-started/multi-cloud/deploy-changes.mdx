@@ -33,38 +33,7 @@ Now that your Stack has been deployed. Let's add the ability to remove example d
 First, from within your `functions` directory, create a new `delete.ts` file
 that contains your function code:
 
-```typescript
-// functions/delete.ts
-
-import { faas, documents } from '@nitric/sdk';
-import { Example, path } from '../common';
-
-// Start your function here
-faas
-  .http(async (ctx: faas.HttpContext): Promise<faas.HttpContext> => {
-    // get params from path
-    const { id } = path.test(ctx.req.path);
-
-    if (!id) {
-      ctx.res.body = new TextEncoder().encode('Invalid Request');
-      ctx.res.status = 400;
-    }
-
-    try {
-      console.log('removing doc id', id);
-      await documents().collection<Example>('examples').doc(id).delete();
-      ctx.res.body = new TextEncoder().encode(`Removed example with ID: ${id}`);
-    } catch (e) {
-      ctx.res.status = 404;
-      ctx.res.body = new TextEncoder().encode(
-        `Example not found!: ${e.message}`
-      );
-    }
-
-    return ctx;
-  })
-  .start();
-```
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/snippets/functions/delete.ts" />
 
 Now to add our new `delete` function to our Stack definition and API.
 
@@ -102,39 +71,7 @@ apis:
 First, from within your `functions` directory, create a new `delete.py` file
 that contains your function code:
 
-```python
-from nitric.api.exception import NotFoundException, NitricServiceException
-from nitric.faas import start, Trigger, Response
-from nitric.api import Documents
-
-
-async def handler(trigger: Trigger) -> Response:
-    ctx = trigger.context.as_http()
-    response = trigger.default_response()
-
-    # get id param from HTTP request path
-    try:
-        doc_id = ctx.path.split("/")[-1]
-    except IndexError:
-        response.data = "Invalid request"
-        response.context.as_http().status = 400
-        return response
-
-    try:
-        await Documents().collection("examples").doc(doc_id).delete()
-        response.data = "Removed example " + doc_id
-    except NotFoundException:
-        response.context.as_http().status = 404
-        response.data = "Example not found"
-    except NitricServiceException:
-        response.context.as_http().status = 500
-        response.data = "An unexpected error occurred"
-
-    return response
-
-if __name__ == "__main__":
-    start(handler)
-```
+<CodeSnippet snippet="nitrictech/nitric-examples/python/snippets/functions/delete.py" />
 
 Now to add our new `delete` function to our Stack definition and API.
 
@@ -171,41 +108,7 @@ apis:
 
 First, from within your `functions` directory, create a new `Delete.java` file that contains your function code:
 
-```java
-package function;
-
-import io.nitric.api.NotFoundException;
-import io.nitric.api.document.Documents;
-import io.nitric.faas.Faas;
-
-public class Delete {
-
-    public static void main(String[] args) {
-        new Faas()
-            .http(context -> {
-                var paths = context.getRequest().getPath().split("/");
-                var id = paths[paths.length - 1];
-
-                try {
-                    new Documents().collection("examples")
-                        .doc(id)
-                        .delete();
-
-                    context.getResponse()
-                        .text("Removed example: %s", id);
-
-                } catch (NotFoundException nfe) {
-                    context.getResponse()
-                        .status(404)
-                        .text("Document not found: %s", id);
-                }
-
-                return context;
-            })
-            .start();
-    }
-}
-```
+<CodeSnippet snippet="nitrictech/nitric-examples/java/snippets/src/main/java/function/Delete.java" />
 
 ## Update Maven POM
 
@@ -273,56 +176,7 @@ apis:
 
 First, from within your `functions` directory, create a new `delete` directory. Then create a `main.go` file that contains your function code:
 
-```go
-package main
-
-import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/api/documents"
-	"github.com/nitrictech/go-sdk/faas"
-	"nitric.io/example-service/common"
-)
-
-func handler(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-	params, ok := ctx.Extras["params"].(map[string]string)
-
-	if !ok || params == nil {
-		return nil, fmt.Errorf("error retrieving path params")
-	}
-
-	id := params["id"]
-
-	dc, err := documents.New()
-	if err != nil {
-		return nil, err
-	}
-
-	err = dc.Collection("examples").Doc(id).Delete()
-	if err != nil {
-		ctx.Response.Body = []byte("Error deleting document")
-		ctx.Response.Status = 500
-	} else {
-		ctx.Response.Body = []byte("Successfully deleted document")
-		ctx.Response.Status = 200
-	}
-
-	return next(ctx)
-}
-
-func main() {
-	err := faas.New().Http(
-		// Retrieve path parameters if available
-		common.PathParser("/examples/:id"),
-		// Actual Handler
-		handler,
-	).Start()
-
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-```
+<CodeSnippet snippet="nitrictech/nitric-examples/go/snippets/functions/delete/main.go" />
 
 Now to add our new `delete` function to our Stack definition and API.
 

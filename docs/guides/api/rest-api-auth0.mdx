@@ -159,60 +159,7 @@ Since some elements of the JWT validation process will be specific to your proje
 
 Start by creating an `auth.ts` file under the `common` directory with the following code:
 
-```typescript
-// common/auth.ts
-
-import { jwt, GetSecretOptions } from '@nitric/middleware-jwt';
-import * as jwksRsa from 'jwks-rsa';
-
-const SUPPORTED_ALGOS = ['RS256'];
-
-const nitricJwtSecret = (options) => {
-  if (options === null || options === undefined) {
-    throw new Error(
-      'An options object must be provided when initializing expressJwtSecret'
-    );
-  }
-
-  const client = jwksRsa(options);
-
-  const secretProvider = async ({ ctx, header, payload }: GetSecretOptions) => {
-    if (!header || !SUPPORTED_ALGOS.includes(header.alg)) {
-      return null;
-    }
-
-    try {
-      const key = await client.getSigningKey(header.kid);
-
-      return key.getPublicKey();
-    } catch (err) {
-      throw err;
-    }
-  };
-  return secretProvider;
-};
-
-export interface Auth0Config {
-  domain: string;
-  audience: string;
-}
-
-export const checkJwt = ({ domain, audience }: Auth0Config) =>
-  jwt({
-    secret: nitricJwtSecret({
-      cache: true,
-      rateLimit: true,
-      jwksRequestsPerMinute: 5,
-      jwksUri: `https://${domain}/.well-known/jwks.json`,
-    }),
-    // Validate the audience and the issuer.
-    verifyOptions: {
-      audience,
-      issuer: `https://${domain}/`,
-    },
-    algorithms: ['RS256'],
-  });
-```
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/rest-api-auth/common/auth.ts" />
 
 Ensure our new auth helper method is exported from `common/index.ts`:
 
@@ -235,164 +182,19 @@ What we'll add to each of our function:
 
 Add the following code to your `functions/create.ts` file, replacing the **domain** and **audience** options with your own:
 
-```typescript
-// functions/create.ts
-
-import { faas, documents } from '@nitric/sdk';
-import { jwtScopes } from '@nitric/middleware-jwt';
-import { uuid } from 'uuidv4';
-import { Order, checkJwt } from '../common';
-
-// Requests to create a new order won't have an id or order date
-type RequestData = Omit<Order, 'id' | 'dateOrdered'>;
-
-interface CreateContext extends faas.HttpContext {
-  req: faas.HttpRequest & {
-    body?: RequestData;
-  };
-}
-
-interface CreateResponse {
-  message: string;
-  orderId?: string;
-}
-
-// Start your function here
-faas
-  .http(
-    checkJwt({
-      domain: 'tenant.region.auth0.com',
-      audience: 'https://orders-api.example.com',
-    }),
-    jwtScopes(['create:orders']),
-    faas.json(), //  use json body parser middleware to decode data
-    async (ctx: CreateContext): Promise<faas.HttpContext> => {
-      const data = ctx.req.body;
-      const response = ctx.res;
-
-      const order: Order = {
-        ...data, // extract data from the request
-        id: uuid(), // generate a new uuid
-        dateOrdered: new Date().toJSON(),
-      };
-
-      const orders = documents().collection<Order>('orders');
-
-      try {
-        // Write the new order document to the orders collection
-        await orders.doc(order.id).set(order);
-        response.body = order.id;
-        response.json({
-          message: 'success',
-          orderId: order.id,
-        } as CreateResponse);
-      } catch {
-        response.status = 500;
-        response.body = new TextEncoder().encode('Invalid Request');
-      }
-
-      return ctx;
-    }
-  )
-  .start();
-```
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/rest-api-auth/functions/create.ts" />
 
 #### Read Orders
 
 Next, add the following code to your `functions/read.ts` file, again replacing the **domain** and **audience** options with your own:
 
-```typescript
-// functions/read.ts
-
-import { jwtScopes } from '@nitric/middleware-jwt';
-import { faas, documents } from '@nitric/sdk';
-import { checkJwt, path } from '../common';
-
-faas
-  .http(
-    checkJwt({
-      domain: 'tenant.region.auth0.com',
-      audience: 'https://orders-api.example.com',
-    }),
-    jwtScopes(['read:orders']),
-    async (ctx): Promise<faas.HttpContext> => {
-      // get params from path
-      const { orderId } = path.test(ctx.req.path);
-
-      if (!orderId) {
-        ctx.res.body = new TextEncoder().encode('Invalid Request');
-        ctx.res.status = 400;
-      }
-
-      const orders = documents().collection('orders');
-
-      try {
-        const order = await orders.doc(orderId).get();
-        ctx.res.json(order);
-      } catch {
-        ctx.res.status = 404;
-        ctx.res.json({ message: 'order not found' });
-      }
-
-      return ctx;
-    }
-  )
-  .start();
-```
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/rest-api-auth/functions/read.ts" />
 
 #### List Orders
 
 Our final function to protect is the list function, add the following code to your `functions/list.ts` file, again replacing the **domain** and **audience** options with your own:
 
-```typescript
-// functions/list.ts
-
-import { jwtScopes } from '@nitric/middleware-jwt';
-import { faas, documents } from '@nitric/sdk';
-import { Order, checkJwt } from '../common';
-
-interface Result {
-  id: string;
-  content: Order;
-}
-
-faas
-  .http(
-    checkJwt({
-      domain: 'tenant.region.auth0.com',
-      audience: 'https://orders-api.example.com',
-    }),
-    jwtScopes(['read:orders']),
-    async (ctx): Promise<faas.HttpContext> => {
-      const orders = documents().collection<Order>('orders');
-      const results: Result[] = [];
-      let token: any = null;
-      while (true) {
-        try {
-          const page = await orders.query().pagingFrom(token).fetch();
-
-          results.push(
-            ...page.documents.map(({ id, content }) => ({
-              id,
-              content,
-            }))
-          );
-
-          if (!page.pagingToken) {
-            break;
-          }
-
-          token = page.pagingToken;
-        } catch (e) {
-          ctx.res.status = 500;
-          return ctx.res.json({ message: e.stack });
-        }
-      }
-      return ctx.res.json(results);
-    }
-  )
-  .start();
-```
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/rest-api-auth/functions/list.ts" />
 
 ## Run it!
 
