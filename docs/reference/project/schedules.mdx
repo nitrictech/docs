@@ -32,8 +32,8 @@ topics:
 # a schedule is defined for what, where and when to send
 schedules:
   my-schedule:
-    # an aws example expression which runs every 5 mins
-    expression: '0/5 * * * ? *'
+    # an example expression which runs every 5 mins
+    expression: '*/5 * * * *'
     target:
       type: topic
       name: my-topic
@@ -43,27 +43,43 @@ schedules:
         example: payload
 ```
 
-> See the following references for documentation on how to define expressions and handle time zone challenges:
+## Cron Expressions
 
-- <a
-    href="https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules"
-    target="_blank"
-  >
-    Google Cloud
-  </a>
-- <a
-    href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html"
-    target="_blank"
-  >
-    AWS
-  </a>
+Schedule expressions are defined using <a href="https://man7.org/linux/man-pages/man5/crontab.5.html" target="_blank">unix-cron format</a>.
 
-> Currently, only triggers via topics are possible with triggers directly to functions & queues coming soon.
+```
+* * * * *
+```
 
-## Testing Schedules
+## Restrictions
+
+A few limitations are imposed on the expressions used in order to ensure compatibility with the schedulers available from cloud providers:
+
+- Day of Month and Day of Year can't both be set to a value other than `*`, you can overcome this limitation by defining two schedules.
+- Expressions that lead to triggers that exceed 1/minute are not supported.
+
+> All schedules are currently triggered via Topics. This maximizes compatibility, however, direct Function triggers may be considered in future.
+
+## Other Notes
+
+### Testing Schedules
 
 > Coming Soon
 
 Currently, local execution and testing of schedules is not supported. Local and manual testing of schedules is on our backlog to be completed soon.
 
 In the meantime, you can directly test the functions that respond to scheduled triggers by sending HTTP requests to those functions with the same payload as defined in your schedule (Events and Requests are treated the same when writing functions). Schedules themselves need to be tested in a supported cloud environment.
+
+### AWS Cron Expressions
+
+When directly configuring schedules in AWS EventBridge a unix-like expression format, similar to <a href="https://www.javadoc.io/doc/org.quartz-scheduler/quartz/1.8.2/org/quartz/CronExpression.html" target="_blank">Quartz Scheduler Format</a>, is used which requires 6 values (instead of 5 for unix-cron or 6-7 for quartz). This format isn't supported by Nitric Schedules, instead the unix-cron expression you provide will be automatically converted to the AWS cron equivalent during deployment.
+
+Because of the conversion, the expression displayed in the AWS Console for EventBridge Rules deployed by Nitric won't directly match the expression defined in your stack template.
+
+Some notable differences between these formats include:
+
+- Day of Month or Day of Week will be set to a `?` character
+- An additional `year` value will be appended, this value will always be set to `*`
+- Numeric Day of Week values will be incremented by 1 (unix-cron values start at 0 (Sunday), AWS cron values start at 1 (Sunday))
+
+For example, the expression `*/1 * * * 1-3` will appear as `0/1 * ? * 2-4 *` in the AWS Console. The resulting expression is functionally equivalent.
