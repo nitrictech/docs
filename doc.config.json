@@ -136,10 +136,6 @@
                     "path": "/docs/intro/vs/terraform.mdx"
                   },
                   {
-                    "title": "Serverless",
-                    "path": "/docs/intro/vs/serverless.mdx"
-                  },
-                  {
                     "title": "Custom Solutions",
                     "path": "/docs/intro/vs/custom.mdx"
                   }
