@@ -127,19 +127,6 @@
                     "path": "/docs/intro/languages/other.mdx"
                   }
                 ]
-              },
-              {
-                "title": "Nitric Compared to",
-                "routes": [
-                  {
-                    "title": "Terraform",
-                    "path": "/docs/intro/vs/terraform.mdx"
-                  },
-                  {
-                    "title": "Custom Solutions",
-                    "path": "/docs/intro/vs/custom.mdx"
-                  }
-                ]
               }
             ]
           }
