@@ -1,0 +1,368 @@
+## Get a single document
+
+To retrieve the contents of a document reference use its `get()` method. Many of the SDKs provide
+methods to marshal documents into typed objects.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/get.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/get.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/documents/Get.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/get.go" />
+
+</CodeExamples>
+
+## Query for documents
+
+The Query object allows you to retrieve filtered sets of documents from collection and subcollections. The Query object provides a uniform
+interface across Cloud document databases.
+
+Queries can be executed with the `fetch()` and `stream()` methods:
+
+- The **fetch** method queries the document collection and fetches the results in batches
+
+- The **stream** method queries the document collection and streams the results one by one
+
+### Collection Queries
+
+Query objects can be created under collections and are used to access all the documents in that collection.
+The example below will fetch all the documents in the 'Customers' collection.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/documents/Query.java" />
+
+<CodeSnippet snippet="nitrictech/examples/documents/query.go" />
+
+</CodeExamples>
+
+### Subcollection Queries
+
+Query objects can also be created under subcollections. There are two types of subcollection queries:
+
+1. Document Subcollection Queries
+2. Subcollection Group Queries
+
+### Document Subcollection Queries
+
+Document subcollection queries can only select the subcollection documents under the parent document:
+
+`collection.document.collection.query`
+
+In the example below we are selecting all `Orders` under the parent `Customers` document with the id `apple`.
+
+<CodeExamples
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-doc-query.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/sub_doc_query.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/documents/SubDocQuery.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_doc_query.go" />
+
+</CodeExamples>
+
+#### Subcollection Group Queries
+
+Subcollection Group queries can select all the documents in the collection subcollection group:
+
+`collection.collection.query`
+
+In the example below we are selecting all `Orders` for all `Customers`.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/sub-col-query.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/sub_col_query.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/documents/SubColQuery.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/sub_col_query.go" />
+
+</CodeExamples>
+
+## Where Filter Expressions
+
+Query `where` expressions allow you to filter collection results. These `where` expressions take three parameters;
+the document field name to filter on, a comparison operator, and an expression value.
+
+`where( <field>, <operator>, <value> )`
+
+For example:
+
+`where( 'country', '==', 'US' )`
+
+### Expression Operators
+
+The supported expression operators include:
+
+| **Operator** | **Description**        | **Example**                                |
+| ------------ | ---------------------- | ------------------------------------------ |
+| `==`         | Equals                 | `.where("status", "==", "active")`         |
+| `<`          | Less Than              | `.where("count", "<", 10)`                 |
+| `>`          | Greater Than           | `.where("price", "<", 100.0)`              |
+| `<=`         | Less Than or Equals    | `.where("count", "<=", 10)`                |
+| `>=`         | Greater Than or Equals | `.where("price", ">=", 50.0)`              |
+| `startsWith` | Text Value Starts With | `.where("type", "startsWith", "Inverter")` |
+
+Where clause expressions can be chained together creating an implicit `AND` clause filter expression. For example:
+
+`where( 'country', '==', 'US' ).where( 'age', '>=', 21 )`
+
+This equates to the SQL:
+
+`WHERE country = 'US' AND age >= 21`
+
+In the examples below we are selecting `Customers` documents where the customer's country is equal to 'US' and
+they have an age of 21 or older.
+
+<CodeExamples
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-filter.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query_filter.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/documents/QueryFilter.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/query_filter.go" />
+
+</CodeExamples>
+
+#### Expression Limitations
+
+To ensure your code is Cloud Portable the following expression limitations are enforced by Nitric's Document Service:
+
+1. only one `==` equality expression is supported in query filter expressions (GCP Firestore limitation)
+2. only the `>= AND <=` query filter range combination is supported (AWS DynamoDB limitation)
+
+## Fetch Limits
+
+By default the `fetch()` method will return all the documents in a collection. When working with very large collections this may not be
+what you want. With some databases such as DynamoDB they have hard limits and will return an error if more than 1 MB of data has been fetched.
+
+To limit the number of documents retrieved use the `limit()` method.
+
+In the example below we are fetching the first 1,000 customer order documents across all customers.
+
+<CodeExamples
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-limits.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/query_limits.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/documents/QueryLimits.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/query_limits.go" />
+
+</CodeExamples>
+
+## Paged Results
+
+The Query object supports paginated queries whereby you can page your way through large result sets.
+Paged queries are useful for efficiently processing large datasets and supporting paged UX.
+
+To use a paginated query set the page size `limit()`, and then use the `pagingToken` returned with your results as input into your
+next query with the `pagingFrom()` method. This will enable the next query to continue from where the previous query finished.
+
+The example below selects active 'Customers' by paging through the collection in sets of 100 document.
+
+<CodeExamples
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-paginated.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/paged_results.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/documents/PagedResults.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/paged_results.go" />
+
+</CodeExamples>
+
+## Streamed Results
+
+The Query object also supports streaming query results. To return your documents one by one use the
+Query object's `stream()` method. Streams can better support functional programming models and
+reduce memory usage.
+
+<CodeExamples
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/node-sdk/examples/documents/query-stream.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/documents/streamed.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/documents/Streamed.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/documents/stream_results.go" />
+
+</CodeExamples>
+
+<br />

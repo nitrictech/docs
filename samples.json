@@ -1,0 +1,82 @@
+[
+  {
+    "title": "REST API - Node",
+    "description": "This example shows how to implement an orders REST API in TypeScript for Node.js",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/typescript/rest-api",
+    "categories": ["Node", "Documents", "APIs", "Stacks"],
+    "language": "TypeScript",
+    "level": "Beginner"
+  },
+  {
+    "title": "REST API with Auth0",
+    "description": "This example shows how to implement an orders REST API and protect it with Auth0 in TypeScript for Node.js",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/typescript/rest-api-auth",
+    "categories": ["Node", "Documents", "APIs", "Stacks", "Security"],
+    "language": "TypeScript",
+    "level": "Intermediate"
+  },
+  {
+    "title": "REST API - Go",
+    "description": "This example shows how to implement an orders REST API in Go",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/go/rest-api",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Go",
+    "level": "Beginner"
+  },
+  {
+    "title": "REST API - Python",
+    "description": "This example shows how to implement an orders REST API in Python",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/python/rest-api",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Python",
+    "level": "Beginner"
+  },
+  {
+    "title": "REST API - Java",
+    "description": "This example shows how to implement an orders REST API in Java",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/java/rest-api",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Java",
+    "level": "Beginner"
+  },
+  {
+    "title": "React with Node REST API",
+    "description": "This example shows how to implement a Node REST API with a React Front-end",
+    "repo_url": "https://github.com/nitrictech/nitric-examples/tree/main/sites/react-with-api",
+    "categories": ["Node", "React", "Front-end", "Documents", "APIs", "Stacks"],
+    "language": "TypeScript",
+    "level": "Beginner"
+  },
+  {
+    "title": "Document API Starter Kit - Node",
+    "description": "This starter kit contains everything you need to start building an API in TypeScript for Node.js",
+    "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/typescript-stack",
+    "categories": ["Node", "Documents", "APIs", "Stacks"],
+    "language": "TypeScript",
+    "level": "Beginner"
+  },
+  {
+    "title": "Document API Starter Kit - Go",
+    "description": "This starter kit contains everything you need to start building an API in Go",
+    "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/go-stack",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Go",
+    "level": "Beginner"
+  },
+  {
+    "title": "Document API Starter Kit - Python",
+    "description": "This starter kit contains everything you need to start building an API in Python",
+    "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/python-stack",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Python",
+    "level": "Beginner"
+  },
+  {
+    "title": "Document API Starter Kit - Java",
+    "description": "This starter kit contains everything you need to start building an API in Java",
+    "repo_url": "https://github.com/nitrictech/stack-templates/tree/main/java-stack",
+    "categories": ["Documents", "APIs", "Stacks"],
+    "language": "Java",
+    "level": "Beginner"
+  }
+]

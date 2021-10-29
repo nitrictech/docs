@@ -1,0 +1,58 @@
+Static sites are a great way to use your favorite frameworks to host the front-end of your nitric application, and is generally a faster and cheaper way to host front-end content when compared to rendering your application through a server.
+
+Nitric supports this capability by allowing you to configure your site into a nitric stack for automatic building and upload during deployments.
+
+Sites can be wired up to the rest of your stack by using [entrypoints](./entrypoints.mdx), allowing you to easily access other services directly from your site under a single origin.
+
+> Support for static sites is currently limited to a few providers, to see if a provider is compatible see the table [here](../../intro/concepts/nitric-apis.mdx)
+
+## Example Site
+
+```yaml
+name: example-stack
+sites:
+  example-site:
+    path: example-site
+    assetPath: ./static
+    buildScripts:
+      - npm run build
+```
+
+## Properties
+
+| **Property** | **Value** | **Description**                                                         |
+| ------------ | --------- | ----------------------------------------------------------------------- |
+| path         | string    | Path of the static site project relative to root of your nitric project |
+| assetPath    | string    | Location of static site assets once site is built relative to path      |
+| buildScripts | string[]  | Scripts to run in order to build static site assets                     |
+
+## Connecting your site to your stack
+
+To host and wire up your site to the rest of your stack you will need to use [entrypoints](./entrypoints.mdx)
+
+```yaml
+name: example-site
+
+functions:
+  example-function:
+    handler: functions/example.ts
+
+sites:
+  example-site:
+    path: example-site
+    assetPath: ./static
+    buildScripts:
+      - npm run build
+
+entrypoints:
+  main:
+    paths:
+      /:
+        type: site
+        target: example-site
+      /example/:
+        type: function
+        target: example-service
+```
+
+In the above example your site would now be able to call the example-function, by simply making a request to `/example/`, as these two resources will be served under a single origin together.

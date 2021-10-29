@@ -1,0 +1,62 @@
+Now that you’ve seen how to deploy changes to our API service, let’s clean up and pull down the resources that are part of your stack.
+
+To pull down all stack resources, run the following from the root of your project:
+
+<CodeExamples 
+	languages={[
+	{
+		icon: <img src="/img/logos/aws.svg" noMargin priority width={70} height={34} />,
+		value: "aws",
+	}, {
+		icon: <img src="/img/logos/gcp-no-text.svg" noMargin priority width={100} height={40} />,
+		value: "gcp"
+	}, {
+		icon: <img src="/img/logos/azure-no-text.svg" noMargin priority width={100} height={45} />,
+		value: "azure"
+	}, {
+		icon: <img src="/img/logos/digital-ocean.svg" noMargin priority width={100} height={70} />,
+		value: "do"
+	}
+	]}
+	defaultLang="aws"
+>
+<CodeExample lang={"aws"}>
+
+```bash
+nitric down:aws
+```
+
+</CodeExample>
+<CodeExample lang={"gcp"}>
+
+```bash
+nitric down:gcp
+```
+
+</CodeExample>
+<CodeExample lang={"azure"}>
+
+```bash
+nitric down:azure
+```
+
+</CodeExample>
+<CodeExample lang={"do"}>
+
+```bash
+nitric down:do
+```
+
+</CodeExample>
+</CodeExamples>
+
+Congratulations! 🎉 You’ve successfully deployed an API using Nitric. By completing this guide you have successfully:
+
+- Created a new Nitric Stack.
+- Ran your Stack for local development.
+- Added a new function to your API.
+- Deployed your API to the cloud of your choice.
+- Pulled down the resources you've deployed.
+
+The fun doesnt end here, on the next page we have a bunch of examples and guides that you can use as a foundation for your own projects.
+Also you can visit our [samples](/docs/samples) page, where you can search for samples via language, category and skill level.

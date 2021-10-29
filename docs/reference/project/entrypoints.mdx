@@ -1,0 +1,181 @@
+Nitric allows you to map a number of resources that can be hosted together and a single frontend/origin.
+
+### How it works
+
+Nitric entrypoints can be mapped to a number of managed services in the cloud in order to facilitate single origin application routing
+and unlock CDN capability.
+
+<img
+  src="../assets/img/nitric-entrypoints.svg"
+  height="500"
+  alt="entrypoint overview diagram"
+/>
+
+### Adding a new Entrypoint
+
+Entrypoints are defined in a projects nitric.yaml file.
+
+Supported resource types for entrypoints are:
+
+- [Containers](./containers)
+- [Functions](./functions)
+- [Sites](./sites)
+- [Apis](./api-gateways)
+
+> When defining entrypoints a default entrypoint `'/'` **MUST** be specified
+
+### APIs as entrypoints
+
+When adding an API as a non-default entrypoint it is important that the leading part of the entrypoint path **MUST** match the leading part of the API path.
+
+<CodeExamples
+languages={[
+	{
+		label: "Good nitric.yaml 👍",
+		value: "good"
+	},
+	{
+		label: "Bad nitric.yaml 👎",
+		value: "bad"
+	},
+  {
+		label: "api.yaml",
+		value: "api"
+	}
+	]}
+	defaultLang="good"
+>
+<CodeExample lang="good">
+
+```yaml
+name: example
+
+# Define functions here
+functions:
+  example:
+    handler: functions/get.ts
+
+# Define Sites here
+sites:
+  app:
+    path: app
+    assetPath: build
+    buildScripts:
+      - yarn install --frozen-lockfile
+      - yarn build
+
+# Define APIs here (see api.yaml)
+apis:
+  exampleapi: api.yaml
+
+# Define nitric application entrypoints here
+entrypoints:
+  main:
+    paths:
+      /:
+        target: app
+        type: site
+      # 👍 Matches the base path of the above API (see api.yaml)
+      /exampleapi/:
+        target: exampleapi
+        type: api
+```
+
+</CodeExample>
+<CodeExample lang="bad">
+
+```yaml
+name: example
+
+# Define functions here
+functions:
+  example:
+    handler: functions/get.ts
+
+# Define Sites here
+sites:
+  app:
+    path: app
+    assetPath: build
+    buildScripts:
+      - yarn install --frozen-lockfile
+      - yarn build
+
+# Define APIs here
+apis:
+  exampleapi: api.yaml
+
+# Define nitric application entrypoints here
+entrypoints:
+  main:
+    paths:
+      /:
+        target: app
+        type: site
+      # 👎 Doesn't match the base path of the above API (see api.yaml)
+      /myapi/:
+        target: exampleapi
+        type: api
+```
+
+</CodeExample>
+
+<CodeExample lang="api">
+
+```yaml
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Sample API
+  description: A sample API to illustrate OpenAPI concepts
+paths:
+  # 👀 entrypoint path must match leading path of API '/exampleapi/'
+  /exampleapi/example:
+    get:
+      operationId: example
+      x-nitric-target:
+        name: example
+        type: function
+      description: Says random quote
+      responses:
+        '200':
+          description: Successful response
+```
+
+</CodeExample>
+
+</CodeExamples>
+
+### Adding a Domain to entrypoints
+
+Custom domains can be added to entrypoints, and will be configured for clouds you deploy to
+
+To define a domain for an entrypoint, you need to add it under `domains`.
+
+```yaml
+# Define nitric application entrypoints here
+entrypoints:
+  main:
+    paths:
+      /:
+        target: app
+        type: site
+      /exampleapi/:
+        target: exampleapi
+        type: api
+    domains:
+      - example.com
+```
+
+> Adding domains may require additional configuration to update DNS records, this can vary between cloud providers.
+
+### Testing your entrypoints
+
+The easiest way to test your entrypoints locally is via the nitric run command. This will deploy an additional frontend along with your other stack
+resources in order to serve your stack under a single origin.
+
+`nitric run`
+
+In the output you should receive a link that indicates where you can reach your application via the nitric entrypoints.
+
+`Your application entrypoint is available at http://localhost:<port>`

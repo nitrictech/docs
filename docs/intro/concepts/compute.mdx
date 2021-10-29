@@ -1,0 +1,77 @@
+Nitric provides cloud portable compute with:
+
+- [Functions](/docs/reference/project/functions)
+- [Containers](/docs/reference/project/containers)
+
+## Functions
+
+Functions provide lightweight and portable Lambda code.
+
+Functions use the Nitric FaaS [Middleware](./middleware) framework and [APIs](/docs/reference/api) to provide a great developer experience and ensure cloud portability.
+
+<CodeExamples
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/snippets/functions/hello.ts" />
+
+<CodeSnippet snippet="nitrictech/nitric-examples/python/snippets/functions/hello.py" />
+
+<CodeSnippet snippet="nitrictech/nitric-examples/java/snippets/src/main/java/function/Hello.java" />
+
+<CodeSnippet snippet="nitrictech/nitric-examples/go/snippets/functions/hello/main.go" />
+
+</CodeExamples>
+
+Nitric automatically builds your functions into OCI compliant Docker containers and can run them locally for development or deploy them to leading Container-as-a-Service offerings such as AWS Lambda, Google Cloud Run and DigitalOcean App Platform.
+
+Nitric containers are packaged with the Nitric Membrane which provides a cloud integrating gateway and service proxy. This ensures your code to remain cloud portable.
+
+## Containers
+
+Containers are the second type of compute. With containers, development teams can leverage Nitric with existing applications.
+
+Nitric Containers are designed to support full-stack applications, microservices and monoliths. Your application code can also use the Nitric [APIs](/docs/reference/api) to support cloud portability.
+
+Containers are specified in the Nitric stack definition:
+
+```yaml
+name: fees-micro-service
+
+containers:
+    orders-container:
+    	context: .
+        dockerfile: ./containers/springboot-fees-service.dockerfile
+    	args:
+      		HANDLER: target/fees-micro-service.jar
+```
+
+The Nitric CLI will automatically build stack dockerfiles, creating OCI Docker containers which incorporate the Nitric Membrane.
+
+## Compute Architecture
+
+Compute with Functions and custom Containers allows you to write code in a variety of popular languages and frameworks without needing to worry about servers, scaling, integrating with event/topic services, or managing the underlying runtime software.
+
+<img
+  src="../assets/img/membrane-architecture.svg"
+  height="500"
+  alt="Compute Architecture"
+/>

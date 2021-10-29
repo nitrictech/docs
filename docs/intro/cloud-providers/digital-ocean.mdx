@@ -1,0 +1,63 @@
+> 🚧 **Partial Support**: Nitric currently has partial support for DigitalOcean, see [here](../../intro/concepts/nitric-apis.mdx) for details.
+
+Nitric applications are supported on DigitalOcean, however many features are currently unavailable or under development. You can automatically deploy an existing application to DigitalOcean using the [Nitric CLI](/docs/reference/cli), with the DigitalOcean plugin.
+
+## Installing the CLI plugin
+
+To install the official Nitric DigitalOcean Plugin, running the following command:
+
+```bash
+nitric plugins:install @nitric/plugin-do
+```
+
+This will download and install DigitalOcean specific commands for the cli.
+
+## Checking Prerequisites
+
+Next, you can check that any prerequisite software is also installed by using the doctor sub-command for DigitalOcean:
+
+```bash
+nitric doctor:do
+```
+
+## Setup Credentials
+
+The Nitric DigitalOcean CLI Plugin requires a Personal Access Token to authenticate with the DigitalOcean API. This can be provided via an environment variable, like so:
+
+```bash
+export DIGITALOCEAN_TOKEN=YOUR_TOKEN
+```
+
+Replace `YOUR_TOKEN` with your own token value. You can create a Personal Access Token by logging into the <a href="https://cloud.digitalocean.com/" target="_blank">DigitalOcean Console</a> and navigating to `API (under 'ACCOUNT')` > `Tokens/Keys` > `Personal Access Tokens` > `Generate New Token`.
+
+## Deploy
+
+When you're ready to deploy your application to DigitalOcean, you can use the DigitalOcean CLI Plugin to automate the deployment process. Use the `deploy:do` command from the root of your project to start an interactive deployment process:
+
+```bash
+nitric deploy:do
+```
+
+For automated build processes you can provide the prompt options on the command line.
+
+To update an existing deployment, simply re-run the command.
+
+> ⚠️ **Warning:** A DigitalOcean "App" will be deployed for _each_ entrypoint in your Nitric application.
+
+Due to lack of component sharing between DigitalOcean App Platform Apps, duplicate containers will be created for each Nitric Service shared between entrypoints. As a result, you will be charged for each instance of the container, one for each entrypoint targeting that container. We recommend limiting the number of entrypoints in your application or having each entrypoint target a unique set of services.
+
+## Undeploy
+
+To pull down a previously deployed application from DigitalOcean, run the down command from the root of your project.
+
+```bash
+nitric down:do
+```
+
+## Troubleshooting Deployments
+
+> Under construction. Having trouble in the meantime? <a href="https://github.com/nitrictech/nitric/discussions/" target="_blank">Chat with us</a>
+
+## Current Status
+
+See [Nitric API](../concepts/nitric-apis) for the current support status of each Nitric Service, when deployed to DigitalOcean.

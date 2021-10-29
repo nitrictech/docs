@@ -1,0 +1,56 @@
+<Box display="flex">
+  <Box width={'75%'}>
+    <p>
+      Nitric currently supports programs written in Python 3. Python 3.7 or
+      later is required.
+    </p>
+    <Box textAlign="center" mb={4}>
+      <LinkButton
+        variant="contained"
+        href="https://www.python.org/downloads/"
+        target="_blank"
+      >
+        Install Python
+      </LinkButton>
+    </Box>
+    <p>
+      To reduce potential issues with setting up your Python environment on
+      Windows or macOS, you should install Python through the official Python
+      installer.
+    </p>
+  </Box>
+  <Box width={'25%'} mt={-8}>
+    <img src="../assets/logos/python.svg" height={150} />
+  </Box>
+</Box>
+
+> If you're having trouble setting up Python on your machine, take a look at this well written <a href="https://realpython.com/installing-python/">Python 3 Installation & Setup Guide</a>.
+
+## Getting Started
+
+The fastest way to get started in Python is by using a stack template. Within an empty directory in which you'd like to create a new stack:
+
+```bash
+nitric make:stack
+```
+
+Then choose:
+
+```bash
+? Stack template (Use arrow keys)
+  official/TypeScript Stack
+❯ official/Python Stack
+  official/Java Stack
+  official/Go Stack
+```
+
+This will create a `nitric.yaml` [stack](/docs/intro/concepts/stack) file, a `requirements.txt` file for dependencies, a `common` directory containing common shared code, and a `functions` directory, containing your functions code.
+
+> You can view our detailed [getting started tutorial](/docs/getting-started/multi-cloud) to learn more
+
+## Nitric Programming Model
+
+The Nitric programming model consists of all the concepts you will use when creating stacks using the Nitric platform.
+All concepts such as [Projects](/docs/intro/concepts/projects), [Stacks](/docs/intro/concepts/stack), [Services](/docs/intro/concepts/services) and [Functions](/docs/intro/concepts/functions) are described under the concepts section.
+
+The <a href="https://github.com/nitrictech/python-sdk" target="_blank">Nitric SDK</a> is available to Python developers as a <a href="https://pypi.org/project/nitric/" target="_blank">pypi package</a>. To learn more, refer to the [SDK Reference Guide](/docs/reference/sdks).

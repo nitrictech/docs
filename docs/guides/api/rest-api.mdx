@@ -1,0 +1,816 @@
+## What we'll do
+
+1. Create a new Nitric stack
+2. Create [functions](/docs/intro/concepts/functions) to handle API operations
+3. Create a [documents](/docs/reference/api/documents) collection to store data
+4. Set up an [API gateway](/reference/project/api-gateways) and bind it to the functions
+5. Get it all running locally for testing
+6. Deploy to a cloud of your choice
+
+| **Method** | **Route**          | **Description**                |
+| ---------- | ------------------ | ------------------------------ |
+| `GET`      | /orders            | List all orders                |
+| `GET`      | /orders/{$orderId} | Get a specific order by its ID |
+| `POST`     | /orders            | Create a new order             |
+
+> This tutorial provides examples in TypeScript, Python & Java.
+
+## Getting started
+
+This tutorial assumes you have the Nitric CLI installed, if not you can follow the [installation guide](/docs/getting-started/installation).
+
+You'll also want to setup your environment to run and test Nitric applications locally by installing prerequisite software. Use the `nitric doctor` command to check and automatically setup your machine.
+
+If you’d like to deploy the results to a cloud environment _(optional)_, you’ll also need to setup your credentials and any other cloud specific configuration: [AWS](/docs/intro/cloud-providers/aws), [GCP](/docs/intro/cloud-providers/gcp), or [Azure](/docs/intro/cloud-providers/azure).
+
+## New stack
+
+We’ll start by creating a new stack for the REST API.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+><CodeExample lang="node">
+
+<Box mt={4}>
+
+You can create your Stack by running the `make:stack` command below:
+
+</Box>
+
+```bash
+nitric make:stack rest-api
+```
+
+We love TypeScript, so let's choose `official/TypeScript Stack` as our template:
+
+```text
+? Stack template (Use arrow keys)
+❯ official/TypeScript Stack
+  official/Python Stack
+  official/Java Stack
+  official/Go Stack
+```
+
+Next, open the project in your editor of choice. The scaffolded project should have the following structure:
+
+```text
+rest-api
+├── common
+│   ├── example.ts
+│   ├── index.ts
+│   └── path.ts
+├── functions
+│   ├── create.ts
+│   ├── list.ts
+│   └── read.ts
+├── .gitignore
+├── api.yaml
+├── nitric.yaml
+├── package.json
+└── yarn.lock
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+<Box mt={4}>
+
+You can create your Stack by running the `make:stack` command below:
+
+</Box>
+
+```bash
+nitric make:stack rest-api
+```
+
+We love Python, so let's choose `official/Python Stack` as our template:
+
+```text
+? Stack template (Use arrow keys)
+  official/TypeScript Stack
+❯ official/Python Stack
+  official/Java Stack
+  official/Go Stack
+```
+
+Next, open the project in your editor of choice. The scaffolded project should have the following structure:
+
+```text
+rest-api
+├── common
+│   ├── __init__.py
+│   └── example.py
+├── functions
+│   ├── __init__.py
+│   ├── create.py
+│   ├── list.py
+│   └── read.py
+├── .gitignore
+├── api.yaml
+├── nitric.yaml
+└── requirements.txt
+```
+
+</CodeExample>
+<CodeExample lang="java">
+
+<Box mt={4}>
+
+You can create your Stack by running the `make:stack` command below:
+
+</Box>
+
+```bash
+nitric make:stack rest-api
+```
+
+We love Java, so let's choose `official/Java Stack` as our template:
+
+```text
+? Stack template (Use arrow keys)
+  official/TypeScript Stack
+  official/Python Stack
+❯ official/Java Stack
+  official/Java Stack (Multi Module)
+  official/Go Stack
+```
+
+> Note the `Java Stack (Multi Module)` option provides a multi module Maven project template. This template is more fully featured with unit tests and middleware, but is also more complex to get started with.
+
+Next, open the project in your editor of choice. The scaffolded project should have the following structure:
+
+```text
+rest-api
+├── src
+│   └── main
+│       └── java
+│           ├── common
+│           │   └── Example.java
+│           └── function
+│               ├── Create.java
+│               ├── List.java
+│               └── Read.java
+├── .gitignore
+├── api.yaml
+├── nitric.yaml
+└── pom.xml
+```
+
+</CodeExample>
+<CodeExample lang="go">
+
+<Box mt={4}>
+
+You can create your Stack by running the `make:stack` command below:
+
+</Box>
+
+```bash
+nitric make:stack rest-api
+```
+
+We love Go, so let's choose `official/Go Stack` as our template:
+
+```text
+? Stack template (Use arrow keys)
+  official/TypeScript Stack
+  official/Python Stack
+  official/Java Stack
+❯ official/Go Stack
+```
+
+Next, open the project in your editor of choice. The scaffolded project should have the following structure:
+
+```text
+rest-api
+├── common
+│   ├── json.go
+│   └── params.go
+├── functions
+│   ├── create
+│   │   └── main.go
+│   ├── list
+│   │   └── main.go
+│   └── read
+│       └── main.go
+├── .gitignore
+├── api.yaml
+├── nitric.yaml
+├── package.json
+├── go.mod
+└── go.sum
+```
+
+</CodeExample>
+</CodeExamples>
+
+The stack template already comes with a working API example, so we will use this example as a starter template for our orders API.
+
+You can test the example stack with the `run` command.
+
+```bash
+nitric run
+```
+
+```bash
+✔ Building Services
+✔ Creating docker network
+✔ Running Functions & Containers
+✔ Starting API Gateways
+✔ Starting Entrypoints
+ Function Port
+ ──────── ─────
+ create   54054
+ list     54055
+ read     54056
+ Api      Port
+ ──────── ─────
+ examples 49152
+Running, press 'Q' to clean up and exit... -
+```
+
+Once running, use your browser to navigate to localhost on the port provided for the `examples` api, e.g. `http://localhost:49152/examples`. You should receive a success response from the api.
+
+> The first time you run a stack it will take a moment longer to start while Docker image layers are downloaded and cached on your machine.
+
+## Create orders
+
+Next, let's turn the `create` function into the handler for `POST: /orders`, by having it add new orders to a document collection called `orders`. Since every new order will need a unique order id, for the purposes of this tutorial we'll generate a uuid to serve as the id.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
+	}]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+<Box mt={4}>
+
+The stack already comes with the `uuidv4` dependency for id generation, so let's install our dependencies from the root of the stack:
+
+</Box>
+
+```bash
+yarn install
+```
+
+To improve our type safety, rename the `common/example.ts` file to be `common/order.ts` and replace its contents with our new `order` type:
+
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/rest-api/common/order.ts" />
+
+Ensure our Order interface is exported from `common/index.ts`:
+
+```typescript
+export * from './order';
+export * from './path';
+```
+
+Next, update the `create.ts` function to receive an "order create request", create the order and store it in the `orders` collection.
+
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/rest-api/functions/create.ts" />
+
+</CodeExample>
+<CodeExample lang="python">
+
+<Box mt={4}>
+
+Update the `create.py` function so that it receives OrderRequests, then creates a new order, stores it in the `orders` collection and returns the new order's id.
+We can re-use the generate_id method from the example stack to generate our id.
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/python/rest-api/functions/create.py" />
+
+</CodeExample>
+<CodeExample lang="java">
+
+<Box mt={4}>
+
+To improve our type safety, rename the `common/Example.java` file to be `common/Order.java` and replace its contents with our new `Order` type:
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/java/rest-api/src/main/java/common/Order.java" />
+
+Next, update the `Create.java` function to receive an "order create request", create the order and store it in the `orders` collection.
+
+<CodeSnippet snippet="nitrictech/nitric-examples/java/rest-api/src/main/java/function/Create.java" />
+
+</CodeExample>
+<CodeExample lang="go">
+
+<Box mt={4}>
+
+The stack already comes with the `uuid` dependency for id generation, so let's install our dependencies from the root of the stack:
+
+</Box>
+
+```bash
+go mod tidy -e
+```
+
+Next we'll define a common model to be used by our services for defining orders under `common/order.go` and add the following contents:
+
+<CodeSnippet snippet="nitrictech/nitric-examples/go/rest-api/common/order.go" />
+
+Next, update the `create/main.go` function to receive an "order create request", create the order and store it in the `orders` collection.
+
+<CodeSnippet snippet="nitrictech/nitric-examples/go/rest-api/functions/create/main.go" />
+
+</CodeExample>
+</CodeExamples>
+
+## Retrieve an order
+
+Now that we can store new orders, let's update the read function for `GET: /orders/{$orderId}`, which will retrieve an order by its ID.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+><CodeExample lang="node">
+
+<Box mt={4}>
+
+First, we want to parse the path so we can obtain the order id. We can do this by using a 3rd party package such as `path-parser`. This is already setup in our stack template under `common/path.ts`, we just need to update the code to match our orders api:
+
+```typescript
+// common/path.ts
+
+import { Path } from 'path-parser';
+
+export const path = new Path('/orders/:orderId');
+```
+
+Next, update the `read.ts` file for this function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/rest-api/functions/read.ts" />
+
+</CodeExample>
+<CodeExample lang="python">
+
+<Box mt={4}>
+
+First, update the `read.py` file for this function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/python/rest-api/functions/read.py" />
+
+</CodeExample>
+<CodeExample lang="java">
+
+<Box mt={4}>
+
+First, update the `Read.java` file for this function so that it gets the orderId from the URL path parameters and uses it to retrieve and return the order document.
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/java/rest-api/src/main/java/function/Read.java" />
+
+</CodeExample>
+<CodeExample lang="go">
+
+<Box mt={4}>
+
+First, we want to parse the path so we can obtain the order id. We could use a third party library to achieve this.
+A parser is already setup in our stack template under `common/params.go`, we just need to update the code to match our orders api.
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/go/rest-api/functions/read/main.go" />
+
+</CodeExample>
+</CodeExamples>
+
+## List all orders
+
+Finally, we'll update the list function for `GET: /orders`, which will list every order.
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+<Box mt={4}>
+
+Update the `list.ts` file for the list function so it retrieves every order from the `orders` collection.
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/typescript/rest-api/functions/list.ts" />
+
+</CodeExample>
+<CodeExample lang="python">
+
+<Box mt={4}>
+
+Update the `list.py` file for the list function so it retrieves every order from the `orders` collection.
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/python/rest-api/functions/list.py" />
+
+</CodeExample>
+<CodeExample lang="java">
+
+<Box mt={4}>
+
+Update the `List.java` file for the list function so it retrieves every order from the `orders` collection.
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/java/rest-api/src/main/java/function/List.java" />
+
+</CodeExample>
+<CodeExample lang="go">
+
+<Box mt={4}>
+
+Update the `list/main.go` file for the list function so it retrieves every order from the `orders` collection.
+
+</Box>
+
+<CodeSnippet snippet="nitrictech/nitric-examples/go/rest-api/functions/list/main.go" />
+
+</CodeExample>
+</CodeExamples>
+
+## Add the API Gateway
+
+Now that we have functions to handle our API operations, we can add the API definition to our project. This will make the functions accessible and trigger them in response to specific requests to the API URL.
+
+> Learn more: [API Gateways Documentation](/docs/reference/project/api-gateways)
+
+Update your `api.yaml` file to the following:
+
+```yaml
+# Note: APIs are defined in OpenAPI Spec 3. The following is a basic example, but can be extended using the specification standards.
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Orders API
+  description: Tutorial orders API
+paths:
+  /orders:
+    get:
+      operationId: list
+      x-nitric-target:
+        name: list
+        type: function
+      description: Retrieve all orders
+      responses:
+        '200':
+          description: Successful response
+    post:
+      operationId: create
+      x-nitric-target:
+        name: create
+        type: function
+      description: Creates and persists new orders
+      responses:
+        '200':
+          description: Successful response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+  /orders/{orderId}:
+    get:
+      operationId: read
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: string
+          required: true
+      x-nitric-target:
+        name: read
+        type: function
+      description: Retrieve an existing order by its ID
+      responses:
+        '200':
+          description: Successful response
+components:
+  schemas:
+    OrderCreate:
+      type: object
+      properties:
+        itemId:
+          type: string
+        customerId:
+          type: string
+```
+
+Now lets add our `orders` collection and rename our API, update your `nitric.yaml` to the following:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+  {
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```yaml
+name: rest-api
+# Nitric functions
+functions:
+  create:
+    handler: functions/create.ts
+  read:
+    handler: functions/read.ts
+  list:
+    handler: functions/list.ts
+# Nitric collections
+collections:
+  orders: {}
+# Nitric APIs
+apis:
+  orders: api.yaml
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```yaml
+name: rest-api
+# Nitric functions
+functions:
+  create:
+    handler: functions/create.py
+  read:
+    handler: functions/read.py
+  list:
+    handler: functions/list.py
+# Nitric collections
+collections:
+  orders: {}
+# Nitric APIs
+apis:
+  orders: api.yaml
+```
+
+</CodeExample>
+<CodeExample lang="java">
+
+```yaml
+name: rest-api
+# Nitric functions
+functions:
+  create:
+    handler: target/create.jar
+  list:
+    handler: target/list.jar
+  read:
+    handler: target/read.jar
+# Nitric collections
+collections:
+  orders: {}
+# Nitric APIs
+apis:
+  orders: api.yaml
+```
+
+</CodeExample>
+<CodeExample lang="go">
+
+```yaml
+name: rest-api
+# Nitric functions
+functions:
+  create:
+    handler: functions/create/main.go
+  read:
+    handler: functions/read/main.go
+  list:
+    handler: functions/list/main.go
+# Nitric collections
+collections:
+  orders: {}
+# Nitric APIs
+apis:
+  orders: api.yaml
+```
+
+</CodeExample>
+</CodeExamples>
+
+## Run it!
+
+Now that you have an API defined and functions built to handle each of its methods, it's time to test it out locally before deploying to the cloud.
+
+Try out your application with the `run` command:
+
+```bash
+nitric run
+```
+
+> _Note:_ In this case, `run` starts a container to act as an API gateway, as well as a container for each of the services.
+
+Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
+
+Replace the **49152** PORT below with your PORT (if applicable):
+
+#### Create an order
+
+```bash
+curl -H "Content-Type: application/json" -X POST -d '{"itemId":"test-item","customerId": "test-customer"}' http://localhost:49152/orders
+```
+
+#### Retrieve an order
+
+```bash
+curl http://localhost:49152/orders/YOUR_ORDER_ID
+```
+
+#### List orders
+
+```bash
+curl http://localhost:49152/orders
+```
+
+## Deploy to the cloud
+
+Once you're happy that everything is running correctly, you can deploy your API application to a cloud provider of your choice.
+
+<Box
+  sx={{
+    mb: 2,
+    px: 2,
+    borderRadius: '4px',
+    display: 'grid',
+    gap: {
+      md: 3,
+    },
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    backgroundColor: '#f4f4f4',
+    '& > a': {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      px: 1,
+      my: {
+        xs: 1,
+        md: 2,
+      },
+      transition: 'all 0.3s ease-in',
+      '&:hover, &:focus': {
+        backgroundColor: '#ececec',
+      },
+    },
+  }}
+>
+  <Link href="/docs/intro/cloud-providers/aws">
+    <img src="/img/logos/aws.svg" noMargin priority height={50} />
+  </Link>
+  <Link href="/docs/intro/cloud-providers/gcp">
+    <img src="/img/logos/gcp.svg" noMargin priority height={130} />
+  </Link>
+  <Link href="/docs/intro/cloud-providers/azure">
+    <img src="/img/logos/azure.svg" noMargin priority height={40} />
+  </Link>
+</Box>
+
+## Next Steps
+
+Time to validate user permissions and protect our API endpoints, [secure your API with Auth0](/docs/guides/api/rest-api-auth0).
+
+## Reference
+
+The completed application code for this guide can downloaded via the command line:
+
+<CodeExamples 
+	languages={[
+	{
+		label: "Node.js",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+  {
+		label: "Java",
+		value: "java"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeExample lang="node">
+
+```bash
+ curl https://codeload.github.com/nitrictech/nitric-examples/tar.gz/main | tar -xz --strip=2 nitric-examples-main/typescript/rest-api
+```
+
+</CodeExample>
+<CodeExample lang="python">
+
+```bash
+ curl https://codeload.github.com/nitrictech/nitric-examples/tar.gz/main | tar -xz --strip=2 nitric-examples-main/python/rest-api
+```
+
+</CodeExample>
+<CodeExample lang="java">
+
+```bash
+ curl https://codeload.github.com/nitrictech/nitric-examples/tar.gz/main | tar -xz --strip=2 nitric-examples-main/java/rest-api
+```
+
+</CodeExample>
+<CodeExample lang="go">
+
+```bash
+ curl https://codeload.github.com/nitrictech/nitric-examples/tar.gz/main | tar -xz --strip=2 nitric-examples-main/go/rest-api
+```
+
+</CodeExample>
+</CodeExamples>
+
+> If you're having issues extracting the tar, use Git Bash to execute the command

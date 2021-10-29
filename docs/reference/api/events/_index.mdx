@@ -1,0 +1,31 @@
+---
+title: 'Events Overview'
+---
+
+Events are a form of asynchronous messaging which enable functions and other stack resources to communicate with one another. Nitric Events follow a [publish/subscribe](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern) model, where messages are published to Topics by Publishers and forwarded to Subscribers. While synchronous request/response communication is quite common, events assist in decoupling services from each other and provide mechanisms that improve fault tolerance. These benefits are important in the creation of distributed and serverless systems, where functions and services are often stateless and ephemral.
+
+The Nitric Events API provides an interface to message-oriented middleware and message brokers such as AWS SNS, Google PubSub and Azure Event Grid to facilitate low-latency, highly available, ["at-least once" message delivery](#at-least-once-delivery).
+
+<img
+  src="../assets/img/topics-overview.svg"
+  height="334"
+  alt="topic overview diagram"
+/>
+
+## Key concepts
+
+- **Topics** are a named resource and target for publishing events. They typically define the _subject_ of the messages being published and subscribed.
+- **Events** (_Messages_) are a combination of metadata and a payload, produced by publishers and delivered to subscribers. Typically, these take the form of a JSON document with a standard format.
+- **Publishers** produce events by sending them to a topic. Publishers are unaware of the topic's subscribers, providing strong decoupling.
+- **Subscriptions** define the subscribers of a particular topic. Each subscription defines a subscriber, and the topic they subscribe to.
+- **Subscribers** are consumers of events, typically in the form of a request that must be handled.
+
+### Push-based Delivery
+
+All Nitric Events are delivered using Push (rather than Pull) based delivery. This means your subscribers will receive a trigger/request containing the event, instead of making a request to retrieve new events. This makes events useful as a means to trigger compute workloads, such as functions and containers, as events occur. If you required batch or Pull based delivery, see [Queues](./queues/).
+
+### At-Least-Once Delivery
+
+Nitric events are delivered using cloud services that provide 'at least once delivery'. This means that typically every event is delivered at least once to each subscriber in the order it was received. However, the message ordering isn't guaranteed and messages may occasionally be delivered more than once.
+
+To avoid reprocessing events that are delivered more than once use standard techniques to ensure [atomic publishers](./events/publish#atomicity-of-events) and [idempotent subscribers](./events/subscribe#idempotent-subscribers).

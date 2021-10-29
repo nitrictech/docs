@@ -1,0 +1,75 @@
+---
+title: Sending Tasks
+---
+
+Using one of the provided Nitric SDKs for your language is the easiest way to work with queues. First, start by importing the QueueClient.
+
+<CodeExamples
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeSnippet snippet="nitrictech/node-sdk/examples/queues/send.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/queues/send.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/queues/Send.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/queues/send.go" />
+
+</CodeExamples>
+
+### Task IDs
+
+Every task that's produced can be uniquely identified so that receivers can be idempotent. To assist with this, Nitric Tasks include an ID property which should contain the unique ID for that task. By default, the Nitric Membrane will automatically generate this ID as a v4 UUID for every published task if it doesn't already contain an ID. Custom ID creation should be implemented by your code to ensure that duplicate queue items contain the same ID value.
+
+### Failed Tasks
+
+For a variety of possible reasons, tasks may fail to be sent to a queue. To combat this, after sending tasks to a queue, the failed tasks will be returned. The failed tasks come packaged with the original task and the reason it failed. This lets you isolate problematic tasks, determine why they didn't process, and then resend them if possible.
+
+<CodeExamples
+	languages={[
+	{
+		label: "Node",
+		value: "node"
+	},
+	{
+		label: "Python",
+		value: "python"
+	},
+	{
+		label: "Java",
+		value: "java"
+	},
+	{
+		label: "Go",
+		value: "go"
+	}
+	]}
+	defaultLang="node"
+>
+<CodeSnippet snippet="nitrictech/node-sdk/examples/queues/failed.ts" />
+
+<CodeSnippet snippet="nitrictech/python-sdk/examples/queues/failed.py" />
+
+<CodeSnippet snippet="nitrictech/java-sdk/examples/src/main/java/examples/queues/Failed.java" />
+
+<CodeSnippet snippet="nitrictech/go-sdk/examples/queues/failed.go" />
+
+</CodeExamples>

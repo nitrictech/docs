@@ -1,0 +1,118 @@
+## Get the Nitric CLI
+
+The Nitric CLI assists with most tasks you'll perform while developing with Nitric. You can use the CLI to create new projects and services, run a project locally, build a project for one or more providers and deploy your projects to the cloud.
+
+### Step 1: Install CLI
+
+<CodeExamples 
+	languages={[
+	{
+		label: "macOS",
+		value: "mac"
+	}, {
+		label: "Windows",
+		value: "win"
+	}, {
+		label: "Linux",
+		value: "linux"
+	}
+	]}
+	defaultLang="mac"
+>
+<CodeExample lang={"win"}>
+
+#### NPM
+
+You can install Nitric using the [Node Package Manager](https://www.npmjs.com/)
+
+```bash
+npm install -g @nitric/cli
+```
+
+</CodeExample>
+<CodeExample lang={"mac"}>
+
+#### NPM
+
+You can install Nitric using the [Node Package Manager](https://www.npmjs.com/):
+
+```bash
+npm install -g @nitric/cli
+```
+
+</CodeExample>
+<CodeExample lang={"linux"}>
+
+#### NPM
+
+You can install Nitric using the [Node Package Manager](https://www.npmjs.com/):
+
+```bash
+npm install -g @nitric/cli
+```
+
+</CodeExample>
+</CodeExamples>
+
+#### Manual installation
+
+Alternatively, if you prefer not to use one of the automated methods above, you can download the Nitric CLI binary.
+
+1. Download the appropriate binary for your system from our [GitHub Releases](https://github.com/nitrictech/cli/releases/latest).
+2. Add the binary to your system's PATH or move it to a folder already included in your PATH.
+
+### Step 2: Verify the installation
+
+```bash
+nitric
+```
+
+The output should be something like:
+
+```bash
+CLI tool for nitric applications
+
+VERSION
+  @nitric/cli/0.0.82 win32-x64 node-v16.4.0
+
+USAGE
+  $ nitric [COMMAND]
+
+TOPICS
+  deploy     Plugin commands to deploy on supported providers. E.g. `$ nitric deploy:aws`
+  doctor     check environment for config and prerequisite software
+  down       Plugin commands to tear down deployments on supported providers. E.g. `$ nitric down:aws`
+  make       Commands to make new projects and assets.
+  plugins    list installed plugins
+  templates  Commands for template management
+  token      convenience method to generate an access token for GCP
+
+COMMANDS
+  build    build a project
+  doctor   check environment for config and prerequisite software
+  help     display help for nitric
+  plugins  list installed plugins
+  run      builds and runs a project locally for testing
+```
+
+### Step 3: Verify dependencies
+
+The Nitric CLI depends on some other software for activities like building container images and deployment. You can verify that dependent software is installed using the `doctor` command. You'll be prompted to install any missing software.
+
+```bash
+nitric doctor
+```
+
+The output should be:
+
+```bash
+Doctor summary:
+☁️ pulumi
+🐳 docker
+
+Good to go 👍 Enjoy using Nitric 🎉
+```
+
+### Step 4: Next Steps
+
+At this point you have everything setup and ready to build applications, then run and test them locally. You can read more about the [Nitric CLI](/docs/reference/cli), try out a [Tutorial](/docs/getting-started/multi-cloud) or if you're ready to deploy an application to a cloud environment, you can jump to the [deployment stage](/docs/getting-started/multi-cloud/deploy) of our tutorial or read more about our supported cloud providers [AWS](/docs/intro/cloud-providers/aws), [Google Cloud](/docs/intro/cloud-providers/gcp), [DigitalOcean](/docs/intro/cloud-providers/digital-ocean) or [Microsoft Azure](/docs/intro/cloud-providers/azure).

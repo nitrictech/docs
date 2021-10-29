@@ -1,0 +1,203 @@
+Nitric allows you to defined your stack using a straight forward YAML configuration file.
+
+By default the Nitric configuration file is named `nitric.yaml`, but you can specify another name with the CLI `--file` option:
+
+```bash
+nitric --file myapp.yaml run
+```
+
+This topic provides a breakdown of all the Nitric features configured within this file.
+
+## Functions
+
+Functions are deployable units of code that handle a single purpose, the Nitric stack file requires references (relative to your stack file) for each of your function's code via handlers.
+
+In the example below we have 3 function keys named `create`, `read` and `list`. The function handlers define the application code to be invoked.
+
+```yaml
+functions:
+  create:
+    handler: functions/create.ts
+  read:
+    handler: functions/read.ts
+  list:
+    handler: functions/list.ts
+```
+
+The function name keys can be referenced in APIs and Entrypoints.
+
+Functions can also be triggered by topic events. In the example below we have an `new-orders` topic, when an item is published to this topic it will trigger the invocation of the `create-order` function.
+
+```yaml
+name: orders-service
+
+functions:
+  create-order:
+    handler: functions/create-order.ts
+    triggers:
+      topics:
+        - new-orders
+
+topics:
+  new-orders: {}
+```
+
+For more details see the [Functions Reference](/docs/reference/project/functions)
+
+## Containers
+
+Containers enable Nitric to deploy custom built Docker containers to the cloud, and be include in your Nitric stack.
+
+In the example below the `express-orders.dockerfile` Dockerfile will be build and deployed by Nitric as part of the stack.
+
+```
+name: orders-service
+
+containers:
+    orders-container:
+        dockerfile: ./containers/express-orders.dockerfile
+```
+
+For more details see the [Containers Reference](/docs/reference/project/containers)
+
+## Collections
+
+Document collections can be defined in the stack as follows:
+
+```yaml
+collections:
+  orders: {}
+```
+
+This will create the collections if required during cloud deployment.
+
+For more details see the [Collections Reference](/docs/reference/project/collections)
+
+## Topics
+
+Topics provide a named feed of events in a pub/sub architecture. In the example below we have defined a `new-orders` topic.
+
+```yaml
+name: orders-service
+
+functions:
+  create-order:
+    handler: functions/create-order.ts
+    triggers:
+      topics:
+        - new-orders
+
+topics:
+  new-orders: {}
+```
+
+For more details see the [Topics Reference](/docs/reference/project/topics)
+
+## Queues
+
+Queues support asynchronous Pull based workflows. Tasks are added to queues which can then be retrieved later by a consumer.
+
+Queues can be defined in the stack as follows:
+
+```yaml
+queues:
+  cancelled-orders: {}
+  expired-orders: {}
+```
+
+For more details see the [Queues Reference](/docs/reference/project/queues)
+
+## Buckets
+
+Buckets provide file object storage. Buckets can be defined in the stack as follows:
+
+```yaml
+buckets:
+  product-images: {}
+  product-manuals: {}
+```
+
+For more details see the [Buckets Reference](/docs/reference/project/buckets)
+
+## Schedules
+
+Schedules allow you to periodically add events to topics. Schedules can be defined in the stack as follows:
+
+```yaml
+name: orders-service
+
+functions:
+  create-order:
+    handler: functions/check-orders.ts
+    triggers:
+      topics:
+        - check-orders
+
+topics:
+  check-orders: {}
+
+schedules:
+  check-orders-schedule:
+    # runs every 5 mins
+    expression: '0/5 * * * ? *'
+    target:
+      type: topic
+      name: check-orders
+    event:
+      payloadType: check-orders
+      payload:
+        max-size: 50
+```
+
+For more details see the [Schedules Reference](/docs/reference/project/schedules)
+
+## Sites
+
+Sites provide a way to imporporate font-end content in your stack and have Nitric deploy it.
+
+Sites can be defined in the stack as follows:
+
+```yaml
+name: ecommerce-stack
+sites:
+  sales-site:
+    path: sales-site
+    assetPath: ./static
+    buildScripts:
+      - npm run build
+```
+
+For more details see the [Sites Reference](/docs/reference/project/sites)
+
+## API Gateways
+
+APIs enable you to incorporate Open API gateways into your Nitric stack. APIs are defined in a separate Open API 3.0 compliant file referenced in your Nitric stack.
+
+Open API files can be referenced in the stack as follows:
+
+```yaml
+apis:
+  ecommerce: api.yaml
+```
+
+For more details see the [API Gateways Reference](/docs/reference/project/api-gateways)
+
+## Entrypoints
+
+Entrypoints allows you to map a number of resources that can be hosted together and a single frontend/origin.
+
+Entrypoints can be defined in the stack as follows:
+
+```yaml
+entrypoints:
+  main:
+    paths:
+      /:
+        target: app
+        type: site
+      /orderapi/:
+        target: orderapi
+        type: api
+```
+
+For more details see the [Entrypoints Reference](/docs/reference/project/entrypoints)

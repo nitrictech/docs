@@ -1,0 +1,24 @@
+A Nitric collection is described by its definition in a `nitric.yaml` file. A collection represents a container for the storage of documents.
+
+## Properties
+
+> Collections do not have properties at present and are represented only by their name at this time.
+
+## Example
+
+```yaml
+name: example-stack
+
+collections:
+  example-collection: {}
+```
+
+#### Limitations
+
+Please note on AWS the DynamoDB database has a maximum document size of a 400 KB. If you expect documents larger than this
+we recommend you:
+
+- decompose any large nested structures into document subcollections
+- store very large document fields in the Storage Service and keep a storage service `bucket/key` reference in your document
+
+See the [Documents API](../api/documents) reference for examples of interacting with defined documents.

@@ -1,0 +1,11 @@
+Topics are a resource defined in a stack file, such as `nitric.yaml`. At the root level of the stack file, add a `topics` key, which contains a collection of topics. Topics will be automatically created and configured with defaults by the Nitric CLI when deploying to a cloud environment and emulated when running and testing locally.
+
+```yaml
+topics:
+	# A Topic with default options
+	my-topic: {}
+```
+
+During our preview release, no additional configuration is needed or available to create topics. All functions and containers in your Nitric project will be configured with appropriate permissions allowing them to publish to all available topics. Future configuration will be introduced to define the list of permitted publishers (enabling least-privilege security by default), as well as configure more advanced topic features.
+
+> Have a property or customization option that you need? Let us know on [GitHub](https://github.com/nitrictech/cli)
