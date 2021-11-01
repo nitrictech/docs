@@ -350,14 +350,6 @@
             "path": "/docs/support/_index.mdx",
             "routes": [
               {
-                "title": "REST API",
-                "path": "/docs/guides/rest-api.mdx"
-              },
-              {
-                "title": "Image Processing with Tensorflow",
-                "path": "/docs/guides/tensorflow.mdx"
-              },
-              {
                 "title": "Creating bug reports",
                 "path": "/docs/support/creating-bug-reports.mdx"
               }
