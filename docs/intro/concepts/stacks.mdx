@@ -1,4 +1,27 @@
-A Stack is a collection of resources defined using a stack file, named `nitric.yaml` by default. Stacks typically define some code functions and cloud resources. Some stacks are infrastructure only, deploying shared resources and act as a dependency to other stacks. A REST API would typically be defined in a Stack.
+A Stack is a collection of resources defined using a stack file, named `nitric.yaml` by default. Stacks typically define some code functions and cloud resources.
+
+```yaml
+name: orders-service
+
+# Nitric functions
+functions:
+  create:
+    handler: functions/create.ts
+  read:
+    handler: functions/read.ts
+  list:
+    handler: functions/list.ts
+
+# Nitric collections
+collections:
+  orders: {}
+
+# Nitric APIs
+apis:
+  orders: api.yaml
+```
+
+Some stacks are infrastructure only, deploying shared resources and act as a dependency to other stacks. A REST API would typically be defined in a Stack.
 
 ## Create a Stack
 
