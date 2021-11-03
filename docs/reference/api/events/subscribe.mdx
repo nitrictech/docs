@@ -2,7 +2,7 @@
 title: Subscribe to Events
 ---
 
-Resources that can subscribe to a topic, such as [functions](/docs/intro/concepts/functions) and containers provide a `triggers` property defining their triggers. Adding a new `topics` object under `triggers`, followed by the name of the topic(s) to subscribe to will set up a subscription between the resource and the topic(s). In the case of functions, this causes the function to be invoked each time a new event is published to the topic. The function will receive a trigger with the event being provided as its payload. This is a useful mechanism when one service needs to communicate with another in order to have the second service perform some work.
+Resources that can subscribe to a topic, such as [functions](/docs/intro/concepts/compute) and containers provide a `triggers` property defining their triggers. Adding a new `topics` object under `triggers`, followed by the name of the topic(s) to subscribe to will set up a subscription between the resource and the topic(s). In the case of functions, this causes the function to be invoked each time a new event is published to the topic. The function will receive a trigger with the event being provided as its payload. This is a useful mechanism when one service needs to communicate with another in order to have the second service perform some work.
 
 ```yaml
 topics:

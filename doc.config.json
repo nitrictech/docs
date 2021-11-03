@@ -78,7 +78,11 @@
                   },
                   {
                     "title": "Nitric Architecture",
-                    "path": "/docs/intro/concepts/how-nitric-works.mdx"
+                    "path": "/docs/intro/concepts/architecture.mdx"
+                  },
+                  {
+                    "title": "SDKs",
+                    "path": "/docs/intro/concepts/sdks.mdx"
                   }
                 ]
               },
