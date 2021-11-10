@@ -191,10 +191,7 @@ func handler(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, e
 
 A FaaS middleware request processing pipeline is illustrated below.
 
-<img
-  src="../../../assets/img/middleware-sequence.svg"
-  alt="Middleware Sequence"
-/>
+<img src="../../../assets/img/middleware-sequence.svg" height="550"  alt="Middleware Sequence" />
 
 This middleware pipeline/chain is composed of:
 
@@ -204,7 +201,7 @@ This middleware pipeline/chain is composed of:
 
 Middleware can abort further processing by simply not calling the next middleware in the chain. In the sequence diagram below the `AuthMiddleware` determines the user is not authorized, it skips calling the next middleware and returns a HTTP 401 status.
 
-<img src="../../../assets/img/middleware-2.svg" alt="Middleware Sequence" />
+<img src="../../../assets/img/middleware-2.svg" height="550" alt="Middleware Sequence" />
 
 Another important use of middleware is processing requests and augmenting them with additional information which subsequent middleware can use. Examples of this include:
 
