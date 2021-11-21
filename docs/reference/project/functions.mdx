@@ -9,6 +9,7 @@ Nitric functions are a type of Service that offers a portable way to develop fun
 | context  | `string`   | No       | Relative path to the container context, defaults to the root of the project.                                                                                                                                               |
 | triggers | `string[]` | No       | The [topic(s)](./topics.mdx) that this function subscribes to. The listed topics will trigger the function if a new event is published to them.                                                                            |
 | excludes | `string[]` | No       | A list of files and directories to exclude e.g. node_modules. The excludes property uses the <a href="https://linuxize.com/post/gitignore-ignoring-files-in-git/#literal-file-names" target="_blank">gitignore syntax</a>. |
+| memory   | `number`   | No       | The function compute instance memory size in MB.                                                                                                                                                                           |
 
 ## Example Configuration
 
