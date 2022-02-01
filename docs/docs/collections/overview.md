@@ -14,7 +14,7 @@ A document is a uniquely identifiable item within a collection. It can be though
 
 ### Sub-collections
 
-A sub-collection is a collection that belongs to within a document. If we use `usa` as a parent document example then `cities` might be a sub-collection that holds cities within that country.
+A sub-collection is a collection that belongs to a single document. If we use `usa` as a parent document example then `cities` might be a sub-collection that holds cities within that country.
 
 ### Create a collection
 
@@ -23,7 +23,7 @@ Declaring a collection for your application can be done in a single line of conf
 ```javascript
 import { collection } from '@nitric/sdk'
 
-const profiles = bucket('users').for('reading', 'writing', 'deleting')
+const profiles = collection('profiles').for('reading', 'writing', 'deleting')
 ```
 
 ### Writing a document
@@ -32,7 +32,9 @@ You can create a new document by simply using an existing collection reference t
 
 ```javascript
 await profiles.doc("Drake Mallard").set({
-	avatar: "someUrl"
+	firstName: "Drake",
+	lastName: "Mallard",
+	popularity: 10,
 });
 ```
 
@@ -49,52 +51,75 @@ const doc = await profiles.doc("Bruce Wayne").get();
 To delete a file that has been previously written, you use the `delete()` method on the file reference.
 
 ```javascript
-await profiles.file('users/cain-marko/profile.png').delete()
+await profiles.doc('Cain Marko').delete();
 ```
 
-### Accessing files
+### Querying a collection
 
-Currently, Nitric Storage Buckets cannot be public, however, you can generate short-lived download or upload URLs with the pre-signed URLs feature. These URLs are useful when you want to provide one of your users with a temporary link to download or upload a file.
+Simple queries on collections are supported as well
 
 ```javascript
-import { storage } from '@nitric/sdk';
+const query = profiles.query()
+	// query string prefixes
+	.where("firstName", "startsWith", "Dra")
+	// query on equality
+	.where("lastName", "==", "Mallard")
+	// query on inequality
+	.where("firstName", "!=", "Bruce")
+	// query on gt, lt, gte and lte as well
+	.where("popularity", ">=", 7);
+```
 
-const signedUrl = await profiles.file('profile.png').signUrl(storage.FileMode.Read)
+Results can be iterated either by paging or streaming
+
+```javascript
+// Paging
+const results = await queue.fetch();
+// Use the paging token in next query to fetch the next page
+const token = results.pagingToken;
+
+for (const doc of results.documents) {
+	// do something with your documents
+}
+
+// Streaming
+const stream = queue.stream();
+
+stream.on('data', (snapshot) => {
+	// Get document snapshots
+});
+```
+
+### Working with subcollections
+
+Working with subcollections is very similiar to working with a collection
+
+```javascript
+const drakeMallardEnemies = profiles.doc("Drake Mallard").collection("Enemies");
+// Get a reference to a document on the sub collection
+const steelBeak = duckMallardEnemies.doc("Steel Beak");
+```
+
+> nitric supports single depth of subcollection
+
+### Querying subcollections
+
+You can query same named subcollections across documents in a collection.
+
+> This collection is only queryable
+
+```javascript
+const enemies = profiles.collection("enemies");
+
+const allEnemies = enemies.query().stream();
+
+allEnemies.on("data", (doc) => {
+	// do something...
+})
 ```
 
 ## What's next?
 
 TODO: ================= update link below with reference page =================
 
-- Learn more about storage, buckets and files in our reference docs.
-
-> Nitric supports subcollections to a 1-depth
-
-## Practical Example
-
-```typescript
-import { collection } from "@nitric/sdk"
-
-
-const countryApi = api("countries")
-const countries = collection("countries");
-
-
-// Example entrypoint to seed our countries collection
-countryApi.post("/seed", async ctx => {
-	const usa = countries.doc("usa");
-
-	await usa.set({
-		name: "United States",
-	});
-
-	// Get a reference to a subcollection of the "usa"
-	// document called cities
-	const usaCities = usa.collection("cities");
-	const newYork = usaCities.doc("new-york");
-
-	await newYork.set({
-		name: "New York",
-	});
-});
-```
+- Learn more about collections and documents in our reference docs.
