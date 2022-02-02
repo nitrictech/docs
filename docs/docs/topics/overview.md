@@ -14,6 +14,32 @@ Events are the messages that can be published to a topic. They can be thought of
 
 A subscription is something listening to a topic. You can think of it as a channel that notifies your application when something new arrives on the topic.
 
-## A Practical Example
+## Creating a Topic
 
-TODO: Hypothetical example of usefulness of topics (e.g. an order system that dispatches orders for fulfillment and shipping, that can be extended to do customer notifications later).
+```javascript
+import { topic } from "@nitric/sdk";
+
+const userCreatedTopic = topic("user-created").for("publishing");
+```
+
+## Publishing an event
+```javascript
+userCreatedTopic.publish({
+	email: "new.user@example.com",
+});
+```
+
+## Subscribing to a topic
+```javascript
+userCreatedTopic.subscribe(async ctx => {
+	const { email } = JSON.parse(ctx.req.data);
+	sendWelcomeEmail(email);
+});
+```
+
+## What's next?
+
+TODO: ================= update link below with reference page =================
+
+- Learn more about topics and events in our reference docs.
+
