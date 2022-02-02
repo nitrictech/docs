@@ -40,55 +40,32 @@ TODO: ================= update link below with example =================
 
 The guide below highlights the features of Nitric Storage, you can use it in your own project or take a look at [one of our examples](#)
 
-### Create a bucket
+### Create a secret version
 
-Creating buckets with the Nitric SDK is just one line when using our `config-as-code` functionality to define resources. In the example below we declare that our function depends on a bucket named "profiles" and needs access to be able to `read`, `write` and `delete` files in the bucket:
+Creating a new secret can be done in a single line, when a new secret is created a new version is automatically generated.
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { secrets } from '@nitric/sdk'
 
-const profiles = bucket('profiles').for('reading', 'writing', 'deleting')
+// Create a new secret 
+const mySecret = await secrets().secret("my-secret").put("ssshhhhh.... it's a secret");
+
+// We can get the version id of our newly created secret using version()
+mySecret.version()
 ```
 
-### Writing files
-
-You can write files to a bucket using pre-signed URLs, which you can read about below, or directly from your application code.
-
-```javascript
-// Example byte array
-const profileImg = new Uint8Array()
-
-await profiles.file('users/drake-mallard/profile.png').write(profileImg)
-```
-
-### Reading files
-
-Just like with writing, you can read files with pre-signed URLs, or directly in your code.
+### Access a secret version
+Accessing the contents of a secret version can be done my calling the `access()` method.
 
 ```javascript
-const bytes = await profiles.file('users/bruce-wayne/profile.png').read()
-```
-
-### Deleting files
-
-To delete a file that has been previously written, you use the `delete()` method on the file reference.
-
-```javascript
-await profiles.file('users/cain-marko/profile.png').delete()
-```
-
-### Accessing files
-
-Currently, Nitric Storage Buckets cannot be public, however, you can generate short-lived download or upload URLs with the pre-signed URLs feature. These URLs are useful when you want to provide one of your users with a temporary link to download or upload a file.
-
-```javascript
-import { storage } from '@nitric/sdk';
-
-const signedUrl = await profiles.file('profile.png').signUrl(storage.FileMode.Read)
+// access the latest version of a secret
+const latestSecret = await secrets().secret("my-secret").latest().access()
+// access a known version of a secret
+const theSecret = await secrets().secret("my-secret").version("version-id").access();
 ```
 
 ## What's next?
 
-TODO: ================= update link below with reference page =================
+<!-- TODO: ================= update link below with reference page ================= -->
 
-- Learn more about storage, buckets and files in our reference docs.
+- Learn more about secrets in our reference docs.
