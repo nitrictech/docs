@@ -2,7 +2,13 @@
 
 ## Overview
 
+Nitric APIs make it dead simple to define and map simple functions to HTTP and REST APIs.
 
+## Concepts
+
+### Request Context
+
+Nitric's way of handing request and response was inspired by a common pattern implemented by frameworks like [koa]() and [fasthttp](). We give you a single context object that gives you everything you need to read and write your requests and responses.
 
 ## Creating a new API
 
@@ -12,40 +18,63 @@ APIs are easy to declare with the nitric SDK
 import { api } from "@nitric/sdk";
 
 
-const userApi = api("user");
+const farAwayGalaxyApi = api("far-away-galaxy-api");
 ```
 
+## Mapping Methods
 
-## Full CRUD Example
+Methods can be mapped to functions by calling that method name with the route you'd like to match on:
 
-```typescript
-import { api } from "@nitric/sdk";
-
-
-const userApi = api("user");
-
-// Create a new user
-userApi.post("/user", async (ctx) => {
-
+``` javascript
+// List planets
+farAwayGalaxyApi.get("/planets", async (ctx) => {
+	// get a list of planets
+	const planets = getPlanetsList();
+	ctx.res.json(planets);
+	return ctx;
 });
 
-// List users
-userApi.get("/user", async (ctx) => {
-
-});
-
-// Update an existing user
-userApi.patch("/user/:userId", async (ctx) => {
-	const { userId } = ctx.req.params;
-});
-
-// Get an existing user
-userApi.get("/user/:userId", async (ctx) => {
-	const { userId } = ctx.req.params;
-});
-
-// Delete an existing user
-userApi.delete("/user/:userId", async (ctx) => {
-	const { userId } = ctx.req.params;
+// Create planets
+farAwayGalaxyApi.post("/planets", async (ctx) => {
+	const data = JSON.parse(ctx.req.data);
+	// create a new planet
+	createPlanet(data);
+	ctx.res.status = 201;
+	return ctx;
 });
 ```
+
+### Handling parameters
+
+```javascript
+farAwayGalaxyApi.get("/planets/:name", async (ctx) => {
+	const { name } = ctx.req.params;
+	// get a specific planet
+	const planet = getPlanet(name);
+	// set the response as json
+	ctx.res.json(planet);
+	return ctx;
+});
+
+farAwayGalaxyApi.patch("/planets/:name", async (ctx) => {
+	const { name } = ctx.req.params;
+	const update = JSON.parse(ctx.req.data);
+	// update a specific plane
+	const planet = updatePlanet(name, update);
+	return ctx;
+});
+
+farAwayGalaxyApi.delete("/planets/:name", async (ctx) => {
+	const { name } = ctx.req.params;
+	// delete a specific planet
+	deletePlanet(name);
+	return ctx;
+});
+```
+
+## What's next?
+
+TODO: ================= update link below with reference page =================
+
+- Learn more about apis in our reference docs.
+
