@@ -1,21 +1,31 @@
 # Introduction
 
-Nitric is .... =====================================
+Nitric is an open source framework for rapid Serverless and Cloud application development.
 
-It provides all of the common services needed to create and launch amazing products. It's opinionated by default so you can move super fast, but flexible and pluggable for when things need to get custom.
+We provide a set of portable building blocks to create and launch amazing products on AWS, Microsoft Azure or Google Cloud. Nitric is opinionated so it can help you move super fast, but flexible and composable for when things need to get custom.
 
-Take a look around the building blocks Nitric provides and get a feel for yourself:
+You can use some or all of what it provides, check out the features for yourself:
 
 TODO: insert links to various topics like storage, eventing, etc. ============================
 
+<CardGrid>
+  <LinkCard title="APIs" description="REST APIs with serverless functions as route handlers."/>
+  <LinkCard title="Storage" description="Read and write large files."/>
+  <LinkCard title="Collections" description="Document database with collection and sub-collection features."/>
+  <LinkCard title="Topics" description="Send messages between functions and integrate your app."/>
+  <LinkCard title="Queues" description="Create and process asynchronous tasks and batch workloads."/>
+  <LinkCard title="Schedules" description="Run serverless functions on a cadence to perform time-based work."/>
+  <LinkCard title="Secrets" description="Store and retrieve credentials and other secrets."/>
+</CardGrid>
+
 ## Quick start
 
-It's easy build and deploy APIs with Nitric and all your code will be packaged in containers by default. This makes Nitric apps play nice with huge number of tools, frameworks and integrations.
+The quickest way to understand Nitric is to build something with it, using familiar tools and framework.
 
 TODO: insert links to various framework examples e.g. react, nextjs, angular, svelt, etc. ============================
 
 ## How does it run?
 
-Want to learn more about the cloud services Nitric integrates with to provide your app with the functionality it needs? Check out our [cloud reference docs](#)
+Want to learn more about the cloud services Nitric offers and integrates with? Check out our [cloud reference docs](#)
 
 TODO: ========== update this link ==========
