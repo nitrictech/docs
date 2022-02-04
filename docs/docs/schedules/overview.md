@@ -19,16 +19,16 @@ The guide below highlights how to create schedules, you can use it in your own p
 Creating schedules with Nitric can be done in a single line using our `config-as-code` functionality to define resources.
 
 ```javascript
-import { schedule } from '@nitric/sdk'
+import { schedule } from '@nitric/sdk';
 
 // Create a schedule that runs every 3 hours
-schedule('transaction-processing').every('3 hours', async ctx => {
-	// do some processing
+schedule('transaction-processing').every('3 hours', async (ctx) => {
+  // do some processing
 });
 
 // We can also just provide a simple singular rate as well
-schedule('send-reports').every('day', async ctx => {
-	// do some processing
+schedule('send-reports').every('day', async (ctx) => {
+  // do some processing
 });
 ```
 

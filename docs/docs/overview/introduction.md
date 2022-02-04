@@ -14,7 +14,6 @@ It's easy build and deploy APIs with Nitric and all your code will be packaged i
 
 TODO: insert links to various framework examples e.g. react, nextjs, angular, svelt, etc. ============================
 
-
 ## How does it run?
 
 Want to learn more about the cloud services Nitric integrates with to provide your app with the functionality it needs? Check out our [cloud reference docs](#)

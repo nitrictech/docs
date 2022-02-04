@@ -21,9 +21,9 @@ A sub-collection is a collection that belongs to a single document. If we use `u
 Declaring a collection for your application can be done in a single line of config-as-code using the nitric SDK:
 
 ```javascript
-import { collection } from '@nitric/sdk'
+import { collection } from '@nitric/sdk';
 
-const profiles = collection('profiles').for('reading', 'writing', 'deleting')
+const profiles = collection('profiles').for('reading', 'writing', 'deleting');
 ```
 
 ### Writing a document
@@ -31,10 +31,10 @@ const profiles = collection('profiles').for('reading', 'writing', 'deleting')
 You can create a new document by simply using an existing collection reference to create a new document reference.
 
 ```javascript
-await profiles.doc("Drake Mallard").set({
-	firstName: "Drake",
-	lastName: "Mallard",
-	popularity: 10,
+await profiles.doc('Drake Mallard').set({
+  firstName: 'Drake',
+  lastName: 'Mallard',
+  popularity: 10,
 });
 ```
 
@@ -43,7 +43,7 @@ await profiles.doc("Drake Mallard").set({
 Just like with writing, you can read a document by simple using it's reference.
 
 ```javascript
-const doc = await profiles.doc("Bruce Wayne").get();
+const doc = await profiles.doc('Bruce Wayne').get();
 ```
 
 ### Deleting a document
@@ -59,15 +59,16 @@ await profiles.doc('Cain Marko').delete();
 Simple queries on collections are supported as well
 
 ```javascript
-const query = profiles.query()
-	// query string prefixes
-	.where("firstName", "startsWith", "Dra")
-	// query on equality
-	.where("lastName", "==", "Mallard")
-	// query on inequality
-	.where("firstName", "!=", "Bruce")
-	// query on gt, lt, gte and lte as well
-	.where("popularity", ">=", 7);
+const query = profiles
+  .query()
+  // query string prefixes
+  .where('firstName', 'startsWith', 'Dra')
+  // query on equality
+  .where('lastName', '==', 'Mallard')
+  // query on inequality
+  .where('firstName', '!=', 'Bruce')
+  // query on gt, lt, gte and lte as well
+  .where('popularity', '>=', 7);
 ```
 
 Results can be iterated either by paging or streaming
@@ -79,14 +80,14 @@ const results = await queue.fetch();
 const token = results.pagingToken;
 
 for (const doc of results.documents) {
-	// do something with your documents
+  // do something with your documents
 }
 
 // Streaming
 const stream = queue.stream();
 
 stream.on('data', (snapshot) => {
-	// Get document snapshots
+  // Get document snapshots
 });
 ```
 
@@ -95,9 +96,9 @@ stream.on('data', (snapshot) => {
 Working with subcollections is very similiar to working with a collection
 
 ```javascript
-const drakeMallardEnemies = profiles.doc("Drake Mallard").collection("Enemies");
+const drakeMallardEnemies = profiles.doc('Drake Mallard').collection('Enemies');
 // Get a reference to a document on the sub collection
-const steelBeak = duckMallardEnemies.doc("Steel Beak");
+const steelBeak = duckMallardEnemies.doc('Steel Beak');
 ```
 
 > nitric supports single depth of subcollection
@@ -109,13 +110,13 @@ You can query same named subcollections across documents in a collection.
 > This collection is only queryable
 
 ```javascript
-const enemies = profiles.collection("enemies");
+const enemies = profiles.collection('enemies');
 
 const allEnemies = enemies.query().stream();
 
-allEnemies.on("data", (doc) => {
-	// do something...
-})
+allEnemies.on('data', (doc) => {
+  // do something...
+});
 ```
 
 ## What's next?

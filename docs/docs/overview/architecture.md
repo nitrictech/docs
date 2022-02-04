@@ -3,12 +3,12 @@
 Nitric is an open source cloud application development framework. It leverages open standards, existing tools and cloud provider APIs/SDKs wherever possible to provide a everything needs to go from concept to product for cloud and SaaS applications.
 
 The guiding principals of the Nitric Framework are:
- - Open Source Foundations
- - Convention-over-configuration
- - Configuration-as-code
- - Serverless first
- - Language agnostic, provider agnostic, and fully portable
 
+- Open Source Foundations
+- Convention-over-configuration
+- Configuration-as-code
+- Serverless first
+- Language agnostic, provider agnostic, and fully portable
 
 TODO: ========= Insert NEW architecture image here =========
 

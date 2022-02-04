@@ -27,9 +27,9 @@ The guide below highlights the features of Nitric Storage, you can use it in you
 Creating buckets with the Nitric SDK is just one line when using our `config-as-code` functionality to define resources. In the example below we declare that our function depends on a bucket named "profiles" and needs access to be able to `read`, `write` and `delete` files in the bucket:
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { bucket } from '@nitric/sdk';
 
-const profiles = bucket('profiles').for('reading', 'writing', 'deleting')
+const profiles = bucket('profiles').for('reading', 'writing', 'deleting');
 ```
 
 ### Writing files
@@ -38,9 +38,9 @@ You can write files to a bucket using pre-signed URLs, which you can read about 
 
 ```javascript
 // Example byte array
-const profileImg = new Uint8Array()
+const profileImg = new Uint8Array();
 
-await profiles.file('users/drake-mallard/profile.png').write(profileImg)
+await profiles.file('users/drake-mallard/profile.png').write(profileImg);
 ```
 
 ### Reading files
@@ -48,7 +48,7 @@ await profiles.file('users/drake-mallard/profile.png').write(profileImg)
 Just like with writing, you can read files with pre-signed URLs, or directly in your code.
 
 ```javascript
-const bytes = await profiles.file('users/bruce-wayne/profile.png').read()
+const bytes = await profiles.file('users/bruce-wayne/profile.png').read();
 ```
 
 ### Deleting files
@@ -56,7 +56,7 @@ const bytes = await profiles.file('users/bruce-wayne/profile.png').read()
 To delete a file that has been previously written, you use the `delete()` method on the file reference.
 
 ```javascript
-await profiles.file('users/cain-marko/profile.png').delete()
+await profiles.file('users/cain-marko/profile.png').delete();
 ```
 
 ### Accessing files
@@ -66,7 +66,9 @@ Currently, Nitric Storage Buckets cannot be public, however, you can generate sh
 ```javascript
 import { storage } from '@nitric/sdk';
 
-const signedUrl = await profiles.file('profile.png').signUrl(storage.FileMode.Read)
+const signedUrl = await profiles
+  .file('profile.png')
+  .signUrl(storage.FileMode.Read);
 ```
 
 ## What's next?

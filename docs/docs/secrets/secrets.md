@@ -45,23 +45,29 @@ The guide below highlights the features of Nitric Storage, you can use it in you
 Creating a new secret can be done in a single line, when a new secret is created a new version is automatically generated.
 
 ```javascript
-import { secrets } from '@nitric/sdk'
+import { secrets } from '@nitric/sdk';
 
-// Create a new secret 
-const mySecret = await secrets().secret("my-secret").put("ssshhhhh.... it's a secret");
+// Create a new secret
+const mySecret = await secrets()
+  .secret('my-secret')
+  .put("ssshhhhh.... it's a secret");
 
 // We can get the version id of our newly created secret using version()
-mySecret.version()
+mySecret.version();
 ```
 
 ### Access a secret version
+
 Accessing the contents of a secret version can be done my calling the `access()` method.
 
 ```javascript
 // access the latest version of a secret
-const latestSecret = await secrets().secret("my-secret").latest().access()
+const latestSecret = await secrets().secret('my-secret').latest().access();
 // access a known version of a secret
-const theSecret = await secrets().secret("my-secret").version("version-id").access();
+const theSecret = await secrets()
+  .secret('my-secret')
+  .version('version-id')
+  .access();
 ```
 
 ## What's next?

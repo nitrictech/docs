@@ -2,23 +2,24 @@
 
 Nitric provides a CLI that makes it easy to develop and test your applications locally before going live.
 
-
 ## Prerequisites
 
 You'll need to make sure you have the following installed:
 
-* Docker
+- Docker
 
 ## Getting the CLI
 
 ### MacOS
 
 With Homebrew
+
 ```
 brew install nitric
 ```
 
 Or using curl
+
 ```bash
 curl ...
 ```
@@ -30,6 +31,7 @@ curl ...
 ```
 
 ### Windows
+
 ```
 scoop install nitric
 ```
@@ -55,4 +57,3 @@ TODO
 ## Stopping your project
 
 When you're ready to stop your application use `Ctrl-C`.
-
