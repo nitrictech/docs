@@ -2,7 +2,7 @@
 
 ## Overview
 
-Nitric Collections simplify storing unstructured data into easily accessible documents.
+Nitric Collections simplify storing data into easily accessible documents.
 
 ### Collections
 
@@ -14,7 +14,7 @@ A document is a uniquely identifiable item within a collection. It can be though
 
 ### Sub-collections
 
-A sub-collection is a collection that belongs to a single document. If we use `usa` as a parent document example then `cities` might be a sub-collection that holds cities within that country.
+A sub-collection is a collection that belongs to a single document. If we use `usa` as a parent document example then `states` might be a sub-collection that holds states within that country.
 
 ### Create a collection
 
@@ -23,7 +23,7 @@ Declaring a collection for your application can be done in a single line of conf
 ```javascript
 import { collection } from '@nitric/sdk';
 
-const profiles = collection('profiles').for('reading', 'writing', 'deleting');
+const countries = collection('countries').for('reading', 'writing', 'deleting');
 ```
 
 ### Writing a document
@@ -31,10 +31,9 @@ const profiles = collection('profiles').for('reading', 'writing', 'deleting');
 You can create a new document by simply using an existing collection reference to create a new document reference.
 
 ```javascript
-await profiles.doc('Drake Mallard').set({
-  firstName: 'Drake',
-  lastName: 'Mallard',
-  popularity: 10,
+await countries.doc('states').set({
+  name: 'Colorado',
+  population: 5759000,
 });
 ```
 
@@ -43,7 +42,7 @@ await profiles.doc('Drake Mallard').set({
 Just like with writing, you can read a document by simple using it's reference.
 
 ```javascript
-const doc = await profiles.doc('Bruce Wayne').get();
+const doc = await countries.doc('Colorado').get();
 ```
 
 ### Deleting a document
@@ -51,7 +50,7 @@ const doc = await profiles.doc('Bruce Wayne').get();
 To delete a file that has been previously written, you use the `delete()` method on the file reference.
 
 ```javascript
-await profiles.doc('Cain Marko').delete();
+await profiles.doc('Colorado').delete();
 ```
 
 ### Querying a collection
@@ -59,32 +58,33 @@ await profiles.doc('Cain Marko').delete();
 Simple queries on collections are supported as well
 
 ```javascript
-const query = profiles
+const query = countries
   .query()
   // query string prefixes
-  .where('firstName', 'startsWith', 'Dra')
+  .where('name', 'startsWith', 'Co')
   // query on equality
-  .where('lastName', '==', 'Mallard')
+  .where('name', '==', 'Colorado')
   // query on inequality
-  .where('firstName', '!=', 'Bruce')
+  .where('name', '!=', 'Maine')
   // query on gt, lt, gte and lte as well
-  .where('popularity', '>=', 7);
+  .where('population', '>=', 100000);
 ```
 
 Results can be iterated either by paging or streaming
 
 ```javascript
 // Paging
-const results = await queue.fetch();
+const results = await query.fetch();
 // Use the paging token in next query to fetch the next page
 const token = results.pagingToken;
 
 for (const doc of results.documents) {
-  // do something with your documents
+  // Do something with your documents
+  console.log(doc.id);
 }
 
 // Streaming
-const stream = queue.stream();
+const stream = query.stream();
 
 stream.on('data', (snapshot) => {
   // Get document snapshots
@@ -96,9 +96,9 @@ stream.on('data', (snapshot) => {
 Working with subcollections is very similiar to working with a collection
 
 ```javascript
-const drakeMallardEnemies = profiles.doc('Drake Mallard').collection('Enemies');
+const coloradoCities = countries.doc('Colorado').collection('Cities');
 // Get a reference to a document on the sub collection
-const steelBeak = duckMallardEnemies.doc('Steel Beak');
+const cityOfDenver = coloradoCities.doc('Denver');
 ```
 
 > nitric supports single depth of subcollection
@@ -110,11 +110,10 @@ You can query same named subcollections across documents in a collection.
 > This collection is only queryable
 
 ```javascript
-const enemies = profiles.collection('enemies');
+const cities = countries.collection('cities');
+const allCities = cities.query().stream();
 
-const allEnemies = enemies.query().stream();
-
-allEnemies.on('data', (doc) => {
+allCities.on('data', (doc) => {
   // do something...
 });
 ```
