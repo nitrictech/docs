@@ -2,7 +2,7 @@
 
 ## Overview
 
-Nitric Secrets make securely storing, updating and retrieving secret values like database credentials and API keys a breeze.
+Nitric Secrets make securely storing, updating and retrieving sensitive values like database credentials and API keys a breeze.
 
 ### Secrets
 
