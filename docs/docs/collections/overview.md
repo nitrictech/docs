@@ -120,6 +120,6 @@ allCities.on('data', (doc) => {
 
 ## What's next?
 
-TODO: ================= update link below with reference page =================
+<!-- TODO: ================= update link below with reference page ================= -->
 
-- Learn more about collections and documents in our reference docs.
+- Learn more about collections and documents in our [reference docs]().

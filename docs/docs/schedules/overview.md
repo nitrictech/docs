@@ -2,11 +2,11 @@
 
 ## Overview
 
-Nitric makes it easy to create simple expressive scheduled functions.
+Nitric makes it easy to create simple functions to run on your desired schedule.
 
 ### Frequencies
 
-Nitric supports schedules as frequent as once per minute, available frequencies can be configured in minutes, hours and days.
+Nitric supports expressive schedules as frequent as once per minute. Available frequencies can be configured in minutes, hours and days.
 
 ## The basics
 
@@ -21,8 +21,13 @@ Creating schedules with Nitric can be done in a single line using our `config-as
 ```javascript
 import { schedule } from '@nitric/sdk';
 
+// Create a schedule that runs every 5 minutes
+schedule('process-transactions').every('5 minutes', async (ctx) => {
+  // do some processing
+});
+
 // Create a schedule that runs every 3 hours
-schedule('transaction-processing').every('3 hours', async (ctx) => {
+schedule('send-reminder').every('3 hours', async (ctx) => {
   // do some processing
 });
 
@@ -36,4 +41,4 @@ schedule('send-reports').every('day', async (ctx) => {
 
 <!-- TODO: ================= update link below with reference page ================= -->
 
-- Learn more about storage, buckets and files in our reference docs.
+- Learn more about schedules in our [reference docs]().
