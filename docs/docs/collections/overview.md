@@ -23,7 +23,7 @@ Declaring a collection for your application can be done in a single line of conf
 ```javascript
 import { collection } from '@nitric/sdk';
 
-const countries = collection('countries').for('reading', 'writing', 'deleting');
+const countries = collection('Countries').for('reading', 'writing', 'deleting');
 ```
 
 ### Writing a document
@@ -31,9 +31,9 @@ const countries = collection('countries').for('reading', 'writing', 'deleting');
 You can create a new document by simply using an existing collection reference to create a new document reference.
 
 ```javascript
-await countries.doc('states').set({
-  name: 'Colorado',
-  population: 5759000,
+await countries.doc('USA').set({
+  name: 'United States of America',
+  population: 329500000,
 });
 ```
 
@@ -42,7 +42,7 @@ await countries.doc('states').set({
 Just like with writing, you can read a document by simple using it's reference.
 
 ```javascript
-const doc = await countries.doc('Colorado').get();
+const doc = await countries.doc('USA').get();
 ```
 
 ### Deleting a document
@@ -50,7 +50,7 @@ const doc = await countries.doc('Colorado').get();
 To delete a file that has been previously written, you use the `delete()` method on the file reference.
 
 ```javascript
-await profiles.doc('Colorado').delete();
+await profiles.doc('USA').delete();
 ```
 
 ### Querying a collection
@@ -61,13 +61,13 @@ Simple queries on collections are supported as well
 const query = countries
   .query()
   // query string prefixes
-  .where('name', 'startsWith', 'Co')
+  .where('name', 'startsWith', 'United')
   // query on equality
-  .where('name', '==', 'Colorado')
+  .where('name', '==', 'United States of America')
   // query on inequality
-  .where('name', '!=', 'Maine')
+  .where('name', '!=', 'Canada')
   // query on gt, lt, gte and lte as well
-  .where('population', '>=', 100000);
+  .where('population', '>=', 100000000);
 ```
 
 Results can be iterated either by paging or streaming
@@ -91,29 +91,29 @@ stream.on('data', (snapshot) => {
 });
 ```
 
-### Working with subcollections
+### Working with sub-collections
 
-Working with subcollections is very similiar to working with a collection
+Working with sub-collections is very similar to working with a collection
 
 ```javascript
-const coloradoCities = countries.doc('Colorado').collection('Cities');
+const states = countries.doc('USA').collection('States');
 // Get a reference to a document on the sub collection
-const cityOfDenver = coloradoCities.doc('Denver');
+const stateOfColorado = states.doc('Colorado');
 ```
 
-> nitric supports single depth of subcollection
+> Nitric supports a single depth of sub-collection
 
-### Querying subcollections
+### Querying sub-collections
 
-You can query same named subcollections across documents in a collection.
+You can query same named sub-collections across documents in a collection.
 
-> This collection is only queryable
+> This sub-collection reference is only queryable, since it's really an aggregate of all `States` sub-collections across all `Countries` documents. i.e. Query every state in every country.
 
 ```javascript
-const cities = countries.collection('cities');
-const allCities = cities.query().stream();
+const allStates = countries.collection('States');
+const foundStates = allStates.query().stream();
 
-allCities.on('data', (doc) => {
+foundStates.on('data', (doc) => {
   // do something...
 });
 ```
