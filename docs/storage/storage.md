@@ -18,9 +18,7 @@ Most cloud object/blob storage services act like key value systems where the key
 
 ## The basics
 
-TODO: ================= update link below with example =================
-
-The guide below highlights the features of Nitric Storage, you can use it in your own project or take a look at [one of our examples](#)
+The guide below highlights the features of Nitric Storage.
 
 ### Create a bucket
 
@@ -71,8 +69,4 @@ const signedUrl = await profiles
   .signUrl(storage.FileMode.Read);
 ```
 
-## What's next?
-
-TODO: ================= update link below with reference page =================
-
-- Learn more about storage, buckets and files in our reference docs.
+<!-- TODO: add `what's next` section with links to reference pages -->
