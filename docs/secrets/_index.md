@@ -36,9 +36,7 @@ It should be noted that the version ids are for illustration only. The specific 
 
 ## The basics
 
-TODO: ================= update link below with example =================
-
-The guide introduces the features of Nitric Secrets, you can use it in your own project or take a look at [one of our examples](#)
+This guide introduces the features of Nitric Secrets.
 
 ### Create a secret
 
@@ -48,12 +46,12 @@ Creating a new secret can be done in a single line, when a new secret is created
 import { secrets } from '@nitric/sdk';
 
 // Create a new secret
-const mySecret = await secrets()
-  .secret('my-secret')
-  .put("ssshhhhh.... it's a secret");
+const apiKey = await secrets()
+  .secret('api-key')
+  .put('6e1d9008-f06b-1111-2222-9b6989d58999');
 
 // We can get the version id of our newly created secret using version()
-mySecret.version();
+apiKey.version();
 ```
 
 > Secret versioning is automatic. Every time you `put` a new secret value a new version will be created and set as the `latest` version.
@@ -68,13 +66,9 @@ const latestSecret = await secrets().secret('my-secret').latest().access();
 
 // access a known version of a secret
 const theSecret = await secrets()
-  .secret('my-secret')
+  .secret('api-key')
   .version('version-id')
   .access();
 ```
 
-## What's next?
-
-<!-- TODO: ================= update link below with reference page ================= -->
-
-- Learn more about secrets in our reference docs.
+<!-- TODO: add `what's next` section with links to reference pages -->
