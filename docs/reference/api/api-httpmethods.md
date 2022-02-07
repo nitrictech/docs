@@ -13,11 +13,11 @@ All of these methods register an API route and set a specific HTTP method handle
 ```javascript
 import { api } from '@nitric/sdk';
 
-const customersRoute = api('public').get('/customers', (ctx) => {
+api('public').get('/customers', (ctx) => {
   // construct response for the GET: /customers request...
   const responseBody = {};
   ctx.res.json(responseBody);
-})
+});
 ```
 
 ## Parameters
@@ -32,7 +32,7 @@ The path matcher to use for the route. Matchers accept path parameters in the fo
 
 **...middleware** required `HttpMiddleware`
 
-One or more middleware functions to use as the handler for `GET` requests.
+One or more middleware functions to use as the handler for HTTP requests.
 
 ---
 
@@ -47,7 +47,7 @@ api('public').get('/customers', (ctx) => {
   // construct response for the GET: /customers request...
   const responseBody = {};
   ctx.res.json(responseBody);
-})
+});
 ```
 
 ### Chain functions as a single method handler
@@ -55,16 +55,16 @@ api('public').get('/customers', (ctx) => {
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
 ```javascript
-import { api } from '@nitric/sdk'
-import { validationMiddleware } from '../middleware'
+import { api } from '@nitric/sdk';
+import { validate } from '../middleware';
 
 const getAllCustomers = (ctx) => {
   // construct response for the GET: /customers request...
   const responseBody = {};
   ctx.res.json(responseBody);
-}
+};
 
-api('public').get('/customers', validationMiddleware, getAllCustomers)
+api('public').get('/customers', validate, getAllCustomers);
 ```
 
 ### Access the request body
@@ -72,10 +72,10 @@ api('public').get('/customers', validationMiddleware, getAllCustomers)
 For methods that include a request body, such as `POST` and `PUT`, you can access the body from the `ctx.req` object.
 
 ```javascript
-import { api } from '@nitric/sdk'
+import { api } from '@nitric/sdk';
 
 api('public').post('/customers', (ctx) => {
-  const customerData = ctx.req.data
+  const customerData = ctx.req.data;
   // parse, validate and store the request payload...
-})
+});
 ```
