@@ -5,157 +5,71 @@
       "sidebars": {
         "docs": [
           {
-            "title": "Getting Started",
-            "path": "/docs/getting-started/_index.mdx",
+            "title": "Overview",
             "routes": [
               {
-                "title": "Multi Cloud",
-                "routes": [
-                  {
-                    "title": "Overview",
-                    "path": "/docs/getting-started/multi-cloud/_index.mdx"
-                  },
-                  {
-                    "title": "Create a New Stack",
-                    "path": "/docs/getting-started/multi-cloud/create-stack.mdx"
-                  },
-                  {
-                    "title": "Review the New Stack",
-                    "path": "/docs/getting-started/multi-cloud/review-stack.mdx"
-                  },
-                  {
-                    "title": "Develop Locally",
-                    "path": "/docs/getting-started/multi-cloud/develop.mdx"
-                  },
-                  {
-                    "title": "Deploy the Stack",
-                    "path": "/docs/getting-started/multi-cloud/deploy.mdx"
-                  },
-                  {
-                    "title": "Deploy Changes",
-                    "path": "/docs/getting-started/multi-cloud/deploy-changes.mdx"
-                  },
-                  {
-                    "title": "Undeploy the Stack",
-                    "path": "/docs/getting-started/multi-cloud/undeploy.mdx"
-                  },
-                  {
-                    "title": "Next Steps",
-                    "path": "/docs/getting-started/multi-cloud/next-steps.mdx"
-                  }
-                ]
+                "title": "Introduction",
+                "path": "/docs/_index.mdx"
               },
-
               {
-                "path": "/docs/getting-started/installation.mdx"
-              }
-            ]
-          },
-          {
-            "title": "Intro",
-            "routes": [
+                "title": "Installation",
+                "path": "/docs/installation.mdx"
+              },
               {
                 "title": "Concepts",
                 "routes": [
                   {
+                    "title": "TODO",
                     "path": "/docs/intro/concepts/projects.mdx"
-                  },
-                  {
-                    "path": "/docs/intro/concepts/stacks.mdx"
-                  },
-                  {
-                    "path": "/docs/intro/concepts/compute.mdx"
-                  },
-                  {
-                    "path": "/docs/intro/concepts/middleware.mdx"
-                  },
-                  {
-                    "path": "/docs/intro/concepts/configuration.mdx"
-                  },
-                  {
-                    "title": "Unified APIs",
-                    "path": "/docs/intro/concepts/nitric-apis.mdx"
-                  },
-                  {
-                    "title": "Nitric Architecture",
-                    "path": "/docs/intro/concepts/architecture.mdx"
-                  },
-                  {
-                    "title": "SDKs",
-                    "path": "/docs/intro/concepts/sdks.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Cloud Providers",
-                "routes": [
-                  {
-                    "title": "AWS",
-                    "path": "/docs/intro/cloud-providers/aws.mdx"
-                  },
-                  {
-                    "title": "Google Cloud",
-                    "path": "/docs/intro/cloud-providers/gcp.mdx"
-                  },
-                  {
-                    "title": "Azure",
-                    "path": "/docs/intro/cloud-providers/azure.mdx"
-                  },
-                  {
-                    "title": "DigitalOcean",
-                    "path": "/docs/intro/cloud-providers/digital-ocean.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Languages",
-                "routes": [
-                  {
-                    "title": "Node.js",
-                    "path": "/docs/intro/languages/node.mdx"
-                  },
-                  {
-                    "title": "Python",
-                    "path": "/docs/intro/languages/python.mdx"
-                  },
-                  {
-                    "title": "Java",
-                    "path": "/docs/intro/languages/java.mdx"
-                  },
-                  {
-                    "title": "Go",
-                    "path": "/docs/intro/languages/go.mdx"
-                  },
-                  {
-                    "title": "Other",
-                    "path": "/docs/intro/languages/other.mdx"
                   }
                 ]
               }
             ]
-          }
-        ],
-        "guides": [
+          },
           {
-            "title": "Guides",
-            "path": "/docs/guides/_index.mdx",
+            "title": "Building Blocks",
             "routes": [
               {
-                "title": "Build a REST API",
+                "title": "APIs",
+                "path": "/docs/apis/_index.md"
+              },
+              {
+                "title": "Collections",
+                "path": "/docs/collections/_index.md"
+              },
+              {
+                "title": "Schedules",
+                "path": "/docs/schedules/_index.md"
+              },
+              {
+                "title": "Storage",
+                "path": "/docs/storage/_index.md"
+              },
+              {
+                "title": "Messaging",
                 "routes": [
                   {
-                    "title": "API Foundations",
-                    "path": "/docs/guides/api/rest-api.mdx"
+                    "title": "Topics",
+                    "path": "/docs/messaging/topics.md"
                   },
                   {
-                    "title": "Protect API with Auth0",
-                    "path": "/docs/guides/api/rest-api-auth0.mdx"
+                    "title": "Queues",
+                    "path": "/docs/messaging/topics.md"
                   }
                 ]
               },
               {
-                "title": "Image Processing with Tensorflow",
-                "path": "/docs/guides/tensorflow.mdx"
+                "title": "Secrets",
+                "path": "/docs/secrets/_index.md"
+              }
+            ]
+          },
+          {
+            "title": "Guides",
+            "routes": [
+              {
+                "title": "Slack Clone",
+                "path": "/docs/guides/_index.md"
               }
             ]
           }

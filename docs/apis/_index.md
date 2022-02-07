@@ -1,4 +1,6 @@
-# APIs
+---
+description: A nice description for APIs
+---
 
 ## Overview
 
