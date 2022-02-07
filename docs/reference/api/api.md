@@ -25,6 +25,8 @@ Additional options when creating the API.
 | **path** optional `string` <br/> base path for all routes in the API.                                                          |
 | **middleware** optional `HttpMiddleware` or `HttpMiddleware[]` <br/> Middleware to apply to all routes and methods of the API. |
 
+---
+
 ## Notes
 
 The `middleware` property on the `options` param is useful for applying universal middleware such as CORS headers or Auth, across an entire API from a single place.

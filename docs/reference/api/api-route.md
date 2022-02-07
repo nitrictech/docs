@@ -24,6 +24,8 @@ Additional options when creating the route.
 | ---------------------------------------------------------------------------------------------------------------------- |
 | **middleware** optional `HttpMiddleware` or `HttpMiddleware[]` <br/> Middleware to apply to all methods on this route. |
 
+---
+
 ## Notes
 
 The `middleware` property on the `options` param is useful for applying universal middleware such as CORS headers or Auth, across an entire route. However, if methods aren't registered, the route won't be deployed. If you need to run the same handler for all methods on a route, you should use [route.all()](<./api-route-all()>)
