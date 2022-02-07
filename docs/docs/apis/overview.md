@@ -2,7 +2,7 @@
 
 ## Overview
 
-Nitric APIs make it dead simple to define and map simple functions to HTTP and REST APIs.
+Nitric APIs make it dead simple to define and map functions to HTTP APIs.
 
 ## Concepts
 

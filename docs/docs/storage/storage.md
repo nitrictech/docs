@@ -2,7 +2,7 @@
 
 ## Overview
 
-Nitric Storage simplifies securing storing and retrieving large files.
+Nitric Storage simplifies securely storing and retrieving large files.
 
 ### Buckets
 

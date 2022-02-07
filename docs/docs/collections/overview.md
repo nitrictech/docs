@@ -39,7 +39,7 @@ await countries.doc('USA').set({
 
 ### Reading a document
 
-Just like with writing, you can read a document by simple using it's reference.
+Just like with writing, you can read a document by simply using it's reference.
 
 ```javascript
 const doc = await countries.doc('USA').get();

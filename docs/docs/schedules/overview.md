@@ -2,11 +2,11 @@
 
 ## Overview
 
-Nitric makes it easy to create simple functions to run on your desired schedule.
+Nitric makes it easy to create functions that run on a schedule. Schedules are most useful for batch workloads, reporting and other activities that happen on a set cadence.
 
 ### Frequencies
 
-Nitric supports expressive schedules as frequent as once per minute. Available frequencies can be configured in minutes, hours and days.
+Frequencies define when your functions should run. Nitric supports expressive schedules which run as often as once per minute. Frequencies can be configured in minutes, hours and days.
 
 ## The basics
 
