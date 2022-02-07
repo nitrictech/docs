@@ -64,7 +64,7 @@ Accessing the contents of a secret version can be done my calling the `access()`
 
 ```javascript
 // access the latest version of a secret
-const latestSecret = await secrets().secret("my-secret").latest().access()
+const latestSecret = await secrets().secret('my-secret').latest().access();
 
 // access a known version of a secret
 const theSecret = await secrets()

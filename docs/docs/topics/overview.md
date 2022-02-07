@@ -23,23 +23,25 @@ A subscription is something listening to a topic. You can think of it as a chann
 ### Creating a Topic
 
 ```javascript
-import { topic } from "@nitric/sdk";
+import { topic } from '@nitric/sdk';
 
-const userCreatedTopic = topic("user-created").for("publishing");
+const userCreatedTopic = topic('user-created').for('publishing');
 ```
 
 ## Publishing an event
+
 ```javascript
 userCreatedTopic.publish({
-	email: "new.user@example.com",
+  email: 'new.user@example.com',
 });
 ```
 
 ## Subscribing to a topic
+
 ```javascript
-userCreatedTopic.subscribe(async ctx => {
-	const { email } = JSON.parse(ctx.req.data);
-	sendWelcomeEmail(email);
+userCreatedTopic.subscribe(async (ctx) => {
+  const { email } = JSON.parse(ctx.req.data);
+  sendWelcomeEmail(email);
 });
 ```
 
@@ -48,4 +50,3 @@ userCreatedTopic.subscribe(async ctx => {
 TODO: ================= update link below with reference page =================
 
 - Learn more about topics and events in our reference docs.
-
