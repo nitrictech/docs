@@ -2,7 +2,7 @@
 
 ## Overview
 
-Nitric Secrets make securely storing, updating and retrieving sensitive values like database credentials and API keys a breeze.
+Nitric Secrets makes securely storing, updating and retrieving sensitive values like database credentials and API keys a breeze.
 
 ### Secrets
 
@@ -10,7 +10,7 @@ Secrets are values stored in an encrypted Secrets Manager, usually containing se
 
 ### Versions
 
-Each secret will contain at least contain a "latest" version, along with any historical versions of that secret's value. This ensures values, such as encryption keys, can be rotated without losing access to the key used with previously encrypted data.
+Each secret will contain at least a "latest" version, along with any historical versions of that secret's value. This ensures values, such as encryption keys, can be rotated without losing access to the key used with previously encrypted data.
 
 ### Values
 
@@ -38,9 +38,9 @@ It should be noted that the version ids are for illustration only. The specific 
 
 TODO: ================= update link below with example =================
 
-The guide below highlights the features of Nitric Storage, you can use it in your own project or take a look at [one of our examples](#)
+The guide introduces the features of Nitric Secrets, you can use it in your own project or take a look at [one of our examples](#)
 
-### Create a secret version
+### Create a secret
 
 Creating a new secret can be done in a single line, when a new secret is created a new version is automatically generated.
 
@@ -56,13 +56,16 @@ const mySecret = await secrets()
 mySecret.version();
 ```
 
-### Access a secret version
+> Secret versioning is automatic. Every time you `put` a new secret value a new version will be created and set as the `latest` version.
+
+### Access a secret
 
 Accessing the contents of a secret version can be done my calling the `access()` method.
 
 ```javascript
 // access the latest version of a secret
-const latestSecret = await secrets().secret('my-secret').latest().access();
+const latestSecret = await secrets().secret("my-secret").latest().access()
+
 // access a known version of a secret
 const theSecret = await secrets()
   .secret('my-secret')
