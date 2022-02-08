@@ -1,20 +1,14 @@
-The following links all redirect here:
+Register an API route and set a specific HTTP DELETE handler on that route.
 
-- `api.get()` - HTTP `GET`
-- `api.post()` - HTTP `POST`
-- `api.put()` - HTTP `PUT`
-- `api.delete()` - HTTP `DELETE`
-- `api.patch()` - HTTP `PATCH`
-
-All of these methods register an API route and set a specific HTTP method handler on that route.
-
-> These methods are a convenient short versions of [route.get()](./api-route-get), [route.post()](./api-route-post), etc.
+> This method is a convenient short version of [api().route().delete()](./api-route-delete)
 
 ```javascript
 import { api } from '@nitric/sdk';
 
-api('public').get('/customers', (ctx) => {
-  // construct response for the GET: /customers request...
+const PARAM_ID = 'customerId';
+
+api('public').delete(`/customers/:${PARAM_ID}`, (ctx) => {
+  // construct response for the DELETE: /customers request...
   const responseBody = {};
   ctx.res.json(responseBody);
 });
@@ -32,19 +26,22 @@ The path matcher to use for the route. Matchers accept path parameters in the fo
 
 **...middleware** required `HttpMiddleware`
 
-One or more middleware functions to use as the handler for HTTP requests.
+One or more middleware functions to use as the handler for HTTP requests. Handlers can be sync or async.
 
 ---
 
 ## Examples
 
-### Register a method handler function
+### Register a handler for DELETE requests
 
 ```javascript
 import { api } from '@nitric/sdk';
 
-api('public').get('/customers', (ctx) => {
-  // construct response for the GET: /customers request...
+const PARAM_ID = 'customerId';
+
+api('public').delete(`/customers/:${PARAM_ID}`, (ctx) => {
+  const id = ctx.req.params[PARAM_ID];
+  // handle the DELETE request...
   const responseBody = {};
   ctx.res.json(responseBody);
 });
@@ -58,23 +55,26 @@ When multiple functions are provided they will be called as a chain. If one succ
 import { api } from '@nitric/sdk';
 import { validate } from '../middleware';
 
-const getAllCustomers = (ctx) => {
-  // construct response for the GET: /customers request...
+const PARAM_ID = 'customerId';
+
+const deleteCustomer = (ctx) => {
+  const id = ctx.req.params[PARAM_ID];
+  // handle the DELETE request...
   const responseBody = {};
   ctx.res.json(responseBody);
 };
 
-api('public').get('/customers', validate, getAllCustomers);
+api('public').delete(`/customers/:${PARAM_ID}`, validate, deleteCustomer);
 ```
 
 ### Access the request body
 
-For methods that include a request body, such as `POST` and `PUT`, you can access the body from the `ctx.req` object.
+The DELETE request body is accessible from the `ctx.req` object.
 
 ```javascript
 import { api } from '@nitric/sdk';
 
-api('public').post('/customers', (ctx) => {
+api('public').delete(`/customers`, (ctx) => {
   const customerData = ctx.req.data;
   // parse, validate and store the request payload...
 });

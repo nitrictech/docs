@@ -143,47 +143,51 @@
                   },
                   {
                     "title": "api().get()",
-                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-get.mdx"
                   },
                   {
                     "title": "api().post()",
-                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-post.mdx"
                   },
                   {
                     "title": "api().put()",
-                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-put.mdx"
                   },
                   {
                     "title": "api().delete()",
-                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-delete.mdx"
                   },
                   {
                     "title": "api().patch()",
-                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-patch.mdx"
                   },
                   {
                     "title": "api().route()",
                     "path": "/docs/reference/api/api-route.mdx"
                   },
                   {
+                    "title": "api().route().all()",
+                    "path": "/docs/reference/api/api-route-all.mdx"
+                  },
+                  {
                     "title": "api().route().get()",
-                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-route-get.mdx"
                   },
                   {
                     "title": "api().route().post()",
-                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-route-post.mdx"
                   },
                   {
                     "title": "api().route().put()",
-                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-route-put.mdx"
                   },
                   {
                     "title": "api().route().delete()",
-                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-route-delete.mdx"
                   },
                   {
                     "title": "api().route().patch()",
-                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                    "path": "/docs/reference/api/api-route-patch.mdx"
                   }
                 ]
               },
