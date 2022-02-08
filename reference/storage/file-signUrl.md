@@ -1,4 +1,4 @@
-Create a signed url for access to file
+Create a signed url for access to a file
 
 ```javascript
 import { bucket, FileMode } from '@nitric/sdk';
@@ -7,6 +7,7 @@ const assets = bucket('assets').for('reading', 'writing');
 
 const logo = assets.file('images/logo.png');
 
+// 👀 create a read-only signed url reference
 const logoUrl = await logo.signUrl(FileMode.Read);
 ```
 
@@ -25,17 +26,18 @@ Available options are:
 
 **options** `SignUrlOptions`
 
-Properties
+Additional options when creating signed URL.
 
-| name   | type     | default | description               |
-| ------ | -------- | ------- | ------------------------- |
-| expiry | `number` | 600     | seconds until link expiry |
+| Properties                                                                            |
+| ------------------------------------------------------------------------------------- |
+| **expiry** optional `number` <br/> Seconds until link expiry. <br/> Defaults to `300` |
 
 ---
 
 ## Examples
 
 Create a readable link that is valid for the next 10 minutes
+
 ```javascript
 import { bucket, FileMode } from '@nitric/sdk';
 
@@ -49,6 +51,7 @@ const logoUrl = await logo.signUrl(FileMode.Read, {
 ```
 
 Create a temporary file upload link for a user
+
 ```javascript
 import { bucket, FileMode } from '@nitric/sdk';
 

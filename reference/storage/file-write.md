@@ -1,4 +1,4 @@
-Write a file from a bucket
+Write a file to a bucket
 
 ```javascript
 import { bucket } from '@nitric/sdk';

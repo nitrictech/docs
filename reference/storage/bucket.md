@@ -36,7 +36,7 @@ This permission allows your function to write files to the bucket
 ---
 **deleting**
 
-This permission allows your function to write files to the bucket
+This permission allows your function to delete files from the bucket
 
 ---
 
