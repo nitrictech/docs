@@ -1,5 +1,3 @@
-# Topics
-
 ## Overview
 
 Topics and Events provide a scalable, decoupled, way to communicate between functions and containers.
@@ -45,8 +43,10 @@ userCreatedTopic.subscribe(async (ctx) => {
 });
 ```
 
+<!--
 ## What's next?
 
 TODO: ================= update link below with reference page =================
 
 - Learn more about topics and events in our reference docs.
+-->
