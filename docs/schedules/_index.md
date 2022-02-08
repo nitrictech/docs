@@ -10,9 +10,7 @@ Frequencies define when your functions should run. Nitric supports expressive sc
 
 ## The basics
 
-<!-- TODO: ================= update link below with example ================= -->
-
-The guide below highlights how to create schedules, you can use it in your own project or take a look at [one of our examples](#)
+The guide below highlights the features of Nitric Schedules.
 
 ### Create a schedule
 
@@ -37,8 +35,4 @@ schedule('send-reports').every('day', async (ctx) => {
 });
 ```
 
-## What's next?
-
-<!-- TODO: ================= update link below with reference page ================= -->
-
-- Learn more about schedules in our [reference docs]().
+<!-- TODO: add `what's next` section with links to reference pages -->
