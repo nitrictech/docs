@@ -24,7 +24,15 @@ The unique name of this Schedule within the app. Subsequent calls to `schedule` 
 
 ## Notes:
 
-Schedules do not require access permissions to be specified.
+- Schedules do not require access permissions to be specified.
+
+- Currently, local execution and testing of schedules is not supported.
+
+- You can directly test the functions that respond to scheduled triggers by sending HTTP requests to those functions with the same payload as defined in your schedule.
+
+> Coming Soon
+
+- Local and manual testing of schedules is on our backlog to be completed soon.
 
 ## Examples
 
