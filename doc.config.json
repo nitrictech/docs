@@ -131,7 +131,7 @@
             ]
           },
           {
-            "title": "JavaScript",
+            "title": "Node.js",
             "path": "/docs/reference/api/_index.mdx",
             "routes": [
               {
