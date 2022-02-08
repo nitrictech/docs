@@ -131,9 +131,62 @@
             ]
           },
           {
-            "title": "Nitric API",
+            "title": "JavaScript",
             "path": "/docs/reference/api/_index.mdx",
             "routes": [
+              {
+                "title": "APIs",
+                "routes": [
+                  {
+                    "title": "api()",
+                    "path": "/docs/reference/api/api.mdx"
+                  },
+                  {
+                    "title": "api().get()",
+                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                  },
+                  {
+                    "title": "api().post()",
+                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                  },
+                  {
+                    "title": "api().put()",
+                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                  },
+                  {
+                    "title": "api().delete()",
+                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                  },
+                  {
+                    "title": "api().patch()",
+                    "path": "/docs/reference/api/api-httpmethods.mdx"
+                  },
+                  {
+                    "title": "api().route()",
+                    "path": "/docs/reference/api/api-route.mdx"
+                  },
+                  {
+                    "title": "api().route().get()",
+                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                  },
+                  {
+                    "title": "api().route().post()",
+                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                  },
+                  {
+                    "title": "api().route().put()",
+                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                  },
+                  {
+                    "title": "api().route().delete()",
+                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                  },
+                  {
+                    "title": "api().route().patch()",
+                    "path": "/docs/reference/api/api-route-httpmethods.mdx"
+                  }
+                ]
+              },
               {
                 "title": "Documents",
                 "routes": [
