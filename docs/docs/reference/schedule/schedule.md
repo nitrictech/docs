@@ -35,16 +35,16 @@ import { schedule } from '@nitric/sdk';
 
 // Create a schedule that runs every 3 minutes
 schedule('send-reminder').every('3 minutes', async (ctx) => {
-  // do some processing
+  // Code which sends a reminder
 });
 
 // Create a schedule that runs every 3 hours
 schedule('send-reminder').every('3 hours', async (ctx) => {
-  // do some processing
+  // Code which sends a reminder
 });
 
 // Create a schedule that runs every 3 days
 schedule('send-reminder').every('3 days', async (ctx) => {
-  // do some processing
+  // Code which sends a reminder
 });
 ```
