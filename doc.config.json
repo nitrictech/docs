@@ -246,6 +246,19 @@
                     "path": "/docs/reference/api/storage/signed-urls.mdx"
                   }
                 ]
+              },
+              {
+                "title": "Schedules",
+                "routes": [
+                  {
+                    "title": "schedule()",
+                    "path": "/docs/reference/schedule/schedule.md"
+                  },
+                  {
+                    "title": "schedule().every()",
+                    "path": "/docs/reference/schedule/schedule-every.md"
+                  }
+                ]
               }
             ]
           },
