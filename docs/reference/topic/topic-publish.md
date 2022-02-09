@@ -6,9 +6,9 @@ import { topic } from '@nitric/sdk';
 const updates = topic('updates').for('publishing');
 
 await updates.publish({
-    payload: {
-        something: 'amazing happened',
-    },
+  payload: {
+    something: 'amazing happened',
+  },
 });
 ```
 
@@ -26,11 +26,9 @@ The event to publish to the topic
 | **payload** required `Record<string, any>` <br/> payload to send with the event. |
 | **payloadType** optional `string` <br/> a hint to the type of payload supplied.  |
 
-
 ---
 
 ## Notes
- - If an id is not supplied with an event a UUID(v4) will be generated for you.
- - A function may subscribe to OR publish to a topic but not both.
 
-
+- If an id is not supplied with an event a UUID(v4) will be generated for you.
+- A function may subscribe to OR publish to a topic but not both.

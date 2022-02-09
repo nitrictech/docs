@@ -16,5 +16,5 @@ The name of the topic to create.
 
 ## See also
 
- - [topic.subscribe()](./topic-subscribe.md)
- - [topic.publish()](./topic-publish.md)
+- [topic.subscribe()](./topic-subscribe.md)
+- [topic.publish()](./topic-publish.md)
