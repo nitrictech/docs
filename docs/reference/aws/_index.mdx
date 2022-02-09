@@ -1,5 +1,36 @@
 The officially supported Nitric AWS Provider.
 
-## Status
+## Status: *Preview*
 
- - 
+The AWS provider is fully implemented and working. However, it is in public preview and subject to change. Where possible upgrades will be automated.
+
+## Usage
+
+The AWS provider is supported by the Nitric SDKs and CLI by default. However, credentials for an AWS account will be required when using the [deploy command](/docs/reference/) from the CLI.
+
+### AWS Credentials
+
+The Nitric CLI uses standard AWS credential settings to authenticate with AWS. If you've set credentials for the AWS CLI or an AWS SDK previously, these settings should work without modification.
+
+If you're setting your credentials for the first time, there are several available methods. We recommend the standard AWS credentials file to get started.
+
+**AWS Credential File Setup**
+
+Create a new credentials files at one of these locations:
+  - `~/.aws/credentials` on Linux, macOS, or Unix
+  - `C:\Users\USERNAME\.aws\credentials` on Windows
+
+The file should contain the following:
+
+```toml
+[default]
+aws_access_key_id = your_access_key_id
+aws_secret_access_key = your_secret_access_key
+```
+
+Replace `your_access_key_id` and `your_secret_access_key` with your own values.
+
+You can create an Access Key by logging into the <a href="https://aws.amazon.com/console/" target="_blank">AWS console</a> and navigating to:
+  `Username Menu > My Security Credentials > Access keys > Create New Access Key`
+
+> See [AWS documentation](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html) for full details on credentials and configuration.
