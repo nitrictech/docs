@@ -5,11 +5,11 @@ Nitric Topics are deployed to Azure using [Azure Eventgrid](https://azure.micros
 The following resources are created when deploying Topics to Azure:
 
 - EventGrid Topic
-- IAM Policies and Permissions
-  - Azure Resource Group
+- Azure Resource Group
 
 ## Deployment
 
 During deployment Nitric's CLI builds your Topics will be built as follows:
 
-...
+- The topic defintion and resource group are deployed as an EventGrid Topic
+- Container apps are subscribed to defined Topics
