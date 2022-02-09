@@ -80,51 +80,11 @@
             "path": "/docs/reference/_index.mdx",
             "routes": [
               {
-                "title": "Project Config",
+                "title": "General",
                 "routes": [
                   {
-                    "title": "Stack Definition",
+                    "title": "TODO",
                     "path": "/docs/reference/project/stack.mdx"
-                  },
-                  {
-                    "title": "Functions",
-                    "path": "/docs/reference/project/functions.mdx"
-                  },
-                  {
-                    "title": "Containers",
-                    "path": "/docs/reference/project/containers.mdx"
-                  },
-                  {
-                    "title": "Topics",
-                    "path": "/docs/reference/project/topics.mdx"
-                  },
-                  {
-                    "title": "Queues",
-                    "path": "/docs/reference/project/queues.mdx"
-                  },
-                  {
-                    "title": "Collections",
-                    "path": "/docs/reference/project/collections.mdx"
-                  },
-                  {
-                    "title": "Buckets",
-                    "path": "/docs/reference/project/buckets.mdx"
-                  },
-                  {
-                    "title": "Schedules",
-                    "path": "/docs/reference/project/schedules.mdx"
-                  },
-                  {
-                    "title": "Static Sites",
-                    "path": "/docs/reference/project/sites.mdx"
-                  },
-                  {
-                    "title": "API Gateways",
-                    "path": "/docs/reference/project/api-gateways.mdx"
-                  },
-                  {
-                    "title": "Entrypoints",
-                    "path": "/docs/reference/project/entrypoints.mdx"
                   }
                 ]
               }
@@ -352,18 +312,45 @@
             ]
           },
           {
-            "title": "Nitric CLI",
-            "path": "/docs/reference/cli/_index.mdx",
+            "title": "Providers",
+            "path": "/docs/reference/api/_index.mdx",
             "routes": [
               {
-                "path": "/docs/reference/cli/commands.mdx"
-              },
-              {
-                "path": "/docs/reference/cli/plugin-commands.mdx"
-              },
-              {
-                "title": "Local Development",
-                "path": "/docs/reference/cli/local.mdx"
+                "title": "AWS",
+                "routes": [
+                  {
+                    "title": "AWS Provider Overview",
+                    "path": "/docs/reference/aws/_index.mdx"
+                  },
+                  {
+                    "title": "APIs",
+                    "path": "/docs/reference/aws/apis.mdx"
+                  },
+                  {
+                    "title": "Collections",
+                    "path": "/docs/reference/aws/collections.mdx"
+                  },
+                  {
+                    "title": "Topics",
+                    "path": "/docs/reference/aws/topics.mdx"
+                  },
+                  {
+                    "title": "Queues",
+                    "path": "/docs/reference/aws/queues.mdx"
+                  },
+                  {
+                    "title": "Secrets",
+                    "path": "/docs/reference/aws/secrets.mdx"
+                  },
+                  {
+                    "title": "Storage",
+                    "path": "/docs/reference/aws/storage.mdx"
+                  },
+                  {
+                    "title": "Schedules",
+                    "path": "/docs/reference/aws/schedules.mdx"
+                  }
+                ]
               }
             ]
           }
