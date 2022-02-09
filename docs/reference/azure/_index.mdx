@@ -1,0 +1,50 @@
+The officially supported Nitric Azure Provider.
+
+## Status: _Preview_
+
+The Azure provider is fully implemented and working. However, it is in public preview and subject to change. Where possible upgrades will be automated.
+
+Currently region support is limited to the following: 'canadacentral', 'northeurope'.
+
+## Usage
+
+The Azure provider is supported by the Nitric SDKs and CLI by default. However, credentials for an Azure account will be required when using the [deploy command](/docs/reference/) from the CLI.
+
+## Azure CLI Installation
+
+Ensure you have installed Azure CLI.
+We've summarized these here, for more options reference the [Microsoft docs](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
+
+### Windows
+
+Download & install the [latest CLI release](https://aka.ms/installazurecliwindows).
+
+### Linux
+
+```
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+```
+
+### Install with Homebrew on MacOs
+
+```bash
+brew update && brew install azure-cli
+```
+
+## Azure Credentials
+
+The Nitric Azure CLI Plugin uses the standard Azure credentials to authenticate with Azure. If you've set up local credentials for the Azure CLI or an SDK previously, these settings should work without modification.
+
+If you're setting up your credentials for the first time, simply run the following command and finish the login via the browser.
+
+```bash
+  az login
+```
+
+Verify the Azure CLI install -
+
+```bash
+  az -v
+```
+
+> See [Azure documentation](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli) for full details on credentials and configuration.
