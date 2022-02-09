@@ -11,6 +11,7 @@ await logo.write(someImageData);
 ```
 
 ## Parameters
+
 ---
 
 **data** required `Uint8Array`
