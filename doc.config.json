@@ -290,20 +290,24 @@
                 "title": "Secrets",
                 "routes": [
                   {
-                    "title": "Overview",
-                    "path": "/docs/reference/api/secrets/_index.mdx"
+                    "title": "secret()",
+                    "path": "/docs/reference/secrets/secret.mdx"
                   },
                   {
-                    "title": "Create Secrets",
-                    "path": "/docs/reference/api/secrets/create-secrets.mdx"
+                    "title": "secret().put()",
+                    "path": "/docs/reference/secrets/secret-put.mdx"
                   },
                   {
-                    "title": "Access Secrets",
-                    "path": "/docs/reference/api/secrets/access-secrets.mdx"
+                    "title": "secret().version()",
+                    "path": "/docs/reference/secrets/secret-version.mdx"
                   },
                   {
-                    "title": "Examples",
-                    "path": "/docs/reference/api/secrets/examples.mdx"
+                    "title": "secret().latest()",
+                    "path": "/docs/reference/secrets/secret-latest.mdx"
+                  },
+                  {
+                    "title": "secret().version().access()",
+                    "path": "/docs/reference/secrets/secret-version-access.mdx"
                   }
                 ]
               },
