@@ -12,6 +12,7 @@ const logoUrl = await logo.signUrl(FileMode.Read);
 ```
 
 ## Parameters
+
 ---
 
 **mode** required `FileMode`
@@ -19,8 +20,9 @@ const logoUrl = await logo.signUrl(FileMode.Read);
 The mode the signed url with operate in.
 
 Available options are:
- - `FileMode.Read`
- - `FileMode.Write`
+
+- `FileMode.Read`
+- `FileMode.Write`
 
 ---
 
@@ -46,7 +48,7 @@ const assets = bucket('assets').for('reading');
 const logo = assets.file('images/logo.png');
 
 const logoUrl = await logo.signUrl(FileMode.Read, {
-    expiry: 600
+  expiry: 600,
 });
 ```
 
