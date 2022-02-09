@@ -192,27 +192,59 @@
                 ]
               },
               {
-                "title": "Documents",
+                "title": "Collections",
                 "routes": [
                   {
-                    "title": "Overview",
-                    "path": "/docs/reference/api/documents/_index.mdx"
+                    "title": "collection()",
+                    "path": "/docs/reference/collection/collection.md"
                   },
                   {
-                    "title": "References",
-                    "path": "/docs/reference/api/documents/references.mdx"
+                    "title": "collection().collection()",
+                    "path": "/docs/reference/collection/collection-collection.md"
                   },
                   {
-                    "title": "Set Data",
-                    "path": "/docs/reference/api/documents/set-data.mdx"
+                    "title": "collection().query()",
+                    "path": "/docs/reference/collection/collection-query.md"
                   },
                   {
-                    "title": "Get and Query Data",
-                    "path": "/docs/reference/api/documents/get-query-data.mdx"
+                    "title": "collection().query().where()",
+                    "path": "/docs/reference/collection/collection-query-where.md"
                   },
                   {
-                    "title": "Delete Data",
-                    "path": "/docs/reference/api/documents/delete-data.mdx"
+                    "title": "collection().query().limit()",
+                    "path": "/docs/reference/collection/collection-query-limit.md"
+                  },
+                  {
+                    "title": "collection().query().pagingFrom()",
+                    "path": "/docs/reference/collection/collection-query-pagingfrom.md"
+                  },
+                  {
+                    "title": "collection().query().fetch()",
+                    "path": "/docs/reference/collection/collection-query-fetch.md"
+                  },
+                  {
+                    "title": "collection().query().stream()",
+                    "path": "/docs/reference/collection/collection-query-fetch.md"
+                  },
+                  {
+                    "title": "collection().doc()",
+                    "path": "/docs/reference/collection/collection-doc.md"
+                  },
+                  {
+                    "title": "collection().doc().get()",
+                    "path": "/docs/reference/collection/collection-doc-get.md"
+                  },
+                  {
+                    "title": "collection().doc().set()",
+                    "path": "/docs/reference/collection/collection-doc-set.md"
+                  },
+                  {
+                    "title": "collection().doc().delete()",
+                    "path": "/docs/reference/collection/collection-doc-delete.md"
+                  },
+                  {
+                    "title": "collection().doc().collection()",
+                    "path": "/docs/reference/collection/collection-doc-collection.md"
                   }
                 ]
               },
