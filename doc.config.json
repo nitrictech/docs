@@ -131,7 +131,7 @@
             ]
           },
           {
-            "title": "Node.js",
+            "title": "Node.js SDK",
             "path": "/docs/reference/api/_index.mdx",
             "routes": [
               {
@@ -283,24 +283,28 @@
                 "title": "Storage",
                 "routes": [
                   {
-                    "title": "Overview",
-                    "path": "/docs/reference/api/storage/_index.mdx"
+                    "title": "bucket()",
+                    "path": "/docs/reference/storage/bucket.md"
                   },
                   {
-                    "title": "Write Files",
-                    "path": "/docs/reference/api/storage/write-files.mdx"
+                    "title": "bucket.file()",
+                    "path": "/docs/reference/storage/file.md"
                   },
                   {
-                    "title": "Read Files",
-                    "path": "/docs/reference/api/storage/read-files.mdx"
+                    "title": "file.get()",
+                    "path": "/docs/reference/storage/file-get.md"
                   },
                   {
-                    "title": "Delete Files",
-                    "path": "/docs/reference/api/storage/delete-files.mdx"
+                    "title": "file.write()",
+                    "path": "/docs/reference/storage/file-write.md"
                   },
                   {
-                    "title": "Signed URLs",
-                    "path": "/docs/reference/api/storage/signed-urls.mdx"
+                    "title": "file.delete()",
+                    "path": "/docs/reference/storage/file-delete.md"
+                  },
+                  {
+                    "title": "file.signUrl()",
+                    "path": "/docs/reference/storage/file-signurl.md"
                   }
                 ]
               },
