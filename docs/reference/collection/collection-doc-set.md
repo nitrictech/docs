@@ -8,8 +8,8 @@ const profiles = collection('profiles').for('writing');
 const drakesProfile = profiles.doc('Drake Mallard');
 
 await drakesProfile.set({
-    firstName: 'Drake',
-    lastName: 'Mallard',
+  firstName: 'Drake',
+  lastName: 'Mallard',
 });
 ```
 
@@ -24,5 +24,6 @@ The document to set on the key
 ---
 
 ## See also
- - [doc().get()](./collection-doc-get.md)
- - [doc().delete()](./collection-doc-delete.md)
+
+- [doc().get()](./collection-doc-get.md)
+- [doc().delete()](./collection-doc-delete.md)

@@ -24,16 +24,16 @@ const profileQuery = profiles.query();
 let results = await profileQuery.streams();
 
 results.on('data', (doc) => {
-    // handle stream results
+  // handle stream results
 });
 
 results.on('end', () => {
-    // handle stream closing
+  // handle stream closing
 });
 ```
 
 ## See also
 
- - [query().where()]()
- - [query().limit()]()
- - [query().pagingFrom()]()
+- [query().where()]()
+- [query().limit()]()
+- [query().pagingFrom()]()

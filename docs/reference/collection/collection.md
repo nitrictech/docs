@@ -42,7 +42,6 @@ This permission allows your code to delete documents from the collection.
 
 ---
 
-
 ## Examples
 
 ### Create a collection

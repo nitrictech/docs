@@ -18,7 +18,7 @@ The name of the sub-collection to reference
 
 ## Examples
 
-### Create a query for a sub collection 
+### Create a query for a sub collection
 
 ```javascript
 import { collection } from '@nitric/sdk';
@@ -30,6 +30,4 @@ const enemiesQuery = enemies.query();
 
 ## See also
 
- - [collection().query()](./collection-query.md)
-
-
+- [collection().query()](./collection-query.md)

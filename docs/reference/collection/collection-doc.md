@@ -20,7 +20,7 @@ The key of the document to reference.
 
 ## See also
 
- - [doc().get()](./collection-doc-get.md)
- - [doc().set()](./collection-doc-set.md)
- - [doc().delete()](./collection-doc-delete.md)
- - [doc().collection()](./collection-doc-collection.md)
+- [doc().get()](./collection-doc-get.md)
+- [doc().set()](./collection-doc-set.md)
+- [doc().delete()](./collection-doc-delete.md)
+- [doc().collection()](./collection-doc-collection.md)

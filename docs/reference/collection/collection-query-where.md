@@ -55,11 +55,13 @@ import { collection } from '@nitric/sdk';
 
 const profiles = collection('profiles').for('reading');
 
-const profileQuery = profiles.query()
-    .where('firstName', '==', 'Drake')
-    .where('age', '>=', 21);
+const profileQuery = profiles
+  .query()
+  .where('firstName', '==', 'Drake')
+  .where('age', '>=', 21);
 ```
 
 ## See also
- - [query().fetch()](./collection-query-fetch.md)
- - [query().stream()](./collection-query-stream.md)
+
+- [query().fetch()](./collection-query-fetch.md)
+- [query().stream()](./collection-query-stream.md)

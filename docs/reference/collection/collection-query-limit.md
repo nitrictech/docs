@@ -20,4 +20,4 @@ The limit to apply to the query
 
 ## See also
 
- - [query().where()](./collection-query-where.md)
+- [query().where()](./collection-query-where.md)

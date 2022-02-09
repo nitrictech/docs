@@ -20,4 +20,4 @@ The paging token to apply to the query, tokens are returned from `query().fetch(
 
 ## See also
 
- - [query().fetch()](./collection-query-where.md)
+- [query().fetch()](./collection-query-where.md)

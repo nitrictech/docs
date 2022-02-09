@@ -11,7 +11,6 @@ await drakesProfile.delete();
 ```
 
 ## See also
- - [doc().set()](./collection-doc-set.md)
- - [doc().get()](./collection-doc-get.md)
 
-
+- [doc().set()](./collection-doc-set.md)
+- [doc().get()](./collection-doc-get.md)

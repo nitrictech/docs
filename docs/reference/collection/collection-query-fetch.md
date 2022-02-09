@@ -24,20 +24,20 @@ const profileQuery = profiles.query();
 let results = await profileQuery.fetch();
 
 do {
-    for(const doc of results.documents()) {
-        // Do something with the document
-        console.log(doc)
-    }
+  for (const doc of results.documents()) {
+    // Do something with the document
+    console.log(doc);
+  }
 
-    if(pagingToken) {
-        profileQuery.pagingFrom(pagingToken);
-        results = await profileQuery.fetch();
-    }
-} while (results.documents().length > 0 || results.pagingToken)
+  if (pagingToken) {
+    profileQuery.pagingFrom(pagingToken);
+    results = await profileQuery.fetch();
+  }
+} while (results.documents().length > 0 || results.pagingToken);
 ```
 
 ## See also
 
- - [query().where()]()
- - [query().limit()]()
- - [query().pagingFrom()]()
+- [query().where()]()
+- [query().limit()]()
+- [query().pagingFrom()]()

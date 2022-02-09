@@ -11,7 +11,6 @@ const drakeMallard = await drakesProfile.get();
 ```
 
 ## See also
- - [doc().set()](./collection-doc-set.md)
- - [doc().delete()](./collection-doc-delete.md)
 
-
+- [doc().set()](./collection-doc-set.md)
+- [doc().delete()](./collection-doc-delete.md)
