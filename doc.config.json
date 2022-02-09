@@ -249,23 +249,19 @@
                 ]
               },
               {
-                "title": "Events",
+                "title": "Topics",
                 "routes": [
                   {
-                    "title": "Overview",
-                    "path": "/docs/reference/api/events/_index.mdx"
+                    "title": "topic()",
+                    "path": "/docs/reference/topic/topic.md"
                   },
                   {
-                    "title": "Define Topics",
-                    "path": "/docs/reference/api/events/define-topics.mdx"
+                    "title": "topic().publish()",
+                    "path": "/docs/reference/topic/topic-publish.md"
                   },
                   {
-                    "title": "Publish Events",
-                    "path": "/docs/reference/api/events/publish.mdx"
-                  },
-                  {
-                    "title": "Subscribe to Events",
-                    "path": "/docs/reference/api/events/subscribe.mdx"
+                    "title": "topic().subscribe()",
+                    "path": "/docs/reference/topic/topic-subscribe.md"
                   }
                 ]
               },
