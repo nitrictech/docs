@@ -1,0 +1,16 @@
+Nitric Topics are deployed to GCP using [pubsub](https://cloud.google.com/pubsub).
+
+## GCP Resources
+
+The following resources are created when deploying Topics to Azure:
+
+- Pubsub Topic
+- Pubsub Subscription (push)
+- Cloud Run (subscribers)
+
+## Deployment
+
+During deployment Nitric's CLI builds your Topics will be built as follows:
+
+- The topic defintion and resource group are deployed as an pubsub topic
+- Cloud run applications that subscribe will have a push subscription deployed for them
