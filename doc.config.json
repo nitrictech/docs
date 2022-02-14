@@ -76,6 +76,15 @@
                 "path": "/docs/guides/_index.md"
               }
             ]
+          },
+          {
+            "title": "More",
+            "routes": [
+              {
+                "title": "Frequently Asked Questions",
+                "path": "/docs/faq.mdx"
+              }
+            ]
           }
         ],
         "reference": [
