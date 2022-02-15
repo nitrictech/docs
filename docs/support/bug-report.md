@@ -39,7 +39,7 @@ When describing the bug, it's help to produce the following information:
 Any information about your environment and setup will be important to help reproduce the bug. Please include the following:
 
 - Which version of the **Nitric CLI** you are using (run `nitric version` to see your version)
-  - Your **Operating System** and **Go** version
+- Your **Operating System**
 - Any nitric dependencies and their version such as SDKs or Middleware
 - Which cloud providers you are deploying to
 
