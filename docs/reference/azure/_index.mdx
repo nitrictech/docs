@@ -2,9 +2,9 @@ The officially supported Nitric Azure Provider.
 
 ## Status: _Preview_
 
-The Azure provider is fully implemented and working. However, it is in public preview and subject to change. Where possible upgrades will be automated.
+The Azure provider is implemented and working, except for [Schedules](./schedules). However, it is in public preview and subject to change. Where possible upgrades will be automated.
 
-Currently region support is limited to 'us-east-2', this will expand as the 'Container Apps' becomes available in other regions.
+> Nitric runs Functions (APIs, Schedules and Topic Subscribers) on Azure Container Apps, which is currently in preview in the US East 2 region only.
 
 ## Usage
 
@@ -12,8 +12,7 @@ The Azure provider is supported by the Nitric SDKs and CLI by default. However, 
 
 ## Azure CLI Installation
 
-Ensure you have installed Azure CLI.
-We've summarized instructions here, for more options reference the [Microsoft docs](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
+Installing the Azure CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Microsoft docs](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
 
 ### Windows
 
@@ -33,9 +32,9 @@ brew update && brew install azure-cli
 
 ## Azure Credentials
 
-The Nitric Azure CLI Plugin uses the standard Azure credentials to authenticate with Azure. If you've set up local credentials for the Azure CLI or an SDK previously, these settings should work without modification.
+The Nitric CLI uses the standard Azure credentials to authenticate with Azure. If you've set up local credentials for the Azure CLI or an SDK previously, these settings should work without modification.
 
-If you're setting up your credentials for the first time, simply run the following command and finish the login via the browser.
+If you're setting up your credentials for the first time, simply run azure login command and finish the login via your browser.
 
 ```bash
   az login
