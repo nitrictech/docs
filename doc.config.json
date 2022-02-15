@@ -359,18 +359,12 @@
                     "path": "/docs/reference/aws/schedules.mdx"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "title": "Cloud Providers",
-            "path": "/docs/reference/api/_index.mdx",
-            "routes": [
+              },
               {
                 "title": "Azure",
                 "routes": [
                   {
-                    "title": "Overview",
+                    "title": "Azure Provider Overview",
                     "path": "/docs/reference/azure/_index.mdx"
                   },
                   {
