@@ -368,10 +368,48 @@
                     "path": "/docs/reference/aws/schedules.mdx"
                   }
                 ]
+              },
+              {
+                "title": "Azure",
+                "routes": [
+                  {
+                    "title": "Azure Provider Overview",
+                    "path": "/docs/reference/azure/_index.mdx"
+                  },
+                  {
+                    "title": "APIs",
+                    "path": "/docs/reference/azure/apis.mdx"
+                  },
+                  {
+                    "title": "Collections",
+                    "path": "/docs/reference/azure/collections.mdx"
+                  },
+                  {
+                    "title": "Queues",
+                    "path": "/docs/reference/azure/queues.mdx"
+                  },
+                  {
+                    "title": "Schedules",
+                    "path": "/docs/reference/azure/schedules.mdx"
+                  },
+                  {
+                    "title": "Secrets",
+                    "path": "/docs/reference/azure/secrets.mdx"
+                  },
+                  {
+                    "title": "Storage",
+                    "path": "/docs/reference/azure/storage.mdx"
+                  },
+                  {
+                    "title": "Topics",
+                    "path": "/docs/reference/azure/topics.mdx"
+                  }
+                ]
               }
             ]
           }
         ],
+
         "support": [
           {
             "title": "Support",
