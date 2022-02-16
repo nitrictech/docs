@@ -366,7 +366,7 @@
         "support": [
           {
             "title": "Support",
-            "path": "/docs/support/support.md",
+            "path": "/docs/support/_index.md",
             "routes": [
               {
                 "title": "Creating bug reports",
