@@ -17,16 +17,7 @@
               },
               {
                 "title": "Concepts",
-                "routes": [
-                  {
-                    "title": "TODO",
-                    "path": "/docs/intro/concepts/projects.mdx"
-                  },
-                  {
-                    "title": "Project Structure",
-                    "path": "/docs/overview/structures.md"
-                  }
-                ]
+                "path": "/docs/concepts.mdx"
               }
             ]
           },
