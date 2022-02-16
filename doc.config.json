@@ -413,11 +413,11 @@
         "support": [
           {
             "title": "Support",
-            "path": "/docs/support/_index.mdx",
+            "path": "/docs/support/_index.md",
             "routes": [
               {
                 "title": "Creating bug reports",
-                "path": "/docs/support/creating-bug-reports.mdx"
+                "path": "/docs/support/bug-report.md"
               }
             ]
           }
