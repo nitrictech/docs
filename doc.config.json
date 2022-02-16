@@ -58,7 +58,7 @@
                   },
                   {
                     "title": "Queues",
-                    "path": "/docs/messaging/topics.md"
+                    "path": "/docs/messaging/queues.md"
                   }
                 ]
               },
