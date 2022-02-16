@@ -242,20 +242,16 @@
                 "title": "Queues",
                 "routes": [
                   {
-                    "title": "Overview",
-                    "path": "/docs/reference/api/queues/_index.mdx"
+                    "title": "queue()",
+                    "path": "/docs/reference/queues/queue.mdx"
                   },
                   {
-                    "title": "Define Queues",
-                    "path": "/docs/reference/api/queues/define-queues.mdx"
+                    "title": "queue().send()",
+                    "path": "/docs/reference/queues/queue-send.mdx"
                   },
                   {
-                    "title": "Send Tasks",
-                    "path": "/docs/reference/api/queues/send-tasks.mdx"
-                  },
-                  {
-                    "title": "Receive and Complete Tasks",
-                    "path": "/docs/reference/api/queues/receive-complete-tasks.mdx"
+                    "title": "queue().receive()",
+                    "path": "/docs/reference/queues/queue-receive.mdx"
                   }
                 ]
               },
