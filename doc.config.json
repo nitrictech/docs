@@ -60,15 +60,6 @@
             ]
           },
           {
-            "title": "Guides",
-            "routes": [
-              {
-                "title": "Slack Clone",
-                "path": "/docs/guides/_index.md"
-              }
-            ]
-          },
-          {
             "title": "More",
             "routes": [
               {
@@ -80,23 +71,7 @@
         ],
         "reference": [
           {
-            "title": "Reference",
-            "path": "/docs/reference/_index.mdx",
-            "routes": [
-              {
-                "title": "General",
-                "routes": [
-                  {
-                    "title": "TODO",
-                    "path": "/docs/reference/project/stack.mdx"
-                  }
-                ]
-              }
-            ]
-          },
-          {
             "title": "Node.js SDK",
-            "path": "/docs/reference/api/_index.mdx",
             "routes": [
               {
                 "title": "APIs",
@@ -188,7 +163,7 @@
                   },
                   {
                     "title": "collection().query().stream()",
-                    "path": "/docs/reference/collection/collection-query-fetch.md"
+                    "path": "/docs/reference/collection/collection-query-stream.md"
                   },
                   {
                     "title": "collection().doc()",
@@ -317,7 +292,6 @@
           },
           {
             "title": "Providers",
-            "path": "/docs/reference/api/_index.mdx",
             "routes": [
               {
                 "title": "AWS",

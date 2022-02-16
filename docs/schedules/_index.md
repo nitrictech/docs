@@ -1,7 +1,3 @@
-# Schedules
-
-## Overview
-
 Nitric makes it easy to create functions that run on a schedule. Schedules are most useful for batch workloads, reporting and other activities that happen on a set cadence.
 
 ### Frequencies

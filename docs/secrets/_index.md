@@ -1,7 +1,3 @@
-# Secrets
-
-## Overview
-
 Nitric Secrets makes securely storing, updating and retrieving sensitive values like database credentials and API keys a breeze.
 
 ### Secrets

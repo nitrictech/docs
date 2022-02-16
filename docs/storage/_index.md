@@ -1,7 +1,3 @@
-# Storage
-
-## Overview
-
 Nitric Storage simplifies securely storing and retrieving large files.
 
 ### Files

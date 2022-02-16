@@ -1,8 +1,4 @@
-# Collections
-
-## Overview
-
-Nitric Collections simplify storing data into easily accessible documents.
+Nitric Collections simplify storing and querying data in easily accessible documents.
 
 ### Collections
 
