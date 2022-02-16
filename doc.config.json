@@ -60,15 +60,6 @@
             ]
           },
           {
-            "title": "Guides",
-            "routes": [
-              {
-                "title": "Slack Clone",
-                "path": "/docs/guides/_index.md"
-              }
-            ]
-          },
-          {
             "title": "More",
             "routes": [
               {
