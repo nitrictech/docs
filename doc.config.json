@@ -65,6 +65,16 @@
               {
                 "title": "Frequently Asked Questions",
                 "path": "/docs/faq.mdx"
+              },
+              {
+                "title": "Support",
+                "path": "/docs/support/_index.md",
+                "routes": [
+                  {
+                    "title": "Creating bug reports",
+                    "path": "/docs/support/bug-report.md"
+                  }
+                ]
               }
             ]
           }
@@ -366,19 +376,6 @@
                     "path": "/docs/reference/azure/topics.mdx"
                   }
                 ]
-              }
-            ]
-          }
-        ],
-
-        "support": [
-          {
-            "title": "Support",
-            "path": "/docs/support/_index.md",
-            "routes": [
-              {
-                "title": "Creating bug reports",
-                "path": "/docs/support/bug-report.md"
               }
             ]
           }
