@@ -67,4 +67,6 @@ const theSecret = await secrets()
   .access();
 ```
 
-<!-- TODO: add `what's next` section with links to reference pages -->
+## What's next?
+
+- Learn more about secrets in our [reference docs](/docs/reference/secrets/secret).

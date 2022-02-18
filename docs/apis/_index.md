@@ -79,4 +79,4 @@ farAwayGalaxyApi.delete('/planets/:name', async (ctx) => {
 
 <!-- TODO: ================= update link below with reference page ================= -->
 
-- Learn more about apis in our [reference docs]().
+- Learn more about apis in our [reference docs](/docs/reference/api/api).
