@@ -43,10 +43,6 @@ userCreatedTopic.subscribe(async (ctx) => {
 });
 ```
 
-<!--
 ## What's next?
 
-TODO: ================= update link below with reference page =================
-
-- Learn more about topics and events in our reference docs.
--->
+- Learn more about topics in our [reference docs](/docs/reference/topic/topic).

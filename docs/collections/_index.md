@@ -118,4 +118,4 @@ foundStates.on('data', (doc) => {
 
 <!-- TODO: ================= update link below with reference page ================= -->
 
-- Learn more about collections and documents in our [reference docs]().
+- Learn more about collections and documents in our [reference docs](/docs/reference/collection/collection).

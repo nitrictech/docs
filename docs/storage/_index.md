@@ -65,4 +65,6 @@ const signedUrl = await profiles
   .signUrl(storage.FileMode.Read);
 ```
 
-<!-- TODO: add `what's next` section with links to reference pages -->
+## What's next?
+
+- Learn more about storage in our [reference docs](/docs/reference/storage/bucket).

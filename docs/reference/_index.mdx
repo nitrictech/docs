@@ -2,13 +2,15 @@ Nitric apps have access to important cloud features. These features are provided
 
 Here is a list of features offered by Nitric and primary services used to provide them:
 
-| **Feature**                                        | **AWS**                                    | **Azure**                        | **Google Cloud**               | **Local**                                               |
-| -------------------------------------------------- | ------------------------------------------ | -------------------------------- | ------------------------------ | ------------------------------------------------------- |
-| [APIs](./api/api)                                  | [API Gateway](./aws/apis)                  | [API Management](./azure/apis)   | API Gateway                    | [Custom](https://github.com/nitrictech/dev-api-gateway) |
-| [Collections](./collection/collection)             | [DynamoDB](./aws/collections)              | [Cosmos DB](./azure/collections) | FireStore                      | BoltDB                                                  |
-| [Messaging: Topics](./topic/topic)                 | [SNS](./aws/topics)                        | [Event Grid](./azure/topics)     | PubSub                         | Custom                                                  |
-| [Messaging: Queues](./queues/queue)                | [SQS](./aws/queues)                        | [Storage Queues](./azure/queues) | PubSub<br/>_Pull Subscription_ | Custom                                                  |
-| [Schedules](./schedule/schedule)                   | [CloudWatch Event Bridge](./aws/schedules) | 🚧 _In Progress_                 | Cloud Scheduler                | _currently unavailable_                                 |
-| [Secrets](./secrets/secret)                        | [Secrets Manager](./aws/secrets)           | [Key Vault](./azure/secrets)     | Secret Manager                 | Custom                                                  |
-| [Storage](./storage/bucket)                        | [S3](./aws/storage)                        | [Blob Storage](./azure/storage)  | Cloud Storage                  | MinIO                                                   |
-| Compute _(Handlers)_<br/>_APIs, Schedules, Topics_ | Lambda                                     | Container Apps                   | CloudRun                       | Docker                                                  |
+| **Feature**                                        | **AWS**                                              | **Azure**                                  | **Google Cloud**               | **Local**                                               |
+| -------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------ | ------------------------------ | ------------------------------------------------------- |
+| [APIs](./reference/api/api)                        | [API Gateway](./reference/aws/apis)                  | [API Management](./reference/azure/apis)   | API Gateway                    | [Custom](https://github.com/nitrictech/dev-api-gateway) |
+| [Collections](./reference/collection/collection)   | [DynamoDB](./reference/aws/collections)              | [Cosmos DB](./reference/azure/collections) | FireStore                      | BoltDB                                                  |
+| [Messaging: Topics](./reference/topic/topic)       | [SNS](./reference/aws/topics)                        | [Event Grid](./reference/azure/topics)     | PubSub                         | Custom                                                  |
+| [Messaging: Queues](./reference/queues/queue)      | [SQS](./reference/aws/queues)                        | [Storage Queues](./reference/azure/queues) | PubSub<br/>_Pull Subscription_ | Custom                                                  |
+| [Schedules](.reference/schedule/schedule)          | [CloudWatch Event Bridge](./reference/aws/schedules) | 🚧 _In Progress_                           | Cloud Scheduler                | _currently unavailable_                                 |
+| [Secrets](./reference/secrets/secret)              | [Secrets Manager](./reference/aws/secrets)           | [Key Vault](./reference/azure/secrets)     | Secret Manager                 | Custom                                                  |
+| [Storage](./reference/storage/bucket)              | [S3](./reference/aws/storage)                        | [Blob Storage](./reference/azure/storage)  | Cloud Storage                  | MinIO                                                   |
+| Compute _(Handlers)_<br/>_APIs, Schedules, Topics_ | Lambda                                               | Container Apps                             | CloudRun                       | Docker                                                  |
+
+reference
