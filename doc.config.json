@@ -81,6 +81,16 @@
         ],
         "reference": [
           {
+            "title": "Reference",
+            "path": "/docs/reference/_index.mdx",
+            "routes": [
+              {
+                "title": "General",
+                "path": "/docs/reference/_index.mdx"
+              }
+            ]
+          },
+          {
             "title": "Node.js SDK",
             "routes": [
               {
