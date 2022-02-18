@@ -329,12 +329,12 @@
                     "path": "/docs/reference/aws/collections.mdx"
                   },
                   {
-                    "title": "Topics",
-                    "path": "/docs/reference/aws/topics.mdx"
-                  },
-                  {
                     "title": "Queues",
                     "path": "/docs/reference/aws/queues.mdx"
+                  },
+                  {
+                    "title": "Schedules",
+                    "path": "/docs/reference/aws/schedules.mdx"
                   },
                   {
                     "title": "Secrets",
@@ -345,8 +345,8 @@
                     "path": "/docs/reference/aws/storage.mdx"
                   },
                   {
-                    "title": "Schedules",
-                    "path": "/docs/reference/aws/schedules.mdx"
+                    "title": "Topics",
+                    "path": "/docs/reference/aws/topics.mdx"
                   }
                 ]
               },
