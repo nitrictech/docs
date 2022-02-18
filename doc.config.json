@@ -71,6 +71,10 @@
                 "path": "/docs/support/_index.md",
                 "routes": [
                   {
+                    "title": "Contributions",
+                    "path": "/docs/support/_index.md"
+                  },
+                  {
                     "title": "Creating bug reports",
                     "path": "/docs/support/bug-report.md"
                   }
