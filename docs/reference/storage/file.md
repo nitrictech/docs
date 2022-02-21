@@ -25,5 +25,6 @@ The file does not need to exist, only a reference to that file is being created.
 ## Available Operations
 
 - [file.get()](./file-get.md)
-- [file.put()](./file-put.md)
+- [file.write()](./file-write.md)
 - [file.delete()](./file-delete.md)
+- [file.signUrl()](./file-signurl.md)
