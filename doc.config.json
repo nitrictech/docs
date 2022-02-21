@@ -104,51 +104,51 @@
                     "path": "/docs/reference/api/api.mdx"
                   },
                   {
-                    "title": "api().get()",
+                    "title": "api.get()",
                     "path": "/docs/reference/api/api-get.mdx"
                   },
                   {
-                    "title": "api().post()",
+                    "title": "api.post()",
                     "path": "/docs/reference/api/api-post.mdx"
                   },
                   {
-                    "title": "api().put()",
+                    "title": "api.put()",
                     "path": "/docs/reference/api/api-put.mdx"
                   },
                   {
-                    "title": "api().delete()",
+                    "title": "api.delete()",
                     "path": "/docs/reference/api/api-delete.mdx"
                   },
                   {
-                    "title": "api().patch()",
+                    "title": "api.patch()",
                     "path": "/docs/reference/api/api-patch.mdx"
                   },
                   {
-                    "title": "api().route()",
+                    "title": "api.route()",
                     "path": "/docs/reference/api/api-route.mdx"
                   },
                   {
-                    "title": "api().route().all()",
+                    "title": "api.route.all()",
                     "path": "/docs/reference/api/api-route-all.mdx"
                   },
                   {
-                    "title": "api().route().get()",
+                    "title": "api.route.get()",
                     "path": "/docs/reference/api/api-route-get.mdx"
                   },
                   {
-                    "title": "api().route().post()",
+                    "title": "api.route.post()",
                     "path": "/docs/reference/api/api-route-post.mdx"
                   },
                   {
-                    "title": "api().route().put()",
+                    "title": "api.route.put()",
                     "path": "/docs/reference/api/api-route-put.mdx"
                   },
                   {
-                    "title": "api().route().delete()",
+                    "title": "api.route.delete()",
                     "path": "/docs/reference/api/api-route-delete.mdx"
                   },
                   {
-                    "title": "api().route().patch()",
+                    "title": "api.route.patch()",
                     "path": "/docs/reference/api/api-route-patch.mdx"
                   }
                 ]
@@ -161,51 +161,51 @@
                     "path": "/docs/reference/collection/collection.md"
                   },
                   {
-                    "title": "collection().collection()",
+                    "title": "collection.collection()",
                     "path": "/docs/reference/collection/collection-collection.md"
                   },
                   {
-                    "title": "collection().query()",
+                    "title": "collection.query()",
                     "path": "/docs/reference/collection/collection-query.md"
                   },
                   {
-                    "title": "collection().query().where()",
+                    "title": "collection.query.where()",
                     "path": "/docs/reference/collection/collection-query-where.md"
                   },
                   {
-                    "title": "collection().query().limit()",
+                    "title": "collection.query.limit()",
                     "path": "/docs/reference/collection/collection-query-limit.md"
                   },
                   {
-                    "title": "collection().query().pagingFrom()",
+                    "title": "collection.query.pagingFrom()",
                     "path": "/docs/reference/collection/collection-query-pagingfrom.md"
                   },
                   {
-                    "title": "collection().query().fetch()",
+                    "title": "collection.query.fetch()",
                     "path": "/docs/reference/collection/collection-query-fetch.md"
                   },
                   {
-                    "title": "collection().query().stream()",
+                    "title": "collection.query.stream()",
                     "path": "/docs/reference/collection/collection-query-stream.md"
                   },
                   {
-                    "title": "collection().doc()",
+                    "title": "collection.doc()",
                     "path": "/docs/reference/collection/collection-doc.md"
                   },
                   {
-                    "title": "collection().doc().get()",
+                    "title": "collection.doc.get()",
                     "path": "/docs/reference/collection/collection-doc-get.md"
                   },
                   {
-                    "title": "collection().doc().set()",
+                    "title": "collection.doc.set()",
                     "path": "/docs/reference/collection/collection-doc-set.md"
                   },
                   {
-                    "title": "collection().doc().delete()",
+                    "title": "collection.doc.delete()",
                     "path": "/docs/reference/collection/collection-doc-delete.md"
                   },
                   {
-                    "title": "collection().doc().collection()",
+                    "title": "collection.doc.collection()",
                     "path": "/docs/reference/collection/collection-doc-collection.md"
                   }
                 ]
@@ -218,11 +218,11 @@
                     "path": "/docs/reference/topic/topic.md"
                   },
                   {
-                    "title": "topic().publish()",
+                    "title": "topic.publish()",
                     "path": "/docs/reference/topic/topic-publish.md"
                   },
                   {
-                    "title": "topic().subscribe()",
+                    "title": "topic.subscribe()",
                     "path": "/docs/reference/topic/topic-subscribe.md"
                   }
                 ]
@@ -235,11 +235,11 @@
                     "path": "/docs/reference/queues/queue.mdx"
                   },
                   {
-                    "title": "queue().send()",
+                    "title": "queue.send()",
                     "path": "/docs/reference/queues/queue-send.mdx"
                   },
                   {
-                    "title": "queue().receive()",
+                    "title": "queue.receive()",
                     "path": "/docs/reference/queues/queue-receive.mdx"
                   }
                 ]
@@ -252,19 +252,19 @@
                     "path": "/docs/reference/secrets/secret.mdx"
                   },
                   {
-                    "title": "secret().put()",
+                    "title": "secret.put()",
                     "path": "/docs/reference/secrets/secret-put.mdx"
                   },
                   {
-                    "title": "secret().version()",
+                    "title": "secret.version()",
                     "path": "/docs/reference/secrets/secret-version.mdx"
                   },
                   {
-                    "title": "secret().latest()",
+                    "title": "secret.latest()",
                     "path": "/docs/reference/secrets/secret-latest.mdx"
                   },
                   {
-                    "title": "secret().version().access()",
+                    "title": "secret.version.access()",
                     "path": "/docs/reference/secrets/secret-version-access.mdx"
                   }
                 ]
@@ -306,7 +306,7 @@
                     "path": "/docs/reference/schedule/schedule.md"
                   },
                   {
-                    "title": "schedule().every()",
+                    "title": "schedule.every()",
                     "path": "/docs/reference/schedule/schedule-every.md"
                   }
                 ]
