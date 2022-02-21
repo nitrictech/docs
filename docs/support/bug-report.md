@@ -63,7 +63,7 @@ api('public').get('/customers', (ctx) => {
 });
 ```
 
-Then I run `nitricz run -s ./ "functions/*.ts"` to run nitric locally.
+Then I run `nitric run -s ./ "functions/*.ts"` to run nitric locally.
 
 **What I expected:**
 
@@ -81,6 +81,6 @@ I did not receive a response from the server.
 
 **Environment and setup information:**
 
-- Nitric CLI version: `Nitric Helper CLI v2.0'
-- Dependencies used: @nitric/sdk@1.0.0
-- Cloud providers: AWS, Google Cloud
+- Nitric CLI version: `Nitric Helper CLI v2.0`
+- Dependencies used: `@nitric/sdk@1.0.0`
+- Cloud providers: AWS and Google Cloud
