@@ -68,16 +68,21 @@
               },
               {
                 "title": "Support",
+                "path": "/docs/support/_index.mdx",
                 "routes": [
+                  {
+                    "title": "General",
+                    "path": "/docs/support/_index.mdx"
+                  },
                   {
                     "title": "Creating bug reports",
                     "path": "/docs/support/bug-report.md"
-                  },
-                  {
-                    "title": "Contributions",
-                    "path": "/docs/support/contributions.md"
                   }
                 ]
+              },
+              {
+                "title": "Contributions",
+                "path": "/docs/support/contributions.md"
               }
             ]
           }
