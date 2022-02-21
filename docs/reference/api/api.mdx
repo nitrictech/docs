@@ -20,12 +20,10 @@ The unique name of this API within the app. Subsequent calls to `api` with the s
 
 Additional options when creating the API.
 
-| Properties                                                                                                                     |
-| ------------------------------------------------------------------------------------------------------------------------------ |
-| **path** optional `string` <br/> base path for all routes in the API.                                                          |
-| **middleware** optional `HttpMiddleware` or `HttpMiddleware[]` <br/> Middleware to apply to all routes and methods of the API. |
-
----
+| Property       | Required | Description                                               | Type                                   |
+| -------------- | -------- | --------------------------------------------------------- | -------------------------------------- |
+| **path**       | No       | Base path for all routes in the API.                      | `string`                               |
+| **middleware** | No       | Middleware to apply to all routes and methods of the API. | `HttpMiddleware` or `HttpMiddleware[]` |
 
 ## Notes
 
