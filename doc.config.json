@@ -88,8 +88,12 @@
             "path": "/docs/reference/_index.mdx",
             "routes": [
               {
-                "title": "General",
+                "title": "Overview",
                 "path": "/docs/reference/_index.mdx"
+              },
+              {
+                "title": "Access Control",
+                "path": "/docs/reference/access-control.mdx"
               }
             ]
           },
