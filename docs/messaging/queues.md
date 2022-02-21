@@ -6,7 +6,7 @@ Queues and Tasks provide a scalable, decoupled, way for functions and containers
 
 A queue is a named target to which tasks can be sent. They can be thought of as a collection of tasks that are grouped together.
 
-They're awesome for allowing functions to process work asynchronously. Queues are often paired with [Schedules](/docs/schedules/_index.md) to support batch workloads, like nightly processes.
+They're awesome for allowing functions to process work asynchronously. Queues are often paired with [Schedules](/docs/schedules) to support batch workloads, like nightly processes.
 
 ### Task
 
