@@ -18,6 +18,10 @@
               {
                 "title": "Concepts",
                 "path": "/docs/concepts.mdx"
+              },
+              {
+                "title": "Getting Started",
+                "path": "/docs/getting-started.mdx"
               }
             ]
           },

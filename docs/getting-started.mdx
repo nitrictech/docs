@@ -1,0 +1,93 @@
+## Project set up
+
+After you have installed the Nitric cli, you can start building a project.
+
+Create a new folder and initialize a node project.
+
+```
+npm init
+```
+
+Add the nitric sdk.
+
+```
+npm install @nitric/sdk
+
+or
+
+yarn add @nitric/sdk
+```
+
+Add a folder to put your functions into, and add a file to start building. Your project should now look like:
+
+```
+node_modules/
+|-- ...
+functions/
+|-- hello.ts
+package.json
+yarn.lock
+```
+
+## Building the App
+
+Lets build a simple API that will greet a user.
+
+Start by creating a new `api` object in `hello.ts`
+
+```typescript
+import { api } from '@nitric/sdk';
+
+const helloApi = api('greeter');
+```
+
+We can then map functions to the routes of the API. These routes will match on the specified HTTP method.
+
+```typescript
+helloApi.get('/hello/:name', (ctx) => {
+  const { name } = ctx.req.params;
+
+  ctx.res.body = `Hello ${name}`;
+
+  return ctx;
+});
+```
+
+This particular endpoint will match on any GET requests to `/greeter/hello/:name`, name being a parameter. It pulls the name from the request parameters, writes to the response body and returns the context.
+
+Thus, we would expect this to return 'Hello nitric' if a we routed to `/greeter/hello/nitric`.
+
+## Testing the App
+
+We can then test it locally using the Nitric cli.
+
+```
+nitric run functions/hello.ts
+```
+
+This will start the necessary application containers as well as the gateway that will route our request to the container.
+
+```
+> curl localhost:9001/greeter/hello/nitric
+
+Hello nitric
+```
+
+
+## Deploying the app
+
+Now that we've implemented a basic API and tested that it works, we can deploy it to any of the major cloud platforms.
+
+The first step for this is to set up the credentials for your chosen cloud platform. You can follow along in the [provider overview]('/reference/aws').
+
+You can then deploy by specifying the handler location and the provider.
+
+```
+nitric deployment apply functions/hello.ts --provider aws
+
+nitric deployment apply functions/hello.ts --provider gcp
+
+nitric deployment apply functions/hello.ts --provider azure
+```
+
+You can then go to your cloud dashboard and you'll be able to see and interact with your API.
