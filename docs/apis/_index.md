@@ -1,9 +1,3 @@
----
-description: A nice description for APIs
----
-
-## Overview
-
 Nitric APIs make it dead simple to define and map functions to HTTP APIs.
 
 ## Concepts
