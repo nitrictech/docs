@@ -28,7 +28,7 @@ const profiles = bucket('profiles').for('reading', 'writing', 'deleting');
 
 ### Writing files
 
-You can write files to a bucket using pre-signed URLs, which you can read about below, or directly from your application code.
+You can write files to a bucket directly from your application code or by using [pre-signed URLs](#accessing-files).
 
 ```javascript
 // Example byte array
@@ -39,7 +39,7 @@ await profiles.file('users/drake-mallard/profile.png').write(profileImg);
 
 ### Reading files
 
-Just like with writing, you can read files with pre-signed URLs, or directly in your code.
+Just like with writing, you can read files directly in your code, or using [pre-signed URLs](#accessing-files).
 
 ```javascript
 const bytes = await profiles.file('users/bruce-wayne/profile.png').read();
@@ -63,6 +63,8 @@ import { storage } from '@nitric/sdk';
 const signedUrl = await profiles
   .file('profile.png')
   .signUrl(storage.FileMode.Read);
+
+// provide the signedUrl value to a user for direct file access
 ```
 
 ## What's next?
