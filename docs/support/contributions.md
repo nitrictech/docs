@@ -1,5 +1,3 @@
-## Support
-
 Thanks for your interest in contributing to the Nitric community.
 
 There are plenty of ways to get involved, we've summarized a few here to get you started.
