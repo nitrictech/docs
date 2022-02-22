@@ -78,7 +78,7 @@ The response object provides `status` and `headers` properties you can set to re
 ```javascript
 galaxyApi.get('/planets/alderaan', async (ctx) => {
   ctx.res.status = 301;
-  ctx.res.headers['Location'] = 'https://example.org/debris/alderann';
+  ctx.res.headers['Location'] = ['https://example.org/debris/alderann'];
   return ctx;
 });
 ```
