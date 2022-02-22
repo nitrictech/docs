@@ -33,6 +33,12 @@ Examples include:
 
 The Nitric CLI is no longer distributed via NPM. A fresh installation is neccessary.
 
+Uninstall the existing CLI with NPM or manually if you didn't start with NPM.
+
+```bash
+  npm uninstall -g @nitric/cli
+```
+
 Follow our [installation guide](/docs/installation) to set up the Nitric CLI.
 
 ## Upgrade existing Nitric projects
