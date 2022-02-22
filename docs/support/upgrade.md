@@ -1,4 +1,6 @@
-## Upgrading your project from Nitric 1.0
+## Upgrading your project
+
+In this section we will discuss changes and upgrade advice for users upgrading from versions of Nitric reliant on a nitric.yaml file.
 
 ### What you’ll learn
 
@@ -11,9 +13,11 @@
 
 The Node SDK now utilizes a 'Config-as-Code' design pattern.
 
-Resources, permissions and configuration will infer automatically from your code.
+- Resources, permissions and configuration will infer automatically from your code.
 
-The API has undergone some changes. Full details can be found in the [documentation](/docs).
+The API defintions have minor changes to support the new pattern.
+
+- Examples on how to use the API can be found in the [documentation](/docs).
 
 ### Why the change?
 
@@ -27,9 +31,9 @@ Examples include:
 
 ## Install the new Nitric CLI
 
-No upgrade required.
+The Nitric CLI is no longer distributed via NPM. A fresh installation is neccessary.
 
-Follow our [installation guide](/docs/installation) to set up the new Nitric CLI.
+Follow our [installation guide](/docs/installation) to set up the Nitric CLI.
 
 ## Upgrade existing Nitric projects
 
@@ -83,12 +87,16 @@ const publicApi = api('public');
 publicApi.post('/examples', async (ctx) => {
   // Handler code goes here
 }
+```
 
+```typescript
 // Create a schedule that runs every 5 minutes
 schedule('process-transactions').every('5 minutes', async (ctx) => {
-   // Handler code goes here
+  // Handler code goes here
 });
+```
 
+```typescript
 // Subscribe to a topic
 updates.subscribe(async (ctx) => {
   // Handler code goes here
