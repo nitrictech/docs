@@ -81,6 +81,10 @@
                   {
                     "title": "Creating bug reports",
                     "path": "/docs/support/bug-report.md"
+                  },
+                  {
+                    "title": "Upgrading",
+                    "path": "/docs/support/upgrade"
                   }
                 ]
               },
