@@ -5,7 +5,7 @@ In this section we will discuss changes and upgrade advice for users upgrading f
 ### What you’ll learn
 
 - Install the new Nitric CLI
-- Upgrade Nitric projects targetting the X CLI
+- Upgrade existing Nitric projects
 
 > &#x26a0;&#xfe0f; ** Info ** - Ensure all source code is safely backed up in repository.
 
