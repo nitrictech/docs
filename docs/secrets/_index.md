@@ -46,8 +46,8 @@ const apiKey = await secrets()
   .secret('api-key')
   .put('6e1d9008-f06b-1111-2222-9b6989d58999');
 
-// We can get the version ID of our newly created secret using version()
-apiKey.version();
+// We can get the version ID of our newly created secret using version
+apiKey.version;
 ```
 
 > Secret versioning is automatic. Every time you `put` a new secret value a new version will be created and set as the `latest` version.
