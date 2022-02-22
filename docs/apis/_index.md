@@ -33,7 +33,7 @@ galaxyApi.get('/planets', async (ctx) => {
 
 // Create planets
 galaxyApi.post('/planets', async (ctx) => {
-  const data = JSON.parse(ctx.req.data);
+  const data = ctx.req.json();
   // create a new planet
   createPlanet(data);
   ctx.res.status = 201;
@@ -57,7 +57,7 @@ galaxyApi.get('/planets/:name', async (ctx) => {
 
 galaxyApi.patch('/planets/:name', async (ctx) => {
   const { name } = ctx.req.params;
-  const update = JSON.parse(ctx.req.data);
+  const update = ctx.req.json();
   // update a specific planet
   const planet = updatePlanet(name, update);
   return ctx;
@@ -78,7 +78,7 @@ The response object provides `status` and `headers` properties you can set to re
 ```javascript
 galaxyApi.get('/planets/alderaan', async (ctx) => {
   ctx.res.status = 301;
-  ctx.res.headers['Location'] = 'https://example.org/debris/alderann';
+  ctx.res.headers['Location'] = ['https://example.org/debris/alderann'];
   return ctx;
 });
 ```
