@@ -1,93 +1,144 @@
-## Project set up
+After installing the [Nitric CLI](/docs/installation), you can start building a project.
 
-After you have installed the Nitric cli, you can start building a project.
+### Using the `new` command
 
-Create a new folder and initialize a node project.
+The Nitric CLI's `new` command provides prompts to scaffold new projects from templates. In this example we'll select the TypeScript starter template:
 
-```
-npm init
-```
-
-Add the nitric sdk.
-
-```
-npm install @nitric/sdk
-
-or
-
-yarn add @nitric/sdk
+```bash
+nitric new
+? What is the name of the stack? hello-world
+? Choose a template: official/TypeScript - Starter
 ```
 
-Add a folder to put your functions into, and add a file to start building. Your project should now look like:
+Navigate to the new project directory and install the NPM dependencies:
 
-```
-node_modules/
-|-- ...
-functions/
-|-- hello.ts
-package.json
-yarn.lock
+```bash
+cd hello-world
+
+npm install
 ```
 
-## Building the App
+Your project should now look like this:
 
-Lets build a simple API that will greet a user.
+```txt
++--functions/
+|  +-- hello.ts
++--node_modules/
+|  ...
++--package-lock.json
++--package.json
++--README.md
+```
 
-Start by creating a new `api` object in `hello.ts`
+### Running your app
+
+The Nitric CLI can run your application locally for development and testing. The run command needs to know which source files represent your application code. In this example all of our app code is inside the `functions/` folder, so we provide a glob pattern to match that folder.
+
+```bash
+nitric run ./functions/*.ts
+```
+
+Output:
+
+```txt
+SUCCESS  Created Dev Image! (4s)
+⠻ Waiting for Local Services to be ready (3s)Registered Gateway Plugin
+Starting Child Process
+Services listening on: 0.0.0.0:50051
+Waiting for active workers
+Starting Worker Supervisor
+Starting Gateway, 0 workers currently available
+running membrane 🚀
+SUCCESS  Started Local Services! (4s)
++-----------------+------------------------------------+
+| RUNDIR          | /Users/you/.nitric/run/hello-world |
+| GATEWAYADDRESS  | :9001                              |
+| MEMBRANEADDRESS | localhost:50051                    |
+| MINIOENDPOINT   | localhost:9000                     |
++-----------------+------------------------------------+
+SUCCESS  Started Functions! (0s)
+Local running, use ctrl-C to stop
+
+Api  | Endpoint
+main | http://localhost:9001/apis/main
+```
+
+Take a look in the `hello.ts` file, you'll see it declares an API named `main` with a single route `GET /hello/:name`.
+
+When running locally Nitric hosts all your APIs under the path:
+
+```txt
+http://localhost:9001/apis/[api_name]/
+```
+
+in this case the URL for the API is:
+
+```txt
+http://localhost:9001/apis/main/
+```
+
+You can test the API using cURL, your browser, or any other HTTP client:
+
+```bash
+curl http://localhost:9001/apis/main/hello/John
+Hello John
+```
+
+### Making updates
+
+The run command supports hot reload by default, so let's make some changes and see what happens.
+
+Open `functions/hello.ts` in your editor and add a new route to the API, then save the file:
 
 ```typescript
 import { api } from '@nitric/sdk';
 
-const helloApi = api('greeter');
-```
+const helloApi = api('main');
 
-We can then map functions to the routes of the API. These routes will match on the specified HTTP method.
-
-```typescript
-helloApi.get('/hello/:name', (ctx) => {
+helloApi.get('/hello/:name', async (ctx) => {
   const { name } = ctx.req.params;
-
   ctx.res.body = `Hello ${name}`;
+  return ctx;
+});
 
+// add this
+helloApi.get('/goodbye/:name', async (ctx) => {
+  const { name } = ctx.req.params;
+  ctx.res.body = `Goodbye ${name}`;
   return ctx;
 });
 ```
 
-This particular endpoint will match on any GET requests to `/greeter/hello/:name`, name being a parameter. It pulls the name from the request parameters, writes to the response body and returns the context.
+After saving, the new route will be registered and you can test it:
 
-Thus, we would expect this to return 'Hello nitric' if a we routed to `/greeter/hello/nitric`.
-
-## Testing the App
-
-We can then test it locally using the Nitric cli.
-
-```
-nitric run functions/hello.ts
+```bash
+curl http://localhost:9001/apis/main/goodbye/John
+Goodbye John
 ```
 
-This will start the necessary application containers as well as the gateway that will route our request to the container.
-
-```
-> curl localhost:9001/greeter/hello/nitric
-
-Hello nitric
-```
-
+When you're finished running press `ctrl + c` to stop the run command.
 
 ## Deploying the app
 
-Now that we've implemented a basic API and tested that it works, we can deploy it to any of the major cloud platforms.
+Now that you've implemented a basic API and tested that it works, you can deploy it to one of the major cloud platforms.
 
-The first step for this is to set up the credentials for your chosen cloud platform. You can follow along in the [provider overview]('/reference/aws').
+The first step is to set up your credentials for the cloud provider. You can follow along in the [provider overview]('/reference/aws').
 
-You can then deploy by specifying the handler location and the provider.
+You can then deploy by specifying the source files to build and the targeted provider:
 
+```bash
+nitric deployment apply functions/*.ts --provider aws
+# OR
+nitric deployment apply functions/*.ts --provider gcp
+# OR
+nitric deployment apply functions/*.ts --provider azure
 ```
-nitric deployment apply functions/hello.ts --provider aws
 
-nitric deployment apply functions/hello.ts --provider gcp
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
 
-nitric deployment apply functions/hello.ts --provider azure
-```
+## What's next?
 
-You can then go to your cloud dashboard and you'll be able to see and interact with your API.
+- Learn more about [APIs](/docs/apis)
+- See other features in the [introduction](/docs)
+- Learn more about the [concepts](/docs/concepts) of Nitric
+- See SDK commands and more in our [reference docs](/docs/reference)
