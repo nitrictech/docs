@@ -21,7 +21,7 @@ The API defintions have minor changes to support the new pattern.
 
 ### Why the change?
 
-Config requires alot of research, Nitric eliminates 1000s of lines of config that you'll need to manage.
+Config as code is an expressive and self-documentating pattern. Save time by not having to read through pages of documentation or manage 1000s of lines of config.
 
 Examples include:
 
