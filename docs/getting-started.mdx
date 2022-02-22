@@ -41,26 +41,19 @@ nitric run ./functions/*.ts
 Output:
 
 ```txt
-SUCCESS  Created Dev Image! (4s)
-⠻ Waiting for Local Services to be ready (3s)Registered Gateway Plugin
-Starting Child Process
-Services listening on: 0.0.0.0:50051
-Waiting for active workers
-Starting Worker Supervisor
-Starting Gateway, 0 workers currently available
-running membrane 🚀
-SUCCESS  Started Local Services! (4s)
-+-----------------+------------------------------------+
-| RUNDIR          | /Users/you/.nitric/run/hello-world |
-| GATEWAYADDRESS  | :9001                              |
-| MEMBRANEADDRESS | localhost:50051                    |
-| MINIOENDPOINT   | localhost:9000                     |
-+-----------------+------------------------------------+
-SUCCESS  Started Functions! (0s)
+ SUCCESS  Configuration gathered (3s)
+ SUCCESS  Created Dev Image! (1s)
+⠯ Waiting for Local Services to be ready (1s)running membrane 🚀
+ SUCCESS  Started Local Services! (2s)
+ SUCCESS  Started Functions! (0s)
 Local running, use ctrl-C to stop
 
 Api  | Endpoint
 main | http://localhost:9001/apis/main
+
+Topic | Endpoint
+
+Schedule | Endpoint
 ```
 
 Take a look in the `hello.ts` file, you'll see it declares an API named `main` with a single route `GET /hello/:name`.
@@ -135,6 +128,12 @@ nitric deployment apply functions/*.ts --provider azure
 ```
 
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
+
+To undeploy this API -
+
+```bash
+nitric deployment delete
+```
 
 ## What's next?
 
