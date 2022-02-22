@@ -55,11 +55,12 @@ userCreatedTopic.subscribe(async (ctx) => {
 Nitric won't allow you to request publishing access and setup a subscriber in the same function.
 
 ```javascript
-// this isn't valid
 import { topic } from '@nitric/sdk';
 
 const loopTopic = topic('infinite').for('publishing');
 
+// This isn't valid
+// You'll see the following error: 'Property 'subscribe' does not exist on type 'Topic'.
 loopTopic.subscribe(async (ctx) => {
   await loopTopic.publish({ payload: {} });
 });
