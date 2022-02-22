@@ -46,7 +46,7 @@ const doc = await countries.doc('USA').get();
 To delete a document that already exists, use the `delete()` method on the document reference.
 
 ```javascript
-await profiles.doc('USA').delete();
+await countries.doc('USA').delete();
 ```
 
 ### Querying a collection
