@@ -26,7 +26,7 @@ import { topic } from '@nitric/sdk';
 const userCreatedTopic = topic('user-created').for('publishing');
 ```
 
-## Publishing an event
+### Publishing an event
 
 To send an event to a topic and notify all subscribers, use the `publish()` method on the topic reference.
 
@@ -38,7 +38,7 @@ const data = userCreatedTopic.publish({
 });
 ```
 
-## Subscribing to a topic
+### Subscribing to a topic
 
 To execute a function when new events are published you can setup subscribers. The delay between publishing an event and a subscriber being executed is usually only a few milliseconds. This makes subscribers perfect for responding to events as they happen.
 
@@ -50,7 +50,7 @@ userCreatedTopic.subscribe(async (ctx) => {
 });
 ```
 
-## Limitation on Publishing and Subscribing
+### Limitation on Publishing and Subscribing
 
 Nitric won't allow you to request publishing access and setup a subscriber in the same function.
 
@@ -65,7 +65,46 @@ loopTopic.subscribe(async (ctx) => {
 });
 ```
 
-The limitation exists to avoid infinite loops in deployed functions, where a function calls itself indirectly via a topic. These sorts of mistakes can lead to large unintentional cloud charges - something you probably want to avoid.
+The limitation exists to protect you from infinite loops in deployed functions where a function calls itself indirectly via a topic. These sorts of mistakes can lead to large unintentional cloud charges - something you probably want to avoid.
+
+## Reliable event handling
+
+If a subscriber encounters an error or is terminated before it finishes processing an event, what happens? Is the event lost?
+
+Nitric deploys topics to cloud services that support "at-least-once delivery". Events are _usually_ delivered exactly once, in the same order that they're published. However, to prevent lost events, they're sometimes delivered more than once or out of order.
+
+Typically, retries occur when a subscriber doesn't respond successfully, like when unhandled exceptions occur. You'll want to make sure events aren't processed again by accident or partially processed, leaving your system in an unexpected state.
+
+Luckily, building atomic publishers and idempotent subscribers is enough to solve for this.
+
+### Atomic publishers
+
+Basically, your publishers needs to update your database _and_ publish associated events. If a database update fails, the events should _never_ be sent. If the database update succeeds, the events should _always_ publish. The two shouldn't occur independently (i.e. one shouldn't fail while the other succeeds).
+
+One solution to this problem is the [Transactional Outbox Pattern](https://microservices.io/patterns/data/transactional-outbox.html).
+
+### Idempotent subscribers
+
+Events can be delivered more than once, but they should only be _processed_ once. To do this your subscribers need to identify and disregard duplicate events.
+
+Usually checking for duplicate payloads or IDs is enough. When you receive an event you've seen before don't process it, skip straight to returning a success response from your subscriber.
+
+```javascript
+import { topic } from '@nitric/sdk';
+import { isDuplicate } from '../common';
+
+const updates = topic('updates');
+
+updates.subscribe((ctx) => {
+  if (isDuplicate(ctx.req)) {
+    return ctx;
+  }
+  // not a duplicate, process the event
+  //...
+});
+```
+
+> If you're checking for duplicate IDs, make sure publishers can't resend failed events with new IDs
 
 ## What's next?
 
