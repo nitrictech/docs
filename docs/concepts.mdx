@@ -36,7 +36,12 @@ orders.post('/orders', async (ctx) => {
   // Do any work you need with the request
   const status = await process(order);
   // Publish an Event (message) to the 'order-updates' topic, so any interested functions can subscribe.
-  await orderTopic.publish({ data: order, status });
+  await orderTopic.publish({
+    payload: {
+      data: order,
+      status,
+    },
+  });
 });
 ```
 
