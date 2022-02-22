@@ -24,7 +24,7 @@ const countries = collection('Countries').for('reading', 'writing', 'deleting');
 
 ### Writing a document
 
-You can create a new document by simply using an existing collection reference to create a new document reference.
+You can create a new document by using an existing collection reference to create a new document reference, then setting a value for the document.
 
 ```javascript
 await countries.doc('USA').set({
@@ -35,7 +35,7 @@ await countries.doc('USA').set({
 
 ### Reading a document
 
-Just like with writing, you can read a document by simply using it's reference.
+Just like with writing, you can read a document by using it's reference.
 
 ```javascript
 const doc = await countries.doc('USA').get();
@@ -43,7 +43,7 @@ const doc = await countries.doc('USA').get();
 
 ### Deleting a document
 
-To delete a file that has been previously written, you use the `delete()` method on the file reference.
+To delete a document that already exists, use the `delete()` method on the document reference.
 
 ```javascript
 await profiles.doc('USA').delete();
@@ -89,7 +89,7 @@ stream.on('data', (snapshot) => {
 
 ### Working with sub-collections
 
-Working with sub-collections is very similar to working with a collection
+Working with a sub-collection is very similar to working with a collection
 
 ```javascript
 const states = countries.doc('USA').collection('States');
@@ -101,9 +101,7 @@ const stateOfColorado = states.doc('Colorado');
 
 ### Querying sub-collections
 
-You can query same named sub-collections across documents in a collection.
-
-> This sub-collection reference is only queryable, since it's really an aggregate of all `States` sub-collections across all `Countries` documents. i.e. Query every state in every country.
+You can query same named sub-collections across all documents in a collection. For example _query states from every country_.
 
 ```javascript
 const allStates = countries.collection('States');
@@ -114,8 +112,8 @@ foundStates.on('data', (doc) => {
 });
 ```
 
-## What's next?
+> This sub-collection reference is only queryable, since it's really an aggregate of all `States` sub-collections across all `Countries` documents. i.e. Query every state in every country.
 
-<!-- TODO: ================= update link below with reference page ================= -->
+## What's next?
 
 - Learn more about collections and documents in our [reference docs](/docs/reference/collection/collection).

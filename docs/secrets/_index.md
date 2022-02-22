@@ -1,4 +1,4 @@
-Nitric Secrets makes securely storing, updating and retrieving sensitive values like database credentials and API keys a breeze.
+Nitric Secrets makes securely storing, updating and retrieving sensitive values like database credentials and API keys easy.
 
 ### Secrets
 
@@ -14,7 +14,7 @@ Values are the secret data attached to a specific secret version, such as the cu
 
 ### The relationship between Secrets, Versions and Values
 
-The schema below illustrates this for a secret named db.password with two versions:
+The schema below illustrates the relationship between secrets, versions and values for a secret named db.password with two versions:
 
 ```
 +- Secret [ 'db.password' ]
@@ -28,7 +28,7 @@ The schema below illustrates this for a secret named db.password with two versio
       +- SecretValue [ 'crummy_goofed_caddy_radiant' ]
 ```
 
-It should be noted that the version ids are for illustration only. The specific id/numbering strategy depends on the underlying secrets manager.
+> Version IDs are for illustration only. The specific id/numbering strategy depends on the underlying secrets manager of the cloud provider.
 
 ## The basics
 
@@ -46,7 +46,7 @@ const apiKey = await secrets()
   .secret('api-key')
   .put('6e1d9008-f06b-1111-2222-9b6989d58999');
 
-// We can get the version id of our newly created secret using version()
+// We can get the version ID of our newly created secret using version()
 apiKey.version();
 ```
 

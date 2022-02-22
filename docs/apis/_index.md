@@ -4,7 +4,7 @@ Nitric APIs make it dead simple to define and map functions to HTTP APIs.
 
 ### Request Context
 
-Nitric's way of handing request and response was inspired by a common pattern implemented by frameworks like koa and fasthttp. We give you a single context object that gives you everything you need to read and write requests and responses.
+Nitric's way of handing requests and responses was inspired by a common pattern from frameworks like koa and fasthttp. We provide a single context object that gives you everything you need to read requests and write responses.
 
 ## Creating a new API
 
@@ -13,18 +13,18 @@ APIs are easy to declare with the nitric SDK
 ```typescript
 import { api } from '@nitric/sdk';
 
-const farAwayGalaxyApi = api('far-away-galaxy-api');
+const galaxyApi = api('far-away-galaxy-api');
 ```
 
-## Mapping Methods
+## Routing
 
-Methods can be mapped to functions by calling that method name with the route you'd like to match on.
+You define your HTTP routes and the functions that handle incoming requests using methods on your api objects, for example `galaxyApi.post()`. When calling the methods you provide the path/pattern to match on and a handler callback function.
 
-The commonly used HTTP methods used for APIs are Get, Post, Put, Patch and Delete.
+> The commonly used HTTP methods used for APIs are GET, POST, PUT, PATCH and DELETE.
 
 ```javascript
 // List planets
-farAwayGalaxyApi.get('/planets', async (ctx) => {
+galaxyApi.get('/planets', async (ctx) => {
   // get a list of planets
   const planets = getPlanetsList();
   ctx.res.json(planets);
@@ -32,7 +32,7 @@ farAwayGalaxyApi.get('/planets', async (ctx) => {
 });
 
 // Create planets
-farAwayGalaxyApi.post('/planets', async (ctx) => {
+galaxyApi.post('/planets', async (ctx) => {
   const data = JSON.parse(ctx.req.data);
   // create a new planet
   createPlanet(data);
@@ -43,8 +43,10 @@ farAwayGalaxyApi.post('/planets', async (ctx) => {
 
 ### Handling parameters
 
+The string used to match HTTP routes can include named parameters. The values collected from those parameters are included in the context object under `ctx.req.params` with the name provided in the route definition.
+
 ```javascript
-farAwayGalaxyApi.get('/planets/:name', async (ctx) => {
+galaxyApi.get('/planets/:name', async (ctx) => {
   const { name } = ctx.req.params;
   // get a specific planet
   const planet = getPlanet(name);
@@ -53,7 +55,7 @@ farAwayGalaxyApi.get('/planets/:name', async (ctx) => {
   return ctx;
 });
 
-farAwayGalaxyApi.patch('/planets/:name', async (ctx) => {
+galaxyApi.patch('/planets/:name', async (ctx) => {
   const { name } = ctx.req.params;
   const update = JSON.parse(ctx.req.data);
   // update a specific planet
@@ -61,7 +63,7 @@ farAwayGalaxyApi.patch('/planets/:name', async (ctx) => {
   return ctx;
 });
 
-farAwayGalaxyApi.delete('/planets/:name', async (ctx) => {
+galaxyApi.delete('/planets/:name', async (ctx) => {
   const { name } = ctx.req.params;
   // delete a specific planet
   deletePlanet(name);
@@ -69,8 +71,18 @@ farAwayGalaxyApi.delete('/planets/:name', async (ctx) => {
 });
 ```
 
+### Setting HTTP status and headers
+
+The response object provides `status` and `headers` properties you can set to return an HTTP status code such as `201` or `404` and appropriate headers.
+
+```javascript
+galaxyApi.get('/planets/alderaan', async (ctx) => {
+  ctx.res.status = 301;
+  ctx.res.headers['Location'] = 'https://example.org/debris/alderann';
+  return ctx;
+});
+```
+
 ## What's next?
 
-<!-- TODO: ================= update link below with reference page ================= -->
-
-- Learn more about apis in our [reference docs](/docs/reference/api/api).
+- Learn more about APIs in our [reference docs](/docs/reference/api/api).
