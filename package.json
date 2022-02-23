@@ -6,7 +6,8 @@
     "test:mdx": "node test/test",
     "generate:cli-commands": "node scripts/generate-cli-commands && yarn format:fix",
     "format:check": "prettier --check docs",
-    "format:fix": "prettier --write docs"
+    "format:fix": "prettier --write docs",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "ajv-cli": "^5.0.0",

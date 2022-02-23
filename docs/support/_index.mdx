@@ -1,49 +1,73 @@
----
-title: Support
----
+Nitric is open source and available on [GitHub](https://github.com/nitrictech/nitric). If you're dealing with an issue or just need some help, we're available.
 
-## Ask a question about Nitric
-
-You can ask questions and launch <a href="https://github.com/nitrictech/nitric/discussions" target="_blank">discussions</a> about Nitric-related topics in the `nitric` repository on GitHub.
-
-<LinkButton
-  sx={{
-    mb: 4,
+<Grid
+  columns={{
+    '@initial': 1,
+    '@sm': 2,
   }}
-  target="_blank"
-  href="https://github.com/nitrictech/nitric/discussions"
-  variant="contained"
+  gap={4}
+  css={{ width: '100%', gridAutoRows: '1fr', padding: '1rem 0 1rem 0' }}
 >
-  Ask a Queston
-</LinkButton>
+  <Link
+    href="https://github.com/nitrictech/nitric/issues"
+    css={{ height: '100%' }}
+  >
+    <Card
+      highlight
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 16,
+        rowGap: 16,
+        height: '100%',
+      }}
+    >
+      <Box
+        css={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 2,
+          rowGap: 16,
+        }}
+      >
+        <Typography variant="h6">Issues</Typography>
+        <Typography>
+          Found a bug or annoyance you want fixed? Raise it on GitHub and we'll
+          take a look.
+        </Typography>
+      </Box>
+    </Card>
+  </Link>
+  <Link
+    href="https://github.com/nitrictech/nitric/discussions"
+    css={{ height: '100%' }}
+  >
+    <Card
+      highlight
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 16,
+        rowGap: 16,
+        height: '100%',
+      }}
+    >
+      <Box
+        css={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 2,
+          rowGap: 16,
+        }}
+      >
+        <Typography variant="h6">Discussions</Typography>
+        <Typography>
+          Join or create a GitHub discussion to ask questions or seek general
+          advice.
+        </Typography>
+      </Box>
+    </Card>
+  </Link>
+</Grid>
 
-## Create a bug report for Nitric
-
-If you find any error messages or run into issues whilst using the Nitric Platform, please make sure to create a bug report!
-You can also check out our [Creating bug reports guide](/docs/support/creating-bug-reports) to step you through the process.
-
-<LinkButton
-  sx={{
-    mb: 4,
-  }}
-  target="_blank"
-  href="https://github.com/nitrictech/nitric/issues/new?assignees=&labels=&template=bug_report.md&title=%27Create%20bug%20report%27"
-  variant="contained"
->
-  Create Bug Report
-</LinkButton>
-
-## Submit a feature request
-
-You can ask questions and launch <a href="https://github.com/nitrictech/nitric/discussions" target="_blank">discussions</a> about Nitric-related topics in the `nitric` repository on GitHub.
-
-<LinkButton
-  sx={{
-    mb: 4,
-  }}
-  target="_blank"
-  href="https://github.com/nitrictech/nitric/issues/new?assignees=&labels=&template=feature_request.md&title=%27Submit%20feature%20request%27"
-  variant="contained"
->
-  Submit Feature Request
-</LinkButton>
+See our page about [creating bug reports](/docs/support/bug-report) for more details.

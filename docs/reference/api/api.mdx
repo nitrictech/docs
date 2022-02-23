@@ -1,0 +1,61 @@
+Creates a new HTTP API
+
+```javascript
+import { api } from '@nitric/sdk';
+
+const publicApi = api('public');
+```
+
+## Parameters
+
+---
+
+**name** required `string`
+
+The unique name of this API within the app. Subsequent calls to `api` with the same name will return the same object.
+
+---
+
+**options** optional `object`
+
+Additional options when creating the API.
+
+| Properties                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------ |
+| **path** optional `string` <br/> base path for all routes in the API.                                                          |
+| **middleware** optional `HttpMiddleware` or `HttpMiddleware[]` <br/> Middleware to apply to all routes and methods of the API. |
+
+---
+
+## Notes
+
+The `middleware` property on the `options` param is useful for applying universal middleware such as CORS headers or Auth, across an entire API from a single place.
+
+## Examples
+
+### Create an API
+
+```javascript
+import { api } from '@nitric/sdk';
+
+const publicApi = api('public');
+```
+
+### Create an API with universal middleware
+
+```javascript
+import { api } from '@nitric/sdk';
+import { authMiddleware } from '../middleware';
+
+const privateApi = api('private', { middleware: authMiddleware });
+```
+
+### Create an API with a base path
+
+If you need to put all the routes in your api below a shared base path, you can do that with the `path` option. In this example we ensure all routes start with `/api/v1/` before the route specific path.
+
+```javascript
+import { api } from '@nitric/sdk';
+
+const apiV1 = api('private', { path: '/api/v1' });
+```
