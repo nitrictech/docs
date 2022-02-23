@@ -39,6 +39,8 @@ Uninstall the existing CLI with NPM or manually if you didn't start with NPM.
   npm uninstall -g @nitric/cli
 ```
 
+Remove any config folders such as '/home/user-name/.nitric'
+
 Follow our [installation guide](/docs/installation) to set up the Nitric CLI.
 
 ## Upgrade existing Nitric projects
@@ -72,7 +74,7 @@ publicApi.get('/examples', async (ctx) => {
 
 Refactor functions into middleware handlers which can be executed as API methods, topic subscriptions and schedules.
 
-> We've omitted the yaml and openAPI configuration files in these example
+> We've omitted the yaml and openAPI configuration files in this example.
 
 #### Before
 
@@ -113,7 +115,7 @@ updates.subscribe(async (ctx) => {
 
 The example is a POST request of an API which creates a record in a Collection.
 
-We'll go from Code, Yaml, OpenAPI to just Code.
+We'll go from code, yaml, and OpenAPI to just code.
 
 #### Before
 
@@ -224,4 +226,4 @@ publicApi.post('/examples', async (ctx) => {
 });
 ```
 
-> nitric.yaml and api.yaml have both be deleted
+> The nitric.yaml and api.yaml are not required.
