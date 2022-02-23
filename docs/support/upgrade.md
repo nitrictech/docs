@@ -117,7 +117,7 @@ We'll go from Code, Yaml, OpenAPI to just Code.
 
 #### Before
 
-Code
+**`example.ts`**
 
 ```typescript
 interface Example {
@@ -148,7 +148,7 @@ faas
   .start();
 ```
 
-Config:
+**`nitric.yaml`**
 
 ```yaml
 name: examples
@@ -164,9 +164,9 @@ apis:
   examples: api.yaml
 ```
 
-Open API Spec:
+**`api.yaml`**
 
-```
+```yaml
 openapi: 3.0.0
 info:
   version: 1.0.0
@@ -200,7 +200,9 @@ components:
           type: string
 ```
 
-### After
+#### After
+
+**`example.ts`**
 
 ```typescript
 import { api, collection } from '@nitric/sdk';
@@ -221,3 +223,5 @@ publicApi.post('/examples', async (ctx) => {
   await examples.doc(name).set({ name, description });
 });
 ```
+
+> nitric.yaml and api.yaml have both be deleted
