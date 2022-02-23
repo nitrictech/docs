@@ -11,7 +11,7 @@ In this section we will discuss changes and upgrade advice for users upgrading f
 
 ### What's changed?
 
-The Node SDK now utilizes a 'Config-as-Code' design pattern.
+The Node SDK now uses a 'Config-as-Code' design pattern.
 
 - Resources, permissions and configuration will infer automatically from your code.
 
@@ -74,7 +74,7 @@ Refactor functions into middleware handlers which can be executed as API methods
 
 > We've omitted the yaml and openAPI configuration files in these example
 
-Before
+#### Before
 
 ```typescript
 // Start your function here
@@ -84,7 +84,7 @@ faas
   }
 ```
 
-After
+#### After
 
 ```typescript
 const publicApi = api('public');
