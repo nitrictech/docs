@@ -1,3 +1,7 @@
+---
+titlePrefix: 'Building Blocks:'
+---
+
 Nitric APIs make it dead simple to define and map functions to HTTP APIs.
 
 ## Concepts
