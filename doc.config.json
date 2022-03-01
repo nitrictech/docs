@@ -112,6 +112,7 @@
           },
           {
             "title": "Node.js SDK",
+            "titleAsPrefix": true,
             "routes": [
               {
                 "title": "APIs",
