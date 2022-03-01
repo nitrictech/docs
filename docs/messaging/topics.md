@@ -1,7 +1,3 @@
----
-titlePrefix: 'Messaging:'
----
-
 Topics and Events provide a scalable, decoupled, way to communicate between functions and containers.
 
 ### Topics
