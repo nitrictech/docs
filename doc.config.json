@@ -65,6 +65,7 @@
           },
           {
             "title": "More",
+            "disableAutoPrefix": true,
             "routes": [
               {
                 "title": "Frequently Asked Questions",
@@ -90,7 +91,7 @@
               },
               {
                 "title": "Contributions",
-                "path": "/docs/support/contributions.md"
+                "path": "/docs/contributions.md"
               }
             ]
           }
@@ -112,7 +113,7 @@
           },
           {
             "title": "Node.js SDK",
-            "titleAsPrefix": true,
+            "useTitleForChildPrefix": true,
             "routes": [
               {
                 "title": "APIs",
