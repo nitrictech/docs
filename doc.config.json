@@ -64,6 +64,16 @@
             ]
           },
           {
+            "title": "Guides",
+            "disableAutoPrefix": true,
+            "routes": [
+              {
+                "title": "Rest API Example",
+                "path": "/guides/profiles.mdx"
+              }
+            ]
+          },
+          {
             "title": "More",
             "disableAutoPrefix": true,
             "routes": [
