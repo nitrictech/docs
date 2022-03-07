@@ -4,7 +4,9 @@
 
 ## The official Nitric documentation repo
 
-Updates to the documentation will be included in the Nitric doc website located <a href="https://nitric.io/docs" target="_blank">here</a>.
+Documentation for the Nitric framework (https://github.com/nitrictech/nitric).
+
+Updates to the documentation will be included in the Nitric doc website located [here](https://nitric.io/docs).
 
 ## Generate CLI Command Docs
 
