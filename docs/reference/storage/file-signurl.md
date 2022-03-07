@@ -59,7 +59,7 @@ import { bucket, FileMode } from '@nitric/sdk';
 
 const uploads = bucket('uploads').for('writing');
 
-const photo = assets.file('images/photo.png');
+const photo = uploads.file('images/photo.png');
 
-const photoUrl = await logo.signUrl(FileMode.Write);
+const photoUrl = await photo.signUrl(FileMode.Write);
 ```
