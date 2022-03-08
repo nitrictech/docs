@@ -13,6 +13,12 @@
 
 3. Running locally for testing
 4. Deploy to a cloud of your choice
+5. (Optional) Add handlers for the following API operations
+
+| **Method** | **Route**                    | **Description**                  |
+| ---------- | ---------------------------- | -------------------------------- |
+| `GET`      | /profiles/{id}/image/upload  | Get a profile image upload URL   |
+| `GET`      | profiles/{id}/image/download | Get a profile image download URL |
 
 ## Getting started
 
@@ -105,24 +111,19 @@ const profiles = collection('profiles').for('writing', 'reading');
 
 > Import uuid, so that we can create profiles against an ID.
 
-```
+````
 import { uuid } from "uuidv4";
-```
-
-### Create an interface which we will use to represent our profile
-
-```typescript
-// Define our profile contents
+```- a collection named profiles with reading/writing permissions
 interface Profile {
   name: string;
   age: string;
   homeTown: string;
 }
-```
+````
 
 ### Now we'll start adding our REST Methods
 
-> Create profile with a post method
+### Create profile with a post method
 
 ```typescript
 profileApi.post('/profiles', async (ctx) => {
@@ -143,7 +144,7 @@ profileApi.post('/profiles', async (ctx) => {
 });
 ```
 
-> Retrieve profile with a get method
+### Retrieve profile with a get method
 
 ```typescript
 profileApi.get('/profiles/:id', async (ctx) => {
@@ -162,7 +163,7 @@ profileApi.get('/profiles/:id', async (ctx) => {
 });
 ```
 
-> Retrieve all profiles with a get method
+### Retrieve all profiles with a get method
 
 ```typescript
 profileApi.get('/profiles', async (ctx) => {
@@ -173,7 +174,7 @@ profileApi.get('/profiles', async (ctx) => {
 });
 ```
 
-> Remove profile with a delete method
+### Remove profile with a delete method
 
 ```typescript
 profileApi.delete('/profiles/:id', async (ctx) => {
@@ -191,7 +192,7 @@ profileApi.delete('/profiles/:id', async (ctx) => {
 });
 ```
 
-> Update profile with a put method
+### Update profile with a put method
 
 ```typescript
 profileApi.put('/profiles/:id', async (ctx) => {
@@ -224,7 +225,7 @@ Nitric will automatically infer the required specification and permissions to cr
 
 Now that you have an API defined with handlers for each of its methods, it's time to test it out locally.
 
-Try out your application with the `run` command:
+Test out your application with the `run` command:
 
 ```bash
 nitric run
@@ -249,7 +250,7 @@ You can use ctrl-C to end the application.
 
 ## Try out the following commands
 
-Create Profile
+### Create Profile
 
 ```bash
 curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles' \
@@ -261,19 +262,19 @@ curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles' \
 }'
 ```
 
-Fetch Profile
+### Fetch Profile
 
 ```
 curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/8ac374d4-11f9-4c61-b3df-387900777905'
 ```
 
-Fetch All Profiles
+### Fetch All Profiles
 
 ```bash
 curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles'
 ```
 
-Update Profile
+### Update Profile
 
 ```bash
 curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/8ac374d4-11f9-4c61-b3df-387900777905' \
@@ -284,7 +285,7 @@ curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/8ac374
 }'
 ```
 
-Delete Profile
+### Delete Profile
 
 ```bash
 curl --location --request DELETE 'http://127.0.0.1:9001/apis/public/profiles/8ac374d4-11f9-4c61-b3df-387900777905'
@@ -301,14 +302,14 @@ Run the appropriate deployment command
 
 > Warning: Publishing services to the cloud may incur costs.
 
-AWS
+### AWS
 
 ```bash
 nitric deployment apply functions/*.ts --provider aws
 
 ```
 
-Azure
+### Azure
 
 ```bash
 nitric deployment apply functions/*.ts --provider azure
@@ -324,16 +325,21 @@ nitric deployment delete
 
 ## Optional - Add profile image upload/download support
 
-> Access profile buckets with permissions
+### Access profile buckets with permissions
+
+Define a bucket named profilesImg with reading/writing permissions
 
 ```typescript
-const profilesImg = bucket('profilesImg').for('reading', 'writing', 'deleting');
+const profilesImg = bucket('profilesImg').for('reading', 'writing');
+```
 
-// Get Signed URL to Upload Profile Image
-profileApi.post('/profiles/:id/image', async (ctx) => {
+### Get Signed URL to Upload Profile Image
+
+```typescript
+profileApi.get('/profiles/:id/image/upload', async (ctx) => {
   const id = ctx.req.params['id'];
 
-  // Create a signed url in write mode
+  // Return a signed url reference for upload
   const photo = profilesImg.file(`images/${id}/photo.png`);
   const photoUrl = await photo.signUrl(FileMode.Write);
 
@@ -343,14 +349,14 @@ profileApi.post('/profiles/:id/image', async (ctx) => {
 });
 ```
 
-> Get Signed URL to Download Profile Image
+### Get Signed URL to Download Profile Image
 
 ```typescript
-profileApi.get('/profiles/:id/image', async (ctx) => {
+profileApi.get('/profiles/:id/image/download', async (ctx) => {
   const id = ctx.req.params['id'];
   const photo = profilesImg.file(`images/${id}/photo.png`);
 
-  // Create a signed url in read mode
+  // Return a signed url reference for download
   const photoUrl = await photo.signUrl(FileMode.Read);
   ctx.res.json({
     url: photoUrl,
@@ -358,29 +364,29 @@ profileApi.get('/profiles/:id/image', async (ctx) => {
 });
 ```
 
-````
-
 ## Try out the following commands
 
-Replace any value in {} with the value from y our
+Remember to replace any value in {} with the appropriate values from your session.
 
 Get upload image URL
 
 ```bash
-curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles/{id}/image'
+curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image/upload'
 ```
 
 Get download image URL
 
 ```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image'
+curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image/download'
 ```
 
-Here's an example of how to use the upload url with curl. substitute {url} with the url you receive from your get operation and adjust your content type and binary location.
+Here's an example of how to use the upload url with curl.
+
+Substitute {url} with the url you receive from your get operation and adjust your content type and binary location.
 
 ```bash
 curl --location --request PUT '{url}' \
 --header 'content-type: image/png' \
 --data-binary '@/home/user/Pictures/photo.png'
 
-````
+```
