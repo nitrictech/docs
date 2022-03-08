@@ -68,7 +68,7 @@
             "disableAutoPrefix": true,
             "routes": [
               {
-                "title": "Rest API Example",
+                "title": "Build a simple user profile API",
                 "path": "/guides/profiles.mdx"
               }
             ]
