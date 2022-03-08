@@ -109,19 +109,32 @@ const profiles = collection('profiles').for('writing', 'reading');
 import { uuid } from "uuidv4";
 ```
 
+### Create an interface which we will use to represent our profile
+
+```typescript
+// Define our profile contents
+interface Profile {
+  name: string;
+  age: string;
+  homeTown: string;
+}
+```
+
 ### Now we'll start adding our REST Methods
 
 > Create profile with a post method
 
 ```typescript
 profileApi.post('/profiles', async (ctx) => {
-  let name = ctx.req.json().name;
-  let age = ctx.req.json().age;
-  let homeTown = ctx.req.json().homeTown;
   let id = uuid();
+  const profile: Profile = {
+    name: ctx.req.json().name,
+    age: ctx.req.json().age,
+    homeTown: ctx.req.json().homeTown,
+  };
 
   // Create the new profile
-  await profiles.doc(id).set({ name, age, homeTown, id });
+  await profiles.doc(id).set(profile);
 
   // Return the id
   ctx.res.json({
@@ -169,9 +182,6 @@ profileApi.delete('/profiles/:id', async (ctx) => {
   // Delete the profile
   try {
     const profile = await profiles.doc(id).delete();
-    ctx.res.json({
-      msg: `Profile with id ${id} deleted.`,
-    });
   } catch (error) {
     ctx.res.status = 404;
     ctx.res.json({
@@ -186,19 +196,19 @@ profileApi.delete('/profiles/:id', async (ctx) => {
 ```typescript
 profileApi.put('/profiles/:id', async (ctx) => {
   const id = ctx.req.params['id'];
-  const profile = profiles.doc(id);
-  try {
-    const current = await profile.get();
+  const doc = profiles.doc(id);
 
-    let name = ctx.req.json().name ?? current['name'] ?? '';
-    let age = ctx.req.json().age ?? current['age'] ?? '';
-    let homeTown = ctx.req.json().homeTown ?? current['homeTown'] ?? '';
+  try {
+    // Update values provided
+    const current = await doc.get();
+    const profile: Profile = {
+      name: ctx.req.json().name ?? current['name'] ?? '',
+      age: ctx.req.json().age ?? current['age'] ?? '',
+      homeTown: ctx.req.json().homeTown ?? current['homeTown'] ?? '',
+    };
 
     // Create or Update the profile
-    await profile.set({ name, age, homeTown });
-    ctx.res.json({
-      msg: `Profile with id ${id} updated.`,
-    });
+    await doc.set(profile);
   } catch (error) {
     ctx.res.status = 404;
     ctx.res.json({
@@ -237,32 +247,48 @@ Once it starts, the application will receive requests via the API port. You can 
 
 You can use ctrl-C to end the application.
 
-try out the following commands with curl or postman.
+## Try out the following commands
 
-Create Profile- POST - http://127.0.0.1:9001/apis/public/profiles
+Create Profile
 
-```json
-{
-  "name": "Peter Parker",
-  "age": "21",
-  "homeTown": "Queens"
-}
+```bash
+curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+	"name": "Peter Parker",
+	"age": "21",
+  "homeTown" : "Queens"
+}'
 ```
 
-Fetch Profile - GET - http://127.0.0.1:9001/apis/public/profiles/{id}
+Fetch Profile
 
-Fetch All Profiles - GET - http://127.0.0.1:9001/apis/public/profiles/
-
-Update Profile - PUT - http://127.0.0.1:9001/apis/public/profiles/{id}
-
-```json
-{
-  "name": "Ben Reily",
-  "homeTown": "Las Vegas"
-}
+```
+curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/8ac374d4-11f9-4c61-b3df-387900777905'
 ```
 
-Delete Profile - DELETE - http://127.0.0.1:9001/apis/public/profiles/{id}
+Fetch All Profiles
+
+```bash
+curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles'
+```
+
+Update Profile
+
+```bash
+curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/8ac374d4-11f9-4c61-b3df-387900777905' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+    "name": "Ben Reily",
+    "homeTown" : "Las Vegas"
+}'
+```
+
+Delete Profile
+
+```bash
+curl --location --request DELETE 'http://127.0.0.1:9001/apis/public/profiles/8ac374d4-11f9-4c61-b3df-387900777905'
+```
 
 ## Deploy to the cloud
 
@@ -295,3 +321,66 @@ To undeploy run the following command.
 ```bash
 nitric deployment delete
 ```
+
+## Optional - Add profile image upload/download support
+
+> Access profile buckets with permissions
+
+```typescript
+const profilesImg = bucket('profilesImg').for('reading', 'writing', 'deleting');
+
+// Get Signed URL to Upload Profile Image
+profileApi.post('/profiles/:id/image', async (ctx) => {
+  const id = ctx.req.params['id'];
+
+  // Create a signed url in write mode
+  const photo = profilesImg.file(`images/${id}/photo.png`);
+  const photoUrl = await photo.signUrl(FileMode.Write);
+
+  ctx.res.json({
+    url: photoUrl,
+  });
+});
+```
+
+> Get Signed URL to Download Profile Image
+
+```typescript
+profileApi.get('/profiles/:id/image', async (ctx) => {
+  const id = ctx.req.params['id'];
+  const photo = profilesImg.file(`images/${id}/photo.png`);
+
+  // Create a signed url in read mode
+  const photoUrl = await photo.signUrl(FileMode.Read);
+  ctx.res.json({
+    url: photoUrl,
+  });
+});
+```
+
+````
+
+## Try out the following commands
+
+Replace any value in {} with the value from y our
+
+Get upload image URL
+
+```bash
+curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles/{id}/image'
+```
+
+Get download image URL
+
+```bash
+curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image'
+```
+
+Here's an example of how to use the upload url with curl. substitute {url} with the url you receive from your get operation and adjust your content type and binary location.
+
+```bash
+curl --location --request PUT '{url}' \
+--header 'content-type: image/png' \
+--data-binary '@/home/user/Pictures/photo.png'
+
+````
