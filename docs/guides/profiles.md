@@ -24,8 +24,6 @@
 
 This tutorial assumes you have the Nitric CLI installed, if not you can follow the [installation guide](/docs/installation).
 
-### New project
-
 We’ll start by creating a new project for our API.
 
 ```bash
@@ -109,19 +107,21 @@ const profiles = collection('profiles').for('writing', 'reading');
 > yarn add uuidv4
 ```
 
-> Import uuid, so that we can create profiles against an ID.
+### Import uuid at the top of our code, so that we can create profiles against an ID.
 
-````
-import { uuid } from "uuidv4";
-```- a collection named profiles with reading/writing permissions
+```typescript
+import { uuid } from 'uuidv4';
+```
+
+### Define our profile contents
+
+```typescript
 interface Profile {
   name: string;
   age: string;
   homeTown: string;
 }
-````
-
-### Now we'll start adding our REST Methods
+```
 
 ### Create profile with a post method
 
@@ -298,21 +298,25 @@ Setup your credentials and any other cloud specific configuration:
 - [AWS](/docs/reference/aws)
 - [Azure](/docs/reference/azure)
 
-Run the appropriate deployment command
+Create a stack - a collection of resources identified in your project which will be deployed.
 
-> Warning: Publishing services to the cloud may incur costs.
+```bash
+> nitricz stack new
+? What do you want to call your new stack? dev
+? Which Cloud do you wish to deploy to? aws
+? select the region us-east-1
+```
 
 ### AWS
 
-```bash
-nitric deployment apply functions/*.ts --provider aws
-
-```
-
-### Azure
+We called our stack dev, lets try deploying it with the `up` command
 
 ```bash
-nitric deployment apply functions/*.ts --provider azure
+nitric up -s dev
+┌───────────────────────────────────────────────────────────────┐
+| API  | Endpoint                                               |
+| main | https://XXXXXXXX.execute-api.us-east-1.amazonaws.com   |
+└───────────────────────────────────────────────────────────────┘
 ```
 
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
@@ -320,7 +324,7 @@ When the deployment is complete, go to the relevant cloud console and you'll be 
 To undeploy run the following command.
 
 ```bash
-nitric deployment delete
+nitric down -s dev
 ```
 
 ## Optional - Add profile image upload/download support
