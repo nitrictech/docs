@@ -4,7 +4,7 @@
 
 ## The official Nitric documentation repo
 
-Documentation for the Nitric framework (https://github.com/nitrictech/nitric).
+Documentation for the [Nitric framework](https://github.com/nitrictech/nitric).
 
 Updates to the documentation will be included in the Nitric doc website located [here](https://nitric.io/docs).
 
