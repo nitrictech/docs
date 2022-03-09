@@ -107,7 +107,9 @@ const profiles = collection('profiles').for('writing', 'reading');
 > yarn add uuidv4
 ```
 
-### Import uuid at the top of our code, so that we can create profiles against an ID.
+### Import uuid
+
+We'll need a unique identifier to store our profiles against.
 
 ```typescript
 import { uuid } from 'uuidv4';
@@ -134,7 +136,7 @@ profileApi.post('/profiles', async (ctx) => {
     homeTown: ctx.req.json().homeTown,
   };
 
-  // Create the new profile
+  // Store the profile in our collection
   await profiles.doc(id).set(profile);
 
   // Return the id
@@ -150,8 +152,8 @@ profileApi.post('/profiles', async (ctx) => {
 profileApi.get('/profiles/:id', async (ctx) => {
   const id = ctx.req.params['id'];
 
-  // Return the profile
   try {
+    // Get the profile from our collection
     const profile = await profiles.doc(id).get();
     return ctx.res.json(profile);
   } catch (error) {
@@ -167,8 +169,8 @@ profileApi.get('/profiles/:id', async (ctx) => {
 
 ```typescript
 profileApi.get('/profiles', async (ctx) => {
-  // Return all profiles
   return ctx.res.json({
+    // Use a query to retrieve all profiles
     output: await profiles.query().fetch(),
   });
 });
@@ -180,8 +182,8 @@ profileApi.get('/profiles', async (ctx) => {
 profileApi.delete('/profiles/:id', async (ctx) => {
   const id = ctx.req.params['id'];
 
-  // Delete the profile
   try {
+    // Delete the profile from the collection
     const profile = await profiles.doc(id).delete();
   } catch (error) {
     ctx.res.status = 404;
@@ -200,7 +202,7 @@ profileApi.put('/profiles/:id', async (ctx) => {
   const doc = profiles.doc(id);
 
   try {
-    // Update values provided
+    // Only update newly provided data
     const current = await doc.get();
     const profile: Profile = {
       name: ctx.req.json().name ?? current['name'] ?? '',
@@ -208,7 +210,7 @@ profileApi.put('/profiles/:id', async (ctx) => {
       homeTown: ctx.req.json().homeTown ?? current['homeTown'] ?? '',
     };
 
-    // Create or Update the profile
+    // Update the profile in the collection
     await doc.set(profile);
   } catch (error) {
     ctx.res.status = 404;
@@ -246,9 +248,11 @@ public | http://localhost:9001/apis/public
 
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
 
-You can use ctrl-C to end the application.
+Pressing 'Ctrl-C' will end the application.
 
-## Try out the following commands
+## Test your API
+
+Update all {} values and change the URL to your deployed URL if you're testing on the cloud.
 
 ### Create Profile
 
@@ -256,16 +260,16 @@ You can use ctrl-C to end the application.
 curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles' \
 --header 'Content-Type: text/plain' \
 --data-raw '{
-	"name": "Peter Parker",
-	"age": "21",
-  "homeTown" : "Queens"
+    "name": "Peter Parker",
+    "age": "21",
+    "homeTown" : "Queens"
 }'
 ```
 
 ### Fetch Profile
 
-```
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/8ac374d4-11f9-4c61-b3df-387900777905'
+```bash
+curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}'
 ```
 
 ### Fetch All Profiles
@@ -277,7 +281,7 @@ curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles'
 ### Update Profile
 
 ```bash
-curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/8ac374d4-11f9-4c61-b3df-387900777905' \
+curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/{id}' \
 --header 'Content-Type: text/plain' \
 --data-raw '{
     "name": "Ben Reily",
@@ -288,7 +292,7 @@ curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/8ac374
 ### Delete Profile
 
 ```bash
-curl --location --request DELETE 'http://127.0.0.1:9001/apis/public/profiles/8ac374d4-11f9-4c61-b3df-387900777905'
+curl --location --request DELETE 'http://127.0.0.1:9001/apis/public/profiles/{id}'
 ```
 
 ## Deploy to the cloud
@@ -301,13 +305,18 @@ Setup your credentials and any other cloud specific configuration:
 Create a stack - a collection of resources identified in your project which will be deployed.
 
 ```bash
-> nitricz stack new
+nitric stack new
+```
+
+```
 ? What do you want to call your new stack? dev
 ? Which Cloud do you wish to deploy to? aws
 ? select the region us-east-1
 ```
 
 ### AWS
+
+> Note: You are responsible for staying within the limits of the free tier or any costs associated with deployment.
 
 We called our stack dev, lets try deploying it with the `up` command
 
@@ -368,29 +377,27 @@ profileApi.get('/profiles/:id/image/download', async (ctx) => {
 });
 ```
 
-## Try out the following commands
+## Test your API
 
-Remember to replace any value in {} with the appropriate values from your session.
+Update all {} values and change the URL to your deployed URL if you're testing on the cloud.
 
-Get upload image URL
+### Get upload image URL
 
 ```bash
 curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image/upload'
 ```
 
-Get download image URL
-
-```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image/download'
-```
-
-Here's an example of how to use the upload url with curl.
-
-Substitute {url} with the url you receive from your get operation and adjust your content type and binary location.
+### Using the upload URL with curl
 
 ```bash
 curl --location --request PUT '{url}' \
 --header 'content-type: image/png' \
 --data-binary '@/home/user/Pictures/photo.png'
 
+```
+
+### Get download image URL
+
+```bash
+curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image/download'
 ```
