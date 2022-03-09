@@ -226,4 +226,12 @@ publicApi.post('/examples', async (ctx) => {
 });
 ```
 
-> The nitric.yaml and api.yaml are not required.
+> The api.yaml file is no longer required.
+
+> The nitric.yaml file now only contains basic meta information such as the project name and handler paths.
+
+```yaml
+name: examples
+handlers:
+  - functions/*.ts
+```
