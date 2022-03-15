@@ -108,6 +108,16 @@
                 "path": "/docs/contributions.md"
               }
             ]
+          },
+          {
+            "title": "Guides",
+            "disableAutoPrefix": true,
+            "routes": [
+              {
+                "title": "API with PlanetScale and Prisma",
+                "path": "/docs/guides/serverless-api-with-planetscale-and-prisma.md"
+              }
+            ]
           }
         ],
         "reference": [
