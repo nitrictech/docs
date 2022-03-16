@@ -107,7 +107,7 @@ This gives you a new prisma schema in a folder called `prisma` and a new `.env` 
 
 ### Building the schema
 
-We'll use the following schema to initialize our database:
+Overwrite the contents of prisma.schema with the schema below. We'll use this to initialize our database.
 
 ```txt
 // prisma/schema.prisma
