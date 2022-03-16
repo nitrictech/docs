@@ -84,7 +84,7 @@ You can create a new database with the PlanetScale CLI or through the web dashbo
 Here is an example using the CLI:
 
 ```bash
-pscale database create planetnitric -us-east
+pscale database create planetnitric --region us-east
 ```
 
 > You can pick a different region for you database if you prefer, see: [available regions](https://docs.planetscale.com/concepts/regions#available-regions)
@@ -206,7 +206,7 @@ DATABASE_URL='<Your URL from the above screenshot>'
 With the schema available and the connection details configured, you can push the Prisma schema to PlanetScale:
 
 ```bash
-npx prisma push
+npx prisma db push
 ```
 
 ### Add cloud resources to our application
