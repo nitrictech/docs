@@ -510,7 +510,7 @@ curl -X POST http://localhost:9001/apis/meme/memes \
 
 #### Retrieve the image
 
-Using the Meme ID returned from the previous request, open a browser and navigate to `http://localhost:9001/apis/meme/<Meme ID>`.
+Using the Meme ID returned from the previous request, open a browser and navigate to `http://localhost:9001/apis/meme/memes/<Meme ID>`.
 
 ## Deploy to the cloud
 
