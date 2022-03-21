@@ -3,13 +3,13 @@
 1. Use Nitric to create an API to create and update profiles
 2. Create handlers for the following API operations
 
-| **Method** | **Route**              | **Description**                  |
-| ---------- | ---------------------- | -------------------------------- |
-| `GET`      | /profiles/{$profileId} | Get a specific profile by its Id |
-| `GET`      | /profiles              | List all profiles                |
-| `POST`     | /profiles              | Create a new profile             |
-| `DELETE`   | /profiles/{$profileId} | Delete a profile                 |
-| `PUT`      | /profiles/{$profileId} | Update a profile                 |
+| **Method** | **Route**      | **Description**                  |
+| ---------- | -------------- | -------------------------------- |
+| `GET`      | /profiles/{id} | Get a specific profile by its Id |
+| `GET`      | /profiles      | List all profiles                |
+| `POST`     | /profiles      | Create a new profile             |
+| `DELETE`   | /profiles/{id} | Delete a profile                 |
+| `PUT`      | /profiles/{id} | Update a profile                 |
 
 3. Running locally for testing
 4. Deploy to a cloud of your choice
@@ -30,11 +30,12 @@ We’ll start by creating a new project for our API.
 nitric new
 ```
 
-Create a project name and select the TypeScript template.
+Create a project name, select the TypeScript template and choose the default glob handler.
 
-```text
+```bash
 ? What is the name of the stack? my-profile-api
 ? Choose a template: official/TypeScript - Starter
+? Glob for the function handlers? functions/*.ts
 ```
 
 Next, open the project in your editor of choice.
@@ -56,6 +57,7 @@ The scaffolded project should have the following structure:
 |  +-- hello.ts
 +--node_modules/
 |  ...
++--nitric.yaml
 +--package.json
 +--README.md
 ```
@@ -82,62 +84,47 @@ main | http://localhost:9001/apis/main
 
 The template project is successfully scaffolded.
 
+> Since we won't use the example function you can now delete the `functions/hello.ts` file.
+
+### Add uuidv4 to your project
+
+We'll need a unique identifier to store our profiles against.
+
+```bash
+> yarn add uuidv4
+```
+
 ## Coding our Profile API
 
 Let's start by initializing our profiles api, create a file named 'profiles.ts' within functions and add the following code.
 
-Here we are defining the following -
-
-- an API named public,
-- a collection named profiles with reading/writing permissions
-
 ```typescript
 import { api, collection } from '@nitric/sdk';
+import { uuid } from 'uuidv4';
 
-// Create a secure api
+// Create an api named public
 const profileApi = api('public');
 
 // Access profile collection with permissions
 const profiles = collection('profiles').for('writing', 'reading');
 ```
 
-### Add uuidv4 to your project
+Here we are defining the following -
 
-```bash
-> yarn add uuidv4
-```
-
-### Import uuid
-
-We'll need a unique identifier to store our profiles against.
-
-```typescript
-import { uuid } from 'uuidv4';
-```
-
-### Define our profile contents
-
-```typescript
-interface Profile {
-  name: string;
-  age: string;
-  homeTown: string;
-}
-```
+- an API named public,
+- a collection named profiles with reading/writing permissions
 
 ### Create profile with a post method
 
 ```typescript
 profileApi.post('/profiles', async (ctx) => {
   let id = uuid();
-  const profile: Profile = {
-    name: ctx.req.json().name,
-    age: ctx.req.json().age,
-    homeTown: ctx.req.json().homeTown,
-  };
+  let name = ctx.req.json().name;
+  let age = ctx.req.json().age;
+  let homeTown = ctx.req.json().homeTown;
 
-  // Store the profile in our collection
-  await profiles.doc(id).set(profile);
+  // Create the new profile
+  await profiles.doc(id).set({ name, age, homeTown });
 
   // Return the id
   ctx.res.json({
@@ -150,10 +137,10 @@ profileApi.post('/profiles', async (ctx) => {
 
 ```typescript
 profileApi.get('/profiles/:id', async (ctx) => {
-  const id = ctx.req.params['id'];
+  const { id } = ctx.req.params;
 
+  // Return the profile
   try {
-    // Get the profile from our collection
     const profile = await profiles.doc(id).get();
     return ctx.res.json(profile);
   } catch (error) {
@@ -169,8 +156,8 @@ profileApi.get('/profiles/:id', async (ctx) => {
 
 ```typescript
 profileApi.get('/profiles', async (ctx) => {
-  return ctx.res.json({
-    // Use a query to retrieve all profiles
+  // Return all profiles
+  ctx.res.json({
     output: await profiles.query().fetch(),
   });
 });
@@ -180,11 +167,11 @@ profileApi.get('/profiles', async (ctx) => {
 
 ```typescript
 profileApi.delete('/profiles/:id', async (ctx) => {
-  const id = ctx.req.params['id'];
+  const { id } = ctx.req.params;
 
+  // Delete the profile
   try {
-    // Delete the profile from the collection
-    const profile = await profiles.doc(id).delete();
+    profiles.doc(id).delete();
   } catch (error) {
     ctx.res.status = 404;
     ctx.res.json({
@@ -198,20 +185,18 @@ profileApi.delete('/profiles/:id', async (ctx) => {
 
 ```typescript
 profileApi.put('/profiles/:id', async (ctx) => {
-  const id = ctx.req.params['id'];
+  const { id } = ctx.req.params;
   const doc = profiles.doc(id);
 
   try {
-    // Only update newly provided data
+    // Update values provided
     const current = await doc.get();
-    const profile: Profile = {
-      name: ctx.req.json().name ?? current['name'] ?? '',
-      age: ctx.req.json().age ?? current['age'] ?? '',
-      homeTown: ctx.req.json().homeTown ?? current['homeTown'] ?? '',
-    };
+    let name = ctx.req.json().name ?? current['name'] ?? '';
+    let age = ctx.req.json().age ?? current['age'] ?? '';
+    let homeTown = ctx.req.json().homeTown ?? current['homeTown'] ?? '';
 
-    // Update the profile in the collection
-    await doc.set(profile);
+    // Create or Update the profile
+    await doc.set({ name, age, homeTown });
   } catch (error) {
     ctx.res.status = 404;
     ctx.res.json({
