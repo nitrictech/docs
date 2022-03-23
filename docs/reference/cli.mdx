@@ -26,6 +26,18 @@ There are a few common commands that you will use frequently:
 - `nitric up` deploys your stack to the cloud
 - `nitric down` destroys your stack from the cloud
 
+## Environment Variables
+
+### Pulumi Access Token
+
+To view your deployments on the pulumi dashboard, you will need a pulumi access token. You can get this token by logging into pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
+
+Add the environment variable to your `~/.zshrc` or `~/.bashrc` as:
+
+```
+PULUMI_ACCESS_TOKEN=access_token
+```
+
 ## Start
 
 ### Projects
@@ -36,12 +48,13 @@ To start a new project with nitric, run the `nitric new` command.
 nitric new
 ```
 
-This will walk you through creating the project, including the name and what template you want to start from.
+This will walk through creating the project, including the name and what template you want to start from.
 
-The project command will also create a `nitric.yaml` file. This file contains the configuration for your project. The handlers key is list of globs for your functions. The handlers should point to all functions you want to run or deploy.
+The command will also create a `nitric.yaml` file. This file contains the configuration for your project. The handlers key is list of globs for your functions. The handlers should point to all functions you want to run or deploy.
 
 ### Stacks
-Creating a new stack will create a configuration for a particular cloud. You can have many stacks to one project.
+
+Creating a new stack will create a configuration for a particular cloud. You can have multiple stacks for one project.
 
 ```
 nitric stack new
@@ -55,8 +68,6 @@ name: my-aws-stack
 provider: aws
 region: us-east-1
 ```
-
-To list all the project stacks, use the `nitric list command.
 
 ## Development
 
@@ -88,6 +99,10 @@ nitric down
 
 > This will prompt you again before destroying the stack.
 
+To get information about your deployed stacks, use the `nitric list` command.
+
+This will provide give information about its name, its deployment status, when it was last updated, the resource count, and a url to view the deployment on the pulumi console (will require a pulumi account).
+
 ## Info
 
 To get information about the CLI version you are using, you can use:
@@ -109,3 +124,7 @@ nitric help
 ```
 
 For more verbose input, specify a verbosity level with `--verbose`. The larger the number, the more verbose.
+
+## Feedback
+
+If you want to provide feedback on the CLI or the framework in general, you can use the `nitric feedback` command. This will template a github issue for you to submit. Alternatively, you can open an issue manually [here](`https://github.com/nitrictech/cli/issues/new/choose`).

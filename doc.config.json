@@ -108,6 +108,10 @@
               {
                 "title": "Access Control",
                 "path": "/docs/reference/access-control.mdx"
+              },
+              {
+                "title": "CLI",
+                "path": "/docs/reference/cli.mdx"
               }
             ]
           },
