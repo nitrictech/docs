@@ -7,11 +7,12 @@ In this tutorial, you'll create a [Next.js](https://nextjs.org/) application tha
 This guide shows you how to create a simple To-do list in Nextjs with an API backed by serverless functions. It also uses collections for data persistence.
 
 In the guide we'll use the following:
+
 - [Nitric](https://nitric.io) APIs, Functions and Collections
 - [Nextjs](https://nextjs.org)
 - The cloud of your choice:
-  - [AWS](https://aws.amazon.com) 
-  - [GCP](https://cloud.google.com) 
+  - [AWS](https://aws.amazon.com)
+  - [GCP](https://cloud.google.com)
   - [Azure](https://azure.microsoft.com)
 
 ## Prerequisites
@@ -80,12 +81,12 @@ export type Filters = Partial<Task>;
 
 export type TaskListResponse = TaskList;
 
-export type TaskListRequest = Omit<TaskList, "id" | "tasks">;
+export type TaskListRequest = Omit<TaskList, 'id' | 'tasks'>;
 
-export type TaskListPostRequest = Omit<TaskList, "id" | "complete">;
+export type TaskListPostRequest = Omit<TaskList, 'id' | 'complete'>;
 
 /* Task Post */
-export type TaskPostRequest = Omit<Task, "id">;
+export type TaskPostRequest = Omit<Task, 'id'>;
 
 /* Task Update */
 export type TaskPatchRequest = { completed: boolean };
@@ -99,7 +100,7 @@ Apps built with Nitric define their resources in code, you can write this in the
 //apis/tasks-api/resources/apis.ts
 import { api } from '@nitric/sdk';
 
-export const taskListApi = api("taskList");
+export const taskListApi = api('taskList');
 ```
 
 Then we also want to create our collection to store our task lists. We omit the tasks so that we can instead store them as subcollections. This will ease querying individual tasks in the future.
@@ -107,11 +108,11 @@ Then we also want to create our collection to store our task lists. We omit the 
 ```typescript
 //apis/tasks-api/resources/collections.ts
 import { collections } from '@nitric/sdk';
-import { TaskList } from "types";
+import { TaskList } from 'types';
 
-type TaskCollection = Omit<TaskList, "tasks">;
+type TaskCollection = Omit<TaskList, 'tasks'>;
 
-export const taskListCol = collection<TaskCollection>("taskLists");
+export const taskListCol = collection<TaskCollection>('taskLists');
 ```
 
 ### Routes
@@ -138,11 +139,7 @@ We can then get our previous collection, and apply permissions to it for use wit
 //apis/tasks-api/functions/tasks.ts
 import { taskListCol } from '../resources/collections.ts';
 
-const taskLists = taskListCol.for(
-  "reading",
-  "writing",
-  "deleting",
-);
+const taskLists = taskListCol.for('reading', 'writing', 'deleting');
 ```
 
 Now that we have the collection, we can start adding tasks and task lists. We use our collection to store our task lists, and then a subcollection on each task list to store our tasks.
@@ -151,12 +148,12 @@ We can first post a new task list using the `POST /` endpoint
 
 ```typescript
 //apis/tasks-api/functions/tasks.ts
-taskListApi.post("/", async (ctx) => {
+taskListApi.post('/', async (ctx) => {
   const { name, tasks } = ctx.req.json() as TaskListPostRequest;
 
   try {
     if (!name) {
-      ctx.res.body = "A new task list requires a name";
+      ctx.res.body = 'A new task list requires a name';
       ctx.res.status = 400;
       return;
     }
@@ -175,7 +172,7 @@ taskListApi.post("/", async (ctx) => {
         const taskId = uuid.generate();
         await taskLists
           .doc(id)
-          .collection<Task>("tasks")
+          .collection<Task>('tasks')
           .doc(taskId)
           .set({
             ...task,
@@ -185,10 +182,10 @@ taskListApi.post("/", async (ctx) => {
       }
     }
 
-    ctx.res.body = "Successfully added task list!";
+    ctx.res.body = 'Successfully added task list!';
   } catch (err) {
     console.log(err);
-    ctx.res.body = "Failed to add task list";
+    ctx.res.body = 'Failed to add task list';
     ctx.res.status = 400;
   }
 
@@ -202,19 +199,19 @@ We first receive the task list id, and then add a new task under the `listid -> 
 
 ```typescript
 //apis/tasks-api/functions/tasks.ts
-taskListApi.post("/:listid", async (ctx) => {
+taskListApi.post('/:listid', async (ctx) => {
   const { listid } = ctx.req.params;
   const task = ctx.req.json() as TaskPostRequest;
 
   try {
     if (!listid) {
-      ctx.res.body = "A task list id is required";
+      ctx.res.body = 'A task list id is required';
       ctx.res.status = 400;
       return;
     }
 
     if (!task || !task.name) {
-      ctx.res.body = "A task with a name is required";
+      ctx.res.body = 'A task with a name is required';
       ctx.res.status = 400;
       return;
     }
@@ -223,7 +220,7 @@ taskListApi.post("/:listid", async (ctx) => {
 
     await taskLists
       .doc(listid)
-      .collection<Omit<Task, "id">>("tasks")
+      .collection<Omit<Task, 'id'>>('tasks')
       .doc(taskId)
       .set({
         ...task,
@@ -231,10 +228,10 @@ taskListApi.post("/:listid", async (ctx) => {
         createdAt: new Date().getTime(),
       });
 
-    ctx.res.body = "Successfully added task!";
+    ctx.res.body = 'Successfully added task!';
   } catch (err) {
     console.log(err);
-    ctx.res.body = "Failed to add task list";
+    ctx.res.body = 'Failed to add task list';
     ctx.res.status = 400;
   }
 
@@ -283,40 +280,40 @@ taskListApi.get("/", async (ctx) => {
 
 ```typescript
 //apis/todo-api/common/utils.ts
-import { Task } from "types";
+import { Task } from 'types';
 
-type CreatedAtData = Pick<Task, "createdAt">;
+type CreatedAtData = Pick<Task, 'createdAt'>;
 
 export const sortByCreatedAt = (a: CreatedAtData, b: CreatedAtData) => {
   return a.createdAt < b.createdAt ? 1 : -1;
-}
+};
 ```
 
 Within `GET /:listid` endpoint we can get a single list, and apply filters to our query of tasks
 
 ```typescript
 // Get all tasks from a task list, with filters
-taskListApi.get("/:listid", async (ctx) => {
+taskListApi.get('/:listid', async (ctx) => {
   const { listid } = ctx.req.params;
   const filters = ctx.req.query as Filters;
 
   try {
     const taskListRef = taskLists.doc(listid);
-    let query = taskListRef.collection<Task>("tasks").query();
+    let query = taskListRef.collection<Task>('tasks').query();
 
     // Apply filters to query before executing query;
     Object.entries(filters).forEach(([k, v]) => {
       switch (k) {
-        case "complete": {
-          query = query.where(k, "==", v === "true");
+        case 'complete': {
+          query = query.where(k, '==', v === 'true');
           break;
         }
-        case "dueDate": {
-          query = query.where(k, ">=", v);
+        case 'dueDate': {
+          query = query.where(k, '>=', v);
           break;
         }
         default: {
-          query = query.where(k, "startsWith", v as string);
+          query = query.where(k, 'startsWith', v as string);
           break;
         }
       }
@@ -333,7 +330,7 @@ taskListApi.get("/:listid", async (ctx) => {
     });
   } catch (err) {
     console.log(err);
-    ctx.res.body = "Failed to retrieve tasks";
+    ctx.res.body = 'Failed to retrieve tasks';
     ctx.res.status = 400;
   }
 
@@ -345,19 +342,19 @@ Within our `GET /:listid/:id` endpoint we can start retrieving specific tasks fr
 
 ```typescript
 //apis/tasks-api/functions/tasks.ts
-taskListApi.get("/:listid/:id", async (ctx) => {
+taskListApi.get('/:listid/:id', async (ctx) => {
   const { listid, id } = ctx.req.params;
 
   try {
     // Get our task list with id [listId]
-    const taskListRef = taskListCol.doc(listid); 
+    const taskListRef = taskListCol.doc(listid);
     // Get all tasks from the collection with id [id]
-    const task = await taskListRef.collection<Task>("tasks").doc(id).get();
+    const task = await taskListRef.collection<Task>('tasks').doc(id).get();
 
     ctx.res.json(task);
   } catch (err) {
     console.log(err);
-    ctx.res.body = "Failed to retrieve tasks";
+    ctx.res.body = 'Failed to retrieve tasks';
     ctx.res.status = 400;
   }
 
@@ -369,27 +366,27 @@ Within the `PATCH :listid/:id` patch route we can write the logic to update whet
 
 ```typescript
 //apis/tasks-api/functions/tasks.ts
-taskListApi.patch("/:listid/:id", async (ctx) => {
+taskListApi.patch('/:listid/:id', async (ctx) => {
   const { listid: listId, id } = ctx.req.params;
   const { completed } = ctx.req.json() as ToggleRequest;
 
   try {
     const taskListRef = taskLists.doc(listId);
-    const taskRef = taskListRef.collection<Task>("tasks").doc(id);
+    const taskRef = taskListRef.collection<Task>('tasks').doc(id);
     const originalTask = await taskRef.get();
 
     await taskListRef
-      .collection<Task>("tasks")
+      .collection<Task>('tasks')
       .doc(id)
       .set({
         ...originalTask,
         complete: completed,
       });
 
-    ctx.res.body = "Successfully updated task";
+    ctx.res.body = 'Successfully updated task';
   } catch (err) {
     console.log(err);
-    ctx.res.body = "Failed to retrieve tasks";
+    ctx.res.body = 'Failed to retrieve tasks';
     ctx.res.status = 400;
   }
 
@@ -401,31 +398,31 @@ The delete routes `DELETE /:listid/:id` and `DELETE /:id` get the relevent docum
 
 ```typescript
 //apis/tasks-api/functions/tasks.ts
-taskListApi.delete("/:listid/:id", async (ctx) => {
+taskListApi.delete('/:listid/:id', async (ctx) => {
   const { listid: listId, id } = ctx.req.params;
 
   try {
     const taskListRef = taskLists.doc(listId);
-    await taskListRef.collection("tasks").doc(id).delete();
-    ctx.res.body = "Successfully deleted task";
+    await taskListRef.collection('tasks').doc(id).delete();
+    ctx.res.body = 'Successfully deleted task';
   } catch (err) {
     console.log(err);
-    ctx.res.body = "Failed to delete task";
+    ctx.res.body = 'Failed to delete task';
     ctx.res.status = 400;
   }
 
   return ctx;
 });
 
-taskListApi.delete("/:id", async (ctx) => {
+taskListApi.delete('/:id', async (ctx) => {
   const { id } = ctx.req.params;
 
   try {
     await taskLists.doc(id).delete();
-    ctx.res.body = "Successfully deleted task list";
+    ctx.res.body = 'Successfully deleted task list';
   } catch (err) {
     console.log(err);
-    ctx.res.body = "Failed to delete task list";
+    ctx.res.body = 'Failed to delete task list';
     ctx.res.status = 400;
   }
 
@@ -457,14 +454,14 @@ module.exports = {
   async rewrites() {
     return [
       {
-        source: "/apis/:path*",
+        source: '/apis/:path*',
         destination: `${process.env.API_BASE_URL}/apis/:path*`, // Proxy to Backend
       },
     ];
   },
 };
-
 ```
+
 ## Run Locally
 
 To test out our api locally, we can do:
@@ -502,7 +499,6 @@ nitric stack up -s todo
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
 
 > When you're done, you can destroy the stack with `nitric down -s todo`
-
 
 ### Deploy the Next.js App
 
