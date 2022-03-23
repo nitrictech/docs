@@ -1,0 +1,111 @@
+The Nitric CLI allows you to build, develop, and deploy your serverless application.
+
+To verify your installation run `nitric version`. The output should look something like this:
+
+```
+Go Version: go1.17.8
+Go OS/Arch: darwin/amd64
+Git commit: fce97c9
+Build time: 2022-03-23T14:05:59+1100
+Nitric CLI: v1.1.0-develop.14-98-gfce97c91c5bce6eeb864194e592134322b52d8e5
+```
+
+To get a list of the available commands, run the following command:
+
+```
+nitric help
+```
+
+## Common Commands
+
+There are a few common commands that you will use frequently:
+
+- `nitric new` creates a new project
+- `nitric stack new` creates a new stack within a project
+- `nitric run` runs your stack locally
+- `nitric up` deploys your stack to the cloud
+- `nitric down` destroys your stack from the cloud
+
+## Start
+
+### Projects
+
+To start a new project with nitric, run the `nitric new` command.
+
+```
+nitric new
+```
+
+This will walk you through creating the project, including the name and what template you want to start from.
+
+The project command will also create a `nitric.yaml` file. This file contains the configuration for your project. The handlers key is list of globs for your functions. The handlers should point to all functions you want to run or deploy.
+
+### Stacks
+Creating a new stack will create a configuration for a particular cloud. You can have many stacks to one project.
+
+```
+nitric stack new
+```
+
+This will create a `nitric-stackName.yaml` file that contains the configuration for deploying to the cloud. Some providers will have different config, heres an example of an aws stack
+
+```yaml
+# nitric-my-aws-stack.yaml
+name: my-aws-stack
+provider: aws
+region: us-east-1
+```
+
+To list all the project stacks, use the `nitric list command.
+
+## Development
+
+When you are done developing your application and you want to run and test it locally, you can use the `nitric run` command.
+
+```
+nitric run
+```
+
+This will build and run your functions for local testing. The output will provide a local endpoint so that you can test your apis.
+
+If you make changes whilst it is running, the changes will be reflected due to hot reloading.
+
+## Deploy
+
+Once you have tested your application locally and you're ready to deploy, you can do `nitric up`. This command requires you supply the name of a stack with the `-s` or `--stack` argument. This will set the cloud configuration for that particular deployment.
+
+```
+nitric up --stack my-aws-stack
+```
+
+> Each of the cloud providers deployments take different amounts of time.
+
+If you make changes and want to redeploy, you don't have to take the application down, you can just redeploy and it will find the difference. However, if you do want to destroy the application, you can use the `nitric down` command.
+
+```
+nitric down
+```
+
+> This will prompt you again before destroying the stack.
+
+## Info
+
+To get information about the CLI version you are using, you can use:
+
+```
+nitric version
+```
+
+To get more detailed information about the Nitric runtime, you can use:
+
+```
+nitric info
+```
+
+For information regarding individual commands, use the `--help` argument on any of the CLI commands. Alternatively you can run:
+
+```
+nitric help
+```
+
+For more verbose input, specify a verbosity level with `--verbose`. The larger the number, the more verbose.
