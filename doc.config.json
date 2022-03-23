@@ -108,6 +108,16 @@
                 "path": "/docs/contributions.md"
               }
             ]
+          },
+          {
+            "title": "Guides",
+            "disableAutoPrefix": true,
+            "routes": [
+              {
+                "title": "API with Nextjs",
+                "path": "/docs/guides/serverless-api-with-nextjs.md"
+              }
+            ]
           }
         ],
         "reference": [
