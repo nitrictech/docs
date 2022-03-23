@@ -1,7 +1,3 @@
-# Nitric To-Dos
-
-In this tutorial, you'll create a [Next.js](https://nextjs.org/) application that connects to a task list [Nitric API](https://nitric.io/docs/apis) and a task list [Nitric Collection](https://nitric.io/docs/collections). We will also be using [Tailwind CSS](https://tailwindcss.com/) for styling.
-
 ## Overview
 
 This guide shows you how to create a simple To-do list in Nextjs with an API backed by serverless functions. It also uses collections for data persistence.
@@ -10,6 +6,7 @@ In the guide we'll use the following:
 
 - [Nitric](https://nitric.io) APIs, Functions and Collections
 - [Nextjs](https://nextjs.org)
+- [Tailwind CSS](https://tailwindcss.com/) styling
 - The cloud of your choice:
   - [AWS](https://aws.amazon.com)
   - [GCP](https://cloud.google.com)
