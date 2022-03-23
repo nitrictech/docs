@@ -114,7 +114,7 @@
             "disableAutoPrefix": true,
             "routes": [
               {
-                "title": "API with Nextjs",
+                "title": "API with Next.js",
                 "path": "/docs/guides/serverless-api-with-nextjs.md"
               }
             ]

@@ -1,11 +1,11 @@
 ## Overview
 
-This guide shows you how to create a simple To-do list in Nextjs with an API backed by serverless functions. It also uses collections for data persistence.
+This guide shows you how to create a simple To-do list in Next.js with an API backed by Nitric functions. It also uses collections for data persistence.
 
 In the guide we'll use the following:
 
 - [Nitric](https://nitric.io) APIs, Functions and Collections
-- [Nextjs](https://nextjs.org)
+- [Next.js](https://Next.js.org)
 - [Tailwind CSS](https://tailwindcss.com/) styling
 - The cloud of your choice:
   - [AWS](https://aws.amazon.com)
@@ -17,7 +17,7 @@ In the guide we'll use the following:
 - [Node.js](https://nodejs.org/en/download/)
 - [Nitric CLI](https://nitric.io/docs/installation)
 
-## Start with a Nextjs App
+## Start with a Next.js App
 
 We'll start with the finished product, and follow along that way, just clone [Nitric to-do]("https://github.com/nitrictech/nitric-todo).
 
@@ -43,7 +43,7 @@ code .
 This project is structured as a monorepo, using [turborepo]("https://turborepo.org"). The project is split into three main areas:
 
 - **todo-api** - This is where the Nitric API is stored
-- **web** - This is where your Nextjs application is stored
+- **web** - This is where your Next.js application is stored
 
 ## API
 
@@ -446,7 +446,7 @@ module.exports = {
       bodyParser: false, // Disallow body parsing, consume as stream
     },
   },
-  // To avoid any CORs issues use NextJS as a proxy for Nitric API
+  // To avoid any CORs issues use Next.js as a proxy for Nitric API
   // We are working on it :)
   async rewrites() {
     return [
@@ -468,7 +468,7 @@ cd todo-api
 nitric run
 ```
 
-We can launch the Nextjs frontend with:
+We can launch the Next.js frontend with:
 
 ```bash
 cd ../web
