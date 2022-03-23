@@ -362,6 +362,21 @@ profileApi.get('/profiles/:id/image/download', async (ctx) => {
 });
 ```
 
+
+You can also directly redirect to the photo url.
+
+```typescript 
+profileApi.get("/profiles/:id/image/view", async (ctx) => {
+  const { id } = ctx.req.params;
+  const photo = profilesImg.file(`images/${id}/photo.png`);
+
+  // Create a read-only signed url reference
+  const photoUrl = await photo.signUrl(FileMode.Read);
+  ctx.res.status = 303;
+  ctx.res.headers["Location"] = [photoUrl];
+});
+```
+
 ## Test your API
 
 Update all {} values and change the URL to your deployed URL if you're testing on the cloud.
