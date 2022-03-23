@@ -86,7 +86,7 @@ provider: aws
 region: us-east-1
 ```
 
-> Note: the cloud configuration is separate to the cloud credentials. 
+> Note: the cloud configuration is separate to the cloud credentials.
 > You will still have to set your cloud credentials on your first deployment by following the guide in the cloud's section in the reference documentation.
 
 ## Development
@@ -96,13 +96,13 @@ When you are done developing your application and you want to run and test it lo
 ```
 nitric run
 
-SUCCESS  Configuration gathered (8s)                           
-SUCCESS  Created Dev Image! (0s)                         
-SUCCESS  Started Local Services! (5s)                      
-SUCCESS  Started Functions! (1s)                    
+SUCCESS  Configuration gathered (8s)
+SUCCESS  Created Dev Image! (0s)
+SUCCESS  Started Local Services! (5s)
+SUCCESS  Started Functions! (1s)
 Local running, use ctrl-C to stop
 
-Api    | Endpoint                            
+Api    | Endpoint
 my-api | http://localhost:9001/apis/my-api
 ```
 
@@ -119,17 +119,18 @@ If this is your first deployment, you will have to set up your cloud credentials
 ```
 nitric up -s my-aws-stack
 ```
+
 > Each of the cloud providers deployments take different amounts of time.
 
 The deployment output will look something like:
 
 ```
  SUCCESS  Configuration gathered (11s)
- SUCCESS  Images built (34s)                               
- Deployed  Group/nitric-project-stack (3s)                  
- Deployed  Repository/nitric-stack-func (2s)                     
- Deployed  Role/funcLambdaRole (6s)                            
- Deployed  Table/nitric-collection (9s)  
+ SUCCESS  Images built (34s)
+ Deployed  Group/nitric-project-stack (3s)
+ Deployed  Repository/nitric-stack-func (2s)
+ Deployed  Role/funcLambdaRole (6s)
+ Deployed  Table/nitric-collection (9s)
  Deployed  RolePolicyAttachment/funcLambdaBasicExecution (3s)
  Deployed  RolePolicy/funcListAccess (3s)
  Deployed  RolePolicy/func-c0c5f70007b3733c39d198bd674bbde4 (3s)
@@ -141,7 +142,7 @@ The deployment output will look something like:
  Deployed  Stack/nitric-project-nitric-stack-func (2m37s)
  Deployed  Permission/nitric-apifunc (43s)
  Deployed  Stage/func-listDefaultStage (1m4s)
- Deployed  Stack (4m8s)             
+ Deployed  Stack (4m8s)
 ┌────────────────────────────────────────────────┐
 | API     | Endpoint                             |
 | apiName | https://apiName-region.amazonaws.com |
