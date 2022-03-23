@@ -14,6 +14,29 @@ To get a list of the available commands, run the following command:
 
 ```
 nitric help
+
+Usage:
+  nitric [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  down        Undeploy a previously deployed stack, deleting resources
+  feedback    Provide feedback on your experience with nitric
+  help        Help about any command
+  info        Gather information about Nitric and the environoment
+  list        List all project stacks and their status
+  new         Create a new project
+  run         Run your project locally for development and testing
+  stack       Manage stacks (the deployed app containing multiple resources e.g. collection, bucket, topic)
+  up          Create or update a deployed stack
+  version     Print the version number of this CLI
+
+Flags:
+  -h, --help                   help for nitric
+  -o, --output stringEnumVar   output format (default table)
+  -v, --verbose int            set the verbosity of output (larger is more verbose) (default 1)
+
+Use "nitric [command] --help" for more information about a command.
 ```
 
 ## Common Commands
@@ -23,20 +46,8 @@ There are a few common commands that you will use frequently:
 - `nitric new` creates a new project
 - `nitric stack new` creates a new stack within a project
 - `nitric run` runs your stack locally
-- `nitric up` deploys your stack to the cloud
-- `nitric down` destroys your stack from the cloud
-
-## Environment Variables
-
-### Pulumi Access Token
-
-To view your deployments on the pulumi dashboard, you will need a pulumi access token. You can get this token by logging into pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
-
-Add the environment variable to your `~/.zshrc` or `~/.bashrc` as:
-
-```
-PULUMI_ACCESS_TOKEN=access_token
-```
+- `nitric up -s my-aws-stack` deploys your stack to the cloud
+- `nitric down -s my-aws-stack` destroys your stack from the cloud
 
 ## Start
 
@@ -52,6 +63,12 @@ This will walk through creating the project, including the name and what templat
 
 The command will also create a `nitric.yaml` file. This file contains the configuration for your project. The handlers key is list of globs for your functions. The handlers should point to all functions you want to run or deploy.
 
+```yaml
+name: my-project
+handlers:
+  - functions/*.ts
+```
+
 ### Stacks
 
 Creating a new stack will create a configuration for a particular cloud. You can have multiple stacks for one project.
@@ -60,7 +77,7 @@ Creating a new stack will create a configuration for a particular cloud. You can
 nitric stack new
 ```
 
-This will create a `nitric-stackName.yaml` file that contains the configuration for deploying to the cloud. Some providers will have different config, heres an example of an aws stack
+This will create a `nitric-stackName.yaml` file that contains the configuration for deploying to the cloud. Some providers will have different config, heres an example of an aws stack:
 
 ```yaml
 # nitric-my-aws-stack.yaml
@@ -69,15 +86,27 @@ provider: aws
 region: us-east-1
 ```
 
+> Note: the cloud configuration is separate to the cloud credentials. 
+> You will still have to set your cloud credentials on your first deployment by following the guide in the cloud's section in the reference documentation.
+
 ## Development
 
 When you are done developing your application and you want to run and test it locally, you can use the `nitric run` command.
 
 ```
 nitric run
+
+SUCCESS  Configuration gathered (8s)                           
+SUCCESS  Created Dev Image! (0s)                         
+SUCCESS  Started Local Services! (5s)                      
+SUCCESS  Started Functions! (1s)                    
+Local running, use ctrl-C to stop
+
+Api    | Endpoint                            
+my-api | http://localhost:9001/apis/my-api
 ```
 
-This will build and run your functions for local testing. The output will provide a local endpoint so that you can test your apis.
+This will build and run your functions for local testing. The output provides a local endpoint so that you can test your apis.
 
 If you make changes whilst it is running, the changes will be reflected due to hot reloading.
 
@@ -85,19 +114,65 @@ If you make changes whilst it is running, the changes will be reflected due to h
 
 Once you have tested your application locally and you're ready to deploy, you can do `nitric up`. This command requires you supply the name of a stack with the `-s` or `--stack` argument. This will set the cloud configuration for that particular deployment.
 
-```
-nitric up --stack my-aws-stack
-```
+If this is your first deployment, you will have to set up your cloud credentials before deploying to the cloud. You can find the guides for these in the cloud's section in the reference documentation. The AWS guide is [here](`/docs/reference/aws`).
 
+```
+nitric up -s my-aws-stack
+```
 > Each of the cloud providers deployments take different amounts of time.
 
-If you make changes and want to redeploy, you don't have to take the application down, you can just redeploy and it will find the difference. However, if you do want to destroy the application, you can use the `nitric down` command.
+The deployment output will look something like:
 
 ```
-nitric down
+ SUCCESS  Configuration gathered (11s)
+ SUCCESS  Images built (34s)                               
+ Deployed  Group/nitric-project-stack (3s)                  
+ Deployed  Repository/nitric-stack-func (2s)                     
+ Deployed  Role/funcLambdaRole (6s)                            
+ Deployed  Table/nitric-collection (9s)  
+ Deployed  RolePolicyAttachment/funcLambdaBasicExecution (3s)
+ Deployed  RolePolicy/funcListAccess (3s)
+ Deployed  RolePolicy/func-c0c5f70007b3733c39d198bd674bbde4 (3s)
+ Deployed  Image/func-image (1m36s)
+ Deployed  Image/func (1m38s)
+ Deployed  Function/func (43s)
+ Deployed  AWSLambda/func (2m22s)
+ Deployed  Api/nitric-api (11s)
+ Deployed  Stack/nitric-project-nitric-stack-func (2m37s)
+ Deployed  Permission/nitric-apifunc (43s)
+ Deployed  Stage/func-listDefaultStage (1m4s)
+ Deployed  Stack (4m8s)             
+┌────────────────────────────────────────────────┐
+| API     | Endpoint                             |
+| apiName | https://apiName-region.amazonaws.com |
+└─────────────────────────────────────────────── ┘
+```
+
+If you make changes and want to redeploy, you don't have to take the application down, you can just redeploy and it will find the difference. However, if you do want to destroy the application completely, you can use the `nitric down` command.
+
+```
+nitric down -s my-aws-stack
 ```
 
 > This will prompt you again before destroying the stack.
+
+This output will look something like:
+
+```bash
+? Warning - This operation will destroy your stack, all deployed resources will be removed. Are you sure you want to proceed? Yes
+ Deleted  Stage/func-listDefaultStage (3s)
+ Deleted  Permission/nitric-apifunc (3s)
+ Deleted  Api/nitric-api (5s)
+ Deleted  RolePolicyAttachment/funcLambdaBasicExecution (1s)
+ Deleted  Function/func (2s)
+ Deleted  RolePolicy/func-c0c5f70007b3733c39d198bd674bbde4 (2s)
+ Deleted  RolePolicy/funcListAccess (2s)
+ Deleted  Role/funcLambdaRole (6s)
+ Deleted  Repository/nitric-stack-func (2s)
+ Deleted  Group/nitric-project-stack (2s)
+ Deleted  Table/nitric-collection (4s)
+ Deleted  Stack (57s)
+```
 
 To get information about your deployed stacks, use the `nitric list` command.
 
@@ -128,3 +203,12 @@ For more verbose input, specify a verbosity level with `--verbose`. The larger t
 ## Feedback
 
 If you want to provide feedback on the CLI or the framework in general, you can use the `nitric feedback` command. This will template a github issue for you to submit. Alternatively, you can open an issue manually [here](`https://github.com/nitrictech/cli/issues/new/choose`).
+
+```
+? What is the name of the repo? cli
+? What kind of feedback do you want to give? bug
+? How would you like to title your feedback? Nitric list command
+? Please write your feedback <Received>
+INFO  Please create a github issue by clicking on the link below
+[link to generated github issue]
+```
