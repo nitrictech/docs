@@ -1,6 +1,6 @@
 The Nitric CLI allows you to build, develop, and deploy your serverless application.
 
-To verify your installation run `nitric version`. The output should look something like this:
+To verify your [installation](/docs/installation) run `nitric version`. The output should look something like this:
 
 ```
 Go Version: go1.17.8
@@ -49,7 +49,7 @@ There are a few common commands that you will use frequently:
 - `nitric up -s my-aws-stack` deploys your stack to the cloud
 - `nitric down -s my-aws-stack` destroys your stack from the cloud
 
-## Start
+## Getting Started
 
 ### Projects
 
@@ -110,11 +110,13 @@ This will build and run your functions for local testing. The output provides a 
 
 If you make changes whilst it is running, the changes will be reflected due to hot reloading.
 
-## Deploy
+## Deployment
+
+### Deploying the Stack
 
 Once you have tested your application locally and you're ready to deploy, you can do `nitric up`. This command requires you supply the name of a stack with the `-s` or `--stack` argument. This will set the cloud configuration for that particular deployment.
 
-If this is your first deployment, you will have to set up your cloud credentials before deploying to the cloud. You can find the guides for these in the cloud's section in the reference documentation. The AWS guide is [here](`/docs/reference/aws`).
+If this is your first deployment, you will have to set up your cloud credentials before deploying to the cloud. You can find the guides for these in the cloud's section in the reference documentation. The AWS guide is [here](/docs/reference/aws).
 
 ```
 nitric up -s my-aws-stack
@@ -149,6 +151,8 @@ The deployment output will look something like:
 └─────────────────────────────────────────────── ┘
 ```
 
+### Destroying the Deployment
+
 If you make changes and want to redeploy, you don't have to take the application down, you can just redeploy and it will find the difference. However, if you do want to destroy the application completely, you can use the `nitric down` command.
 
 ```
@@ -174,6 +178,8 @@ This output will look something like:
  Deleted  Table/nitric-collection (4s)
  Deleted  Stack (57s)
 ```
+
+### Listing Deployments
 
 To get information about your deployed stacks, use the `nitric list` command.
 
@@ -203,7 +209,7 @@ For more verbose input, specify a verbosity level with `--verbose`. The larger t
 
 ## Feedback
 
-If you want to provide feedback on the CLI or the framework in general, you can use the `nitric feedback` command. This will template a github issue for you to submit. Alternatively, you can open an issue manually [here](`https://github.com/nitrictech/cli/issues/new/choose`).
+If you want to provide feedback on the CLI or the framework in general, you can use the `nitric feedback` command. This will template a github issue for you to submit. Alternatively, you can open an issue manually [here](https://github.com/nitrictech/cli/issues/new/choose).
 
 ```
 ? What is the name of the repo? cli
