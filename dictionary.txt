@@ -25,7 +25,7 @@ Homebrew
 HttpMiddleware
 IAM
 JSON
-MacOS
+macOS
 Microservice
 Middleware
 MinIO
@@ -153,4 +153,18 @@ v3
 versionId
 x-amazon-apigateway-integration
 yaml
+Matchers
+deployable
+scalable
+unhandled
+queryable
+composable
+integrations
+Scalable
+Transactional
+Pulumi
+homebrew
+PubSubPull
 \..+
+
+️

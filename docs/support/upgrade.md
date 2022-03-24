@@ -15,13 +15,13 @@ The Node SDK now uses a 'Config-as-Code' design pattern.
 
 - Resources, permissions and configuration will infer automatically from your code.
 
-The API defintions have minor changes to support the new pattern.
+The API definitions have minor changes to support the new pattern.
 
 - Examples on how to use the API can be found in the [documentation](/docs).
 
 ### Why the change?
 
-Config as code is an expressive and self-documentating pattern. Save time by not having to read through pages of documentation or manage 1000s of lines of config.
+Config as code is an expressive and self-documenting pattern. Save time by not having to read through pages of documentation or manage 1000s of lines of config.
 
 Examples include:
 
@@ -31,7 +31,7 @@ Examples include:
 
 ## Install the new Nitric CLI
 
-The Nitric CLI is no longer distributed via NPM. A fresh installation is neccessary.
+The Nitric CLI is no longer distributed via NPM. A fresh installation is necessary.
 
 Uninstall the existing CLI with NPM or manually if you didn't start with NPM.
 

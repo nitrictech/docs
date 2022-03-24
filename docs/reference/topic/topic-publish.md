@@ -12,7 +12,7 @@ await updates.publish({
 });
 ```
 
-## Paramaters
+## Parameters
 
 ---
 
