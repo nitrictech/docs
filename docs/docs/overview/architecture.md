@@ -1,6 +1,6 @@
 # Architecture
 
-Nitric is an open source cloud application development framework. It leverages open standards, existing tools and cloud provider APIs/SDKs wherever possible to provide a everything needs to go from concept to product for cloud and SaaS applications.
+Nitric is an open source cloud application development framework. It leverages open standards, existing tools and cloud provider APIs/SDKs wherever possible to provide everything required to go from concept to product for cloud and SaaS applications.
 
 The guiding principals of the Nitric Framework are:
 

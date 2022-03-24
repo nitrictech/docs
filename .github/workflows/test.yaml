@@ -3,7 +3,7 @@ name: Tests
 on: pull_request
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,3 +19,5 @@ jobs:
         run: yarn format:check
       - name: Run tests
         run: yarn test
+      - name: Run spellcheck test
+        run: yarn ci:rename-for-spellcheck && yarn test:spellcheck
