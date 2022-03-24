@@ -19,7 +19,7 @@ In the guide we'll use the following:
 
 ## Start with a Next.js App
 
-We'll start with the finished product, and follow along that way, just clone [Nitric to-do]("https://github.com/nitrictech/nitric-todo).
+We'll start with the finished product, and follow along that way, just clone [Nitric to-do](https://github.com/nitrictech/nitric-todo).
 
 ```bash
 git clone https://github.com/nitrictech/nitric-todo.git
@@ -40,7 +40,7 @@ code .
 
 ## Project structure
 
-This project is structured as a monorepo, using [turborepo]("https://turborepo.org"). The project is split into three main areas:
+This project is structured as a monorepo, using [turborepo](https://turborepo.org). The project is split into three main areas:
 
 - **todo-api** - This is where the Nitric API is stored
 - **web** - This is where your Next.js application is stored
