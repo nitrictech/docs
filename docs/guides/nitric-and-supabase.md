@@ -32,9 +32,9 @@ Navigate to _database_, then _tables_ and click _New_
  height="300"
  />
 
-In the _Name_ field enter __profiles__, then add the following columns to the table and click _Save_:
+In the _Name_ field enter **profiles**, then add the following columns to the table and click _Save_:
 
-| __Name__ | __Type__ |
+| **Name** | **Type** |
 | -------- | -------- |
 | email    | varchar  |
 | name     | varchar  |
@@ -44,7 +44,6 @@ In the _Name_ field enter __profiles__, then add the following columns to the ta
   src="../../assets/img/guides/nitric-and-supabase/supabase_createprofilestable.png"
   height="700"
   />
-
 
 That's all we need to do in Supabase for now. We'll come back to the project when it's time to link everything together.
 
@@ -78,11 +77,7 @@ The API Key will be displayed on screen starting with `SG.`, take note of it sin
 
 > ⚠️ the API key can only be displayed once, make sure you note it down or you'll need to generate it again later.
 
-
-
 Create .env file and put the key in it.
-
-
 
 ## Create a new Nitric project
 
@@ -130,19 +125,19 @@ height="170"
 Open `functions/welcome.js` in your editor and replace the file contents with this:
 
 ```javascript
-import "dotenv/config";
-import sendgrid from "@sendgrid/mail";
-import { api } from "@nitric/sdk";
+import 'dotenv/config';
+import sendgrid from '@sendgrid/mail';
+import { api } from '@nitric/sdk';
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 const sender = process.env.SENDGRID_SENDER;
 
-const payApi = api("notifications");
+const payApi = api('notifications');
 
-payApi.post("/welcome", async ({ req, res }) => {
-  if (req.headers["x-api-key"] !== process.env.API_KEY) {
-    res.status = "401";
-    res.body = "Unauthorized";
+payApi.post('/welcome', async ({ req, res }) => {
+  if (req.headers['x-api-key'] !== process.env.API_KEY) {
+    res.status = '401';
+    res.body = 'Unauthorized';
     return;
   }
 
@@ -151,7 +146,7 @@ payApi.post("/welcome", async ({ req, res }) => {
   const msg = {
     to: email,
     from: sender,
-    subject: "Welcome to Nitric!",
+    subject: 'Welcome to Nitric!',
     text: `Hi ${name}, thanks for joining, we're so glad you're here!`,
     html: `
       <h1>
@@ -174,13 +169,13 @@ Let's breakdown what the code above is doing.
 First, we import `dotenv/config` so that environment variables are automatically loaded from `.env` files.
 
 ```javascript
-import "dotenv/config";
+import 'dotenv/config';
 ```
 
 Next, we setup the SendGrid client by providing it with an API key stored in the `SENDGRID_API_KEY` environment variable, which we'll create later. We also retrieve the sender email address from the `SENDGRID_SENDER` variable, which is used as the _from_ email address.
 
 ```javascript
-import sendgrid from "@sendgrid/mail";
+import sendgrid from '@sendgrid/mail';
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 const sender = process.env.SENDGRID_SENDER;
@@ -239,10 +234,10 @@ API_KEY=
 
 Update these variables in this file with your own values.
 
-| Variable         | Description                                                                                                                                                                                                                      |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| SENDGRID_API_KEY | This is the API Key you created with SendGrid earlier, starting with _SG._                                                                                                                                                       |
-| SENDGRID_SENDER  | This is the verified send email address you setup earlier, e.g. you@example.com                                                                                                                                                  |
+| Variable         | Description                                                                                                                                                                                                                                                         |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SENDGRID_API_KEY | This is the API Key you created with SendGrid earlier, starting with _SG._                                                                                                                                                                                          |
+| SENDGRID_SENDER  | This is the verified send email address you setup earlier, e.g. you@example.com                                                                                                                                                                                     |
 | API_KEY          | This is shared secret with your Supabase app, for the purposes of this guide you can use any string _(just make one up or use a UUID)_. <br /><br />⚠️ In production this value should be something cryptographically secure, so it's hard to guess or brute force. |
 
 ## Run the API locally
@@ -322,7 +317,6 @@ src="../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook_ste
 height="500"
 />
 
-
 For _Type of hook_ select _HTTP Request_:
 
 <img alt="create function hook screenshot - step 2"
@@ -348,4 +342,4 @@ src="../../assets/img/guides/nitric-and-supabase/supabase_insertrow.png"
 height="400"
 />
 
-That it!
+That's it!
