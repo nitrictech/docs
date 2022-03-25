@@ -1,5 +1,3 @@
-Extending Supabase with Function Hooks and Nitric Functions
-
 ## What we'll be doing
 
 In this guide we'll use the Nitric Framework with a Supabase project to build serverless functions the can respond to Insert, Update or Delete operations in your Supabase tables.
@@ -28,7 +26,11 @@ In real scenario you'd probably relate this table to the `auth.users` table, but
 
 Navigate to _database_, then _tables_ and click _New_
 
-![new table steps diagram](../../assets/img/guides/nitric-and-supabase/supabase_createnewtable.png)
+<img
+ alt="new table steps diagram"
+ src="../../assets/img/guides/nitric-and-supabase/supabase_createnewtable.png"
+ height="300"
+ />
 
 In the _Name_ field enter __profiles__, then add the following columns to the table and click _Save_:
 
@@ -37,7 +39,12 @@ In the _Name_ field enter __profiles__, then add the following columns to the ta
 | email    | varchar  |
 | name     | varchar  |
 
-![create profiles table steps diagram](../../assets/img/guides/nitric-and-supabase/supabase_createprofilestable.png)
+<img
+  alt="create profiles table steps diagram"
+  src="../../assets/img/guides/nitric-and-supabase/supabase_createprofilestable.png"
+  height="700"
+  />
+
 
 That's all we need to do in Supabase for now. We'll come back to the project when it's time to link everything together.
 
@@ -53,13 +60,19 @@ If you see the _Create a Single Sender_ button already, go ahead and click it. O
 
 Complete the sender's information and click _Create_. You'll receive a link in a confirmation email to the sender _From_ address which you'll need to click.
 
-![SendGrid create new sender dialog screenshot](../../assets/img/guides/nitric-and-supabase/sendgrid_newsenderdetails.png)
+<img alt="SendGrid create new sender dialog screenshot"
+src="../../assets/img/guides/nitric-and-supabase/sendgrid_newsenderdetails.png"
+height="700"
+/>
 
 Now that you have a verified sender setup, let's generate a SendGrid API key for use in the app. Navigate to the [API Keys](https://app.sendgrid.com/settings/api_keys) page and click _Create API Key_.
 
 In the modal enter a name for your API Key e.g. "Supabase Tutorial", select _Full Access_ and click _Create & View_.
 
-![create API key dialog screenshot](../../assets/img/guides/nitric-and-supabase/sendgrid_createapikey.png)
+<img alt="create API key dialog screenshot"
+src="../../assets/img/guides/nitric-and-supabase/sendgrid_createapikey.png"
+height="500"
+/>
 
 The API Key will be displayed on screen starting with `SG.`, take note of it since we'll need it later.
 
@@ -107,7 +120,10 @@ mv functions/hello.js functions/welcome.js
 
 With those steps complete, your project should look like this:
 
-![example project structure](../../assets/img/guides/nitric-and-supabase/project_structure.png)
+<img alt="example project structure"
+src="../../assets/img/guides/nitric-and-supabase/project_structure.png"
+height="170"
+/>
 
 ## Update the welcome function
 
@@ -294,20 +310,32 @@ In Supabase navigate to _database_, _Function Hooks_, then click _Create Functio
 
 > You'll need to enable Function Hooks first if this is the first time you're using them in the project
 
-![create function hook screenshot](../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook.png)
+<img alt="create function hook screenshot"
+src="../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook.png"
+height="500"
+/>
 
 Give the function hook a new, such as _welcome_customers_, then select the `profiles` table and check _Insert_ as the type of event to trigger your function hook:
 
-![create function hook screenshot - step 1](../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook_step1.png)
+<img alt="create function hook screenshot - step 1"
+src="../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook_step1.png"
+height="500"
+/>
 
 
 For _Type of hook_ select _HTTP Request_:
 
-![create function hook screenshot - step 2](../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook_step2.png)
+<img alt="create function hook screenshot - step 2"
+src="../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook_step2.png"
+height="350"
+/>
 
 Finally, for HTTP Request choose the `POST` method, enter your ngrok URL followed by `/apis/notifications/welcome`, and under HTTP Headers add a new header named `x-api-key`, setting it's value to match the `API_KEY` environment variable you created earlier:
 
-![create function hook screenshot - step 3](../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook_step3.png)
+<img alt="create function hook screenshot - step 3"
+src="../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook_step3.png"
+height="350"
+/>
 
 Click _Confirm_ to save the hook and you're done!
 
@@ -315,6 +343,9 @@ Click _Confirm_ to save the hook and you're done!
 
 You can now test that your Function Hook is working by adding a new record to the `profiles` table. An easy way to do that is with the Supabase Table Editor. Navigate to the _Table Editor_, select the _profiles_ table and click _Insert row_:
 
-![Supabase editor screenshot](../../assets/img/guides/nitric-and-supabase/supabase_insertrow.png)
+<img alt="Supabase editor screenshot"
+src="../../assets/img/guides/nitric-and-supabase/supabase_insertrow.png"
+height="400"
+/>
 
 That it!
