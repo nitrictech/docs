@@ -18,7 +18,7 @@ You could even go the other way and build powerful SaaS APIs with Nitric, connec
 
 We're assuming you're already using Supabase, but if not you can [sign up for free](https://app.supabase.io/).
 
-Log into Supabase and creating a new project. If you have an existing project you'd like to use, that'll be fine, just adapt the next few steps to match your existing project and table names.
+Log into Supabase and create a new project. If you have an existing project you'd like to use, that'll be fine, just adapt the next few steps to match your existing project and table names.
 
 ## Create a table
 
