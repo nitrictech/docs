@@ -64,6 +64,16 @@
             ]
           },
           {
+            "title": "Guides",
+            "disableAutoPrefix": true,
+            "routes": [
+              {
+                "title": "Build a simple user profile API",
+                "path": "/guides/profiles.md"
+              }
+            ]
+          },
+          {
             "title": "More",
             "disableAutoPrefix": true,
             "routes": [
