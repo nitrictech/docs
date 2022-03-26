@@ -6,9 +6,9 @@ This example sends welcome emails to new user profiles with [SendGrid](https://s
 
 - Securely processing payments with Stripe
 - Data aggregation
-- Fanout or event-based workflows with Nitric [queues](https://nitric.io/docs/messaging/queues), [topics](https://nitric.io/docs/messaging/topics), and [schedules](https://nitric.io/docs/schedules)
+- Fanout or event-based workflows with Nitric [queues](/docs/messaging/queues), [topics](/docs/messaging/topics), and [schedules](/docs/schedules)
 
-You could even go the other way and build powerful SaaS APIs with Nitric, connected to your Supabase backend. Or, use Nitric [schedules](https://nitric.io/docs/schedules) to clean up old data in batches.
+You could even go the other way and build powerful SaaS APIs with Nitric, connected to your Supabase backend. Or, use Nitric [schedules](/docs/schedules) to clean up old data in batches.
 
 > Want guides for the topics above? Great! [come and tell us](https://github.com/nitrictech/nitric/discussions) what you need and we'll write it for you.
 
@@ -83,7 +83,7 @@ Create .env file and put the key in it.
 
 Now that Supabase and SendGrid are both setup, let's create a new Nitric project to build the welcome email function.
 
-> You'll need the Nitric CLI for the next steps, if you haven't installed it yet follow the [installation instructions](https://nitric.io/docs/installation).
+> You'll need the Nitric CLI for the next steps, if you haven't installed it yet follow the [installation instructions](/docs/installation).
 
 Follow the prompts with the `new` command to create your project from the JavaScript starter template.
 
