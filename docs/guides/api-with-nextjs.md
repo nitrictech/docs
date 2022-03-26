@@ -15,6 +15,7 @@ In the guide we'll use the following:
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en/download/)
+- [Next.js](https://Next.js.org)
 - [Nitric CLI](https://nitric.io/docs/installation)
 
 ## Start with a Next.js App
