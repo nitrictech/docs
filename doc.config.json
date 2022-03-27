@@ -68,8 +68,12 @@
             "disableAutoPrefix": true,
             "routes": [
               {
-                "title": "Build a simple user profile API",
-                "path": "/guides/profiles.md"
+                "title": "Example: User profile API",
+                "path": "/docs/guides/profiles.md"
+              },
+              {
+                "title": "Supabase",
+                "path": "/docs/guides/nitric-and-supabase.md"
               }
             ]
           },
