@@ -95,7 +95,10 @@ Now you're ready to setup Prisma, let's start by adding it to our project with N
 
 ```bash
 npm install prisma --save-dev
+npm install @prisma/client@dev --save
 ```
+
+> Note: @dev version of the prisma client is needed temporarily due to this [issue](https://github.com/prisma/prisma/issues/10512), which has been resolved but not fully released. We'll update the guide to remove this step once that fix is fully released.
 
 Then, we can initialize Prisma and generate our first schema file:
 
