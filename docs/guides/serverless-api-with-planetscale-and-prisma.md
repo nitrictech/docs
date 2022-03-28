@@ -18,9 +18,7 @@ To keep things light, the API we'll create generates memes by allowing uploads o
 
 > For image editing, we used a library from NPM called [jimp](https://www.npmjs.com/package/jimp), but you could use anything else you like.
 
-When you're done, you'll have an API which accepts a template image (like the left image below) and can generate multiple memes from it (like the right image below):
-
-<!-- TODO: include image ![meme example]() -->
+When you're done, you'll have an API which accepts a template image and can generate multiple memes from it.
 
 ## Prerequisites
 
@@ -198,7 +196,10 @@ export default prisma;
 
 Now our schema is ready, let's get Prisma connected to PlanetScale. The easiest method is to use the `connect` button in the PlanetScale dashboard and select `Prisma` from the dropdown. This will give you values you can copy into the `.env` for your project.
 
-<!-- TODO: include image ![Connect with prisma dashboard screenshot]() -->
+<img alt="create function hook screenshot - step 2"
+src="../../assets/img/guides/planetscale/connect-with-prisma.png"
+height="450"
+/>
 
 When you're done, the `.env` file will look something like this:
 
