@@ -1,4 +1,4 @@
-Gets a reference to a child collection on a document
+Gets a reference to a child collection on a document.
 
 ```javascript
 import { collection } from '@nitric/sdk';

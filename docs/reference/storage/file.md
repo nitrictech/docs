@@ -1,4 +1,4 @@
-Create a reference to a file on a bucket
+Create a reference to a file within a bucket.
 
 ```javascript
 import { bucket } from '@nitric/sdk';
@@ -18,7 +18,7 @@ The unique name/reference to the file.
 
 ---
 
-## Notes:
+## Notes
 
 The file does not need to exist, only a reference to that file is being created.
 

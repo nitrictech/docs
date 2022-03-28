@@ -1,4 +1,4 @@
-Fetch paged results from query
+Fetch paged results from query.
 
 ```javascript
 import { collection } from '@nitric/sdk';

@@ -1,4 +1,4 @@
-Subscribes to a topic
+Publishes a topic.
 
 ```javascript
 import { topic } from '@nitric/sdk';
@@ -27,6 +27,22 @@ The event to publish to the topic
 | **payloadType** optional `string` <br/> a hint to the type of payload supplied.  |
 
 ---
+
+## Examples
+
+### Publish a topic
+
+```javascript
+import { topic } from '@nitric/sdk';
+
+const updates = topic('updates').for('publishing');
+
+await updates.publish({
+  payload: {
+    something: 'amazing happened',
+  },
+});
+```
 
 ## Notes
 

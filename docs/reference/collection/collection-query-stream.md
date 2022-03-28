@@ -1,4 +1,4 @@
-Fetch paged results from query
+Stream paged results from query.
 
 ```javascript
 import { collection } from '@nitric/sdk';
@@ -21,7 +21,7 @@ const profiles = collection('profiles');
 
 const profileQuery = profiles.query();
 
-let results = await profileQuery.streams();
+let results = await profileQuery.stream();
 
 results.on('data', (doc) => {
   // handle stream results

@@ -1,4 +1,4 @@
-Creates a new Collection
+Creates a new Collection.
 
 ```javascript
 import { collection } from '@nitric/sdk';
