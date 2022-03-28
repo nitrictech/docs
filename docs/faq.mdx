@@ -16,6 +16,16 @@ We never want to restrict access in Nitric apps. For services/APIs/etc. that we 
 
 Additionally, being an Open Source project, you're welcome to contribute additional services and plugins to the Nitric project to permanently add support for these integrations.
 
+### How do I view my deployments on the pulumi dashboard?
+
+To view your deployments on the pulumi dashboard, you will need a pulumi access token. You can get this token by logging into pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
+
+Add the environment variable to your `~/.zshrc` or `~/.bashrc` as:
+
+```
+PULUMI_ACCESS_TOKEN=access_token
+```
+
 ### More questions?
 
 Come and chat on [GitHub](https://github.com/nitrictech/nitric/discussions).
