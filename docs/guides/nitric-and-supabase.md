@@ -215,6 +215,7 @@ payApi.post("/welcome", async ({ req, res }) => {
   };
   await sendgrid.send(msg);
   console.log(`welcome sent to: ${email}`);
+}
 ```
 
 ## Create the .env file
