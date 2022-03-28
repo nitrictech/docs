@@ -1,4 +1,4 @@
-Create a new bucket for storing and retrieving files
+Create a new bucket for storing and retrieving files.
 
 ```javascript
 import { bucket } from '@nitric/sdk';

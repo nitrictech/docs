@@ -22,7 +22,7 @@ The unique name of this Schedule within the app. Subsequent calls to `schedule` 
 
 ---
 
-## Notes:
+## Notes
 
 - Schedules do not require access permissions to be specified.
 

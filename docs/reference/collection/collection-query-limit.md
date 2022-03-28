@@ -1,4 +1,4 @@
-Limit the number of results returned by a query
+Limit the number of results returned by a query.
 
 ```javascript
 import { collection } from '@nitric/sdk';
@@ -20,4 +20,5 @@ The limit to apply to the query
 
 ## See also
 
+- [query().pagingFrom()](./collection-query-pagingfrom.md)
 - [query().where()](./collection-query-where.md)

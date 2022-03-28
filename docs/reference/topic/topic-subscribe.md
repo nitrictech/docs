@@ -1,4 +1,4 @@
-Subscribes to a topic
+Subscribes to a topic.
 
 ```javascript
 import { topic } from '@nitric/sdk';
@@ -20,6 +20,21 @@ updates.subscribe(async (ctx) => {
 The middleware (code) to be triggered by the topic
 
 ---
+
+## Examples
+
+### Subscribe to a topic
+
+```javascript
+import { topic } from '@nitric/sdk';
+
+const updates = topic('updates');
+
+updates.subscribe(async (ctx) => {
+  // Log the provided message
+  console.log(ctx.req.json());
+});
+```
 
 ## Notes
 

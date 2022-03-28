@@ -1,4 +1,4 @@
-Get a reference to a document
+Get a reference to a document.
 
 ```javascript
 import { collection } from '@nitric/sdk';
