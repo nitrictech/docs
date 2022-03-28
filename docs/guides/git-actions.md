@@ -5,7 +5,9 @@ Here we'll walk through the simple example of deploying a Nitric project to AWS.
 
 ## Lets start by getting our workflow setup
 
-In your project you'll want to create a yaml file which contains your workflow config. You can name this file anything you like, in this example we've gone with 'deploy-aws.yaml'.
+In your project you'll want to create a yaml file which contains your workflow config. You can name this file anything you like, in this example we've gone with 'deploy-aws.yaml'. 
+
+It should be placed the folder `.github/workflows`
 
 ## Full example
 
@@ -68,7 +70,7 @@ on:
     branches:
       - main
 ```
-Configure the environment properties required by Nitric's dependency Pulumi as GitHub secrets.
+Configure the environment properties required by Nitric's dependency Pulumi as GitHub secrets. Which can be found by navagating to `https://github.com/{user}/{project}/settings/secrets/actions`.
 
 - PULUMI_ACCESS_TOKEN
 
