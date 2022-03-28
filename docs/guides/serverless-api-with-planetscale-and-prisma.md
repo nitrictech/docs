@@ -10,8 +10,8 @@ In the guide we'll use:
 - [PlanetScale](https://planetscale.com) serverless database
 - [Prisma](https://prisma.io) ORM
 - The cloud of your choice:
-  - [AWS](https://aws.amazon.com) 
-  - [GCP](https://cloud.google.com) 
+  - [AWS](https://aws.amazon.com)
+  - [GCP](https://cloud.google.com)
   - [Azure](https://azure.microsoft.com)
 
 To keep things light, the API we'll create generates memes by allowing uploads of image templates, then generating new images with overlaid text. Feel free to adapt the steps for any other API you'd like to build.
@@ -170,24 +170,24 @@ npx prisma generate
 Finally, let's make it easy to import an instance of the prisma client by creating the file `prisma/index.ts` and adding this code:
 
 ```typescript
-import { PrismaClient } from "./client";
+import { PrismaClient } from './client';
 
-export * from "./client";
+export * from './client';
 
 let prisma: PrismaClient;
 
-if (process.env.NITRIC_ENVIRONMENT !== "build") {
-  if (process.env.NODE_ENV === "production") {
+if (process.env.NITRIC_ENVIRONMENT !== 'build') {
+  if (process.env.NODE_ENV === 'production') {
     prisma = new PrismaClient({
-      errorFormat: "minimal",
+      errorFormat: 'minimal',
     });
   } else {
-    globalThis["prisma"] =
-      globalThis["prisma"] ||
+    globalThis['prisma'] =
+      globalThis['prisma'] ||
       new PrismaClient({
-        errorFormat: "pretty",
+        errorFormat: 'pretty',
       });
-    prisma = globalThis["prisma"];
+    prisma = globalThis['prisma'];
   }
 }
 
@@ -247,25 +247,25 @@ In the `/functions` directory create a new file called `templates.ts` and popula
 
 ```typescript
 // functions/templates.ts
-import Jimp from "jimp";
-import prisma, { MemeTemplate, TextPosition } from "../prisma";
-import { memeApi } from "../resources/apis";
-import { templates } from "../resources/buckets";
+import Jimp from 'jimp';
+import prisma, { MemeTemplate, TextPosition } from '../prisma';
+import { memeApi } from '../resources/apis';
+import { templates } from '../resources/buckets';
 
 export interface CreateTemplateRequest
-  extends Omit<MemeTemplate, "filepath" | "createdAt"> {
+  extends Omit<MemeTemplate, 'filepath' | 'createdAt'> {
   source: string;
-  textPositions: Omit<TextPosition, "id" | "memeId">[];
+  textPositions: Omit<TextPosition, 'id' | 'memeId'>[];
 }
 
-const templateImgs = templates.for("writing");
+const templateImgs = templates.for('writing');
 
 export const normalizeName = (name: string) => {
-  return name.replace(" ", '-').replace(/[^\w-]*/g, "")
-}
+  return name.replace(' ', '-').replace(/[^\w-]*/g, '');
+};
 
 // POST: /templates - Create new meme templates
-memeApi.post("/templates", async ({ req, res }) => {
+memeApi.post('/templates', async ({ req, res }) => {
   const {
     textPositions,
     source,
@@ -300,7 +300,7 @@ memeApi.post("/templates", async ({ req, res }) => {
 });
 
 // GET: /templates - List all meme templates
-memeApi.get("/templates", async ({ res }) => {
+memeApi.get('/templates', async ({ res }) => {
   const memeTemplates = await prisma.memeTemplate.findMany({
     include: {
       textPositions: true,
@@ -311,7 +311,7 @@ memeApi.get("/templates", async ({ res }) => {
 });
 ```
 
-In this example we're importing the api gateway `memeApi` we created in our `resources` directory, and registering route and method handlers using methods like `get` and `post`, much like you would in frameworks such as [Express](https://expressjs.com/). 
+In this example we're importing the api gateway `memeApi` we created in our `resources` directory, and registering route and method handlers using methods like `get` and `post`, much like you would in frameworks such as [Express](https://expressjs.com/).
 
 Additionally, we're importing the bucket used to store template images `templateImages` from the resources directory. We also declare our intended use of the bucket with the `for` method, which let's nitric know what permissions your code needs and applies them during deployments. In this instance we're only giving our template service `write` access to the templates bucket.
 
@@ -323,13 +323,13 @@ Similar to the `templates` example, we'll create another new file `functions/mem
 
 ```typescript
 // functions/memes.ts
-import { FileMode } from "@nitric/sdk";
-import Jimp from "jimp";
-import prisma, { Meme } from "../prisma";
-import { memes, templates } from "../resources/buckets";
-import { memeApi } from "../resources/apis";
+import { FileMode } from '@nitric/sdk';
+import Jimp from 'jimp';
+import prisma, { Meme } from '../prisma';
+import { memes, templates } from '../resources/buckets';
+import { memeApi } from '../resources/apis';
 
-interface MemeCreationRequest extends Omit<Meme, "id" | "templateId"> {
+interface MemeCreationRequest extends Omit<Meme, 'id' | 'templateId'> {
   templateName: string;
   texts: {
     name: string;
@@ -337,11 +337,11 @@ interface MemeCreationRequest extends Omit<Meme, "id" | "templateId"> {
   }[];
 }
 
-const templateImgs = templates.for("reading");
-const memesImgs = memes.for("reading", "writing");
+const templateImgs = templates.for('reading');
+const memesImgs = memes.for('reading', 'writing');
 
 // POST: /memes - Create new meme images
-memeApi.post("/memes", async ({ req, res }) => {
+memeApi.post('/memes', async ({ req, res }) => {
   const meme = req.json() as MemeCreationRequest;
 
   const template = await prisma.memeTemplate.findFirst({
@@ -359,8 +359,8 @@ memeApi.post("/memes", async ({ req, res }) => {
 
   // Load the image and font
   const [img, font] = await Promise.all([
-    Jimp.read(Buffer.from(imgBytes)), 
-    Jimp.loadFont(Jimp.FONT_SANS_32_WHITE)
+    Jimp.read(Buffer.from(imgBytes)),
+    Jimp.loadFont(Jimp.FONT_SANS_32_WHITE),
   ]);
 
   // Apply text to the template image to create the meme
@@ -370,7 +370,7 @@ memeApi.post("/memes", async ({ req, res }) => {
       (tp) => tp.name === text.name
     );
 
-    if(!matchingText) return
+    if (!matchingText) return;
 
     // ignore if anchor tags don't match
     img.print(
@@ -383,7 +383,7 @@ memeApi.post("/memes", async ({ req, res }) => {
         alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
       },
       img.getWidth() * (matchingText.width / 100),
-      img.getHeight() * (matchingText.height / 100),
+      img.getHeight() * (matchingText.height / 100)
     );
   });
 
@@ -393,7 +393,7 @@ memeApi.post("/memes", async ({ req, res }) => {
         templateId: meme.templateName,
       },
     }),
-    img.getBufferAsync(Jimp.MIME_PNG)
+    img.getBufferAsync(Jimp.MIME_PNG),
   ]);
 
   await memesImgs.file(newMeme.id).write(buf);
@@ -402,15 +402,15 @@ memeApi.post("/memes", async ({ req, res }) => {
 });
 
 // GET: /memes - List all created memes
-memeApi.get("/memes", async ({ res }) => {
+memeApi.get('/memes', async ({ res }) => {
   const memes = await prisma.meme.findMany();
   return res.json(memes);
 });
 
 // GET: /memes/:id - Get a meme image by it's ID
-memeApi.get("/memes/:id", async ({ req, res }) => {
+memeApi.get('/memes/:id', async ({ req, res }) => {
   const { id } = req.params;
-  const signedUrl = await memesImgs.file(id).signUrl(FileMode.Read)
+  const signedUrl = await memesImgs.file(id).signUrl(FileMode.Read);
   res.status = 303;
   res.headers['Location'] = [signedUrl];
 });
