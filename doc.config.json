@@ -74,6 +74,10 @@
               {
                 "title": "Supabase",
                 "path": "/docs/guides/nitric-and-supabase.md"
+              },
+              {
+                "title": "PlanetScale and Prisma",
+                "path": "/docs/guides/serverless-api-with-planetscale-and-prisma.md"
               }
             ]
           },
