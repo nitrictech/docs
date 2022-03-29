@@ -419,7 +419,7 @@ memeApi.get('/memes/:id', async ({ req, res }) => {
 
 Again, this file re-uses the `memeApi` resource, but defines new routes under the `/memes` path.
 
-We also request `read` access to the the `templateImages` bucket and `read-write` access to the `memeImages` bucket.
+We also request `read` access to the `templateImages` bucket and `read-write` access to the `memeImages` bucket.
 
 ## Testing it locally
 
