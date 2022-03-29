@@ -72,6 +72,10 @@
                 "path": "/docs/guides/profiles.md"
               },
               {
+                "title": "API with Next.js",
+                "path": "/docs/guides/api-with-nextjs.md"
+              },
+              {
                 "title": "Supabase",
                 "path": "/docs/guides/nitric-and-supabase.md"
               },
