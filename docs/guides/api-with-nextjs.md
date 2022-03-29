@@ -392,7 +392,7 @@ taskListApi.patch('/:listid/:id', async (ctx) => {
 });
 ```
 
-The delete routes `DELETE /:listid/:id` and `DELETE /:id` get the relevent document and delete them from the collection.
+The delete routes `DELETE /:listid/:id` and `DELETE /:id` get the relevant document and delete them from the collection.
 
 ```typescript
 //apis/tasks-api/functions/tasks.ts
@@ -436,7 +436,7 @@ Start by create your `.env` file by renaming the `.env.example` file:
 mv web/apps/.env.example web/apps/.env
 ```
 
-Within the `next.config.js` you should have rewrites defined to proxy between your universal Next.js API route and your Nitric APIS. It takes the `API_BASE_URL` variable which is defined in the `.env` file.
+Within the `next.config.js` you should have rewrites defined to proxy between your universal Next.js API route and your Nitric APIs. It takes the `API_BASE_URL` variable which is defined in the `.env` file.
 
 ```javascript
 //apps/web/next.config.js
