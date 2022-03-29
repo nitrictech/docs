@@ -42,7 +42,6 @@ eventing
 fasthttp
 filepath
 github
-heres
 homebrew
 integrations
 jimp
