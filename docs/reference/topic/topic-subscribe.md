@@ -11,7 +11,7 @@ updates.subscribe(async (ctx) => {
 });
 ```
 
-## Paramaters
+## Parameters
 
 ---
 
