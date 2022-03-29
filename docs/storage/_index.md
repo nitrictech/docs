@@ -2,7 +2,7 @@ Nitric Storage simplifies securely storing and retrieving large files.
 
 ### Files
 
-Files are any sort of binary files, common examples include documents (.doc, .pdf), images (.gif, .jpg) or videos (.mp4, .mkv). Using buckets to store these larger files, instead of in other data persistance systems, like SQL or document databases, can improve performance.
+Files are any sort of binary files, common examples include documents (.doc, .pdf), images (.gif, .jpg) or videos (.mp4, .mkv). Using buckets to store these larger files, instead of in other data persistence systems, like SQL or document databases, can improve performance.
 
 ### Buckets
 
