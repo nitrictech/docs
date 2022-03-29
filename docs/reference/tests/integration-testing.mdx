@@ -1,6 +1,6 @@
 Integration tests are important for your systems as they catch system-level issues that unit tests miss, whilst being faster than end-to-end tests.
 
-When writing these tests we want to make sure that these tests are reliable, able to be reproduced and can isolate our system failures. This is why we want to use a testing framework like `jest`, and utilise a http testing library like `supertest`.
+When writing these tests we want to make sure that these tests are reliable, able to be reproduced and can isolate our system failures. This is why we want to use a testing framework like `jest`, and use a http testing library like `supertest`.
 
 ```
 yarn add --dev jest supertest @types/jest @types/supertest
@@ -72,7 +72,7 @@ describe('Testing Hello Api', () => {
 
 We can then add some tests to hit this API. We'll start with testing the `GET /:name` route.
 
-This request has the name paramater set to 'test'. This means we expect the response to be 'Hello test' and the status code to be 200. We get the done function as a parameter from the test callback, and call that when the test is resolved or encounters errors. This is to stop timeouts on the test, as we are testing an async operation.
+This request has the name parameter set to 'test'. This means we expect the response to be 'Hello test' and the status code to be 200. We get the done function as a parameter from the test callback, and call that when the test is resolved or encounters errors. This is to stop timeouts on the test, as we are testing an async operation.
 
 ```ts
 import supertest from 'supertest';
@@ -96,7 +96,7 @@ describe('Testing Hello Api', () => {
 
 We can add another test case for hitting the `POST /:name` route. This will need to test whether the response from the api resolves correctly, as well as whether the image bucket was updated. It makes a post request to our route and then checks the response just like the last one. Additionally, this test reads from the bucket to verify that the correct content was written.
 
-> Make sure you remove the call to done from the assertation in the api route. Otherwise, the bucket test will not be run.
+> Make sure you remove the call to done from the assertion in the api route. Otherwise, the bucket test will not be run.
 
 ```ts
 import supertest from 'supertest';
