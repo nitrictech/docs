@@ -81,7 +81,7 @@ import assert from 'assert';
 describe('Testing Hello Api', () => {
   const api = supertest('http://localhost:9001/apis/main');
 
-  describe('Given a request to GET /:name', done => {
+  describe('Given a request to GET /:name', (done) => {
     test('responds with Hello test', () => {
       api
         .get('/test')
