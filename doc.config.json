@@ -434,6 +434,43 @@
                     "path": "/docs/reference/azure/topics.mdx"
                   }
                 ]
+              },
+              {
+                "title": "GCP",
+                "routes": [
+                  {
+                    "title": "GCP Provider Overview",
+                    "path": "/docs/reference/gcp/_index.mdx"
+                  },
+                  {
+                    "title": "APIs",
+                    "path": "/docs/reference/gcp/apis.mdx"
+                  },
+                  {
+                    "title": "Collections",
+                    "path": "/docs/reference/gcp/collections.mdx"
+                  },
+                  {
+                    "title": "Queues",
+                    "path": "/docs/reference/gcp/queues.mdx"
+                  },
+                  {
+                    "title": "Schedules",
+                    "path": "/docs/reference/gcp/schedules.mdx"
+                  },
+                  {
+                    "title": "Secrets",
+                    "path": "/docs/reference/gcp/secrets.mdx"
+                  },
+                  {
+                    "title": "Storage",
+                    "path": "/docs/reference/gcp/storage.mdx"
+                  },
+                  {
+                    "title": "Topics",
+                    "path": "/docs/reference/gcp/topics.mdx"
+                  }
+                ]
               }
             ]
           }

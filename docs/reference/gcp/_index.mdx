@@ -1,0 +1,35 @@
+The officially supported Nitric GCP Provider.
+
+## Status
+
+-The Nitric GCP Provider is currently in preview
+
+## Usage
+
+The GCP provider is supported by the Nitric SDKs and CLI by default. However, credentials for an GCP account will be required when using the [deploy command](/docs/reference/) from the CLI.
+
+## Google CLI Installation
+
+Installing the Azure CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Google docs](https://cloud.google.com/sdk/docs/install).
+
+### Windows
+
+Download & install the [latest CLI release](https://cloud.google.com/sdk/docs/install#windows).
+
+### Linux
+
+```
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-378.0.0-linux-x86_64.tar.gz
+```
+
+### macOS
+
+Download & install the [latest CLI release](https://cloud.google.com/sdk/docs/install#mac).
+
+### GCP Credentials
+
+Authorize gcloud to access the Cloud Platform with Google user credentials:
+
+```
+gcloud auth login
+```

@@ -9,6 +9,7 @@ CLI's
 CORS
 ECR
 GCP
+GCR
 IAM
 JSON
 MinIO
@@ -41,6 +42,8 @@ dropdown
 eventing
 fasthttp
 filepath
+firestore
+gcloud
 github
 homebrew
 integrations
@@ -54,6 +57,7 @@ npm
 param
 params
 prisma
+pubsub
 pulumi
 queryable
 repo
