@@ -82,6 +82,10 @@
               {
                 "title": "PlanetScale and Prisma",
                 "path": "/docs/guides/serverless-api-with-planetscale-and-prisma.md"
+              },
+              {
+                "title": "Using Git Actions",
+                "path": "/docs/guides/git-actions.md"
               }
             ]
           },
