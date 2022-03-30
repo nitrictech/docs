@@ -55,12 +55,12 @@ Edit the config file and start by defining a name.
 name: Sample configuration to deploy to AWS
 ```
 
-Setup action triggers
+### Setup action triggers
 
 Action triggers tell your workflow when to run.
 
 - workflow_dispatch
-  - This is a trigger which allows you to run the workflow from github.com within the action
+  - This trigger allows the workflow to be manually run from GitHub
 - push -> branches -> main
   - This will trigger this workflow each time a push is performed on the main branch
 
@@ -72,7 +72,7 @@ on:
       - main
 ```
 
-Configure the environment properties required by Nitric's dependency Pulumi as GitHub secrets. Which can be found by navagating to `https://github.com/{user}/{project}/settings/secrets/actions`.
+Configure the environment variables required by Nitric's dependency Pulumi as GitHub secrets. Which can be found by navigating to `https://github.com/{user}/{project}/settings/secrets/actions`.
 
 - PULUMI_ACCESS_TOKEN
 
@@ -80,7 +80,7 @@ Configure the environment properties required by Nitric's dependency Pulumi as G
 
 - PULUMI_CONFIG_PASSPHRASE
 
-  - For interaction free experiences, Pulumi also requires a passphrase to be configured. Your passphrase is used to generate a unique key used to encrypt configuraiton and state values. E.g. 'my-secret-password'
+  - For interaction free experiences, Pulumi also requires a passphrase to be configured. Your passphrase is used to generate a unique key which encrypts configuration and state values. E.g. 'my-secret-password'
 
 ```yaml
 env:
@@ -99,7 +99,7 @@ jobs:
     runs-on: ubuntu-latest
 ```
 
-Next setup your AWS action with the following credentials as GitHub secrets:
+Next, setup your AWS action with the following credentials as GitHub secrets:
 
 - AWS_ACCESS_KEY_ID
 - AWS_SECRET_ACCESS_KEY
