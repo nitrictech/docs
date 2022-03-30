@@ -1,6 +1,6 @@
-Integration tests are important for your systems as they catch system-level issues that unit tests miss, whilst being faster than end-to-end tests.
+Integration tests are important for your systems as they catch system-level issues that unit tests miss, and are faster than end-to-end tests.
 
-When writing these tests we want to make sure that these tests are reliable, able to be reproduced and can isolate our system failures. This is why we want to use a testing framework like `jest`, and use a http testing library like `supertest`.
+When writing these tests we want to make sure that these tests are reliable, able to be reproduced and can isolate our system failures. This is why we want to use a testing framework like [jest]('https://jestjs.io/'), and use a http testing library like [supertest]('https://github.com/visionmedia/supertest').
 
 ```
 yarn add --dev jest supertest @types/jest @types/supertest
@@ -81,15 +81,17 @@ import assert from 'assert';
 describe('Testing Hello Api', () => {
   const api = supertest('http://localhost:9001/apis/main');
 
-  test('Given a request to GET /:name', (done) => {
-    api
-      .get('/test')
-      .expect(200)
-      .then((res) => {
-        assert.equal(res.text, 'Hello test');
-        done();
-      })
-      .catch((err) => done(err));
+  describe('Given a request to GET /:name', done => {
+    test('responds with Hello test', () => {
+      api
+        .get('/test')
+        .expect(200)
+        .then((res) => {
+          assert.equal(res.text, 'Hello test');
+          done();
+        })
+        .catch((err) => done(err));
+    });
   });
 });
 ```
@@ -108,31 +110,33 @@ describe('Testing Hello Api', () => {
 
   ...
 
-  test('POST /:name', done => {
-    api
-      .post('/test')
-      .expect(200)
-      .then(res => {
-        assert.equal(res.text, "Successfully added 'test' image to bucket!")
-      })
-      .catch(err => done(err))
+  describe('Given a request to POST /:name', () => {
+    test('adds a new image to the bucket', done => {
+      api
+        .post('/test')
+        .expect(200)
+        .then(res => {
+          assert.equal(res.text, "Successfully added 'test' image to bucket!")
+        })
+        .catch(err => done(err))
 
-    imageBucket
-      .for('reading')
-      .file('name')
-      .read()
-      .then(val => {
-        assert.equal(val.toString(), 'test')
-        done();
-      })
-      .catch((err) => done(err));
-  })
+      imageBucket
+        .for('reading')
+        .file('name')
+        .read()
+        .then(val => {
+          assert.equal(val.toString(), 'test')
+          done();
+        })
+        .catch((err) => done(err));
+    })
+  });
 });
 ```
 
 ## Running the tests
 
-There are two options for running our tests.
+There are two options for running our tests:
 
 1. We run them locally
 2. We run them against a deployed API
@@ -157,6 +161,23 @@ And then in a separate terminal, run the tests:
 
 ```
 yarn test
+```
+
+This will produce the output:
+
+```
+  Testing Hello Api
+    Given a request to GET /:name
+      ✓ responds with Hello test (4 ms)
+    Given a request to POST /:name
+      ✓ adds a new image to the bucket (5 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        3.292 s, estimated 5 s
+Ran all test suites.
+✨  Done in 5.18s.
 ```
 
 ### Deployed Tests
