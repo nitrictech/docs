@@ -72,6 +72,8 @@ on:
       - main
 ```
 
+### Configuring environment variables
+
 Configure the environment variables required by Nitric's dependency Pulumi as GitHub secrets. Which can be found by navigating to `https://github.com/{user}/{project}/settings/secrets/actions`.
 
 - PULUMI_ACCESS_TOKEN
@@ -88,7 +90,9 @@ env:
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 ```
 
-Intialize your workflow with a name and set where it will be run.
+### Intialize your workflow
+
+Assign a name and set what os it will be run on.
 
 > Note: Nitric currently only supports ubuntu-latest.
 
@@ -99,7 +103,9 @@ jobs:
     runs-on: ubuntu-latest
 ```
 
-Next, setup your AWS action with the following credentials as GitHub secrets:
+### AWS Credentials
+
+Setup your AWS action with the following credentials as GitHub secrets:
 
 - AWS_ACCESS_KEY_ID
 - AWS_SECRET_ACCESS_KEY
@@ -117,7 +123,9 @@ steps:
       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
-Install Nitric and dependencies to the runner:
+### Install Nitric and dependencies
+
+This makes it possible for you to run nitric commands e.g. `nitric up -s dev`.
 
 ```yaml
 - name: Install Nitric CLI
@@ -127,6 +135,8 @@ Install Nitric and dependencies to the runner:
 - name: Install dependencies
   uses: pulumi/setup-pulumi@v2
 ```
+
+### Deploying the stack
 
 Finally, checkout your project and run the up command to deploy your project. In this project we've initialized a stack which deploys to AWS named dev with the command `nitric up -s dev -v0`
 
