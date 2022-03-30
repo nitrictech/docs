@@ -54,6 +54,7 @@ middleware
 ngrok
 nitrictech
 npm
+os
 param
 params
 prisma
