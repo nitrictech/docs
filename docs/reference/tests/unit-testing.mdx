@@ -1,10 +1,6 @@
-Integration tests are important for your systems as they catch system-level issues that unit tests miss, whilst being faster than end-to-end tests.
+A unit test is testing small piece of logically isolated code, usually a function, subprogram, method or property. Unit tests provide confidence in the code thats been written. This confidence gives you the ability to create new features, without fear of breaking older code.
 
-When writing these tests we want to make sure that these tests are reliable, able to be reproduced and can isolate our system failures. This is why we want to use a testing framework like `jest`, and use a http testing library like `supertest`.
-
-```
-yarn add --dev jest supertest @types/jest @types/supertest
-```
+It is important that unit tests are fast, replicable, and isolated. It shouldn't touch or talk to a database, network, or file system, and should be able to run parallel to any other test.
 
 ## Writing the API
 
