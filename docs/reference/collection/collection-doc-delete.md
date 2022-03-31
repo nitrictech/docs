@@ -1,4 +1,4 @@
-Deletes a document from a collection
+Deletes a document from a collection.
 
 ```javascript
 import { collection } from '@nitric/sdk';

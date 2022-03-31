@@ -64,6 +64,32 @@
             ]
           },
           {
+            "title": "Guides",
+            "disableAutoPrefix": true,
+            "routes": [
+              {
+                "title": "REST API Tutorial",
+                "path": "/docs/guides/serverless-rest-api-example.md"
+              },
+              {
+                "title": "Next.js",
+                "path": "/docs/guides/api-with-nextjs.md"
+              },
+              {
+                "title": "Supabase",
+                "path": "/docs/guides/nitric-and-supabase.md"
+              },
+              {
+                "title": "PlanetScale and Prisma",
+                "path": "/docs/guides/serverless-api-with-planetscale-and-prisma.md"
+              },
+              {
+                "title": "Using Git Actions",
+                "path": "/docs/guides/github-actions.md"
+              }
+            ]
+          },
+          {
             "title": "More",
             "disableAutoPrefix": true,
             "routes": [
@@ -108,6 +134,10 @@
               {
                 "title": "Access Control",
                 "path": "/docs/reference/access-control.mdx"
+              },
+              {
+                "title": "CLI",
+                "path": "/docs/reference/cli.mdx"
               }
             ]
           },
@@ -408,6 +438,52 @@
                     "path": "/docs/reference/azure/topics.mdx"
                   }
                 ]
+              },
+              {
+                "title": "GCP",
+                "routes": [
+                  {
+                    "title": "GCP Provider Overview",
+                    "path": "/docs/reference/gcp/_index.mdx"
+                  },
+                  {
+                    "title": "APIs",
+                    "path": "/docs/reference/gcp/apis.mdx"
+                  },
+                  {
+                    "title": "Collections",
+                    "path": "/docs/reference/gcp/collections.mdx"
+                  },
+                  {
+                    "title": "Queues",
+                    "path": "/docs/reference/gcp/queues.mdx"
+                  },
+                  {
+                    "title": "Schedules",
+                    "path": "/docs/reference/gcp/schedules.mdx"
+                  },
+                  {
+                    "title": "Secrets",
+                    "path": "/docs/reference/gcp/secrets.mdx"
+                  },
+                  {
+                    "title": "Storage",
+                    "path": "/docs/reference/gcp/storage.mdx"
+                  },
+                  {
+                    "title": "Topics",
+                    "path": "/docs/reference/gcp/topics.mdx"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Testing",
+            "routes": [
+              {
+                "title": "Integration Testing",
+                "path": "/docs/reference/tests/integration-testing.mdx"
               }
             ]
           }

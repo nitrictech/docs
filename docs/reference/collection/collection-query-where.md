@@ -1,4 +1,4 @@
-Adds a new where clause to a query
+Adds a new where clause to a query, which filters the data returned.
 
 ```javascript
 import { collection } from '@nitric/sdk';
@@ -32,11 +32,11 @@ The value to compare against
 
 ---
 
-### Notes:
+### Notes
 
 Where clauses combined together are always considered `AND`
 
-## Examples:
+## Examples
 
 ### A simple query
 

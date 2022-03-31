@@ -1,4 +1,4 @@
-Receive tasks from a queue
+Receive tasks from a queue.
 
 ```javascript
 import { queue } from '@nitric/sdk';
@@ -37,7 +37,7 @@ Instead, tasks are hidden and receivers are granted a temporary lease for each t
 
 When complete, the receiver must tell the queue the task was completed successfully, which will remove it from the queue and stop it being reprocessed.
 
-> Failing to complete a task before the lease expires will result in it being requeued.
+> Failing to complete a task before the lease expires will result in it being re-queued.
 
 To notify the queue that a task was completed call the `complete()` method on the task reference.
 

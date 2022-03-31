@@ -1,0 +1,11 @@
+files:
+  - 'docs/**/*.{md,mdx}'
+dictionaries:
+  - dictionary.txt
+quiet: true
+language: en-US
+plugins:
+  - spell
+  - syntax-urls
+  - syntax-mentions
+  - repeated-words

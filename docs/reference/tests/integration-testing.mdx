@@ -1,0 +1,196 @@
+Integration tests are important for your systems as they catch system-level issues that unit tests miss, and are faster than end-to-end tests.
+
+When writing these tests we want to make sure that these tests are reliable, able to be reproduced and can isolate our system failures. This is why we want to use a testing framework like [jest](https://jestjs.io/), and use a http testing library like [supertest](https://github.com/visionmedia/supertest).
+
+```
+yarn add --dev jest supertest @types/jest @types/supertest
+```
+
+## Writing the API
+
+We will write a small API to do some testing on.
+
+First define the resources:
+
+```ts
+// resources/apis.ts
+import { api } from '@nitric/sdk';
+
+export const helloApi = api('main');
+```
+
+```ts
+// resources/buckets.ts
+import { bucket } from '@nitric/sdk';
+
+export const imageBucket = bucket('images');
+```
+
+Then define our routes and our functions:
+
+```ts
+// functions/hello.ts
+import { imageBucket } from '../resources/buckets';
+import { helloApi } from '../resources/apis';
+
+export const imageWriter = imageBucket.for('writing');
+
+export const handleHello = async (ctx: any) => {
+  const { name } = ctx.req.params;
+
+  ctx.res.body = `Hello ${name}`;
+
+  return ctx;
+};
+
+export const handleAddImage = async (ctx: any) => {
+  const { name } = ctx.req.params;
+
+  await imageWriter.file(name).write(Buffer.from(name));
+
+  ctx.res.body = `Successfully added '${name}' image to bucket!`;
+
+  return ctx;
+};
+
+helloApi.get('/:name', handleHello);
+helloApi.post('/:name', handleAddImage);
+```
+
+## Writing the Tests
+
+We will put the integration test in a test directory, and name it `integration.test.ts`. For the test we want to create an agent using supertest. We'll point the agent at the url of our API.
+
+```ts
+// tests/integration.test.ts
+import request from 'supertest';
+
+describe('Testing Hello Api', () => {
+  const api = request('http://localhost:9001/apis/main');
+});
+```
+
+We can then add some tests to hit this API. We'll start with testing the `GET /:name` route.
+
+This request has the name parameter set to 'test'. This means we expect the response to be 'Hello test' and the status code to be 200. We get the done function as a parameter from the test callback, and call that when the test is resolved or encounters errors. This is to stop timeouts on the test, as we are testing an async operation.
+
+```ts
+import supertest from 'supertest';
+import assert from 'assert';
+
+describe('Testing Hello Api', () => {
+  const api = supertest('http://localhost:9001/apis/main');
+
+  describe('Given a request to GET /:name', (done) => {
+    test('responds with Hello test', () => {
+      api
+        .get('/test')
+        .expect(200)
+        .then((res) => {
+          assert.equal(res.text, 'Hello test');
+          done();
+        })
+        .catch((err) => done(err));
+    });
+  });
+});
+```
+
+We can add another test case for hitting the `POST /:name` route. This will need to test whether the response from the api resolves correctly, as well as whether the image bucket was updated. It makes a post request to our route and then checks the response just like the last one. Additionally, this test reads from the bucket to verify that the correct content was written.
+
+> Make sure you remove the call to done from the assertion in the api route. Otherwise, the bucket test will not be run.
+
+```ts
+import supertest from 'supertest';
+import assert from 'assert';
+import { imageBucket } from '../resources/buckets';
+
+describe('Testing Hello Api', () => {
+  const api = supertest('http://localhost:9001/apis/main')
+
+  ...
+
+  describe('Given a request to POST /:name', () => {
+    test('adds a new image to the bucket', done => {
+      api
+        .post('/test')
+        .expect(200)
+        .then(res => {
+          assert.equal(res.text, "Successfully added 'test' image to bucket!")
+        })
+        .catch(err => done(err))
+
+      imageBucket
+        .for('reading')
+        .file('name')
+        .read()
+        .then(val => {
+          assert.equal(val.toString(), 'test')
+          done();
+        })
+        .catch((err) => done(err));
+    })
+  });
+});
+```
+
+## Running the tests
+
+There are two options for running our tests:
+
+1. We run them locally
+2. We run them against a deployed API
+
+### Local Tests
+
+For a local run, we need to first run the local API then run the tests. Add to your `package.json` a test script.
+
+```json
+"scripts": {
+  "test": "jest"
+}
+```
+
+We can then start the API with:
+
+```bash
+nitric run
+```
+
+And then in a separate terminal, run the tests:
+
+```
+yarn test
+```
+
+This will produce the output:
+
+```
+  Testing Hello Api
+    Given a request to GET /:name
+      ✓ responds with Hello test (4 ms)
+    Given a request to POST /:name
+      ✓ adds a new image to the bucket (5 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        3.292 s, estimated 5 s
+Ran all test suites.
+✨  Done in 5.18s.
+```
+
+### Deployed Tests
+
+We attempt to make the local run of nitric as similar as possible to the cloud environments, so these tests should act the same locally as they do the cloud. However, running them on the cloud may incur costs.
+
+When you have an API deployed to the cloud, most cloud providers have a feature in the console to do endpoint testing. However, the tests are often just checking if the API resolves to a 200 status code. The process we are following here will lead to much more robust testing and a lot more confidence in your cloud application.
+
+Now for testing. The obvious first step before running our tests is to [deploy](https://nitric.io/docs/getting-started#deploying-the-app) the API. Then, to test against the deployed API, we just want to swap out our supertest agent host from the localhost endpoint to our deployed endpoint. This new endpoint will look something like:
+
+```ts
+// tests/integration.test.ts
+const api = request('https://testerapi.us-east-1.amazonaws.com');
+```
+
+To invoke our tests we can do `yarn test` locally. This will run the tests against the deployed instance and return your test results.
