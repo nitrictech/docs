@@ -1,6 +1,6 @@
 ---
 title: Extend Supabase apps with Nitric serverless framework
-description: Add functions, queues, events or secrets to Supabase apps using the Nitric framework 
+description: Add functions, queues, events or secrets to Supabase apps using the Nitric framework
 ---
 
 ## What we'll be doing

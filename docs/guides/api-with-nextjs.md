@@ -1,6 +1,6 @@
 ---
 title: Serverless apps with Next.js and Nitric
-description: Build a serverless backend for your Next.js app using Nitric framework for AWS, Google Cloud or Azure 
+description: Build a serverless backend for your Next.js app using Nitric framework for AWS, Google Cloud or Azure
 ---
 
 ## Overview
