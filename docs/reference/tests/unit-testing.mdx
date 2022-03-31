@@ -69,17 +69,16 @@ We are first testing that if the function is passed a context with a set name pa
 import { handleHello } from '../functions/hello';
 
 describe('Testing Hello Function', () => {
-  const ctx = { req: { params: { name: "Test" } }, res: { body: "" } };
+  const ctx = { req: { params: { name: 'Test' } }, res: { body: '' } };
 
   describe('Given we want a greeting', () => {
     test('responds with Hello Test', async () => {
-      await expect(handleHello(ctx))
-        .resolves.toEqual({
-          ...ctx,
-          res: {
-            body: "Hello Test"
-          }
-        });
+      await expect(handleHello(ctx)).resolves.toEqual({
+        ...ctx,
+        res: {
+          body: 'Hello Test',
+        },
+      });
     });
   });
 });
@@ -95,7 +94,7 @@ We'll go over it section by section, but here is the full example of these tests
   ...
 
   describe('Given we want to add a new image to a bucket', () => {
-    
+
     let writerSpy;
     let bucketSpy;
     let handleAddImage;
@@ -120,13 +119,13 @@ We'll go over it section by section, but here is the full example of these tests
       writerSpy.mockResolvedValue();
 
       await expect(handleAddImage(ctx))
-        .resolves.toEqual({ 
-          ...ctx, 
-          res: { 
+        .resolves.toEqual({
+          ...ctx,
+          res: {
             body: "Successfully added 'Test' to user collection"
           }
         })
-      
+
       expect(writerSpy).toBeCalledTimes(1)
     });
 
@@ -134,15 +133,15 @@ We'll go over it section by section, but here is the full example of these tests
       writerSpy.mockRejectedValue(new Error('Mock error'))
 
       await expect(handleAddImage(ctx)).rejects.toEqual(Error('Mock error'))
-      
+
       expect(writerSpy).toBeCalledTimes(1)
     });
   });
 ```
 
-Lets start by looking at the mocks. These are done in the beforeAll function, which means it happens before all the tests are run. 
+Lets start by looking at the mocks. These are done in the beforeAll function, which means it happens before all the tests are run.
 
-The functions to create a bucket 'for' and the call to write to a bucket 'write' will make gRPC calls on the backend. This means that they need to be mocked, as there is nothing for it to call to, and thus will result in an UNAVAILABLE error. We mock these using jest's spyOn functions on the object prototype. 
+The functions to create a bucket 'for' and the call to write to a bucket 'write' will make gRPC calls on the backend. This means that they need to be mocked, as there is nothing for it to call to, and thus will result in an UNAVAILABLE error. We mock these using jest's spyOn functions on the object prototype.
 
 This works fine for mocking the `write` method as its within the `handleAddImage` function, but the `for` method is called when the module is imported. Therefore, we add a dynamic import after the `for` method is mocked.
 
@@ -173,7 +172,7 @@ afterAll(() => {
 
 beforeEach(() => {
   jest.clearAllMocks();
-})
+});
 ```
 
 Now that we have the mocks, we can use them for the tests. The first test is testing that the function will succeed. On a success, the promise will both resolve and have a success message in the body of the context's response.
@@ -184,29 +183,28 @@ Update the mock so that it resolves, and check that the `write` function was onl
 test('adds a new image to the bucket', async () => {
   writerSpy.mockResolvedValue();
 
-  await expect(handleAddImage(ctx))
-    .resolves.toEqual({ 
-      ...ctx, 
-      res: { 
-        body: "Successfully added 'Test' to user collection"
-      }
-    })
-  
-  expect(writerSpy).toBeCalledTimes(1)
+  await expect(handleAddImage(ctx)).resolves.toEqual({
+    ...ctx,
+    res: {
+      body: "Successfully added 'Test' to user collection",
+    },
+  });
+
+  expect(writerSpy).toBeCalledTimes(1);
 });
 ```
 
-The next test will instead test a write failure. The failure may be caused by any number of reasons, and therefore we should make sure our function is fit to handle them when they occur. 
+The next test will instead test a write failure. The failure may be caused by any number of reasons, and therefore we should make sure our function is fit to handle them when they occur.
 
 Change the mock this time so that it rejects with a new error. Still check that the write was called once.
 
 ```ts
 test('throws an error', async () => {
-  writerSpy.mockRejectedValue(new Error('Mock error'))
+  writerSpy.mockRejectedValue(new Error('Mock error'));
 
-  await expect(handleAddImage(ctx)).rejects.toEqual(Error('Mock error'))
-  
-  expect(writerSpy).toBeCalledTimes(1)
+  await expect(handleAddImage(ctx)).rejects.toEqual(Error('Mock error'));
+
+  expect(writerSpy).toBeCalledTimes(1);
 });
 ```
 
