@@ -46,7 +46,7 @@ code .
 
 ## Project structure
 
-This project is structured as a monorepo, using [turborepo](https://turborepo.org). The project is split into three main areas:
+The project is split into two main areas:
 
 - **todo-api** - This is where the Nitric API is stored
 - **web** - This is where your Next.js application is stored
