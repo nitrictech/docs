@@ -1,4 +1,7 @@
-Build and deploy an API with PlanetScale, Prisma and Nitric.
+---
+title: Build a serverless API with PlanetScale, Prisma and Nitric
+description: Use PlanetScale serverless database, Prisma ORM and Nitric framework to building scalable APIs in the cloud
+---
 
 ## Overview
 

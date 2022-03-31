@@ -1,6 +1,11 @@
-## Setting up CI/CD with [Nitric](https://nitric.io) and [GitHub actions](https://github.com/features/actions)
+---
+title: CI/CD workflow with Nitric and GitHub Actions
+description: Deploy to AWS using GitHub Actions and the Nitric CLI
+---
 
-GitHub has comprehensive documentation which can guide you through advanced workflows.
+## Setting up CI/CD with Nitric and GitHub actions
+
+GitHub has comprehensive [documentation](https://github.com/features/actions) which can guide you through advanced workflows.
 
 Here we'll walk through the simple example of deploying a Nitric project to AWS.
 

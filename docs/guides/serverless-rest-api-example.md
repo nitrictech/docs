@@ -1,3 +1,8 @@
+---
+title: Building your first API with Nitric
+description: Use the Nitric framework to easily build and deploy REST APIs for AWS, Azure or GCP
+---
+
 ## What we'll do
 
 1. Use Nitric to create an API to create and update profiles

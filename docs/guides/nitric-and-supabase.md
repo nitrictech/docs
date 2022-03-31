@@ -1,6 +1,11 @@
+---
+title: Extend Supabase apps with Nitric serverless framework
+description: Add functions, queues, events or secrets to Supabase apps using the Nitric framework
+---
+
 ## What we'll be doing
 
-In this guide we'll use the Nitric Framework with a Supabase project to build serverless functions the can respond to Insert, Update or Delete operations in your Supabase tables.
+In this guide we'll use the Nitric Framework with a Supabase project to build serverless functions that can respond to Insert, Update or Delete operations in your Supabase tables.
 
 This example sends welcome emails to new user profiles with [SendGrid](https://sendgrid.com/), but you could adapt the steps for other situations, like:
 

@@ -1,3 +1,8 @@
+---
+title: Serverless apps with Next.js and Nitric
+description: Build a serverless backend for your Next.js app using Nitric framework for AWS, Google Cloud or Azure
+---
+
 ## Overview
 
 This guide shows you how to create a simple To-do list in Next.js with an API backed by Nitric functions. It also uses collections for data persistence.
