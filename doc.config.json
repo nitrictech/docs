@@ -68,11 +68,11 @@
             "disableAutoPrefix": true,
             "routes": [
               {
-                "title": "Example: User profile API",
-                "path": "/docs/guides/profiles.md"
+                "title": "REST API Tutorial",
+                "path": "/docs/guides/serverless-rest-api-example.md"
               },
               {
-                "title": "API with Next.js",
+                "title": "Next.js",
                 "path": "/docs/guides/api-with-nextjs.md"
               },
               {
@@ -85,7 +85,7 @@
               },
               {
                 "title": "Using Git Actions",
-                "path": "/docs/guides/git-actions.md"
+                "path": "/docs/guides/github-actions.md"
               }
             ]
           },
