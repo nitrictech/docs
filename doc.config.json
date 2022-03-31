@@ -483,7 +483,7 @@
             "routes": [
               {
                 "title": "Integration Testing",
-                "routes": "/docs/reference/tests/integration-testing.mdx"
+                "path": "/docs/reference/tests/integration-testing.mdx"
               }
             ]
           }
