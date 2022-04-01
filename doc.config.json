@@ -73,15 +73,15 @@
               },
               {
                 "title": "Next.js",
-                "path": "/docs/guides/api-with-nextjs.md"
+                "path": "/docs/guides/nextjs-api-example.md"
               },
               {
                 "title": "Supabase",
-                "path": "/docs/guides/nitric-and-supabase.md"
+                "path": "/docs/guides/supabase-serverless-functions.md"
               },
               {
                 "title": "PlanetScale and Prisma",
-                "path": "/docs/guides/serverless-api-with-planetscale-and-prisma.md"
+                "path": "/docs/guides/serverless-api-planetscale-prisma.md"
               },
               {
                 "title": "Using Git Actions",
