@@ -57,7 +57,7 @@ We set up our API in the apis directory of our project, we'll call ours tasks-ap
 
 ### Typing
 
-We add some typings for our tasks and our api request/response
+We add some typings for our tasks and our api request/response.
 
 ```typescript
 // /packages/types/index.ts
@@ -97,7 +97,7 @@ export type TaskPatchRequest = { completed: boolean };
 
 ### Resources
 
-Apps built with Nitric define their resources in code, you can write this in the root of any `.js` or `.ts` file, but for organization we recommend putting them together. So,. let's start by defining the resources we'll need to support our API in a new `resources` directory.
+Apps built with Nitric define their resources in code, you can write this in the root of any `.js` or `.ts` file, but for organization we recommend putting them together. So let's start by defining the resources we'll need to support our API in a new `resources` directory.
 
 ```typescript
 //apis/tasks-api/resources/apis.ts
@@ -292,7 +292,7 @@ export const sortByCreatedAt = (a: CreatedAtData, b: CreatedAtData) => {
 };
 ```
 
-Within `GET /:listid` endpoint we can get a single list, and apply filters to our query of tasks
+Within `GET /:listid` endpoint we can get a single list, and apply filters to our query of tasks.
 
 ```typescript
 // Get all tasks from a task list, with filters
@@ -491,7 +491,7 @@ Setup your credentials and any other cloud specific configuration:
 - [Azure](/docs/reference/azure)
 - [GCP](/docs/reference/gcp)
 
-Run the deployment command
+Run the deployment command.
 
 > Warning: Publishing services to the cloud may incur costs.
 
