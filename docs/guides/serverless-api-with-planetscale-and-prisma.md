@@ -1,6 +1,6 @@
 ---
 title: Building APIs with PlanetScale, Prisma and Nitric
-description: Use PlanetScale serverless database, Prisma ORM and Nitric framework to building scalable APIs in the cloud
+description: Use PlanetScale serverless database, Prisma ORM and Nitric framework to build scalable APIs in the cloud
 ---
 
 ## Overview
@@ -245,7 +245,7 @@ Again, we're declaring new resources, buckets in this case, and giving them uniq
 
 ### Create the meme template service
 
-Now that the resources are declared, let's create the first service. This service let's API consumer register new meme templates by providing a base image for memes and a configurable set of text locations.
+Now that the resources are declared, let's create the first service. This service lets API consumer register new meme templates by providing a base image for memes and a configurable set of text locations.
 
 In the `/functions` directory create a new file called `templates.ts` and populate it with the following code:
 
@@ -317,7 +317,7 @@ memeApi.get('/templates', async ({ res }) => {
 
 In this example we're importing the api gateway `memeApi` we created in our `resources` directory, and registering route and method handlers using methods like `get` and `post`, much like you would in frameworks such as [Express](https://expressjs.com/).
 
-Additionally, we're importing the bucket used to store template images `templateImages` from the resources directory. We also declare our intended use of the bucket with the `for` method, which let's nitric know what permissions your code needs and applies them during deployments. In this instance we're only giving our template service `write` access to the templates bucket.
+Additionally, we're importing the bucket used to store template images `templateImages` from the resources directory. We also declare our intended use of the bucket with the `for` method, which lets nitric know what permissions your code needs and applies them during deployments. In this instance we're only giving our template service `write` access to the templates bucket.
 
 The incoming `context` object _(which has been destructured into `req` and `res`)_ contains request and response details like path params, query params, headers, body, status, etc.
 
