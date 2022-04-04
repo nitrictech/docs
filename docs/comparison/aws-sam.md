@@ -75,7 +75,6 @@ An important distinction is the approach to least-privilege IAM permissions.
 SAM's least-privilege permissions are written explicitly in the template configuration. The responsibility is on the user to make sure the policies provided follow AWS best practice.
 
 ```yaml
-
 ---
 Policies:
   - SQSPollerPolicy:
