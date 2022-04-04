@@ -1,12 +1,14 @@
-AWS Serverless Application Model (SAM) is an abstraction layer for CloudFormation that makes it simpler to write serverless applications in AWS. 
+AWS Serverless Application Model (SAM) is an abstraction layer for CloudFormation that makes it simpler to write serverless applications in AWS.
 The SAM CLI enables local development and testing that closely resembles a Lambda environment.
 
 Both AWS SAM and Nitric try solve the problem of infrastructure as code to simplify serverless application development. However, there are some major differences in the building and configuration of the two frameworks.
 
 ## TLDR
+
 The major differences with SAM are:
+
 - Only supports AWS.
-- Configuration is defined in a separate YAML file.
+- Configuration is defined in a separate yaml file.
 - Transpiles to CloudFormation.
 - Does not support queues, secrets, buckets, or schedules without writing extensions in CloudFormation configuration.
 - Although SAM is open source, CloudFormation is not.
@@ -22,14 +24,14 @@ Building with SAM requires both the configuration in the template yaml, as well 
 ```yaml
 Resources:
   HelloWorldFunction:
-    Type: AWS::Serverless::Function 
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: hello_world/
       Handler: app.lambda_handler
       Runtime: nodejs14.x
       Events:
         HelloWorld:
-          Type: Api 
+          Type: Api
           Properties:
             Path: /helloWorld
             Method: get
@@ -40,11 +42,11 @@ Then your code might look something like this for a simple hello world applicati
 ```typescript
 function lambdaHandler(event, context) {
   return JSON.stringify({
-      statusCode: 200,
-      body: {
-          message: "Hello World",
-      },
-  })
+    statusCode: 200,
+    body: {
+      message: 'Hello World',
+    },
+  });
 }
 ```
 
@@ -57,38 +59,39 @@ Nitric uses config as code, which means all your cloud resources are provisioned
 ```typescript
 import { api, bucket } from '@nitric/sdk';
 
-const newApi = api("test-bucket");
-const newBucket = bucket("test-bucket").for("reading");
+const newApi = api('test-bucket');
+const newBucket = bucket('test-bucket').for('reading');
 
 newApi.get('/hello', (ctx) => {
-  ctx.body = newBucket.file("test-file").read();
+  ctx.body = newBucket.file('test-file').read();
   return ctx;
 });
 ```
 
 ## IAM Policies
 
-An important distinction is the approach to least-privilege IAM permissions. 
+An important distinction is the approach to least-privilege IAM permissions.
 
 SAM's least-privilege permissions are written explicitly in the template configuration. The responsibility is on the user to make sure the policies provided follow AWS best practice.
 
 ```yaml
-...
+
+---
 Policies:
   - SQSPollerPolicy:
-      QueueName:
-        !GetAtt MyQueue.QueueName
+      QueueName: !GetAtt MyQueue.QueueName
 ```
 
 Nitric follows each cloud provider's best practice and assigns the roles under the hood based on a verb, i.e. 'reading', 'writing', 'deleting'. This means you choose what resources each function has access to, directly in the code you write.
 
 ```typescript
-queue("test-queue").for("sending", "receiving");
+queue('test-queue').for('sending', 'receiving');
 ```
 
 ## Testing
 
 Testing using a local run has a lot of overlap:
+
 - Has hot reloading.
 - Builds containers locally.
 - Starts a local API Gateway.
@@ -108,7 +111,6 @@ And Nitric's is done using:
 ```
 nitric run
 ```
-
 
 ## Deploying
 
@@ -130,7 +132,7 @@ aws cloudformation delete-stack --stack-name stack-name --region region
 
 ### Nitric
 
-Nitric's stack configuration will have already been set when the project was created. Therefore, to deploy with Nitric all thats needed is:
+Nitric's stack configuration will have already been set when the project was created. Therefore, to deploy with Nitric, just run:
 
 ```
 nitric up -s stack-name
