@@ -44,7 +44,6 @@ SAM's least-privilege permissions are written explicitly in the template configu
 This is done through more yaml configuration, which points to an AWS policy.
 
 ```yaml
-
 ---
 Resources:
   MyFunction:
