@@ -7,7 +7,7 @@ Although both AWS SAM and Nitric are in the same problem space, there are major 
 The major differences with SAM are:
 
 - Only supports AWS.
-- Configuration is defined in lengthy YAML files.
+- Configuration is defined in lengthy yaml files.
 - Only supports functions, apis, and tables.
 - IAM implementation is the responsibility of the developer.
 
@@ -39,7 +39,7 @@ const newBucket = bucket('test-bucket');
 
 ## IAM Policy
 
-SAM's least-privilege permissions are written explicitly in the template configuration. The responsiblity (and burden) is on the developer to make sure the lambda policies chosen follow security best practices.
+SAM's least-privilege permissions are written explicitly in the template configuration. The responsibility (and burden) is on the developer to make sure the lambda policies chosen follow security best practices.
 
 This is done through more yaml configuration, which points to an AWS policy.
 
@@ -57,7 +57,7 @@ Resources:
             QueueName: !GetAtt MyQueue.QueueName
 ```
 
-On the other hand, Nitric handles the implementation of least-privilege policies for you. All thats needed is to specify how you want to use a resource, and the function will be assigned the relevant policy.
+On the other hand, Nitric handles the implementation of least-privilege policies for you. All that is needed is to specify how you want to use a resource, and the function will be assigned the relevant policy.
 
 ```typescript
 const newQueue = queue('tester').for('receiving', 'sending');
