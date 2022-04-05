@@ -74,6 +74,7 @@ The difference comes when writing automated unit or integration tests.
 | ----------- | ------- | ------ |
 | Unit        | AWS SDK | BYO    |
 | Integration | AWS SDK | BYO    |
+| Mocking     | AWS SDK | BYO    |
 
 AWS SAM can't configure all the resources, so when you use the local test environment none of the external resources are going to be mocked. This means for a decent integration testing experience, you have to use the AWS SDK or CLI, which attempts to solve this problem.
 
