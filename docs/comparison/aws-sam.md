@@ -1,144 +1,84 @@
 AWS Serverless Application Model (SAM) is an abstraction layer for CloudFormation that makes it simpler to write serverless applications in AWS.
-The SAM CLI enables local development and testing that closely resembles a Lambda environment.
 
-Both AWS SAM and Nitric try solve the problem of infrastructure as code to simplify serverless application development. However, there are some major differences in the building and configuration of the two frameworks.
+Although both AWS SAM and Nitric are in the same problem space, there are major differences in the way that Nitric solves simplifying serverless application development compared with SAM.
 
 ## TLDR
 
 The major differences with SAM are:
 
 - Only supports AWS.
-- Configuration is defined in a separate yaml file.
-- Transpiles to CloudFormation.
-- Does not support queues, secrets, buckets, or schedules without writing extensions in CloudFormation configuration.
-- Although SAM is open source, CloudFormation is not.
-- Configuration artifacts must be stored in an S3 Bucket.
-- Manually configure IAM policies to follow best practice.
+- Configuration is defined in lengthy YAML files.
+- Only supports functions, apis, and tables.
+- IAM implementation is the responsibility of the developer.
 
 ## Building
 
-### SAM
+To build with AWS SAM you need a template yaml, an OpenAPI spec yaml, as well as the actual lambda code.
 
-Building with SAM requires both the configuration in the template yaml, as well as the code that will be executed in the lambda.
+[Here](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-open-api.html#http-api-import.example) is the example OpenAPI spec AWS uses to demonstrate the simplicity of SAM. That file is over 200 lines long.
 
-```yaml
-Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: hello_world/
-      Handler: app.lambda_handler
-      Runtime: nodejs14.x
-      Events:
-        HelloWorld:
-          Type: Api
-          Properties:
-            Path: /helloWorld
-            Method: get
-```
+Nitric does the spec in 0 lines.
 
-Then your code might look something like this for a simple hello world application:
+Any Nitric config you write is done as code, keeping the architecture of your application in one place, rather than three.
 
 ```typescript
-function lambdaHandler(event, context) {
-  return JSON.stringify({
-    statusCode: 200,
-    body: {
-      message: 'Hello World',
-    },
-  });
-}
-```
-
-This gets much more complicated if you want to interact with other AWS resources, where you would use the AWS CDK.
-
-### Nitric
-
-Nitric uses config as code, which means all your cloud resources are provisioned and interacted with entirely through code.
-
-```typescript
-import { api, bucket } from '@nitric/sdk';
-
-const newApi = api('test-bucket');
-const newBucket = bucket('test-bucket').for('reading');
+const newApi = api('test-api');
 
 newApi.get('/hello', (ctx) => {
-  ctx.body = newBucket.file('test-file').read();
-  return ctx;
+  return ctx.text('Hello World');
 });
 ```
 
-## IAM Policies
+Building resources other than lambdas, apis, or tables requires separate CloudFormation extensions to your SAM template files.
 
-An important distinction is the approach to least-privilege IAM permissions.
-
-SAM's least-privilege permissions are written explicitly in the template configuration. The responsibility is on the user to make sure the policies provided follow AWS best practice.
-
-```yaml
----
-Policies:
-  - SQSPollerPolicy:
-      QueueName: !GetAtt MyQueue.QueueName
-```
-
-Nitric follows each cloud provider's best practice and assigns the roles under the hood based on a verb, i.e. 'reading', 'writing', 'deleting'. This means you choose what resources each function has access to, directly in the code you write.
+Nitric has first-class support for these other resources, and its only one extra line.
 
 ```typescript
-queue('test-queue').for('sending', 'receiving');
+const newBucket = bucket('test-bucket');
+```
+
+## IAM Policy
+
+SAM's least-privilege permissions are written explicitly in the template configuration. The responsiblity (and burden) is on the developer to make sure the lambda policies chosen follow security best practices.
+
+This is done through more yaml configuration, which points to an AWS policy.
+
+```yaml
+
+---
+Resources:
+  MyFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs8.10
+      CodeUri: 's3://my-bucket/function.zip'
+      Policies:
+        - SQSPollerPolicy:
+            QueueName: !GetAtt MyQueue.QueueName
+```
+
+On the other hand, Nitric handles the implementation of least-privilege policies for you. All thats needed is to specify how you want to use a resource, and the function will be assigned the relevant policy.
+
+```typescript
+const newQueue = queue('tester').for('receiving', 'sending');
 ```
 
 ## Testing
 
-Testing using a local run has a lot of overlap:
+Both the SAM and Nitric frameworks have local testing environments that closely resemble the cloud environment. This means testing that your functions work is as simple as making a request to the local endpoint.
 
-- Has hot reloading.
-- Builds containers locally.
-- Starts a local API Gateway.
-- Can configure development environment variables.
-- Resembles the cloud environment.
+The difference comes when writing automated unit or integration tests.
 
-Writing unit and integration tests can be different between the two as AWS provides their own testing framework provided in the CDK. On the other hand, any testing framework can be used to test Nitric applications.
+|             | AWS SAM | Nitric |
+| ----------- | ------- | ------ |
+| Unit        | AWS SDK | BYO    |
+| Integration | AWS SDK | BYO    |
 
-SAM's local run is done using:
+AWS SAM can't configure all the resources, so when you use the local test environment none of the external resources are going to be mocked. This means for a decent integration testing experience, you have to use the AWS SDK or CLI, which attempts to solve this problem.
 
-```
-sam local start-api
-```
-
-And Nitric's is done using:
-
-```
-nitric run
-```
+Nitric's testing works with any testing framework, as resource creation and calling can be mocked. When running the local test environment, other resources like buckets are created using the file system. This makes the integration testing super smooth, as the files you create and events you push are actually there.
 
 ## Deploying
 
-The deployment between Nitric and AWS SAM is somewhat similar, however the obvious caveat is that AWS SAM can only deploy to AWS, whereas Nitric can deploy to AWS, GCP, and Azure.
-
-### SAM
-
-To deploy with SAM you can use the guided prompt. This will go over all the options and build a configuration file that remains in your project for future deployments.
-
-```
-sam deploy --guided
-```
-
-Then to bring the stack down:
-
-```
-aws cloudformation delete-stack --stack-name stack-name --region region
-```
-
-### Nitric
-
-Nitric's stack configuration will have already been set when the project was created. Therefore, to deploy with Nitric, just run:
-
-```
-nitric up -s stack-name
-```
-
-Then to bring the stack down:
-
-```
-nitric down -s stack-name
-```
+The deployment experience between the frameworks is very similar, where a single command will deploy the entire stack. The big difference however, is that AWS SAM only deploys to AWS, while Nitric will deploy to AWS, GCP, or Azure.
