@@ -64,6 +64,16 @@
             ]
           },
           {
+            "title": "Compare Nitric with...",
+            "disableAutoPrefix": true,
+            "routes": [
+              {
+                "title": "Azure Resource Manager",
+                "path": "/docs/comparison/arm.md"
+              }
+            ]
+          },
+          {
             "title": "Guides",
             "disableAutoPrefix": true,
             "routes": [

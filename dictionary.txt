@@ -81,6 +81,7 @@ subcollection
 supertest
 localhost
 http
+powershell
 listid
 auth
 twilio
