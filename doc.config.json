@@ -74,6 +74,16 @@
             ]
           },
           {
+            "title": "Compare Nitric with...",
+            "disableAutoPrefix": true,
+            "routes": [
+              {
+                "title": "Google Cloud Deployment Manager",
+                "path": "/docs/comparison/gcp-deployment-manager.md"
+              }
+            ]
+          },
+          {
             "title": "Guides",
             "disableAutoPrefix": true,
             "routes": [
