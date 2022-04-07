@@ -10,7 +10,7 @@ The major differences between Nitric and Google Cloud Deployment Manager are:
 
 ## Building
 
-To build with Google Cloud Deployment Manager you can buid a template yaml file. For deploying a virtual machine, the file may look like:
+To build with Google Cloud Deployment Manager you can build a template yaml file. For deploying a virtual machine, the file may look like:
 
 ```yaml
 resources:
