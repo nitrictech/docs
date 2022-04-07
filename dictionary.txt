@@ -82,6 +82,8 @@ supertest
 localhost
 http
 powershell
+TLDR
+BYO
 listid
 auth
 twilio
