@@ -92,6 +92,10 @@
                 "path": "/docs/guides/stripe.md"
               },
               {
+                "title": "Twilio",
+                "path": "/docs/guides/twilio.md"
+              },
+              {
                 "title": "Using Git Actions",
                 "path": "/docs/guides/github-actions.md"
               }
