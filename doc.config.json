@@ -68,7 +68,7 @@
             "disableAutoPrefix": true,
             "routes": [
               {
-                "title": "REST API Tutorial",
+                "title": "REST API",
                 "path": "/docs/guides/serverless-rest-api-example.md"
               },
               {
