@@ -1,3 +1,8 @@
+---
+title: Integrating Twilio with Nitric
+description: Build a serverless application with Twilio and Nitric for AWS, Google Cloud, or Azure
+---
+
 ## What we'll be doing
 
 In this guide we'll use the Nitric Framework with [Twilio](https://twilio.com) to build a serverless API that can send SMS to users. This won't include a frontend, however you can look at how to integrate a Nitric API in one of our other comprehensive [guides](https://nitric.io/docs/guides/api-with-nextjs).
