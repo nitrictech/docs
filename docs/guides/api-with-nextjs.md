@@ -7,19 +7,18 @@ description: Build a serverless backend for your Next.js app using Nitric framew
 
 1. Create a To-do app with [Next.js](https://nextjs.org) backed by a Nitric API
 2. Define our Nitric resources
-2. Create handlers for the following API operations
+3. Create handlers for the following API operations
 
-| **Method** | **Route**     | **Description**                                     |
-| ---------- | ------------- | --------------------------------------------------- |
-| `GET`      | /:listid/:id  | Get a specific task by its task list Id and task Id |
-| `GET`      | /:listid      | Get a specific task list by its Id                  |
-| `GET`      | /             | List all task lists                                 |
-| `POST`     | /:listid      | Add new task to task list                           |
-| `POST`     | /             | Create a new task list                              |
-| `PATCH`    | /:listid/:id  | Update a task                                       |
-| `DELETE`   | /:listid/:id  | Delete a task                                       |
-| `DELETE`   | /:listid      | Delete a task list                                  |
-                                 
+| **Method** | **Route**    | **Description**                                     |
+| ---------- | ------------ | --------------------------------------------------- |
+| `GET`      | /:listid/:id | Get a specific task by its task list Id and task Id |
+| `GET`      | /:listid     | Get a specific task list by its Id                  |
+| `GET`      | /            | List all task lists                                 |
+| `POST`     | /:listid     | Add new task to task list                           |
+| `POST`     | /            | Create a new task list                              |
+| `PATCH`    | /:listid/:id | Update a task                                       |
+| `DELETE`   | /:listid/:id | Delete a task                                       |
+| `DELETE`   | /:listid     | Delete a task list                                  |
 
 3. Set up a proxy for the Next.js API
 4. Run locally for testing
@@ -59,7 +58,6 @@ The project is split into two main areas:
 
 - **todo-api** - This is where the Nitric API is stored
 - **web** - This is where your Next.js application is stored
-
 
 ## Defining Types
 
@@ -501,7 +499,6 @@ nitric run
 ```
 
 > Note: `run` starts a container to act as an API gateway, as well as a container for each of the services.
-
 
 We can then launch the Next.js frontend with:
 
