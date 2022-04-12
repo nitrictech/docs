@@ -3,19 +3,9 @@ title: Building APIs with PlanetScale, Prisma and Nitric
 description: Use PlanetScale serverless database, Prisma ORM and Nitric framework to build scalable APIs in the cloud
 ---
 
-## Overview
+## What we'll be doing
 
-This guide shows you how to create an API using serverless functions, then [PlanetScale](https://planetscale.com) and [Prisma](https://www.prisma.io/) for data persistence.
-
-In the guide we'll use:
-
-- [Nitric](https://nitric.io) APIs, Functions and Storage
-- [PlanetScale](https://planetscale.com) serverless database
-- [Prisma](https://prisma.io) ORM
-- The cloud of your choice:
-  - [AWS](https://aws.amazon.com)
-  - [GCP](https://cloud.google.com)
-  - [Azure](https://azure.microsoft.com)
+In this guide we will create an API using serverless functions, then use [PlanetScale](https://planetscale.com) and [Prisma](https://www.prisma.io/) for data persistence. We will then deploy the application to the cloud of your choice, [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com), or [Azure](https://azure.microsoft.com).
 
 To keep things light, the API we'll create generates memes by allowing uploads of image templates, then generating new images with overlaid text. Feel free to adapt the steps for any other API you'd like to build.
 
@@ -32,7 +22,7 @@ To complete this guide, here are things you'll need setup ahead of time:
 - The [Nitric CLI](/docs/installation)
 - An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
 
-## Starting the project
+## Getting started
 
 Let's start with a new nitric project and select the TypeScript starter template:
 

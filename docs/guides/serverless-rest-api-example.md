@@ -3,7 +3,7 @@ title: Building your first API with Nitric
 description: Use the Nitric framework to easily build and deploy REST APIs for AWS, Azure or GCP
 ---
 
-## What we'll do
+## What we'll be doing
 
 1. Use Nitric to create an API to create and update profiles
 2. Create handlers for the following API operations
@@ -16,7 +16,7 @@ description: Use the Nitric framework to easily build and deploy REST APIs for A
 | `DELETE`   | /profiles/{id} | Delete a profile                 |
 | `PUT`      | /profiles/{id} | Update a profile                 |
 
-3. Running locally for testing
+3. Run locally for testing
 4. Deploy to a cloud of your choice
 5. (Optional) Add handlers for the following API operations
 
@@ -25,9 +25,13 @@ description: Use the Nitric framework to easily build and deploy REST APIs for A
 | `GET`      | /profiles/{id}/image/upload  | Get a profile image upload URL   |
 | `GET`      | profiles/{id}/image/download | Get a profile image download URL |
 
-## Getting started
+## Prerequisites
 
-This tutorial assumes you have the Nitric CLI installed, if not you can follow the [installation guide](/docs/installation).
+- [Node.js](https://nodejs.org/en/download/)
+- The [Nitric CLI](https://nitric.io/docs/installation)
+- An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
+
+## Getting started
 
 We’ll start by creating a new project for our API.
 
@@ -321,7 +325,7 @@ nitric up -s dev
 
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
 
-To undeploy run the following command.
+To undeploy run the following command:
 
 ```bash
 nitric down -s dev
