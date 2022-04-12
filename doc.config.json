@@ -102,6 +102,19 @@
             ]
           },
           {
+            "title": "Testing",
+            "routes": [
+              {
+                "title": "Unit Testing",
+                "path": "/docs/reference/tests/unit-testing.mdx"
+              },
+              {
+                "title": "Integration Testing",
+                "path": "/docs/reference/tests/integration-testing.mdx"
+              }
+            ]
+          },
+          {
             "title": "Compare Nitric with...",
             "disableAutoPrefix": true,
             "routes": [
@@ -501,19 +514,6 @@
                     "path": "/docs/reference/gcp/topics.mdx"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "title": "Testing",
-            "routes": [
-              {
-                "title": "Unit Testing",
-                "path": "/docs/reference/tests/unit-testing.mdx"
-              },
-              {
-                "title": "Integration Testing",
-                "path": "/docs/reference/tests/integration-testing.mdx"
               }
             ]
           }
