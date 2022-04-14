@@ -5,7 +5,7 @@ description: Build a serverless application with Stripe and Nitric for AWS, Goog
 
 ## What we'll be doing
 
-Creating a Stripe checkout backed by a Nitric API and collections. This API will be completely compatible with Stripe's checkout components, and will be deployable to the cloud of you choice.
+Creating a Stripe checkout backed by a Nitric API and collections. This API will be completely compatible with Stripe's checkout components, and can be deployed to the cloud of you choice.
 
 1. Add stripe to the project
 2. Create handler for checkout sessions
