@@ -72,6 +72,10 @@
                 "path": "/docs/guides/serverless-rest-api-example.md"
               },
               {
+                "title": "GraphQL",
+                "path": "/docs/guides/graphql.md"
+              },
+              {
                 "title": "Next.js",
                 "path": "/docs/guides/api-with-nextjs.md"
               },
