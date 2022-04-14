@@ -84,6 +84,10 @@
                 "path": "/docs/guides/serverless-api-with-planetscale-and-prisma.md"
               },
               {
+                "title": "Stripe",
+                "path": "/docs/guides/stripe.md"
+              },
+              {
                 "title": "Using Git Actions",
                 "path": "/docs/guides/github-actions.md"
               }
