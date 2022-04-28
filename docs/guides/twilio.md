@@ -121,7 +121,7 @@ We'll fill in the logic for the route. First, pull the data from the POST reques
 
 ```json
 {
-  "to": "+61412345678",
+  "to": "+16505130514",
   "message": "Test Message from Twilio!"
 }
 ```
@@ -188,7 +188,7 @@ text | http://localhost:9001/apis/text
 We can then use a tool like `postman` or `curl` to test the endpoint.
 
 ```
-curl -X POST -d '{"to":"+6141234567", "message": "Test Message from Twilio!"}' http://localhost:9001/apis/text/send
+curl -X POST -d '{"to":"+16505130514", "message": "Test Message from Twilio!"}' http://localhost:9001/apis/text/send
 ```
 
 If everything has been set up correctly, and the 'to' field on the JSON request body is replaced with a phone number you own, you will get a text that looks something like:
