@@ -72,12 +72,12 @@
                 "path": "/docs/comparison/aws-sam.md"
               },
               {
-                "title": "Google Cloud Deployment Manager",
+                "title": "GCP Deployment Manager",
                 "path": "/docs/comparison/gcp-deployment-manager.md"
               },
               {
                 "title": "Azure Resource Manager",
-                "path": "/docs/comparison/arm.md"
+                "path": "/docs/comparison/bicep.md"
               }
             ]
           },
@@ -124,11 +124,11 @@
             "routes": [
               {
                 "title": "Unit Testing",
-                "path": "/docs/reference/tests/unit-testing.mdx"
+                "path": "/docs/tests/unit-testing.mdx"
               },
               {
                 "title": "Integration Testing",
-                "path": "/docs/reference/tests/integration-testing.mdx"
+                "path": "/docs/tests/integration-testing.mdx"
               }
             ]
           },
