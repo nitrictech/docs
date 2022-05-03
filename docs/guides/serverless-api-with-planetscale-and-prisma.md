@@ -1,21 +1,11 @@
 ---
 title: Building APIs with PlanetScale, Prisma and Nitric
-description: Use PlanetScale serverless database, Prisma ORM and Nitric framework to building scalable APIs in the cloud
+description: Use PlanetScale serverless database, Prisma ORM and Nitric framework to build scalable APIs in the cloud
 ---
 
-## Overview
+## What we'll be doing
 
-This guide shows you how to create an API using serverless functions, then [PlanetScale](https://planetscale.com) and [Prisma](https://www.prisma.io/) for data persistence.
-
-In the guide we'll use:
-
-- [Nitric](https://nitric.io) APIs, Functions and Storage
-- [PlanetScale](https://planetscale.com) serverless database
-- [Prisma](https://prisma.io) ORM
-- The cloud of your choice:
-  - [AWS](https://aws.amazon.com)
-  - [GCP](https://cloud.google.com)
-  - [Azure](https://azure.microsoft.com)
+In this guide we will create an API using serverless functions, then use [PlanetScale](https://planetscale.com) and [Prisma](https://www.prisma.io/) for data persistence. We will then deploy the application to the cloud of your choice, [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com), or [Azure](https://azure.microsoft.com).
 
 To keep things light, the API we'll create generates memes by allowing uploads of image templates, then generating new images with overlaid text. Feel free to adapt the steps for any other API you'd like to build.
 
@@ -32,7 +22,7 @@ To complete this guide, here are things you'll need setup ahead of time:
 - The [Nitric CLI](/docs/installation)
 - An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
 
-## Starting the project
+## Getting started
 
 Let's start with a new nitric project and select the TypeScript starter template:
 
@@ -245,7 +235,7 @@ Again, we're declaring new resources, buckets in this case, and giving them uniq
 
 ### Create the meme template service
 
-Now that the resources are declared, let's create the first service. This service let's API consumer register new meme templates by providing a base image for memes and a configurable set of text locations.
+Now that the resources are declared, let's create the first service. This service lets API consumer register new meme templates by providing a base image for memes and a configurable set of text locations.
 
 In the `/functions` directory create a new file called `templates.ts` and populate it with the following code:
 
@@ -317,7 +307,7 @@ memeApi.get('/templates', async ({ res }) => {
 
 In this example we're importing the api gateway `memeApi` we created in our `resources` directory, and registering route and method handlers using methods like `get` and `post`, much like you would in frameworks such as [Express](https://expressjs.com/).
 
-Additionally, we're importing the bucket used to store template images `templateImages` from the resources directory. We also declare our intended use of the bucket with the `for` method, which let's nitric know what permissions your code needs and applies them during deployments. In this instance we're only giving our template service `write` access to the templates bucket.
+Additionally, we're importing the bucket used to store template images `templateImages` from the resources directory. We also declare our intended use of the bucket with the `for` method, which lets nitric know what permissions your code needs and applies them during deployments. In this instance we're only giving our template service `write` access to the templates bucket.
 
 The incoming `context` object _(which has been destructured into `req` and `res`)_ contains request and response details like path params, query params, headers, body, status, etc.
 

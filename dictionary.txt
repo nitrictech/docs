@@ -81,6 +81,25 @@ subcollection
 supertest
 localhost
 http
+BYO
+TLDR
+DM
+powershell
+TLDR
+BYO
+listid
+auth
+twilio
+SMS
+performant
+GraphQL
+graphql
+CDK
+TLDR
+BYO
+webhook
+utils
+
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
