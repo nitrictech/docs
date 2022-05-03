@@ -5,7 +5,7 @@ description: Add functions, queues, events or secrets to Supabase apps using the
 
 ## What we'll be doing
 
-In this guide we'll use the Nitric Framework with a Supabase project to build serverless functions that can respond to Insert, Update or Delete operations in your Supabase tables.
+In this guide we'll use the Nitric Framework with a [Supabase](https://supabase.com/) project to build serverless functions that can respond to Insert, Update or Delete operations in your Supabase tables.
 
 This example sends welcome emails to new user profiles with [SendGrid](https://sendgrid.com/), but you could adapt the steps for other situations, like:
 
@@ -16,6 +16,12 @@ This example sends welcome emails to new user profiles with [SendGrid](https://s
 You could even go the other way and build powerful SaaS APIs with Nitric, connected to your Supabase backend. Or, use Nitric [schedules](/docs/schedules) to clean up old data in batches.
 
 > Want guides for the topics above? Great! [come and tell us](https://github.com/nitrictech/nitric/discussions) what you need and we'll write it for you.
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/en/download/)
+- The [Nitric CLI](https://nitric.io/docs/installation)
+- An account with [Supabase](https://app.supabase.io)
 
 ## Create a Supabase project
 

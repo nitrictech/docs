@@ -3,6 +3,10 @@ title: CI/CD workflow with Nitric and GitHub Actions
 description: Deploy to AWS using GitHub Actions and the Nitric CLI
 ---
 
+## What we'll be doing
+
+In this guide we will demonstrate how Nitric can be used for continuous deployments to AWS in a GitHub action CI/CD pipeline. The action we write can be simply modified for GCP or Azure deployments.
+
 ## Setting up CI/CD with Nitric and GitHub actions
 
 GitHub has comprehensive [documentation](https://github.com/features/actions) which can guide you through advanced workflows.

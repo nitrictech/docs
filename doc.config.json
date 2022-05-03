@@ -68,7 +68,7 @@
             "disableAutoPrefix": true,
             "routes": [
               {
-                "title": "REST API Tutorial",
+                "title": "REST API",
                 "path": "/docs/guides/serverless-rest-api-example.md"
               },
               {
@@ -98,6 +98,19 @@
               {
                 "title": "Using Git Actions",
                 "path": "/docs/guides/github-actions.md"
+              }
+            ]
+          },
+          {
+            "title": "Testing",
+            "routes": [
+              {
+                "title": "Unit Testing",
+                "path": "/docs/reference/tests/unit-testing.mdx"
+              },
+              {
+                "title": "Integration Testing",
+                "path": "/docs/reference/tests/integration-testing.mdx"
               }
             ]
           },
@@ -501,19 +514,6 @@
                     "path": "/docs/reference/gcp/topics.mdx"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "title": "Testing",
-            "routes": [
-              {
-                "title": "Unit Testing",
-                "path": "/docs/reference/tests/unit-testing.mdx"
-              },
-              {
-                "title": "Integration Testing",
-                "path": "/docs/reference/tests/integration-testing.mdx"
               }
             ]
           }
