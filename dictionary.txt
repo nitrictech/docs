@@ -81,6 +81,9 @@ subcollection
 supertest
 localhost
 http
+performant
+GraphQL
+graphql
 CDK
 TLDR
 BYO
