@@ -68,18 +68,16 @@
             "disableAutoPrefix": true,
             "routes": [
               {
-                "title": "Azure Resource Manager",
-                "path": "/docs/comparison/arm.md"
-              }
-            ]
-          },
-          {
-            "title": "Compare Nitric with...",
-            "disableAutoPrefix": true,
-            "routes": [
+                "title": "AWS SAM",
+                "path": "/docs/comparison/aws-sam.md"
+              },
               {
                 "title": "Google Cloud Deployment Manager",
                 "path": "/docs/comparison/gcp-deployment-manager.md"
+              },
+              {
+                "title": "Azure Resource Manager",
+                "path": "/docs/comparison/arm.md"
               }
             ]
           },
@@ -131,16 +129,6 @@
               {
                 "title": "Integration Testing",
                 "path": "/docs/reference/tests/integration-testing.mdx"
-              }
-            ]
-          },
-          {
-            "title": "Compare Nitric with...",
-            "disableAutoPrefix": true,
-            "routes": [
-              {
-                "title": "AWS SAM",
-                "path": "/docs/comparison/aws-sam.md"
               }
             ]
           },

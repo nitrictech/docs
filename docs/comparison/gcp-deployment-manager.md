@@ -79,7 +79,7 @@ const newBucket = bucket('test-bucket');
 
 ## IAM Policy
 
-Google Cloud Deployment Manager templates have property keys for defining or assigning roles. A This puts the responsibility on the developer to make sure the policies defined in the file are following best practices.
+Google Cloud Deployment Manager templates have property keys for defining or assigning roles. This puts the responsibility on the developer to make sure the policies defined in the file are following best practices.
 
 On the other hand, Nitric handles the implementation of least-privilege policies for you. All that is needed is to specify how you want to use a resource, and the function will be assigned the relevant policy.
 
