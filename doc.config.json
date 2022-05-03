@@ -152,6 +152,10 @@
               {
                 "title": "CLI",
                 "path": "/docs/reference/cli.mdx"
+              },
+              {
+                "title": "Stacks",
+                "path": "/docs/reference/stacks.mdx"
               }
             ]
           },
