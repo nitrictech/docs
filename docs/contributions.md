@@ -2,7 +2,7 @@ Thanks for your interest in contributing to the Nitric community.
 
 There are plenty of ways to get involved, we've summarized a few here to get you started.
 
-Our team encourages you to ask questions, raise requests for new features and let us know about bugs!
+Nitric is opensource, our team encourages you to ask questions, raise requests for new features and let us know about bugs!
 
 ### Ask a question about Nitric
 
