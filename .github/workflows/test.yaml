@@ -21,3 +21,42 @@ jobs:
         run: yarn test
       - name: Run spellcheck test
         run: yarn ci:rename-for-spellcheck && yarn test:spellcheck
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: nitrictech/nitric-website
+          ref: main
+          token: ${{ secrets.NITRIC_BOT_TOKEN }}
+      - name: Cache Yarn Cache Website
+        uses: actions/cache@v2
+        with:
+          path: 'node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
+      - name: Prep Env Files
+        working-directory: apps/web
+        run: |
+          printf "NEXT_PUBLIC_DOCS_REPO=${{github.repository}}/${{github.head_ref}}" >> .env.local
+      - name: Cypress install 📦
+        uses: cypress-io/github-action@v2
+        with:
+          runTests: false
+          build: yarn build
+      - name: Cypress tests 🧪
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: ./apps/web
+          headless: true
+          config: video=false
+          browser: chrome
+          spec: cypress/integration/broken-links.spec.ts
+          build: yarn build-pages-fixture
+          start: yarn start
+          wait-on: 'http://localhost:3000'
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: apps/web/cypress/screenshots
