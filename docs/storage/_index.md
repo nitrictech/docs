@@ -26,6 +26,14 @@ import { bucket } from '@nitric/sdk';
 const profiles = bucket('profiles').for('reading', 'writing', 'deleting');
 ```
 
+### Listing Files
+
+To list files in a bucket, use the `files()` method on the bucket reference. This returns a list of `File` reference so the below methods can be called on the returned references.
+
+```javascript
+const files = await profiles.files();
+```
+
 ### Writing files
 
 You can write files to a bucket directly from your application code or by using [pre-signed URLs](#accessing-files).
