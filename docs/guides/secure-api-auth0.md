@@ -7,7 +7,7 @@ description: Configure an Auth0 application and secure your API with it
 
 In this guide we'll use the Nitric Framework with an [Auth0](https://auth0.com/) application to build serverless functions and a secure API.
 
-This example adds secure JWT authentication to an API allowing you to integrate it either with standalone api login, or to integrate it with a frontend application using the clients identity token.
+This example adds secure JWT authentication to an API allowing you to integrate it either with standalone api login, or to integrate it with a frontend application using the client's identity token.
 
 ## Prerequisites
 
@@ -39,6 +39,8 @@ Log into Auth0 and create a new API. If you have an existing API you'd like to u
 
 > You can enter any identifier you want, this guide will continue using 'testing' in subsequent steps.
 
+## Configuring the Nitric API
+
 Now we're ready to hook up our API for testing with our application. For this guide we'll create a new typescript application using `nitric new`, if you have an application already you want to use, just adapt the below steps to your application.
 
 Before we start getting into the code we'll need a bit more information from Auth0.
@@ -51,7 +53,7 @@ First we'll need the `audience` for our API, this can be found on the settings t
   height="700"
   />
 
-Second we'll get the `issuer` for our API, this will be our Auth0 environment endpoint and easy way to see this is to navigate the `Test` tab of our API.
+Second we'll get the `issuer` for our API, this will be our Auth0 environment endpoint. An easy way to see this is to navigate the `Test` tab of our API.
 
 <img
   alt="get audience value"
@@ -105,6 +107,8 @@ helloApi.get('/hello/:name', async (ctx) => {
   return ctx;
 });
 ```
+
+## Testing the Security Definition
 
 To test our security we will need to deploy our application to a cloud that nitric supports (security rules are currently not enforced when using `nitric run` for local development).
 
