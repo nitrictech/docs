@@ -60,48 +60,49 @@ Second we'll get the `issuer` for our API, this will be our auth0 environment en
   />
 
 In our new nitric application you will have the following in the `hello.ts` file
+
 ```typescript
-import { api } from "@nitric/sdk";
+import { api } from '@nitric/sdk';
 
 const helloApi = api('main');
 
-helloApi.get("/hello/:name", async (ctx) => {
-    const { name } = ctx.req.params;
+helloApi.get('/hello/:name', async (ctx) => {
+  const { name } = ctx.req.params;
 
-    ctx.res.body = `Hello ${name}`;
+  ctx.res.body = `Hello ${name}`;
 
-    return ctx;
+  return ctx;
 });
 ```
 
 To secure our api we will need to import the `jwt` function from the nitric sdk and configure our API gateway with the values we got from auth0 in the above steps.
 
 ```typescript
-import { api, jwt } from "@nitric/sdk";
+import { api, jwt } from '@nitric/sdk';
 
 const helloApi = api('main', {
-   // define security for this API
-   securityDefinitions: {
-       user: jwt({
-           issuer: 'https://your-auth0-app.region.auth0.com', // 👀 your issuer value goes here
-           audiences: ['testing'] // 👀 your audience value goes here
-       })
-   },
-   
-   security: {
-       // Apply the above security to the entire API, note the string matches the above key
-       user: [
-           // NOTE: The array option here is to specify required scopes, for simplicity we'll leave this blank for now
-       ],
-   },
+  // define security for this API
+  securityDefinitions: {
+    user: jwt({
+      issuer: 'https://your-auth0-app.region.auth0.com', // 👀 your issuer value goes here
+      audiences: ['testing'], // 👀 your audience value goes here
+    }),
+  },
+
+  security: {
+    // Apply the above security to the entire API, note the string matches the above key
+    user: [
+      // NOTE: The array option here is to specify required scopes, for simplicity we'll leave this blank for now
+    ],
+  },
 });
 
-helloApi.get("/hello/:name", async (ctx) => {
-    const { name } = ctx.req.params;
+helloApi.get('/hello/:name', async (ctx) => {
+  const { name } = ctx.req.params;
 
-    ctx.res.body = `Hello ${name}`;
+  ctx.res.body = `Hello ${name}`;
 
-    return ctx;
+  return ctx;
 });
 ```
 
@@ -114,6 +115,7 @@ Run `nitric stack new` and follow the prompts to create a new stack
 The run `nitric up -s <your_stack_name>` to deploy your application.
 
 We can check to see if our application is secure by calling it without an `Authorization` header
+
 ```bash
 curl -H <INSERT_API_GATEWAY>/hello/world
 ```
@@ -127,7 +129,6 @@ To test your application, you can follow the instructions on the `Test` tab of y
   height="700"
   />
 
-
 Once we have our token we can call our API
 
 ```bash
@@ -136,9 +137,4 @@ curl -H "Authorization: Bearer <INSERT_TOKEN>" <INSERT_API_GATEWAY>/hello/world
 
 Which should return `Hello world`.
 
-And that's all it takes to secure your nitric APIs with auth0 🎉. For more detailed information on available options for securing your APIs check out our [api docs/reference](https://nitric.io/docs). 
-
-
-
-
-
+And that's all it takes to secure your nitric APIs with auth0 🎉. For more detailed information on available options for securing your APIs check out our [api docs/reference](https://nitric.io/docs).
