@@ -87,7 +87,7 @@ galaxyApi.get('/planets/alderaan', async (ctx) => {
 
 APIs can include security definitions for OIDC compatible providers such as [Auth0](https://auth0.com/), [FusionAuth](https://fusionauth.io/) and [AWS Cognito](https://aws.amazon.com/cognito/).
 
-A `securityDefinitions` object can be provided to start defining the auth requirements of your API. `security` rules can 
+A `securityDefinitions` object can be provided to start defining the auth requirements of your API. `security` rules can also be specified on the API to apply a security definition to the entire API.
 
 ```javascript
 import { api, jwt } from '@nitric/sdk';

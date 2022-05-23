@@ -23,7 +23,7 @@ Additional options when creating the API.
 | Properties                                                                                                                                        |
 | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **path** optional `string` <br/> base path for all routes in the API.                                                                             |
-| **middleware** optional `HttpMiddleware` <br/> Middleware to apply to all routes and methods of the API.                                          |
+| **middleware** optional `HttpMiddleware or HttpMiddleware[]` <br/> Middleware to apply to all routes and methods of the API.                      |
 | **securityDefinitions** optional `map<string, SecurityDefiniton>` <br/> Security definitions defined by this API.                                 |
 | **security** optional `map<string, string[]>` <br/> Security rules to apply with scopes to the entire API. Keys must match a `securityDefinition` |
 
