@@ -75,7 +75,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 });
 ```
 
-To secure our api we will need to import the `jwt` function from the nitric sdk and configure our API gateway with the values we got from Auth0 in the above steps.
+To secure our api we will need to import the `jwt` function from the nitric SDK and configure our API gateway with the values we got from Auth0 in the above steps.
 
 ```typescript
 import { api, jwt } from '@nitric/sdk';
