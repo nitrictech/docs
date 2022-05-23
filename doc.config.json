@@ -377,6 +377,10 @@
                     "path": "/docs/reference/storage/file.md"
                   },
                   {
+                    "title": "bucket.files()",
+                    "path": "/docs/reference/storage/files.md"
+                  },
+                  {
                     "title": "file.get()",
                     "path": "/docs/reference/storage/file-get.md"
                   },
