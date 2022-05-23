@@ -98,8 +98,8 @@ const galaxyApi = api('galaxy', {
     // define a security definition called 'user'
     user: jwt({
       issuer: 'https://example-issuer.com',
-      audiences: ['YOUR-AUDIENCES']
-    })
+      audiences: ['YOUR-AUDIENCES'],
+    }),
   },
   // You can optionally apply security rules to the entire API
   security: {
@@ -107,10 +107,10 @@ const galaxyApi = api('galaxy', {
     user: [
       // Optionally apply required scopes to this api
       // in this case users will require the planets:read scope to access the API
-      'planets:read'
-    ]
+      'planets:read',
+    ],
   },
-})
+});
 ```
 
 ### Overriding API level security
@@ -118,12 +118,9 @@ const galaxyApi = api('galaxy', {
 Individual routes can also have their own security rules applied for any `securityDefinition` supplied at the API level.
 
 ```javascript
-
-galaxyApi.get('planets/unsecured-planet', async (ctx) => {
-
-}, {
+galaxyApi.get('planets/unsecured-planet', async (ctx) => {}, {
   // override top level security, and apply no security to this route
-  security: {}
+  security: {},
 });
 ```
 
