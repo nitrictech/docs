@@ -1,11 +1,11 @@
 ---
-title: Securing your API with auth0
+title: Securing your API with Auth0
 description: Configure an Auth0 application and secure your API with it
 ---
 
 ## What we'll be doing
 
-In this guide we'll use the Nitric Framework with an [auth0](https://auth0.com/) application to build serverless functions and a secure API.
+In this guide we'll use the Nitric Framework with an [Auth0](https://auth0.com/) application to build serverless functions and a secure API.
 
 This example adds secure JWT authentication to an API allowing you to integrate it either with standalone api login, or to integrate it with a frontend application using the clients identity token.
 
@@ -15,15 +15,15 @@ This example adds secure JWT authentication to an API allowing you to integrate 
 - The [Nitric CLI](https://nitric.io/docs/installation)
 - An account with [auth0](https://auth0.com/)
 
-## Create an auth0 API
+## Create an Auth0 API
 
-We're assuming you're already using auth0, but if not you can [sign up for free](https://auth0.com/).
+We're assuming you're already using Auth0, but if not you can [sign up for free](https://auth0.com/).
 
-Normally when authenticating a frontend application with auth0 you will create a new auth0 application that can be used to log into your app. These log ins will supply you with an auth0 identity token that can be used to request access tokens used to consume your backend APIs.
+Normally when authenticating a frontend application with Auth0 you will create a new Auth0 application that can be used to log into your app. These log ins will supply you with an Auth0 identity token that can be used to request access tokens used to consume your backend APIs.
 
-For the purposes of this guide we are only securing a new API, so we only need to create a new API within auth0.
+For the purposes of this guide we are only securing a new API, so we only need to create a new API within Auth0.
 
-Log into auth0 and create a new API. If you have an existing API you'd like to use, that's fine, just adapt the next steps to match your existing API.
+Log into Auth0 and create a new API. If you have an existing API you'd like to use, that's fine, just adapt the next steps to match your existing API.
 
 <img
   alt="navigate to APIs"
@@ -41,7 +41,7 @@ Log into auth0 and create a new API. If you have an existing API you'd like to u
 
 Now we're ready to hook up our API for testing with our application. For this guide we'll create a new typescript application using `nitric new`, if you have an application already you want to use, just adapt the below steps to your application.
 
-Before we start getting into the code we'll need a bit more information from auth0.
+Before we start getting into the code we'll need a bit more information from Auth0.
 
 First we'll need the `audience` for our API, this can be found on the settings tab of your new API.
 
@@ -51,7 +51,7 @@ First we'll need the `audience` for our API, this can be found on the settings t
   height="700"
   />
 
-Second we'll get the `issuer` for our API, this will be our auth0 environment endpoint and easy way to see this is to navigate the the `Test` tab our our API.
+Second we'll get the `issuer` for our API, this will be our Auth0 environment endpoint and easy way to see this is to navigate the `Test` tab of our API.
 
 <img
   alt="get audience value"
@@ -75,7 +75,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 });
 ```
 
-To secure our api we will need to import the `jwt` function from the nitric sdk and configure our API gateway with the values we got from auth0 in the above steps.
+To secure our api we will need to import the `jwt` function from the nitric sdk and configure our API gateway with the values we got from Auth0 in the above steps.
 
 ```typescript
 import { api, jwt } from '@nitric/sdk';
@@ -122,7 +122,7 @@ curl -H <INSERT_API_GATEWAY>/hello/world
 
 This should return a `401` error.
 
-To test your application, you can follow the instructions on the `Test` tab of your auth0 API, to create a new JWT token to test with.
+To test your application, you can follow the instructions on the `Test` tab of your Auth0 API, to create a new JWT token to test with.
 <img
   alt="get testing token"
   src="../../assets/img/guides/auth0/auth0-get-jwt.png"
@@ -137,4 +137,4 @@ curl -H "Authorization: Bearer <INSERT_TOKEN>" <INSERT_API_GATEWAY>/hello/world
 
 Which should return `Hello world`.
 
-And that's all it takes to secure your nitric APIs with auth0 🎉. For more detailed information on available options for securing your APIs check out our [api docs/reference](https://nitric.io/docs).
+And that's all it takes to secure your nitric APIs with Auth0 🎉. For more detailed information on available options for securing your APIs check out our [api docs/reference](https://nitric.io/docs).
