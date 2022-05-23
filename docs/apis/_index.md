@@ -83,6 +83,47 @@ galaxyApi.get('/planets/alderaan', async (ctx) => {
 });
 ```
 
+## Securing the API
+
+APIs can include security definitions for OIDC compatible providers such as [Auth0](https://auth0.com/), [FusionAuth](https://fusionauth.io/) and [AWS Cognito](https://aws.amazon.com/cognito/).
+
+A `securityDefinitions` object can be provided to start defining the auth requirements of your API. `security` rules can also be specified on the API to apply a security definition to the entire API.
+
+```javascript
+import { api, jwt } from '@nitric/sdk';
+
+const galaxyApi = api('galaxy', {
+  // security requirements for your API are defined here
+  securityDefinitions: {
+    // define a security definition called 'user'
+    user: jwt({
+      issuer: 'https://example-issuer.com',
+      audiences: ['YOUR-AUDIENCES'],
+    }),
+  },
+  // You can optionally apply security rules to the entire API
+  security: {
+    // apply the 'user security definition the whole API'
+    user: [
+      // Optionally apply required scopes to this api
+      // in this case users will require the planets:read scope to access the API
+      'planets:read',
+    ],
+  },
+});
+```
+
+### Overriding API level security
+
+Individual routes can also have their own security rules applied for any `securityDefinition` supplied at the API level.
+
+```javascript
+galaxyApi.get('planets/unsecured-planet', async (ctx) => {}, {
+  // override top level security, and apply no security to this route
+  security: {},
+});
+```
+
 ## What's next?
 
 - Learn more about APIs in our [reference docs](/docs/reference/api/api).

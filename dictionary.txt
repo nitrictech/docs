@@ -99,6 +99,9 @@ TLDR
 BYO
 webhook
 utils
+OIDC
+JWT
+JWTSecurityDefinition
 
 
 ^.+[-:_]\w+$
