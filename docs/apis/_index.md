@@ -113,7 +113,7 @@ const galaxyApi = api('galaxy', {
 })
 ```
 
-### Securing routes
+### Overriding API level security
 
 Individual routes can also have their own security rules applied for any `securityDefinition` supplied at the API level.
 
