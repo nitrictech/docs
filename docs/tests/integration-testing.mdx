@@ -63,10 +63,10 @@ We will put the integration test in a test directory, and name it `integration.t
 
 ```ts
 // tests/integration.test.ts
-import request from 'supertest';
+import supertest from 'supertest';
 
 describe('Testing Hello Api', () => {
-  const api = request('http://localhost:9001/apis/main');
+  const api = supertest('http://localhost:9001/apis/main');
 });
 ```
 
@@ -75,6 +75,7 @@ We can then add some tests to hit this API. We'll start with testing the `GET /:
 This request has the name parameter set to 'test'. This means we expect the response to be 'Hello test' and the status code to be 200. We get the done function as a parameter from the test callback, and call that when the test is resolved or encounters errors. This is to stop timeouts on the test, as we are testing an async operation.
 
 ```ts
+// tests/integration.test.ts
 import supertest from 'supertest';
 import assert from 'assert';
 
@@ -101,6 +102,7 @@ We can add another test case for hitting the `POST /:name` route. This will need
 > Make sure you remove the call to done from the assertion in the api route. Otherwise, the bucket test will not be run.
 
 ```ts
+// tests/integration.test.ts
 import supertest from 'supertest';
 import assert from 'assert';
 import { imageBucket } from '../resources/buckets';
