@@ -132,7 +132,7 @@ APIs support middleware at the API level and at the route level. Middleware is s
 const validate = (ctx, next) => {
   // Do request validation, etc.
   next();
-}
+};
 ```
 
 ### API level middleware
@@ -144,7 +144,7 @@ import { api } from '@nitric/sdk';
 import { validate, logRequest } from '../middleware';
 
 const customersApi = api('customers', {
-  middleware: [logRequest, validate], 
+  middleware: [logRequest, validate],
 });
 ```
 
