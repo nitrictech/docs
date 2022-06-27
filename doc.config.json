@@ -114,6 +114,10 @@
                 "path": "/docs/guides/twilio.md"
               },
               {
+                "title": "Secure API with Auth0",
+                "path": "/docs/guides/secure-api-auth0.md"
+              },
+              {
                 "title": "Using Git Actions",
                 "path": "/docs/guides/github-actions.md"
               }
