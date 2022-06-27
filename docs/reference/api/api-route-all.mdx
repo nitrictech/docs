@@ -5,7 +5,7 @@ import { api } from '@nitric/sdk';
 
 const customersRoute = api('public').route('/customers')
 
-customersRoute.all(ctx) => {
+customersRoute.all((ctx) => {
   // construct a response for all incoming HTTP requests
   const responseBody = {};
   ctx.res.json(responseBody);

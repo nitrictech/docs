@@ -124,6 +124,45 @@ galaxyApi.get('planets/unsecured-planet', async (ctx) => {}, {
 });
 ```
 
+## Defining Middleware
+
+APIs support middleware at the API level and at the route level. Middleware is supplied both a `HttpContext` object and a `next()` function which calls the next middleware in the chain.
+
+```javascript
+const validate = (ctx, next) => {
+  // Do request validation, etc.
+  next();
+}
+```
+
+### API level middleware
+
+Middleware defined at the API level will be called on every route.
+
+```javascript
+import { api } from '@nitric/sdk';
+import { validate, logRequest } from '../middleware';
+
+const customersApi = api('customers', {
+  middleware: [logRequest, validate], 
+});
+```
+
+### Route level middleware
+
+Middleware defined at a route level will only be called for that route.
+
+```javascript
+import { api } from '@nitric/sdk';
+import { validate } from '../middleware';
+
+const customersApi = api('customers');
+
+const getAllCustomers = (ctx) => {};
+
+customersApi.get('/customers', validate, getAllCustomers);
+```
+
 ## What's next?
 
 - Learn more about APIs in our [reference docs](/docs/reference/api/api).
