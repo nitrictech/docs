@@ -22,6 +22,10 @@
               {
                 "title": "Getting Started",
                 "path": "/docs/getting-started.mdx"
+              },
+              {
+                "title": "Languages",
+                "path": "/docs/language-support.md"
               }
             ]
           },
