@@ -25,6 +25,14 @@ If you don't have time to create a standalone repository, please include as much
 Log files can be found in your stack directory under the `.nitric` folder.
 Including Log files will provide a ton of useful information logged during local run and cloud deployments.
 
+### Include output of info command
+
+The output of the info command provides us with meta data such as OS, Chipset information, GoVersion, etc. which can be used to reproduce the issue raised.
+
+```bash
+nitric info -o yaml`
+```
+
 ### Include bug description and reproduction
 
 When describing the bug, it's help to produce the following information:

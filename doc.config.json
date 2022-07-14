@@ -22,6 +22,10 @@
               {
                 "title": "Getting Started",
                 "path": "/docs/getting-started.mdx"
+              },
+              {
+                "title": "Languages",
+                "path": "/docs/language-support.md"
               }
             ]
           },
@@ -112,6 +116,10 @@
               {
                 "title": "Twilio",
                 "path": "/docs/guides/twilio.md"
+              },
+              {
+                "title": "Secure API with Auth0",
+                "path": "/docs/guides/secure-api-auth0.md"
               },
               {
                 "title": "Using Git Actions",

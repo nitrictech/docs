@@ -20,10 +20,26 @@ The unique name of this API within the app. Subsequent calls to `api` with the s
 
 Additional options when creating the API.
 
-| Properties                                                                                                                     |
-| ------------------------------------------------------------------------------------------------------------------------------ |
-| **path** optional `string` <br/> base path for all routes in the API.                                                          |
-| **middleware** optional `HttpMiddleware` or `HttpMiddleware[]` <br/> Middleware to apply to all routes and methods of the API. |
+| Properties                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **path** optional `string` <br/> base path for all routes in the API.                                                                             |
+| **middleware** optional `HttpMiddleware or HttpMiddleware[]` <br/> Middleware to apply to all routes and methods of the API.                      |
+| **securityDefinitions** optional `map<string, SecurityDefiniton>` <br/> Security definitions defined by this API.                                 |
+| **security** optional `map<string, string[]>` <br/> Security rules to apply with scopes to the entire API. Keys must match a `securityDefinition` |
+
+---
+
+**SecurityDefinition**
+
+A `SecurityDefintion` object is one of the following:
+
+**JWTSecurityDefinition**
+
+| Properties                                                                                       |
+| ------------------------------------------------------------------------------------------------ |
+| **kind** `string` <br/> value must be `jwt`                                                      |
+| **issuer** `string` <br/> the issuer for the JWT tokens e.g. `https://account.region.auth0.com`. |
+| **audiences** `string[]` <br/> the `aud` that will be applied to JWT tokens from the issuer.     |
 
 ---
 
@@ -58,4 +74,30 @@ If you need to put all the routes in your api below a shared base path, you can 
 import { api } from '@nitric/sdk';
 
 const apiV1 = api('private', { path: '/api/v1' });
+```
+
+### Apply JWT authentication to an API
+
+```javascript
+import { api, jwt } from '@nitric/sdk';
+
+const secureApi = api('secure', {
+  // security requirements for your API are defined here
+  securityDefinitions: {
+    // define a security definition called 'user'
+    user: jwt({
+      issuer: 'https://example-issuer.com',
+      audiences: ['YOUR-AUDIENCES'],
+    }),
+  },
+  // You can optionally apply security rules to the entire API
+  security: {
+    // apply the 'user security definition the whole API'
+    user: [
+      // Optionally apply required scopes to this api
+      // in this case users will require the products:read scope to access the API
+      'products:read',
+    ],
+  },
+});
 ```

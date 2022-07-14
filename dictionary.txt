@@ -60,6 +60,8 @@ params
 prisma
 pubsub
 pulumi
+protobuf
+runtimes
 queryable
 repo
 monorepo
@@ -99,7 +101,10 @@ TLDR
 BYO
 webhook
 utils
-
+OIDC
+JWT
+JWTSecurityDefinition
+JVM
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)

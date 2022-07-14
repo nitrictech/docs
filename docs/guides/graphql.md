@@ -15,6 +15,10 @@ We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud o
 4. Run locally for testing
 5. Deploy to a cloud of your choice
 
+## Video
+
+<iframe width="560px" height="315px" src="https://www.youtube.com/embed/K7T32ebYSLA" title="" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en/download/)
