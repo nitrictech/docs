@@ -32,39 +32,52 @@ The schema below illustrates the relationship between secrets, versions and valu
 
 ## The basics
 
-This guide introduces the features of Nitric Secrets.
+### Creating a Secret
 
-### Create a secret
-
-Creating a new secret can be done in a single line, when a new secret is created a new version is automatically generated.
+Before sensitive values can be stored a secret must be defined.
 
 ```javascript
-import { secrets } from '@nitric/sdk';
+import { secret } from '@nitric/sdk';
 
 // Create a new secret
-const apiKey = await secrets()
-  .secret('api-key')
-  .put('6e1d9008-f06b-1111-2222-9b6989d58999');
+const apiKey = secret('api-key').for('put', 'access');
+```
 
-// We can get the version ID of our newly created secret using version
+### Store a new secret value
+
+To store or update the latest version of a secret, use the `put()` method on the secret reference.
+
+```javascript
+const latestVersion = await apiKey.put('a new secret value');
+
+// We can get the version ID of our newly stored value
 apiKey.version;
 ```
 
 > Secret versioning is automatic. Every time you `put` a new secret value a new version will be created and set as the `latest` version.
 
-### Access a secret
+### Access the latest value of a secret
 
-Accessing the contents of a secret version can be done my calling the `access()` method.
+Accessing the contents of a secret version can be done my calling the `access()` method. The `latest()` method ensures we always get the latest value of a secret. This is the best option for retrieving credentials or API keys, where the latest is the only valid version.
 
 ```javascript
-// access the latest version of a secret
-const latestSecret = await secrets().secret('my-secret').latest().access();
+// access the details of the latest version of a secret
+const latest = await apiKey.latest().access();
 
-// access a known version of a secret
-const theSecret = await secrets()
-  .secret('api-key')
-  .version('version-id')
-  .access();
+// Retrieve the value of the secret as a string
+latest.asString();
+```
+
+### Access a specific version of a secret
+
+If you need a previous version of a secret's value (not latest) you can use the `version()` method to specific the exact version ID. This is useful when you need a version that was used at a particular point in time.
+
+```javascript
+// access the details of a known version of a secret
+const specific = await apiKey.version('version-id').access();
+
+// Note, you can also retrieve the value of the secret as a byte array
+latest.asBytes();
 ```
 
 ## What's next?
