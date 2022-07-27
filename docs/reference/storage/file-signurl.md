@@ -22,13 +22,13 @@ Additional options when creating signed URL.
 
 | Properties                                                                            |
 | ------------------------------------------------------------------------------------- |
-| **expiry** optional `number` <br/> Seconds until link expiry. <br/> Defaults to `300` |
+| **expiry** optional `number` <br/> Seconds until link expiry. <br/> Defaults to `600` |
 
 ---
 
 ## Examples
 
-### Create a readable link that is valid for the next 10 minutes
+### Create a readable link that is valid for the next 5 minutes
 
 ```javascript
 import { bucket } from '@nitric/sdk';
@@ -38,7 +38,7 @@ const assets = bucket('assets').for('reading');
 const logo = assets.file('images/logo.png');
 
 const logoUrl = await logo.getDownloadUrl({
-  expiry: 600,
+  expiry: 300,
 });
 ```
 
