@@ -20,9 +20,9 @@ const uploadUrl = await profiles.file('profile.png').getUploadUrl();
 
 Additional options when creating signed URL.
 
-| Properties                                                                            |
-| ------------------------------------------------------------------------------------- |
-| **expiry** optional `number` <br/> Seconds until link expiry. <br/> Defaults to `600` |
+| Properties                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------- |
+| **expiry** optional `number` <br/> Seconds until link expiry. <br/> Defaults to `600`, Maximum of `604800` (7 days) |
 
 ---
 
