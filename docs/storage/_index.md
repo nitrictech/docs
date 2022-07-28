@@ -66,12 +66,13 @@ await profiles.file('users/cain-marko/profile.png').delete();
 You can generate short-lived download or upload URLs with the pre-signed URLs feature. These URLs are useful when you want to provide temporary links to download or upload a file.
 
 ```javascript
-import { bucket, FileMode } from '@nitric/sdk';
+import { bucket } from '@nitric/sdk';
 
 const profiles = bucket('profiles').for('reading', 'writing');
 
-// Provide the signedUrl value to a user for direct file access
-const signedUrl = await profiles.file('profile.png').signUrl(FileMode.Read);
+// Get pre-signed URLs for downloading or uploading
+const downloadUrl = await profiles.file('profile.png').getDownloadUrl();
+const uploadUrl = await profiles.file('profile.png').getUploadUrl();
 ```
 
 ## What's next?
