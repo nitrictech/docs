@@ -94,6 +94,10 @@
                 "path": "/docs/guides/serverless-rest-api-example.md"
               },
               {
+                "title": "Nitric Deploy",
+                "path": "/docs/guides/deploy.md"
+              },
+              {
                 "title": "GraphQL",
                 "path": "/docs/guides/graphql.md"
               },
