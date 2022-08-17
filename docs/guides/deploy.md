@@ -86,7 +86,7 @@ You'll also need to specify which directory the Nitric source code is in - by de
 
 If your project requires variables, they can be added in project settings.
 
-> Changes to variables will require a redeploy, which can be triggered from the projects home.
+> Changes to variables will require a redeploy, which can be triggered from the project's home.
 
 <img alt="...." src="../../assets/img/guides/deploy/new-environment-variable.png" height="337.5" />
 
@@ -130,7 +130,7 @@ That's it! With just a few clicks, you've deployed a project to your cloud and d
 
 ## Whats next?
 
-Try one of the following activities to keep going with Nitric
+Try one of the following activities to keep going with Nitric:
 
 - Update your code and push to the configured branch
 - Get started on one of our [guides](/docs/reference) to build a new project with the Nitric CLI
