@@ -14,13 +14,13 @@ In this guide, we'll walk through the steps of getting started with Nitric Deplo
 5. Create an environment
 6. Configure environment variables
 7. Deploy your project
-8. Check out the logs
+8. View the logs
 
 <br/>
 
 ## Sign in to Nitric Deploy
 
-> Nitric Deploy is currently in preview. [Request access](https://deploy.nitric.io/signup) using your Github account email address.
+> Nitric Deploy is currently in preview. [Request access](https://deploy.nitric.io/signup) using your GitHub account email address.
 
 Nitric Deploy can be accessed by navigating to https://deploy.nitric.io - you'll be greeted by our sign in screens. Follow the prompts to sign in with GitHub.
 
@@ -42,11 +42,11 @@ Let's create a new organization and give it a name.
 
 ## Set up AWS credentials
 
-The next step is to set up our AWS credentials with our new organization. Head to settings -> Credentials and click 'Create Credential'.
+The next step is to set up our AWS credentials with our new organization. Navigate to Settings -> Credentials and click **Create Credential**.
 
-You'll need to name your credentials and then set your AWS credentials.
+You'll need to name and store your AWS credentials.
 
-> If you're unsure about what these are or how to get them [click here](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html).
+> If you're unsure about what these are or how to get them, see the [Understanding and getting your AWS credentials](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html) documentation from AWS.
 
 > Only valid credentials will work here.
 
@@ -64,21 +64,21 @@ Projects can be imported from existing Git repositories or we can scaffold a new
 
 ### Existing projects
 
-In order to import an existing project, it must have been scaffolded by using the Nitric CLI. Your projects _must_ contain a valid nitric.yaml file for it to function correctly.
+In order to import an existing project, it must have been scaffolded by using the Nitric CLI. Your projects _must_ contain a valid `nitric.yaml` file for it to function correctly.
 
 <img alt="add existing project" src="../../assets/img/guides/deploy/add-project-existing.png" height="337.5" />
 
 ### Scaffold a new project
 
-Our template projects will give you a starting point with a basic hello world REST API.
+Our template projects will give you a starting point with a basic REST API.
 
-> Your new project will be scaffolded in the repository which you select.
+> Your new project will be scaffolded in the repository you select.
 
 <img alt="add new project" src="../../assets/img/guides/deploy/add-project-new.png" height="337.5" />
 
 In both of the scenarios you'll need to choose a production branch. This is the branch which Nitric Deploy will watch for any push events and trigger a deployment.
 
-You'll also need to specify which directory the Nitric source code is in - by default this would be './' but could be a few levels deeper if you are working in an existing monorepo.
+You'll also need to specify which directory the Nitric source code is in - by default this would be the root directory `./` but could be a few levels deeper if you are working in an existing monorepo.
 
 <br/>
 
@@ -94,7 +94,7 @@ If your project requires variables, they can be added in project settings.
 
 ## Create an environment
 
-An environment represents a collection of deployments targeted at your configured AWS account. You can have one or more environments if you'd like to deploy to different environment stages (e.g. dev, staging, prod), regions, or use different credentials.
+An environment represents a deployed instance of your application in a specific AWS account and region. You can have one or more environments based on the development workflow you follow (e.g. dev, staging, prod), or if you need environments in other regions or using different credentials.
 
 > Once you've created an environment, Nitric Deploy will automatically initiate your first deployment to the cloud.
 
@@ -106,9 +106,9 @@ An environment represents a collection of deployments targeted at your configure
 
 ## Deploy your project
 
-Your project will automatically deploy when you create your environment for the first time. It will also deploy each time you push to the branch which was configured when you created your project.
+Your project will automatically deploy when you create your environment for the first time. It will also deploy each time you push to the `linked branch` selected when creating your environment.
 
-Once you see the deployment tick over to success with a 'tick' you'll also notice that your preview / production URL is displayed. You can use this to access your deployment.
+Once you see the deployment tick over to success with a 'tick' you'll also notice that your preview / production URL is displayed. You can use this to access your deployed API.
 
 If you scaffolded a template project then you can test the API out with the following command.
 
@@ -116,19 +116,17 @@ If you scaffolded a template project then you can test the API out with the foll
 curl https://{url}/hello/user
 ```
 
-> You can change the branch by going to your project settings.
-
 <img alt="Create and deploy" src="../../assets/img/guides/deploy/deploy-2.png" height="337.5" />
 
 <br/>
 
-## Check out the logs
+## View the logs
 
-By clicking on 'view latest build' we can drill down into the details and retrieve the deployment log file.
+By clicking on 'view latest build' we can see the details and retrieve the deployment log information.
 
 <img alt="Deployment logs" src="../../assets/img/guides/deploy/deploy-logs.png" height="337.5" />
 
-That's it! With just a few easy clicks, you've deployed a project to your cloud and don't have to manage environments or infrastructure state.
+That's it! With just a few clicks, you've deployed a project to your cloud and don't have to manage environments or infrastructure state.
 
 ## Whats next?
 
