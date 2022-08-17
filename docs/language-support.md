@@ -1,6 +1,6 @@
 The Nitric SDKs communicate with the Nitric server using gRPC. The choice of gRPC and Protocol Buffers ensures the Nitric framework can support many languages without rewriting the entire framework from scratch.
 
-The Nitric team provides idiomatic languages SDKs, designed to feel familiar to developers of each language and make the best use unique language features. In addition, a set of base SDKs are auto-generated from the Protobuf contracts and published the [APIs](https://github.com/nitrictech/apis) project.
+The Nitric team provides idiomatic languages SDKs, designed to feel familiar to developers of each language and make the best use of unique language features. In addition, a set of base SDKs are auto-generated from the Protobuf contracts and published in the [APIs](https://github.com/nitrictech/apis) project.
 
 ## Supported Languages
 
@@ -15,7 +15,7 @@ The following runtimes are currently supported or are in development:
 
 If a language you want isn't listed, come chat to us on [Discord](https://discord.gg/Webemece5C).
 
-Alternatively, feel free to develop you own SDKs. Nitric is completely [open source](https://github.com/nitrictech) so you can use any of the other SDKs linked above as a reference.
+Alternatively, feel free to develop your own SDKs. Nitric is completely [open source](https://github.com/nitrictech) so you can use any of the other SDKs linked above as a reference.
 
 ## Adding language support
 
