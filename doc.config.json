@@ -6,6 +6,7 @@
         "docs": [
           {
             "title": "Overview",
+            "path": "/docs/_index.mdx",
             "routes": [
               {
                 "title": "Introduction",
