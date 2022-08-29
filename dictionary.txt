@@ -4,6 +4,7 @@ ACR
 APIs
 ARNs
 BoltDB
+backends
 CLI
 CLI's
 CORS
@@ -60,6 +61,8 @@ params
 prisma
 pubsub
 pulumi
+Pulumi
+Pulumi's
 protobuf
 runtimes
 queryable
