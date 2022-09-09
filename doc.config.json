@@ -30,6 +30,15 @@
               {
                 "title": "Deployment",
                 "path": "/docs/deployment/_index.md"
+              },
+              {
+                "title": "Configuration",
+                "routes": [
+                  {
+                    "title": "Stacks",
+                    "path": "/docs/config/stack.md"
+                  }
+                ]
               }
             ]
           },
