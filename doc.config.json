@@ -24,6 +24,10 @@
                 "path": "/docs/getting-started.mdx"
               },
               {
+                "title": "Deploying",
+                "path": "/docs/deploy-your-app.mdx"
+              },
+              {
                 "title": "Languages",
                 "path": "/docs/language-support.md"
               }, 

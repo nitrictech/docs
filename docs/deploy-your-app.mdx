@@ -1,0 +1,60 @@
+This guide demonstrates using the CLI to deploy your Nitric app.
+Try [Nitric Deploy](https://deploy.nitric.io) for a 'push-to-deploy' experience.
+
+## Deploying your app
+
+The first step is to set up your credentials for the cloud provider.
+
+- [AWS](/docs/reference/aws)
+- [Azure](/docs/reference/azure)
+- [GCP](/docs/reference/gcp)
+
+For AWS, you'll do this by setting up a credentials file, GCP and Azure will require you to install their CLI and login.
+
+You'll then need to create a [stack](/docs/reference/stacks) which represents your project and a deployment target.
+
+```bash
+nitric stack new
+```
+
+Follow the prompts to create a stack for your provider, this example will use `aws`.
+
+```
+? What do you want to call your new stack? dev
+? Which Cloud do you wish to deploy to? aws
+? select the region us-east-1
+```
+
+Now you can deploy your stack named `dev` with the `up` command.
+
+```bash
+nitric up -s dev
+```
+
+Output:
+
+```
+ SUCCESS  Configuration gathered (2s)
+ SUCCESS  Images built (3s)
+ Deployed  Function/hello (15)
+ Deployed  Stack (25s)
+┌───────────────────────────────────────────────────────────────┐
+| API  | Endpoint                                               |
+| main | https://XXXXXXXX.execute-api.us-east-1.amazonaws.com |
+└───────────────────────────────────────────────────────────────┘
+```
+
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
+
+To undeploy this stack -
+
+```bash
+nitric down -s dev
+```
+
+## What's next?
+
+- Learn more about [APIs](/docs/apis)
+- See other features in the [introduction](/docs)
+- Learn more about the [concepts](/docs/concepts) of Nitric
+- See SDK commands and more in our [reference docs](/docs/reference)
