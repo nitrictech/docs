@@ -18,6 +18,7 @@ functions:
     memory: 1024
     timeout: 15
 ```
+
 > This configuration goes in the stack file e.g. `nitric-<stack>.yaml`
 
 ### Default values
