@@ -24,10 +24,6 @@
                 "path": "/docs/getting-started.mdx"
               },
               {
-                "title": "Deploying",
-                "path": "/docs/deploy-your-app.mdx"
-              },
-              {
                 "title": "Languages",
                 "path": "/docs/language-support.md"
               }, 
@@ -132,6 +128,10 @@
               {
                 "title": "Secure API with Auth0",
                 "path": "/docs/guides/secure-api-auth0.md"
+              },
+              {
+                "title": "Deploying with the CLI",
+                "path": "/docs/deploy-your-app.mdx"
               },
               {
                 "title": "Using Git Actions",
