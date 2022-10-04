@@ -19,3 +19,13 @@ functions:
     timeout: 15
 ```
 > This configuration goes in the stack file e.g. `nitric-<stack>.yaml`
+
+### Default values
+
+When function configuration is not specfied the default depends on on the cloud provider being deployed to:
+
+| provider | memory | timeout |
+| -------- | ------ | ------- |
+| aws      | 128    | 15      |
+| gcp      | 512    | 15      |
+| azure    | 128    | 15      |
