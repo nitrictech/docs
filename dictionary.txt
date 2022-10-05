@@ -45,6 +45,7 @@ fasthttp
 filepath
 firestore
 gcloud
+gcp
 github
 homebrew
 integrations

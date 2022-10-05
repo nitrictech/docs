@@ -23,7 +23,7 @@ functions:
 
 ### Default values
 
-When function configuration is not specfied the default depends on on the cloud provider being deployed to:
+When function configuration is not specified the default depends on the cloud provider being deployed to:
 
 | provider | memory | timeout |
 | -------- | ------ | ------- |
