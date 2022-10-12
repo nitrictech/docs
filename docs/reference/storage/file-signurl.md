@@ -8,8 +8,8 @@ const assets = bucket('assets').for('reading', 'writing');
 const logo = assets.file('images/logo.png');
 
 // Create a read-only signed url reference for downloading or uploading
-const downloadUrl = await profiles.file('profile.png').getDownloadUrl();
-const uploadUrl = await profiles.file('profile.png').getUploadUrl();
+const downloadUrl = await logo.getDownloadUrl();
+const uploadUrl = await logo.getUploadUrl();
 ```
 
 ## Parameters

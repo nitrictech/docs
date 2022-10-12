@@ -352,9 +352,9 @@ profileApi.get('/profiles/:id/image/upload', async (ctx) => {
   const id = ctx.req.params['id'];
 
   // Return a signed url reference for upload
-  const photo = profilesImg.file(`images/${id}/photo.png`);
-  const photoUrl = await photo.signUrl(FileMode.Write);
-
+  const photoUrl = await profilesImg
+    .file(`images/${id}/photo.png`)
+    .getUploadUrl();
   ctx.res.json({
     url: photoUrl,
   });
@@ -366,10 +366,11 @@ profileApi.get('/profiles/:id/image/upload', async (ctx) => {
 ```typescript
 profileApi.get('/profiles/:id/image/download', async (ctx) => {
   const id = ctx.req.params['id'];
-  const photo = profilesImg.file(`images/${id}/photo.png`);
 
   // Return a signed url reference for download
-  const photoUrl = await photo.signUrl(FileMode.Read);
+  const photoUrl = await profilesImg
+    .file(`images/${id}/photo.png`)
+    .getDownloadUrl();
   ctx.res.json({
     url: photoUrl,
   });
@@ -381,10 +382,11 @@ You can also directly redirect to the photo url.
 ```typescript
 profileApi.get('/profiles/:id/image/view', async (ctx) => {
   const { id } = ctx.req.params;
-  const photo = profilesImg.file(`images/${id}/photo.png`);
 
   // Create a read-only signed url reference
-  const photoUrl = await photo.signUrl(FileMode.Read);
+  const photoUrl = await profilesImg
+    .file(`images/${id}/photo.png`)
+    .getDownloadUrl();
   ctx.res.status = 303;
   ctx.res.headers['Location'] = [photoUrl];
 });
