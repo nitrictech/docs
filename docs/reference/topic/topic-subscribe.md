@@ -38,5 +38,5 @@ updates.subscribe(async (ctx) => {
 
 ## Notes
 
-- A function may only subscribe to a function once, if multiple subscribers are required, create them in different functions.
+- A function may only subscribe to a topic once, if multiple subscribers are required, create them in different functions.
 - A function may subscribe to OR publish to a topic but not both
