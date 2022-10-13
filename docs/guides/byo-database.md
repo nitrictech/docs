@@ -107,7 +107,7 @@ You can then create a docker compose file to simplify running your docker contai
 
 version: '3.6'
 services:
-  postgres:
+  mysql:
     image: mysql
     restart: always
     environment:
@@ -159,7 +159,7 @@ You can then create a docker compose file to simplify running your docker contai
 
 version: '3.6'
 services:
-  postgres:
+  redis:
     image: redis
     restart: always
     ports:
@@ -207,8 +207,8 @@ You can then create a docker compose file to simplify running your docker contai
 
 version: '3.6'
 services:
-  postgres:
-    image: mysql
+  mongodb:
+    image: mongodb
     restart: always
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
@@ -216,7 +216,7 @@ services:
       - MONGO_INITDB_DATABASE=$MONGO_INITDB_DATABASE
 
     ports:
-      - '5432:5432'
+      - '27017:27017'
 ```
 
 You can add a script to your `package.json` which will run the docker compose file.
