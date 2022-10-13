@@ -153,11 +153,7 @@ For a local run, we need to first run the local API then run the tests. Add to y
 }
 ```
 
-We can then start the API with:
-
-```bash
-nitric run
-```
+We can then start the API with `nitric start` and then running your function code.
 
 And then in a separate terminal, run the tests:
 
@@ -188,7 +184,13 @@ We attempt to make the local run of nitric as similar as possible to the cloud e
 
 When you have an API deployed to the cloud, most cloud providers have a feature in the console to do endpoint testing. However, the tests are often just checking if the API resolves to a 200 status code. The process we are following here will lead to much more robust testing and a lot more confidence in your cloud application.
 
-Now for testing. The obvious first step before running our tests is to [deploy](https://nitric.io/docs/getting-started#deploying-the-app) the API. Then, to test against the deployed API, we just want to swap out our supertest agent host from the localhost endpoint to our deployed endpoint. This new endpoint will look something like:
+Now for testing. The obvious first step before running our tests is to [deploy](https://nitric.io/docs/getting-started#deploying-the-app) the resources.
+
+```
+nitric up
+```
+
+Then, to test against the deployed API, we just want to swap out our supertest agent host from the localhost endpoint to our deployed endpoint. This new endpoint will look something like:
 
 ```ts
 // tests/integration.test.ts

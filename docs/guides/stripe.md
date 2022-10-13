@@ -245,26 +245,15 @@ function handleOrder() {
 
 Now that you have an API defined with a handler and the webhook, it's time to test it out locally.
 
-Test out your application with the `run` command:
+Test out your application with the `yarn dev` command:
 
 ```bash
-nitric run
+yarn dev
 ```
 
-> _Note:_ `run` starts a container to act as an API gateway, as well as a container for each of the services.
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
-```
- SUCCESS Configuration gathered (3s)
- SUCCESS  Created Dev Image! (2s)
- SUCCESS  Started Local Services! (2s)
- SUCCESS  Started Functions! (1s)
-Local running, use ctrl-C to stop
-
-Api    | Endpoint
-public | http://localhost:9001/apis/payments
-```
-
-Pressing 'Ctrl-C' will end the application.
+Pressing `ctrl + a + k` will end the application.
 
 ### Testing the Checkout Session
 
@@ -319,8 +308,14 @@ nitric stack new
 ? select the region us-east-1
 ```
 
-To undeploy run the following command.
+To deploy the stack run the following command:
 
 ```bash
-nitric down -s dev
+nitric up
+```
+
+To undeploy run the following command:
+
+```bash
+nitric down
 ```

@@ -109,13 +109,13 @@ Next, let's navigate to the project directory and install the npm dependencies:
 ```bash
 cd welcome-guide
 
-npm install
+yarn install
 ```
 
 For this project we'll also want to install the `@sendgrid/mail` and `dotenv` packages to work with SendGrid and .env files respectively.
 
 ```bash
-npm install --save @sendgrid/mail dotenv
+yarn add @sendgrid/mail dotenv
 ```
 
 The starter template comes with an example function called `functions/hello.js`, let's rename that file to `functions/welcome.js` so it matches what we're going to build.
@@ -259,8 +259,10 @@ At this point everything in your Nitric app should be ready to go. You can test 
 Start the app:
 
 ```bash
-nitric run
+yarn dev
 ```
+
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
 In another terminal or HTTP client, send POST requests to the API:
 
@@ -282,16 +284,16 @@ Here we are in the home stretch! For this last section we'll get your Supabase a
 
 You could deploy your app to a cloud provider like AWS, but for development, let's just connect your Supabase project to your local development server. One neat tool for doing this is called _Ngrok_. Ngrok can forward requests from a public URL to a port on your local machine.
 
-You can install ngrok with NPM like so:
+You can install ngrok with yarn like so:
 
 ```bash
-npm install -g ngrok
+yarn add -D ngrok
 ```
 
 Next, let's connect it to your local Nitric app's server, which is already running on port 9001:
 
 ```bash
-ngrok http 9001
+yarn ngrok http 9001
 ```
 
 The output from ngrok will look something like this:

@@ -114,7 +114,7 @@ Deploying the stack.
 ```
 gcloud deployment-manager deployments create quickstart-deployment --config vm.yaml
 
-nitric up -s stack_name
+nitric up
 ```
 
 Deleting the stack.
@@ -122,5 +122,5 @@ Deleting the stack.
 ```
 gcloud deployment-manager deployments delete quickstart-deployment
 
-nitric down -s stack_name
+nitric down
 ```

@@ -10,7 +10,7 @@ The guide below highlights the features of Nitric Schedules.
 
 ### Create a schedule
 
-Creating schedules with Nitric can be done in a single line using our `config-as-code` functionality to define resources.
+Creating schedules with Nitric can be done with a single line of code to define resources.
 
 ```javascript
 import { schedule } from '@nitric/sdk';

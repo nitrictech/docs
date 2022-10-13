@@ -45,9 +45,9 @@ There are a few common commands that you will use frequently:
 
 - `nitric new` creates a new project
 - `nitric stack new` creates a new stack within a project
-- `nitric run` runs your stack locally
-- `nitric up -s my-aws-stack` deploys your stack to the cloud
-- `nitric down -s my-aws-stack` destroys your stack from the cloud
+- `nitric start` runs the Nitric server locally
+- `nitric up` deploys your stack to the cloud
+- `nitric down` destroys your stack from the cloud
 
 ## Getting Started
 
@@ -91,35 +91,29 @@ region: us-east-1
 
 ## Development
 
-When you are done developing your application and you want to run and test it locally, you can use the `nitric run` command.
+When you are done developing your application and you want to run and test it locally, you can use the `nitric start` command.
 
 ```
-nitric run
+nitric start
 
-SUCCESS  Configuration gathered (8s)
-SUCCESS  Created Dev Image! (0s)
 SUCCESS  Started Local Services! (5s)
-SUCCESS  Started Functions! (1s)
 Local running, use ctrl-C to stop
-
-Api    | Endpoint
-my-api | http://localhost:9001/apis/my-api
 ```
 
-This will build and run your functions for local testing. The output provides a local endpoint so that you can test your apis.
+This will run the Nitric server for local testing. You can then run your function files directly to register them with the server. This will output a local endpoint so that you can test your apis.
 
-If you make changes whilst it is running, the changes will be reflected due to hot reloading.
+If you make changes whilst it is running, just re-run your function files and the changes will be reflected in the server output.
 
 ## Deployment
 
 ### Deploying the Stack
 
-Once you have tested your application locally and you're ready to deploy, you can do `nitric up`. This command requires you supply the name of a stack with the `-s` or `--stack` argument. This will set the cloud configuration for that particular deployment.
+Once you have tested your application locally and you're ready to deploy, you can do `nitric up`. This command can be optionally supplied with the name of a stack with the `-s` or `--stack` argument. However, the stack will be auto-detected if theres only one or options will be presented if theres multiple. This will set the cloud configuration for that particular deployment.
 
 If this is your first deployment, you will have to set up your cloud credentials before deploying to the cloud. You can find the guides for these in the cloud's section in the reference documentation. The AWS guide is [here](/docs/reference/aws).
 
 ```
-nitric up -s my-aws-stack
+nitric up
 ```
 
 > Each of the cloud providers deployments take different amounts of time.
@@ -156,7 +150,7 @@ The deployment output will look something like:
 If you make changes and want to redeploy, you don't have to take the application down, you can just redeploy and it will find the difference. However, if you do want to destroy the application completely, you can use the `nitric down` command.
 
 ```
-nitric down -s my-aws-stack
+nitric down
 ```
 
 > This will prompt you again before destroying the stack.

@@ -2,7 +2,7 @@ Nitric is a framework for rapid development of cloud-native and serverless appli
 
 The agility and portability of Nitric means you can focus on your products, not your cloud provider.
 
-Even though your apps are portable, they'll still make the best use of the fully-managed and serverless offerings of each cloud provider. Nitric deploys using services like Lambda, CloudRun, DynamoDB, FireStore, CosmosDB, SNS, Event Grid, PubSub... the list is super long. Nitric also makes sure IAM and other access is correctly configured in your deployed applications, so everything stays secure and just works.
+Even though your apps are portable, they'll still make the best use of the fully-managed and serverless offerings of each cloud provider. Nitric deploys using services like Lambda, CloudRun, DynamoDB, FireStore, CosmosDB, SNS, Event Grid, PubSub... [the list](https://nitric.io/docs/reference) is super long. Nitric also makes sure IAM and other access is correctly configured in your deployed applications, so everything stays secure and just works.
 
 Nitric's CLI, Server and SDKs work together to provide these features. You can read a little about each of them below to get an understanding of how it all works.
 
@@ -16,7 +16,7 @@ The Nitric CLI performs 3 main tasks:
 
 ## Nitric SDKs
 
-Nitric SDKs provide an infrastructure-as-code style that lets you define resources in code. You can also write the functions that support the logic behind APIs, subscribers and schedules. Lastly, you can request the type of access you need to resources such as `publishing` for topics, without dealing directly with IAM or policy documents.
+Nitric SDKs provide an infrastructure-from-code style that lets you define resources from your code. You can also write the functions that support the logic behind APIs, subscribers and schedules. Lastly, you can request the type of access you need to resources such as `publishing` for topics, without dealing directly with IAM or policy documents.
 
 Here's an example with a few details noted:
 
@@ -57,7 +57,7 @@ A question we often get is _"aren't the clouds and their services different?"_ Y
 
 To compete with each other, clouds have ended up providing a set of functionally identical base services. Across those services, the biggest differences tend to be their interfaces and how they're deployed, secured and scaled.
 
-For that reason, you can think of Nitric to cloud providers, like an ORM to SQL databases. There are differences, but in general most SQL databases are similar enough and ORMs provide enough abstraction and value, that they're worth using. It's exactly the same with Nitric and cloud services; some features won't be directly accessible, but for many applications that won't matter.
+For that reason, you can think of Nitric to cloud providers, like an ORM to SQL databases. There are differences, but in general most SQL databases are similar enough and ORMs provide enough abstraction and value, that they're worth using. It's exactly the same with Nitric and cloud services; some features won't be directly accessible, but for most applications that won't matter.
 
 If you do need direct access to a cloud API, there is nothing preventing you from importing a cloud SDK in a specific function or container that needs that low-level control, while still maintaining portability elsewhere.
 

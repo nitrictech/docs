@@ -37,14 +37,16 @@ nitric new api-guide
 cd api-guide
 
 # install dependencies
-npm install
+yarn install
 ```
 
 Once you have the project, you can run it locally to check that everything is working correctly:
 
 ```bash
-nitric run
+yarn dev
 ```
+
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
 The example app contains a `hello world` style example function. Once it's running you can test it with an HTTP request:
 
@@ -61,7 +63,7 @@ curl http://localhost:9001/apis/main/hello/John
 Since we'll also use Jimp later for image editing, let's install that now too:
 
 ```bash
-npm install jimp -save
+yarn add jimp
 ```
 
 ## Database and schema setup
@@ -82,17 +84,16 @@ pscale database create planetnitric --region us-east
 
 ### Prisma setup
 
-Now you're ready to setup Prisma, let's start by adding it to our project with NPM:
+Now you're ready to setup Prisma, let's start by adding it to our project with yarn:
 
 ```bash
-npm install prisma --save-dev
-npm install @prisma/client --save
+yarn add -D prisma @prisma/client
 ```
 
 Then, we can initialize Prisma and generate our first schema file:
 
 ```bash
-npx prisma init
+yarn prisma init
 ```
 
 This gives you a new prisma schema in a folder called `prisma` and a new `.env` file containing config we'll use to connect to our PlanetScale database.
@@ -417,19 +418,7 @@ We also request `read` access to the `templateImages` bucket and `read-write` ac
 Now we've got the API established, let's test it out locally.
 
 ```bash
-nitric run
-```
-
-You'll see some spinners while nitric gets everything setup, then when everything succeeds your terminal output should look something like this:
-
-```txt
-SUCCESS Configuration gathered (6s)
-SUCCESS Created Dev Image! (0s)
-SUCCESS Started Local Services! (4s)
-SUCCESS Started Functions! (1s)
-
-Api  | Endpoint
-meme | http://localhost:9001/apis/meme
+yarn dev
 ```
 
 When running APIs locally, nitric will sub-route them by their name. So in this example to create a new meme template you'll need to make your `POST` request to `https://localhost:9001/apis/meme/templates`.
@@ -505,7 +494,7 @@ curl -X POST http://localhost:9001/apis/meme/memes \
 
 #### Retrieve the image
 
-Using the Meme ID returned from the previous request, open a browser and navigate to `http://localhost:9001/apis/meme/memes/<Meme ID>`.
+Using the Meme ID returned from the previous request, open a browser and navigate to `http://localhost:9001/apis/meme/memes/{id}`.
 
 ## Deploy to the cloud
 
@@ -525,11 +514,11 @@ nitric stack new
 Finally, run the `up` command to deploy the stack and push your code to the cloud:
 
 ```bash
-nitric up -s awsdev
+nitric up
 ```
 
 You can use the URL returned from the `up` command to make requests to your newly deployed API. Then, when you're done, you can destroy the stack with the `down` command:
 
 ```bash
-nitric down -s awsdev
+nitric down
 ```

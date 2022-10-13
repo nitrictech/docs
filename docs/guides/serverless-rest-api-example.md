@@ -75,27 +75,15 @@ The scaffolded project should have the following structure:
 +--README.md
 ```
 
-You can test the project scaffold with the `run` command.
+You can test the project scaffold with the `yarn dev` command.
 
 ```bash
-nitric run
+yarn dev
 ```
 
-> The first time you run a project or function it will take a moment longer to start while Docker image layers are downloaded and cached on your machine.
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
-```bash
-SUCCESS  Configuration gathered (3s)
-SUCCESS  Created Dev Image! (1s)
-SUCCESS  Started Local Services! (2s)
-SUCCESS  Started Functions!(0s)
-
-Local running, use ctrl-C to stop
-
-Api  | Endpoint
-main | http://localhost:9001/apis/main
-```
-
-The template project is successfully scaffolded.
+Use `ctrl + a + k` to close the multi-terminal.
 
 > Since we won't use the example function you can now delete the `functions/hello.ts` file.
 
@@ -225,37 +213,24 @@ Nitric will automatically infer the required specification and permissions to cr
 
 Now that you have an API defined with handlers for each of its methods, it's time to test it out locally.
 
-Test out your application with the `run` command:
+Test out your application with the `yarn dev` command:
 
 ```bash
-nitric run
-```
-
-> _Note:_ `run` starts a container to act as an API gateway, as well as a container for each of the services.
-
-```
- SUCCESS Configuration gathered (3s)
- SUCCESS  Created Dev Image! (2s)
- SUCCESS  Started Local Services! (2s)
- SUCCESS  Started Functions! (1s)
-Local running, use ctrl-C to stop
-
-Api    | Endpoint
-public | http://localhost:9001/apis/public
+yarn dev
 ```
 
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
 
-Pressing 'Ctrl-C' will end the application.
+We will keep it running for our tests, however pressing `ctrl + a + k` will end the application. If you want to update your functions, just save them, and it will be hot reloaded.
 
 ## Test your API
 
-Update all {} values and change the URL to your deployed URL if you're testing on the cloud.
+Update all values in {} and change the URL to your deployed URL if you're testing on the cloud.
 
 ### Create Profile
 
 ```bash
-curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles' \
+curl --location --request POST 'http://localhost:9001/apis/public/profiles' \
 --header 'Content-Type: text/plain' \
 --data-raw '{
     "name": "Peter Parker",
@@ -267,19 +242,19 @@ curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles' \
 ### Fetch Profile
 
 ```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}'
+curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}'
 ```
 
 ### Fetch All Profiles
 
 ```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles'
+curl --location --request GET 'http://localhost:9001/apis/public/profiles'
 ```
 
 ### Update Profile
 
 ```bash
-curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/{id}' \
+curl --location --request PUT 'http://localhost:9001/apis/public/profiles/{id}' \
 --header 'Content-Type: text/plain' \
 --data-raw '{
     "name": "Ben Reily",
@@ -290,7 +265,7 @@ curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/{id}' 
 ### Delete Profile
 
 ```bash
-curl --location --request DELETE 'http://127.0.0.1:9001/apis/public/profiles/{id}'
+curl --location --request DELETE 'http://localhost:9001/apis/public/profiles/{id}'
 ```
 
 ## Deploy to the cloud
@@ -320,7 +295,7 @@ nitric stack new
 We called our stack dev, lets try deploying it with the `up` command
 
 ```bash
-nitric up -s dev
+nitric up
 ┌───────────────────────────────────────────────────────────────┐
 | API  | Endpoint                                               |
 | main | https://XXXXXXXX.execute-api.us-east-1.amazonaws.com   |
@@ -332,7 +307,7 @@ When the deployment is complete, go to the relevant cloud console and you'll be 
 To undeploy run the following command:
 
 ```bash
-nitric down -s dev
+nitric down
 ```
 
 ## Optional - Add profile image upload/download support
@@ -394,12 +369,12 @@ profileApi.get('/profiles/:id/image/view', async (ctx) => {
 
 ## Test your API
 
-Update all {} values and change the URL to your deployed URL if you're testing on the cloud.
+Update all values in {} and change the URL to your deployed URL if you're testing on the cloud.
 
 ### Get upload image URL
 
 ```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image/upload'
+curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/upload'
 ```
 
 ### Using the upload URL with curl
@@ -414,5 +389,5 @@ curl --location --request PUT '{url}' \
 ### Get download image URL
 
 ```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image/download'
+curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/download'
 ```

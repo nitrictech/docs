@@ -18,7 +18,7 @@ A subscription is something listening to a topic. You can think of it as a chann
 
 ### Creating a Topic
 
-Before events can be published or subscribers created a topic must be defined.
+Before events can be published or subscribed to, a topic must be defined.
 
 ```javascript
 import { topic } from '@nitric/sdk';

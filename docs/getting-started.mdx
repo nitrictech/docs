@@ -33,31 +33,20 @@ Your project should now look like this:
 
 ### Running your app
 
-The Nitric CLI can run your application locally for development and testing.
+The Nitric CLI starts the Nitric Server using `nitric start`. This will listen for any requests that are made from your code. Once the server has started, you can run your functions like any regular node application. In the starter templates, we provide a recommended setup so you can start the server and your code using npm or yarn.
 
 ```bash
-nitric run
-```
-
-Output:
-
-```txt
- SUCCESS  Configuration gathered (2s)
- SUCCESS  Created Dev Image! (0s)
- SUCCESS  Started Local Services! (2s)
- SUCCESS  Started Functions! (0s)
-Local running, use ctrl-C to stop
-
-Api  | Endpoint
-main | http://localhost:9001/apis/main
+npm run dev
+OR
+yarn dev
 ```
 
 Take a look in the `hello.ts` file, you'll see it declares an API named `main` with a single route `GET /hello/:name`.
 
-When running locally Nitric hosts all your APIs under the path:
+After your function is run, it will register itself with the server. All the APIS are locally hosted under the path:
 
 ```txt
-http://localhost:9001/apis/[api_name]/
+http://localhost:9001/apis/:api_name
 ```
 
 in this case the URL for the API is:
@@ -66,7 +55,7 @@ in this case the URL for the API is:
 http://localhost:9001/apis/main/
 ```
 
-You can test the API using cURL, your browser, or any other HTTP client:
+Once the API is registered, you can test the API using cURL, your browser, or any other HTTP client:
 
 ```bash
 curl http://localhost:9001/apis/main/hello/John
@@ -75,9 +64,7 @@ Hello John
 
 ### Making updates
 
-The run command supports hot reload by default, so let's make some changes and see what happens.
-
-Open `functions/hello.ts` in your editor and add a new route to the API, then save the file:
+Open `functions/hello.ts` in your editor and add a new route to the API, then save, and execute the file:
 
 ```typescript
 import { api } from '@nitric/sdk';
@@ -98,14 +85,14 @@ helloApi.get('/goodbye/:name', async (ctx) => {
 });
 ```
 
-After saving, the new route will be registered and you can test it:
+After executing the file, the new route will be registered and you can test it:
 
 ```bash
 curl http://localhost:9001/apis/main/goodbye/John
 Goodbye John
 ```
 
-When you're finished running press `ctrl + c` to stop the run command.
+When you're finished testing, press `ctrl + c` to stop the Nitric Server.
 
 ## Deploying the app
 
@@ -134,7 +121,7 @@ Follow the prompts to create a stack for your provider, this example will use `a
 Now you can deploy your stack named `dev` with the `up` command.
 
 ```bash
-nitric up -s dev
+nitric up
 ```
 
 Output:
@@ -152,10 +139,10 @@ Output:
 
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
 
-To undeploy this stack -
+To undeploy this stack:
 
 ```bash
-nitric down -s dev
+nitric down
 ```
 
 ## What's next?

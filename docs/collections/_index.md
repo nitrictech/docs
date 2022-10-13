@@ -2,7 +2,7 @@ Nitric Collections simplify storing and querying data in easily accessible docum
 
 ### Collections
 
-A collection in a unique collection of unstructured data that is made up of many documents. Collections can most often be thought of as a category of related documents. E.g. `countries`
+A collection is a unique collection of unstructured data that is made up of many documents. Collections can most often be thought of as a category of related documents. E.g. `countries`
 
 ### Documents
 
@@ -14,7 +14,7 @@ A sub-collection is a collection that belongs to a single document. If we use `u
 
 ### Create a collection
 
-Declaring a collection for your application can be done in a single line of config-as-code using the nitric SDK:
+Declaring a collection for your application can be done in a single line of code using the Nitric SDK:
 
 ```javascript
 import { collection } from '@nitric/sdk';
@@ -51,7 +51,7 @@ await countries.doc('USA').delete();
 
 ### Querying a collection
 
-Simple queries on collections are supported as well
+Simple queries on collections are supported as well.
 
 ```javascript
 const query = countries
@@ -66,7 +66,7 @@ const query = countries
   .where('population', '>=', 100000000);
 ```
 
-Results can be iterated either by paging or streaming
+Results can be iterated either by paging or streaming.
 
 ```javascript
 // Paging
@@ -89,7 +89,7 @@ stream.on('data', (snapshot) => {
 
 ### Working with sub-collections
 
-Working with a sub-collection is very similar to working with a collection
+Working with a sub-collection is very similar to working with a collection.
 
 ```javascript
 const states = countries.doc('USA').collection('States');
@@ -97,7 +97,7 @@ const states = countries.doc('USA').collection('States');
 const stateOfColorado = states.doc('Colorado');
 ```
 
-> Nitric supports a single depth of sub-collection
+> Nitric supports a single depth for sub-collections
 
 ### Querying sub-collections
 
