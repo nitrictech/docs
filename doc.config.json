@@ -26,7 +26,7 @@
               {
                 "title": "Languages",
                 "path": "/docs/language-support.md"
-              }, 
+              },
               {
                 "title": "Deployment",
                 "path": "/docs/deployment/_index.md"
@@ -132,6 +132,10 @@
               {
                 "title": "Using Git Actions",
                 "path": "/docs/guides/github-actions.md"
+              },
+              {
+                "title": "Using a Database",
+                "path": "/docs/guides/byo-database"
               }
             ]
           },
