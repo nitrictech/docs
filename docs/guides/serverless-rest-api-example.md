@@ -57,7 +57,7 @@ Next, open the project in your editor of choice.
 > cd my-profile-api
 ```
 
-Make sure all dependencies are resolved with  npm.
+Make sure all dependencies are resolved with npm.
 
 ```bash
 npm install
