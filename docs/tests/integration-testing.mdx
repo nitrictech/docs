@@ -3,7 +3,7 @@ Integration tests are important for your systems as they catch system-level issu
 When writing these tests we want to make sure that these tests are reliable, able to be reproduced, and can isolate our system failures. This is why we want to use a testing framework like [jest](https://jestjs.io/), and use a http testing library like [supertest](https://github.com/visionmedia/supertest).
 
 ```
-yarn add --dev jest supertest @types/jest @types/supertest
+npm install --save-dev jest supertest @types/jest @types/supertest
 ```
 
 ## Writing the API
@@ -158,7 +158,7 @@ We can then start the API with `nitric start` and then running your function cod
 And then in a separate terminal, run the tests:
 
 ```
-yarn test
+npm run test
 ```
 
 This will produce the output:
@@ -197,4 +197,4 @@ Then, to test against the deployed API, we just want to swap out our supertest a
 const api = request('https://testerapi.us-east-1.amazonaws.com');
 ```
 
-To invoke our tests we can do `yarn test` locally. This will run the tests against the deployed instance and return your test results.
+To invoke our tests we can do `npm run test` locally. This will run the tests against the deployed instance and return your test results.

@@ -42,10 +42,10 @@ Next, open the project in your editor of choice.
 code nitric-stripe
 ```
 
-Make sure all dependencies are resolved with yarn or npm.
+Make sure all dependencies are resolved with npm.
 
 ```bash
-yarn install
+npm install
 ```
 
 The scaffolded project should have the following structure:
@@ -65,7 +65,7 @@ The scaffolded project should have the following structure:
 We will need the stripe module from npm to build the stripe backend.
 
 ```bash
-yarn add stripe
+npm install stripe
 ```
 
 We will also add a utils file for our stripe object and some environment variables. We'll put ours in `common/utils.ts`
@@ -90,7 +90,7 @@ export const stripe = new Stripe(process.env.STRIPE_API_KEY, {
 As we will be storing our environment variables in a `.env` file, we will use the `dotenv` module from npm.
 
 ```bash
-yarn add dotenv
+npm install dotenv
 ```
 
 Using `dotenv.config()` will load the environment variables into `process.env` so we can use them in the code without directly hard coding it.
@@ -245,10 +245,10 @@ function handleOrder() {
 
 Now that you have an API defined with a handler and the webhook, it's time to test it out locally.
 
-Test out your application with the `yarn dev` command:
+Test out your application with the `npm run dev` command:
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 > _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.

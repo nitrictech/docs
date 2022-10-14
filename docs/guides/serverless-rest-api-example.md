@@ -57,10 +57,10 @@ Next, open the project in your editor of choice.
 > cd my-profile-api
 ```
 
-Make sure all dependencies are resolved with yarn or npm.
+Make sure all dependencies are resolved with  npm.
 
 ```bash
-yarn install
+npm install
 ```
 
 The scaffolded project should have the following structure:
@@ -75,10 +75,10 @@ The scaffolded project should have the following structure:
 +--README.md
 ```
 
-You can test the project scaffold with the `yarn dev` command.
+You can test the project scaffold with the `npm run dev` command.
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 > _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
@@ -92,7 +92,7 @@ Use `ctrl + a + k` to close the multi-terminal.
 We'll need a unique identifier to store our profiles against.
 
 ```bash
-> yarn add uuidv4
+> npm install uuidv4
 ```
 
 ## Coding our Profile API
@@ -213,10 +213,10 @@ Nitric will automatically infer the required specification and permissions to cr
 
 Now that you have an API defined with handlers for each of its methods, it's time to test it out locally.
 
-Test out your application with the `yarn dev` command:
+Test out your application with the `npm run dev` command:
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.

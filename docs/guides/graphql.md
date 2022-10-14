@@ -32,7 +32,7 @@ We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud o
 GraphQL requests are type safe, and so they require a schema to be defined to validate queries against. Lets first add the graphql module from npm.
 
 ```bash
-yarn add graphql
+npm install graphql
 ```
 
 We can then import `buildSchema`, and write out the schema.
@@ -199,10 +199,10 @@ profileApi.post('/', async (ctx) => {
 
 Now that you have an API defined with a handler for the GraphQL requests, it's time to test it out locally.
 
-Test out your application with the `yarn dev` command:
+Test out your application with the `npm run dev` command:
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 > _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
