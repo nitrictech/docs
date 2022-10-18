@@ -39,11 +39,11 @@ We'll start with the finished product, and follow along that way, just clone the
 git clone https://github.com/nitrictech/nitric-todo.git
 ```
 
-Install the dependencies with npm or yarn.
+Install the dependencies with npm.
 
 ```bash
 cd nitric-todo
-yarn install
+npm install
 ```
 
 Next, open the project in your editor of choice.
@@ -437,7 +437,7 @@ taskListApi.delete('/:listid/:id', async (ctx) => {
 
 ### Delete a task list
 
-```
+```typescript
 taskListApi.delete('/:id', async (ctx) => {
   const { id } = ctx.req.params;
 
@@ -491,25 +491,25 @@ module.exports = {
 
 Now that you have an API defined with handlers for each of the methods, we can test it out locally.
 
-Test out your application with the `run` command:
+Test out your application with the `npm run dev` command:
 
 ```bash
 cd todo-api
-nitric run
+npm run dev
 ```
 
-> Note: `run` starts a container to act as an API gateway, as well as a container for each of the services.
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
-We can then launch the Next.js frontend with:
+We can then launch the Next.js frontend in a new terminal with:
 
 ```bash
 cd ../web
-yarn dev
+npm run dev
 ```
 
 You can then go to `localhost:3000` to view the application. Alternatively, you can test the API directly at `localhost:9001/apis/taskList` using cURL, Postman, or any other HTTP client.
 
-Pressing 'Crtl-C' will end the application.
+Pressing `ctrl + a + k` will end the application.
 
 ## Deploy to the cloud
 
@@ -536,7 +536,7 @@ nitric stack new
 > Note: You are responsible for staying within the limits of the free tier or any costs associated with deployment.
 
 ```
-nitric up -s todo
+nitric up
 ```
 
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
@@ -544,7 +544,7 @@ When the deployment is complete, go to the relevant cloud console and you'll be 
 To undeploy run the following command:
 
 ```
-nitric down -s dev
+nitric down
 ```
 
 ### Deploy the Next.js App

@@ -3,7 +3,7 @@ Integration tests are important for your systems as they catch system-level issu
 When writing these tests we want to make sure that these tests are reliable, able to be reproduced, and can isolate our system failures. This is why we want to use a testing framework like [jest](https://jestjs.io/), and use a http testing library like [supertest](https://github.com/visionmedia/supertest).
 
 ```
-yarn add --dev jest supertest @types/jest @types/supertest
+npm install --save-dev jest supertest @types/jest @types/supertest
 ```
 
 ## Writing the API
@@ -153,16 +153,12 @@ For a local run, we need to first run the local API then run the tests. Add to y
 }
 ```
 
-We can then start the API with:
-
-```bash
-nitric run
-```
+We can then start the API with `nitric start` and then running your function code.
 
 And then in a separate terminal, run the tests:
 
 ```
-yarn test
+npm run test
 ```
 
 This will produce the output:
@@ -188,11 +184,17 @@ We attempt to make the local run of nitric as similar as possible to the cloud e
 
 When you have an API deployed to the cloud, most cloud providers have a feature in the console to do endpoint testing. However, the tests are often just checking if the API resolves to a 200 status code. The process we are following here will lead to much more robust testing and a lot more confidence in your cloud application.
 
-Now for testing. The obvious first step before running our tests is to [deploy](https://nitric.io/docs/getting-started#deploying-the-app) the API. Then, to test against the deployed API, we just want to swap out our supertest agent host from the localhost endpoint to our deployed endpoint. This new endpoint will look something like:
+Now for testing. The obvious first step before running our tests is to [deploy](https://nitric.io/docs/getting-started#deploying-the-app) the resources.
+
+```
+nitric up
+```
+
+Then, to test against the deployed API, we just want to swap out our supertest agent host from the localhost endpoint to our deployed endpoint. This new endpoint will look something like:
 
 ```ts
 // tests/integration.test.ts
 const api = request('https://testerapi.us-east-1.amazonaws.com');
 ```
 
-To invoke our tests we can do `yarn test` locally. This will run the tests against the deployed instance and return your test results.
+To invoke our tests we can do `npm run test` locally. This will run the tests against the deployed instance and return your test results.

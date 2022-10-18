@@ -66,7 +66,7 @@ export default Messenger;
 You will need to add the twilio module using your preferred package manager.
 
 ```
-yarn add twilio
+npm install twilio
 ```
 
 ## Create the API
@@ -86,7 +86,7 @@ textApi.post('/send', async (ctx) => {});
 The next step is pulling the environment variables in and constructing our messenger. We will use the `dotenv` module.
 
 ```
-yarn add dotenv
+npm install dotenv
 ```
 
 We can create a `.env` file in root of the project with the twilio API information that's sitting on your Twilio dashboard.
@@ -169,21 +169,10 @@ textApi.post('/send', async (ctx) => {
 This API can easily be tested using the local Nitric dev environment. This is started with the following command:
 
 ```
-nitric run
+npm run dev
 ```
 
-Which will output our locally hosted endpoint:
-
-```
-SUCCESS  Configuration gathered (18s)
-SUCCESS  Created Dev Image! (1s)
-SUCCESS  Started Local Services! (8s)
-SUCCESS  Started Functions! (2s)
-Local running, use ctrl-C to stop
-
-Api  | Endpoint
-text | http://localhost:9001/apis/text
-```
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
 We can then use a tool like `postman` or `curl` to test the endpoint.
 

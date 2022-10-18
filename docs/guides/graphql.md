@@ -32,7 +32,7 @@ We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud o
 GraphQL requests are type safe, and so they require a schema to be defined to validate queries against. Lets first add the graphql module from npm.
 
 ```bash
-yarn add graphql
+npm install graphql
 ```
 
 We can then import `buildSchema`, and write out the schema.
@@ -199,28 +199,17 @@ profileApi.post('/', async (ctx) => {
 
 Now that you have an API defined with a handler for the GraphQL requests, it's time to test it out locally.
 
-Test out your application with the `run` command:
+Test out your application with the `npm run dev` command:
 
 ```bash
-nitric run
+npm run dev
 ```
 
-> _Note:_ `run` starts a container to act as an API gateway, as well as a container for each of the services.
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
-```
- SUCCESS Configuration gathered (3s)
- SUCCESS  Created Dev Image! (2s)
- SUCCESS  Started Local Services! (2s)
- SUCCESS  Started Functions! (1s)
-Local running, use ctrl-C to stop
+Once it starts, the application will be able to receive requests via the API port.
 
-Api    | Endpoint
-public | http://localhost:9001/apis/public
-```
-
-Once it starts, the application will receive requests via the API port.
-
-Pressing 'Ctrl-C' will end the application.
+Pressing `ctrl + a + k` will end the application.
 
 We can use cURL, postman or any other HTTP Client to test our application, however it's better if the client has GraphQL support.
 
@@ -394,8 +383,14 @@ nitric stack new
 ? select the region us-east-1
 ```
 
+You can then deploy using the following command:
+
+```bash
+nitric up
+```
+
 To undeploy run the following command:
 
 ```bash
-nitric down -s dev
+nitric down
 ```

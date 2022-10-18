@@ -4,7 +4,7 @@ Queues and Tasks provide a scalable, decoupled, way for functions and containers
 
 Queue are named targets where tasks can be sent. They can be thought of as a group of related tasks. Unlike [topics](./topics), tasks sent to a queue won't automatically trigger functions to process them. Instead, functions receive tasks from the queue by requesting them.
 
-This makes queues awesome for processing work asynchronously, often paired with [Schedules](/docs/schedules) to support batch workloads, like nightly processes.
+This makes queues awesome for processing work asynchronously, often paired with [schedules](/docs/schedules) to support batch workloads, like nightly processes.
 
 ### Task
 
@@ -36,7 +36,7 @@ await transactionQueue.send([
 ]);
 ```
 
-### Receiving & Acknowledging Tasks
+### Receiving and Acknowledging Tasks
 
 When pulling tasks off a queue they aren't immediately deleted, they're leased. Leased tasks are hidden, preventing other functions from receiving them unless the lease expires.
 

@@ -4,11 +4,11 @@ Nitric APIs make it dead simple to define and map functions to HTTP APIs.
 
 ### Request Context
 
-Nitric's way of handing requests and responses was inspired by a common pattern from frameworks like koa and fasthttp. We provide a single context object that gives you everything you need to read requests and write responses.
+Nitric's way of handing requests and responses was inspired by a common pattern from frameworks like [Koa](https://koajs.com/) and [Next.js](https://nextjs.org/docs/api-routes/introduction) edge functions. We provide a single context object that gives you everything you need to read requests and write responses.
 
 ## Creating a new API
 
-APIs are easy to declare with the nitric SDK
+APIs are easy to declare with the Nitric SDK
 
 ```typescript
 import { api } from '@nitric/sdk';

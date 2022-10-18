@@ -10,7 +10,7 @@ Buckets are isolated repositories for files. You can think of a bucket like a ha
 
 ### Folders
 
-Most cloud object/blob storage services act like key value systems where the keys are filenames and values are file data. Including paths in filenames allows you to organize files within a bucket, just like folders would be used in local storage. For example the a file named `profile.png` could be stored in the folder `images/default` by providing the full filepath when writing or reading the file e.g. `image/default/profile.png`.
+Most cloud object/blob storage services act like key value systems where the keys are filenames and values are file data. Including paths in filenames allows you to organize files within a bucket, just like folders would be used in local storage. For example, a file named `profile.png` could be stored in the folder `images/default` by providing the full filepath when writing or reading the file e.g. `image/default/profile.png`.
 
 ## The basics
 
@@ -18,7 +18,7 @@ The guide below highlights the features of Nitric Storage.
 
 ### Create a bucket
 
-Creating buckets with the Nitric SDK is just one line of code. In the example below we declare that our function depends on a bucket named "profiles" and needs access to `read`, `write` and `delete` files in the bucket:
+Creating buckets with the Nitric SDK is just one line of code. In the example below we declare a bucket named `profiles`, and specify that our function needs access to `read`, `write` and `delete` files in the bucket:
 
 ```javascript
 import { bucket } from '@nitric/sdk';
@@ -28,7 +28,7 @@ const profiles = bucket('profiles').for('reading', 'writing', 'deleting');
 
 ### Listing Files
 
-To list files in a bucket, use the `files()` method on the bucket reference. This returns a list of `File` reference so the below methods can be called on the returned references.
+To list files in a bucket, use the `files()` method on the bucket reference. This returns a list of `File` references so the below methods can be called on the returned references.
 
 ```javascript
 const files = await profiles.files();
