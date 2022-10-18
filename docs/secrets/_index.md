@@ -1,5 +1,7 @@
 Nitric Secrets makes securely storing, updating and retrieving sensitive values like database credentials and API keys easy.
 
+You can also choose to store these values as [environment variables](/docs/env).
+
 ### Secrets
 
 Secrets are values stored in an encrypted Secrets Manager, usually containing sensitive data such as the username and password used to access a database. Since credentials and keys tend to change over time, Nitric Secrets act as a virtual storage location for these values with version control baked in.

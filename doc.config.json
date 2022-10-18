@@ -157,6 +157,10 @@
                 "path": "/docs/faq.mdx"
               },
               {
+                "title": "Environment Variables",
+                "path": "/docs/env.mdx"
+              },
+              {
                 "title": "Support",
                 "path": "/docs/support/_index.mdx",
                 "routes": [
