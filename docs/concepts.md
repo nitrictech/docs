@@ -1,3 +1,8 @@
+---
+title: Concepts
+description: Initial concepts of the Nitric framework
+---
+
 Nitric is a framework for rapid development of cloud-native and serverless applications. It helps you define your apps in terms of the resources they need, then write the code for serverless function based APIs, event subscribers and scheduled jobs. Unlike other cloud or container frameworks, apps built with Nitric can be deployed to AWS, Azure or Google Cloud all from the same code base.
 
 The agility and portability of Nitric means you can focus on your products, not your cloud provider.

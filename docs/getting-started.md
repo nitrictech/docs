@@ -1,6 +1,11 @@
+---
+title: Getting started
+description: Getting started guide for an initial Nitric project
+---
+
 After installing the [Nitric CLI](/docs/installation), you can start building a project.
 
-### Using the `new` command
+## Using the `new` command
 
 The Nitric CLI's `new` command provides prompts to scaffold new projects from templates. In this example we'll select the TypeScript starter template. The CLI also needs to know which source files represent your application code. In this example all of our app code is inside the `functions/` folder, so we provide a glob pattern to match that folder.
 
@@ -31,7 +36,7 @@ Your project should now look like this:
 +--README.md
 ```
 
-### Running your app
+## Running your app
 
 The Nitric CLI starts the Nitric Server using `nitric start`. This will listen for any requests that are made from your code. Once the server has started, you can run your functions like any regular node application. In the starter templates, we provide a recommended setup so you can start the server and your code using npm.
 
@@ -60,7 +65,7 @@ curl http://localhost:9001/apis/main/hello/John
 Hello John
 ```
 
-### Making updates
+## Making updates
 
 Open `functions/hello.ts` in your editor and add a new route to the API, then save, and execute the file:
 
@@ -92,7 +97,7 @@ Goodbye John
 
 When you're finished testing, press `ctrl + c` to stop the Nitric Server.
 
-## Deploying the app
+# Deploying the app
 
 Now that you've implemented a basic API and tested that it works, you can deploy it to one of the major cloud platforms.
 
@@ -143,7 +148,7 @@ To undeploy this stack:
 nitric down
 ```
 
-## What's next?
+# What's next?
 
 - Learn more about [APIs](/docs/apis)
 - See other features in the [introduction](/docs)

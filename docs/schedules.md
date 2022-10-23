@@ -1,14 +1,19 @@
+---
+title: Schedules
+description: Create and deploy schedules with Nitric
+---
+
 Nitric makes it easy to create functions that run on a schedule. Schedules are most useful for batch workloads, reporting and other activities that happen on a set cadence.
 
-### Frequencies
+## Frequencies
 
 Frequencies define when your functions should run. Nitric supports expressive schedules which run as often as once per minute. Frequencies can be configured in minutes, hours and days.
 
-## The basics
+# The basics
 
 The guide below highlights the features of Nitric Schedules.
 
-### Create a schedule
+## Create a schedule
 
 Creating schedules with Nitric can be done with a single line of code to define resources.
 
@@ -31,6 +36,6 @@ schedule('send-reports').every('day', async (ctx) => {
 });
 ```
 
-## What's next?
+# What's next?
 
 - Learn more about schedules in our [reference docs](/docs/reference/schedule/schedule).

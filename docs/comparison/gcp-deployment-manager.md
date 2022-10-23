@@ -1,5 +1,6 @@
 ---
-title: Google Cloud Deployment Manager
+title: Comparing Google Cloud Deployment Manager
+description: Comparison to Google Cloud Deployment Manager
 ---
 
 [Google Cloud Deployment Manager](https://cloud.google.com/deployment-manager/docs#docs) is an infrastructure as code offering for creating and managing deployments on GCP.

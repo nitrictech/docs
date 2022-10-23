@@ -1,22 +1,27 @@
+---
+title: Topics
+description: Creating and using Topics in Nitric applications
+---
+
 Topics and Events provide a scalable, decoupled, way to communicate between functions and containers.
 
-### Topics
+## Topics
 
 A topic is a named target where events can be published. They can be thought of as a subject that your functions can discuss with each other.
 
 They're awesome for allowing serverless functions to communicate in a stateless, scalable and highly decoupled way.
 
-### Events
+## Events
 
 Events are the messages that can be published to a topic. They can be thought of as kind of notification that is sent to say that something new has happened.
 
-### Subscriptions
+## Subscriptions
 
 A subscription is something listening to a topic. You can think of it as a channel that notifies your application when something new arrives on the topic.
 
-## The basics
+# The basics
 
-### Creating a Topic
+## Creating a Topic
 
 Before events can be published or subscribed to, a topic must be defined.
 
@@ -26,7 +31,7 @@ import { topic } from '@nitric/sdk';
 const userCreatedTopic = topic('user-created').for('publishing');
 ```
 
-### Publishing an event
+## Publishing an event
 
 To send an event to a topic and notify all subscribers, use the `publish()` method on the topic reference.
 
@@ -38,7 +43,7 @@ const data = userCreatedTopic.publish({
 });
 ```
 
-### Subscribing to a topic
+## Subscribing to a topic
 
 To execute a function when new events are published you can setup subscribers. The delay between publishing an event and a subscriber being executed is usually only a few milliseconds. This makes subscribers perfect for responding to events as they happen.
 
@@ -50,7 +55,7 @@ userCreatedTopic.subscribe(async (ctx) => {
 });
 ```
 
-### Limitation on Publishing and Subscribing
+## Limitation on Publishing and Subscribing
 
 Nitric won't allow you to request publishing access and setup a subscriber in the same function.
 
@@ -67,7 +72,7 @@ loopTopic.subscribe(async (ctx) => {
 
 The limitation exists to protect you from infinite loops in deployed functions where a function calls itself indirectly via a topic. These sorts of mistakes can lead to large unintentional cloud charges - something you probably want to avoid.
 
-## Reliable event handling
+# Reliable event handling
 
 If a subscriber encounters an error or is terminated before it finishes processing an event, what happens? Is the event lost?
 
@@ -77,13 +82,13 @@ Typically, retries occur when a subscriber doesn't respond successfully, like wh
 
 Luckily, building atomic publishers and idempotent subscribers is enough to solve for this.
 
-### Atomic publishers
+## Atomic publishers
 
 Basically, your publishers needs to update your database _and_ publish associated events. If a database update fails, the events should _never_ be sent. If the database update succeeds, the events should _always_ publish. The two shouldn't occur independently (i.e. one shouldn't fail while the other succeeds).
 
 One solution to this problem is the [Transactional Outbox Pattern](https://microservices.io/patterns/data/transactional-outbox.html).
 
-### Idempotent subscribers
+## Idempotent subscribers
 
 Events can be delivered more than once, but they should only be _processed_ once. To do this your subscribers need to identify and disregard duplicate events.
 
@@ -106,6 +111,6 @@ updates.subscribe((ctx) => {
 
 > If you're checking for duplicate IDs, make sure publishers can't resend failed events with new IDs
 
-## What's next?
+# What's next?
 
 - Learn more about topics in our [reference docs](/docs/reference/topic/topic).

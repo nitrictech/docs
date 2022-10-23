@@ -1,3 +1,8 @@
+---
+title: Comparing to AWS SAM
+description: Comparison to AWS Serverless Application Model (SAM)
+---
+
 AWS Serverless Application Model (SAM) is an abstraction layer for CloudFormation that makes it simpler to write serverless applications in AWS.
 
 Although both AWS SAM and Nitric are in the same problem space, there are major differences in the way that Nitric solves simplifying serverless application development compared with SAM.

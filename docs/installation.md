@@ -1,3 +1,8 @@
+---
+title: Installation
+description: Basic installation instructions
+---
+
 ## Prerequisites
 
 Nitric relies on functionality from the following projects to help retrieve plugins, containerize and deploy your application.

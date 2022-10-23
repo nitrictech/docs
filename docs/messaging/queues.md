@@ -1,18 +1,23 @@
+---
+title: Queues
+description: Creating and using queues with Nitric
+---
+
 Queues and Tasks provide a scalable, decoupled, way for functions and containers to communicate asynchronously.
 
-### Queue
+## Queue
 
 Queue are named targets where tasks can be sent. They can be thought of as a group of related tasks. Unlike [topics](./topics), tasks sent to a queue won't automatically trigger functions to process them. Instead, functions receive tasks from the queue by requesting them.
 
 This makes queues awesome for processing work asynchronously, often paired with [schedules](/docs/schedules) to support batch workloads, like nightly processes.
 
-### Task
+## Task
 
 A task is a form of message that can be sent to a queue. They can be thought of as a collection of data that has been queued for processing some time in the future.
 
-## The basics
+# The basics
 
-### Creating a Queue
+## Creating a Queue
 
 ```javascript
 import { queue } from '@nitric/sdk';
@@ -23,7 +28,7 @@ const transactionQueue = queue('process-transactions').for(
 );
 ```
 
-### Sending Tasks
+## Sending Tasks
 
 ```javascript
 await transactionQueue.send([
@@ -36,7 +41,7 @@ await transactionQueue.send([
 ]);
 ```
 
-### Receiving and Acknowledging Tasks
+## Receiving and Acknowledging Tasks
 
 When pulling tasks off a queue they aren't immediately deleted, they're leased. Leased tasks are hidden, preventing other functions from receiving them unless the lease expires.
 
@@ -55,6 +60,6 @@ for (let task of tasks) {
 }
 ```
 
-## What's next?
+# What's next?
 
 - Learn more about queues in our [reference docs](/docs/reference/queues/queue).

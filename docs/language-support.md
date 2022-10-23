@@ -1,6 +1,11 @@
+---
+title: Language support
+description: Details on the programming languages supported by Nitric
+---
+
 The Nitric SDKs communicate with the Nitric server using gRPC. The choice of gRPC and Protocol Buffers ensures the Nitric framework can support many languages without rewriting the entire framework from scratch.
 
-The Nitric team provides idiomatic languages SDKs, designed to feel familiar to developers of each language and make the best use of unique language features. In addition, a set of base SDKs are auto-generated from the Protobuf contracts and published in the [APIs](https://github.com/nitrictech/apis) project.
+The Nitric team provides idiomatic language SDKs, designed to feel familiar to developers of each language and make the best use of unique language features. In addition, a set of base SDKs are auto-generated from the Protobuf contracts and published in the [APIs](https://github.com/nitrictech/apis) project.
 
 ## Supported Languages
 

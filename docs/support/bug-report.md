@@ -1,3 +1,8 @@
+---
+title: Bug report
+description: Report issues with Nitric
+---
+
 ## Overview
 
 You can help us improve Nitric by creating **bug reports**. When creating a bug report, it's important that you include as much information as possible about your issue. That way, it's easier to reproduce and fix the issue.

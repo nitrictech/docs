@@ -1,3 +1,8 @@
+---
+title: APIs
+description: Building HTTP APIs with Nitric
+---
+
 Nitric APIs make it dead simple to define and map functions to HTTP APIs.
 
 ## Concepts
