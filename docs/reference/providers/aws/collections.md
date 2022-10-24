@@ -1,3 +1,8 @@
+---
+title: Collections
+description: How Nitric deploys Collections to AWS
+---
+
 Nitric Collections are deployed to AWS using [Amazon DynamoDB](https://aws.amazon.com/dynamodb).
 
 ## AWS Resources

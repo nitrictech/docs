@@ -1,3 +1,8 @@
+---
+title: Secrets
+description: How Nitric deploys Secrets to AWS
+---
+
 Nitric Secrets are implemented in AWS using [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
 
 ## AWS Resources

@@ -1,3 +1,8 @@
+---
+title: Secrets
+description: How Nitric deploys Secrets to Azure
+---
+
 Nitric Secrets are deployed to Azure using [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/).
 
 ## Azure Resources

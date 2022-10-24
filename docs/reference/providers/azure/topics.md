@@ -1,3 +1,8 @@
+---
+title: Topics
+description: How Nitric deploys Topics to Azure
+---
+
 Nitric Topics are deployed to Azure using [Azure Event Grid](https://azure.microsoft.com/en-us/services/event-grid/).
 
 ## Azure Resources

@@ -1,3 +1,8 @@
+---
+title: Queues
+description: How Nitric deploys Queues to Azure
+---
+
 Nitric Queues are deployed to Azure using [Azure Storage Queues](https://azure.microsoft.com/en-us/services/storage/queues/).
 
 ## Azure Resources

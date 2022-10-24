@@ -1,3 +1,8 @@
+---
+title: Stacks
+description: Understanding Nitric stacks
+---
+
 ## Stacks
 
 A Nitric stack represents a pairing of a project and its deployment target. A project may have multiple stacks as the deployment target is broken down into a cloud provider e.g. `aws` and a region e.g. `us-east-1`.
@@ -20,7 +25,7 @@ Follow the prompts to create a stack for your provider.
 ? select the region us-east-1
 ```
 
-The stack definition will be created in the root of your project as a yaml file prefixed with `nitric-` e.g. `nitric-aws-stack.yaml`
+The stack definition will be created in the root of your project as a YAML file prefixed with `nitric-` e.g. `nitric-aws-stack.yaml`
 
 ```yaml
 name: aws-stack
@@ -32,4 +37,4 @@ Once you have created a stack, you're ready to deploy and undeploy to your deplo
 
 ## Updating a stack definition
 
-You are free to manually edit the stack definition if required, ensure that both the provider and region values are valid or simply run the `nitric new stack` command again.
+You are free to manually edit the stack definition if required, ensure that both the provider and region values are valid or simply run the `nitric stack new` command again.

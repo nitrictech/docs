@@ -1,3 +1,8 @@
+---
+title: APIs
+description: How Nitric deploys APIs to AWS
+---
+
 Nitric APIs are deployed to AWS using [Amazon API Gateway](https://aws.amazon.com/api-gateway/).
 
 ## AWS Resources

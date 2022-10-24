@@ -1,3 +1,8 @@
+---
+title: APIs
+description: How Nitric deploys APIs to Google Cloud
+---
+
 Nitric APIs are deployed to GCP using [API Gateway](https://cloud.google.com/api-gateway).
 
 ## GCP Resources

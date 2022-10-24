@@ -1,4 +1,9 @@
-Nitric Storage are deployed to GCP using [Cloud Storage](https://cloud.google.com/storage).
+---
+title: Storage
+description: How Nitric deploys Storage to Google Cloud
+---
+
+Nitric Storage is deployed to GCP using [Cloud Storage](https://cloud.google.com/storage).
 
 ## GCP Resources
 

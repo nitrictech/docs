@@ -1,3 +1,8 @@
+---
+title: Nitric CLI
+description: Reference docs for the Nitric CLI
+---
+
 The Nitric CLI allows you to build, develop, and deploy your serverless application.
 
 To verify your [installation](/docs/installation) run `nitric version`. The output should look something like this:

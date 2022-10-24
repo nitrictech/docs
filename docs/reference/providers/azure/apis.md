@@ -1,3 +1,8 @@
+---
+title: APIs
+description: How Nitric deploys APIs to Azure
+---
+
 Nitric APIs are deployed to Azure using [Azure API Management](https://azure.microsoft.com/en-us/services/api-management/).
 
 ## Azure Resources

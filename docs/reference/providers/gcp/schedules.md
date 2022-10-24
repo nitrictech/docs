@@ -1,3 +1,8 @@
+---
+title: Schedules
+description: How Nitric deploys Schedules to Google Cloud
+---
+
 Nitric schedules are deployed to GCP using [Cloud Scheduler](https://cloud.google.com/scheduler).
 
 ## GCP Resources

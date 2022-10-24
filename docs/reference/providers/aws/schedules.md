@@ -1,3 +1,8 @@
+---
+title: Schedules
+description: How Nitric deploys Schedules to AWS
+---
+
 Nitric Schedules are deployed to AWS using [CloudWatch Events](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/WhatIsCloudWatchEvents.html).
 
 ## AWS Resources

@@ -1,3 +1,8 @@
+---
+title: Queues
+description: How Nitric deploys Queues to Google Cloud
+---
+
 Nitric queues are deployed using [pubsub](https://cloud.google.com/pubsub) topics with a single pull subscription when deploying to GCP.
 
 ## GCP Resources

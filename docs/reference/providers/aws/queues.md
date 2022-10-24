@@ -1,3 +1,8 @@
+---
+title: Queues
+description: How Nitric deploys Queues to AWS
+---
+
 Nitric Queues are deployed using [Amazon Simple Queue Service (SQS)](https://aws.amazon.com/sqs/).
 
 ## AWS Resources

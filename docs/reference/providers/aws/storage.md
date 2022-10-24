@@ -1,3 +1,8 @@
+---
+title: Storage
+description: How Nitric deploys Storage to AWS
+---
+
 Nitric Storage is deployed to AWS using [Amazon S3](https://aws.amazon.com/s3/).
 
 ## AWS Resources

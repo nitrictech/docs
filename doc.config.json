@@ -157,6 +157,25 @@
     }
   ],
   "reference": {
+    "reference": [
+      {
+        "title": "Reference",
+        "links": [
+          {
+            "title": "Node.js SDK",
+            "href": "/docs/reference/nodejs/v0"
+          },
+          {
+            "title": "Cloud Providers",
+            "href": "/docs/reference/providers"
+          },
+          {
+            "title": "CLI",
+            "href": "/docs/reference/cli"
+          }
+        ]
+      }
+    ],
     "nodejs": [
       {
         "title": "Getting Started",
@@ -393,35 +412,35 @@
         "links": [
           {
             "title": "AWS Provider Overview",
-            "href": "/docs/reference/aws"
+            "href": "/docs/reference/providers/aws"
           },
           {
             "title": "APIs",
-            "href": "/docs/reference/aws/apis"
+            "href": "/docs/reference/providers/aws/apis"
           },
           {
             "title": "Collections",
-            "href": "/docs/reference/aws/collections"
+            "href": "/docs/reference/providers/aws/collections"
           },
           {
             "title": "Queues",
-            "href": "/docs/reference/aws/queues"
+            "href": "/docs/reference/providers/aws/queues"
           },
           {
             "title": "Schedules",
-            "href": "/docs/reference/aws/schedules"
+            "href": "/docs/reference/providers/aws/schedules"
           },
           {
             "title": "Secrets",
-            "href": "/docs/reference/aws/secrets"
+            "href": "/docs/reference/providers/aws/secrets"
           },
           {
             "title": "Storage",
-            "href": "/docs/reference/aws/storage"
+            "href": "/docs/reference/providers/aws/storage"
           },
           {
             "title": "Topics",
-            "href": "/docs/reference/aws/topics"
+            "href": "/docs/reference/providers/aws/topics"
           }
         ]
       },
@@ -430,72 +449,91 @@
         "links": [
           {
             "title": "Azure Provider Overview",
-            "href": "/docs/reference/azure"
+            "href": "/docs/reference/providers/azure"
           },
           {
             "title": "APIs",
-            "href": "/docs/reference/azure/apis"
+            "href": "/docs/reference/providers/azure/apis"
           },
           {
             "title": "Collections",
-            "href": "/docs/reference/azure/collections"
+            "href": "/docs/reference/providers/azure/collections"
           },
           {
             "title": "Queues",
-            "href": "/docs/reference/azure/queues"
+            "href": "/docs/reference/providers/azure/queues"
           },
           {
             "title": "Schedules",
-            "href": "/docs/reference/azure/schedules"
+            "href": "/docs/reference/providers/azure/schedules"
           },
           {
             "title": "Secrets",
-            "href": "/docs/reference/azure/secrets"
+            "href": "/docs/reference/providers/azure/secrets"
           },
           {
             "title": "Storage",
-            "href": "/docs/reference/azure/storage"
+            "href": "/docs/reference/providers/azure/storage"
           },
           {
             "title": "Topics",
-            "href": "/docs/reference/azure/topics"
+            "href": "/docs/reference/providers/azure/topics"
           }
         ]
       },
       {
-        "title": "GCP",
+        "title": "Google Cloud",
         "links": [
           {
             "title": "GCP Provider Overview",
-            "href": "/docs/reference/gcp"
+            "href": "/docs/reference/providers/gcp"
           },
           {
             "title": "APIs",
-            "href": "/docs/reference/gcp/apis"
+            "href": "/docs/reference/providers/gcp/apis"
           },
           {
             "title": "Collections",
-            "href": "/docs/reference/gcp/collections"
+            "href": "/docs/reference/providers/gcp/collections"
           },
           {
             "title": "Queues",
-            "href": "/docs/reference/gcp/queues"
+            "href": "/docs/reference/providers/gcp/queues"
           },
           {
             "title": "Schedules",
-            "href": "/docs/reference/gcp/schedules"
+            "href": "/docs/reference/providers/gcp/schedules"
           },
           {
             "title": "Secrets",
-            "href": "/docs/reference/gcp/secrets"
+            "href": "/docs/reference/providers/gcp/secrets"
           },
           {
             "title": "Storage",
-            "href": "/docs/reference/gcp/storage"
+            "href": "/docs/reference/providers/gcp/storage"
           },
           {
             "title": "Topics",
-            "href": "/docs/reference/gcp/topics"
+            "href": "/docs/reference/providers/gcp/topics"
+          }
+        ]
+      }
+    ],
+    "cli": [
+      {
+        "title": "Nitric CLI",
+        "links": [
+          {
+            "title": "Overview",
+            "href": "/docs/reference/cli"
+          },
+          {
+            "title": "Installation",
+            "href": "/docs/reference/cli/installation"
+          },
+          {
+            "title": "Stacks",
+            "href": "/docs/reference/cli/stacks"
           }
         ]
       }

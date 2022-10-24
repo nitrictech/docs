@@ -1,3 +1,8 @@
+---
+title: Storage
+description: How Nitric deploys Storage with Azure
+---
+
 Nitric Storage are deployed to Azure using [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/).
 
 ## Azure Resources

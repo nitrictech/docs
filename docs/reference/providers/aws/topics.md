@@ -1,3 +1,8 @@
+---
+title: Topics
+description: How Nitric deploys Topics to AWS
+---
+
 Nitric Topics & Events are deployed to AWS using [Amazon Simple Notification Service (SNS)](https://aws.amazon.com/sns/).
 
 ## AWS Resources

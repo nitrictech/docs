@@ -1,12 +1,15 @@
-The officially supported Nitric GCP Provider.
+---
+title: Overview
+description: The Google Cloud provider for Nitric
+---
 
-## Status
+The officially supported Nitric Google Cloud Platform (GCP) Provider.
 
--The Nitric GCP Provider is currently in preview
+## Status: _Preview_
 
 ## Usage
 
-The GCP provider is supported by the Nitric SDKs and CLI by default. However, credentials for an GCP account will be required when using the [deploy command](/docs/reference/cli) from the CLI.
+The GCP provider is supported by the Nitric SDKs and CLI by default. However, credentials for a GCP account will be required when using the [up command](/docs/reference/cli) from the CLI.
 
 ## Google CLI Installation
 

@@ -1,3 +1,8 @@
+---
+title: Collections
+description: How Nitric deploys Collections to Google Cloud
+---
+
 Nitric Collections are deployed to GCP using [Firestore](https://cloud.google.com/firestore).
 
 ## GCP Resources
