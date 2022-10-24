@@ -51,4 +51,5 @@ See the following for examples on working with files in a bucket:
 - [file().get()](./file-get.md)
 - [file().write()](./file-write.md)
 - [file().delete()](./file-delete.md)
-- [file().signUrl()](./file-signurl.md)
+- [file.getDownloadUrl()](./file-downloadurl.md)
+- [file.getUploadUrl()](./file-uploadurl.md)

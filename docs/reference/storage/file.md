@@ -27,4 +27,5 @@ The file does not need to exist, only a reference to that file is being created.
 - [file.get()](./file-get.md)
 - [file.write()](./file-write.md)
 - [file.delete()](./file-delete.md)
-- [file.signUrl()](./file-signurl.md)
+- [file.getDownloadUrl()](./file-downloadurl.md)
+- [file.getUploadUrl()](./file-uploadurl.md)
