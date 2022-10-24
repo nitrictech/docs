@@ -417,8 +417,12 @@
                     "path": "/docs/reference/storage/file-delete.md"
                   },
                   {
-                    "title": "file.signUrl()",
-                    "path": "/docs/reference/storage/file-signurl.md"
+                    "title": "file.getDownloadUrl()",
+                    "path": "/docs/reference/storage/file-downloadurl.md"
+                  },
+                  {
+                    "title": "file.getUploadUrl()",
+                    "path": "/docs/reference/storage/file-uploadurl.md"
                   }
                 ]
               },
