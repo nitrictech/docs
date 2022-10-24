@@ -1,6 +1,8 @@
 ---
-title: Documentation
-description: Documentation for the Nitric cloud application framework.
+title: Reference
+description: Nitric framework component reference documentation.
 ---
 
-This is a test
+- [Nitric CLI](/docs/reference/cli) - Using the Nitric CLI to work with projects
+- [Node.js SDK](/docs/reference/nodejs/v0) - Using Nitric with JavaScript or TypeScript
+- [Providers](/docs/reference/providers) - Learn about support Cloud Providers for Nitric
