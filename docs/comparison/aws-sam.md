@@ -1,5 +1,5 @@
 ---
-title: Comparing to AWS SAM
+title: AWS SAM
 description: Comparison to AWS Serverless Application Model (SAM)
 ---
 

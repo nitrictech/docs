@@ -1,5 +1,5 @@
 ---
-title: Comparing Google Cloud Deployment Manager
+title: Google Cloud Deployment Manager
 description: Comparison to Google Cloud Deployment Manager
 ---
 

@@ -1,9 +1,17 @@
 ---
-title: Bug report
-description: Report issues with Nitric
+title: Support
+description: Getting support for Nitric
 ---
 
-## Overview
+Nitric is open source and available on [GitHub](https://github.com/nitrictech/nitric). If you're dealing with an issue or just need some help, we're available.
+
+## Links
+
+- [Issues](https://github.com/nitrictech/nitric/issues) - Report or search for bugs.
+- [Discussion](https://discord.gg/Webemece5C) - Chat with the community on Discord
+- [Feature Requests](https://github.com/nitrictech/nitric/discussions) - Find or create a discussion on GitHub
+
+## Bug Reports
 
 You can help us improve Nitric by creating **bug reports**. When creating a bug report, it's important that you include as much information as possible about your issue. That way, it's easier to reproduce and fix the issue.
 

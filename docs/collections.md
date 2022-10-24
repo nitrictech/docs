@@ -1,6 +1,6 @@
 ---
 title: Collection
-descriptions: Document stores and collections
+description: Document stores and collections
 ---
 
 Nitric Collections simplify storing and querying data in easily accessible documents.
