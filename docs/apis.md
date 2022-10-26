@@ -168,6 +168,3 @@ const getAllCustomers = (ctx) => {};
 customersApi.get('/customers', validate, getAllCustomers);
 ```
 
-## What's next?
-
-- Learn more about APIs in our [reference docs](/docs/reference/api/api).

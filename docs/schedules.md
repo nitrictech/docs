@@ -36,6 +36,3 @@ schedule('send-reports').every('day', async (ctx) => {
 });
 ```
 
-# What's next?
-
-- Learn more about schedules in our [reference docs](/docs/reference/schedule/schedule).

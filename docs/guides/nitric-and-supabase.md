@@ -11,7 +11,7 @@ This example sends welcome emails to new user profiles with [SendGrid](https://s
 
 - Securely processing payments with Stripe
 - Data aggregation
-- Fanout or event-based workflows with Nitric [queues](/docs/messaging/queues), [topics](/docs/messaging/topics), and [schedules](/docs/schedules)
+- Fanout or event-based workflows with Nitric [queues](/docs/messaging#queues), [topics](/docs/messaging#topics), and [schedules](/docs/schedules)
 
 You could even go the other way and build powerful SaaS APIs with Nitric, connected to your Supabase backend. Or, use Nitric [schedules](/docs/schedules) to clean up old data in batches.
 

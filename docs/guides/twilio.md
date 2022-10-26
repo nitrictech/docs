@@ -183,4 +183,4 @@ Sent from your Twilio trial account -
 Test Message from Twilio!
 ```
 
-Thats it! If you want to deploy the API you can using our [deployment](https://nitric.io/docs/getting-started#deploying-the-app) docs. If you want to attach a frontend to the application so its a bit more user friendly, you can use any framework you want or follow our [Next.js guide](/docs/guides/api-with-nextjs.md)
+Thats it! If you want to deploy the API you can using our [deployment](https://nitric.io/docs/getting-started#deploying-the-app) docs. If you want to attach a frontend to the application so its a bit more user friendly, you can use any framework you want or follow our [Next.js guide](/docs/guides/api-with-nextjs)

@@ -103,11 +103,11 @@ Now that you've implemented a basic API and tested that it works, you can deploy
 
 The first step is to set up your credentials for the cloud provider.
 
-- [AWS](/docs/reference/aws)
-- [Azure](/docs/reference/azure)
-- [GCP](/docs/reference/gcp)
+- [AWS](/docs/reference/providers/aws)
+- [Azure](/docs/reference/providers/azure)
+- [GCP](/docs/reference/providers/gcp)
 
-You'll then need to create a [stack](/docs/reference/stacks) which represents your project and a deployment target.
+You'll then need to create a [stack](/docs/reference/cli#stacks) which represents your project and a deployment target.
 
 ```bash
 nitric stack new

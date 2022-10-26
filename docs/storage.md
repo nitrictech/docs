@@ -79,7 +79,3 @@ const profiles = bucket('profiles').for('reading', 'writing');
 const downloadUrl = await profiles.file('profile.png').getDownloadUrl();
 const uploadUrl = await profiles.file('profile.png').getUploadUrl();
 ```
-
-# What's next?
-
-- Learn more about storage in our [reference docs](/docs/reference/storage/bucket).

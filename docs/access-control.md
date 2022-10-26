@@ -53,4 +53,4 @@ import { bucket } from '@nitric/sdk';
 const assets = bucket('assets').for('reading', 'writing', 'deleting');
 ```
 
-> Available permissions are unique to resources and documented in their reference pages, e.g. [buckets](./storage/bucket#available-permissions)
+> Available permissions are unique to resources and documented in their reference pages, e.g. [buckets](./storage#available-permissions)
