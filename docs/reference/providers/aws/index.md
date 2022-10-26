@@ -36,7 +36,7 @@ aws_secret_access_key = your_secret_access_key
 
 Replace `your_access_key_id` and `your_secret_access_key` with your own values.
 
-You can create an Access Key by logging into the <a href="https://aws.amazon.com/console/" target="_blank">AWS console</a> and navigating to:
+You can create an Access Key by logging into the [AWS console](https://aws.amazon.com/console/) and navigating to:
 `Username Menu > Security credentials > Access keys > Create New Access Key`
 
 > See [AWS documentation](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html) for full details on credentials and configuration.

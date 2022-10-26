@@ -25,17 +25,9 @@ For the purposes of this guide we are only securing a new API, so we only need t
 
 Log into Auth0 and create a new API. If you have an existing API you'd like to use, that's fine, just adapt the next steps to match your existing API.
 
-<img
-  alt="navigate to APIs"
-  src="../../assets/img/guides/auth0/auth0-navigate-apis.png"
-  height="700"
-  />
+![navigate to APIs](../../assets/img/guides/auth0/auth0-navigate-apis.png)
 
-<img
-  alt="create API"
-  src="../../assets/img/guides/auth0/auth0-create-api.png"
-  height="700"
-  />
+![create API](../../assets/img/guides/auth0/auth0-create-api.png)
 
 > You can enter any identifier you want, this guide will continue using 'testing' in subsequent steps.
 
@@ -47,19 +39,11 @@ Before we start getting into the code we'll need a bit more information from Aut
 
 First we'll need the `audience` for our API, this can be found on the settings tab of your new API.
 
-<img
-  alt="get audience value"
-  src="../../assets/img/guides/auth0/auth0-get-audience.png"
-  height="700"
-  />
+![get audience value](../../assets/img/guides/auth0/auth0-get-audience.png)
 
 Second we'll get the `issuer` for our API, this will be our Auth0 environment endpoint. An easy way to see this is to navigate the `Test` tab of our API.
 
-<img
-  alt="get audience value"
-  src="../../assets/img/guides/auth0/auth0-get-issuer.png"
-  height="700"
-  />
+![get audience value](../../assets/img/guides/auth0/auth0-get-issuer.png)
 
 In our new nitric application you will have the following in the `hello.ts` file
 
@@ -127,11 +111,7 @@ curl -H <INSERT_API_GATEWAY>/hello/world
 This should return a `401` error.
 
 To test your application, you can follow the instructions on the `Test` tab of your Auth0 API, to create a new JWT token to test with.
-<img
-  alt="get testing token"
-  src="../../assets/img/guides/auth0/auth0-get-jwt.png"
-  height="700"
-  />
+![get testing token](../../assets/img/guides/auth0/auth0-get-jwt.png)
 
 Once we have our token we can call our API
 

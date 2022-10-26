@@ -188,10 +188,7 @@ export default prisma;
 
 Now our schema is ready, let's get Prisma connected to PlanetScale. The easiest method is to use the `connect` button in the PlanetScale dashboard and select `Prisma` from the dropdown. This will give you values you can copy into the `.env` for your project.
 
-<img alt="create function hook screenshot - step 2"
-src="../../assets/img/guides/planetscale/connect-with-prisma.png"
-height="450"
-/>
+![create function hook screenshot - step 2](../../assets/img/guides/planetscale/connect-with-prisma.png)
 
 When you're done, the `.env` file will look something like this:
 

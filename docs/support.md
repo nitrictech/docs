@@ -19,19 +19,19 @@ You can help us improve Nitric by creating **bug reports**. When creating a bug 
 
 ## Where do I open the bug report?
 
-The Nitric framework has many different repositories in the <a href="https://github.com/nitrictech" target="_blank">nitrictech</a> organization on GitHub. If you have an issue with any component, you can open a new issue in the respective repo.
+The Nitric framework has many different repositories in the [nitrictech](https://github.com/nitrictech) organization on GitHub. If you have an issue with any component, you can open a new issue in the respective repo.
 
-If you're unsure where to open the GitHub issue, you can use our main <a href="https://github.com/nitrictech/nitric" target="_blank">nitrictech/nitric</a> repo. The Nitric team frequently monitors and triages new issues within this main repo and will move the issue to another repo if required.
+If you're unsure where to open the GitHub issue, you can use our main [nitrictech/nitric](https://github.com/nitrictech/nitric) repo. The Nitric team frequently monitors and triages new issues within this main repo and will move the issue to another repo if required.
 
 ## Share reproduction of bug
 
 To best help us understand and tackle the issue effectively, provide a **standalone GitHub repository** in your report that can reproduce the issue.
 
-For information on how to create minimal, reproducible examples you can view this informative <a href="https://stackoverflow.com/help/minimal-reproducible-example" target="_blank">Stackoverflow guide</a>.
+For information on how to create minimal, reproducible examples you can view this informative [Stackoverflow guide](https://stackoverflow.com/help/minimal-reproducible-example).
 
 ## Best practices for writing the bug report
 
-If you don't have time to create a standalone repository, please include as much information as you can can about the issue, use the <a href="https://github.com/nitrictech/nitric/issues/new?assignees=&labels=&template=bug_report.md&title=%27Create%20bug%20report%27" target="_blank">Bug report template</a> from our main repo to help guide you.
+If you don't have time to create a standalone repository, please include as much information as you can about the issue, use the [Bug report template](https://github.com/nitrictech/nitric/issues/new?assignees=&labels=&template=bug_report.md&title=%27Create%20bug%20report%27) from our main repo to help guide you.
 
 ### Include .nitric log files
 

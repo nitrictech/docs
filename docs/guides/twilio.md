@@ -28,11 +28,7 @@ To integrate with Twilio, it's important to create a Twilio account. If you don'
 
 Once you've gone through the account creation and verification, you'll arrive at the dashboard. There is a section which contains the important API credentials. These are used to connect to the API so keep them in mind.
 
-<img
- alt="twilio dashboard credentials"
- src="../../assets/img/guides/twilio/twilio-credentials.png"
- height="300"
- />
+![twilio dashboard credentials](../../assets/img/guides/twilio/twilio-credentials.png)
 
 ## Create the Messenger Class
 
