@@ -19,10 +19,10 @@ The following runtimes are currently supported or are in development:
 | [Python](https://github.com/nitrictech/python-sdk) | Experimental   |
 | [C#](https://github.com/nitrictech/dotnet-sdk)     | In Development |
 
-If a language you want isn't listed, come chat to us on [Discord](https://discord.gg/Webemece5C).
+If a language you want isn't listed, come chat with us on [Discord](https://discord.gg/Webemece5C).
 
 Alternatively, feel free to develop your own SDKs. Nitric is completely [open source](https://github.com/nitrictech) so you can use any of the other SDKs linked above as a reference.
 
 ## Adding language support
 
-To start adding support for a language, check out the [protobuf contracts](https://github.com/nitrictech/nitric/tree/main/contracts), and look at how to compile the base SDKs for your specific language on the [protobuf docs](https://developers.google.com/protocol-buffers). Compiling the protobuf definition to a base SDK will provide gRPC stubs for connecting with the Nitric server, as well as language specific types for constructing request and response objects.
+To start adding support for a language, check out the [protobuf contracts](https://github.com/nitrictech/nitric/tree/main/contracts), and look at how to compile the base SDKs for your specific language on the [protobuf docs](https://developers.google.com/protocol-buffers). Compiling the protobuf definition to a base SDK will provide gRPC stubs for connecting with the Nitric server, as well as language-specific types for constructing request and response objects.

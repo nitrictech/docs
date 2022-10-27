@@ -44,7 +44,7 @@ The Nitric CLI starts the Nitric Server using `nitric start`. This will listen f
 npm run dev
 ```
 
-Take a look in the `hello.ts` file, you'll see it declares an API named `main` with a single route `GET /hello/:name`.
+Take a look at the `hello.ts` file, you'll see it declares an API named `main` with a single route `GET /hello/:name`.
 
 After your function is run, it will register itself with the server. All the APIs are locally hosted under the path:
 
@@ -52,7 +52,7 @@ After your function is run, it will register itself with the server. All the API
 http://localhost:9001/apis/:api_name
 ```
 
-in this case the URL for the API is:
+in this case, the URL for the API is:
 
 ```txt
 http://localhost:9001/apis/main/
@@ -107,7 +107,7 @@ The first step is to set up your credentials for the cloud provider.
 - [Azure](/docs/reference/providers/azure)
 - [GCP](/docs/reference/providers/gcp)
 
-You'll then need to create a [stack](/docs/reference/cli#stacks) which represents your project and a deployment target.
+You'll then need to create a [stack](/docs/reference/cli#stacks) that represents your project and a deployment target.
 
 ```bash
 nitric stack new

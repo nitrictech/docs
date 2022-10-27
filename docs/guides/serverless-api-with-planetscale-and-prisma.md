@@ -430,8 +430,7 @@ curl -X POST http://localhost:9001/apis/meme/templates \
    -d '{"name":"my-meme","source":"https://www.meme-arsenal.com/memes/89f28a7e83e28f15b1d8e560c788b4fc.jpg","textPositions":[{"name":"topText","posX":50,"posY":0,"width":50,"height":50},{"name":"bottomText","posX":50,"posY":50,"width":50,"height":50}]}'
 ```
 
-<details>
-<summary>Full Request Body</summary>
+##### Full Request Body
 
 ```json
 {
@@ -456,8 +455,6 @@ curl -X POST http://localhost:9001/apis/meme/templates \
 }
 ```
 
-</details>
-
 > For `source` provide a URL hosting a meme template image in a common format like .png or .jpg
 
 #### Create a new meme using the template
@@ -468,8 +465,7 @@ curl -X POST http://localhost:9001/apis/meme/memes \
    -d '{"templateName":"my-meme","texts":[{"name":"topText","value":"top text content"},{"name":"bottomText","value":"bottom text content"}]}'
 ```
 
-<details>
-<summary>Full Request Body</summary>
+##### Full Request Body
 
 ```json
 {
@@ -486,8 +482,6 @@ curl -X POST http://localhost:9001/apis/meme/memes \
   ]
 }
 ```
-
-</details>
 
 #### Retrieve the image
 

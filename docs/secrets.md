@@ -37,9 +37,9 @@ The schema below illustrates the relationship between secrets, versions and valu
 
 > Version IDs are for illustration only. The specific id/numbering strategy depends on the underlying secrets manager of the cloud provider.
 
-# The basics
+## General usage
 
-## Creating a Secret
+### Create secrets
 
 Before sensitive values can be stored a secret must be defined.
 
@@ -50,7 +50,7 @@ import { secret } from '@nitric/sdk';
 const apiKey = secret('api-key').for('put', 'access');
 ```
 
-## Store a new secret value
+### Store secret values
 
 To store or update the latest version of a secret, use the `put()` method on the secret reference.
 
@@ -63,9 +63,9 @@ apiKey.version;
 
 > Secret versioning is automatic. Every time you `put` a new secret value a new version will be created and set as the `latest` version.
 
-## Access the latest value of a secret
+### Access a secret value
 
-Accessing the contents of a secret version can be done my calling the `access()` method. The `latest()` method ensures we always get the latest value of a secret. This is the best option for retrieving credentials or API keys, where the latest is the only valid version.
+Accessing the contents of a secret version can be done by calling the `access()` method. The `latest()` method ensures we always get the latest value of a secret. This is the best option for retrieving credentials or API keys, where the latest is the only valid version.
 
 ```javascript
 // access the details of the latest version of a secret
@@ -75,9 +75,9 @@ const latest = await apiKey.latest().access();
 latest.asString();
 ```
 
-## Access a specific version of a secret
+### Access a specific version of a secret
 
-If you need a previous version of a secret's value (not latest) you can use the `version()` method to specific the exact version ID. This is useful when you need a version that was used at a particular point in time.
+If you need a previous version of a secret's value (not latest) you can use the `version()` method to specify the exact version ID. This is useful when you need a version that was used at a particular point in time.
 
 ```javascript
 // access the details of a known version of a secret

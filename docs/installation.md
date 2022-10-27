@@ -42,7 +42,7 @@ curl https://nitric.io/install | bash
 
 ### Manual
 
-You can download pre-compiled binaries from the [releases](https://github.com/nitrictech/cli/releases) page and copy into your desired location
+You can download pre-compiled binaries from the [releases](https://github.com/nitrictech/cli/releases) page and copy them into your desired location
 
 ## What's next
 

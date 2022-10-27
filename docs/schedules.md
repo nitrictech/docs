@@ -9,11 +9,11 @@ Nitric makes it easy to create functions that run on a schedule. Schedules are m
 
 Frequencies define when your functions should run. Nitric supports expressive schedules which run as often as once per minute. Frequencies can be configured in minutes, hours and days.
 
-# The basics
+## General usage
 
 The guide below highlights the features of Nitric Schedules.
 
-## Create a schedule
+### Create schedules
 
 Creating schedules with Nitric can be done with a single line of code to define resources.
 

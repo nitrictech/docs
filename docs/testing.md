@@ -5,11 +5,11 @@ description: How to test Nitric applications
 
 This section goes over different techniques for testing Nitric applications locally, and in the cloud.
 
-We attempt to make the local run of nitric as similar as possible as the cloud environments, so these tests should act the same locally as they do the cloud. However, running them on the cloud may incur costs.
+We attempt to make the local run of nitric as similar as possible to the cloud environments, so these tests should act the same locally as they do in the cloud. However, running them on the cloud may incur costs.
 
 ## Unit testing
 
-A unit test is testing small piece of logically isolated code, usually a function, subprogram, method or property. Unit tests provide confidence in the code that has been written. This confidence gives you the ability to create new features, without fear of breaking older code.
+A unit test is testing small sections of logically isolated code, usually a function, subprogram, method or property. Unit tests provide confidence in the code that has been written. This confidence gives you the ability to create new features, without fear of breaking older code.
 
 It is important that unit tests are fast, replicable, and isolated. It shouldn't touch or talk to a database, network, or file system, and should be able to run parallel to any other test.
 
@@ -17,7 +17,7 @@ It is important that unit tests are fast, replicable, and isolated. It shouldn't
 
 We will write a small API to do some testing on.
 
-First define the resources:
+First, define the resources:
 
 ```ts
 // resources/apis.ts
@@ -68,7 +68,7 @@ helloApi.post('/:name', handleAddImage);
 
 #### Asserting
 
-Put the unit tests in a test directory, and name it `unit.test.ts`. The logic being split out into separate functions makes it very easy to test our API.
+Put the unit tests in a test directory, and name it `unit.test.ts`. The logic being split into separate functions makes it very easy to test our API.
 
 We are first testing that if the function is passed a context with a set name parameter, it should return the same context, but with a body added to the response. The function handleHello is asynchronous, therefore we await it, expecting it to resolve to the expected value.
 
@@ -93,11 +93,11 @@ describe('Testing Hello Function', () => {
 
 #### Mocking
 
-Our next function handleAddImage becomes more complex because it uses a bucket. This will need to be mocked as we want our unit tests to be fast, replicable, and isolated. By mocking a production system, we have an isolated environment that won't be effected by changes in the system. The trade-off is that the unit tests won't catch system-level failures. However, this is covered by [integration tests](/docs/testing#integration-testing).
+Our next function handleAddImage becomes more complex because it uses a bucket. This will need to be mocked as we want our unit tests to be fast, replicable, and isolated. By mocking a production system, we have an isolated environment that won't be affected by changes in the system. The trade-off is that the unit tests won't catch system-level failures. However, this is covered by [integration tests](/docs/testing#integration-testing).
 
 We'll go over it section by section, but here is the full example of these tests:
 
-```ts
+```typescript
   ...
 
   describe('Given we want to add a new image to a bucket', () => {
@@ -146,11 +146,11 @@ We'll go over it section by section, but here is the full example of these tests
   });
 ```
 
-Lets start by looking at the mocks. These are done in the beforeAll function, which means it happens before all the tests are run.
+Let's start by looking at the mocks. These are done in the beforeAll function, which means it happens before all the tests are run.
 
 The functions to create a bucket 'for' and the call to write to a bucket 'write' will make gRPC calls on the backend. This means that they need to be mocked, as there is nothing for it to call to, and thus will result in an UNAVAILABLE error. We mock these using jest's spyOn functions on the object prototype.
 
-This works fine for mocking the `write` method as its within the `handleAddImage` function, but the `for` method is called when the module is imported. Therefore, we add a dynamic import after the `for` method is mocked.
+This works fine for mocking the `write` method as it's within the `handleAddImage` function, but the `for` method is called when the module is imported. Therefore, we add a dynamic import after `for` is mocked.
 
 ```ts
 import { File, BucketResouce } from '@nitric/sdk';
@@ -231,7 +231,7 @@ You can then run the tests locally with:
 npm run test
 ```
 
-The output should be something like:
+The output should be something like this:
 
 ```
   Testing Hello Function
@@ -253,7 +253,7 @@ Ran all test suites.
 
 Integration tests are important for your systems as they catch system-level issues that unit tests miss, and are faster than end-to-end tests.
 
-When writing these tests we want to make sure that these tests are reliable, able to be reproduced, and can isolate our system failures. This is why we want to use a testing framework like [jest](https://jestjs.io/), and use a http testing library like [supertest](https://github.com/visionmedia/supertest).
+When writing these tests we want to make sure that these tests are reliable, able to be reproduced and can isolate our system failures. This is why we want to use a testing framework like [jest](https://jestjs.io/), and use an HTTP testing library like [supertest](https://github.com/visionmedia/supertest).
 
 ```
 npm install --save-dev jest supertest @types/jest @types/supertest
@@ -263,7 +263,7 @@ npm install --save-dev jest supertest @types/jest @types/supertest
 
 We will write a small API to do some testing on.
 
-First define the resources:
+First, define the resources:
 
 ```ts
 // resources/apis.ts
@@ -312,7 +312,7 @@ helloApi.post('/:name', handleAddImage);
 
 ### Writing the Tests
 
-We will put the integration test in a test directory, and name it `integration.test.ts`. For the test we want to create an agent using supertest. We'll point the agent at the url of our API.
+We will put the integration test in a test directory, and name it `integration.test.ts`. For the test, we want to create an agent using supertest. We'll point the agent at the URL of our API.
 
 ```ts
 // tests/integration.test.ts
@@ -350,7 +350,7 @@ describe('Testing Hello Api', () => {
 });
 ```
 
-We can add another test case for hitting the `POST /:name` route. This will need to test whether the response from the api resolves correctly, as well as whether the image bucket was updated. It makes a post request to our route and then checks the response just like the last one. Additionally, this test reads from the bucket to verify that the correct content was written.
+We can add another test case for hitting the `POST /:name` route. This will need to test whether the response from the API resolves correctly, as well as whether the image bucket was updated. It makes a post request to our route and then checks the response just like the last one. Additionally, this test reads from the bucket to verify that the correct content was written.
 
 > Make sure you remove the call to done from the assertion in the api route. Otherwise, the bucket test will not be run.
 
@@ -398,7 +398,7 @@ There are two options for running our tests:
 
 #### Local Tests
 
-For a local run, we need to first run the local API then run the tests. Add to your `package.json` a test script.
+For a local run, we need to first run the local API, then run the tests. Add to your `package.json` a test script.
 
 ```json
 "scripts": {
@@ -406,7 +406,7 @@ For a local run, we need to first run the local API then run the tests. Add to y
 }
 ```
 
-We can then start the API with `nitric start` and then running your function code.
+We can then start the API with `nitric start` and then run your function code.
 
 And then in a separate terminal, run the tests:
 
@@ -433,7 +433,7 @@ Ran all test suites.
 
 #### Deployed Tests
 
-We attempt to make the local run of nitric as similar as possible to the cloud environments, so these tests should act the same locally as they do the cloud. However, running them on the cloud may incur costs.
+We attempt to make the local run of nitric as similar as possible to the cloud environments, so these tests should act the same locally as they do on the cloud. However, running them on the cloud may incur costs.
 
 When you have an API deployed to the cloud, most cloud providers have a feature in the console to do endpoint testing. However, the tests are often just checking if the API resolves to a 200 status code. The process we are following here will lead to much more robust testing and a lot more confidence in your cloud application.
 
@@ -443,7 +443,7 @@ Now for testing. The obvious first step before running our tests is to [deploy](
 nitric up
 ```
 
-Then, to test against the deployed API, we just want to swap out our supertest agent host from the localhost endpoint to our deployed endpoint. This new endpoint will look something like:
+Then, to test against the deployed API, we just want to swap out our supertest agent host from the localhost endpoint to our deployed endpoint. This new endpoint will look something like this:
 
 ```ts
 // tests/integration.test.ts

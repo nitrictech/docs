@@ -27,7 +27,7 @@ description: Use the Nitric framework to easily build and deploy REST APIs for A
 
 ## Video
 
-<iframe width="560px" height="315px" src="https://www.youtube.com/embed/PpIxtKDoL2Q" title="" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[Build and Deploy a REST API for any Cloud](https://www.youtube.com/embed/PpIxtKDoL2Q)
 
 ## Prerequisites
 

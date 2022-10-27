@@ -3,7 +3,7 @@ title: Environment Variables
 description: How to use Environment Variables in Nitric projects
 ---
 
-.env files can be used to configure properties such as runtime ids, api keys, etc.
+.env files can be used to configure properties such as runtime ids, API keys, etc.
 
 > Note: If you're looking for more secure ways to store values you might consider the [secrets manager](/docs/secrets) or in an [object store](/docs/storage).
 

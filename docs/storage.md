@@ -17,11 +17,11 @@ Buckets are isolated repositories for files. You can think of a bucket like a ha
 
 Most cloud object/blob storage services act like key value systems where the keys are filenames and values are file data. Including paths in filenames allows you to organize files within a bucket, just like folders would be used in local storage. For example, a file named `profile.png` could be stored in the folder `images/default` by providing the full filepath when writing or reading the file e.g. `image/default/profile.png`.
 
-# The basics
+## General usage
 
 The guide below highlights the features of Nitric Storage.
 
-## Create a bucket
+### Create buckets
 
 Creating buckets with the Nitric SDK is just one line of code. In the example below we declare a bucket named `profiles`, and specify that our function needs access to `read`, `write` and `delete` files in the bucket:
 
@@ -31,7 +31,7 @@ import { bucket } from '@nitric/sdk';
 const profiles = bucket('profiles').for('reading', 'writing', 'deleting');
 ```
 
-## Listing Files
+### List files
 
 To list files in a bucket, use the `files()` method on the bucket reference. This returns a list of `File` references so the below methods can be called on the returned references.
 
@@ -39,7 +39,7 @@ To list files in a bucket, use the `files()` method on the bucket reference. Thi
 const files = await profiles.files();
 ```
 
-## Writing files
+### Write files
 
 You can write files to a bucket directly from your application code or by using [pre-signed URLs](#accessing-files).
 
@@ -50,7 +50,7 @@ const profileImg = new Uint8Array();
 await profiles.file('users/drake-mallard/profile.png').write(profileImg);
 ```
 
-## Reading files
+### Read files
 
 Just like with writing, you can read files directly in your code, or using [pre-signed URLs](#accessing-files).
 
@@ -58,7 +58,7 @@ Just like with writing, you can read files directly in your code, or using [pre-
 const bytes = await profiles.file('users/bruce-wayne/profile.png').read();
 ```
 
-## Deleting files
+### Delete files
 
 To delete an existing file, use the `delete()` method on the file reference.
 
@@ -66,7 +66,7 @@ To delete an existing file, use the `delete()` method on the file reference.
 await profiles.file('users/cain-marko/profile.png').delete();
 ```
 
-## Accessing files
+### Download or upload files
 
 You can generate short-lived download or upload URLs with the pre-signed URLs feature. These URLs are useful when you want to provide temporary links to download or upload a file.
 

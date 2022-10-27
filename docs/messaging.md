@@ -3,7 +3,11 @@ title: Messaging
 description: Using Queues and Topics for async messaging with Nitric
 ---
 
-## Events & Topics
+Nitric provides two common options for asynchronous messaging. Topics for publish/subscribe messaging, where new messages are immediately _pushed_ to subscribers, and Queues for _pull_ messaging where new messages are put on a queue and must be requested.
+
+Nitric provides unique names for specific message types. Messages sent to a _Topic_ are called _Events_, while messages sent to a _Queue_ are called _Tasks_. The structures of these messages are very similar, but the delivery and retry mechanisms are different. The unique naming removes ambiguity when working with these messages in code and makes their intention clear.
+
+## Topics & Events
 
 Topics and Events provide a scalable, decoupled, way to communicate between functions and containers.
 
@@ -19,7 +23,7 @@ Events are messages that can be published on a topic. They can be thought of as 
 
 ### Subscriptions
 
-A subscription is something listening to a topic. You can think of it as a channel that notifies your application when something new arrives on the topic.
+A subscription is something that listens to a topic. You can think of it as a channel that notifies your application when something new arrives on the topic.
 
 ### Examples
 
@@ -82,7 +86,7 @@ Nitric deploys topics to cloud services that support "at-least-once delivery". E
 
 Typically, retries occur when a subscriber doesn't respond successfully, like when unhandled exceptions occur. You'll want to make sure events aren't processed again by accident or partially processed, leaving your system in an unexpected state.
 
-Luckily, building atomic publishers and idempotent subscribers is enough to solve for this.
+Luckily, building atomic publishers and idempotent subscribers is enough to solve this.
 
 ### Atomic publishers
 
@@ -171,3 +175,9 @@ for (let task of tasks) {
   await task.complete();
 }
 ```
+
+## Choosing between queues and topics
+
+It's common to ask when to use a queue or a topic. From a publisher's point of view, both queues and topics are almost identical. The difference is primarily on the receiver/subscriber side. Topics push new messages to their subscribers, immediately spinning up workers to process the events, while queues rely on the receiver to ask for new messages to process.
+
+For these reasons, we usually default to Topics, leaving queues for batch workloads or situations where requests are received in large spikes that can be processed later.

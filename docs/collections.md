@@ -1,5 +1,5 @@
 ---
-title: Collection
+title: Collections
 description: Document stores and collections
 ---
 
@@ -11,13 +11,15 @@ A collection is a unique collection of unstructured data that is made up of many
 
 ## Documents
 
-A document is a uniquely identifiable item within a collection. It can be thought of as a simple `JSON` document. E.g. if `countries` was a collection then `usa` might be a document within that collection.
+A document is a uniquely identifiable item within a collection. It can be thought of as a simple `JSON` document. E.g. if `countries` were a collection then `usa` might be a document within that collection.
 
 ## Sub-collections
 
 A sub-collection is a collection that belongs to a single document. If we use `usa` as a parent document example then `states` might be a sub-collection that holds states within that country.
 
-## Create a collection
+## General usage
+
+### Create collections
 
 Declaring a collection for your application can be done in a single line of code using the Nitric SDK:
 
@@ -27,9 +29,9 @@ import { collection } from '@nitric/sdk';
 const countries = collection('Countries').for('reading', 'writing', 'deleting');
 ```
 
-## Writing a document
+### Write documents
 
-You can create a new document by using an existing collection reference to create a new document reference, then setting a value for the document.
+You can create a new document by using an existing collection reference to create a new document reference, then set a value for the document.
 
 ```javascript
 await countries.doc('USA').set({
@@ -38,15 +40,15 @@ await countries.doc('USA').set({
 });
 ```
 
-## Reading a document
+### Read documents
 
-Just like with writing, you can read a document by using it's reference.
+Just like with writing, you can read a document by using its reference.
 
 ```javascript
 const doc = await countries.doc('USA').get();
 ```
 
-## Deleting a document
+### Delete documents
 
 To delete a document that already exists, use the `delete()` method on the document reference.
 
@@ -54,7 +56,7 @@ To delete a document that already exists, use the `delete()` method on the docum
 await countries.doc('USA').delete();
 ```
 
-## Querying a collection
+### Query collections
 
 Simple queries on collections are supported as well.
 
@@ -92,9 +94,11 @@ stream.on('data', (snapshot) => {
 });
 ```
 
-## Working with sub-collections
+## Sub-collections
 
-Working with a sub-collection is very similar to working with a collection.
+### Create sub-collections
+
+Working with a sub-collection is very similar to working with a collection, except they can be created dynamically at runtime. Simply construct a reference to a sub-collection within an existing document and you can being working with documents within that sub-collection.
 
 ```javascript
 const states = countries.doc('USA').collection('States');
@@ -104,9 +108,9 @@ const stateOfColorado = states.doc('Colorado');
 
 > Nitric supports a single depth for sub-collections
 
-## Querying sub-collections
+### Query sub-collections
 
-You can query same named sub-collections across all documents in a collection. For example _query states from every country_.
+You can query sub-collections across all documents in a collection when they have the same name. For example _query states from every country_.
 
 ```javascript
 const allStates = countries.collection('States');

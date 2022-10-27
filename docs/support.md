@@ -23,9 +23,9 @@ The Nitric framework has many different repositories in the [nitrictech](https:/
 
 If you're unsure where to open the GitHub issue, you can use our main [nitrictech/nitric](https://github.com/nitrictech/nitric) repo. The Nitric team frequently monitors and triages new issues within this main repo and will move the issue to another repo if required.
 
-## Share reproduction of bug
+## Share reproduction of bugs
 
-To best help us understand and tackle the issue effectively, provide a **standalone GitHub repository** in your report that can reproduce the issue.
+To best help with understanding the issue effectively, provide a **standalone GitHub repository** in your report that can reproduce the issue.
 
 For information on how to create minimal, reproducible examples you can view this informative [Stackoverflow guide](https://stackoverflow.com/help/minimal-reproducible-example).
 
@@ -38,9 +38,9 @@ If you don't have time to create a standalone repository, please include as much
 Log files can be found in your stack directory under the `.nitric` folder.
 Including Log files will provide a ton of useful information logged during local run and cloud deployments.
 
-### Include output of info command
+### Include the output of info command
 
-The output of the info command provides us with meta data such as OS, Chipset information, GoVersion, etc. which can be used to reproduce the issue raised.
+The output of the info command provides us with metadata such as OS, Chipset information, GoVersion, etc. which can be used to reproduce the issue raised.
 
 ```bash
 nitric info -o yaml`
@@ -48,7 +48,7 @@ nitric info -o yaml`
 
 ### Include bug description and reproduction
 
-When describing the bug, it's help to produce the following information:
+When describing the bug, it helps to provide the following information:
 
 - A clear and concise description of what the bug is
 - Steps to reproduce the bug
@@ -61,7 +61,7 @@ Any information about your environment and setup will be important to help repro
 
 - Which version of the **Nitric CLI** you are using (run `nitric version` to see your version)
 - Your **Operating System**
-- Any nitric dependencies and their version such as SDKs or Middleware
+- Any nitric dependencies and their versions, such as SDKs or Middleware
 - Which cloud providers you are deploying to
 
 ### Example Report

@@ -5,7 +5,7 @@ description: Frequently asked questions about Nitric.
 
 ## Do I need to deploy to a cloud to test my applications?
 
-Nope, the Nitric CLI can run applications for dev and testing directly on your machine.
+Nope, the Nitric CLI can run applications for development and testing directly on your machine.
 
 ## Other programming languages
 
@@ -21,9 +21,9 @@ We never want to restrict access in Nitric apps. For services/APIs/etc. that we 
 
 Additionally, being an Open Source project, you're welcome to contribute additional services and plugins to the Nitric project to permanently add support for these integrations.
 
-## How do I view my deployments on the pulumi dashboard?
+## How do I view my deployments on the Pulumi dashboard?
 
-To view your deployments on the pulumi dashboard, you will need a pulumi access token. You can get this token by logging into pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
+To view your deployments on the Pulumi dashboard, you will need a Pulumi access token. You can get this token by logging into Pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
 
 Add the environment variable to your `~/.zshrc` or `~/.bashrc` as:
 
