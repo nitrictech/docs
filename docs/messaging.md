@@ -119,7 +119,7 @@ Queues and Tasks provide a scalable, decoupled, way for functions and containers
 
 ### Queues
 
-Queues are named targets where tasks can be sent. They can be thought of as a group of related tasks. Unlike [topics](./topics), tasks sent to a queue won't automatically trigger functions to process them. Instead, functions receive tasks from the queue by requesting them.
+Queues are named targets where tasks can be sent. They can be thought of as a group of related tasks. Unlike [topics](#topics), tasks sent to a queue won't automatically trigger functions to process them. Instead, functions receive tasks from the queue by requesting them.
 
 This makes queues awesome for processing work asynchronously, often paired with [schedules](/docs/schedules) to support batch workloads, like nightly processes.
 
@@ -171,8 +171,3 @@ for (let task of tasks) {
   await task.complete();
 }
 ```
-
-# What's next?
-
-- Learn more about topics in our [reference docs](/docs/reference/topic/topic).
-- Learn more about queues in our [reference docs](/docs/reference/queues/queue).

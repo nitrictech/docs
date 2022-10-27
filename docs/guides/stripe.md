@@ -292,9 +292,9 @@ Once it has been tested, you can start deploying to the cloud.
 
 Setup your credentials and any other cloud specific configuration:
 
-- [AWS](/docs/reference/aws)
-- [Azure](/docs/reference/azure)
-- [GCP](/docs/reference/gcp)
+- [AWS](/docs/reference/providers/aws)
+- [Azure](/docs/reference/providers/azure)
+- [GCP](/docs/reference/providers/gcp)
 
 Create a stack - a collection of resources identified in your project which will be deployed.
 

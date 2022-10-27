@@ -20,7 +20,7 @@ The following resources are created when deploying APIs to AWS:
 
 During deployment Nitric's CLI builds your API's routes, methods and handlers:
 
-- Files containing handler functions, such as [api.post()](/docs/reference/api/api-post), are built into container images
+- Files referenced under `functions` in `nitric.yaml` are built into container images
 - Built container images are pushed to the [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/) as private images
 - Functions in [AWS Lambda](https://aws.amazon.com/lambda/) are created to run the container images
 - All route/handler mappings are built into an Open API v3 definition file (as required by Amazon API Gateway)

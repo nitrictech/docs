@@ -119,6 +119,3 @@ foundStates.on('data', (doc) => {
 
 > This sub-collection reference is only queryable, since it's really an aggregate of all `States` sub-collections across all `Countries` documents. i.e. Query every state in every country.
 
-# What's next?
-
-- Learn more about collections and documents in our [reference docs](/docs/reference/collection/collection).

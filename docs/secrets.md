@@ -87,6 +87,3 @@ const specific = await apiKey.version('version-id').access();
 latest.asBytes();
 ```
 
-# What's next?
-
-- Learn more about secrets in our [reference docs](/docs/reference/secrets/secret).
