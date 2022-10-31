@@ -23,7 +23,7 @@ The unique name of this Queue within the app. Subsequent calls to `queue` with t
 
 ## Access
 
-All Nitric resources provide access permissions you can use to specify the level of access your code needs to the resource. See here for details [Access Control documentation](./../access-control).
+All Nitric resources provide access permissions you can use to specify the level of access your code needs to the resource. See here for details [Access Control documentation](../../../../access-control).
 
 ### Available permissions:
 

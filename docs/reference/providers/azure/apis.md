@@ -25,7 +25,7 @@ Azure Container Apps are currently in preview in the US East 2 region.
 
 During deployment Nitric's CLI builds your API's routes, methods and handlers will be built as follows:
 
-- Files containing handler functions, such as [api.post()](/docs/reference/api/api-post), are built into containers
+- Files referenced under `functions` in `nitric.yaml` are built into container images
 - Built container images are pushed to the [Azure Container Registry](https://azure.microsoft.com/en-us/services/container-registry/) as private images
 - Container Apps are setup to run the containers
 - All route/handler mappings are built into an Open API v3 definition file

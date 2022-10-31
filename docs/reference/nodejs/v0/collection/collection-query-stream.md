@@ -39,6 +39,6 @@ results.on('end', () => {
 
 ## See also
 
-- [query().where()]()
-- [query().limit()]()
-- [query().pagingFrom()]()
+- [query().where()](./collection-query-where)
+- [query().limit()](./collection-query-limit)
+- [query().pagingFrom()](./collection-query-pagingfrom)

@@ -9,4 +9,4 @@ It offers portable building blocks for building on AWS, Microsoft Azure or Googl
 
 ## How does it work?
 
-Nitric is a little unique in the way it builds and deploys projects. Reading the [concepts](./docs/concepts) section can be a good way to learn more.
+Nitric is a little unique in the way it builds and deploys projects. Reading the [concepts](./concepts) section can be a good way to learn more.

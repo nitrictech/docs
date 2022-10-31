@@ -35,4 +35,4 @@ const enemiesQuery = enemies.query();
 
 ## See also
 
-- [collection().query()](./collection-query.md)
+- [collection().query()](./collection-query)
