@@ -86,4 +86,3 @@ const specific = await apiKey.version('version-id').access();
 // Note, you can also retrieve the value of the secret as a byte array
 latest.asBytes();
 ```
-

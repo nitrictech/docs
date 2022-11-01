@@ -42,6 +42,7 @@ This permission allows your code to receive tasks from the queue.
 ---
 
 ### Notes
+
 In most instances, code should either send to or receive from a queue, usually not both.
 
 ## Examples
