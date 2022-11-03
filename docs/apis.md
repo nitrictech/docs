@@ -142,4 +142,3 @@ const getAllCustomers = (ctx) => {};
 
 customersApi.get('/customers', validate, getAllCustomers);
 ```
-

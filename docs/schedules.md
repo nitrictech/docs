@@ -35,4 +35,3 @@ schedule('send-reports').every('day', async (ctx) => {
   // do some processing
 });
 ```
-

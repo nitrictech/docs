@@ -68,5 +68,5 @@ const profileQuery = profiles
 
 ## See also
 
-- [query().fetch()](./collection-query-fetch.md)
-- [query().stream()](./collection-query-stream.md)
+- [query().fetch()](./collection-query-fetch)
+- [query().stream()](./collection-query-stream)

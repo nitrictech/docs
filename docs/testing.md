@@ -93,7 +93,7 @@ describe('Testing Hello Function', () => {
 
 #### Mocking
 
-Our next function handleAddImage becomes more complex because it uses a bucket. This will need to be mocked as we want our unit tests to be fast, replicable, and isolated. By mocking a production system, we have an isolated environment that won't be affected by changes in the system. The trade-off is that the unit tests won't catch system-level failures. However, this is covered by [integration tests](/docs/testing#integration-testing).
+Our next function handleAddImage becomes more complex because it uses a bucket. This will need to be mocked as we want our unit tests to be fast, replicable, and isolated. By mocking a production system, we have an isolated environment that won't be affected by changes in the system. The trade-off is that the unit tests won't catch system-level failures. However, this is covered by [integration tests](#integration-testing).
 
 We'll go over it section by section, but here is the full example of these tests:
 
@@ -437,7 +437,7 @@ We attempt to make the local run of nitric as similar as possible to the cloud e
 
 When you have an API deployed to the cloud, most cloud providers have a feature in the console to do endpoint testing. However, the tests are often just checking if the API resolves to a 200 status code. The process we are following here will lead to much more robust testing and a lot more confidence in your cloud application.
 
-Now for testing. The obvious first step before running our tests is to [deploy](https://nitric.io/docs/getting-started#deploying-the-app) the resources.
+Now for testing. The obvious first step before running our tests is to [deploy](./getting-started#deploying-the-app) the resources.
 
 ```
 nitric up
