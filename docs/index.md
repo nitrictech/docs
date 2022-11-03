@@ -1,5 +1,5 @@
 ---
-title: Documentation
+title: Introduction
 description: Documentation for the Nitric cloud application framework.
 ---
 
