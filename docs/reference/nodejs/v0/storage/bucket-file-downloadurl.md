@@ -1,9 +1,9 @@
 ---
-title: bucket.file.signUrl()
-description: Create a signed URL for access to a file.
+title: bucket.file.getDownloadUrl()
+description: Get a download url for a file from a bucket.
 ---
 
-Create a signed URL for access to a file.
+Create a download url for a file within a bucket.
 
 ```javascript
 import { bucket } from '@nitric/sdk';
@@ -12,9 +12,8 @@ const assets = bucket('assets').for('reading', 'writing');
 
 const logo = assets.file('images/logo.png');
 
-// Create a read-only signed url reference for downloading or uploading
+// Create a read-only signed url reference for downloading
 const downloadUrl = await logo.getDownloadUrl();
-const uploadUrl = await logo.getUploadUrl();
 ```
 
 ## Parameters
@@ -23,7 +22,7 @@ const uploadUrl = await logo.getUploadUrl();
 
 **options** `SignUrlOptions`
 
-Additional options when creating a signed URL.
+Additional options when creating signed URL.
 
 | Properties                                                                                                          |
 | ------------------------------------------------------------------------------------------------------------------- |
@@ -47,19 +46,7 @@ const logoUrl = await logo.getDownloadUrl({
 });
 ```
 
-### Create a temporary file upload link for a user
-
-```javascript
-import { bucket } from '@nitric/sdk';
-
-const uploads = bucket('uploads').for('writing');
-
-const photo = uploads.file('images/photo.png');
-
-const photoUrl = await photo.getUploadUrl();
-```
-
-### Get an image URL for rendering
+### Redirect response to an image url
 
 ```javascript
 import { api, bucket } from '@nitric/sdk';
