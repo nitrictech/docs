@@ -4,7 +4,7 @@ The Nitric deployment engine will run through your code at deploy time and inter
 
 ## Rules
 
-There are a few rules to keep in mind when declaring nitric resources as part of your application
+There are a few rules to keep in mind when declaring Nitric resources as part of your application.
 
 ### Don't declare resources in runtime code
 
