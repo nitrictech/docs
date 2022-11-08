@@ -27,7 +27,7 @@ description: Use the Nitric framework to easily build and deploy REST APIs for A
 
 ## Video
 
-<iframe width="560px" height="315px" src="https://www.youtube.com/embed/PpIxtKDoL2Q" title="" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[Build and Deploy a REST API for any Cloud](https://www.youtube.com/embed/PpIxtKDoL2Q)
 
 ## Prerequisites
 
@@ -272,9 +272,9 @@ curl --location --request DELETE 'http://localhost:9001/apis/public/profiles/{id
 
 Setup your credentials and any other cloud specific configuration:
 
-- [AWS](/docs/reference/aws)
-- [Azure](/docs/reference/azure)
-- [GCP](/docs/reference/gcp)
+- [AWS](/docs/reference/providers/aws)
+- [Azure](/docs/reference/providers/azure)
+- [GCP](/docs/reference/providers/gcp)
 
 Create a stack - a collection of resources identified in your project which will be deployed.
 

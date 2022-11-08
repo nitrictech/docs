@@ -17,7 +17,7 @@ We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud o
 
 ## Video
 
-<iframe width="560px" height="315px" src="https://www.youtube.com/embed/K7T32ebYSLA" title="" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[Serverless GraphQL on any Cloud](https://www.youtube.com/embed/K7T32ebYSLA)
 
 ## Prerequisites
 
@@ -29,7 +29,7 @@ We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud o
 
 ## Build the GraphQL Schema
 
-GraphQL requests are type safe, and so they require a schema to be defined to validate queries against. Lets first add the graphql module from npm.
+GraphQL requests are typesafe, and so they require a schema to be defined to validate queries. Let's first add the GraphQL module from NPM.
 
 ```bash
 npm install graphql
@@ -367,9 +367,9 @@ curl --location -X POST \
 
 Setup your credentials and any other cloud specific configuration:
 
-- [AWS](/docs/reference/aws)
-- [Azure](/docs/reference/azure)
-- [GCP](/docs/reference/gcp)
+- [AWS](/docs/reference/providers/aws)
+- [Azure](/docs/reference/providers/azure)
+- [GCP](/docs/reference/providers/gcp)
 
 Create a stack - a collection of resources identified in your project which will be deployed.
 

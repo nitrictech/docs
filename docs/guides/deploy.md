@@ -16,18 +16,15 @@ In this guide, we'll walk through the steps of getting started with [Nitric Depl
 7. Deploy your project
 8. View the logs
 
-<br/>
-
 ## Sign in to Nitric Deploy
 
 > Nitric Deploy is currently in preview. [Request access](https://deploy.nitric.io/signup) using your GitHub account email address.
 
 Nitric Deploy can be accessed by navigating to https://deploy.nitric.io - you'll be greeted by our sign in screens. Follow the prompts to sign in with GitHub.
 
-<img alt="Nitric Deploy sign in screen" src="../../assets/img/guides/deploy/sign-in.png" height="337.5" />
-<img alt="Signing into Nitric Deploy with GitHub" src="../../assets/img/guides/deploy/sign-in-3.png" height="337.5" />
+![Nitric Deploy sign in screen](../../assets/img/guides/deploy/sign-in.png)
 
-<br/>
+![Signing into Nitric Deploy with GitHub](../../assets/img/guides/deploy/sign-in-3.png)
 
 ## Create an organization
 
@@ -35,10 +32,9 @@ Organizations allow you to group your projects. For example, I have an organizat
 
 Let's create a new organization and give it a name.
 
-<img alt="Creating an organization in Nitric Deploy" src="../../assets/img/guides/deploy/add-org-2.png" height="337.5" />
-<img alt="An organization created in Nitric Deploy" src="../../assets/img/guides/deploy/add-org.png" height="337.5" />
+![Creating an organization in Nitric Deploy](../../assets/img/guides/deploy/add-org-2.png)
 
-<br/>
+![An organization created in Nitric Deploy](../../assets/img/guides/deploy/add-org.png)
 
 ## Set up AWS credentials
 
@@ -50,23 +46,23 @@ You'll need to name and store your AWS credentials.
 
 > Only valid credentials will work here.
 
-<img alt="Adding AWS credentials in Nitric Deploy" src="../../assets/img/guides/deploy/add-org-credentials.png" height="337.5" />
-<img alt="AWS credentials created in Nitric Deploy" src="../../assets/img/guides/deploy/add-org-credentials-2.png" height="337.5" />
+![Adding AWS credentials in Nitric Deploy](../../assets/img/guides/deploy/add-org-credentials.png)
 
-<br/>
+![AWS credentials created in Nitric Deploy](../../assets/img/guides/deploy/add-org-credentials-2.png)
 
 ## Create or import a project
 
 Projects can be imported from existing Git repositories or we can scaffold a new project for you from one our of templates.
 
-<img alt="An organization in Nitric Deploy with no projects created" src="../../assets/img/guides/deploy/add-project.png" height="337.5" />
-<img alt="Import a Git repo or clone a template in Nitric Deploy" src="../../assets/img/guides/deploy/add-project-2.png" height="337.5" />
+![An organization in Nitric Deploy with no projects created](../../assets/img/guides/deploy/add-project.png)
+
+![Import a Git repo or clone a template in Nitric Deploy](../../assets/img/guides/deploy/add-project-2.png)
 
 ### Existing projects
 
 In order to import an existing project, it must have been scaffolded by using the Nitric CLI. Your projects _must_ contain a valid `nitric.yaml` file for it to function correctly.
 
-<img alt="Configure a Nitric project from a GitHub repo" src="../../assets/img/guides/deploy/add-project-existing.png" height="337.5" />
+![Configure a Nitric project from a GitHub repo](../../assets/img/guides/deploy/add-project-existing.png)
 
 ### Scaffold a new project
 
@@ -74,13 +70,11 @@ Our template projects will give you a starting point with a basic REST API.
 
 > Your new project will be scaffolded in the repository you select.
 
-<img alt="Creating a new Nitric project" src="../../assets/img/guides/deploy/add-project-new.png" height="337.5" />
+![Creating a new Nitric project](../../assets/img/guides/deploy/add-project-new.png)
 
 In both of the scenarios you'll need to choose a production branch. This is the branch which Nitric Deploy will watch for any push events and trigger a deployment.
 
 You'll also need to specify which directory the Nitric source code is in - by default this would be the root directory `./` but could be a few levels deeper if you are working in an existing monorepo.
-
-<br/>
 
 ## Configure environment variables
 
@@ -88,9 +82,7 @@ If your project requires variables, they can be added in project settings.
 
 > Changes to variables will require a redeploy, which can be triggered from the project's home.
 
-<img alt="Add environment variables for production and staging" src="../../assets/img/guides/deploy/new-environment-variable.png" height="337.5" />
-
-<br/>
+![Add environment variables for production and staging](../../assets/img/guides/deploy/new-environment-variable.png)
 
 ## Create an environment
 
@@ -98,11 +90,9 @@ An environment represents a deployed instance of your application in a specific 
 
 > Once you've created an environment, Nitric Deploy will automatically initiate your first cloud deployment.
 
-<img alt="A project in Nitric Deploy with no environments created" src="../../assets/img/guides/deploy/new-environment.png" height="337.5" />
+![A project in Nitric Deploy with no environments created](../../assets/img/guides/deploy/new-environment.png)
 
-<img alt="Create a stack environment for your project" src="../../assets/img/guides/deploy/new-environment-2.png" height="337.5" />
-
-<br/>
+![Create a stack environment for your project](../../assets/img/guides/deploy/new-environment-2.png)
 
 ## Deploy your project
 
@@ -116,15 +106,13 @@ If you scaffolded a template project then you can test the API out with the foll
 curl https://{url}/hello/user
 ```
 
-<img alt="A stack deployed with Nitric Deploy infrastructure automation" src="../../assets/img/guides/deploy/deploy-2.png" height="337.5" />
-
-<br/>
+![A stack deployed with Nitric Deploy infrastructure automation](../../assets/img/guides/deploy/deploy-2.png)
 
 ## View the logs
 
 By clicking on 'view latest build' we can see the details and retrieve the deployment log information.
 
-<img alt="Cloud deployment logs in Nitric Deploy" src="../../assets/img/guides/deploy/deploy-logs.png" height="337.5" />
+![Cloud deployment logs in Nitric Deploy](../../assets/img/guides/deploy/deploy-logs.png)
 
 That's it! With just a few clicks, you've deployed a project to your cloud and don't have to manage environments or infrastructure state.
 

@@ -1,560 +1,542 @@
 {
-  "versions": [
+  "docs": [
     {
-      "version": "0.1.0",
-      "sidebars": {
-        "docs": [
-          {
-            "title": "Overview",
-            "routes": [
-              {
-                "title": "Introduction",
-                "path": "/docs/_index.mdx"
-              },
-              {
-                "title": "Installation",
-                "path": "/docs/installation.mdx"
-              },
-              {
-                "title": "Concepts",
-                "path": "/docs/concepts.mdx"
-              },
-              {
-                "title": "Getting Started",
-                "path": "/docs/getting-started.mdx"
-              },
-              {
-                "title": "Languages",
-                "path": "/docs/language-support.md"
-              },
-              {
-                "title": "Deployment",
-                "path": "/docs/deployment/_index.md"
-              }
-            ]
-          },
-          {
-            "title": "Building Blocks",
-            "routes": [
-              {
-                "title": "APIs",
-                "path": "/docs/apis/_index.md"
-              },
-              {
-                "title": "Collections",
-                "path": "/docs/collections/_index.md"
-              },
-              {
-                "title": "Schedules",
-                "path": "/docs/schedules/_index.md"
-              },
-              {
-                "title": "Storage",
-                "path": "/docs/storage/_index.md"
-              },
-              {
-                "title": "Messaging",
-                "routes": [
-                  {
-                    "title": "Topics",
-                    "path": "/docs/messaging/topics.md"
-                  },
-                  {
-                    "title": "Queues",
-                    "path": "/docs/messaging/queues.md"
-                  }
-                ]
-              },
-              {
-                "title": "Secrets",
-                "path": "/docs/secrets/_index.md"
-              }
-            ]
-          },
-          {
-            "title": "Compare Nitric with...",
-            "disableAutoPrefix": true,
-            "routes": [
-              {
-                "title": "AWS SAM",
-                "path": "/docs/comparison/aws-sam.md"
-              },
-              {
-                "title": "GCP Deployment Manager",
-                "path": "/docs/comparison/gcp-deployment-manager.md"
-              },
-              {
-                "title": "Azure Resource Manager",
-                "path": "/docs/comparison/bicep.md"
-              }
-            ]
-          },
-          {
-            "title": "Guides",
-            "disableAutoPrefix": true,
-            "routes": [
-              {
-                "title": "REST API",
-                "path": "/docs/guides/serverless-rest-api-example.md"
-              },
-              {
-                "title": "Nitric Deploy",
-                "path": "/docs/guides/deploy.md"
-              },
-              {
-                "title": "GraphQL",
-                "path": "/docs/guides/graphql.md"
-              },
-              {
-                "title": "Next.js",
-                "path": "/docs/guides/api-with-nextjs.md"
-              },
-              {
-                "title": "Supabase",
-                "path": "/docs/guides/nitric-and-supabase.md"
-              },
-              {
-                "title": "PlanetScale and Prisma",
-                "path": "/docs/guides/serverless-api-with-planetscale-and-prisma.md"
-              },
-              {
-                "title": "Stripe",
-                "path": "/docs/guides/stripe.md"
-              },
-              {
-                "title": "Twilio",
-                "path": "/docs/guides/twilio.md"
-              },
-              {
-                "title": "Secure API with Auth0",
-                "path": "/docs/guides/secure-api-auth0.md"
-              },
-              {
-                "title": "Using Git Actions",
-                "path": "/docs/guides/github-actions.md"
-              },
-              {
-                "title": "Using a Database",
-                "path": "/docs/guides/byo-database.md"
-              }
-            ]
-          },
-          {
-            "title": "Testing",
-            "routes": [
-              {
-                "title": "Unit Testing",
-                "path": "/docs/tests/unit-testing.mdx"
-              },
-              {
-                "title": "Integration Testing",
-                "path": "/docs/tests/integration-testing.mdx"
-              }
-            ]
-          },
-          {
-            "title": "More",
-            "disableAutoPrefix": true,
-            "routes": [
-              {
-                "title": "Frequently Asked Questions",
-                "path": "/docs/faq.mdx"
-              },
-              {
-                "title": "Environment Variables",
-                "path": "/docs/env.mdx"
-              },
-              {
-                "title": "Support",
-                "path": "/docs/support/_index.mdx",
-                "routes": [
-                  {
-                    "title": "General",
-                    "path": "/docs/support/_index.mdx"
-                  },
-                  {
-                    "title": "Creating bug reports",
-                    "path": "/docs/support/bug-report.md"
-                  },
-                  {
-                    "title": "Upgrading",
-                    "path": "/docs/support/upgrade.md"
-                  }
-                ]
-              },
-              {
-                "title": "Contributions",
-                "path": "/docs/contributions.md"
-              }
-            ]
-          }
-        ],
-        "reference": [
-          {
-            "title": "Reference",
-            "path": "/docs/reference/_index.mdx",
-            "routes": [
-              {
-                "title": "Overview",
-                "path": "/docs/reference/_index.mdx"
-              },
-              {
-                "title": "Access Control",
-                "path": "/docs/reference/access-control.mdx"
-              },
-              {
-                "title": "CLI",
-                "path": "/docs/reference/cli.mdx"
-              },
-              {
-                "title": "Stacks",
-                "path": "/docs/reference/stacks.mdx"
-              }
-            ]
-          },
+      "title": "Overview",
+      "links": [
+        {
+          "title": "Introduction",
+          "href": "/docs"
+        },
+        {
+          "title": "Installation",
+          "href": "/docs/installation"
+        },
+        {
+          "title": "Concepts",
+          "href": "/docs/concepts"
+        },
+        {
+          "title": "Getting Started",
+          "href": "/docs/getting-started"
+        },
+        {
+          "title": "Languages",
+          "href": "/docs/language-support"
+        },
+        {
+          "title": "Testing",
+          "href": "/docs/testing"
+        },
+        {
+          "title": "Deployment",
+          "href": "/docs/deployment"
+        }
+      ]
+    },
+    {
+      "title": "Building Blocks",
+      "links": [
+        {
+          "title": "APIs",
+          "href": "/docs/apis"
+        },
+        {
+          "title": "Collections",
+          "href": "/docs/collections"
+        },
+        {
+          "title": "Schedules",
+          "href": "/docs/schedules"
+        },
+        {
+          "title": "Storage",
+          "href": "/docs/storage"
+        },
+        {
+          "title": "Messages",
+          "href": "/docs/messaging"
+        },
+        {
+          "title": "Secrets",
+          "href": "/docs/secrets"
+        }
+      ]
+    },
+    {
+      "title": "Compare Nitric with...",
+      "disableAutoPrefix": true,
+      "links": [
+        {
+          "title": "AWS SAM",
+          "href": "/docs/comparison/aws-sam"
+        },
+        {
+          "title": "GCP Deployment Manager",
+          "href": "/docs/comparison/gcp-deployment-manager"
+        },
+        {
+          "title": "Azure Resource Manager",
+          "href": "/docs/comparison/bicep"
+        }
+      ]
+    },
+    {
+      "title": "Guides",
+      "disableAutoPrefix": true,
+      "links": [
+        {
+          "title": "REST API",
+          "href": "/docs/guides/serverless-rest-api-example"
+        },
+        {
+          "title": "Nitric Deploy",
+          "href": "/docs/guides/deploy"
+        },
+        {
+          "title": "GraphQL",
+          "href": "/docs/guides/graphql"
+        },
+        {
+          "title": "Next.js",
+          "href": "/docs/guides/api-with-nextjs"
+        },
+        {
+          "title": "Supabase",
+          "href": "/docs/guides/nitric-and-supabase"
+        },
+        {
+          "title": "PlanetScale and Prisma",
+          "href": "/docs/guides/serverless-api-with-planetscale-and-prisma"
+        },
+        {
+          "title": "Stripe",
+          "href": "/docs/guides/stripe"
+        },
+        {
+          "title": "Twilio",
+          "href": "/docs/guides/twilio"
+        },
+        {
+          "title": "Secure API with Auth0",
+          "href": "/docs/guides/secure-api-auth0"
+        },
+        {
+          "title": "Using Git Actions",
+          "href": "/docs/guides/github-actions"
+        },
+        {
+          "title": "Using a Database",
+          "href": "/docs/guides/byo-database"
+        }
+      ]
+    },
+    {
+      "title": "More",
+      "links": [
+        {
+          "title": "Frequently Asked Questions",
+          "href": "/docs/faq"
+        },
+        {
+          "title": "Environment Variables",
+          "href": "/docs/env"
+        },
+        {
+          "title": "IAM and Access Control",
+          "href": "/docs/access-control"
+        },
+        {
+          "title": "Support",
+          "href": "/docs/support"
+        },
+        {
+          "title": "Contributions",
+          "href": "/docs/contributions"
+        }
+      ]
+    }
+  ],
+  "reference": {
+    "reference": [
+      {
+        "title": "Reference",
+        "links": [
           {
             "title": "Node.js SDK",
-            "useTitleForChildPrefix": true,
-            "routes": [
-              {
-                "title": "APIs",
-                "routes": [
-                  {
-                    "title": "api()",
-                    "path": "/docs/reference/api/api.mdx"
-                  },
-                  {
-                    "title": "api.get()",
-                    "path": "/docs/reference/api/api-get.mdx"
-                  },
-                  {
-                    "title": "api.post()",
-                    "path": "/docs/reference/api/api-post.mdx"
-                  },
-                  {
-                    "title": "api.put()",
-                    "path": "/docs/reference/api/api-put.mdx"
-                  },
-                  {
-                    "title": "api.delete()",
-                    "path": "/docs/reference/api/api-delete.mdx"
-                  },
-                  {
-                    "title": "api.patch()",
-                    "path": "/docs/reference/api/api-patch.mdx"
-                  },
-                  {
-                    "title": "api.route()",
-                    "path": "/docs/reference/api/api-route.mdx"
-                  },
-                  {
-                    "title": "api.route.all()",
-                    "path": "/docs/reference/api/api-route-all.mdx"
-                  },
-                  {
-                    "title": "api.route.get()",
-                    "path": "/docs/reference/api/api-route-get.mdx"
-                  },
-                  {
-                    "title": "api.route.post()",
-                    "path": "/docs/reference/api/api-route-post.mdx"
-                  },
-                  {
-                    "title": "api.route.put()",
-                    "path": "/docs/reference/api/api-route-put.mdx"
-                  },
-                  {
-                    "title": "api.route.delete()",
-                    "path": "/docs/reference/api/api-route-delete.mdx"
-                  },
-                  {
-                    "title": "api.route.patch()",
-                    "path": "/docs/reference/api/api-route-patch.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Collections",
-                "routes": [
-                  {
-                    "title": "collection()",
-                    "path": "/docs/reference/collection/collection.md"
-                  },
-                  {
-                    "title": "collection.collection()",
-                    "path": "/docs/reference/collection/collection-collection.md"
-                  },
-                  {
-                    "title": "collection.query()",
-                    "path": "/docs/reference/collection/collection-query.md"
-                  },
-                  {
-                    "title": "collection.query.where()",
-                    "path": "/docs/reference/collection/collection-query-where.md"
-                  },
-                  {
-                    "title": "collection.query.limit()",
-                    "path": "/docs/reference/collection/collection-query-limit.md"
-                  },
-                  {
-                    "title": "collection.query.pagingFrom()",
-                    "path": "/docs/reference/collection/collection-query-pagingfrom.md"
-                  },
-                  {
-                    "title": "collection.query.fetch()",
-                    "path": "/docs/reference/collection/collection-query-fetch.md"
-                  },
-                  {
-                    "title": "collection.query.stream()",
-                    "path": "/docs/reference/collection/collection-query-stream.md"
-                  },
-                  {
-                    "title": "collection.doc()",
-                    "path": "/docs/reference/collection/collection-doc.md"
-                  },
-                  {
-                    "title": "collection.doc.get()",
-                    "path": "/docs/reference/collection/collection-doc-get.md"
-                  },
-                  {
-                    "title": "collection.doc.set()",
-                    "path": "/docs/reference/collection/collection-doc-set.md"
-                  },
-                  {
-                    "title": "collection.doc.delete()",
-                    "path": "/docs/reference/collection/collection-doc-delete.md"
-                  },
-                  {
-                    "title": "collection.doc.collection()",
-                    "path": "/docs/reference/collection/collection-doc-collection.md"
-                  }
-                ]
-              },
-              {
-                "title": "Topics",
-                "routes": [
-                  {
-                    "title": "topic()",
-                    "path": "/docs/reference/topic/topic.md"
-                  },
-                  {
-                    "title": "topic.publish()",
-                    "path": "/docs/reference/topic/topic-publish.md"
-                  },
-                  {
-                    "title": "topic.subscribe()",
-                    "path": "/docs/reference/topic/topic-subscribe.md"
-                  }
-                ]
-              },
-              {
-                "title": "Queues",
-                "routes": [
-                  {
-                    "title": "queue()",
-                    "path": "/docs/reference/queues/queue.mdx"
-                  },
-                  {
-                    "title": "queue.send()",
-                    "path": "/docs/reference/queues/queue-send.mdx"
-                  },
-                  {
-                    "title": "queue.receive()",
-                    "path": "/docs/reference/queues/queue-receive.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Secrets",
-                "routes": [
-                  {
-                    "title": "secret()",
-                    "path": "/docs/reference/secrets/secret.mdx"
-                  },
-                  {
-                    "title": "secret.put()",
-                    "path": "/docs/reference/secrets/secret-put.mdx"
-                  },
-                  {
-                    "title": "secret.version()",
-                    "path": "/docs/reference/secrets/secret-version.mdx"
-                  },
-                  {
-                    "title": "secret.latest()",
-                    "path": "/docs/reference/secrets/secret-latest.mdx"
-                  },
-                  {
-                    "title": "secret.version.access()",
-                    "path": "/docs/reference/secrets/secret-version-access.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Storage",
-                "routes": [
-                  {
-                    "title": "bucket()",
-                    "path": "/docs/reference/storage/bucket.md"
-                  },
-                  {
-                    "title": "bucket.file()",
-                    "path": "/docs/reference/storage/file.md"
-                  },
-                  {
-                    "title": "bucket.files()",
-                    "path": "/docs/reference/storage/files.md"
-                  },
-                  {
-                    "title": "file.get()",
-                    "path": "/docs/reference/storage/file-get.md"
-                  },
-                  {
-                    "title": "file.write()",
-                    "path": "/docs/reference/storage/file-write.md"
-                  },
-                  {
-                    "title": "file.delete()",
-                    "path": "/docs/reference/storage/file-delete.md"
-                  },
-                  {
-                    "title": "file.signUrl()",
-                    "path": "/docs/reference/storage/file-signurl.md"
-                  }
-                ]
-              },
-              {
-                "title": "Schedules",
-                "routes": [
-                  {
-                    "title": "schedule()",
-                    "path": "/docs/reference/schedule/schedule.md"
-                  },
-                  {
-                    "title": "schedule.every()",
-                    "path": "/docs/reference/schedule/schedule-every.md"
-                  }
-                ]
-              }
-            ]
+            "href": "/docs/reference/nodejs/v0"
           },
           {
-            "title": "Providers",
-            "routes": [
-              {
-                "title": "AWS",
-                "routes": [
-                  {
-                    "title": "AWS Provider Overview",
-                    "path": "/docs/reference/aws/_index.mdx"
-                  },
-                  {
-                    "title": "APIs",
-                    "path": "/docs/reference/aws/apis.mdx"
-                  },
-                  {
-                    "title": "Collections",
-                    "path": "/docs/reference/aws/collections.mdx"
-                  },
-                  {
-                    "title": "Queues",
-                    "path": "/docs/reference/aws/queues.mdx"
-                  },
-                  {
-                    "title": "Schedules",
-                    "path": "/docs/reference/aws/schedules.mdx"
-                  },
-                  {
-                    "title": "Secrets",
-                    "path": "/docs/reference/aws/secrets.mdx"
-                  },
-                  {
-                    "title": "Storage",
-                    "path": "/docs/reference/aws/storage.mdx"
-                  },
-                  {
-                    "title": "Topics",
-                    "path": "/docs/reference/aws/topics.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "Azure",
-                "routes": [
-                  {
-                    "title": "Azure Provider Overview",
-                    "path": "/docs/reference/azure/_index.mdx"
-                  },
-                  {
-                    "title": "APIs",
-                    "path": "/docs/reference/azure/apis.mdx"
-                  },
-                  {
-                    "title": "Collections",
-                    "path": "/docs/reference/azure/collections.mdx"
-                  },
-                  {
-                    "title": "Queues",
-                    "path": "/docs/reference/azure/queues.mdx"
-                  },
-                  {
-                    "title": "Schedules",
-                    "path": "/docs/reference/azure/schedules.mdx"
-                  },
-                  {
-                    "title": "Secrets",
-                    "path": "/docs/reference/azure/secrets.mdx"
-                  },
-                  {
-                    "title": "Storage",
-                    "path": "/docs/reference/azure/storage.mdx"
-                  },
-                  {
-                    "title": "Topics",
-                    "path": "/docs/reference/azure/topics.mdx"
-                  }
-                ]
-              },
-              {
-                "title": "GCP",
-                "routes": [
-                  {
-                    "title": "GCP Provider Overview",
-                    "path": "/docs/reference/gcp/_index.mdx"
-                  },
-                  {
-                    "title": "APIs",
-                    "path": "/docs/reference/gcp/apis.mdx"
-                  },
-                  {
-                    "title": "Collections",
-                    "path": "/docs/reference/gcp/collections.mdx"
-                  },
-                  {
-                    "title": "Queues",
-                    "path": "/docs/reference/gcp/queues.mdx"
-                  },
-                  {
-                    "title": "Schedules",
-                    "path": "/docs/reference/gcp/schedules.mdx"
-                  },
-                  {
-                    "title": "Secrets",
-                    "path": "/docs/reference/gcp/secrets.mdx"
-                  },
-                  {
-                    "title": "Storage",
-                    "path": "/docs/reference/gcp/storage.mdx"
-                  },
-                  {
-                    "title": "Topics",
-                    "path": "/docs/reference/gcp/topics.mdx"
-                  }
-                ]
-              }
-            ]
+            "title": "Cloud Providers",
+            "href": "/docs/reference/providers"
+          },
+          {
+            "title": "CLI",
+            "href": "/docs/reference/cli"
           }
         ]
       }
-    }
-  ]
+    ],
+    "nodejs": [
+      {
+        "title": "Getting Started",
+        "links": [
+          {
+            "title": "Overview & Installation",
+            "href": "/docs/reference/nodejs/v0"
+          }
+        ]
+      },
+      {
+        "title": "APIs",
+        "links": [
+          {
+            "title": "api()",
+            "href": "/docs/reference/nodejs/v0/api/api"
+          },
+          {
+            "title": "api.get()",
+            "href": "/docs/reference/nodejs/v0/api/api-get"
+          },
+          {
+            "title": "api.post()",
+            "href": "/docs/reference/nodejs/v0/api/api-post"
+          },
+          {
+            "title": "api.put()",
+            "href": "/docs/reference/nodejs/v0/api/api-put"
+          },
+          {
+            "title": "api.delete()",
+            "href": "/docs/reference/nodejs/v0/api/api-delete"
+          },
+          {
+            "title": "api.patch()",
+            "href": "/docs/reference/nodejs/v0/api/api-patch"
+          },
+          {
+            "title": "api.route()",
+            "href": "/docs/reference/nodejs/v0/api/api-route"
+          },
+          {
+            "title": "api.route.all()",
+            "href": "/docs/reference/nodejs/v0/api/api-route-all"
+          },
+          {
+            "title": "api.route.get()",
+            "href": "/docs/reference/nodejs/v0/api/api-route-get"
+          },
+          {
+            "title": "api.route.post()",
+            "href": "/docs/reference/nodejs/v0/api/api-route-post"
+          },
+          {
+            "title": "api.route.put()",
+            "href": "/docs/reference/nodejs/v0/api/api-route-put"
+          },
+          {
+            "title": "api.route.delete()",
+            "href": "/docs/reference/nodejs/v0/api/api-route-delete"
+          },
+          {
+            "title": "api.route.patch()",
+            "href": "/docs/reference/nodejs/v0/api/api-route-patch"
+          }
+        ]
+      },
+      {
+        "title": "Collections",
+        "links": [
+          {
+            "title": "collection()",
+            "href": "/docs/reference/nodejs/v0/collection/collection"
+          },
+          {
+            "title": "collection.collection()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-collection"
+          },
+          {
+            "title": "collection.query()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-query"
+          },
+          {
+            "title": "collection.query.where()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-query-where"
+          },
+          {
+            "title": "collection.query.limit()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-query-limit"
+          },
+          {
+            "title": "collection.query.pagingFrom()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-query-pagingfrom"
+          },
+          {
+            "title": "collection.query.fetch()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-query-fetch"
+          },
+          {
+            "title": "collection.query.stream()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-query-stream"
+          },
+          {
+            "title": "collection.doc()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-doc"
+          },
+          {
+            "title": "collection.doc.get()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-doc-get"
+          },
+          {
+            "title": "collection.doc.set()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-doc-set"
+          },
+          {
+            "title": "collection.doc.delete()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-doc-delete"
+          },
+          {
+            "title": "collection.doc.collection()",
+            "href": "/docs/reference/nodejs/v0/collection/collection-doc-collection"
+          }
+        ]
+      },
+      {
+        "title": "Topics",
+        "links": [
+          {
+            "title": "topic()",
+            "href": "/docs/reference/nodejs/v0/topic/topic"
+          },
+          {
+            "title": "topic.publish()",
+            "href": "/docs/reference/nodejs/v0/topic/topic-publish"
+          },
+          {
+            "title": "topic.subscribe()",
+            "href": "/docs/reference/nodejs/v0/topic/topic-subscribe"
+          }
+        ]
+      },
+      {
+        "title": "Queues",
+        "links": [
+          {
+            "title": "queue()",
+            "href": "/docs/reference/nodejs/v0/queues/queue"
+          },
+          {
+            "title": "queue.send()",
+            "href": "/docs/reference/nodejs/v0/queues/queue-send"
+          },
+          {
+            "title": "queue.receive()",
+            "href": "/docs/reference/nodejs/v0/queues/queue-receive"
+          }
+        ]
+      },
+      {
+        "title": "Secrets",
+        "links": [
+          {
+            "title": "secret()",
+            "href": "/docs/reference/nodejs/v0/secrets/secret"
+          },
+          {
+            "title": "secret.put()",
+            "href": "/docs/reference/nodejs/v0/secrets/secret-put"
+          },
+          {
+            "title": "secret.version()",
+            "href": "/docs/reference/nodejs/v0/secrets/secret-version"
+          },
+          {
+            "title": "secret.latest()",
+            "href": "/docs/reference/nodejs/v0/secrets/secret-latest"
+          },
+          {
+            "title": "secret.version.access()",
+            "href": "/docs/reference/nodejs/v0/secrets/secret-version-access"
+          }
+        ]
+      },
+      {
+        "title": "Storage",
+        "links": [
+          {
+            "title": "bucket()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket"
+          },
+          {
+            "title": "bucket.file()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket-file"
+          },
+          {
+            "title": "bucket.files()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket-files"
+          },
+          {
+            "title": "file.get()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket-file-get"
+          },
+          {
+            "title": "file.write()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket-file-write"
+          },
+          {
+            "title": "file.delete()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket-file-delete"
+          },
+          {
+            "title": "file.signUrl()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket-file-signurl"
+          }
+        ]
+      },
+      {
+        "title": "Schedules",
+        "links": [
+          {
+            "title": "schedule()",
+            "href": "/docs/reference/nodejs/v0/schedule/schedule"
+          },
+          {
+            "title": "schedule.every()",
+            "href": "/docs/reference/nodejs/v0/schedule/schedule-every"
+          }
+        ]
+      }
+    ],
+    "providers": [
+      {
+        "title": "AWS",
+        "links": [
+          {
+            "title": "AWS Provider Overview",
+            "href": "/docs/reference/providers/aws"
+          },
+          {
+            "title": "APIs",
+            "href": "/docs/reference/providers/aws/apis"
+          },
+          {
+            "title": "Collections",
+            "href": "/docs/reference/providers/aws/collections"
+          },
+          {
+            "title": "Queues",
+            "href": "/docs/reference/providers/aws/queues"
+          },
+          {
+            "title": "Schedules",
+            "href": "/docs/reference/providers/aws/schedules"
+          },
+          {
+            "title": "Secrets",
+            "href": "/docs/reference/providers/aws/secrets"
+          },
+          {
+            "title": "Storage",
+            "href": "/docs/reference/providers/aws/storage"
+          },
+          {
+            "title": "Topics",
+            "href": "/docs/reference/providers/aws/topics"
+          }
+        ]
+      },
+      {
+        "title": "Azure",
+        "links": [
+          {
+            "title": "Azure Provider Overview",
+            "href": "/docs/reference/providers/azure"
+          },
+          {
+            "title": "APIs",
+            "href": "/docs/reference/providers/azure/apis"
+          },
+          {
+            "title": "Collections",
+            "href": "/docs/reference/providers/azure/collections"
+          },
+          {
+            "title": "Queues",
+            "href": "/docs/reference/providers/azure/queues"
+          },
+          {
+            "title": "Schedules",
+            "href": "/docs/reference/providers/azure/schedules"
+          },
+          {
+            "title": "Secrets",
+            "href": "/docs/reference/providers/azure/secrets"
+          },
+          {
+            "title": "Storage",
+            "href": "/docs/reference/providers/azure/storage"
+          },
+          {
+            "title": "Topics",
+            "href": "/docs/reference/providers/azure/topics"
+          }
+        ]
+      },
+      {
+        "title": "Google Cloud",
+        "links": [
+          {
+            "title": "GCP Provider Overview",
+            "href": "/docs/reference/providers/gcp"
+          },
+          {
+            "title": "APIs",
+            "href": "/docs/reference/providers/gcp/apis"
+          },
+          {
+            "title": "Collections",
+            "href": "/docs/reference/providers/gcp/collections"
+          },
+          {
+            "title": "Queues",
+            "href": "/docs/reference/providers/gcp/queues"
+          },
+          {
+            "title": "Schedules",
+            "href": "/docs/reference/providers/gcp/schedules"
+          },
+          {
+            "title": "Secrets",
+            "href": "/docs/reference/providers/gcp/secrets"
+          },
+          {
+            "title": "Storage",
+            "href": "/docs/reference/providers/gcp/storage"
+          },
+          {
+            "title": "Topics",
+            "href": "/docs/reference/providers/gcp/topics"
+          }
+        ]
+      }
+    ],
+    "cli": [
+      {
+        "title": "Nitric CLI",
+        "links": [
+          {
+            "title": "Overview",
+            "href": "/docs/reference/cli"
+          },
+          {
+            "title": "Installation",
+            "href": "/docs/reference/cli/installation"
+          },
+          {
+            "title": "Stacks",
+            "href": "/docs/reference/cli/stacks"
+          }
+        ]
+      }
+    ]
+  }
 }

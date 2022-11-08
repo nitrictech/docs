@@ -1,18 +1,45 @@
 {
   "type": "object",
   "properties": {
-    "versions": {
+    "docs": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "version": {
+          "title": {
             "type": "string"
           },
-          "sidebars": {
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
+                }
+              },
+              "required": ["title", "href"]
+            }
+          }
+        },
+        "required": ["title", "links"]
+      }
+    },
+    "reference": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z]+$": {
+          "type": "array",
+          "items": {
             "type": "object",
-            "patternProperties": {
-              "^[a-z]+$": {
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "links": {
                 "type": "array",
                 "items": {
                   "type": "object",
@@ -20,30 +47,19 @@
                     "title": {
                       "type": "string"
                     },
-                    "routes": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "title": {
-                            "type": "string"
-                          },
-                          "path": {
-                            "type": "string"
-                          }
-                        }
-                      }
+                    "href": {
+                      "type": "string"
                     }
-                  }
+                  },
+                  "required": ["title", "href"]
                 }
               }
             },
-            "required": ["docs"]
+            "required": ["title", "links"]
           }
-        },
-        "required": ["version", "sidebars"]
+        }
       }
     }
   },
-  "required": ["versions"]
+  "required": ["docs", "reference"]
 }

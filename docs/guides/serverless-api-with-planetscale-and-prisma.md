@@ -188,10 +188,7 @@ export default prisma;
 
 Now our schema is ready, let's get Prisma connected to PlanetScale. The easiest method is to use the `connect` button in the PlanetScale dashboard and select `Prisma` from the dropdown. This will give you values you can copy into the `.env` for your project.
 
-<img alt="create function hook screenshot - step 2"
-src="../../assets/img/guides/planetscale/connect-with-prisma.png"
-height="450"
-/>
+![create function hook screenshot - step 2](../../assets/img/guides/planetscale/connect-with-prisma.png)
 
 When you're done, the `.env` file will look something like this:
 
@@ -433,8 +430,7 @@ curl -X POST http://localhost:9001/apis/meme/templates \
    -d '{"name":"my-meme","source":"https://www.meme-arsenal.com/memes/89f28a7e83e28f15b1d8e560c788b4fc.jpg","textPositions":[{"name":"topText","posX":50,"posY":0,"width":50,"height":50},{"name":"bottomText","posX":50,"posY":50,"width":50,"height":50}]}'
 ```
 
-<details>
-<summary>Full Request Body</summary>
+##### Full Request Body
 
 ```json
 {
@@ -459,8 +455,6 @@ curl -X POST http://localhost:9001/apis/meme/templates \
 }
 ```
 
-</details>
-
 > For `source` provide a URL hosting a meme template image in a common format like .png or .jpg
 
 #### Create a new meme using the template
@@ -471,8 +465,7 @@ curl -X POST http://localhost:9001/apis/meme/memes \
    -d '{"templateName":"my-meme","texts":[{"name":"topText","value":"top text content"},{"name":"bottomText","value":"bottom text content"}]}'
 ```
 
-<details>
-<summary>Full Request Body</summary>
+##### Full Request Body
 
 ```json
 {
@@ -489,8 +482,6 @@ curl -X POST http://localhost:9001/apis/meme/memes \
   ]
 }
 ```
-
-</details>
 
 #### Retrieve the image
 

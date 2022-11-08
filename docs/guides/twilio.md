@@ -28,11 +28,7 @@ To integrate with Twilio, it's important to create a Twilio account. If you don'
 
 Once you've gone through the account creation and verification, you'll arrive at the dashboard. There is a section which contains the important API credentials. These are used to connect to the API so keep them in mind.
 
-<img
- alt="twilio dashboard credentials"
- src="../../assets/img/guides/twilio/twilio-credentials.png"
- height="300"
- />
+![twilio dashboard credentials](../../assets/img/guides/twilio/twilio-credentials.png)
 
 ## Create the Messenger Class
 
@@ -187,4 +183,4 @@ Sent from your Twilio trial account -
 Test Message from Twilio!
 ```
 
-Thats it! If you want to deploy the API you can using our [deployment](https://nitric.io/docs/getting-started#deploying-the-app) docs. If you want to attach a frontend to the application so its a bit more user friendly, you can use any framework you want or follow our [Next.js guide](/docs/guides/api-with-nextjs.md)
+Thats it! If you want to deploy the API you can using our [deployment](https://nitric.io/docs/getting-started#deploying-the-app) docs. If you want to attach a frontend to the application so its a bit more user friendly, you can use any framework you want or follow our [Next.js guide](/docs/guides/api-with-nextjs)
