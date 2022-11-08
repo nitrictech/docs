@@ -10,7 +10,7 @@ There are a few rules to keep in mind when declaring Nitric resources as part of
 
 Nitric needs to be aware of resources at deploy time so they can be deployed appropriately. Declaring resources at runtime means the resource won't be declared when deploying your application. Consequently, the resource will not be provisioned to the cloud.
 
-The Nitric deployment engine does not evaluate runtime code at deploy time as this could result in unintended behaviour/side-effects.
+The Nitric deployment engine does not evaluate runtime code at deploy time as this could result in unintended behaviours or side-effects.
 
 A working example:
 
