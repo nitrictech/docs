@@ -8,22 +8,23 @@ There are a few rules to keep in mind when declaring nitric resources as part of
 
 ### Don't declare resources in runtime code
 
-Nitric needs to be aware of resources at deploy time so they can be deployed appropriately. Declaring resources at runtime mean the resource won't be declared when deploying your application and therefore it will not be provisioned to the cloud. 
+Nitric needs to be aware of resources at deploy time so they can be deployed appropriately. Declaring resources at runtime mean the resource won't be declared when deploying your application and therefore it will not be provisioned to the cloud.
 
 The Nitric deployment engine does not evaluate runtime code at deploy time as this could result in unintended behaviour/side-effects.
 
 A working example:
+
 ```typescript
-import { api, bucket } from "@nitric/sdk";
+import { api, bucket } from '@nitric/sdk';
 
 // ✅ This declaration will work
-const files = bucket('files').for("reading");
+const files = bucket('files').for('reading');
 
 const publicApi = api('public');
 
 publicApi.get('/files/:name', () => {
-    // ❌ This declaration will not work, as this resource will not exist
-    const badBucket = bucket('wont-work').for("writing");
+  // ❌ This declaration will not work, as this resource will not exist
+  const badBucket = bucket('wont-work').for('writing');
 });
 ```
 
@@ -36,13 +37,14 @@ publicApi.get('/files/:name', () => {
 When many functions share a resource its helpful to re-use resource declaration like any other variable in your code.
 
 For example:
+
 ```typescript
 // lib/resources.ts
-import { api, topic } from "@nitric/sdk";
+import { api, topic } from '@nitric/sdk';
 
-export const publicApi = api("public");
+export const publicApi = api('public');
 
-export const updateTopic = topic("updates");
+export const updateTopic = topic('updates');
 ```
 
 ```typescript
@@ -52,11 +54,11 @@ import { publicApi, updateTopic } from '../lib/resources';
 const publisher = updateTopic.for('publishing');
 
 publicApi.post('/update', (ctx) => {
-    publisher.publish({
-        payload: {
-            "test": "message",
-        }
-    })
+  publisher.publish({
+    payload: {
+      test: 'message',
+    },
+  });
 });
 ```
 
@@ -65,42 +67,41 @@ publicApi.post('/update', (ctx) => {
 import { updateTopic } from '../lib/resources';
 
 updateTopic.subscribe((ctx) => {
-    console.log("got the message");
+  console.log('got the message');
 });
 ```
 
-> Sharing resources like this can avoid nasty typos, and allows easily shared references to a single resource using your IDE. 
-> 
+> Sharing resources like this can avoid nasty typos, and allows easily shared references to a single resource using your IDE.
+
 ### ❌ Avoid declaring permissions for shared resources
 
 Creating resource permissions in the same context as the resources can make those permissions leak. This is demonstrated in the below example:
 
 ```typescript
 // lib/resources.ts
-import { api, topic, bucket } from "@nitric/sdk";
+import { api, topic, bucket } from '@nitric/sdk';
 
-export const publicApi = api("public");
+export const publicApi = api('public');
 
-export const bucketOne = bucket("bucket-one").for("reading");
-export const bucketTwo = bucket("bucket-two").for("reading");
+export const bucketOne = bucket('bucket-one').for('reading');
+export const bucketTwo = bucket('bucket-two').for('reading');
 ```
 
 ```typescript
 // functions/function-one.ts
 import { publicApi, bucketOne } from '../lib/resources';
 
-publicApi.get('bucket-one/file/:name', ctx => {
-    // do something with the file
+publicApi.get('bucket-one/file/:name', (ctx) => {
+  // do something with the file
 });
-
 ```
 
 ```typescript
 // functions/function-two.ts
-import { publicApi, bucketTwo } from '../lib/resources';;
+import { publicApi, bucketTwo } from '../lib/resources';
 
-publicApi.get('bucket-two/file/:name', ctx => {
-    // do something with the file
+publicApi.get('bucket-two/file/:name', (ctx) => {
+  // do something with the file
 });
 ```
 
