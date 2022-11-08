@@ -18,17 +18,16 @@ In this guide, we'll walk through the steps of getting started with [Nitric Depl
 
 ## Sign in to Nitric Deploy
 
-> Nitric Deploy is currently in preview. [Request access](https://deploy.nitric.io/signup) using your GitHub account email address.
+> [Nitric Deploy](https://deploy.nitric.io) is currently in preview. You can sign up for access using your GitHub account.
 
-Nitric Deploy can be accessed by navigating to https://deploy.nitric.io - you'll be greeted by our sign in screens. Follow the prompts to sign in with GitHub.
-
-![Nitric Deploy sign in screen](../../assets/img/guides/deploy/sign-in.png)
+Nitric Deploy can be accessed by navigating to https://deploy.nitric.io - you'll be greeted by our sign-in screens. Follow the prompts to sign in with GitHub.
+Nitric Deploy sign-in screen](../../assets/img/guides/deploy/sign-in.png)
 
 ![Signing into Nitric Deploy with GitHub](../../assets/img/guides/deploy/sign-in-3.png)
 
 ## Create an organization
 
-Organizations allow you to group your projects. For example, I have an organization which contains all of my demo projects.
+Organizations allow you to group your projects. For example, I have an organization that contains all of my demo projects.
 
 Let's create a new organization and give it a name.
 
@@ -72,7 +71,7 @@ Our template projects will give you a starting point with a basic REST API.
 
 ![Creating a new Nitric project](../../assets/img/guides/deploy/add-project-new.png)
 
-In both of the scenarios you'll need to choose a production branch. This is the branch which Nitric Deploy will watch for any push events and trigger a deployment.
+In both of the scenarios, you'll need to choose a production branch. This is the branch Nitric Deploy watches for any push events and triggers a deployment.
 
 You'll also need to specify which directory the Nitric source code is in - by default this would be the root directory `./` but could be a few levels deeper if you are working in an existing monorepo.
 
@@ -98,7 +97,7 @@ An environment represents a deployed instance of your application in a specific 
 
 Your project will automatically deploy when you create your environment for the first time, and the right cloud infrastructure will be automatically provisioned. It will also deploy each time you push to the `linked branch` selected when creating your environment.
 
-Once you see the deployment tick over to success with a 'tick' you'll also notice that your preview / production URL is displayed. You can use this to access your deployed API.
+Once you see the deployment tick over to success with a 'tick' you'll also notice that your preview/production URL is displayed. You can use this to access your deployed API.
 
 If you scaffolded a template project then you can test the API out with the following command.
 
@@ -116,10 +115,10 @@ By clicking on 'view latest build' we can see the details and retrieve the deplo
 
 That's it! With just a few clicks, you've deployed a project to your cloud and don't have to manage environments or infrastructure state.
 
-## Whats next?
+## What's next?
 
 Try one of the following activities to keep going with Nitric:
 
-- Update your code and push to the configured branch
+- Update your code and push it to the configured branch
 - Get started on one of our [guides](/docs/reference) to build a new project with the Nitric CLI
 - [Join our Discord](https://discord.gg/Webemece5C) to ask questions or get help with your next project
