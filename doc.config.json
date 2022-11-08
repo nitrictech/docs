@@ -391,8 +391,12 @@
             "href": "/docs/reference/nodejs/v0/storage/bucket-file-delete"
           },
           {
-            "title": "file.signUrl()",
-            "href": "/docs/reference/nodejs/v0/storage/bucket-file-signurl"
+            "title": "file.getDownloadUrl()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket-file-downloadurl"
+          },
+          {
+            "title": "file.getUploadUrl()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket-file-uploadurl"
           }
         ]
       },
