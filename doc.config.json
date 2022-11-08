@@ -37,6 +37,10 @@
       "title": "Building Blocks",
       "links": [
         {
+          "title": "Overview",
+          "href": "/docs/resources-overview"
+        },
+        {
           "title": "APIs",
           "href": "/docs/apis"
         },
