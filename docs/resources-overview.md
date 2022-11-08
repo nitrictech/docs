@@ -23,7 +23,7 @@ const files = bucket('files').for('reading');
 const publicApi = api('public');
 
 publicApi.get('/files/:name', (ctx) => {
-  // ❌ This declaration will not work, as this resource will not exist
+  // ❌ This declaration will not work, as this is only called at runtime.
   const badBucket = bucket('wont-work').for('writing');
 });
 ```
