@@ -1,5 +1,6 @@
 ---
 title: Google Cloud Deployment Manager
+description: Comparison to Google Cloud Deployment Manager
 ---
 
 [Google Cloud Deployment Manager](https://cloud.google.com/deployment-manager/docs#docs) is an infrastructure as code offering for creating and managing deployments on GCP.
@@ -114,7 +115,7 @@ Deploying the stack.
 ```
 gcloud deployment-manager deployments create quickstart-deployment --config vm.yaml
 
-nitric up -s stack_name
+nitric up
 ```
 
 Deleting the stack.
@@ -122,5 +123,5 @@ Deleting the stack.
 ```
 gcloud deployment-manager deployments delete quickstart-deployment
 
-nitric down -s stack_name
+nitric down
 ```

@@ -27,7 +27,7 @@ description: Use the Nitric framework to easily build and deploy REST APIs for A
 
 ## Video
 
-<iframe width="560px" height="315px" src="https://www.youtube.com/embed/PpIxtKDoL2Q" title="" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[Build and Deploy a REST API for any Cloud](https://www.youtube.com/embed/PpIxtKDoL2Q)
 
 ## Prerequisites
 
@@ -57,10 +57,10 @@ Next, open the project in your editor of choice.
 > cd my-profile-api
 ```
 
-Make sure all dependencies are resolved with yarn or npm.
+Make sure all dependencies are resolved with npm.
 
 ```bash
-yarn install
+npm install
 ```
 
 The scaffolded project should have the following structure:
@@ -75,27 +75,15 @@ The scaffolded project should have the following structure:
 +--README.md
 ```
 
-You can test the project scaffold with the `run` command.
+You can test the project scaffold with the `npm run dev` command.
 
 ```bash
-nitric run
+npm run dev
 ```
 
-> The first time you run a project or function it will take a moment longer to start while Docker image layers are downloaded and cached on your machine.
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
-```bash
-SUCCESS  Configuration gathered (3s)
-SUCCESS  Created Dev Image! (1s)
-SUCCESS  Started Local Services! (2s)
-SUCCESS  Started Functions!(0s)
-
-Local running, use ctrl-C to stop
-
-Api  | Endpoint
-main | http://localhost:9001/apis/main
-```
-
-The template project is successfully scaffolded.
+Use `ctrl + a + k` to close the multi-terminal.
 
 > Since we won't use the example function you can now delete the `functions/hello.ts` file.
 
@@ -104,7 +92,7 @@ The template project is successfully scaffolded.
 We'll need a unique identifier to store our profiles against.
 
 ```bash
-> yarn add uuidv4
+> npm install uuidv4
 ```
 
 ## Coding our Profile API
@@ -225,37 +213,24 @@ Nitric will automatically infer the required specification and permissions to cr
 
 Now that you have an API defined with handlers for each of its methods, it's time to test it out locally.
 
-Test out your application with the `run` command:
+Test out your application with the `npm run dev` command:
 
 ```bash
-nitric run
-```
-
-> _Note:_ `run` starts a container to act as an API gateway, as well as a container for each of the services.
-
-```
- SUCCESS Configuration gathered (3s)
- SUCCESS  Created Dev Image! (2s)
- SUCCESS  Started Local Services! (2s)
- SUCCESS  Started Functions! (1s)
-Local running, use ctrl-C to stop
-
-Api    | Endpoint
-public | http://localhost:9001/apis/public
+npm run dev
 ```
 
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
 
-Pressing 'Ctrl-C' will end the application.
+We will keep it running for our tests, however pressing `ctrl + a + k` will end the application. If you want to update your functions, just save them, and it will be hot reloaded.
 
 ## Test your API
 
-Update all {} values and change the URL to your deployed URL if you're testing on the cloud.
+Update all values in {} and change the URL to your deployed URL if you're testing on the cloud.
 
 ### Create Profile
 
 ```bash
-curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles' \
+curl --location --request POST 'http://localhost:9001/apis/public/profiles' \
 --header 'Content-Type: text/plain' \
 --data-raw '{
     "name": "Peter Parker",
@@ -267,19 +242,19 @@ curl --location --request POST 'http://127.0.0.1:9001/apis/public/profiles' \
 ### Fetch Profile
 
 ```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}'
+curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}'
 ```
 
 ### Fetch All Profiles
 
 ```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles'
+curl --location --request GET 'http://localhost:9001/apis/public/profiles'
 ```
 
 ### Update Profile
 
 ```bash
-curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/{id}' \
+curl --location --request PUT 'http://localhost:9001/apis/public/profiles/{id}' \
 --header 'Content-Type: text/plain' \
 --data-raw '{
     "name": "Ben Reily",
@@ -290,16 +265,16 @@ curl --location --request PUT 'http://127.0.0.1:9001/apis/public/profiles/{id}' 
 ### Delete Profile
 
 ```bash
-curl --location --request DELETE 'http://127.0.0.1:9001/apis/public/profiles/{id}'
+curl --location --request DELETE 'http://localhost:9001/apis/public/profiles/{id}'
 ```
 
 ## Deploy to the cloud
 
 Setup your credentials and any other cloud specific configuration:
 
-- [AWS](/docs/reference/aws)
-- [Azure](/docs/reference/azure)
-- [GCP](/docs/reference/gcp)
+- [AWS](/docs/reference/providers/aws)
+- [Azure](/docs/reference/providers/azure)
+- [GCP](/docs/reference/providers/gcp)
 
 Create a stack - a collection of resources identified in your project which will be deployed.
 
@@ -320,7 +295,7 @@ nitric stack new
 We called our stack dev, lets try deploying it with the `up` command
 
 ```bash
-nitric up -s dev
+nitric up
 ┌───────────────────────────────────────────────────────────────┐
 | API  | Endpoint                                               |
 | main | https://XXXXXXXX.execute-api.us-east-1.amazonaws.com   |
@@ -332,7 +307,7 @@ When the deployment is complete, go to the relevant cloud console and you'll be 
 To undeploy run the following command:
 
 ```bash
-nitric down -s dev
+nitric down
 ```
 
 ## Optional - Add profile image upload/download support
@@ -352,9 +327,9 @@ profileApi.get('/profiles/:id/image/upload', async (ctx) => {
   const id = ctx.req.params['id'];
 
   // Return a signed url reference for upload
-  const photo = profilesImg.file(`images/${id}/photo.png`);
-  const photoUrl = await photo.signUrl(FileMode.Write);
-
+  const photoUrl = await profilesImg
+    .file(`images/${id}/photo.png`)
+    .getUploadUrl();
   ctx.res.json({
     url: photoUrl,
   });
@@ -366,10 +341,11 @@ profileApi.get('/profiles/:id/image/upload', async (ctx) => {
 ```typescript
 profileApi.get('/profiles/:id/image/download', async (ctx) => {
   const id = ctx.req.params['id'];
-  const photo = profilesImg.file(`images/${id}/photo.png`);
 
   // Return a signed url reference for download
-  const photoUrl = await photo.signUrl(FileMode.Read);
+  const photoUrl = await profilesImg
+    .file(`images/${id}/photo.png`)
+    .getDownloadUrl();
   ctx.res.json({
     url: photoUrl,
   });
@@ -381,10 +357,11 @@ You can also directly redirect to the photo url.
 ```typescript
 profileApi.get('/profiles/:id/image/view', async (ctx) => {
   const { id } = ctx.req.params;
-  const photo = profilesImg.file(`images/${id}/photo.png`);
 
   // Create a read-only signed url reference
-  const photoUrl = await photo.signUrl(FileMode.Read);
+  const photoUrl = await profilesImg
+    .file(`images/${id}/photo.png`)
+    .getDownloadUrl();
   ctx.res.status = 303;
   ctx.res.headers['Location'] = [photoUrl];
 });
@@ -392,12 +369,12 @@ profileApi.get('/profiles/:id/image/view', async (ctx) => {
 
 ## Test your API
 
-Update all {} values and change the URL to your deployed URL if you're testing on the cloud.
+Update all values in {} and change the URL to your deployed URL if you're testing on the cloud.
 
 ### Get upload image URL
 
 ```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image/upload'
+curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/upload'
 ```
 
 ### Using the upload URL with curl
@@ -412,5 +389,5 @@ curl --location --request PUT '{url}' \
 ### Get download image URL
 
 ```bash
-curl --location --request GET 'http://127.0.0.1:9001/apis/public/profiles/{id}/image/download'
+curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/download'
 ```

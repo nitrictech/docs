@@ -4,6 +4,7 @@ ACR
 APIs
 ARNs
 BoltDB
+backends
 CLI
 CLI's
 CORS
@@ -60,6 +61,8 @@ params
 prisma
 pubsub
 pulumi
+Pulumi
+Pulumi's
 protobuf
 runtimes
 queryable
@@ -105,6 +108,12 @@ OIDC
 JWT
 JWTSecurityDefinition
 JVM
+postgres
+mysql
+mongodb
+typesafe
+YAML
+CRON
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)

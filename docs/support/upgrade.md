@@ -1,6 +1,11 @@
+---
+title: Upgrading from earlier version
+description: How to upgrade from an early version of Nitric to the current
+---
+
 ## Upgrading your project
 
-In this section we will discuss changes and upgrade advice for users upgrading from versions of Nitric reliant on a nitric.yaml file.
+In this section, we will discuss changes and upgrade advice for users upgrading from versions of Nitric reliant on a nitric.yaml file.
 
 ### What you’ll learn
 

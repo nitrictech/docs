@@ -28,11 +28,7 @@ To integrate with Twilio, it's important to create a Twilio account. If you don'
 
 Once you've gone through the account creation and verification, you'll arrive at the dashboard. There is a section which contains the important API credentials. These are used to connect to the API so keep them in mind.
 
-<img
- alt="twilio dashboard credentials"
- src="../../assets/img/guides/twilio/twilio-credentials.png"
- height="300"
- />
+![twilio dashboard credentials](../../assets/img/guides/twilio/twilio-credentials.png)
 
 ## Create the Messenger Class
 
@@ -66,7 +62,7 @@ export default Messenger;
 You will need to add the twilio module using your preferred package manager.
 
 ```
-yarn add twilio
+npm install twilio
 ```
 
 ## Create the API
@@ -86,7 +82,7 @@ textApi.post('/send', async (ctx) => {});
 The next step is pulling the environment variables in and constructing our messenger. We will use the `dotenv` module.
 
 ```
-yarn add dotenv
+npm install dotenv
 ```
 
 We can create a `.env` file in root of the project with the twilio API information that's sitting on your Twilio dashboard.
@@ -169,21 +165,10 @@ textApi.post('/send', async (ctx) => {
 This API can easily be tested using the local Nitric dev environment. This is started with the following command:
 
 ```
-nitric run
+npm run dev
 ```
 
-Which will output our locally hosted endpoint:
-
-```
-SUCCESS  Configuration gathered (18s)
-SUCCESS  Created Dev Image! (1s)
-SUCCESS  Started Local Services! (8s)
-SUCCESS  Started Functions! (2s)
-Local running, use ctrl-C to stop
-
-Api  | Endpoint
-text | http://localhost:9001/apis/text
-```
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
 We can then use a tool like `postman` or `curl` to test the endpoint.
 
@@ -198,4 +183,4 @@ Sent from your Twilio trial account -
 Test Message from Twilio!
 ```
 
-Thats it! If you want to deploy the API you can using our [deployment](https://nitric.io/docs/getting-started#deploying-the-app) docs. If you want to attach a frontend to the application so its a bit more user friendly, you can use any framework you want or follow our [Next.js guide](/docs/guides/api-with-nextjs.md)
+Thats it! If you want to deploy the API you can using our [deployment](https://nitric.io/docs/getting-started#deploying-the-app) docs. If you want to attach a frontend to the application so its a bit more user friendly, you can use any framework you want or follow our [Next.js guide](/docs/guides/api-with-nextjs)

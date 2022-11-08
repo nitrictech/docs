@@ -43,8 +43,10 @@ npm install
 Once you have the project, you can run it locally to check that everything is working correctly:
 
 ```bash
-nitric run
+npm run dev
 ```
+
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
 The example app contains a `hello world` style example function. Once it's running you can test it with an HTTP request:
 
@@ -61,7 +63,7 @@ curl http://localhost:9001/apis/main/hello/John
 Since we'll also use Jimp later for image editing, let's install that now too:
 
 ```bash
-npm install jimp -save
+npm install jimp
 ```
 
 ## Database and schema setup
@@ -82,11 +84,10 @@ pscale database create planetnitric --region us-east
 
 ### Prisma setup
 
-Now you're ready to setup Prisma, let's start by adding it to our project with NPM:
+Now you're ready to setup Prisma, let's start by adding it to our project with npm:
 
 ```bash
-npm install prisma --save-dev
-npm install @prisma/client --save
+npm install --save-dev prisma @prisma/client
 ```
 
 Then, we can initialize Prisma and generate our first schema file:
@@ -187,10 +188,7 @@ export default prisma;
 
 Now our schema is ready, let's get Prisma connected to PlanetScale. The easiest method is to use the `connect` button in the PlanetScale dashboard and select `Prisma` from the dropdown. This will give you values you can copy into the `.env` for your project.
 
-<img alt="create function hook screenshot - step 2"
-src="../../assets/img/guides/planetscale/connect-with-prisma.png"
-height="450"
-/>
+![create function hook screenshot - step 2](../../assets/img/guides/planetscale/connect-with-prisma.png)
 
 When you're done, the `.env` file will look something like this:
 
@@ -417,19 +415,7 @@ We also request `read` access to the `templateImages` bucket and `read-write` ac
 Now we've got the API established, let's test it out locally.
 
 ```bash
-nitric run
-```
-
-You'll see some spinners while nitric gets everything setup, then when everything succeeds your terminal output should look something like this:
-
-```txt
-SUCCESS Configuration gathered (6s)
-SUCCESS Created Dev Image! (0s)
-SUCCESS Started Local Services! (4s)
-SUCCESS Started Functions! (1s)
-
-Api  | Endpoint
-meme | http://localhost:9001/apis/meme
+npm run dev
 ```
 
 When running APIs locally, nitric will sub-route them by their name. So in this example to create a new meme template you'll need to make your `POST` request to `https://localhost:9001/apis/meme/templates`.
@@ -444,8 +430,7 @@ curl -X POST http://localhost:9001/apis/meme/templates \
    -d '{"name":"my-meme","source":"https://www.meme-arsenal.com/memes/89f28a7e83e28f15b1d8e560c788b4fc.jpg","textPositions":[{"name":"topText","posX":50,"posY":0,"width":50,"height":50},{"name":"bottomText","posX":50,"posY":50,"width":50,"height":50}]}'
 ```
 
-<details>
-<summary>Full Request Body</summary>
+##### Full Request Body
 
 ```json
 {
@@ -470,8 +455,6 @@ curl -X POST http://localhost:9001/apis/meme/templates \
 }
 ```
 
-</details>
-
 > For `source` provide a URL hosting a meme template image in a common format like .png or .jpg
 
 #### Create a new meme using the template
@@ -482,8 +465,7 @@ curl -X POST http://localhost:9001/apis/meme/memes \
    -d '{"templateName":"my-meme","texts":[{"name":"topText","value":"top text content"},{"name":"bottomText","value":"bottom text content"}]}'
 ```
 
-<details>
-<summary>Full Request Body</summary>
+##### Full Request Body
 
 ```json
 {
@@ -501,11 +483,9 @@ curl -X POST http://localhost:9001/apis/meme/memes \
 }
 ```
 
-</details>
-
 #### Retrieve the image
 
-Using the Meme ID returned from the previous request, open a browser and navigate to `http://localhost:9001/apis/meme/memes/<Meme ID>`.
+Using the Meme ID returned from the previous request, open a browser and navigate to `http://localhost:9001/apis/meme/memes/{id}`.
 
 ## Deploy to the cloud
 
@@ -525,11 +505,11 @@ nitric stack new
 Finally, run the `up` command to deploy the stack and push your code to the cloud:
 
 ```bash
-nitric up -s awsdev
+nitric up
 ```
 
 You can use the URL returned from the `up` command to make requests to your newly deployed API. Then, when you're done, you can destroy the stack with the `down` command:
 
 ```bash
-nitric down -s awsdev
+nitric down
 ```

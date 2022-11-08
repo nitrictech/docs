@@ -1,0 +1,156 @@
+---
+title: Getting started
+description: Getting started guide for an initial Nitric project
+---
+
+After installing the [Nitric CLI](/docs/installation), you can start building a project.
+
+## Using the `new` command
+
+The Nitric CLI's `new` command provides prompts to scaffold new projects from templates. In this example we'll select the TypeScript starter template. The CLI also needs to know which source files represent your application code. In this example all of our app code is inside the `functions/` folder, so we provide a glob pattern to match that folder.
+
+```bash
+nitric new
+? What is the name of the stack? hello-world
+? Choose a template: official/TypeScript - Starter
+? Glob for the function handlers? functions/*.ts
+```
+
+Navigate to the new project directory and install the NPM dependencies:
+
+```bash
+cd hello-world
+
+npm install
+```
+
+Your project should now look like this:
+
+```txt
++--functions/
+|  +-- hello.ts
++--node_modules/
+|  ...
++--package-lock.json
++--package.json
++--README.md
+```
+
+## Running your app
+
+The Nitric CLI starts the Nitric Server using `nitric start`. This will listen for any requests that are made from your code. Once the server has started, you can run your functions like any regular node application. In the starter templates, we provide a recommended setup so you can start the server and your code using npm.
+
+```bash
+npm run dev
+```
+
+Take a look at the `hello.ts` file, you'll see it declares an API named `main` with a single route `GET /hello/:name`.
+
+After your function is run, it will register itself with the server. All the APIs are locally hosted under the path:
+
+```txt
+http://localhost:9001/apis/:api_name
+```
+
+in this case, the URL for the API is:
+
+```txt
+http://localhost:9001/apis/main/
+```
+
+Once the API is registered, you can test the API using cURL, your browser, or any other HTTP client:
+
+```bash
+curl http://localhost:9001/apis/main/hello/John
+Hello John
+```
+
+## Making updates
+
+Open `functions/hello.ts` in your editor and add a new route to the API, then save, and execute the file:
+
+```typescript
+import { api } from '@nitric/sdk';
+
+const helloApi = api('main');
+
+helloApi.get('/hello/:name', async (ctx) => {
+  const { name } = ctx.req.params;
+  ctx.res.body = `Hello ${name}`;
+  return ctx;
+});
+
+// add this
+helloApi.get('/goodbye/:name', async (ctx) => {
+  const { name } = ctx.req.params;
+  ctx.res.body = `Goodbye ${name}`;
+  return ctx;
+});
+```
+
+After executing the file, the new route will be registered and you can test it:
+
+```bash
+curl http://localhost:9001/apis/main/goodbye/John
+Goodbye John
+```
+
+When you're finished testing, press `ctrl + c` to stop the Nitric Server.
+
+# Deploying the app
+
+Now that you've implemented a basic API and tested that it works, you can deploy it to one of the major cloud platforms.
+
+The first step is to set up your credentials for the cloud provider.
+
+- [AWS](/docs/reference/providers/aws)
+- [Azure](/docs/reference/providers/azure)
+- [GCP](/docs/reference/providers/gcp)
+
+You'll then need to create a [stack](/docs/reference/cli#stacks) that represents your project and a deployment target.
+
+```bash
+nitric stack new
+```
+
+Follow the prompts to create a stack for your provider, this example will use `aws`.
+
+```
+? What do you want to call your new stack? dev
+? Which Cloud do you wish to deploy to? aws
+? select the region us-east-1
+```
+
+Now you can deploy your stack named `dev` with the `up` command.
+
+```bash
+nitric up
+```
+
+Output:
+
+```
+ SUCCESS  Configuration gathered (2s)
+ SUCCESS  Images built (3s)
+ Deployed  Function/hello (15)
+ Deployed  Stack (25s)
+┌───────────────────────────────────────────────────────────────┐
+| API  | Endpoint                                               |
+| main | https://XXXXXXXX.execute-api.us-east-1.amazonaws.com |
+└───────────────────────────────────────────────────────────────┘
+```
+
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
+
+To undeploy this stack:
+
+```bash
+nitric down
+```
+
+# What's next?
+
+- Learn more about [APIs](/docs/apis)
+- See other features in the [introduction](/docs)
+- Learn more about the [concepts](/docs/concepts) of Nitric
+- See SDK commands and more in our [reference docs](/docs/reference)

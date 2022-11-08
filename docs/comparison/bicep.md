@@ -1,3 +1,8 @@
+---
+title: Bicep
+description: Comparison to Bicep
+---
+
 [Bicep](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview?tabs=bicep) is an infrastructure as code solution for deploying stacks to Azure. It acts as an abstraction layer for Azure Resource Manager ([ARM](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)) templates.
 
 ## TLDR

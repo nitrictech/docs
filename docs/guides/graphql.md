@@ -17,7 +17,7 @@ We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud o
 
 ## Video
 
-<iframe width="560px" height="315px" src="https://www.youtube.com/embed/K7T32ebYSLA" title="" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[Serverless GraphQL on any Cloud](https://www.youtube.com/embed/K7T32ebYSLA)
 
 ## Prerequisites
 
@@ -29,10 +29,10 @@ We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud o
 
 ## Build the GraphQL Schema
 
-GraphQL requests are type safe, and so they require a schema to be defined to validate queries against. Lets first add the graphql module from npm.
+GraphQL requests are typesafe, and so they require a schema to be defined to validate queries. Let's first add the GraphQL module from NPM.
 
 ```bash
-yarn add graphql
+npm install graphql
 ```
 
 We can then import `buildSchema`, and write out the schema.
@@ -199,28 +199,17 @@ profileApi.post('/', async (ctx) => {
 
 Now that you have an API defined with a handler for the GraphQL requests, it's time to test it out locally.
 
-Test out your application with the `run` command:
+Test out your application with the `npm run dev` command:
 
 ```bash
-nitric run
+npm run dev
 ```
 
-> _Note:_ `run` starts a container to act as an API gateway, as well as a container for each of the services.
+> _Note:_ the `dev` script in the template starts the Nitric Server using `nitric start` and runs your functions.
 
-```
- SUCCESS Configuration gathered (3s)
- SUCCESS  Created Dev Image! (2s)
- SUCCESS  Started Local Services! (2s)
- SUCCESS  Started Functions! (1s)
-Local running, use ctrl-C to stop
+Once it starts, the application will be able to receive requests via the API port.
 
-Api    | Endpoint
-public | http://localhost:9001/apis/public
-```
-
-Once it starts, the application will receive requests via the API port.
-
-Pressing 'Ctrl-C' will end the application.
+Pressing `ctrl + a + k` will end the application.
 
 We can use cURL, postman or any other HTTP Client to test our application, however it's better if the client has GraphQL support.
 
@@ -378,9 +367,9 @@ curl --location -X POST \
 
 Setup your credentials and any other cloud specific configuration:
 
-- [AWS](/docs/reference/aws)
-- [Azure](/docs/reference/azure)
-- [GCP](/docs/reference/gcp)
+- [AWS](/docs/reference/providers/aws)
+- [Azure](/docs/reference/providers/azure)
+- [GCP](/docs/reference/providers/gcp)
 
 Create a stack - a collection of resources identified in your project which will be deployed.
 
@@ -394,8 +383,14 @@ nitric stack new
 ? select the region us-east-1
 ```
 
+You can then deploy using the following command:
+
+```bash
+nitric up
+```
+
 To undeploy run the following command:
 
 ```bash
-nitric down -s dev
+nitric down
 ```
