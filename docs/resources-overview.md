@@ -1,4 +1,4 @@
-Nitric provides cloud native building blocks that make it simple to declare the resources you need as part of your application code.
+Nitric provides cloud-native building blocks that make it simple to declare the resources you need as part of your application code.
 
 The Nitric deployment engine will run through your code at deploy time and interpret resources that are declared as part of your application and create them in the cloud you are pushing to.
 
@@ -10,7 +10,7 @@ There are a few rules to keep in mind when declaring Nitric resources as part of
 
 Nitric needs to be aware of resources at deploy time so they can be deployed appropriately. Declaring resources at runtime means the resource won't be declared when deploying your application. Consequently, the resource will not be provisioned to the cloud.
 
-The Nitric deployment engine does not evaluate runtime code at deploy time as this could result in unintended behaviours or side-effects.
+The Nitric deployment engine does not evaluate runtime code at deploy time as this could result in unintended behaviors or side effects.
 
 A working example:
 
@@ -34,7 +34,7 @@ publicApi.get('/files/:name', (ctx) => {
 
 ### ✅ Re-use declarations for shared resources
 
-When many functions share a resource its helpful to re-use resource declaration like any other variable in your code.
+When many functions share a resource it's helpful to re-use resource declaration like any other variable in your code.
 
 For example:
 
@@ -105,8 +105,8 @@ publicApi.get('bucket-two/file/:name', (ctx) => {
 });
 ```
 
-In this scenario both `function-one` and `function-two` have read access to both buckets, even though each function is only using one of the buckets. This is because they are declared in the same context and evaluated at the same time in each of the functions.
+In this scenario, both `function-one` and `function-two` have read access to both buckets, even though each function is only using one of the buckets. This is because they are declared in the same context and evaluated at the same time in each of the functions.
 
-Resource permissions should always be declared for in the scope of a single function, unless the permissions required by one or more functions are identical.
+Resource permissions should always be declared in the scope of a single function unless the permissions required by one or more functions are identical.
 
-> This practice can break principal of least priveledge in infrastructure deployments
+> This practice can break principal of least privilege in infrastructure deployments
