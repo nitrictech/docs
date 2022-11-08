@@ -21,7 +21,8 @@ In this guide, we'll walk through the steps of getting started with [Nitric Depl
 > [Nitric Deploy](https://deploy.nitric.io) is currently in preview. You can sign up for access using your GitHub account.
 
 Nitric Deploy can be accessed by navigating to https://deploy.nitric.io - you'll be greeted by our sign-in screens. Follow the prompts to sign in with GitHub.
-Nitric Deploy sign-in screen](../../assets/img/guides/deploy/sign-in.png)
+
+![Nitric Deploy sign-in screen](../../assets/img/guides/deploy/sign-in.png)
 
 ![Signing into Nitric Deploy with GitHub](../../assets/img/guides/deploy/sign-in-3.png)
 
