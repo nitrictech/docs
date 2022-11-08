@@ -1,6 +1,6 @@
 Nitric provides cloud-native building blocks that make it simple to declare the resources you need as part of your application code.
 
-The Nitric deployment engine will run through your code at deploy time and interpret resources that are declared as part of your application and create them in the cloud you are pushing to.
+The Nitric deployment engine will run through your code at deploy time, interpreting resources that are declared as part of your application and creating them in the cloud you are pushing to.
 
 ## Rules
 
