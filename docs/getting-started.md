@@ -7,13 +7,12 @@ After installing the [Nitric CLI](/docs/installation), you can start building a 
 
 ## Using the `new` command
 
-The Nitric CLI's `new` command provides prompts to scaffold new projects from templates. In this example we'll select the TypeScript starter template. The CLI also needs to know which source files represent your application code. In this example all of our app code is inside the `functions/` folder, so we provide a glob pattern to match that folder.
+The Nitric CLI's `new` command provides prompts to scaffold new projects from templates. In this example, we'll select the TypeScript starter template.
 
 ```bash
 nitric new
-? What is the name of the stack? hello-world
+? What is the name of the project? hello-world
 ? Choose a template: official/TypeScript - Starter
-? Glob for the function handlers? functions/*.ts
 ```
 
 Navigate to the new project directory and install the NPM dependencies:
@@ -46,7 +45,7 @@ npm run dev
 
 Take a look at the `hello.ts` file, you'll see it declares an API named `main` with a single route `GET /hello/:name`.
 
-After your function is run, it will register itself with the server. All the APIs are locally hosted under the path:
+After your function is running, it will register itself with the server. All the APIs are locally hosted under the path:
 
 ```txt
 http://localhost:9001/apis/:api_name
@@ -142,7 +141,7 @@ Output:
 
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
 
-To undeploy this stack:
+To tear down this stack:
 
 ```bash
 nitric down
