@@ -59,6 +59,7 @@ npm
 os
 param
 params
+pipenv
 prisma
 pubsub
 pulumi
