@@ -47,6 +47,7 @@ firestore
 gcloud
 github
 homebrew
+img
 integrations
 jimp
 koa
