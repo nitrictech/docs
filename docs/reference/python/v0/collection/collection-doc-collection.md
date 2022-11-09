@@ -9,9 +9,9 @@ Gets a reference to a child collection on a document.
 from nitric.resources import collection
 
 profiles = collection('profiles').allow('reading')
-drakesProfile = profiles.doc('Drake Mallard')
+drakes_profile = profiles.doc('Drake Mallard')
 
-drakesEnemies = drakesProfile.collection('enemies')
+drakes_enemies = drakes_profile.collection('enemies')
 ```
 
 ## Parameters

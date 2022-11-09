@@ -29,13 +29,13 @@ All Nitric resources provide access permissions you can use to specify the level
 
 ---
 
-**put**
+**putting**
 
 This permission allows your code to set a new latest value for a secret.
 
 ---
 
-**access**
+**accessing**
 
 This permission allows your code to retrieve secret values.
 

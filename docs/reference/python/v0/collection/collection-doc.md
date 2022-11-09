@@ -9,7 +9,7 @@ Get a reference to a document in the collection.
 from nitric.resources import collection
 
 profiles = collection('profiles').allow('reading','writing')
-drakesProfile = profiles.doc('Drake Mallard')
+drakes_profile = profiles.doc('Drake Mallard')
 ```
 
 ## Parameters

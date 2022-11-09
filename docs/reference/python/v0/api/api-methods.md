@@ -13,7 +13,7 @@ from nitric.faas import HttpMethod
 publicApi = api("public")
 
 @publicApi.methods([HttpMethod.PUT, HttpMethod.PATCH] "/customer/:customerId")
-async def hello_world(ctx):
+async def customer_update(ctx):
     id = ctx.req.params.customerId
 
     ctx.res.body = f"Updating customer {id}"

@@ -9,6 +9,7 @@ Retrieve a page of results for a query. This is an alternative to [collection.qu
 from nitric.resources import collection
 
 query = collection("profiles").allow('reading').query()
+
 results = await query.fetch()
 ```
 

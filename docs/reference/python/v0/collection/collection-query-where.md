@@ -10,7 +10,7 @@ from nitric.resources import collection
 
 profiles = collection('profiles').allow('reading')
 
-query = docs.collection("profiles").query().where("name", startsWith, 'T')
+query = collection("profiles").query().where("name", startsWith, 'T')
 ```
 
 ## Parameters

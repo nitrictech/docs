@@ -9,9 +9,9 @@ Retrieve the value of a document.
 from nitric.resources import collection
 
 enemies = collection('profiles').allow('reading')
-drakesProfile = profiles.doc('Drake Mallard')
+drakes_profile = profiles.doc('Drake Mallard')
 
-await drakesProfile.get()
+await drakes_profile.get()
 ```
 
 ## Examples

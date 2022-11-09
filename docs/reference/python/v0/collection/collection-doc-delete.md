@@ -9,9 +9,9 @@ Delete a document from a collection.
 from nitric.resources import collection
 
 profiles = collection('profiles').allow('deleting')
-drakesProfile = profiles.doc('Drake Mallard')
+drakes_profile = profiles.doc('Drake Mallard')
 
-await drakesProfile.delete()
+await drakes_profile.delete()
 ```
 
 ## See also

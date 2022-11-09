@@ -9,9 +9,9 @@ Set the value of a document.
 from nitric.resources import collection
 
 enemies = collection('profiles').allow('writing')
-drakesProfile = profiles.doc('Drake Mallard')
+drakes_profile = profiles.doc('Drake Mallard')
 
-await drakesProfile.set({
+await drakes_profile.set({
   firstName: 'Drake',
   lastName: 'Mallard',
 })

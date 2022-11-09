@@ -12,7 +12,7 @@ from nitric.application import Nitric
 publicApi = api("public")
 
 @publicApi.get("/customer/:customerId")
-async def hello_world(ctx):
+async def customer_get(ctx):
     id = ctx.req.params.customerId
 
     ctx.res.body = f"Getting {id}"

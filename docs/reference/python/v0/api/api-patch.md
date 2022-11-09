@@ -12,7 +12,7 @@ from nitric.application import Nitric
 publicApi = api("public")
 
 @publicApi.patch("/customer/:customerId")
-async def hello_world(ctx):
+async def customer_update(ctx):
     id = ctx.req.params.customerId
 
     ctx.res.body = f"Updating customer {id}"

@@ -11,7 +11,7 @@ from nitric.api import Task
 
 batch_queue = queue('batch').allow('receiving')
 
-tasks = await batchQueue.receive(10)
+tasks = await batch_queue.receive(10)
 
 for t in tasks:
   # TODO work on the task

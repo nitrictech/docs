@@ -8,7 +8,7 @@ Process query results as a stream.
 ```python
 from nitric.resources import collection
 
-query = docs.collection("profiles").allow('reading').query()
+query = collection("profiles").allow('reading').query()
 
 async for doc in query.stream():
     # Process doc stream...
@@ -22,7 +22,7 @@ async for doc in query.stream():
 ```python
 from nitric.resources import collection
 
-query = docs.collection("profiles").allow('reading').query()
+query = collection("profiles").allow('reading').query()
 
 async for doc in query.stream():
     # Process doc stream...

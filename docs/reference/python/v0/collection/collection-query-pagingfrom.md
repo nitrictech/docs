@@ -8,7 +8,7 @@ Set a point to resume a query from, this is required when continuing a paginated
 ```python
 from nitric.resources import collection
 
-query = docs.collection("profiles").allow('reading').query().limit(1000)
+query = collection("profiles").allow('reading').query().limit(1000)
 
 # Fetch first page
 results = await query.fetch()

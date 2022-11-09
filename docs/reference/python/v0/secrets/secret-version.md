@@ -30,9 +30,9 @@ The version id. This value is returned from [secret.put()](./secret-put)
 ```python
 from nitric.resources import secret
 
-keyRef = secret('apiKey').allow('accessing')
+key_ref = secret('apiKey').allow('accessing')
 
-keyValue = await keyRef.version('the-version-id')
+key_value = await key_ref.version('the-version-id')
 ```
 
 ## See Also

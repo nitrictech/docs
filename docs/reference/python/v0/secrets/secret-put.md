@@ -46,9 +46,9 @@ Calling `put()` returns a promise to a reference to the new secret version. Stor
 ```python
 from nitric.resources import secret
 
-keyRef = secret('apiKey').allow('putting')
+key_ref = secret('apiKey').allow('putting')
 
-await keyRef.put(b"6c3199a3-094e-4797-bfc9-9ee2a7839286")
+await key_ref.put(b"6c3199a3-094e-4797-bfc9-9ee2a7839286")
 
-versionId = keyRef.version
+versionId = key_ref.version
 ```

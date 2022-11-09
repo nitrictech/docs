@@ -32,7 +32,7 @@ value = await latest.access()
 ```python
 from nitric.resources import secret
 
-keyRef = secret('apiKey').allow('accessing')
+key_ref = secret('apiKey').allow('accessing')
 
-keyValue = await keyRef.version('the-version-id').access()
+key_value = await key_ref.version('the-version-id').access()
 ```

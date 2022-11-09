@@ -30,7 +30,7 @@ from nitric.resources import collection
 
 enemies = collection('profiles').allow('reading').collection('enemies')
 
-const enemiesQuery = enemies.query()
+enemiesQuery = enemies.query()
 ```
 
 ## See also

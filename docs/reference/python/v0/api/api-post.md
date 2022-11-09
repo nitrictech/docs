@@ -12,7 +12,7 @@ from nitric.application import Nitric
 publicApi = api("public")
 
 @publicApi.post("/customer")
-async def hello_world(ctx):
+async def customer_create(ctx):
     ctx.res.body = f"Creating new customer"
 
 Nitric.run()
