@@ -170,6 +170,10 @@
             "href": "/docs/reference/nodejs/v0"
           },
           {
+            "title": "Python SDK",
+            "href": "/docs/reference/python/v0"
+          },
+          {
             "title": "Cloud Providers",
             "href": "/docs/reference/providers"
           },
@@ -410,6 +414,212 @@
           {
             "title": "schedule.every()",
             "href": "/docs/reference/nodejs/v0/schedule/schedule-every"
+          }
+        ]
+      }
+    ],
+    "python": [
+      {
+        "title": "Getting Started",
+        "links": [
+          {
+            "title": "Overview & Installation",
+            "href": "/docs/reference/python/v0"
+          }
+        ]
+      },
+      {
+        "title": "APIs",
+        "links": [
+          {
+            "title": "api()",
+            "href": "/docs/reference/python/v0/api/api"
+          },
+          {
+            "title": "api.get()",
+            "href": "/docs/reference/python/v0/api/api-get"
+          },
+          {
+            "title": "api.post()",
+            "href": "/docs/reference/python/v0/api/api-post"
+          },
+          {
+            "title": "api.put()",
+            "href": "/docs/reference/python/v0/api/api-put"
+          },
+          {
+            "title": "api.delete()",
+            "href": "/docs/reference/python/v0/api/api-delete"
+          },
+          {
+            "title": "api.patch()",
+            "href": "/docs/reference/python/v0/api/api-patch"
+          },
+          {
+            "title": "api.methods()",
+            "href": "/docs/reference/python/v0/api/api-methods"
+          },
+          {
+            "title": "api.all()",
+            "href": "/docs/reference/python/v0/api/api-all"
+          }
+        ]
+      },
+      {
+        "title": "Collections",
+        "links": [
+          {
+            "title": "collection()",
+            "href": "/docs/reference/python/v0/collection/collection"
+          },
+          {
+            "title": "collection.collection()",
+            "href": "/docs/reference/python/v0/collection/collection-collection"
+          },
+          {
+            "title": "collection.query()",
+            "href": "/docs/reference/python/v0/collection/collection-query"
+          },
+          {
+            "title": "collection.query.where()",
+            "href": "/docs/reference/python/v0/collection/collection-query-where"
+          },
+          {
+            "title": "collection.query.limit()",
+            "href": "/docs/reference/python/v0/collection/collection-query-limit"
+          },
+          {
+            "title": "collection.query.pagingFrom()",
+            "href": "/docs/reference/python/v0/collection/collection-query-pagingfrom"
+          },
+          {
+            "title": "collection.query.fetch()",
+            "href": "/docs/reference/python/v0/collection/collection-query-fetch"
+          },
+          {
+            "title": "collection.query.stream()",
+            "href": "/docs/reference/python/v0/collection/collection-query-stream"
+          },
+          {
+            "title": "collection.doc()",
+            "href": "/docs/reference/python/v0/collection/collection-doc"
+          },
+          {
+            "title": "collection.doc.get()",
+            "href": "/docs/reference/python/v0/collection/collection-doc-get"
+          },
+          {
+            "title": "collection.doc.set()",
+            "href": "/docs/reference/python/v0/collection/collection-doc-set"
+          },
+          {
+            "title": "collection.doc.delete()",
+            "href": "/docs/reference/python/v0/collection/collection-doc-delete"
+          },
+          {
+            "title": "collection.doc.collection()",
+            "href": "/docs/reference/python/v0/collection/collection-doc-collection"
+          }
+        ]
+      },
+      {
+        "title": "Topics",
+        "links": [
+          {
+            "title": "topic()",
+            "href": "/docs/reference/python/v0/topic/topic"
+          },
+          {
+            "title": "topic.publish()",
+            "href": "/docs/reference/python/v0/topic/topic-publish"
+          },
+          {
+            "title": "topic.subscribe()",
+            "href": "/docs/reference/python/v0/topic/topic-subscribe"
+          }
+        ]
+      },
+      {
+        "title": "Queues",
+        "links": [
+          {
+            "title": "queue()",
+            "href": "/docs/reference/python/v0/queues/queue"
+          },
+          {
+            "title": "queue.send()",
+            "href": "/docs/reference/python/v0/queues/queue-send"
+          },
+          {
+            "title": "queue.receive()",
+            "href": "/docs/reference/python/v0/queues/queue-receive"
+          }
+        ]
+      },
+      {
+        "title": "Secrets",
+        "links": [
+          {
+            "title": "secret()",
+            "href": "/docs/reference/python/v0/secrets/secret"
+          },
+          {
+            "title": "secret.put()",
+            "href": "/docs/reference/python/v0/secrets/secret-put"
+          },
+          {
+            "title": "secret.version()",
+            "href": "/docs/reference/python/v0/secrets/secret-version"
+          },
+          {
+            "title": "secret.latest()",
+            "href": "/docs/reference/python/v0/secrets/secret-latest"
+          },
+          {
+            "title": "secret.version.access()",
+            "href": "/docs/reference/python/v0/secrets/secret-version-access"
+          }
+        ]
+      },
+      {
+        "title": "Storage",
+        "links": [
+          {
+            "title": "bucket()",
+            "href": "/docs/reference/python/v0/storage/bucket"
+          },
+          {
+            "title": "bucket.file()",
+            "href": "/docs/reference/python/v0/storage/bucket-file"
+          },
+          {
+            "title": "bucket.files()",
+            "href": "/docs/reference/python/v0/storage/bucket-files"
+          },
+          {
+            "title": "file.get()",
+            "href": "/docs/reference/python/v0/storage/bucket-file-get"
+          },
+          {
+            "title": "file.write()",
+            "href": "/docs/reference/python/v0/storage/bucket-file-write"
+          },
+          {
+            "title": "file.delete()",
+            "href": "/docs/reference/python/v0/storage/bucket-file-delete"
+          },
+          {
+            "title": "file.signUrl()",
+            "href": "/docs/reference/python/v0/storage/bucket-file-signurl"
+          }
+        ]
+      },
+      {
+        "title": "Schedules",
+        "links": [
+          {
+            "title": "schedule()",
+            "href": "/docs/reference/python/v0/schedules/schedule"
           }
         ]
       }
