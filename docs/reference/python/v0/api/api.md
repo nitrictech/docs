@@ -27,10 +27,10 @@ Additional options when creating the API.
 
 | Properties                                                                                                                                       |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **path** optional `string` <br/> base path for all routes in the API.                                                                            |
-| **middleware** optional `List[Middleware]` <br/> Middleware to apply to all routes and methods of the API.                                       |
-| **securityDefinitions** optional `dict[str, SecurityDefiniton]` <br/> Security definitions defined by this API.                                  |
-| **security** optional `dict[str, List[str]]` <br/> Security rules to apply with scopes to the entire API. Keys must match a `securityDefinition` |
+| **path** optional `string`  base path for all routes in the API.                                                                            |
+| **middleware** optional `List[Middleware]`  Middleware to apply to all routes and methods of the API.                                       |
+| **securityDefinitions** optional `dict[str, SecurityDefiniton]`  Security definitions defined by this API.                                  |
+| **security** optional `dict[str, List[str]]`  Security rules to apply with scopes to the entire API. Keys must match a `securityDefinition` |
 
 ---
 
@@ -42,8 +42,8 @@ A `SecurityDefinition` object is one of the following:
 
 | Properties                                                                                       |
 | ------------------------------------------------------------------------------------------------ |
-| **issuer** `string` <br/> the issuer for the JWT tokens e.g. `https://account.region.auth0.com`. |
-| **audiences** `string[]` <br/> the `aud` that will be applied to JWT tokens from the issuer.     |
+| **issuer** `string`  the issuer for the JWT tokens e.g. `https://account.region.auth0.com`. |
+| **audiences** `string[]`  the `aud` that will be applied to JWT tokens from the issuer.     |
 
 ---
 

@@ -26,9 +26,9 @@ The event to publish to the topic
 
 | Properties                                                                      |
 | ------------------------------------------------------------------------------- |
-| **id** optional `string` <br/> unique id to apply to the event.                 |
-| **payload** required `dict` <br/> payload to send with the event.               |
-| **payloadType** optional `string` <br/> a hint to the type of payload supplied. |
+| **id** optional `string`  unique id to apply to the event.                 |
+| **payload** required `dict`  payload to send with the event.               |
+| **payloadType** optional `string`  a hint to the type of payload supplied. |
 
 ---
 
