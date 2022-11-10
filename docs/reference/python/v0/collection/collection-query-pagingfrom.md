@@ -22,7 +22,7 @@ if results.paging_token:
 
 ---
 
-**pagingToken** required `unknown`
+**pagingToken** required `object`
 
 The paging token to apply to the query, tokens are returned from `query().fetch()`, when results can not be returned in a single page.
 
