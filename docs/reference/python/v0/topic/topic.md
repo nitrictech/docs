@@ -19,6 +19,8 @@ updates = topic('updates')
 
 The name of the topic to create.
 
+---
+
 ## Examples
 
 ### Create a new topic
