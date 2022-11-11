@@ -25,12 +25,12 @@ The unique name of this API within the app. Subsequent calls to `api` with the s
 
 Additional options when creating the API.
 
-| Properties                                                                                                                                       |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **path** optional `string`  base path for all routes in the API.                                                                            |
-| **middleware** optional `List[Middleware]`  Middleware to apply to all routes and methods of the API.                                       |
-| **securityDefinitions** optional `dict[str, SecurityDefiniton]`  Security definitions defined by this API.                                  |
-| **security** optional `dict[str, List[str]]`  Security rules to apply with scopes to the entire API. Keys must match a `securityDefinition` |
+| Properties                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **path** optional `string` base path for all routes in the API.                                                                            |
+| **middleware** optional `List[Middleware]` Middleware to apply to all routes and methods of the API.                                       |
+| **securityDefinitions** optional `dict[str, SecurityDefiniton]` Security definitions defined by this API.                                  |
+| **security** optional `dict[str, List[str]]` Security rules to apply with scopes to the entire API. Keys must match a `securityDefinition` |
 
 ---
 
@@ -40,10 +40,10 @@ A `SecurityDefinition` object is one of the following:
 
 **JWTSecurityDefinition**
 
-| Properties                                                                                       |
-| ------------------------------------------------------------------------------------------------ |
-| **issuer** `string`  the issuer for the JWT tokens e.g. `https://account.region.auth0.com`. |
-| **audiences** `string[]`  the `aud` that will be applied to JWT tokens from the issuer.     |
+| Properties                                                                                 |
+| ------------------------------------------------------------------------------------------ |
+| **issuer** `string` the issuer for the JWT tokens e.g. `https://account.region.auth0.com`. |
+| **audiences** `string[]` the `aud` that will be applied to JWT tokens from the issuer.     |
 
 ---
 
