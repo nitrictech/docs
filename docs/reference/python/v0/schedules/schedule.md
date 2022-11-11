@@ -25,6 +25,28 @@ The unique name of this Schedule within the app. Subsequent calls to `schedule` 
 
 ---
 
+**every** required `string`
+
+The rate description for the schedule. Supported frequencies include `seconds`, `minutes`, `hours` and `days`.
+
+Using `every` as a keyword argument can help with readability of schedules, e.g.
+
+```python
+@schedule("backup", every="2 days")
+```
+
+#### Examples:
+
+| description      | example schedule                    |
+| ---------------- | ----------------------------------- |
+| Every day        | @schedule("work", every="day")      |
+| Every 14 hours   | @schedule("work", every="14 hours") |
+| Every 30 minutes | @schedule("work", "30 minutes")     |
+
+> Singular rates will be automatically converted. e.g. "day" will be interpretted as "1 days".
+
+---
+
 ## Notes
 
 - Schedules do not require access permissions to be specified.
