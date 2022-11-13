@@ -43,7 +43,7 @@ Using `every` as a keyword argument can help with readability of schedules, e.g.
 | Every 14 hours   | @schedule("work", every="14 hours") |
 | Every 30 minutes | @schedule("work", "30 minutes")     |
 
-> Singular rates will be automatically converted. e.g. "day" will be interpretted as "1 days".
+> Singular rates will be automatically converted. e.g. "day" will be interpreted as "1 days".
 
 ---
 
