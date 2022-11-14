@@ -483,7 +483,6 @@ from uuid import uuid4
 
 from nitric.resources import api, collection, bucket
 from nitric.application import Nitric
-from nitric.api.storage import FileMode
 
 # Create an api named public
 profile_api = api("public")
@@ -503,14 +502,14 @@ Here we are defining the following -
 @profile_api.post("/profiles")
 async def create_profile(ctx):
 
-    id = str(uuid4())
+    pid = str(uuid4())
     name = ctx.req.json['name']
     age = ctx.req.json['age']
     hometown = ctx.req.json['homeTown']
 
-    await profiles.doc(id).set({ 'name': name, 'age': age, 'hometown': hometown} )
+    await profiles.doc(pid).set({ 'name': name, 'age': age, 'hometown': hometown} )
 
-    ctx.res.body = { 'msg': f'Profile with id {id} created.'}
+    ctx.res.body = { 'msg': f'Profile with id {pid} created.'}
 ```
 
 ### Retrieve profile with a get method
@@ -519,8 +518,8 @@ async def create_profile(ctx):
 @profile_api.get("/profiles/:id")
 async def get_profile(ctx):
 
-    id = ctx.req.params['id']
-    d = await profiles.doc(id).get()
+    pid = ctx.req.params['id']
+    d = await profiles.doc(pid).get()
 
     ctx.res.body = f"{d.content}"
 ```
@@ -546,14 +545,14 @@ async def get_profiles(ctx):
 @profile_api.delete("/profiles/:id")
 async def delete_profiles(ctx):
 
-    id = ctx.req.params['id']
+    pid = ctx.req.params['id']
 
     try:
-        d = await profiles.doc(id).delete()
-        ctx.res.body = { 'msg': f'Profile with id {id} deleted.'}
+        d = await profiles.doc(pid).delete()
+        ctx.res.body = { 'msg': f'Profile with id {pid} deleted.'}
     except:
         ctx.res.status = 404
-        ctx.res.body = { 'msg': f'Profile with id {id} not found.'}
+        ctx.res.body = { 'msg': f'Profile with id {pid} not found.'}
 
 ```
 
@@ -563,16 +562,16 @@ async def delete_profiles(ctx):
 @profile_api.put("/profiles/:id")
 async def update_profiles(ctx):
 
-    id = ctx.req.params['id']
+    pid = ctx.req.params['id']
 
     try:
-        d = await profiles.doc(id).get()
-        ctx.res.body = { 'msg': f'Profile with id {id} updated.'}
+        d = await profiles.doc(pid).get()
+        ctx.res.body = { 'msg': f'Profile with id {pid} updated.'}
     except:
-        ctx.res.body = { 'msg': f'Profile with id {id} not found.'}
+        ctx.res.body = { 'msg': f'Profile with id {pid} not found.'}
         return
 
-    await profiles.doc(id).set({ 'name': ctx.req.json['name'], 'age': ctx.req.json['age'], 'hometown': ctx.req.json['homeTown']} )
+    await profiles.doc(pid).set({ 'name': ctx.req.json['name'], 'age': ctx.req.json['age'], 'hometown': ctx.req.json['homeTown']} )
 
 ```
 
@@ -689,16 +688,26 @@ Define a bucket named profilesImg with reading/writing permissions
 photos = bucket("photos").allow('reading','writing')
 ```
 
+Add imports for time and date so that we can set up caching/expiry headers
+
+```
+from datetime import datetime, timedelta
+```
+
 ### Get Signed URL to Upload Profile Image
 
 ```python
 @profile_api.get("/profiles/:id/image/upload")
 async def upload_profile_image(ctx):
 
-    id = ctx.req.params['id']
+    pid = ctx.req.params['id']
 
-    photo =  photos.file("images/{id}/photo.png")
+    photo =  photos.file(f'images/{pid}/photo.png')
     photo_url = await photo.upload_url(expiry=3600)
+
+    expires = datetime.utcnow() + timedelta(seconds=(3600))
+    expires = expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
+    ctx.res.headers['Expires'] = expires
 
     ctx.res.body = photo_url
 ```
@@ -709,10 +718,14 @@ async def upload_profile_image(ctx):
 @profile_api.get("/profiles/:id/image/view")
 async def download_profile_image(ctx):
 
-    id = ctx.req.params['id']
+    pid = ctx.req.params['id']
 
-    photo =  photos.file("images/{id}/photo.png")
+    photo =  photos.file(f'images/{pid}/photo.png')
     photo_url = await photo.download_url(expiry=3600)
+
+    expires = datetime.utcnow() + timedelta(seconds=(3600))
+    expires = expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
+    ctx.res.headers['Expires'] = expires
 
     ctx.res.body = photo_url
 ```
@@ -723,10 +736,14 @@ You can also directly redirect to the photo url.
 @profile_api.get("/profiles/:id/image/view")
 async def download_profile_image(ctx):
 
-    id = ctx.req.params['id']
+    pid = ctx.req.params['id']
 
-    photo =  photos.file("images/{id}/photo.png")
+    photo =  photos.file(f'images/{pid}/photo.png')
     photo_url = await photo.download_url(expiry=3600)
+
+    expires = datetime.utcnow() + timedelta(seconds=(3600))
+    expires = expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
+    ctx.res.headers['Expires'] = expires
 
     ctx.res.headers['Location'] = [photo_url]
     ctx.res.status = 303
