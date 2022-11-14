@@ -1,0 +1,69 @@
+---
+title: topic.subscribe()
+description: Subscribe a handler to a topic and receive new events for processing.
+---
+
+Subscribe a handler to a topic and receive new events for processing.
+
+```c#
+using Nitric.Sdk;
+
+var updates = Nitric.Topic("updates");
+
+updates.Subscribe(context => {
+  Console.WriteLine(context.Req.Payload);
+
+  return context;
+});
+```
+
+## Parameters
+
+---
+
+**middleware** required `Func<EventContext, EventContext>` or `Middleware<EventContext>[]`
+
+The middleware (code) to be triggered by the topic.
+
+---
+
+## Examples
+
+### Subscribe to a topic
+
+```c#
+using Nitric.Sdk;
+
+var updates = Nitric.Topic("updates");
+
+updates.Subscribe(context => {
+  Console.WriteLine(context.Req.Payload);
+
+  return context;
+});
+```
+
+### Subscibe to a topic with chained middleware
+
+```c#
+using Nitric.Sdk;
+
+var updates = Nitric.Topic("updates");
+
+updates.Subscribe((context, next) => 
+  {
+    // Validate request
+
+    return next(context);
+  }, (context, next) => {
+    Console.WriteLine(context.Req.Payload);
+
+    return next(context);
+  }
+);
+```
+
+## Notes
+
+- A function may only subscribe to a topic once, if multiple subscribers are required, create them in different functions.
+- A function may subscribe to OR publish to a topic but not both
