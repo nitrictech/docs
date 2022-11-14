@@ -5,7 +5,7 @@ description: Create a new bucket for storing and retrieving files.
 
 Create a new bucket for storing and retrieving files.
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 

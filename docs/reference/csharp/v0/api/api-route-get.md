@@ -5,7 +5,7 @@ description: Register a handler for HTTP GET requests to the route.
 
 Register a handler for HTTP GET requests to the route.
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
@@ -41,7 +41,7 @@ One or more middleware functions to use as the handler for HTTP requests. Handle
 
 ### Register a handler for GET requests
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
@@ -61,7 +61,7 @@ Nitric.Run();
 
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
-```c#
+```csharp
 var route = Nitric.Api("main").Route("/customers");
 
 route.Get((context, next) => {

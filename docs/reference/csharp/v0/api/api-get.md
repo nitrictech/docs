@@ -7,7 +7,7 @@ Register an API route and set a specific HTTP GET handler on that route.
 
 > This method is a convenient short version of [api().route().get()](./api-route-get)
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var api = Nitric.Api("main");
@@ -43,7 +43,7 @@ One or more middleware functions to use as the handler for HTTP requests. Handle
 
 ### Register a handler for GET requests
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var api = Nitric.Api("main");
@@ -63,7 +63,7 @@ Nitric.run();
 
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var api = Nitric.Api("main");

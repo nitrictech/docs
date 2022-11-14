@@ -5,7 +5,7 @@ description: Get a download url for a file from a bucket.
 
 Create a download url for a file within a bucket.
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 
@@ -31,7 +31,7 @@ Seconds until link expiry. Defaults to `600`, Maximum of `604800` (7 days)
 
 ### Create a readable link that is valid for the next 5 minutes
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 
@@ -45,7 +45,7 @@ var downloadUrl = logo.GetDownloadUrl(300);
 
 ### Redirect response to an image url
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 

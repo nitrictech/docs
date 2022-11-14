@@ -5,7 +5,7 @@ description: Create a reference to a file within a bucket.
 
 Create a reference to a file within a bucket.
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 

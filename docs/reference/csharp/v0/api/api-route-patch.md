@@ -5,7 +5,7 @@ description: Register a handler for HTTP PATCH requests to the route.
 
 Register a handler for HTTP PATCH requests to the route.
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers/:userId");
@@ -42,7 +42,7 @@ One or more middleware functions to use as the handler for HTTP requests. Handle
 
 ### Register a handler for PATCH requests
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers/:userId");
@@ -63,7 +63,7 @@ Nitric.Run();
 
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers/:userId");
@@ -99,7 +99,7 @@ Nitric.Run();
 
 The PATCH request body is accessible from the `ctx.req` object.
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var api = Nitric.Api("main").Route("/customers");
