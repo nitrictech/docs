@@ -12,6 +12,8 @@ using Nitric.Sdk.Storage;
 var assets = Nitric.Bucket("assets").With(BucketPermission.Reading);
 
 var logo = assets.File("images/logo.png");
+
+Nitric.Run();
 ```
 
 ## Parameters

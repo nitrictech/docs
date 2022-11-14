@@ -10,6 +10,8 @@ using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 
 var assets = Nitric.Bucket("assets").With(BucketPermission.Reading, BucketPermission.Writing, BucketPermission.Deleting);
+
+Nitric.Run();
 ```
 
 ## Parameters

@@ -109,5 +109,5 @@ route.Patch(context => {
   // parse, validate and store the request payload...
 });
 
-Nitric.run();
+Nitric.Run();
 ```

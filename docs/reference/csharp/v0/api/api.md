@@ -9,6 +9,8 @@ Creates a new HTTP API.
 using Nitric.Sdk;
 
 var api = Nitric.Api("main");
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -58,6 +60,8 @@ The `middleware` property on the `options` param is useful for applying universa
 using Nitric.Sdk;
 
 var api = Nitric.Api("main");
+
+Nitric.Run();
 ```
 
 ### Create an API with universal middleware
@@ -74,6 +78,8 @@ private HttpContext ValidateRequest(HttpContext ctx, Func<HttpContext, HttpConte
 var api = Nitric.Api("main", new ApiOptions(
     Middleware: new Middleware<HttpContext>[] { ValidateRequest }
 ));
+
+Nitric.Run();
 ```
 
 ### Create an API with a base path
@@ -86,6 +92,8 @@ using Nitric.Sdk;
 var api = Nitric.Api("main", new ApiOptions(
     BaseRoute: "/api/v1"
 ));
+
+Nitric.Run();
 ```
 
 ### Apply JWT authentication to an API
@@ -117,4 +125,6 @@ var secureApi = Nitric.Api("main", new ApiOptions(
     }
   }
 ));
+
+Nitric.Run();
 ```

@@ -12,6 +12,8 @@ using Nitric.Sdk.Storage;
 var assets = Nitric.Bucket("assets").With(BucketPermission.Reading);
 
 var files = assets.Files();
+
+Nitric.Run();
 ```
 
 ## Examples
@@ -27,6 +29,8 @@ var assets = Nitric.Bucket("assets").With(BucketPermission.Reading);
 var files = assets.Files();
 
 files.ForEach(file => file.Delete());
+
+Nitric.Run();
 ```
 
 ## Notes

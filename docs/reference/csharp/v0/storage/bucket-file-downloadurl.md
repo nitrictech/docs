@@ -41,6 +41,8 @@ var logo = assets.File('images/logo.png');
 
 // Create a read-only signed url reference for downloading
 var downloadUrl = logo.GetDownloadUrl(300);
+
+Nitric.Run();
 ```
 
 ### Redirect response to an image url
@@ -61,4 +63,6 @@ mainApi.Get("/images/:id", context => {
 
     return context;
 });
+
+Nitric.Run();
 ```

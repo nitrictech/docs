@@ -10,6 +10,8 @@ using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 
 var batchQueue = Nitric.Queue("batchQueue").With(QueuePermission.Writing);
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -55,6 +57,8 @@ using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 
 var batchQueue = Nitric.Queue("batchQueue");
+
+Nitric.Run();
 ```
 
 ### Receive tasks from a queue
@@ -65,5 +69,7 @@ using Nitric.Sdk.Queue;
 
 var batchQueue = Nitric.Queue("batchQueue").With(QueuePermission.Reading);
 
-batchQueue.Receive();
+var tasks = batchQueue.Receive();
+
+Nitric.Run();
 ```

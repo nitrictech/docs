@@ -20,7 +20,7 @@ api.Post("/hello/:name", context => {
   return context;
 });
 
-Nitric.run();
+Nitric.Run();
 ```
 
 ## Parameters
@@ -56,7 +56,7 @@ api.Post("/hello/:name", context => {
   return context;
 });
 
-Nitric.run();
+Nitric.Run();
 ```
 
 ### Chain functions as a single method handler
@@ -93,7 +93,7 @@ api.Post("/hello/:userId",
   }
 );
 
-Nitric.run();
+Nitric.Run();
 ```
 
 ### Access the request body
@@ -110,5 +110,5 @@ api.Post("/hello/:name", context => {
   // parse, validate and store the request payload...
 });
 
-Nitric.run();
+Nitric.Run();
 ```

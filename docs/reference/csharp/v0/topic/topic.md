@@ -9,6 +9,8 @@ Creates a new Topic.
 using Nitric.Sdk;
 
 var updates = Nitric.Topic("updates");
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -27,6 +29,8 @@ The name of the topic to create.
 using Nitric.Sdk;
 
 var updates = Nitric.Topic("updates");
+
+Nitric.Run();
 ```
 
 ## See also
