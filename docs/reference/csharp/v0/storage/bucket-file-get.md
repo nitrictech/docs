@@ -5,7 +5,7 @@ description: Get the contents of a file from a bucket.
 
 Get the contents of a file from a bucket.
 
-```csharp
+```C#
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 
@@ -20,7 +20,7 @@ var logoData = logo.Get();
 
 ### Get a file
 
-```csharp
+```C#
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 

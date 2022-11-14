@@ -5,7 +5,7 @@ description: Register a handler for HTTP POST requests to the route.
 
 Register a handler for HTTP POST requests to the route.
 
-```csharp
+```C#
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
@@ -41,7 +41,7 @@ One or more middleware functions to use as the handler for HTTP requests. Handle
 
 ### Register a handler for POST requests
 
-```csharp
+```C#
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
@@ -61,7 +61,7 @@ Nitric.Run();
 
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
-```csharp
+```C#
 var route = Nitric.Api("main").Route("/customers/:userId");
 
 route.Post((context, next) => {
@@ -95,7 +95,7 @@ Nitric.Run();
 
 The POST request body is accessible from the `ctx.req` object.
 
-```csharp
+```C#
 using Nitric.Sdk;
 
 var api = Nitric.Api("main").Route("/customers");

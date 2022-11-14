@@ -5,7 +5,7 @@ description: Receive tasks from a queue.
 
 Receive tasks from a queue.
 
-```csharp
+```C#
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 
@@ -57,7 +57,7 @@ This means calls to receive will return between 0 and _depth_ tasks.
 
 ### Receive tasks from a queue
 
-```csharp
+```C#
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 

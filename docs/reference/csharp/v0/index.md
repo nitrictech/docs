@@ -1,30 +1,23 @@
 ---
-title: Nitric's Node.js SDK
-description: Using Nitric with JavaScript and TypeScript
+title: Nitric's .NET SDK
+description: Using Nitric with C# and .NET
 ---
 
-This SDK reference provides documentation for the functions and methods in Nitric's Node.js library for JavaScript and TypeScript.
+This SDK reference provides documentation for the functions and methods in Nitric's .NET library for C# and .NET.
 
 The library provides the ability to define and interact with cloud resources, as well as build application logic like functions/handlers.
 
 ## Installation
 
-If you used a Nitric starter template for JavaScript or TypeScript to scaffold your project, then `@nitric/sdk` will already be included in the dependencies in your `package.json` file. Using starter templates is the recommended installation option since it ensures the other files and configuration needed are also set up.
+If you used a Nitric starter template for C# to scaffold your project, then `Nitric.Sdk` will already be included in the dependencies. Using starter templates is the recommended installation option since it ensures the other files and configuration needed are also set up.
 
-However, you can also install the SDK from NPM.
+However, you can also install the SDK from Nuget.
 
-### Using NPM
-
-```bash
-npm install @nitric/sdk
-```
-
-### Using Yarn
+### Using dotnet CLI
 
 ```bash
-yarn add @nitric/sdk
+dotnet add package Nitric.Sdk
 ```
-
 ## Source
 
-The source for the SDK is available on [GitHub](https://github.com/nitrictech/node-sdk).
+The source for the SDK is available on [GitHub](https://github.com/nitrictech/dotnet-sdk).

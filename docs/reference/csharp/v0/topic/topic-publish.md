@@ -5,7 +5,7 @@ description: Publish new events to the topic.
 
 Publish an event (push based message) to a topic.
 
-```csharp
+```C#
 using Nitric.Sdk;
 using Nitric.Sdk.Resource;
 using Nitric.Sdk.Event;
@@ -37,7 +37,7 @@ The event to publish to the topic
 
 ### Publish a topic
 
-```csharp
+```C#
 using Nitric.Sdk;
 using Nitric.Sdk.Event;
 using Nitric.Sdk.Resource;
