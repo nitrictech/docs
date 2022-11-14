@@ -15,7 +15,7 @@ var api = Nitric.Api("main");
 api.Patch("/hello/:name", context => {
   var name = context.Req.PathParams.get("name");
 
-  context.Res.Text($"Updating {name}!");
+  context.Res.Text($"Patching {name}!");
 
   return context;
 });
@@ -51,7 +51,7 @@ var api = Nitric.Api("main");
 api.Patch("/hello/:name", context => {
   var name = context.Req.PathParams.get("name");
 
-  context.Res.Text($"Updating {name}!");
+  context.Res.Text($"Patching {name}!");
 
   return context;
 });
@@ -87,7 +87,7 @@ api.Patch("/hello/:userId",
   }, (context, next) => {
     var user = context.Req.PathParams["userId"];
 
-    context.Res.Text($"Updating {user}");
+    context.Res.Text($"Patching {user}");
 
     return next(context);
   }
