@@ -1,19 +1,18 @@
 ---
-title: bucket.file.signUrl()
-description: Create a signed URL for access to a file.
+title: bucket.file.download_url()
+description: Create a signed URL for read access to a file.
 ---
 
-Create a signed url for access to a file.
+Create a signed url for read access to a file.
 
 ```python
 from nitric.resources import bucket
 
-assets = bucket('assets').allow('reading', 'writing')
+assets = bucket('assets').allow('reading')
 
 logo = assets.file('images/logo.png')
 
 download_url = await logo.download_url()
-upload_url = await logo.upload_url()
 ```
 
 ## Parameters
@@ -37,18 +36,6 @@ assets = bucket('assets').allow('reading')
 logo = assets.file('images/logo.png')
 
 logo_url = await logo.download_url(expiry=300)
-```
-
-### Create a temporary file upload link for a user
-
-```python
-from nitric.resources import bucket
-
-uploads = bucket('uploads').allow('writing')
-
-photo = assets.file('images/photo.png')
-
-photo_url = await logo.upload_url()
 ```
 
 ### Get an image url for rendering

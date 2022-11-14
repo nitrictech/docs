@@ -489,7 +489,7 @@
             "href": "/docs/reference/python/v0/collection/collection-query-limit"
           },
           {
-            "title": "collection.query.pagingFrom()",
+            "title": "collection.query.page_from()",
             "href": "/docs/reference/python/v0/collection/collection-query-pagingfrom"
           },
           {
@@ -609,8 +609,12 @@
             "href": "/docs/reference/python/v0/storage/bucket-file-delete"
           },
           {
-            "title": "file.signUrl()",
-            "href": "/docs/reference/python/v0/storage/bucket-file-signurl"
+            "title": "file.download_url()",
+            "href": "/docs/reference/python/v0/storage/bucket-file-downloadurl"
+          },
+          {
+            "title": "file.upload_url()",
+            "href": "/docs/reference/python/v0/storage/bucket-file-uploadurl"
           }
         ]
       },
