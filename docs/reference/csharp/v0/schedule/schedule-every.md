@@ -5,7 +5,7 @@ description: Sets the frequency and one or many handlers to be triggered.
 
 Sets the frequency and one or many handlers to be triggered.
 
-```csharp
+```C#
 using Nitric.Sdk;
 using Nitric.Sdk.Function;
 
@@ -34,7 +34,7 @@ One or more middleware functions to use as the handler which will run on defined
 
 ### Create a Schedule to run every 3 minutes
 
-```csharp
+```C#
 using Nitric.Sdk;
 using Nitric.Sdk.Function;
 
@@ -47,7 +47,7 @@ Nitric.Schedule("send-reminder").Every(3, Frequency.Minutes, context =>
 
 ### Create a Schedule with multiple middleware/handlers
 
-```csharp
+```C#
 using Nitric.Sdk;
 using Nitric.Sdk.Function;
 

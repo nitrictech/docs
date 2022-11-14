@@ -5,7 +5,7 @@ description: Creates a new route (path) within an API.
 
 Creates a new route (path) within an API.
 
-```csharp
+```C#
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
@@ -59,7 +59,7 @@ var route = Nitric.Api("main").Route("/customers/:customerId");
 
 ### Create a route with middleware
 
-```csharp
+```C#
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers", (context, next) => {
