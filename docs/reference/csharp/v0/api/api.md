@@ -5,7 +5,7 @@ description: Create APIs with the Nitric C# SDK
 
 Creates a new HTTP API.
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var api = Nitric.Api("main");
@@ -54,7 +54,7 @@ The `middleware` property on the `options` param is useful for applying universa
 
 ### Create an API
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var api = Nitric.Api("main");
@@ -62,7 +62,7 @@ var api = Nitric.Api("main");
 
 ### Create an API with universal middleware
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 private HttpContext ValidateRequest(HttpContext ctx, Func<HttpContext, HttpContext> next)
@@ -80,7 +80,7 @@ var api = Nitric.Api("main", new ApiOptions(
 
 If you need to put all the routes in your api below a shared base path, you can do that with the `BaseRoute` option. In this example we ensure all routes start with `/api/v1/` before the route specific path.
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var api = Nitric.Api("main", new ApiOptions(
@@ -90,7 +90,7 @@ var api = Nitric.Api("main", new ApiOptions(
 
 ### Apply JWT authentication to an API
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var secureApi = Nitric.Api("main", new ApiOptions(

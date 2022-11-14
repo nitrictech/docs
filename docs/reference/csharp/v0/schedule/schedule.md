@@ -5,7 +5,7 @@ description: Creates a new Schedule to run a function on a defined frequency.
 
 Creates a new Schedule to run a function on a defined frequency.
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Function;
 
@@ -42,7 +42,7 @@ The unique name of this Schedule within the app. Subsequent calls to `Schedule` 
 
 ### Create a Schedule
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Function;
 
@@ -70,7 +70,7 @@ Nitric.Schedule("send-reminder").Every(3, Frequency.Days, context =>
 
 ### Create a Schedule using Cron expression
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Function;
 

@@ -5,7 +5,7 @@ description: Delete a file from a bucket.
 
 Delete a file from a bucket.
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 
@@ -20,7 +20,7 @@ logo.Delete();
 
 ### Delete a file
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 

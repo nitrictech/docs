@@ -5,7 +5,7 @@ description: Send tasks to a queue.
 
 Send tasks to a queue.
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 
@@ -30,7 +30,7 @@ A task or an array of tasks to send to the queue.
 
 ### Send a task to a queue
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 using System.Collections.Generic;
@@ -46,7 +46,7 @@ queue.Send(new Task {
 
 ### Send multiple tasks to a queue
 
-```c#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ batchQueue.Send(new Task[] {
 
 In rare cases when sending tasks to a queue some tasks might fail to be sent. The response from `send()` will include an array of any tasks that failed to send. You can process this array to retry or log the error.
 
-```c#
+```csharp
 var failed = await batchQueue.Send(tasks);
 
 failed.ForEach(failedTask => {
