@@ -102,15 +102,15 @@ Nitric.Run();
 using Nitric.Sdk;
 
 var secureApi = Nitric.Api("main", new ApiOptions(
-  // You can optionally apply security rules to the entire API         
+  // You can optionally apply security rules to the entire API
   Security: new Dictionary<string, string[]>
   {
     // apply the 'user security definition the whole API'
-    { 
-      "user", 
+    {
+      "user",
       // Optionally apply required scopes to this api
       // in this case users will require the products:read scope to access the API
-      new string[] { "products:read" } 
+      new string[] { "products:read" }
     },
   },
   // security requirements for your API are defined here

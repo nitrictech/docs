@@ -68,7 +68,7 @@ using Nitric.Sdk;
 
 var api = Nitric.Api("main");
 
-api.Delete("/hello/:userId", 
+api.Delete("/hello/:userId",
   (context, next) => {
     var user = context.Req.PathParams["userId"];
 
