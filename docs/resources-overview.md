@@ -1,6 +1,11 @@
+---
+title: Resources Overview
+description: An overview of cloud resources provided by the Nitric framework
+---
+
 Nitric provides cloud-native building blocks that make it simple to declare the resources you need as part of your application code.
 
-The Nitric deployment engine will run through your code at deploy time, interpreting resources that are declared as part of your application and creating them in the cloud you are pushing to.
+The Nitric deployment engine will run through your code at deployment time, interpreting resources that are declared as part of your application and creating them in the cloud you are pushing to.
 
 ## Rules
 
@@ -8,9 +13,9 @@ There are a few rules to keep in mind when declaring Nitric resources as part of
 
 ### Don't declare resources in runtime code
 
-Nitric needs to be aware of resources at deploy time so they can be deployed appropriately. Declaring resources at runtime means the resource won't be declared when deploying your application. Consequently, the resource will not be provisioned to the cloud.
+Nitric needs to be aware of resources at deployment time so they can be deployed appropriately. Declaring resources at runtime means the resource won't be declared when deploying your application. Consequently, the resource will not be provisioned to the cloud.
 
-The Nitric deployment engine does not evaluate runtime code at deploy time as this could result in unintended behaviors or side effects.
+The Nitric deployment engine does not evaluate runtime code at deployment time as this could result in unintended behavior or side effects.
 
 A working example:
 
@@ -20,9 +25,7 @@ import { api, bucket } from '@nitric/sdk';
 // ✅ This declaration will work
 const files = bucket('files').for('reading');
 
-const publicApi = api('public');
-
-publicApi.get('/files/:name', (ctx) => {
+api('public').get('/files/:name', (ctx) => {
   // ❌ This declaration will not work, as this is only called at runtime.
   const badBucket = bucket('wont-work').for('writing');
 });
