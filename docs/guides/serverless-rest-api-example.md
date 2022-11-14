@@ -434,12 +434,11 @@ We’ll start by creating a new project for our API.
 nitric new
 ```
 
-Create a project name, select the TypeScript template and choose the default glob handler.
+Create a project name and select the Python starter template.
 
 ```bash
-? What is the name of the stack? my-profile-api
+? What is the name of the project? my-profile-api
 ? Choose a template: official/Python - Starter
-? Glob for the function handlers? functions/*.py
 ```
 
 Next, open the project in your editor of choice.
@@ -451,7 +450,7 @@ Next, open the project in your editor of choice.
 Make sure all dependencies are resolved with pipenv.
 
 ```bash
-pipenv install
+pipenv install --dev
 ```
 
 The scaffolded project should have the following structure:
@@ -699,7 +698,7 @@ async def upload_profile_image(ctx):
     id = ctx.req.params['id']
 
     photo =  photos.file("images/{id}/photo.png")
-    photo_url = await photo.sign_url(mode=FileMode.WRITE, expiry=3600)
+    photo_url = await photo.upload_url(expiry=3600)
 
     ctx.res.body = photo_url
 ```
@@ -713,7 +712,7 @@ async def download_profile_image(ctx):
     id = ctx.req.params['id']
 
     photo =  photos.file("images/{id}/photo.png")
-    photo_url = await photo.sign_url(mode=FileMode.READ, expiry=3600)
+    photo_url = await photo.download_url(expiry=3600)
 
     ctx.res.body = photo_url
 ```
@@ -727,7 +726,7 @@ async def download_profile_image(ctx):
     id = ctx.req.params['id']
 
     photo =  photos.file("images/{id}/photo.png")
-    photo_url = await photo.sign_url(mode=FileMode.READ, expiry=3600)
+    photo_url = await photo.download_url(expiry=3600)
 
     ctx.res.headers['Location'] = [photo_url]
     ctx.res.status = 303
