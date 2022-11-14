@@ -5,7 +5,7 @@ description: Get a list of file references for files that exist in the bucket.
 
 Get a list of file references for files that exist in the bucket.
 
-```C#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 
@@ -18,7 +18,7 @@ var files = assets.Files();
 
 Deleting all files in a bucket
 
-```C#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 

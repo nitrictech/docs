@@ -5,7 +5,7 @@ description: Register a single handler for all HTTP Methods (GET, POST, PUT, DEL
 
 Register a single handler for all HTTP Methods (GET, POST, PUT, DELETE, PATCH) on the route.
 
-```C#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
@@ -35,7 +35,7 @@ One or more functions to use as the handler for requests. Handlers can be sync o
 
 When using the `All()` method to register a single function as the handler for all HTTP methods, none of the other methods should be defined on that route.
 
-```C#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
@@ -56,7 +56,7 @@ Nitric.Run();
 
 ### Register a method handler function
 
-```C#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
@@ -76,7 +76,7 @@ Nitric.Run();
 
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
-```C#
+```csharp
 var route = Nitric.Api("main").Route("/customers");
 
 route.All((context, next) => {
@@ -110,7 +110,7 @@ Nitric.Run();
 
 For methods that include a request body, such as `POST` and `PUT`, you can access the body from the `ctx.req` object.
 
-```C#
+```csharp
 using Nitric.Sdk;
 
 var api = Nitric.Api("main").Route("/customers");

@@ -5,7 +5,7 @@ description: Creates a new Topic.
 
 Creates a new Topic.
 
-```C#
+```csharp
 using Nitric.Sdk;
 
 var updates = Nitric.Topic("updates");
@@ -23,7 +23,7 @@ The name of the topic to create.
 
 ### Create a new topic
 
-```C#
+```csharp
 using Nitric.Sdk;
 
 var updates = Nitric.Topic("updates");
