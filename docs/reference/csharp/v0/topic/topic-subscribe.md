@@ -15,6 +15,8 @@ updates.Subscribe(context => {
 
   return context;
 });
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -41,6 +43,8 @@ updates.Subscribe(context => {
 
   return context;
 });
+
+Nitric.Run();
 ```
 
 ### Subscibe to a topic with chained middleware
@@ -61,6 +65,8 @@ updates.Subscribe((context, next) =>
     return next(context);
   }
 );
+
+Nitric.Run();
 ```
 
 ## Notes

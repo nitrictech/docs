@@ -19,6 +19,8 @@ tasks.ForEach(task => {
   // Complete the task
   task.Complete();
 });
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -72,4 +74,6 @@ tasks.ForEach(task => {
   // Complete the task
   task.Complete();
 });
+
+Nitric.Run();
 ```

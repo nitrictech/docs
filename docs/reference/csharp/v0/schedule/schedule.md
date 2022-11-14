@@ -14,6 +14,8 @@ Nitric.Schedule("send-reminder").Every(3, Frequency.Hours, context =>
     // do some processing
     return context;
 });
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -66,6 +68,8 @@ Nitric.Schedule("send-reminder").Every(3, Frequency.Days, context =>
     // do some processing
     return context;
 });
+
+Nitric.Run();
 ```
 
 ### Create a Schedule using Cron expression
@@ -80,4 +84,6 @@ Nitric.Schedule("send-reminder").Cron("3 * * * *", context =>
     // do some processing
     return context;
 });
+
+Nitric.Run();
 ```

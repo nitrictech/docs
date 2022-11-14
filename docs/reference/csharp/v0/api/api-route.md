@@ -9,6 +9,8 @@ Creates a new route (path) within an API.
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -39,10 +41,12 @@ The `middleware` property on the `options` param is useful for applying universa
 
 ### Create a route
 
-```javascript
+```c#
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
+
+Nitric.Run();
 ```
 
 ### Create a route with path params
@@ -51,10 +55,12 @@ Route paths can include dynamic parameters. These values will automatically be p
 
 For example, if you have a customers path and you want to include a `customerId` param you would define the route like this.
 
-```javascript
+```c#
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers/:customerId");
+
+Nitric.Run();
 ```
 
 ### Create a route with middleware
@@ -78,4 +84,6 @@ var route = Nitric.Api("main").Route("/customers", (context, next) => {
     // Call next to continue the middleware chain.
     return next(context);
 });
+
+Nitric.Run();
 ```

@@ -15,6 +15,8 @@ var updates = Nitric.Topic("updates").With(TopicPermission.Publishing);
 updates.Publish(new Event {
   Payload = "event payload"
 });
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -47,6 +49,8 @@ var updates = Nitric.Topic("updates").With(TopicPermission.Publishing);
 updates.Publish(new Event {
   Payload = "event payload"
 });
+
+Nitric.Run();
 ```
 
 ## Notes

@@ -14,6 +14,8 @@ Nitric.Schedule("send-reminder").Every(3, Frequency.Hours, context =>
     // do some processing
     return context;
 });
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -43,6 +45,8 @@ Nitric.Schedule("send-reminder").Every(3, Frequency.Minutes, context =>
     // do some processing
     return context;
 });
+
+Nitric.Run();
 ```
 
 ### Create a Schedule with multiple middleware/handlers
@@ -67,4 +71,6 @@ private EventContext SendNotification(EventContext ctx, Func<EventContext, Event
 
 // Create a schedule that runs every 7 days
 Nitric.Schedule("send-reminder").Every(7, Frequency.Days, GenerateReport, SendNotification);
+
+Nitric.Run();
 ```

@@ -14,6 +14,8 @@ var assets = Nitric.Bucket('assets').With(BucketPermission.Reading);
 var logo = assets.File('images/logo.png');
 
 logo.Write(someImageData);
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -39,4 +41,6 @@ var assets = Nitric.Bucket('assets').With(BucketPermission.Reading);
 var logo = assets.File('images/logo.png');
 
 logo.Write(someImageData);
+
+Nitric.Run();
 ```

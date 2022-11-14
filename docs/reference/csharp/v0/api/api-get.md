@@ -20,7 +20,7 @@ api.Get("/hello/:name", context => {
   return context;
 });
 
-Nitric.run();
+Nitric.Run();
 ```
 
 ## Parameters
@@ -56,7 +56,7 @@ api.Get("/hello/:name", context => {
   return context;
 });
 
-Nitric.run();
+Nitric.Run();
 ```
 
 ### Chain functions as a single method handler
@@ -93,5 +93,5 @@ api.Get("/hello/:userId",
   }
 );
 
-Nitric.run();
+Nitric.Run();
 ```

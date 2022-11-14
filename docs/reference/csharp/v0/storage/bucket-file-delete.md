@@ -14,6 +14,8 @@ var assets = Nitric.Bucket('assets').With(BucketPermission.Deleting);
 var logo = assets.File('images/logo.png');
 
 logo.Delete();
+
+Nitric.Run();
 ```
 
 ## Examples
@@ -29,4 +31,6 @@ var assets = Nitric.Bucket('assets').With(BucketPermission.Deleting);
 var logo = assets.File('images/logo.png');
 
 logo.Delete();
+
+Nitric.Run();
 ```

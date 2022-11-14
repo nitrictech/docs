@@ -14,6 +14,8 @@ var batchQueue = Nitric.Queue("batch").With(QueuePermission.Sending);
 queue.Send(new Task {
     Payload = "this is a message"
 });
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -42,6 +44,8 @@ queue.Send(new Task {
       { "message", "payloads can be any serializable object" }
     }
 });
+
+Nitric.Run();
 ```
 
 ### Send multiple tasks to a queue
@@ -65,6 +69,8 @@ batchQueue.Send(new Task[] {
         }
     }
 });
+
+Nitric.Run();
 ```
 
 ### Dealing with failures
@@ -76,5 +82,7 @@ var failed = await batchQueue.Send(tasks);
 
 failed.ForEach(failedTask => {
   Console.WriteLine(failedTask.ID);
-})
+});
+
+Nitric.Run();
 ```

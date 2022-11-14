@@ -15,6 +15,8 @@ var logo = assets.File('images/logo.png');
 
 // Create a read-only signed url reference for uploading
 var uploadUrl = logo.GetUploadUrl();
+
+Nitric.Run();
 ```
 
 ## Parameters
@@ -41,4 +43,6 @@ var logo = assets.File('images/logo.png');
 
 // Create a read-only signed url reference for uploading
 var downloadUrl = logo.GetUploadUrl(300);
+
+Nitric.Run();
 ```
