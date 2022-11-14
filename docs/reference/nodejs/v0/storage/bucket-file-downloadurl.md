@@ -22,7 +22,7 @@ const downloadUrl = await logo.getDownloadUrl();
 
 **options** `SignUrlOptions`
 
-Additional options when creating signed URL.
+Additional options when creating a signed URL.
 
 | Properties                                                                                                          |
 | ------------------------------------------------------------------------------------------------------------------- |
@@ -46,7 +46,7 @@ const logoUrl = await logo.getDownloadUrl({
 });
 ```
 
-### Redirect response to an image url
+### Redirect response to an image URL
 
 ```javascript
 import { api, bucket } from '@nitric/sdk';

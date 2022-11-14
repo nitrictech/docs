@@ -1,9 +1,9 @@
 ---
-title: bucket.file.geUploadUrl()
-description: Get a upload url for a file from a bucket.
+title: bucket.file.getUploadUrl()
+description: Get an upload URL for a file from a bucket.
 ---
 
-Create a upload url for a file within a bucket.
+Create an upload URL for a file within a bucket.
 
 ```javascript
 import { bucket } from '@nitric/sdk';
@@ -22,7 +22,7 @@ const uploadUrl = await logo.getUploadUrl();
 
 **options** `SignUrlOptions`
 
-Additional options when creating signed URL.
+Additional options when creating a signed URL.
 
 | Properties                                                                                                          |
 | ------------------------------------------------------------------------------------------------------------------- |
