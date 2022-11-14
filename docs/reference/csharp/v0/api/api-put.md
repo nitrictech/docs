@@ -62,12 +62,13 @@ Nitric.Run();
 ### Chain functions as a single method handler
 
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
+
 ```csharp
 using Nitric.Sdk;
 
 var api = Nitric.Api("main");
 
-api.Put("/hello/:userId", 
+api.Put("/hello/:userId",
   (context, next) => {
     var user = context.Req.PathParams["userId"];
 

@@ -54,7 +54,7 @@ using Nitric.Sdk;
 
 var updates = Nitric.Topic("updates");
 
-updates.Subscribe((context, next) => 
+updates.Subscribe((context, next) =>
   {
     // Validate request
 

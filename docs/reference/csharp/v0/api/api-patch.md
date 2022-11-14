@@ -68,7 +68,7 @@ using Nitric.Sdk;
 
 var api = Nitric.Api("main");
 
-api.Patch("/hello/:userId", 
+api.Patch("/hello/:userId",
   (context, next) => {
     var user = context.Req.PathParams["userId"];
 

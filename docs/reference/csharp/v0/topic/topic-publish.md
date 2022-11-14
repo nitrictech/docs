@@ -27,11 +27,11 @@ Nitric.Run();
 
 The event to publish to the topic
 
-| Properties                                                                       |
-| -------------------------------------------------------------------------------- |
-| **id** optional `string` unique id to apply to the event.                        |
-| **payload** required `object` payload to send with the event.                    |
-| **payloadType** optional `string` a hint to the type of payload supplied.        |
+| Properties                                                                |
+| ------------------------------------------------------------------------- |
+| **id** optional `string` unique id to apply to the event.                 |
+| **payload** required `object` payload to send with the event.             |
+| **payloadType** optional `string` a hint to the type of payload supplied. |
 
 ---
 
