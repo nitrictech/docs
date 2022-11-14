@@ -5,7 +5,7 @@ description: Write a file to a bucket.
 
 Write a file to a bucket.
 
-```C#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 
@@ -30,7 +30,7 @@ The data to write to the file.
 
 ### Write a file
 
-```C#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 

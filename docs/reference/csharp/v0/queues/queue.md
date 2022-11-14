@@ -5,7 +5,7 @@ description: Creates a new Queue to send and receive asynchronous tasks.
 
 Creates a new Queue to send and receive asynchronous tasks.
 
-```C#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 
@@ -50,7 +50,7 @@ In most instances, code should either send to or receive from a queue, usually n
 
 ### Create a Queue
 
-```C#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 
@@ -59,7 +59,7 @@ var batchQueue = Nitric.Queue("batchQueue");
 
 ### Receive tasks from a queue
 
-```C#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 

@@ -5,7 +5,7 @@ description: Get a upload url for a file from a bucket.
 
 Create a upload url for a file within a bucket.
 
-```C#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 
@@ -31,7 +31,7 @@ Seconds until link expiry. Defaults to `600`, Maximum of `604800` (7 days)
 
 ### Create a temporary file upload link for a user
 
-```C#
+```csharp
 using Nitric.Sdk;
 using Nitric.Sdk.Storage;
 

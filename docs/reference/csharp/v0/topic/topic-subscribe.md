@@ -5,7 +5,7 @@ description: Subscribe a handler to a topic and receive new events for processin
 
 Subscribe a handler to a topic and receive new events for processing.
 
-```C#
+```csharp
 using Nitric.Sdk;
 
 var updates = Nitric.Topic("updates");
@@ -31,7 +31,7 @@ The middleware (code) to be triggered by the topic.
 
 ### Subscribe to a topic
 
-```C#
+```csharp
 using Nitric.Sdk;
 
 var updates = Nitric.Topic("updates");
@@ -45,7 +45,7 @@ updates.Subscribe(context => {
 
 ### Subscibe to a topic with chained middleware
 
-```C#
+```csharp
 using Nitric.Sdk;
 
 var updates = Nitric.Topic("updates");
