@@ -67,7 +67,7 @@ publicApi = api("public")
 from nitric.resources import api, ApiOptions
 from myapp.middleware import auth
 
-publicApi = api("public", ApiOptions(middleware: [auth]))
+publicApi = api("public", ApiOptions(middleware=[auth]))
 ```
 
 ### Create an API with a base path
@@ -77,7 +77,7 @@ If you need to put all the routes in your api below a shared base path, you can 
 ```python
 from nitric.resources import api, ApiOptions
 
-publicApi = api("public", ApiOptions(path: "/api/v1/"))
+publicApi = api("public", ApiOptions(path="/api/v1/"))
 ```
 
 ### Apply JWT authentication to an API
@@ -86,13 +86,13 @@ publicApi = api("public", ApiOptions(path: "/api/v1/"))
 from nitric.resources import api, ApiOptions
 
 publicApi = api("public", ApiOptions(
-    security_definitions: {
+    security_definitions={
         "user": JwtSecurityDefinition(
             issuer: "https://example-issuer.com"
             audiences: ['YOUR-AUDIENCES']
         )
     },
-    security: {
+    security={
         "user": []
     }
 ))
