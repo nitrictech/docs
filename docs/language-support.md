@@ -16,7 +16,7 @@ The following runtimes are currently supported or are in development:
 | [Node.js](https://github.com/nitrictech/node-sdk)  | Full Support   |
 | [Go](https://github.com/nitrictech/go-sdk)         | In Preview     |
 | [JVM](https://github.com/nitrictech/jvm-sdk)       | Experimental   |
-| [Python](https://github.com/nitrictech/python-sdk) | Experimental   |
+| [Python](https://github.com/nitrictech/python-sdk) | Full Support   |
 | [C#](https://github.com/nitrictech/dotnet-sdk)     | In Development |
 
 If a language you want isn't listed, come chat with us on [Discord](https://discord.gg/Webemece5C).
