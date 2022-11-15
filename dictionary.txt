@@ -65,6 +65,7 @@ pulumi
 Pulumi
 Pulumi's
 protobuf
+resolvers
 runtimes
 queryable
 repo
