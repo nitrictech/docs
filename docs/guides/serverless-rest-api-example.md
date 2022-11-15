@@ -3,12 +3,12 @@ title: Building your first API with Nitric
 description: Use the Nitric framework to easily build and deploy REST APIs for AWS, Azure or GCP
 ---
 
-{% tabs %}
+{% tabs query="lang" %}
 {% tab label="TypeScript" %}
 
 ## What we'll be doing
 
-1. Use Nitric to create an API to create and update profiles
+1. Use Nitric & Node.js to create an API to create and update profiles
 2. Create handlers for the following API operations
 
 | **Method** | **Route**      | **Description**                  |
@@ -100,7 +100,7 @@ We'll need a unique identifier to store our profiles against.
 
 ## Coding our Profile API
 
-Let's start by initializing our profiles api, create a file named 'profiles.ts' within functions and add the following code.
+Let's start by initializing our profiles API. Create a file named 'profiles.ts' in the functions directory and add the following code.
 
 ```typescript
 import { api, collection } from '@nitric/sdk';
@@ -118,7 +118,7 @@ Here we are defining the following -
 - an API named public,
 - a collection named profiles with reading/writing permissions
 
-### Create profile with a post method
+### Create a profile with POST
 
 ```typescript
 profileApi.post('/profiles', async (ctx) => {
@@ -137,7 +137,7 @@ profileApi.post('/profiles', async (ctx) => {
 });
 ```
 
-### Retrieve profile with a get method
+### Retrieve a profile with GET
 
 ```typescript
 profileApi.get('/profiles/:id', async (ctx) => {
@@ -156,7 +156,7 @@ profileApi.get('/profiles/:id', async (ctx) => {
 });
 ```
 
-### Retrieve all profiles with a get method
+### Retrieve all profiles with GET
 
 ```typescript
 profileApi.get('/profiles', async (ctx) => {
@@ -167,7 +167,7 @@ profileApi.get('/profiles', async (ctx) => {
 });
 ```
 
-### Remove profile with a delete method
+### Remove a profile with DELETE
 
 ```typescript
 profileApi.delete('/profiles/:id', async (ctx) => {
@@ -185,7 +185,7 @@ profileApi.delete('/profiles/:id', async (ctx) => {
 });
 ```
 
-### Update profile with a put method
+### Update a profile with PUT
 
 ```typescript
 profileApi.put('/profiles/:id', async (ctx) => {
@@ -224,7 +224,7 @@ npm run dev
 
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
 
-We will keep it running for our tests, however pressing `ctrl + a + k` will end the application. If you want to update your functions, just save them, and it will be hot reloaded.
+We will keep it running for our tests. However, pressing `ctrl + a + k` will end the application. If you want to update your functions, just save them, and they will be reloaded.
 
 ## Test your API
 
@@ -273,7 +273,7 @@ curl --location --request DELETE 'http://localhost:9001/apis/public/profiles/{id
 
 ## Deploy to the cloud
 
-Setup your credentials and any other cloud specific configuration:
+Setup your credentials and any other cloud-specific configuration:
 
 - [AWS](/docs/reference/providers/aws)
 - [Azure](/docs/reference/providers/azure)
@@ -295,7 +295,7 @@ nitric stack new
 
 > Note: You are responsible for staying within the limits of the free tier or any costs associated with deployment.
 
-We called our stack dev, lets try deploying it with the `up` command
+We called our stack `dev`, let's try deploying it with the `up` command
 
 ```bash
 nitric up
@@ -323,7 +323,7 @@ Define a bucket named profilesImg with reading/writing permissions
 const profilesImg = bucket('profilesImg').for('reading', 'writing');
 ```
 
-### Get Signed URL to Upload Profile Image
+### Get a URL to upload a profile image
 
 ```typescript
 profileApi.get('/profiles/:id/image/upload', async (ctx) => {
@@ -339,7 +339,7 @@ profileApi.get('/profiles/:id/image/upload', async (ctx) => {
 });
 ```
 
-### Get Signed URL to Download Profile Image
+### Get a URL to download a profile image
 
 ```typescript
 profileApi.get('/profiles/:id/image/download', async (ctx) => {
@@ -374,7 +374,7 @@ profileApi.get('/profiles/:id/image/view', async (ctx) => {
 
 Update all values in {} and change the URL to your deployed URL if you're testing on the cloud.
 
-### Get upload image URL
+### Get an image upload URL
 
 ```bash
 curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/upload'
@@ -389,7 +389,7 @@ curl --location --request PUT '{url}' \
 
 ```
 
-### Get download image URL
+### Get an image download URL
 
 ```bash
 curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/download'
@@ -400,7 +400,7 @@ curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/i
 
 ## What we'll be doing
 
-1. Use Nitric to create an API to create and update profiles
+1. Use Nitric & Python to create an API to create and update profiles
 2. Create handlers for the following API operations
 
 | **Method** | **Route**      | **Description**                  |
@@ -476,7 +476,7 @@ pipenv run dev
 
 ## Coding our Profile API
 
-Let's start by initializing our profiles api, create a file named 'profiles.py' within functions and add the following code.
+Let's start by initializing our profiles API. Create a file named 'profiles.py' in the functions directory and add the following code.
 
 ```python
 from uuid import uuid4
@@ -496,7 +496,7 @@ Here we are defining the following -
 - an API named public,
 - a collection named profiles with reading/writing permissions
 
-### Create profile with a post method
+### Create a profile with POST
 
 ```python
 @profile_api.post("/profiles")
@@ -512,7 +512,7 @@ async def create_profile(ctx):
     ctx.res.body = { 'msg': f'Profile with id {pid} created.'}
 ```
 
-### Retrieve profile with a get method
+### Retrieve a profile with GET
 
 ```python
 @profile_api.get("/profiles/:id")
@@ -524,22 +524,18 @@ async def get_profile(ctx):
     ctx.res.body = f"{d.content}"
 ```
 
-### Retrieve all profiles with a get method
+### Retrieve all profiles with GET
 
 ```python
 @profile_api.get("/profiles")
 async def get_profiles(ctx):
 
     results = await profiles.query().fetch()
-
-    r = []
-    for docs in results.documents:
-        r.append(docs.content)
-
+    r = [doc.content for doc in results.documents]
     ctx.res.body = f"{r}"
 ```
 
-### Remove profile with a delete method
+### Remove a profile with DELETE
 
 ```python
 @profile_api.delete("/profiles/:id")
@@ -556,7 +552,7 @@ async def delete_profiles(ctx):
 
 ```
 
-### Update profile with a put method
+### Update a profile with PUT
 
 ```python
 @profile_api.put("/profiles/:id")
@@ -581,7 +577,7 @@ Nitric will automatically infer the required specification and permissions to cr
 
 Now that you have an API defined with handlers for each of its methods, it's time to test it out locally.
 
-Test out your application with following command:
+Test out your application with the following command:
 
 ```bash
 pipenv run dev
@@ -589,7 +585,7 @@ pipenv run dev
 
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
 
-We will keep it running for our tests, however pressing `ctrl + d` will end the application. If you want to update your functions, just save them, and it will be hot reloaded.
+We will keep it running for our tests, however pressing `ctrl + d` will end the application. If you want to update your functions, just save them, and they will be reloaded.
 
 ## Test your API
 
@@ -638,7 +634,7 @@ curl --location --request DELETE 'http://localhost:9001/apis/public/profiles/{id
 
 ## Deploy to the cloud
 
-Setup your credentials and any other cloud specific configuration:
+Setup your credentials and any other cloud-specific configuration:
 
 - [AWS](/docs/reference/providers/aws)
 - [Azure](/docs/reference/providers/azure)
@@ -660,7 +656,7 @@ nitric stack new
 
 > Note: You are responsible for staying within the limits of the free tier or any costs associated with deployment.
 
-We called our stack dev, lets try deploying it with the `up` command
+We called our stack dev, let's try deploying it with the `up` command
 
 ```bash
 nitric up
@@ -694,7 +690,7 @@ Add imports for time and date so that we can set up caching/expiry headers
 from datetime import datetime, timedelta
 ```
 
-### Get Signed URL to Upload Profile Image
+### Get a URL to upload a profile image
 
 ```python
 @profile_api.get("/profiles/:id/image/upload")
@@ -712,7 +708,7 @@ async def upload_profile_image(ctx):
     ctx.res.body = photo_url
 ```
 
-### Get Signed URL to Download Profile Image
+### Get a URL to download a profile image
 
 ```python
 @profile_api.get("/profiles/:id/image/view")
@@ -753,7 +749,7 @@ async def download_profile_image(ctx):
 
 Update all values in {} and change the URL to your deployed URL if you're testing on the cloud.
 
-### Get upload image URL
+### Get an image upload URL
 
 ```bash
 curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/upload'
@@ -768,7 +764,7 @@ curl --location --request PUT '{url}' \
 
 ```
 
-### Get download image URL
+### Get an image download URL
 
 ```bash
 curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/download'
