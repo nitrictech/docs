@@ -598,7 +598,13 @@ Nitric.run()
 
 Now that you have an API defined with a handler for the GraphQL requests, it's time to test it out locally.
 
-Test out your application with the following command:
+Start your Nitric server:
+
+```bash
+nitric start
+```
+
+Then test out your application with the following command in a new terminal:
 
 ```bash
 pipenv run dev
