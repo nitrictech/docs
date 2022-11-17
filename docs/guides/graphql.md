@@ -107,7 +107,7 @@ We can then use the collection within these functions. Each resolver will receiv
 
 An example of this is converting the GraphQL query function:
 
-```
+```graphql
 updateProfile(id: String!, profile: ProfileInput!): Profile
 ```
 
@@ -218,7 +218,7 @@ We can use cURL, postman or any other HTTP Client to test our application, howev
 
 ### GraphQL Queries
 
-```text
+```graphql
 query {
   getProfiles {
     id
@@ -233,18 +233,19 @@ query {
     homeTown
   }
 }
-
 ```
 
 And here is the syntax for mutating:
 
-```text
+```graphql
 mutation {
-  createProfile(profile: {
-    name: "Tony Stark",
-    age: 53,
-    homeTown: "Manhattan, New York City"
-  }){
+  createProfile(
+    profile: {
+      name: "Tony Stark"
+      age: 53
+      homeTown: "Manhattan, New York City"
+    }
+  ) {
     id
     name
     age
@@ -252,13 +253,13 @@ mutation {
   }
 
   updateProfile(
-    id: "1234",
+    id: "1234"
     profile: {
-      name: "Peter Parker",
-      age: 22,
+      name: "Peter Parker"
+      age: 22
       homeTown: "Queens, New York City"
     }
-  ){
+  ) {
     id
   }
 }
@@ -488,7 +489,7 @@ We can then use the collection within these functions. Each resolver will receiv
 
 An example of this is converting the GraphQL query function into Python:
 
-```
+```graphql
 updateProfile(pid: String!, profile: ProfileInput!): Profile
 ```
 
@@ -611,7 +612,7 @@ We can use cURL, postman or any other HTTP Client to test our application, howev
 
 ### GraphQL Queries
 
-```text
+```graphql
 query {
   getProfiles {
     pid
@@ -627,18 +628,19 @@ query {
     home_town
   }
 }
-
 ```
 
 And here is the syntax for mutating:
 
-```text
+```graphql
 mutation {
-  createProfile(profile: {
-    name: "Tony Stark",
-    age: 53,
-    home_town: "Manhattan, New York City"
-  }){
+  createProfile(
+    profile: {
+      name: "Tony Stark"
+      age: 53
+      home_town: "Manhattan, New York City"
+    }
+  ) {
     pid
     name
     age
@@ -646,13 +648,13 @@ mutation {
   }
 
   updateProfile(
-    pid: "1234",
+    pid: "1234"
     profile: {
-      name: "Peter Parker",
-      age: 22,
+      name: "Peter Parker"
+      age: 22
       home_town: "Queens, New York City"
     }
-  ){
+  ) {
     pid
   }
 
