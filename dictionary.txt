@@ -24,6 +24,7 @@ SG
 SNS
 SQS
 UUID
+UUIDs
 api
 apis
 args
@@ -59,6 +60,7 @@ npm
 os
 param
 params
+pipenv
 prisma
 pubsub
 pulumi
