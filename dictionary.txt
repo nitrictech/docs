@@ -24,6 +24,7 @@ SG
 SNS
 SQS
 UUID
+UUIDs
 api
 apis
 args
