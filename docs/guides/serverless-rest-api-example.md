@@ -5,7 +5,7 @@ description: Use the Nitric framework to easily build and deploy REST APIs for A
 
 ## What we'll be doing
 
-1. Use Nitric & Node.js to create an API to create and update profiles
+1. Use Nitric to create an API to create and update profiles
 2. Create handlers for the following API operations
 
 | **Method** | **Route**      | **Description**                  |
