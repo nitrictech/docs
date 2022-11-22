@@ -64,17 +64,17 @@ from common.orders import process
 # Define a new API and give it a unique name
 orders = api("orders")
 # Define a topic and request the required access (e.g. 'publishing')
-orderTopic = topic("order-updates").allow("publishing")
+order_topic = topic("order-updates").allow("publishing")
 
 
 @orders.post("/orders")
 async def new_order(ctx):
-    # Retrieve the POST request body as an object from the incoming context
-    order = ctx.req.json()
-    # Do any work you need with the request
-    status = await process(order)
-    # Publish an Event (message) to the 'order-updates' topic, so any interested handlers can subscribe.
-    await orderTopic.publish({'data': order, 'status': status})
+  # Retrieve the POST request body as an object from the incoming context
+  order = ctx.req.json()
+  # Do any work you need with the request
+  status = await process(order)
+  # Publish an Event (message) to the 'order-updates' topic, so any interested handlers can subscribe.
+  await order_topic.publish({'data': order, 'status': status})
 
 
 Nitric.run()

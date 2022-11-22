@@ -19,7 +19,10 @@ The Nitric deployment engine does not evaluate runtime code at deployment time a
 
 A working example:
 
-```typescript
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
+```javascript
 import { api, bucket } from '@nitric/sdk';
 
 // ✅ This declaration will work
@@ -31,6 +34,26 @@ api('public').get('/files/:name', (ctx) => {
 });
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+from nitric.resources import api, bucket
+
+public_api = api('public')
+
+# ✅ This declaration will work
+files = bucket('files').allow('reading')
+
+@public_api.get("/files/:name")
+async def get_file(ctx):
+  # ❌ This declaration will not work, as this is only called at runtime.
+  bad_bucket = bucket('wont-work').allow('writing')
+```
+
+{% /tab %}
+{% /tabs %}
+
 > Always declare resources outside of runtime/callback code
 
 ## Best Practices
@@ -40,6 +63,9 @@ api('public').get('/files/:name', (ctx) => {
 When many functions share a resource it's helpful to re-use resource declaration like any other variable in your code.
 
 For example:
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```typescript
 // lib/resources.ts
@@ -74,15 +100,55 @@ updateTopic.subscribe((ctx) => {
 });
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+# resources.py
+from nitric.resources import api, topic
+
+public_api = api('public')
+update_topic = topic('updates')
+
+```
+
+```python
+# functions/api.py
+from resources import public_api, update_topic
+
+publisher = update_topic.allow('publishing')
+
+@public_api.post("/update")
+async def new_update(ctx):
+  await publisher.publish({"test": "message"})
+
+```
+
+```python
+# functions/updates.py
+from resources import update_topic
+
+@update_topic.subscribe
+async def updates_sub(ctx):
+    print(ctx.req.payload)
+
+```
+
+{% /tab %}
+{% /tabs %}
+
 > Sharing resources like this can avoid nasty typos, and allows easily shared references to a single resource using your IDE.
 
 ### ❌ Avoid declaring permissions for shared resources
 
 Creating resource permissions in the same context as the resources can make those permissions leak. This is demonstrated in the below example:
 
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
 ```typescript
 // lib/resources.ts
-import { api, topic, bucket } from '@nitric/sdk';
+import { api, bucket } from '@nitric/sdk';
 
 export const publicApi = api('public');
 
@@ -108,7 +174,44 @@ publicApi.get('bucket-two/file/:name', (ctx) => {
 });
 ```
 
-In this scenario, both `function-one` and `function-two` have read access to both buckets, even though each function is only using one of the buckets. This is because they are declared in the same context and evaluated at the same time in each of the functions.
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+# resources.py
+from nitric.resources import api, bucket
+
+public_api = api('public')
+
+bucket_one = bucket('bucket-one').allow('reading');
+bucket_two = bucket('bucket-two').allow('reading');
+
+```
+
+```python
+# functions/function-one.py
+from resources import public_api, bucket_one
+
+@public_api.get("bucket-one/file/:name")
+async def get_file(ctx):
+  pass # do something with the file
+
+```
+
+```python
+# functions/function-two.py
+from resources import public_api, bucket_two
+
+@public_api.get("bucket-two/file/:name")
+async def get_file(ctx):
+  pass # do something with the file
+
+```
+
+{% /tab %}
+{% /tabs %}
+
+In this scenario, both `function-one` and `function-two` have read access to **both** buckets, even though each function is only using one of the buckets. This is because they are declared in the same context and evaluated at the same time in each of the functions.
 
 Resource permissions should always be declared in the scope of a single function unless the permissions required by one or more functions are identical.
 

@@ -23,15 +23,33 @@ A sub-collection is a collection that belongs to a single document. If we use `u
 
 Declaring a collection for your application can be done in a single line of code using the Nitric SDK:
 
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
 ```javascript
 import { collection } from '@nitric/sdk';
 
 const countries = collection('Countries').for('reading', 'writing', 'deleting');
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+from nitric.resources import collection
+
+countries = collection('Countries').allow('reading', 'writing', 'deleting')
+```
+
+{% /tab %}
+{% /tabs %}
+
 ### Write documents
 
 You can create a new document by using an existing collection reference to create a new document reference, then set a value for the document.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 await countries.doc('USA').set({
@@ -40,25 +58,67 @@ await countries.doc('USA').set({
 });
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+await countries.doc('USA').set({
+  "name": "United States of America",
+  "population": 329500000
+})
+```
+
+{% /tab %}
+{% /tabs %}
+
 ### Read documents
 
 Just like with writing, you can read a document by using its reference.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 const doc = await countries.doc('USA').get();
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+doc = await countries.doc('USA').get()
+```
+
+{% /tab %}
+{% /tabs %}
+
 ### Delete documents
 
 To delete a document that already exists, use the `delete()` method on the document reference.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 await countries.doc('USA').delete();
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+await countries.doc('USA').delete()
+```
+
+{% /tab %}
+{% /tabs %}
+
 ### Query collections
 
 Simple queries on collections are supported as well.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 const query = countries
@@ -73,7 +133,25 @@ const query = countries
   .where('population', '>=', 100000000);
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+query = countries \
+  .query() \
+  .where('name', 'startsWith', 'United') \
+  .where('name', '==', 'United States of America') \
+  .where('name', '!=', 'Canada') \
+  .where('population', '>=', 100000000)
+```
+
+{% /tab %}
+{% /tabs %}
+
 Results can be iterated either by paging or streaming.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 // Paging
@@ -94,11 +172,38 @@ stream.on('data', (snapshot) => {
 });
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+# Paging
+results = await query.fetch()
+# Use the paging token in next query to fetch the next page
+token = results.pagingToken
+
+for doc in results.documents:
+  print(doc.id)
+
+# Streaming
+async for doc in query.stream():
+  # Process doc stream...
+  print(doc.content)
+```
+
+{% /tab %}
+{% tab label="Python" %}
+
+{% /tab %}
+{% /tabs %}
+
 ## Sub-collections
 
 ### Create sub-collections
 
-Working with a sub-collection is very similar to working with a collection, except they can be created dynamically at runtime. Simply construct a reference to a sub-collection within an existing document and you can being working with documents within that sub-collection.
+Working with a sub-collection is very similar to working with a collection, except they can be created dynamically at runtime. Simply construct a reference to a sub-collection within an existing document and you can begin working with documents within that sub-collection.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 const states = countries.doc('USA').collection('States');
@@ -106,11 +211,26 @@ const states = countries.doc('USA').collection('States');
 const stateOfColorado = states.doc('Colorado');
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+states = countries.doc('USA').collection('States')
+# Get a reference to a document on the sub collection
+state_of_colorado = states.doc('Colorado')
+```
+
+{% /tab %}
+{% /tabs %}
+
 > Nitric supports a single depth for sub-collections
 
 ### Query sub-collections
 
 You can query sub-collections across all documents in a collection when they have the same name. For example _query states from every country_.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 const allStates = countries.collection('States');
@@ -120,5 +240,19 @@ foundStates.on('data', (doc) => {
   // do something...
 });
 ```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+all_states = countries.collection('States')
+
+async for doc in all_states.query().stream():
+  # Do something
+  pass
+```
+
+{% /tab %}
+{% /tabs %}
 
 > This sub-collection reference is only queryable, since it's really an aggregate of all `States` sub-collections across all `Countries` documents. i.e. Query every state in every country.

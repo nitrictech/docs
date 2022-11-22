@@ -31,27 +31,58 @@ A subscription is something that listens to a topic. You can think of it as a ch
 
 Before events can be published or subscribed to, a topic must be defined.
 
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
 ```javascript
 import { topic } from '@nitric/sdk';
 
 const userCreatedTopic = topic('user-created').for('publishing');
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+from nitric.resources import topic
+
+user_created_topic = topic("user-created").allow("publishing")
+```
+
+{% /tab %}
+{% /tabs %}
+
 #### Publishing an event
 
 To send an event to a topic and notify all subscribers, use the `publish()` method on the topic reference.
 
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
 ```javascript
-const data = userCreatedTopic.publish({
+await userCreatedTopic.publish({
   payload: {
     email: 'new.user@example.com',
   },
 });
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+await user_created_topic.publish({"email": "new.user@example.com"})
+```
+
+{% /tab %}
+{% /tabs %}
+
 #### Subscribing to a topic
 
 To execute a function when new events are published you can set up subscribers. The delay between publishing an event and a subscriber being executed is usually only a few milliseconds. This makes subscribers perfect for responding to events as they happen.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 userCreatedTopic.subscribe(async (ctx) => {
@@ -61,9 +92,27 @@ userCreatedTopic.subscribe(async (ctx) => {
 });
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+user_created_topic = topic("user-created")
+
+@user_created_topic.subscribe
+async def updates_sub(ctx):
+  email = ctx.req.json['email']
+  send_welcome_email(email)
+```
+
+{% /tab %}
+{% /tabs %}
+
 #### Limitations on Publishing and Subscribing
 
 Nitric won't allow you to request publishing access and set up a subscriber in the same function.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 // this isn't valid
@@ -75,6 +124,23 @@ loopTopic.subscribe(async (ctx) => {
   await loopTopic.publish({ payload: {} });
 });
 ```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+# this isn't valid
+from nitric.resources import topic
+
+loop_topic = topic("infinite").allow("publishing")
+
+@loop_topic.subscribe
+async def danger(ctx):
+  await loop_topic.publish(dict())
+```
+
+{% /tab %}
+{% /tabs %}
 
 The limitation exists to protect you from infinite loops in deployed functions where a function calls itself indirectly via a topic. These sorts of mistakes can lead to large unintentional cloud charges - something you probably want to avoid.
 
@@ -100,6 +166,9 @@ Events can be delivered more than once, but they should only be _processed_ once
 
 Usually checking for duplicate payloads or IDs is enough. When you receive an event you've seen before don't process it, skip straight to returning a `success` response from your subscriber.
 
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
 ```javascript
 import { topic } from '@nitric/sdk';
 import { isDuplicate } from '../common';
@@ -114,6 +183,27 @@ updates.subscribe((ctx) => {
   //...
 });
 ```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+# this isn't valid
+from nitric.resources import topic
+from common import is_duplicate
+
+updates = topic("updates")
+
+@updates.subscribe
+async def process_update(ctx):
+  if is_duplicate(ctx.req):
+    return ctx
+  # not a duplicate, process the event
+  # ...
+```
+
+{% /tab %}
+{% /tabs %}
 
 > If you're checking for duplicate IDs, make sure publishers can't resend failed events with new IDs
 
@@ -135,16 +225,31 @@ A task is a form of message that can be sent to a queue. They can be thought of 
 
 #### Creating a Queue
 
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
 ```javascript
 import { queue } from '@nitric/sdk';
 
-const transactionQueue = queue('process-transactions').for(
-  'sending',
-  'receiving'
-);
+const transactionQueue = queue('transactions').for('sending', 'receiving');
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+from nitric.resources import queue
+
+transaction_queue = queue("transactions").allow("sending", "receiving")
+```
+
+{% /tab %}
+{% /tabs %}
+
 #### Sending Tasks
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 await transactionQueue.send([
@@ -157,6 +262,18 @@ await transactionQueue.send([
 ]);
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+await transaction_queue.send({
+  "message": "hello world"
+})
+```
+
+{% /tab %}
+{% /tabs %}
+
 #### Receiving and Acknowledging Tasks
 
 When pulling tasks off a queue they aren't immediately deleted, they're leased. Leased tasks are hidden, preventing other functions from receiving them unless the lease expires.
@@ -164,6 +281,9 @@ When pulling tasks off a queue they aren't immediately deleted, they're leased. 
 When your code successfully processes a task it should `complete` the task, this permanently removes it from the queue.
 
 If the lease expires before the task is marked as complete it will reappear in the queue and can be received again. This prevents tasks from being lost in failure scenarios. If your function encounters an error or is terminated before completing the task it will automatically reappear on the queue to be processed again.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 const tasks = await transactionQueue.receive(10);
@@ -175,6 +295,22 @@ for (let task of tasks) {
   await task.complete();
 }
 ```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+tasks = await transaction_queue.receive(10)
+
+for task in tasks:
+  # process your task's data
+  print(task.payload)
+  # acknowledge when the task is complete
+  await task.complete()
+```
+
+{% /tab %}
+{% /tabs %}
 
 ## Choosing between queues and topics
 
