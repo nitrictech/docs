@@ -17,6 +17,9 @@ The guide below highlights the features of Nitric Schedules.
 
 Creating schedules with Nitric can be done with a single line of code to define resources.
 
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
 ```javascript
 import { schedule } from '@nitric/sdk';
 
@@ -35,3 +38,28 @@ schedule('send-reports').every('day', async (ctx) => {
   // do some processing
 });
 ```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+from nitric.resources import schedule
+
+# Create a schedule that runs every 5 minutes
+@schedule("process-transactions", every="5 minutes")
+async def process_transactions(ctx):
+    pass
+
+# Create a schedule that runs every 3 hours
+@schedule("send-reminder", every="3 hours")
+async def send_reminder(ctx):
+    pass
+
+# We can also just provide a simple singular rate as well
+@schedule("send-reports", every="day")
+async def send_reports(ctx):
+    pass
+```
+
+{% /tab %}
+{% /tabs %}

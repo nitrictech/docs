@@ -43,6 +43,9 @@ The schema below illustrates the relationship between secrets, versions and valu
 
 Before sensitive values can be stored a secret must be defined.
 
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
 ```javascript
 import { secret } from '@nitric/sdk';
 
@@ -50,22 +53,54 @@ import { secret } from '@nitric/sdk';
 const apiKey = secret('api-key').for('put', 'access');
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+from nitric.resources import secret
+
+# Create a new secret
+api_key = secret("api-key").allow("accessing")
+```
+
+{% /tab %}
+{% /tabs %}
+
 ### Store secret values
 
 To store or update the latest version of a secret, use the `put()` method on the secret reference.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 const latestVersion = await apiKey.put('a new secret value');
 
 // We can get the version ID of our newly stored value
-apiKey.version;
+latestVersion.version;
 ```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+latest = api_key.put("a new secret value")
+
+# We can get the version ID of our newly stored value
+latest.version
+```
+
+{% /tab %}
+{% /tabs %}
 
 > Secret versioning is automatic. Every time you `put` a new secret value a new version will be created and set as the `latest` version.
 
 ### Access a secret value
 
 Accessing the contents of a secret version can be done by calling the `access()` method. The `latest()` method ensures we always get the latest value of a secret. This is the best option for retrieving credentials or API keys, where the latest is the only valid version.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 // access the details of the latest version of a secret
@@ -75,14 +110,45 @@ const latest = await apiKey.latest().access();
 latest.asString();
 ```
 
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+# access the details of the latest version of a secret
+latest = await api_key.latest().access()
+
+# Retrieve the value of the secret as a string
+str(latest)
+```
+
+{% /tab %}
+{% /tabs %}
+
 ### Access a specific version of a secret
 
 If you need a previous version of a secret's value (not latest) you can use the `version()` method to specify the exact version ID. This is useful when you need a version that was used at a particular point in time.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
 
 ```javascript
 // access the details of a known version of a secret
 const specific = await apiKey.version('version-id').access();
 
 // Note, you can also retrieve the value of the secret as a byte array
-latest.asBytes();
+specific.asBytes();
 ```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+# access the details of a known version of a secret
+specific = await api_key.version('version-id').access()
+
+# Note, you can also retrieve the value of the secret as a byte array
+bytes(specific)
+```
+
+{% /tab %}
+{% /tabs %}
