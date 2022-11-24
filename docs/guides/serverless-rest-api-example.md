@@ -357,6 +357,7 @@ async def delete_profiles(ctx):
     ctx.res.status = 404
     ctx.res.body = { 'msg': f'Profile with id {pid} not found.'}
 
+Nitric.run()
 ```
 
 {% /tab %}
