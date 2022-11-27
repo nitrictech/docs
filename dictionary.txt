@@ -67,6 +67,7 @@ pulumi
 Pulumi
 Pulumi's
 protobuf
+resolvers
 runtimes
 queryable
 repo
@@ -78,6 +79,7 @@ scalable
 serverless
 triages
 undeploy
+uuid
 typings
 unhandled
 frontend
