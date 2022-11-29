@@ -110,7 +110,6 @@ Overwrite the contents of prisma.schema with the schema below. We'll use this to
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
   binaryTargets   = ["linux-musl"]
   output   = "./client"
 }
@@ -118,7 +117,7 @@ generator client {
 datasource db {
   provider             = "mysql"
   url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  relationMode         = "prisma"
 }
 
 model MemeTemplate {
