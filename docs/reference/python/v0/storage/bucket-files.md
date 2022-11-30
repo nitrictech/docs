@@ -29,4 +29,4 @@ for f in files:
 
 ## Notes
 
-This method returns a list of [File](./file) references that exist on the bucket.
+This method returns a list of [File](./bucket-file) references that exist on the bucket.

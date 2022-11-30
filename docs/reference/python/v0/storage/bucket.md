@@ -23,7 +23,7 @@ The unique name of this bucket within the app. Subsequent calls to `bucket` with
 
 ## Access
 
-All Nitric resources provide access permissions you can use to specify the level of access your code needs to the resource. See here for details [Access Control documentation](./../access-control).
+All Nitric resources provide access permissions you can use to specify the level of access your code needs to the resource. See here for details [Access Control documentation](../../../../access-control).
 
 ### Available permissions:
 
@@ -51,8 +51,9 @@ This permission allows your function to delete files from the bucket
 
 See the following for examples on working with files in a bucket:
 
-- [file()](./file.md)
-- [file().get()](./file-get.md)
-- [file().write()](./file-write.md)
-- [file().delete()](./file-delete.md)
-- [file().signUrl()](./file-signurl.md)
+- [file()](./bucket-file.md)
+- [file.get()](./bucket-file-get.md)
+- [file.write()](./bucket-file-write.md)
+- [file.delete()](./bucket-file-delete.md)
+- [file.getDownloadUrl()](./bucket-file-downloadurl)
+- [file.getUploadUrl()](./bucket-file-uploadurl)
