@@ -14,6 +14,7 @@ GCR
 IAM
 JSON
 MinIO
+SeaweedFS
 NPM
 ORM
 ORMs
