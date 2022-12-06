@@ -480,7 +480,7 @@ module.exports = {
     return [
       {
         source: '/apis/:path*',
-        destination: `${process.env.API_BASE_URL}/apis/:path*`, // Proxy to Backend
+        destination: `${process.env.API_BASE_URL}/:path*`, // Proxy to Backend
       },
     ];
   },
@@ -507,7 +507,7 @@ cd ../web
 npm run dev
 ```
 
-You can then go to `localhost:3000` to view the application. Alternatively, you can test the API directly at `localhost:9001/apis/taskList` using cURL, Postman, or any other HTTP client.
+You can then go to `localhost:3000` to view the application. Alternatively, you can test the API directly at `localhost:4001` using cURL, Postman, or any other HTTP client.
 
 Pressing `ctrl + a + k` will end the application.
 

@@ -593,7 +593,7 @@ We can use cURL, postman or any other HTTP Client to test our application, howev
 
 ```bash
 curl --location -X POST \
-  'http://localhost:9001/apis/public/' \
+  'http://localhost:4001' \
   --header 'Content-Type: application/json' \
   --data-raw '{"query":"query { getProfiles { pid name age home }}","variables":{}}'
 ```
@@ -629,7 +629,7 @@ curl --location -X POST \
 
 ```bash
 curl --location -X POST \
-  'http://localhost:9001/apis/public/' \
+  'http://localhost:4001' \
   --header 'Content-Type: application/json' \
   --data-raw '{"query":"query { getProfile(pid: \"3f70ca58-25ed-4e88-8a45-eea1fbbb45d8\") { pid name age home }}","variables":{}}'
 
@@ -652,7 +652,7 @@ curl --location -X POST \
 
 ```bash
 curl --location -X POST \
-  'http://localhost:9001/apis/public/' \
+  'http://localhost:4001' \
   --header 'Content-Type: application/json' \
   --data-raw '{"query":"mutation { createProfile(profile: { name: \"Tony Stark\", age: 53, home: \"Manhattan, New York City\" }){ pid name age home }}","variables":{}}'
 ```
@@ -674,7 +674,7 @@ curl --location -X POST \
 
 ```bash
 curl --location -X POST \
-  'http://localhost:9001/apis/public/' \
+  'http://localhost:4001' \
   --header 'Content-Type: application/json' \
   --data-raw '{"query":"mutation { updateProfile(pid: \"3f70ca58-25ed-4e88-8a45-eea1fbbb45d8\",profile: { name: \"Peter Parker\", age: 22, home: \"Queens, New York City\" }){ pid name age home }}","variables":{}}'
 ```

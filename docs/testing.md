@@ -319,7 +319,7 @@ We will put the integration test in a test directory, and name it `integration.t
 import supertest from 'supertest';
 
 describe('Testing Hello Api', () => {
-  const api = supertest('http://localhost:9001/apis/main');
+  const api = supertest('http://localhost:4001');
 });
 ```
 
@@ -333,7 +333,7 @@ import supertest from 'supertest';
 import assert from 'assert';
 
 describe('Testing Hello Api', () => {
-  const api = supertest('http://localhost:9001/apis/main');
+  const api = supertest('http://localhost:4001');
 
   describe('Given a request to GET /:name', () => {
     test('responds with Hello test', (done) => {
@@ -361,7 +361,7 @@ import assert from 'assert';
 import { imageBucket } from '../resources/buckets';
 
 describe('Testing Hello Api', () => {
-  const api = supertest('http://localhost:9001/apis/main')
+  const api = supertest('http://localhost:4001')
 
   ...
 

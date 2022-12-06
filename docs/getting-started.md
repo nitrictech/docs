@@ -144,22 +144,22 @@ Take a look at the `hello.py` file, you'll see it declares an API named `main` w
 {% /tab %}
 {% /tabs %}
 
-After your function is running, it will register itself with the server. All the APIs are locally hosted under the path:
+After your function is running, it will register itself with the server. All the APIs are locally hosted under their own port which will be displayed in the CLI output:
 
 ```txt
-http://localhost:9001/apis/:api_name
+http://localhost:<port_number>
 ```
 
-in this case, the URL for the API is:
+in this case, the URL for the API should be:
 
 ```txt
-http://localhost:9001/apis/main/
+http://localhost:4001/
 ```
 
 Once the API is registered, you can test the API using cURL, your browser, or any other HTTP client:
 
 ```bash
-curl http://localhost:9001/apis/main/hello/John
+curl http://localhost:4001/hello/John
 Hello John
 ```
 
@@ -248,7 +248,7 @@ Nitric.run()
 After saving the file, the new route will be registered and you can test it:
 
 ```bash
-curl http://localhost:9001/apis/main/goodbye/John
+curl http://localhost:4001/goodbye/John
 Goodbye John
 ```
 

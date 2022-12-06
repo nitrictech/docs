@@ -253,7 +253,7 @@ In another terminal or HTTP client, send POST requests to the API:
 
 ```bash
 # Note: update the email address and x-api-key header with your own values
-curl -X POST http://localhost:9001/apis/notifications/welcome \
+curl -X POST http://localhost:4001/welcome \
    -H 'Content-Type: application/json' \
    -H 'x-api-key: YOUR_API_KEY' \
    -d '{"record":{"email":"you@example.com","name":"Your Name"}}'
@@ -275,10 +275,10 @@ You can install ngrok with npm like so:
 npm install --save-dev ngrok
 ```
 
-Next, let's connect it to your local Nitric app's server, which is already running on port 9001:
+Next, let's connect it to your local Nitric api server, which should already running on port 4001:
 
 ```bash
-npm run ngrok http 9001
+npm run ngrok http 4001
 ```
 
 The output from ngrok will look something like this:
@@ -298,7 +298,7 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
                               0       0       0.00    0.00    0.00    0.00
 ```
 
-You can see in this example that the URL `http://61f5-194-193-39-11.ngrok.io` is being forward to port `9001` on my local machine. When you run it, the URL will be different, so take note of that value.
+You can see in this example that the URL `http://61f5-194-193-39-11.ngrok.io` is being forward to port `4001` on my local machine. When you run it, the URL will be different, so take note of that value.
 
 In Supabase navigate to _database_, _Function Hooks_, then click _Create Function Hook_
 
@@ -314,7 +314,7 @@ For _Type of hook_ select _HTTP Request_:
 
 ![create function hook screenshot - step 2](../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook_step2.png)
 
-Finally, for HTTP Request choose the `POST` method, enter your ngrok URL followed by `/apis/notifications/welcome`, and under HTTP Headers add a new header named `x-api-key`, setting it's value to match the `API_KEY` environment variable you created earlier:
+Finally, for HTTP Request choose the `POST` method, enter your ngrok URL followed by `/welcome`, and under HTTP Headers add a new header named `x-api-key`, setting it's value to match the `API_KEY` environment variable you created earlier:
 
 ![create function hook screenshot - step 3](../../assets/img/guides/nitric-and-supabase/supabase_createfunctionhook_step3.png)
 
