@@ -263,7 +263,7 @@ We first need to create a product in Stripe. This will create a price_id which w
 
 ```bash
 curl -X POST \
-localhost:9001/apis/payments/create-checkout-session \
+localhost:4001/create-checkout-session \
 -d '{"items": [{ "price": "price_<ID>", "quantity": "1" }]}'
 ```
 
@@ -274,7 +274,7 @@ This will return a stripe checkout url. Once you navigate to this page, you will
 We can use the Stripe CLI for testing the webhook works. Run the following command for forwarding all stripe events to your API endpoint:
 
 ```bash
-stripe listen --forward-to localhost:9001/apis/payments/webhook
+stripe listen --forward-to localhost:4001/webhook
 Ready! You are using Stripe API Version [2020-08-27]. Your webhook signing secret is whsec_<UNIQUE_ID> (^C to quit)
 ```
 

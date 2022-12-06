@@ -51,7 +51,7 @@ npm run dev
 The example app contains a `hello world` style example function. Once it's running you can test it with an HTTP request:
 
 ```bash
-curl http://localhost:9001/apis/main/hello/John
+curl http://localhost:4001/hello/John
 
 # expected response: Hello John
 
@@ -417,14 +417,14 @@ Now we've got the API established, let's test it out locally.
 npm run dev
 ```
 
-When running APIs locally, nitric will sub-route them by their name. So in this example to create a new meme template you'll need to make your `POST` request to `https://localhost:9001/apis/meme/templates`.
+When running APIs locally, nitric will sub-route them by their name. So in this example to create a new meme template you'll need to make your `POST` request to `https://localhost:4001/templates`.
 
 Here are some example requests you can use to test the API:
 
 #### Create a meme template
 
 ```bash
-curl -X POST http://localhost:9001/apis/meme/templates \
+curl -X POST http://localhost:4001/templates \
    -H 'Content-Type: application/json' \
    -d '{"name":"my-meme","source":"https://www.meme-arsenal.com/memes/89f28a7e83e28f15b1d8e560c788b4fc.jpg","textPositions":[{"name":"topText","posX":50,"posY":0,"width":50,"height":50},{"name":"bottomText","posX":50,"posY":50,"width":50,"height":50}]}'
 ```
@@ -459,7 +459,7 @@ curl -X POST http://localhost:9001/apis/meme/templates \
 #### Create a new meme using the template
 
 ```bash
-curl -X POST http://localhost:9001/apis/meme/memes \
+curl -X POST http://localhost:4001/memes \
    -H 'Content-Type: application/json' \
    -d '{"templateName":"my-meme","texts":[{"name":"topText","value":"top text content"},{"name":"bottomText","value":"bottom text content"}]}'
 ```
@@ -484,7 +484,7 @@ curl -X POST http://localhost:9001/apis/meme/memes \
 
 #### Retrieve the image
 
-Using the Meme ID returned from the previous request, open a browser and navigate to `http://localhost:9001/apis/meme/memes/{id}`.
+Using the Meme ID returned from the previous request, open a browser and navigate to `http://localhost:4001/memes/{id}`.
 
 ## Deploy to the cloud
 

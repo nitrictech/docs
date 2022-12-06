@@ -405,7 +405,7 @@ Update all values in {} and change the URL to your deployed URL if you're testin
 ### Create Profile
 
 ```bash
-curl --location --request POST 'http://localhost:9001/apis/public/profiles' \
+curl --location --request POST 'http://localhost:4001/profiles' \
 --header 'Content-Type: text/plain' \
 --data-raw '{
     "name": "Peter Parker",
@@ -417,19 +417,19 @@ curl --location --request POST 'http://localhost:9001/apis/public/profiles' \
 ### Fetch Profile
 
 ```bash
-curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}'
+curl --location --request GET 'http://localhost:4001/profiles/{id}'
 ```
 
 ### Fetch All Profiles
 
 ```bash
-curl --location --request GET 'http://localhost:9001/apis/public/profiles'
+curl --location --request GET 'http://localhost:4001/profiles'
 ```
 
 ### Delete Profile
 
 ```bash
-curl --location --request DELETE 'http://localhost:9001/apis/public/profiles/{id}'
+curl --location --request DELETE 'http://localhost:4001/profiles/{id}'
 ```
 
 ## Deploy to the cloud
@@ -632,7 +632,7 @@ Update all values in {} and change the URL to your deployed URL if you're testin
 **Get an image upload URL**
 
 ```bash
-curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/upload'
+curl --location --request GET 'http://localhost:4001/profiles/{id}/image/upload'
 ```
 
 **Using the upload URL with curl**
@@ -647,5 +647,5 @@ curl --location --request PUT '{url}' \
 **Get an image download URL**
 
 ```bash
-curl --location --request GET 'http://localhost:9001/apis/public/profiles/{id}/image/download'
+curl --location --request GET 'http://localhost:4001/profiles/{id}/image/download'
 ```

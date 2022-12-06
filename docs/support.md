@@ -95,7 +95,7 @@ I expected to see a 200 status with the JSON response printed to my terminal in 
 I then use curl to test the handler's endpoint.
 
 ```bash
-curl http://localhost:9001/apis/public/customers
+curl http://localhost:4001/customers
 ```
 
 I did not receive a response from the server.
