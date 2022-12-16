@@ -32,3 +32,26 @@ You will need to configure your cloud credentials for your CI/CD pipeline to all
 #### Configuring State Backend
 
 For nitric to maintain the state of your deployment between runs you will also need to configure a backend for Pulumi to store its stack state. For this, you can use either [Pulumi's managed service](https://www.pulumi.com/docs/intro/concepts/state/#logging-into-the-pulumi-service-backend), or you could use one of the other state [backends](https://www.pulumi.com/docs/intro/concepts/state/#logging-into-a-self-managed-backend) they provide support for.
+
+## Configuring Deployment
+
+When deploying the application, you can add extra configuration for specific functions or a global function. This configuration is individualized for each stack file. Below is an example of config added to a GCP stack to augment the memory, timeout, and telemetry sampling percentage.
+
+```yaml
+name: project
+provider: gcp
+region: australia-southeast1
+project: project-id-123456
+config:
+  default:
+    memory: 1024
+    telemetry: 10
+  functions/hello.ts:
+    timeout: 30
+```
+
+You can point config to all functions, or to a specific function. Either by using the `default` key or the function name i.e. `functions/hello.ts`. The following configurations can be made:
+
+- `memory`: The memory of the compute instance in MB. Defaults to 512.
+- `timeout`: The max running time of the function in seconds. Defaults to 15.
+- `telemetry`: The percentage of requests to be sampled for tracing. Defaults to 0%.

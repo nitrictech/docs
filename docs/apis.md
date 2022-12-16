@@ -181,7 +181,50 @@ async def find_alderaan(ctx):
 
 APIs can include security definitions for OIDC-compatible providers such as [Auth0](https://auth0.com/), [FusionAuth](https://fusionauth.io/) and [AWS Cognito](https://aws.amazon.com/cognito/).
 
-A `securityDefinitions` object can be provided to start defining the auth requirements of your API. `security` rules can also be specified on the API to apply a security definition to the entire API.
+A `securityDefinitions` object can be provided to start defining the auth requirements of your API. `security` rules can also be specified on the API to apply a security definition to the entire API. The security definition defines the kind of auth and the configuration required. For a JWT this configuration is the JWT issuer and audiences. The security object defines the required scope to access that resource.
+
+For a more in depth tutorial look at the [Auth0 integration guide](./guides/secure-api-auth0.md)
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
+```javascript
+const helloApi = api('main', {
+  security: {
+    user: ['user.read'],
+  },
+  securityDefinitions: {
+    user: {
+      kind: 'jwt',
+      issuer: 'dev-abc123.us.auth0.com',
+      audiences: ['https://test-security-definition/'],
+    },
+  },
+});
+```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+from nitric.resources import api, ApiOptions, JwtSecurityDefinition
+
+helloApi = api("main", opts=ApiOptions(
+        security={
+            "user": ["user.read"],
+        },
+        security_definitions={
+            "user": JwtSecurityDefinition(
+                issuer="dev-abc123.us.auth0.com",
+                audiences=["https://test-security-definition/"],
+            )
+        }
+    )
+)
+```
+
+{% /tab %}
+{% /tabs %}
 
 ### Overriding API-level security
 
@@ -195,13 +238,26 @@ galaxyApi.get('planets/unsecured-planet', async (ctx) => {}, {
   // override top level security, and apply no security to this route
   security: {},
 });
+
+galaxyApi.post('planets/unsecured-planet', async (ctx) => {}, {
+  // override top level security to require user.write scope to access
+  security: {
+    user: ['user.write'],
+  },
+});
 ```
 
 {% /tab %}
 {% tab label="Python" %}
 
 ```python
+# Override top level security, and apply no security to the route
 @galaxy_api.get("planets/unsecured-planet", opts=MethodOptions(security=dict()))
+async def get_planet(ctx):
+    pass
+
+# Override top level security to require user.write scope to access
+@galaxy_api.post("planets/unsecured-planet", opts=MethodOptions(security={ "user": ['user.write'] }))
 async def get_planet(ctx):
     pass
 ```
