@@ -9,7 +9,7 @@ There are plenty of ways to get involved, we've summarized a few here to get you
 
 Nitric is Open-Source, our team encourages you to ask questions, raise requests for new features and let us know about bugs!
 
-If you would like to know more about our future plans or what we are currently working on, you can look at the Nitric [roadmap](https://github.com/orgs/nitrictech/projects/4).
+If you would like to know more about our future plans or what we are currently working on, you can look at the [Nitric roadmap](https://github.com/orgs/nitrictech/projects/4).
 
 ## Ask a question about Nitric
 
