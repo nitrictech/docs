@@ -1,5 +1,5 @@
 ---
-title: Node.js - Nitric's Node.js SDK
+title: Nitric's Node.js SDK
 description: Reference for Nitric's Node.js library - Using Nitric with JavaScript and TypeScript
 ---
 

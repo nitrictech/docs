@@ -1,5 +1,5 @@
 ---
-title: Python - Nitric's Python SDK
+title: Nitric's Python SDK
 description: Reference for Nitric's Python library - Using Nitric with Python
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: CLI Installation
+title: Installation
 description: Basic installation instructions for the Nitric Framework
 ---
 
