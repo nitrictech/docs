@@ -196,7 +196,7 @@ const helloApi = api('main', {
   securityDefinitions: {
     user: {
       kind: 'jwt',
-      issuer: 'dev-abc123.us.auth0.com',
+      issuer: 'https://dev-abc123.us.auth0.com',
       audiences: ['https://test-security-definition/'],
     },
   },
@@ -215,7 +215,7 @@ helloApi = api("main", opts=ApiOptions(
         },
         security_definitions={
             "user": JwtSecurityDefinition(
-                issuer="dev-abc123.us.auth0.com",
+                issuer="https://dev-abc123.us.auth0.com",
                 audiences=["https://test-security-definition/"],
             )
         }
