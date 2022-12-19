@@ -1,6 +1,6 @@
 ---
 title: Node.js - bucket.file.get()
-description: Get the contents of a file from a bucket.
+description: Reference for Nitric's Node.js library - Get the contents of a file from a bucket.
 ---
 
 Get the contents of a file from a bucket.

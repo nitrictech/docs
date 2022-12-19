@@ -1,6 +1,6 @@
 ---
 title: Python - bucket.file.download_url()
-description: Create a signed URL for read access to a file.
+description: Reference for Nitric's Python library - Create a signed URL for read access to a file.
 ---
 
 Create a signed url for read access to a file.

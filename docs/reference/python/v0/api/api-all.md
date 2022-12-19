@@ -1,6 +1,6 @@
 ---
 title: Python - api.all()
-description: Register an API route that handles all HTTP verbs on that route.
+description: Reference for Nitric's Python library - Register an API route that handles all HTTP verbs on that route.
 ---
 
 Register an API route that handles all HTTP verbs on that route.

@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Basic installation instructions
+description: Basic installation instructions for the Nitric CLI
 ---
 
 ## Prerequisites

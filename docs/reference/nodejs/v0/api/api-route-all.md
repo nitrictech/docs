@@ -1,6 +1,6 @@
 ---
 title: Node.js - api.route.all()
-description: Register a single handler for all HTTP Methods (GET, POST, PUT, DELETE, PATCH) on the route.
+description: Reference for Nitric's Node.js library - Register a single handler for all HTTP Methods (GET, POST, PUT, DELETE, PATCH) on the route.
 ---
 
 Register a single handler for all HTTP Methods (GET, POST, PUT, DELETE, PATCH) on the route.

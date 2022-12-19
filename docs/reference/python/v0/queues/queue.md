@@ -1,6 +1,6 @@
 ---
 title: Python - queue()
-description: Creates a new Queue to send and receive asynchronous tasks.
+description: Reference for Nitric's Python library - Creates a new Queue to send and receive asynchronous tasks.
 ---
 
 Creates a new Queue to send and receive asynchronous tasks.

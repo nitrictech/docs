@@ -1,6 +1,6 @@
 ---
 title: Python - queue.receive()
-description: Receive tasks from a queue.
+description: Reference for Nitric's Python library - Receive tasks from a queue.
 ---
 
 Receive tasks from a queue.

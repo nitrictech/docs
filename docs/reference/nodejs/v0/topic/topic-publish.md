@@ -1,6 +1,6 @@
 ---
 title: Node.js - topic.publish()
-description: Publish new events to the topic.
+description: Reference for Nitric's Node.js library - Publish new events to the topic.
 ---
 
 Publish an event (push based message) to a topic.

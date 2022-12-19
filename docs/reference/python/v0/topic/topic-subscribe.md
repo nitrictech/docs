@@ -1,6 +1,6 @@
 ---
 title: Python - topic.subscribe()
-description: Subscribe a handler to a topic and receive new events for processing.
+description: Reference for Nitric's Python library - Subscribe a handler to a topic and receive new events for processing.
 ---
 
 Subscribes to a topic.

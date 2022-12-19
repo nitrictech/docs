@@ -1,6 +1,6 @@
 ---
 title: Node.js - queue.receive()
-description: Receive tasks from a queue.
+description: Reference for Nitric's Node.js library - Receive tasks from a queue.
 ---
 
 Receive tasks from a queue.

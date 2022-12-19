@@ -1,6 +1,6 @@
 ---
 title: Python - collection.collection()
-description: Get a query-only sub-collection reference, this can be used to query commonly named collections across documents.
+description: Reference for Nitric's Python library - Get a query-only sub-collection reference, this can be used to query commonly named collections across documents.
 ---
 
 Get a query-only sub-collection reference, this can be used to query commonly named collections across documents.

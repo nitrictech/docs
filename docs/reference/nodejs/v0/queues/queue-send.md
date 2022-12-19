@@ -1,6 +1,6 @@
 ---
 title: Node.js - queue.send()
-description: Send tasks to a queue.
+description: Reference for Nitric's Node.js library - Send tasks to a queue.
 ---
 
 Send tasks to a queue.

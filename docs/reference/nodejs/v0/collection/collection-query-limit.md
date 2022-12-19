@@ -1,6 +1,6 @@
 ---
 title: Node.js - collection.query.limit()
-description: Limit the number of results returned by a query.
+description: Reference for Nitric's Node.js library - Limit the number of results returned by a query.
 ---
 
 Limit the number of results returned by a query.

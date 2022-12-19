@@ -1,6 +1,6 @@
 ---
 title: Python - secret.latest()
-description: Returns a reference to the latest version of a secret, regardless of that version's ID.
+description: Reference for Nitric's Python library - Returns a reference to the latest version of a secret, regardless of that version's ID.
 ---
 
 Returns a reference to the `latest` version of a secret, regardless of that version's ID.

@@ -1,6 +1,6 @@
 ---
 title: Python - collection.doc.delete()
-description: Delete a document from a collection.
+description: Reference for Nitric's Python library - Delete a document from a collection.
 ---
 
 Delete a document from a collection.

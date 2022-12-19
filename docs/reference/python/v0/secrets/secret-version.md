@@ -1,6 +1,6 @@
 ---
 title: Python - secret.version()
-description: Returns a reference to a known version of a secret.
+description: Reference for Nitric's Python library - Returns a reference to a known version of a secret.
 ---
 
 Returns a reference to a known version of a secret.

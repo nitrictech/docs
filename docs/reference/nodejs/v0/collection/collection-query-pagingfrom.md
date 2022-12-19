@@ -1,6 +1,6 @@
 ---
 title: Node.js - collection.query.pagingFrom()
-description: Set a point to resume a query from.
+description: Reference for Nitric's Node.js library - Set a point to resume a query from.
 ---
 
 Set a point to resume a query from, this is required when continuing a paginated query response.

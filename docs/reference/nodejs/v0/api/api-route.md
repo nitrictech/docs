@@ -1,6 +1,6 @@
 ---
 title: Node.js - api.route()
-description: Creates a new route (path) within an API.
+description: Reference for Nitric's Node.js library - Creates a new route (path) within an API.
 ---
 
 Creates a new route (path) within an API.

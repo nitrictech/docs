@@ -1,6 +1,6 @@
 ---
 title: Python - collection.query.limit()
-description: Limit the number of results returned by a query.
+description: Reference for Nitric's Python library - Limit the number of results returned by a query.
 ---
 
 Limit the number of results returned by a query.

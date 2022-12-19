@@ -1,6 +1,6 @@
 ---
 title: Node.js - api.get()
-description: Register an API route and set a specific HTTP GET handler on that route.
+description: Reference for Nitric's Node.js library - Register an API route and set a specific HTTP GET handler on that route.
 ---
 
 Register an API route and set a specific HTTP GET handler on that route.

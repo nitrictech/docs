@@ -1,6 +1,6 @@
 ---
 title: Node.js - bucket.file.getUploadUrl()
-description: Get an upload URL for a file from a bucket.
+description: Reference for Nitric's Node.js library - Get an upload URL for a file from a bucket.
 ---
 
 Create an upload URL for a file within a bucket.

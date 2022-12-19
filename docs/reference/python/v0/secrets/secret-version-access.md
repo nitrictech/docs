@@ -1,6 +1,6 @@
 ---
 title: Python - secret.version.access()
-description: Retrieves the value from a version of a secret.
+description: Reference for Nitric's Python library - Retrieves the value from a version of a secret.
 ---
 
 Retrieves the value from a version of a secret.

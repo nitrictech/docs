@@ -1,6 +1,6 @@
 ---
 title: Node.js - Nitric's Node.js SDK
-description: Using Nitric with JavaScript and TypeScript
+description: Reference for Nitric's Node.js library - Using Nitric with JavaScript and TypeScript
 ---
 
 This SDK reference provides documentation for the functions and methods in Nitric's Node.js library for JavaScript and TypeScript.

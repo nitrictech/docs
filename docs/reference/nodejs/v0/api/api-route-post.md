@@ -1,6 +1,6 @@
 ---
 title: Node.js - api.route.post()
-description: Register a handler for HTTP POST requests to the route.
+description: Reference for Nitric's Node.js library - Register a handler for HTTP POST requests to the route.
 ---
 
 Register a handler for HTTP POST requests to the route.

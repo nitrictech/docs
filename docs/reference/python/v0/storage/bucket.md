@@ -1,6 +1,6 @@
 ---
 title: Python - bucket()
-description: Create a new bucket for storing and retrieving files.
+description: Reference for Nitric's Python library - Create a new bucket for storing and retrieving files.
 ---
 
 Create a new bucket for storing and retrieving files.

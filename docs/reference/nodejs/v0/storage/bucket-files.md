@@ -1,6 +1,6 @@
 ---
 title: Node.js - bucket.files()
-description: Get a list of file references for files that exist in the bucket.
+description: Reference for Nitric's Node.js library - Get a list of file references for files that exist in the bucket.
 ---
 
 Get a list of file references for files that exist in the bucket.

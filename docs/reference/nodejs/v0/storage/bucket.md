@@ -1,6 +1,6 @@
 ---
 title: Node.js - bucket()
-description: Create a new bucket for storing and retrieving files.
+description: Reference for Nitric's Node.js library - Create a new bucket for storing and retrieving files.
 ---
 
 Create a new bucket for storing and retrieving files.

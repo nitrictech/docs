@@ -1,6 +1,6 @@
 ---
 title: Python - api()
-description: Create APIs with the Nitric Python SDK.
+description: Reference for Nitric's Python library - Create APIs with the Nitric Python SDK.
 ---
 
 Creates a new HTTP API.

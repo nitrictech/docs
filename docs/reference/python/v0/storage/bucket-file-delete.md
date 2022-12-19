@@ -1,6 +1,6 @@
 ---
 title: Python - bucket.file.delete()
-description: Delete a file from a bucket.
+description: Reference for Nitric's Python library - Delete a file from a bucket.
 ---
 
 Deletes a file within a bucket.

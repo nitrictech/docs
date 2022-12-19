@@ -1,6 +1,6 @@
 ---
 title: Node.js - api.route.patch()
-description: Register a handler for HTTP PATCH requests to the route.
+description: Reference for Nitric's Node.js library - Register a handler for HTTP PATCH requests to the route.
 ---
 
 Register a handler for HTTP PATCH requests to the route.

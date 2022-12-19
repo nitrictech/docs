@@ -1,6 +1,6 @@
 ---
 title: Python - collection.doc.get()
-description: Retrieve the value of a document.
+description: Reference for Nitric's Python library - Retrieve the value of a document.
 ---
 
 Retrieve the value of a document.

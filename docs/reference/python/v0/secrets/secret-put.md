@@ -1,6 +1,6 @@
 ---
 title: Python - secret.put()
-description: Store a new secret value.
+description: Reference for Nitric's Python library - Store a new secret value.
 ---
 
 Store a new secret value, creating a new [version](./secret-version) to store the value.

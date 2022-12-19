@@ -1,6 +1,6 @@
 ---
 title: Node.js - bucket.file.write()
-description: Write a file to a bucket.
+description: Reference for Nitric's Node.js library - Write a file to a bucket.
 ---
 
 Write a file to a bucket.

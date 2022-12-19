@@ -1,6 +1,6 @@
 ---
 title: Node.js - collection.query.stream()
-description: Process query results as a stream
+description: Reference for Nitric's Node.js library - Process query results as a stream
 ---
 
 Process query results as a stream.

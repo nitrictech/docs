@@ -1,6 +1,6 @@
 ---
 title: Python - collection.query.where()
-description: Adds a new where clause to a query, which filters the data returned.
+description: Reference for Nitric's Python library - Adds a new where clause to a query, which filters the data returned.
 ---
 
 Adds a new where clause to a query, which filters the data returned.
