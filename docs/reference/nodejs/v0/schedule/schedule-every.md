@@ -1,6 +1,6 @@
 ---
-title: schedule.every()
-description: Sets the frequency and one or many handlers to be triggered.
+title: Node.js - schedule.every()
+description: Reference for Nitric's Node.js library - Sets the frequency and one or many handlers to be triggered.
 ---
 
 Sets the frequency and one or many handlers to be triggered.

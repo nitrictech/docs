@@ -1,6 +1,6 @@
 ---
-title: collection.query.fetch()
-description: Fetch paged results from a query.
+title: Python - collection.query.fetch()
+description: Reference for Nitric's Python library - Fetch paged results from a query.
 ---
 
 Retrieve a page of results for a query. This is an alternative to [collection.query.stream()](./collection-query-stream)

@@ -1,6 +1,6 @@
 ---
-title: bucket.file()
-description: Create a reference to a file within a bucket.
+title: Python - bucket.file()
+description: Reference for Nitric's Python library - Create a reference to a file within a bucket.
 ---
 
 Create a reference to a file within a bucket.

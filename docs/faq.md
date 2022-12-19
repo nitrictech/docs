@@ -1,5 +1,5 @@
 ---
-title: FAQ
+title: Frequently Asked Questions (FAQ)
 description: Frequently asked questions about Nitric.
 ---
 

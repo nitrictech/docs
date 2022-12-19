@@ -1,5 +1,5 @@
 ---
-title: Collections
+title: Building Blocks - Collections
 description: Document stores and collections
 ---
 

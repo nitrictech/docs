@@ -1,6 +1,6 @@
 ---
-title: api.route.put()
-description: Register a handler for HTTP PUT requests to the route.
+title: Node.js - api.route.put()
+description: Reference for Nitric's Node.js library - Register a handler for HTTP PUT requests to the route.
 ---
 
 Register a handler for HTTP PUT requests to the route.

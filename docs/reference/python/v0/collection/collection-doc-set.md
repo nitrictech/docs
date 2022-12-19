@@ -1,6 +1,6 @@
 ---
-title: collection.doc.set()
-description: Set the value of a document.
+title: Python - collection.doc.set()
+description: Reference for Nitric's Python library - Set the value of a document.
 ---
 
 Set the value of a document.

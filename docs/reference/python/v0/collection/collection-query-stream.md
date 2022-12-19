@@ -1,6 +1,6 @@
 ---
-title: collection.query.stream()
-description: Process query results as a stream.
+title: Python - collection.query.stream()
+description: Reference for Nitric's Python library - Process query results as a stream.
 ---
 
 Process query results as a stream.

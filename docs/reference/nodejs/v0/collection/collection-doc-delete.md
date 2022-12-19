@@ -1,6 +1,6 @@
 ---
-title: collection.doc.delete()
-description: Delete a document from a collection
+title: Node.js - collection.doc.delete()
+description: Reference for Nitric's Node.js library - Delete a document from a collection
 ---
 
 Delete a document from a collection.

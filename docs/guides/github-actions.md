@@ -1,5 +1,5 @@
 ---
-title: CI/CD workflow with Nitric and GitHub Actions
+title: CI/CD with GitHub Actions and Nitric
 description: Deploy to AWS using GitHub Actions and the Nitric CLI
 ---
 

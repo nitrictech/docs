@@ -1,6 +1,6 @@
 ---
-title: topic.subscribe()
-description: Subscribe a handler to a topic and receive new events for processing.
+title: Node.js - topic.subscribe()
+description: Reference for Nitric's Node.js library - Subscribe a handler to a topic and receive new events for processing.
 ---
 
 Subscribe a handler to a topic and receive new events for processing.

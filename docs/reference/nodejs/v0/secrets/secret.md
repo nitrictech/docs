@@ -1,6 +1,6 @@
 ---
-title: secret()
-description: Creates a reference to a secret in the secrets manager.
+title: Node.js - secret()
+description: Reference for Nitric's Node.js library - Creates a reference to a secret in the secrets manager.
 ---
 
 Creates a reference to a secret in the secrets manager.

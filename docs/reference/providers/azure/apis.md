@@ -1,5 +1,5 @@
 ---
-title: APIs
+title: Azure Resources - APIs
 description: How Nitric deploys APIs to Azure
 ---
 

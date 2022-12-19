@@ -1,6 +1,6 @@
 ---
-title: bucket.file.getDownloadUrl()
-description: Get a download url for a file from a bucket.
+title: Node.js - bucket.file.getDownloadUrl()
+description: Reference for Nitric's Node.js library - Get a download url for a file from a bucket.
 ---
 
 Create a download url for a file within a bucket.

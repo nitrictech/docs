@@ -1,5 +1,5 @@
 ---
-title: Storage
+title: Azure Resources - Storage
 description: How Nitric deploys Storage with Azure
 ---
 

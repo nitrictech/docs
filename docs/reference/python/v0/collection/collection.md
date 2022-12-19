@@ -1,6 +1,6 @@
 ---
-title: collection()
-description: Creates a new Collection.
+title: Python - collection()
+description: Reference for Nitric's Python library - Creates a new Collection.
 ---
 
 Creates a new Collection.

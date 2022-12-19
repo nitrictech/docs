@@ -1,5 +1,5 @@
 ---
-title: APIs
+title: AWS Resources - APIs
 description: How Nitric deploys APIs to AWS
 ---
 

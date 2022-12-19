@@ -1,6 +1,6 @@
 ---
-title: collection.query.pagingFrom()
-description: Set a point to resume a query from.
+title: Python - collection.query.pagingFrom()
+description: Reference for Nitric's Python library - Set a point to resume a query from.
 ---
 
 Set a point to resume a query from, this is required when continuing a paginated query response.

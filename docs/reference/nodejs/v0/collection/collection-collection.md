@@ -1,6 +1,6 @@
 ---
-title: collection.collection()
-description: Get a query-only sub-collection reference, this can be used to query commonly named collections across documents.
+title: Node.js - collection.collection()
+description: Reference for Nitric's Node.js library - Get a query-only sub-collection reference, this can be used to query commonly named collections across documents.
 ---
 
 Get a query-only sub-collection reference, this can be used to query commonly named collections across documents.

@@ -1,6 +1,6 @@
 ---
-title: bucket.file()
-description: Create a reference to a file within a bucket.
+title: Node.js - bucket.file()
+description: Reference for Nitric's Node.js library - Create a reference to a file within a bucket.
 ---
 
 Create a reference to a file within a bucket.

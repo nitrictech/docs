@@ -1,6 +1,6 @@
 ---
-title: api.delete()
-description: Register an API route and set a specific HTTP DELETE handler on that route.
+title: Node.js - api.delete()
+description: Reference for Nitric's Node.js library - Register an API route and set a specific HTTP DELETE handler on that route.
 ---
 
 Register an API route and set a specific HTTP DELETE handler on that route.

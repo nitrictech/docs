@@ -1,6 +1,6 @@
 ---
-title: queue.send()
-description: Send tasks to a queue.
+title: Python - queue.send()
+description: Reference for Nitric's Python library - Send tasks to a queue.
 ---
 
 Sends tasks to a queue.

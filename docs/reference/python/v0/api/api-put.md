@@ -1,6 +1,6 @@
 ---
-title: api.route.put()
-description: Register a handler for HTTP PUT requests to the route.
+title: Python - api.route.put()
+description: Reference for Nitric's Python library - Register a handler for HTTP PUT requests to the route.
 ---
 
 Register an API route and set a specific HTTP PUT handler on that route.

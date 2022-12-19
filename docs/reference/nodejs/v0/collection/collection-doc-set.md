@@ -1,6 +1,6 @@
 ---
-title: collection.doc.set()
-description: Set the value of a document
+title: Node.js - collection.doc.set()
+description: Reference for Nitric's Node.js library - Set the value of a document
 ---
 
 Set the value of a document.

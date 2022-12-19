@@ -1,6 +1,6 @@
 ---
-title: collection()
-description: Creates a new Collection.
+title: Node.js - collection()
+description: Reference for Nitric's Node.js library - Creates a new Collection.
 ---
 
 Creates a new Collection.

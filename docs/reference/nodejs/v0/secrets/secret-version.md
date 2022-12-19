@@ -1,6 +1,6 @@
 ---
-title: secret.version()
-description: Returns a reference to a known version of a secret.
+title: Node.js - secret.version()
+description: Reference for Nitric's Node.js library - Returns a reference to a known version of a secret.
 ---
 
 Returns a reference to a known version of a secret.

@@ -1,5 +1,5 @@
 ---
-title: Storage
+title: GCP Resources - Storage
 description: How Nitric deploys Storage to Google Cloud
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: bucket.file.get()
-description: Get the contents of a file from a bucket.
+title: Python - bucket.file.get()
+description: Reference for Nitric's Python library - Get the contents of a file from a bucket.
 ---
 
 Get a file from a bucket.

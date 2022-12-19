@@ -1,6 +1,6 @@
 ---
-title: api.methods()
-description: Register an API route that handles a set of specific HTTP verbs.
+title: Python - api.methods()
+description: Reference for Nitric's Python library - Register an API route that handles a set of specific HTTP verbs.
 ---
 
 Register an API route that handles a set of specific HTTP verbs.

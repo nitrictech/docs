@@ -1,5 +1,5 @@
 ---
-title: Collections
+title: Azure Resources - Collections
 description: How Nitric deploys Collections to Azure
 ---
 

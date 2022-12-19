@@ -1,5 +1,5 @@
 ---
-title: Topics
+title: GCP Resources - Topics
 description: How Nitric deploys Topics to Google Cloud
 ---
 

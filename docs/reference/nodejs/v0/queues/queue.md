@@ -1,6 +1,6 @@
 ---
-title: queue()
-description: Creates a new Queue to send and receive asynchronous tasks.
+title: Node.js - queue()
+description: Reference for Nitric's Node.js library - Creates a new Queue to send and receive asynchronous tasks.
 ---
 
 Creates a new Queue to send and receive asynchronous tasks.

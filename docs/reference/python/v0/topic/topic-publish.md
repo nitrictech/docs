@@ -1,6 +1,6 @@
 ---
-title: topic.publish()
-description: Publish new events to the topic.
+title: Python - topic.publish()
+description: Reference for Nitric's Python library - Publish new events to the topic.
 ---
 
 Publishes a topic.

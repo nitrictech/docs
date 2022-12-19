@@ -1,6 +1,6 @@
 ---
-title: api.route.post()
-description: Register a handler for HTTP POST requests to the route.
+title: Python - api.route.post()
+description: Reference for Nitric's Python library - Register a handler for HTTP POST requests to the route.
 ---
 
 Register an API route and set a specific HTTP GET handler on that route.

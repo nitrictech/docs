@@ -1,5 +1,5 @@
 ---
-title: APIs
+title: GCP Resources - APIs
 description: How Nitric deploys APIs to Google Cloud
 ---
 

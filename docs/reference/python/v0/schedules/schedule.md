@@ -1,6 +1,6 @@
 ---
-title: schedule()
-description: Creates a new Schedule to run a function on a defined frequency.
+title: Python - schedule()
+description: Reference for Nitric's Python library - Creates a new Schedule to run a function on a defined frequency.
 ---
 
 Creates a new Schedule to run a function on a defined frequency.

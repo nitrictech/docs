@@ -1,6 +1,6 @@
 ---
-title: bucket.files()
-description: Get a list of file references for files that exist on the bucket.
+title: Python - bucket.files()
+description: Reference for Nitric's Python library - Get a list of file references for files that exist on the bucket.
 ---
 
 Get a list of file references for files that exist on the bucket.

@@ -1,5 +1,5 @@
 ---
-title: Secrets
+title: AWS Resources - Secrets
 description: How Nitric deploys Secrets to AWS
 ---
 

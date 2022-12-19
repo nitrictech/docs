@@ -1,6 +1,6 @@
 ---
-title: collection.query()
-description: Begins a new query on a Collection.
+title: Python - collection.query()
+description: Reference for Nitric's Python library - Begins a new query on a Collection.
 ---
 
 Begins a new query on a Collection.

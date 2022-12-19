@@ -1,5 +1,5 @@
 ---
-title: Queues
+title: AWS Resources - Queues
 description: How Nitric deploys Queues to AWS
 ---
 

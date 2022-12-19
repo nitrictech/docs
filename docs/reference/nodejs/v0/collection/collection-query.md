@@ -1,6 +1,6 @@
 ---
-title: collection.query()
-description: Begins a new query on a Collection.
+title: Node.js - collection.query()
+description: Reference for Nitric's Node.js library - Begins a new query on a Collection.
 ---
 
 Begins a new query on a Collection.

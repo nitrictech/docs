@@ -1,6 +1,6 @@
 ---
-title: topic()
-description: Creates a new Topic.
+title: Python - topic()
+description: Reference for Nitric's Python library - Creates a new Topic.
 ---
 
 Creates a new Topic.

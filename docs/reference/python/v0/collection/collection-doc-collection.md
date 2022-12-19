@@ -1,6 +1,6 @@
 ---
-title: collection.doc.collection()
-description: Gets a reference to a child collection on a document.
+title: Python - collection.doc.collection()
+description: Reference for Nitric's Python library - Gets a reference to a child collection on a document.
 ---
 
 Gets a reference to a child collection on a document.

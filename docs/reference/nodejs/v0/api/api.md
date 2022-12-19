@@ -1,6 +1,6 @@
 ---
-title: api()
-description: Create APIs with the Nitric Node.js SDK
+title: Node.js - api()
+description: Reference for Nitric's Node.js library - Create APIs with the Nitric Node.js SDK
 ---
 
 Creates a new HTTP API.

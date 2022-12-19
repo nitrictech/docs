@@ -1,5 +1,5 @@
 ---
-title: Deploying your first project with Nitric Deploy
+title: Deploying with Nitric Deploy
 description: Nitric Deploy builds and deploys the right infrastructure from your code in your chosen cloud.
 ---
 

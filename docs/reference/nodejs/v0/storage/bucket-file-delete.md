@@ -1,6 +1,6 @@
 ---
-title: bucket.file.delete()
-description: Delete a file from a bucket.
+title: Node.js - bucket.file.delete()
+description: Reference for Nitric's Node.js library - Delete a file from a bucket.
 ---
 
 Delete a file from a bucket.

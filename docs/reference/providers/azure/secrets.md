@@ -1,5 +1,5 @@
 ---
-title: Secrets
+title: Azure Resources - Secrets
 description: How Nitric deploys Secrets to Azure
 ---
 

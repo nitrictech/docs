@@ -1,6 +1,6 @@
 ---
-title: secret()
-description: Creates a reference to a secret in the secrets manager.
+title: Python - secret()
+description: Reference for Nitric's Python library - Creates a reference to a secret in the secrets manager.
 ---
 
 Creates a reference to a secret in the secrets manager.

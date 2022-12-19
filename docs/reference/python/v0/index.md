@@ -1,6 +1,6 @@
 ---
 title: Nitric's Python SDK
-description: Using Nitric with Python
+description: Reference for Nitric's Python library - Using Nitric with Python
 ---
 
 This SDK reference provides documentation for the functions and methods in Nitric's library for Python.

@@ -1,6 +1,6 @@
 ---
-title: secret.latest()
-description: Returns a reference to the latest version of a secret, regardless of that version's ID.
+title: Node.js - secret.latest()
+description: Reference for Nitric's Node.js library - Returns a reference to the latest version of a secret, regardless of that version's ID.
 ---
 
 Returns a reference to the `latest` version of a secret, regardless of that version's ID.

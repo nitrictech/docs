@@ -1,5 +1,5 @@
 ---
-title: Collections
+title: AWS Resources - Collections
 description: How Nitric deploys Collections to AWS
 ---
 

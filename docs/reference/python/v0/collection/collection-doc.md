@@ -1,6 +1,6 @@
 ---
-title: collection.doc()
-description: Get a reference to a document in the collection.
+title: Python - collection.doc()
+description: Reference for Nitric's Python library - Get a reference to a document in the collection.
 ---
 
 Get a reference to a document in the collection.
