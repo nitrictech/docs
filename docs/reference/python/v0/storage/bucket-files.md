@@ -1,5 +1,5 @@
 ---
-title: bucket.files()
+title: Python - bucket.files()
 description: Get a list of file references for files that exist on the bucket.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: collection.doc.delete()
+title: Python - collection.doc.delete()
 description: Delete a document from a collection.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: topic()
+title: Node.js - topic()
 description: Creates a new Topic.
 ---
 

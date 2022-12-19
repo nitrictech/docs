@@ -1,5 +1,5 @@
 ---
-title: api.put()
+title: Node.js - api.put()
 description: Register an API route and set a specific HTTP PUT handler on that route.
 ---
 

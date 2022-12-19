@@ -1,5 +1,5 @@
 ---
-title: collection.doc.get()
+title: Python - collection.doc.get()
 description: Retrieve the value of a document.
 ---
 

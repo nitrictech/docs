@@ -1,5 +1,5 @@
 ---
-title: schedule.every()
+title: Node.js - schedule.every()
 description: Sets the frequency and one or many handlers to be triggered.
 ---
 

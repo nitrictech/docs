@@ -1,5 +1,5 @@
 ---
-title: secret.latest()
+title: Node.js - secret.latest()
 description: Returns a reference to the latest version of a secret, regardless of that version's ID.
 ---
 

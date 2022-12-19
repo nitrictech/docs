@@ -1,5 +1,5 @@
 ---
-title: Queues
+title: Azure Resources - Queues
 description: How Nitric deploys Queues to Azure
 ---
 

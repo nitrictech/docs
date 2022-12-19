@@ -1,5 +1,5 @@
 ---
-title: api.route.patch()
+title: Node.js - api.route.patch()
 description: Register a handler for HTTP PATCH requests to the route.
 ---
 

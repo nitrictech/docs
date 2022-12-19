@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: GCP Resources - Overview
 description: The Google Cloud provider for Nitric
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: topic.subscribe()
+title: Node.js - topic.subscribe()
 description: Subscribe a handler to a topic and receive new events for processing.
 ---
 

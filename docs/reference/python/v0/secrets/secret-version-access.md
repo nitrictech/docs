@@ -1,5 +1,5 @@
 ---
-title: secret.version.access()
+title: Python - secret.version.access()
 description: Retrieves the value from a version of a secret.
 ---
 

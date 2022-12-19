@@ -1,5 +1,5 @@
 ---
-title: api()
+title: Node.js - api()
 description: Create APIs with the Nitric Node.js SDK
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: collection.doc()
+title: Python - collection.doc()
 description: Get a reference to a document in the collection.
 ---
 

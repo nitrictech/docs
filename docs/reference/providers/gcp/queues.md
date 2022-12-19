@@ -1,5 +1,5 @@
 ---
-title: Queues
+title: GCP Resources - Queues
 description: How Nitric deploys Queues to Google Cloud
 ---
 

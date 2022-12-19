@@ -1,5 +1,5 @@
 ---
-title: topic.subscribe()
+title: Python - topic.subscribe()
 description: Subscribe a handler to a topic and receive new events for processing.
 ---
 

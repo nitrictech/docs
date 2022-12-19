@@ -1,5 +1,5 @@
 ---
-title: Topics
+title: AWS Resources - Topics
 description: How Nitric deploys Topics to AWS
 ---
 

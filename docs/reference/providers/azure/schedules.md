@@ -1,5 +1,5 @@
 ---
-title: Schedules
+title: Azure Resources - Schedules
 description: How Nitric deploys Schedules to Azure
 ---
 

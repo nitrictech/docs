@@ -1,5 +1,5 @@
 ---
-title: api.route.delete()
+title: Node.js - api.route.delete()
 description: Register a handler for HTTP DELETE requests to the route.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: schedule()
+title: Node.js - schedule()
 description: Creates a new Schedule to run a function on a defined frequency.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: collection.doc()
+title: Node.js - collection.doc()
 description: Get a reference to a document in the collection.
 ---
 

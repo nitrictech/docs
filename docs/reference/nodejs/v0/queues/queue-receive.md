@@ -1,5 +1,5 @@
 ---
-title: queue.receive()
+title: Node.js - queue.receive()
 description: Receive tasks from a queue.
 ---
 

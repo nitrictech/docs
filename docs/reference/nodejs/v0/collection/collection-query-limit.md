@@ -1,5 +1,5 @@
 ---
-title: collection.query.limit()
+title: Node.js - collection.query.limit()
 description: Limit the number of results returned by a query.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: collection.query()
+title: Node.js - collection.query()
 description: Begins a new query on a Collection.
 ---
 

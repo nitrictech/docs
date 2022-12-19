@@ -1,5 +1,5 @@
 ---
-title: api()
+title: Python - api()
 description: Create APIs with the Nitric Python SDK.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Secrets
+title: GCP Resources - Secrets
 description: How Nitric deploys Secrets to Google Cloud
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: api.all()
+title: Python - api.all()
 description: Register an API route that handles all HTTP verbs on that route.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: bucket.file()
+title: Node.js - bucket.file()
 description: Create a reference to a file within a bucket.
 ---
 

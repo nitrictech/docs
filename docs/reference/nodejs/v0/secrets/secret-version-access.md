@@ -1,5 +1,5 @@
 ---
-title: secret.version.access()
+title: Node.js - secret.version.access()
 description: Retrieves the value from a version of a secret.
 ---
 

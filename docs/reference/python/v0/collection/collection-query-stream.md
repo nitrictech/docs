@@ -1,5 +1,5 @@
 ---
-title: collection.query.stream()
+title: Python - collection.query.stream()
 description: Process query results as a stream.
 ---
 

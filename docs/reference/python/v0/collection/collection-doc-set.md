@@ -1,5 +1,5 @@
 ---
-title: collection.doc.set()
+title: Python - collection.doc.set()
 description: Set the value of a document.
 ---
 

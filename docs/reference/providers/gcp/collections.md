@@ -1,5 +1,5 @@
 ---
-title: Collections
+title: GCP Resources - Collections
 description: How Nitric deploys Collections to Google Cloud
 ---
 

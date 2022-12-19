@@ -1,5 +1,5 @@
 ---
-title: api.get()
+title: Python - api.get()
 description: Register an API route and set a specific HTTP GET handler on that route.
 ---
 

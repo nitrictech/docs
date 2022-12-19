@@ -1,5 +1,5 @@
 ---
-title: Schedules
+title: GCP Resources - Schedules
 description: How Nitric deploys Schedules to Google Cloud
 ---
 

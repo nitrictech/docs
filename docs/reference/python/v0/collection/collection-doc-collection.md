@@ -1,5 +1,5 @@
 ---
-title: collection.doc.collection()
+title: Python - collection.doc.collection()
 description: Gets a reference to a child collection on a document.
 ---
 

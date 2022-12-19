@@ -1,5 +1,5 @@
 ---
-title: secret.version()
+title: Python - secret.version()
 description: Returns a reference to a known version of a secret.
 ---
 

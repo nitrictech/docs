@@ -1,5 +1,5 @@
 ---
-title: collection.query.pagingFrom()
+title: Node.js - collection.query.pagingFrom()
 description: Set a point to resume a query from.
 ---
 

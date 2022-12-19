@@ -1,5 +1,5 @@
 ---
-title: Storage
+title: AWS Resources - Storage
 description: How Nitric deploys Storage to AWS
 ---
 

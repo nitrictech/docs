@@ -1,5 +1,5 @@
 ---
-title: queue.send()
+title: Python - queue.send()
 description: Send tasks to a queue.
 ---
 

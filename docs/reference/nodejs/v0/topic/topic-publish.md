@@ -1,5 +1,5 @@
 ---
-title: topic.publish()
+title: Node.js - topic.publish()
 description: Publish new events to the topic.
 ---
 

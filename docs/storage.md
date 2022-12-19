@@ -1,5 +1,5 @@
 ---
-title: Storage
+title: Building Blocks - Storage
 description: Working with files and storage in Nitric
 ---
 

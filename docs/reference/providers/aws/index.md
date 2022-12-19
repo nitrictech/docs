@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: AWS Resources - Overview
 description: Amazon Web Service (AWS) provider for Nitric
 ---
 

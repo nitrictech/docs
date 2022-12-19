@@ -1,5 +1,5 @@
 ---
-title: bucket.file.delete()
+title: Node.js - bucket.file.delete()
 description: Delete a file from a bucket.
 ---
 

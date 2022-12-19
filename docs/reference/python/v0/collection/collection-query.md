@@ -1,5 +1,5 @@
 ---
-title: collection.query()
+title: Python - collection.query()
 description: Begins a new query on a Collection.
 ---
 

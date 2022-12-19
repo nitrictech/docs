@@ -1,5 +1,5 @@
 ---
-title: bucket.file.get()
+title: Node.js - bucket.file.get()
 description: Get the contents of a file from a bucket.
 ---
 

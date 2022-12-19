@@ -1,5 +1,5 @@
 ---
-title: Schedules
+title: AWS Resources - Schedules
 description: How Nitric deploys Schedules to AWS
 ---
 

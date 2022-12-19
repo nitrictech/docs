@@ -1,5 +1,5 @@
 ---
-title: collection.query.fetch()
+title: Python - collection.query.fetch()
 description: Fetch paged results from a query.
 ---
 

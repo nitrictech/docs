@@ -1,5 +1,5 @@
 ---
-title: topic.publish()
+title: Python - topic.publish()
 description: Publish new events to the topic.
 ---
 

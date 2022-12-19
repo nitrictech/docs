@@ -1,5 +1,5 @@
 ---
-title: api.route.get()
+title: Node.js - api.route.get()
 description: Register a handler for HTTP GET requests to the route.
 ---
 

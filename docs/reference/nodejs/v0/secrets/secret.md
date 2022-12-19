@@ -1,5 +1,5 @@
 ---
-title: secret()
+title: Node.js - secret()
 description: Creates a reference to a secret in the secrets manager.
 ---
 

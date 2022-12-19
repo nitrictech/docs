@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: Azure Resources - Overview
 description: The Azure provider for Nitric
 ---
 

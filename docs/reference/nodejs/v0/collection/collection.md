@@ -1,5 +1,5 @@
 ---
-title: collection()
+title: Node.js - collection()
 description: Creates a new Collection.
 ---
 

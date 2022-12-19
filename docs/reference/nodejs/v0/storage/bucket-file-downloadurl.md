@@ -1,5 +1,5 @@
 ---
-title: bucket.file.getDownloadUrl()
+title: Node.js - bucket.file.getDownloadUrl()
 description: Get a download url for a file from a bucket.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: bucket.file.write()
+title: Node.js - bucket.file.write()
 description: Write a file to a bucket.
 ---
 

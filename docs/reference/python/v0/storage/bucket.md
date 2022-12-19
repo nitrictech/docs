@@ -1,5 +1,5 @@
 ---
-title: bucket()
+title: Python - bucket()
 description: Create a new bucket for storing and retrieving files.
 ---
 

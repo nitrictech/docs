@@ -1,5 +1,5 @@
 ---
-title: bucket.file.upload_url()
+title: Python - bucket.file.upload_url()
 description: Create a signed URL for write access to a file.
 ---
 

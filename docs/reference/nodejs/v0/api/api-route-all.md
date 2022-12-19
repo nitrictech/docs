@@ -1,5 +1,5 @@
 ---
-title: api.route.all()
+title: Node.js - api.route.all()
 description: Register a single handler for all HTTP Methods (GET, POST, PUT, DELETE, PATCH) on the route.
 ---
 

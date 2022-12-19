@@ -1,5 +1,5 @@
 ---
-title: queue()
+title: Node.js - queue()
 description: Creates a new Queue to send and receive asynchronous tasks.
 ---
 

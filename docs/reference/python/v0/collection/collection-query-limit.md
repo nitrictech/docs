@@ -1,5 +1,5 @@
 ---
-title: collection.query.limit()
+title: Python - collection.query.limit()
 description: Limit the number of results returned by a query.
 ---
 

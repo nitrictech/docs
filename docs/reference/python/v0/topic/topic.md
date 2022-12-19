@@ -1,5 +1,5 @@
 ---
-title: topic()
+title: Python - topic()
 description: Creates a new Topic.
 ---
 

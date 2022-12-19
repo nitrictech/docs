@@ -1,5 +1,5 @@
 ---
-title: queue.receive()
+title: Python - queue.receive()
 description: Receive tasks from a queue.
 ---
 

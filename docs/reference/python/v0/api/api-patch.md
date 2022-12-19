@@ -1,5 +1,5 @@
 ---
-title: api.patch()
+title: Python - api.patch()
 description: Register an API route and set a specific HTTP PATCH handler on that route.
 ---
 

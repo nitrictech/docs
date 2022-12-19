@@ -1,5 +1,5 @@
 ---
-title: bucket.files()
+title: Node.js - bucket.files()
 description: Get a list of file references for files that exist in the bucket.
 ---
 

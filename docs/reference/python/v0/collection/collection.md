@@ -1,5 +1,5 @@
 ---
-title: collection()
+title: Python - collection()
 description: Creates a new Collection.
 ---
 

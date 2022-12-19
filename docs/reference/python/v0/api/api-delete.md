@@ -1,5 +1,5 @@
 ---
-title: api.delete()
+title: Python - api.delete()
 description: Register an API route and set a specific HTTP DELETE handler on that route.
 ---
 

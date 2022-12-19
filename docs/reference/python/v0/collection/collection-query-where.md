@@ -1,5 +1,5 @@
 ---
-title: collection.query.where()
+title: Python - collection.query.where()
 description: Adds a new where clause to a query, which filters the data returned.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: api.methods()
+title: Python - api.methods()
 description: Register an API route that handles a set of specific HTTP verbs.
 ---
 

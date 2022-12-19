@@ -1,5 +1,5 @@
 ---
-title: collection.doc.get()
+title: Node.js - collection.doc.get()
 description: Retrieve the value of a document.
 ---
 

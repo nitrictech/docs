@@ -1,5 +1,5 @@
 ---
-title: secret.latest()
+title: Python - secret.latest()
 description: Returns a reference to the latest version of a secret, regardless of that version's ID.
 ---
 

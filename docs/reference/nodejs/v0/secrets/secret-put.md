@@ -1,5 +1,5 @@
 ---
-title: secret.put()
+title: Node.js - secret.put()
 description: Store a new secret value
 ---
 
