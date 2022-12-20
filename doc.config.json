@@ -174,6 +174,10 @@
             "href": "/docs/reference/python/v0"
           },
           {
+            "title": ".NET SDK (Experimental 🧪)",
+            "href": "/docs/reference/csharp/v0"
+          },
+          {
             "title": "Cloud Providers",
             "href": "/docs/reference/providers"
           },
@@ -624,6 +628,158 @@
           {
             "title": "schedule()",
             "href": "/docs/reference/python/v0/schedules/schedule"
+          }
+        ]
+      }
+    ],
+    "csharp": [
+      {
+        "title": "Getting Started",
+        "links": [
+          {
+            "title": "Overview & Installation",
+            "href": "/docs/reference/csharp/v0"
+          }
+        ]
+      },
+      {
+        "title": "APIs",
+        "links": [
+          {
+            "title": "api()",
+            "href": "/docs/reference/csharp/v0/api/api"
+          },
+          {
+            "title": "api.get()",
+            "href": "/docs/reference/csharp/v0/api/api-get"
+          },
+          {
+            "title": "api.post()",
+            "href": "/docs/reference/csharp/v0/api/api-post"
+          },
+          {
+            "title": "api.put()",
+            "href": "/docs/reference/csharp/v0/api/api-put"
+          },
+          {
+            "title": "api.delete()",
+            "href": "/docs/reference/csharp/v0/api/api-delete"
+          },
+          {
+            "title": "api.patch()",
+            "href": "/docs/reference/csharp/v0/api/api-patch"
+          },
+          {
+            "title": "api.route()",
+            "href": "/docs/reference/csharp/v0/api/api-route"
+          },
+          {
+            "title": "api.route.all()",
+            "href": "/docs/reference/csharp/v0/api/api-route-all"
+          },
+          {
+            "title": "api.route.get()",
+            "href": "/docs/reference/csharp/v0/api/api-route-get"
+          },
+          {
+            "title": "api.route.post()",
+            "href": "/docs/reference/csharp/v0/api/api-route-post"
+          },
+          {
+            "title": "api.route.put()",
+            "href": "/docs/reference/csharp/v0/api/api-route-put"
+          },
+          {
+            "title": "api.route.delete()",
+            "href": "/docs/reference/csharp/v0/api/api-route-delete"
+          },
+          {
+            "title": "api.route.patch()",
+            "href": "/docs/reference/csharp/v0/api/api-route-patch"
+          }
+        ]
+      },
+      {
+        "title": "Topics",
+        "links": [
+          {
+            "title": "topic()",
+            "href": "/docs/reference/csharp/v0/topic/topic"
+          },
+          {
+            "title": "topic.publish()",
+            "href": "/docs/reference/csharp/v0/topic/topic-publish"
+          },
+          {
+            "title": "topic.subscribe()",
+            "href": "/docs/reference/csharp/v0/topic/topic-subscribe"
+          }
+        ]
+      },
+      {
+        "title": "Queues",
+        "links": [
+          {
+            "title": "queue()",
+            "href": "/docs/reference/csharp/v0/queues/queue"
+          },
+          {
+            "title": "queue.send()",
+            "href": "/docs/reference/csharp/v0/queues/queue-send"
+          },
+          {
+            "title": "queue.receive()",
+            "href": "/docs/reference/csharp/v0/queues/queue-receive"
+          }
+        ]
+      },
+      {
+        "title": "Storage",
+        "links": [
+          {
+            "title": "bucket()",
+            "href": "/docs/reference/csharp/v0/storage/bucket"
+          },
+          {
+            "title": "bucket.file()",
+            "href": "/docs/reference/csharp/v0/storage/bucket-file"
+          },
+          {
+            "title": "bucket.files()",
+            "href": "/docs/reference/csharp/v0/storage/bucket-files"
+          },
+          {
+            "title": "file.get()",
+            "href": "/docs/reference/csharp/v0/storage/bucket-file-get"
+          },
+          {
+            "title": "file.write()",
+            "href": "/docs/reference/csharp/v0/storage/bucket-file-write"
+          },
+          {
+            "title": "file.delete()",
+            "href": "/docs/reference/csharp/v0/storage/bucket-file-delete"
+          },
+          {
+            "title": "file.getDownloadUrl()",
+            "href": "/docs/reference/csharp/v0/storage/bucket-file-downloadurl"
+          },
+          {
+            "title": "file.getUploadUrl()",
+            "href": "/docs/reference/csharp/v0/storage/bucket-file-uploadurl"
+          }
+        ]
+      },
+      {
+        "title": "Schedules",
+        "links": [
+          {
+            "title": "schedule()",
+            "href": "/docs/reference/csharp/v0/schedule/schedule"
+          },
+          {
+            "title": "schedule.every()",
+            "href": "/docs/reference/csharp/v0/schedule/schedule-every"
           }
         ]
       }
