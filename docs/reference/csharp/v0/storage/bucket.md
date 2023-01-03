@@ -1,6 +1,6 @@
 ---
-title: bucket()
-description: Create a new bucket for storing and retrieving files.
+title: csharp - bucket()
+description: Reference for Nitric's csharp library - Create a new bucket for storing and retrieving files.
 ---
 
 Create a new bucket for storing and retrieving files.

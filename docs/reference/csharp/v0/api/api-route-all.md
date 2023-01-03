@@ -1,6 +1,6 @@
 ---
-title: api.route.all()
-description: Register a single handler for all HTTP Methods (GET, POST, PUT, DELETE, PATCH) on the route.
+title: csharp - api.route.all()
+description: Reference for Nitric's csharp library - Register a single handler for all HTTP Methods (GET, POST, PUT, DELETE, PATCH) on the route.
 ---
 
 Register a single handler for all HTTP Methods (GET, POST, PUT, DELETE, PATCH) on the route.

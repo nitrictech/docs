@@ -1,6 +1,6 @@
 ---
-title: topic.subscribe()
-description: Subscribe a handler to a topic and receive new events for processing.
+title: csharp - topic.subscribe()
+description: Reference for Nitric's csharp library - Subscribe a handler to a topic and receive new events for processing.
 ---
 
 Subscribe a handler to a topic and receive new events for processing.

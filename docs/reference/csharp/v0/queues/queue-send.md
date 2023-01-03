@@ -1,6 +1,6 @@
 ---
-title: queue.send()
-description: Send tasks to a queue.
+title: csharp - queue.send()
+description: Reference for Nitric's csharp library - Send tasks to a queue.
 ---
 
 Send tasks to a queue.

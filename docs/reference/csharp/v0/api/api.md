@@ -1,6 +1,6 @@
 ---
-title: api()
-description: Create APIs with the Nitric C# SDK
+title: csharp - api()
+description: Reference for Nitric's csharp library - Create APIs with the Nitric C# SDK
 ---
 
 Creates a new HTTP API.

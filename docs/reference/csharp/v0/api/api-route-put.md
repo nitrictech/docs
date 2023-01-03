@@ -1,6 +1,6 @@
 ---
-title: api.route.put()
-description: Register a handler for HTTP PUT requests to the route.
+title: csharp - api.route.put()
+description: Reference for Nitric's csharp library - Register a handler for HTTP PUT requests to the route.
 ---
 
 Register a handler for HTTP PUT requests to the route.

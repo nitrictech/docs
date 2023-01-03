@@ -1,6 +1,6 @@
 ---
-title: bucket.file.geUploadUrl()
-description: Get a upload url for a file from a bucket.
+title: csharp - bucket.file.geUploadUrl()
+description: Reference for Nitric's csharp library - Get a upload url for a file from a bucket.
 ---
 
 Create a upload url for a file within a bucket.

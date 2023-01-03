@@ -1,6 +1,6 @@
 ---
-title: bucket.file.getDownloadUrl()
-description: Get a download url for a file from a bucket.
+title: csharp - bucket.file.getDownloadUrl()
+description: Reference for Nitric's csharp library - Get a download url for a file from a bucket.
 ---
 
 Create a download url for a file within a bucket.

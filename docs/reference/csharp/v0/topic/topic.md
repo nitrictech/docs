@@ -1,6 +1,6 @@
 ---
-title: topic()
-description: Creates a new Topic.
+title: csharp - topic()
+description: Reference for Nitric's csharp library - Creates a new Topic.
 ---
 
 Creates a new Topic.

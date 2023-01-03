@@ -1,6 +1,6 @@
 ---
-title: api.route.delete()
-description: Register a handler for HTTP DELETE requests to the route.
+title: csharp - api.route.delete()
+description: Reference for Nitric's csharp library - Register a handler for HTTP DELETE requests to the route.
 ---
 
 Register a handler for HTTP DELETE requests to the route.

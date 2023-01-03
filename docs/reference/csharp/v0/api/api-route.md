@@ -1,6 +1,6 @@
 ---
-title: api.route()
-description: Creates a new route (path) within an API.
+title: csharp - api.route()
+description: Reference for Nitric's csharp library - Creates a new route (path) within an API.
 ---
 
 Creates a new route (path) within an API.

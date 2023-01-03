@@ -1,6 +1,6 @@
 ---
-title: queue.receive()
-description: Receive tasks from a queue.
+title: csharp - queue.receive()
+description: Reference for Nitric's csharp library - Receive tasks from a queue.
 ---
 
 Receive tasks from a queue.

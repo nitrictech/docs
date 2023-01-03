@@ -1,6 +1,6 @@
 ---
-title: topic.publish()
-description: Publish new events to the topic.
+title: csharp - topic.publish()
+description: Reference for Nitric's csharp library - Publish new events to the topic.
 ---
 
 Publish an event (push based message) to a topic.

@@ -1,6 +1,6 @@
 ---
-title: api.get()
-description: Register an API route and set a specific HTTP GET handler on that route.
+title: csharp - api.get()
+description: Reference for Nitric's csharp library - Register an API route and set a specific HTTP GET handler on that route.
 ---
 
 Register an API route and set a specific HTTP GET handler on that route.

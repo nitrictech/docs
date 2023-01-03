@@ -1,6 +1,6 @@
 ---
-title: queue()
-description: Creates a new Queue to send and receive asynchronous tasks.
+title: csharp - queue()
+description: Reference for Nitric's csharp library - Creates a new Queue to send and receive asynchronous tasks.
 ---
 
 Creates a new Queue to send and receive asynchronous tasks.

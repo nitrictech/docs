@@ -1,6 +1,6 @@
 ---
-title: bucket.file.write()
-description: Write a file to a bucket.
+title: csharp - bucket.file.write()
+description: Reference for Nitric's csharp library - Write a file to a bucket.
 ---
 
 Write a file to a bucket.

@@ -1,6 +1,6 @@
 ---
-title: bucket.file.delete()
-description: Delete a file from a bucket.
+title: csharp - bucket.file.delete()
+description: Reference for Nitric's csharp library - Delete a file from a bucket.
 ---
 
 Delete a file from a bucket.

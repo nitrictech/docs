@@ -1,6 +1,6 @@
 ---
-title: bucket.file.get()
-description: Get the contents of a file from a bucket.
+title: csharp - bucket.file.get()
+description: Reference for Nitric's csharp library - Get the contents of a file from a bucket.
 ---
 
 Get the contents of a file from a bucket.
