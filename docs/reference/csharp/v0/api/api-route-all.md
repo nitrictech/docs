@@ -44,7 +44,7 @@ route.All(context => {
   /* handle all requests */
 });
 
-// Don't call `Get()`, `Post()`, etc., they're already handled by `all()`
+// Don't call `Get()`, `Post()`, etc., they're already handled by `All()`
 route.Get(context => {
   // This handler won't work
 })

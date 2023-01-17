@@ -7,4 +7,6 @@ description: Nitric framework component reference documentation.
 - [Node.js SDK](/docs/reference/nodejs/v0) - Using Nitric with JavaScript or TypeScript
 - [Python SDK](/docs/reference/python/v0) - Using Nitric with Python
 - [.NET SDK](/docs/reference/csharp/v0) (Experimental 🧪) - Using Nitric with .NET Core and C#
+- [JVM SDK](/docs/reference/jvm/v0) (Experimental 🧪) - Using Nitric with JVM languages
+
 - [Providers](/docs/reference/providers) - Learn about support Cloud Providers for Nitric
