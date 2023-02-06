@@ -56,6 +56,7 @@ We can then define our api route which will accept the histogram data to then be
 ```python
 from nitric.resources import api
 from nitric.application import Nitric
+import matplotlib as plt
 
 mainApi = api("main")
 
@@ -121,20 +122,23 @@ plt.hist(x=data, bins=np.arange(min(data), max(data) + 2, 1))
 At this point the plot will be created, however, nothing but a 200 status will be returned to the user. To actually return the data as an image to the user, we will need to first get the image data.
 
 ```python
-plt.savefig("plot.png")
+import io
 
-with open("plot.png", "rb") as f:
-  pass
+with io.BytesIO() as buffer:  # use buffer memory
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    ctx.res.body = buffer.getvalue()
+    ctx.res.headers = { 'Content-Type': 'image/png' }
 ```
 
-This will save the plot as a png and then read as bytes. We can then return it in the body of our response and set the header to the correct content type. At the end we want to reset the plot. The plot not being cleared will only effect local reruns, as once deployed the state is ephemeral.
+This will save the plot as a png and store it in the buffer. We can then return it in the body of our response and set the header to the correct content type. At the end we want to reset the plot. The plot not being cleared will only effect local reruns, as once deployed the state is ephemeral.
 
 ```python
-plt.savefig("plot.png")
-
-with open('plot.png', 'rb') as f:
-  ctx.res.body = f.read()
-  ctx.res.headers = { 'Content-Type': 'image/png' }
+with io.BytesIO() as buffer:  # use buffer memory
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    ctx.res.body = buffer.getvalue()
+    ctx.res.headers = { 'Content-Type': 'image/png' }
 
 plt.close()
 ```
