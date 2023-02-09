@@ -1,9 +1,9 @@
 ---
-title: bucket.file.get()
-description: Get the contents of a file from a bucket.
+title: bucket.file.read()
+description: Read the contents of a file from a bucket.
 ---
 
-Get the contents of a file from a bucket.
+Read the contents of a file from a bucket.
 
 ```csharp
 using Nitric.Sdk;
@@ -13,14 +13,14 @@ var assets = Nitric.Bucket('assets').With(BucketPermission.Reading);
 
 var logo = assets.File('images/logo.png');
 
-var logoData = logo.Get();
+var logoData = logo.Read();
 
 Nitric.Run();
 ```
 
 ## Examples
 
-### Get a file
+### Read a file
 
 ```csharp
 using Nitric.Sdk;
@@ -30,7 +30,7 @@ var assets = Nitric.Bucket('assets').With(BucketPermission.Reading);
 
 var logo = assets.File('images/logo.png');
 
-var logoData = logo.Get();
+var logoData = logo.Read();
 
 Nitric.Run();
 ```

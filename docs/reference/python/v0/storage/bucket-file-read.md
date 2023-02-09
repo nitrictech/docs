@@ -1,9 +1,9 @@
 ---
 title: Python - bucket.file.get()
-description: Reference for Nitric's Python library - Get the contents of a file from a bucket.
+description: Reference for Nitric's Python library - Read the contents of a file from a bucket.
 ---
 
-Get a file from a bucket.
+Read a file from a bucket.
 
 ```python
 from nitric.resources import bucket
@@ -18,7 +18,7 @@ logo_data = await logo.get()
 
 ## Examples
 
-### Get a file
+### Read a file
 
 ```python
 from nitric.resources import bucket
