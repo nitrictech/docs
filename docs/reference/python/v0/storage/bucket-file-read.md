@@ -1,5 +1,5 @@
 ---
-title: Python - bucket.file.get()
+title: Python - bucket.file.read()
 description: Reference for Nitric's Python library - Read the contents of a file from a bucket.
 ---
 
@@ -13,7 +13,7 @@ assets = bucket('assets').allow('reading')
 
 logo = assets.file('images/logo.png')
 
-logo_data = await logo.get()
+logo_data = await logo.read()
 ```
 
 ## Examples
@@ -27,5 +27,5 @@ assets = bucket('assets').allow('reading')
 
 logo = assets.file('images/logo.png')
 
-logo_data = await logo.get()
+logo_data = await logo.read()
 ```
