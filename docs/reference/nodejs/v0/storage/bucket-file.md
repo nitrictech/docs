@@ -29,7 +29,7 @@ The file does not need to exist, only a reference to that file is being created.
 
 ## Available Operations
 
-- [file.get()](./bucket-file-get)
+- [file.read()](./bucket-file-read)
 - [file.write()](./bucket-file-write)
 - [file.delete()](./bucket-file-delete)
 - [file.getDownloadUrl()](./bucket-file-downloadurl)

@@ -53,7 +53,7 @@ This permission allows your function to delete files from the bucket
 See the following for examples on working with files in a bucket:
 
 - [file()](./bucket-file.md)
-- [file().get()](./bucket-file-get.md)
+- [file().read()](./bucket-file-read.md)
 - [file().write()](./bucket-file-write.md)
 - [file().delete()](./bucket-file-delete.md)
 - [file.getDownloadUrl()](./bucket-file-downloadurl)
