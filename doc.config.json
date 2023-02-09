@@ -387,8 +387,8 @@
             "href": "/docs/reference/nodejs/v0/storage/bucket-files"
           },
           {
-            "title": "file.get()",
-            "href": "/docs/reference/nodejs/v0/storage/bucket-file-get"
+            "title": "file.read()",
+            "href": "/docs/reference/nodejs/v0/storage/bucket-file-read"
           },
           {
             "title": "file.write()",
@@ -601,8 +601,8 @@
             "href": "/docs/reference/python/v0/storage/bucket-files"
           },
           {
-            "title": "file.get()",
-            "href": "/docs/reference/python/v0/storage/bucket-file-get"
+            "title": "file.read()",
+            "href": "/docs/reference/python/v0/storage/bucket-file-read"
           },
           {
             "title": "file.write()",
@@ -749,8 +749,8 @@
             "href": "/docs/reference/csharp/v0/storage/bucket-files"
           },
           {
-            "title": "file.get()",
-            "href": "/docs/reference/csharp/v0/storage/bucket-file-get"
+            "title": "file.read()",
+            "href": "/docs/reference/csharp/v0/storage/bucket-file-read"
           },
           {
             "title": "file.write()",
