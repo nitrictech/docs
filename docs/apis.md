@@ -339,7 +339,7 @@ const getAllCustomers = (ctx) => {};
 customersApi.get('/customers', [validate, getAllCustomers]);
 
 // Using .route()
-customersApi.route('/customers', validate, getAllCustomers);
+customersApi.route('/customers').get(validate, getAllCustomers);
 ```
 
 {% /tab %}
