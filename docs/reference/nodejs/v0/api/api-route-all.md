@@ -21,9 +21,19 @@ customersRoute.all((ctx) => {
 
 ---
 
-**...middleware** required `HttpMiddleware`
+**middleware** required `HttpMiddleware` | `HttpMiddleware[]`
 
-One or more functions to use as the handler for requests. Handlers can be sync or async.
+One or more middleware functions to use as the handler for HTTP requests. Handlers can be sync or async
+
+---
+
+**opts** optional `object`
+
+Additional options when creating method.
+
+| Properties                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **security** optional `map<string, string[]>` <br/> Security rules to apply with scopes to the entire API. Keys must match a `securityDefinition` |
 
 ---
 
@@ -53,13 +63,13 @@ customersRoute.get((ctx) => {
 ```javascript
 import { api } from '@nitric/sdk';
 
-const customersRoute = api('public').route('/customers')
+const customersRoute = api('public').route('/customers');
 
-customersRoute.all(ctx) => {
+customersRoute.all((ctx) => {
   // construct a response for all incoming HTTP requests
   const responseBody = {};
   ctx.res.json(responseBody);
-})
+});
 ```
 
 ### Chain functions as a single method handler
@@ -74,7 +84,7 @@ const customersRoute = api('public').route('/customers');
 
 const customersHandler = (ctx) => {};
 
-customersRoute.all(validate, customersHandler);
+customersRoute.all([validate, customersHandler]);
 ```
 
 ### Access the request body

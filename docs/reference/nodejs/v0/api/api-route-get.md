@@ -21,15 +21,19 @@ customerRoute.get((ctx) => {
 
 ---
 
-**match** required `string`
+**middleware** required `HttpMiddleware` | `HttpMiddleware[]`
 
-The path matcher to use for the route. Matchers accept path parameters in the form of a colon prefixed string. The string provided will be used as that path parameter's name when calling middleware and handlers. See [create a route with path params](#create-a-route-with-path-params)
+One or more middleware functions to use as the handler for HTTP requests. Handlers can be sync or async
 
 ---
 
-**...middleware** required `HttpMiddleware`
+**opts** optional `object`
 
-One or more middleware functions to use as the handler for HTTP requests. Handlers can be sync or async.
+Additional options when creating method.
+
+| Properties                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **security** optional `map<string, string[]>` <br/> Security rules to apply with scopes to the entire API. Keys must match a `securityDefinition` |
 
 ---
 
@@ -65,5 +69,5 @@ const getCustomer = (ctx) => {
 
 const customerRoute = api('public').route(`/customers`);
 
-customerRoute.get(validate, getCustomer);
+customerRoute.get([validate, getCustomer]);
 ```

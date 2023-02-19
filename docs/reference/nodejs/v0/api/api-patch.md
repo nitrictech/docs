@@ -29,9 +29,19 @@ The path matcher to use for the route. Matchers accept path parameters in the fo
 
 ---
 
-**...middleware** required `HttpMiddleware`
+**middleware** required `HttpMiddleware` | `HttpMiddleware[]`
 
-One or more middleware functions to use as the handler for HTTP requests. Handlers can be sync or async.
+One or more middleware functions to use as the handler for HTTP requests. Handlers can be sync or async
+
+---
+
+**opts** optional `object`
+
+Additional options when creating method.
+
+| Properties                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **security** optional `map<string, string[]>` <br/> Security rules to apply with scopes to the entire API. Keys must match a `securityDefinition` |
 
 ---
 
@@ -69,7 +79,7 @@ const patchCustomer = (ctx) => {
   ctx.res.json(responseBody);
 };
 
-api('public').patch(`/customers/:${PARAM_ID}`, validate, patchCustomer);
+api('public').patch(`/customers/:${PARAM_ID}`, [validate, patchCustomer]);
 ```
 
 ### Access the request body
