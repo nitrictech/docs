@@ -24,7 +24,7 @@ For a local PostgreSQL instance, we recommend the [official docker image](https:
 
 ### Connect
 
-The official [postgres](https://github.com/mysql/mysql-connector-nodejs) driver is recommended for basic connections to a MySQL instance. However, if you would prefer a higher abstraction, we recommend Prisma ORM. You can read our guide on using Prisma [here](https://nitric.io/docs/guides/serverless-api-with-planetscale-and-prisma).
+The official [postgres](https://github.com/mysql/mysql-connector-nodejs) driver is recommended for basic connections to a PostgreSQL instance. However, if you would prefer a higher abstraction, we recommend Prisma ORM. You can read our guide on using Prisma [here](https://nitric.io/docs/guides/serverless-api-with-planetscale-and-prisma).
 
 ```ts
 import { Client } from 'pg';
