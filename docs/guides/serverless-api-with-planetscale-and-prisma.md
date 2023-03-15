@@ -312,7 +312,6 @@ Similar to the `templates` example, we'll create another new file `functions/mem
 
 ```typescript
 // functions/memes.ts
-import { FileMode } from '@nitric/sdk';
 import Jimp from 'jimp';
 import prisma, { Meme } from '../prisma';
 import { memes, templates } from '../resources/buckets';
@@ -399,7 +398,7 @@ memeApi.get('/memes', async ({ res }) => {
 // GET: /memes/:id - Get a meme image by it's ID
 memeApi.get('/memes/:id', async ({ req, res }) => {
   const { id } = req.params;
-  const signedUrl = await memesImgs.file(id).signUrl(FileMode.Read);
+  const signedUrl = await memesImgs.file(id).GetDownloadUrl();
   res.status = 303;
   res.headers['Location'] = [signedUrl];
 });

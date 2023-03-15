@@ -35,4 +35,5 @@ The file does not need to exist, only a reference to that file is being created.
 - [file.read()](./bucket-file-read)
 - [file.write()](./bucket-file-write)
 - [file.delete()](./bucket-file-delete)
-- [file.signUrl()](./bucket-file-signurl)
+- [file.getDownloadUrl()](./bucket-file-downloadurl)
+- [file.getUploadUrl()](./bucket-file-uploadurl)
