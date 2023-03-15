@@ -398,7 +398,7 @@ memeApi.get('/memes', async ({ res }) => {
 // GET: /memes/:id - Get a meme image by it's ID
 memeApi.get('/memes/:id', async ({ req, res }) => {
   const { id } = req.params;
-  const signedUrl = await memesImgs.file(id).GetDownloadUrl();
+  const signedUrl = await memesImgs.file(id).getDownloadUrl();
   res.status = 303;
   res.headers['Location'] = [signedUrl];
 });
