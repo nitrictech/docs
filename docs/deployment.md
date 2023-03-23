@@ -27,7 +27,7 @@ The current providers in nitric for AWS, GCP and Azure all use [Pulumi](https://
 
 #### Configuring cloud credentials
 
-You will need to configure your cloud credentials for your CI/CD pipeline to allow nitric to create resources in your cloud account, instructions on doing this can be found in our provide documentation for each of the clouds: [AWS](/docs/reference/providers/aws), [GCP](/docs/reference/providers/gcp) and [Azure](/docs/reference/providers/azure)
+You will need to configure your cloud credentials for your CI/CD pipeline to allow nitric to create resources in your cloud account, instructions on doing this can be found in our provider documentation for each of the clouds: [AWS](/docs/reference/providers/aws), [GCP](/docs/reference/providers/gcp) and [Azure](/docs/reference/providers/azure)
 
 #### Configuring State Backend
 
