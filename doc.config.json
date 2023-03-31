@@ -895,6 +895,15 @@
             "href": "/docs/reference/providers/gcp/topics"
           }
         ]
+      },
+      {
+        "title": "Custom Provider",
+        "links": [
+          {
+            "title": "Building a Custom Provider",
+            "href": "/docs/reference/providers/custom/building-custom-provider.md"
+          }
+        ]
       }
     ],
     "cli": [
