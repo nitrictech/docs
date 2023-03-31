@@ -162,6 +162,10 @@
           "href": "/docs/support"
         },
         {
+          "title": "Migrate away from Nitric",
+          "href": "/docs/support/eject"
+        },
+        {
           "title": "Contributions",
           "href": "/docs/contributions"
         }
