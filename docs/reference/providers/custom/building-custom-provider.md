@@ -3,7 +3,7 @@ title: Building Custom Providers
 description: How to build a custom provider using Nitric
 ---
 
-This guide is for those that are interested in building their own custom provider to provide support for a missing cloud, or implementing their own internal development platform, or just curious to know how it all works. Nitric's main goal is to keep a general interface for interacting with cloud resources, regardless of the provider. This abstraction enables portability, developer efficiency, and standardises the way that code is written across teams.
+This guide is for those that are interested in building their own custom provider to provide support for a missing cloud, or implementing their own internal development platform, or just curious to know how it all works. Nitric's main goal is to keep a general interface for interacting with cloud resources, regardless of the provider. This abstraction enables portability, developer efficiency, and standardizes the way that code is written across teams.
 
 Nitric's cloud providers are individual plugins separated into a runtime and a deployment provider for AWS, GCP, and Azure. The [runtime provider](#runtime) is concerned with converting abstract SDK calls into direct cloud API calls. The [deployment provider](#deployments) takes a resource specification of topics, buckets, and functions and converts them into cloud resources. The providers, CLI, and SDK all work together to make the application deploy and run.
 
@@ -15,7 +15,7 @@ The Nitric CLI's core responsibility is to get the infrastructure requirements f
 
 > The complete proto files can be found in our core [nitric repository](https://github.com/nitrictech/nitric/blob/main/contracts/proto/deploy/v1/deploy.proto).
 
-The CLI will also dockerise and build your function code, passing the information about the built image to the deployment provider. Given this deployment specification, the provider can deploy whatever resources are needed. For example, given the function below:
+The CLI will also containerize and build your function code, passing the information about the built image to the deployment provider. Given this deployment specification, the provider can deploy whatever resources are needed. For example, given the function below:
 
 ```ts
 import { api, bucket, faas } from '@nitric/sdk';
@@ -103,7 +103,7 @@ The CLI would convert it into the following resource spec:
 }
 ```
 
-The spec contains a list of resources and global attributes that can be passed to the deployment provider. The list of resources for this deployment contains an API, bucket, and execution unit with the information required to configure them for the cloud. The default project and stack attributes are also provided. You will notice in the execution unit config the image is provided with a uri pointing to the local image name.
+The spec contains a list of resources and global attributes that can be passed to the deployment provider. The list of resources for this deployment contains an API, bucket, and execution unit with the information required to configure them for the cloud. The default project and stack attributes are also provided. You will notice in the execution unit config the image is provided with a URI pointing to the local image name.
 
 The deployment provider requires an implementation for deploying and a method for destroying the cloud resources, called `Up` and `Down` respectively.
 
@@ -156,7 +156,7 @@ func StartServer(deploySrv v1.DeployServiceServer) {
 
 > As protocol buffers can be compiled to any language, the deployment providers can be written in any language.
 
-The next step is filling in the deployment code. For Nitric's deployment provider implementation we use [Pulumi](https://www.pulumi.com/), however other tools like Terraform CDK and AWS CDK can be used. There is a provider currently built for AWS, GCP, and Azure which means theres plenty of examples and inspiration for when you build your own deployment provider. The following example is using Pulumi to deploy an S3 bucket.
+The next step is filling in the deployment code. For Nitric's deployment provider implementation we use [Pulumi](https://www.pulumi.com/), however other tools like Terraform CDK and AWS CDK can be used. There is a provider currently built for AWS, GCP, and Azure which means there's plenty of examples and inspiration for when you build your own deployment provider. The following example is using Pulumi to deploy an S3 bucket.
 
 ```go
 for _, res := range request.Spec.Resources {
@@ -185,7 +185,7 @@ Importantly, the resource needs to be tagged with the Nitric tags. This is so a 
 
 The runtime provider is there to map the Nitric SDKs to the relevant cloud API. For example, using the SDK in application code, someone might define an API and a bucket with permissions for writing. This will be picked up by the CLI and added to the resource spec so the deployment provider can provision it. However, the actual action to write to the bucket will be performed at runtime. This is handled using a sidecar gRPC server that accepts the write request for that particular file.
 
-> If your provider only needs to deploy resources, and does not make use of any of the Nitric SDKs, then the runtime code is unneccessary.
+> If your provider only needs to deploy resources, and does not make use of any of the Nitric SDKs, then the runtime code is unnecessary.
 
 In the following case, a bucket is written to with some image data.
 
