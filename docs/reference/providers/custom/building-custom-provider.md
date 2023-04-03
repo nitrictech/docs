@@ -105,6 +105,8 @@ The CLI would convert it into the following resource spec:
 
 The spec contains a list of resources and global attributes that can be passed to the deployment provider. The list of resources for this deployment contains an API, bucket, and execution unit with the information required to configure them for the cloud. The default project and stack attributes are also provided. You will notice in the execution unit config the image is provided with a URI pointing to the local image name.
 
+### Setting up the server
+
 The deployment provider requires an implementation for deploying and a method for destroying the cloud resources, called `Up` and `Down` respectively.
 
 ```golang
@@ -155,6 +157,24 @@ func StartServer(deploySrv v1.DeployServiceServer) {
 ```
 
 > As protocol buffers can be compiled to any language, the deployment providers can be written in any language.
+
+In the future, we may release developer resources that make writing the custom providers easier for the languages that Nitric supports. This would remove the need for this boilerplate so that you can focus on writing your code. This may look like the following:
+
+```ts
+import { deploy } from '@nitric/cdk';
+
+deploy.up(async ({ spec }) => {
+  // deploy the stack
+});
+
+deploy.down(async ({ spec }) => {
+  // tear down the stack
+});
+```
+
+> This would also include the utilities to make it easier to write runtime plugins in your own language as well
+
+### Writing the deployment code
 
 The next step is filling in the deployment code. For Nitric's deployment provider implementation we use [Pulumi](https://www.pulumi.com/), however other tools like Terraform CDK and AWS CDK can be used. There is a provider currently built for AWS, GCP, and Azure which means there's plenty of examples and inspiration for when you build your own deployment provider. The following example is using Pulumi to deploy an S3 bucket.
 
