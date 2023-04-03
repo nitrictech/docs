@@ -125,6 +125,14 @@
           "href": "/docs/guides/secure-api-auth0"
         },
         {
+          "title": "Visualising Data",
+          "href": "/docs/guides/create-histogram"
+        },
+        {
+          "title": "Predictive Text API using Tensorflow",
+          "href": "/docs/guides/text-prediction"
+        },
+        {
           "title": "Using Git Actions",
           "href": "/docs/guides/github-actions"
         },

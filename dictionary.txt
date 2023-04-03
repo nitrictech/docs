@@ -120,6 +120,12 @@ mongodb
 typesafe
 YAML
 CRON
+png
+keras
+tokenize
+tokenizer
+programmatically
+numpy
 dotnet
 
 ^.+[-:_]\w+$
