@@ -24,7 +24,7 @@ A great time to contact us is when your team requires support for a native resou
 
 ## Choosing a new IaC
 
-Most of the code that you write for your applications will likely be specific to your organization or domain. Nitric's role is to provide supporting runtime and deploy time resources which make it easier for you to build your app. We have eliminated the need for a separate deployment project, so this will be where the most effort lies in migration away.
+Most of the code that you write for your applications will likely be specific to your organization or domain. Nitric's role is to provide supporting runtime and deploy time resources which make it easier for you to build your app. We have eliminated the need for a separate deployment project, so this will be where the most effort lies in migrating away.
 
 Deciding which IaC tool will suit your needs is a difficult decision, and one which we've attempted to abstract and automate to free up your time. We're pro code over config, so our recommendation would be to use an IaC tool like Pulumi - but the choice is yours.
 
