@@ -48,6 +48,7 @@ The CLI would convert it into the following resource spec:
       },
       {
         "name": "main",
+        "type": 0,
         "Config": {
           "Api": {
             "Document": {
@@ -107,7 +108,7 @@ The spec contains a list of resources and global attributes that can be passed t
 
 ### Setting up the server
 
-The deployment provider requires an implementation for deploying and a method for destroying the cloud resources, called `Up` and `Down` respectively.
+The deployment provider requires implementations for deploying and destroying cloud resources, called `Up` and `Down` respectively.
 
 ```golang
 type DeployServer struct {
@@ -158,6 +159,8 @@ func StartServer(deploySrv v1.DeployServiceServer) {
 
 > As protocol buffers can be compiled to any language, the deployment providers can be written in any language.
 
+### Future features
+
 In the future, we may release developer resources that make writing the custom providers easier for the languages that Nitric supports. This would remove the need for this boilerplate so that you can focus on writing your code. This may look like the following:
 
 ```ts
@@ -173,6 +176,8 @@ deploy.down(async ({ spec }) => {
 ```
 
 > This would also include the utilities to make it easier to write runtime plugins in your own language as well
+
+Check out the [discussion on GitHub](https://github.com/nitrictech/nitric/discussions/422) to contribute feedback on the approach, and how we can best enhance your platform development.
 
 ### Writing the deployment code
 
