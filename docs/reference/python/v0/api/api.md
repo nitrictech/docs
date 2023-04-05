@@ -84,12 +84,13 @@ publicApi = api("public", ApiOptions(path="/api/v1/"))
 
 ```python
 from nitric.resources import api, ApiOptions
+from nitric.resources.apis import JwtSecurityDefinition
 
 publicApi = api("public", ApiOptions(
     security_definitions={
         "user": JwtSecurityDefinition(
-            issuer: "https://example-issuer.com"
-            audiences: ['YOUR-AUDIENCES']
+            issuer="https://example-issuer.com",
+            audiences=['YOUR-AUDIENCES']
         )
     },
     security={
