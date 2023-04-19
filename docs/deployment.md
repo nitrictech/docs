@@ -42,12 +42,11 @@ When deploying the application, you can add extra configuration for specific fun
 name: project
 provider: nitric/aws@0.24.0
 region: us-east-1
+telemetry: 10
 config:
   default:
     lambda:
       memory: 1024
-      telemetry: 10
-    target: lambda
   memory-optimized:
     lambda:
       memory: 4096
