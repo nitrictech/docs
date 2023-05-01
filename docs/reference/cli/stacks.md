@@ -28,12 +28,92 @@ Follow the prompts to create a stack for your provider.
 The stack definition will be created in the root of your project as a YAML file prefixed with `nitric-` e.g. `nitric-aws-stack.yaml`
 
 ```yaml
-name: aws-stack
-provider: aws
+name: my-aws-stack
+provider: nitric/aws@0.24.0
 region: us-east-1
 ```
 
+If you want to specify different configuration for your functions you can use the following syntax:
+
+```yaml
+name: my-aws-stack
+provider: nitric/aws@0.24.0
+region: us-east-1
+config:
+  default:
+    lambda:
+      memory: 1024
+      telemetry: 10
+    target: lambda
+  memory-optimized:
+    lambda:
+      memory: 4096
+```
+
+> For more information on what can be configured, [look here](/docs/deployment#configuring-deployment)
+
 Once you have created a stack, you're ready to deploy and undeploy to your deployment target. See the [CLI docs](/docs/reference/cli) for available commands.
+
+### Legacy Stacks
+
+Previously stacks were not tied to a specific runtime and did not version the providers. It had the following format:
+
+```yaml
+name: my-aws-stack
+provider: aws
+region: us-east-1
+config:
+  default:
+    memory: 1024
+    telemetry: 10
+  memory-optimized:
+    memory: 4096
+```
+
+The provider has been updated from `aws`, `gcp`, and `azure` to `nitric/aws@0.24.0`, `nitric/gcp@0.24.0`, and `nitric/azure@0.24.0` respectively. This change enables locking a version for your deployments, as it was previously tied to the CLI version. This change will also enable creation of your own [custom deployment providers](/docs/reference/providers/custom/building-custom-provider).
+
+There was also a change to the way configuration is written to support multiple execution runtimes. Currently there are no new runtimes supported (just Lambda, Cloud Run, and Container Apps), however there are plans to support more in the near future, hence the change. The migration involves adding the runtime key to the configuration, letting the deployment know what runtime it should apply the configuration to.
+
+```yaml
+# Legacy
+config:
+  default:
+    memory: 1024
+  memory-optimized:
+    memory: 4096
+
+# New AWS Config
+config:
+  default:
+    lambda:
+      memory: 1024 # in MB
+    target: lambda
+  memory-optimized:
+    # A non-default configuration does not need to specify a target
+    # It picks up from which runtime config is provided
+    lambda:
+      memory: 4096
+
+# New GCP Config
+config:
+  default:
+    cloudrun:
+      memory: 1024 # in MB
+    target: cloudrun
+  memory-optimized:
+    cloudrun:
+      memory: 4096
+
+# New Azure Config
+config:
+  default:
+    containerapps:
+      memory: 1 # in GB
+    target: containerapps
+  memory-optimized:
+    containerapps:
+      memory: 4
+```
 
 ## Updating a stack definition
 

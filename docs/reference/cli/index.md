@@ -8,11 +8,11 @@ The Nitric CLI allows you to build, develop, and deploy your serverless applicat
 To verify your [installation](/docs/installation) run `nitric version`. The output should look something like this:
 
 ```
-Go Version: go1.17.8
+Go Version: go1.19
 Go OS/Arch: darwin/amd64
-Git commit: fce97c9
-Build time: 2022-03-23T14:05:59+1100
-Nitric CLI: v1.1.0-develop.14-98-gfce97c91c5bce6eeb864194e592134322b52d8e5
+Git commit: 10e05a65
+Build time: 2023-03-31T13:17:25+1100
+Nitric CLI: v1.8.0-273-g10e05a65d3b6307ce1a3648527b971ee4c513a62
 ```
 
 To get a list of the available commands, run the following command:
@@ -74,6 +74,17 @@ handlers:
   - functions/*.ts
 ```
 
+If you want to specify a specific type of function that matches your stack config, you can use this syntax instead:
+
+```yaml
+name: my-project
+handlers:
+  - match: functions/*.ts
+    type: default
+  - match: custom/*.ts
+    type: memory-optimized
+```
+
 ### Stacks
 
 Creating a new stack will create a configuration for a particular cloud. You can have multiple stacks for one project.
@@ -87,12 +98,29 @@ This will create a `nitric-stackName.yaml` file that contains the configuration 
 ```yaml
 # nitric-my-aws-stack.yaml
 name: my-aws-stack
-provider: aws
+provider: nitric/aws@0.24.0
 region: us-east-1
 ```
 
 > Note: the cloud configuration is separate to the cloud credentials.
 > You will still have to set your cloud credentials on your first deployment by following the guide in the cloud's section in the reference documentation.
+
+If you want to specify different configuration for your functions you can use the following syntax:
+
+```yaml
+# nitric-my-aws-stack.yaml
+name: my-aws-stack
+provider: nitric/aws@0.24.0
+region: us-east-1
+telemetry: 10
+config:
+  default:
+    lambda:
+      memory: 1024
+  memory-optimized:
+    lambda:
+      memory: 4096
+```
 
 ## Development
 

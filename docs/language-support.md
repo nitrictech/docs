@@ -11,13 +11,13 @@ The Nitric team provides idiomatic language SDKs, designed to feel familiar to d
 
 The following runtimes are currently supported or are in development:
 
-| Language Runtime                                   | Support        |
-| -------------------------------------------------- | -------------- |
-| [Node.js](https://github.com/nitrictech/node-sdk)  | Full Support   |
-| [Python](https://github.com/nitrictech/python-sdk) | Full Support   |
-| [Go](https://github.com/nitrictech/go-sdk)         | In Preview     |
-| [JVM](https://github.com/nitrictech/jvm-sdk)       | Experimental   |
-| [C#](https://github.com/nitrictech/dotnet-sdk)     | In Development |
+| Language Runtime                                   | Support      |
+| -------------------------------------------------- | ------------ |
+| [Node.js](https://github.com/nitrictech/node-sdk)  | Full Support |
+| [Python](https://github.com/nitrictech/python-sdk) | Full Support |
+| [Go](https://github.com/nitrictech/go-sdk)         | In Preview   |
+| [C#](https://github.com/nitrictech/dotnet-sdk)     | Experimental |
+| [JVM](https://github.com/nitrictech/jvm-sdk)       | Experimental |
 
 If a language you want isn't listed, come chat with us on [Discord](https://discord.gg/Webemece5C).
 
