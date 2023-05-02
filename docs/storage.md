@@ -166,3 +166,27 @@ upload_url = await profiles.file('profile.png').upload_url()
 
 {% /tab %}
 {% /tabs %}
+
+### Create bucket notification
+
+You can create a trigger for when an object is created or deleted in a bucket. A common use case for this is resizing an image once its added to a bucket.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
+```javascript
+import { bucket } from '@nitric/sdk';
+
+const profiles = bucket('profiles');
+
+profiles.on('created:images/', (ctx) => {
+  console.log(`new image called '${ctx.req.key}' was created`);
+});
+
+profiles.on('deleted:*', (ctx) => {
+  console.log(`${ctx.req.key} was deleted`);
+});
+```
+
+{% /tab %}
+{% /tabs %}
