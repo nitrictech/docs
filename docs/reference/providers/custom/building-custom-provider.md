@@ -110,7 +110,7 @@ The spec contains a list of resources and global attributes that can be passed t
 
 The deployment provider requires implementations for deploying and destroying cloud resources, called `Up` and `Down` respectively.
 
-```golang
+```go
 type DeployServer struct {
 }
 
