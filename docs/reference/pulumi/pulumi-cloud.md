@@ -3,7 +3,7 @@ title: Using Pulumi Cloud as a Backend
 description: Use pulumi cloud as a state backend when deploying your nitric applications
 ---
 
-Nitric uses the [Pulumi Automation API](https://www.pulumi.com/docs/guides/automation-api/) for it's out of the box provider plugins, this can be a bit confusing at first as there is no need to create a workspace along with your project to manage your stacks. These stacks are instead managed by the program that uses the automation API to interact with Pulumi to get your infrastructure deployed, this could come in the form of a CLI, API or even plugins to other software.
+Nitric uses the [Pulumi Automation API](https://www.pulumi.com/automation/) for it's out of the box provider plugins, this can be a bit confusing at first as there is no need to create a workspace along with your project to manage your stacks. These stacks are instead managed by the program that uses the automation API to interact with Pulumi to get your infrastructure deployed, this could come in the form of a CLI, API or even plugins to other software.
 
 Despite these differences this does not change how you can integrate nitric with Pulumi cloud and use it as a state backend for your stack infrastructure. You can get started quickly and try this out with the following steps
 
