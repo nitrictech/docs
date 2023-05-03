@@ -169,7 +169,7 @@ upload_url = await profiles.file('profile.png').upload_url()
 
 ### Create bucket notification
 
-You can create a trigger for when an object is created or deleted in a bucket. A common use case for this is resizing an image once its added to a bucket.
+You can create a trigger for when an object is created or deleted in a bucket. A common use case is to trigger data processing tasks, such as running analytics or machine learning models, when new files are added to a bucket.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}

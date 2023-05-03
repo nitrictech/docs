@@ -1,14 +1,13 @@
 ---
-title: Node.js - bucket()
-description: Reference for Nitric's Node.js library - Create a new bucket for storing and retrieving files.
+title: Node.js - bucket.on()
+description: Reference for Nitric's Node.js library - Create a new bucket notification trigger
 ---
 
-Create a new bucket for storing and retrieving files.
+Create a new bucket notification trigger when certain files are created or deleted.
 
 ```javascript
 import { bucket } from '@nitric/sdk';
 
-// Create a readable/writable reference to an 'assets' bucket
 const assets = bucket('assets');
 
 assets.on('created:*', (ctx) => {
