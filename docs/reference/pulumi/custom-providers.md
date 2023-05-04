@@ -3,15 +3,15 @@ title: Building Nitric providers using Pulumi
 description: Create your own Infrastructure from Code experience with deployments powered by Pulumi
 ---
 
-If you're not already familiar with the basics of nitric providers detailed overview on how nitric providers work under the hood can be found [here](../providers/custom/building-custom-provider.md).
+If you're not already familiar with the basics of Nitric providers, a detailed overview on how Nitric providers work under the hood can be found [here](../providers/custom/building-custom-provider.md).
 
-Nitric's providers are simple programs that implement a plugin interface backed by gRPC. A nitric provider is a simple server that will be started by the nitric CLI at deploy time and will be provided with a cloud specification to deploy any way the provider sees fit.
+Nitric's providers are simple programs that implement a plugin interface backed by gRPC. A Nitric provider is a simple server that will be started by the Nitric CLI at deploy time and will be provided with a cloud specification to deploy any way the provider sees fit.
 
 ![nitric pulumi diagram](/docs/assets/img/nitric-pulumi.png)
 
-Nitric providers can be written using any language, but for now we'd recommend using Go to make use of existing nitric pulumi custom resources and generated protobuf contracts in the nitric core repository.
+Although Nitric providers can be developed using any language, we'd recommend using Go due to the availability of pre-existing Nitric Pulumi custom resources and generated protobuf contracts in the Nitric core repository.
 
-A simple gRPC deployment server, that include pulumi automation API references to get started
+This code provides a simple gRPC deployment server with references to the Pulumi Automation API. It can be used to get started with deploying infrastructure through Pulumi.
 
 ```go
 type DeployServer struct {
@@ -27,18 +27,18 @@ func (d *DeployServer) Up(request *deploy.DeployUpRequest, stream deploy.DeployS
     })
 
     if err != nil {
-		return err
-	}
+	return err
+}
 
     res, err := pulumiStack.Up(context.TODO(), optup.ProgressStreams(messageWriter))
-	if err != nil {
-		return err
-	}
+if err != nil {
+	return err
+}
 
     // send final results
     // err = stream.Send(...)
 
-	return err
+return err
 }
 
 func (d *DeployServer) Down(request *deploy.DeployDownRequest, stream deploy.DeployService_DownServer) error {
@@ -58,4 +58,4 @@ func (d *DeployServer) Down(request *deploy.DeployDownRequest, stream deploy.Dep
 
 For complete example implementations check out our [AWS](https://github.com/nitrictech/nitric/tree/develop/cloud/aws), [GCP](https://github.com/nitrictech/nitric/tree/develop/cloud/gcp) and [Azure](https://github.com/nitrictech/nitric/tree/develop/cloud/azure) providers in the nitric github repository.
 
-If you'd like to see more work in this space including the development of [CDKs](../providers/custom/building-custom-provider#future-features) to make scaffolding and building nitric providers even easier let us know over at our github discussions or drop us a line over at our discord.
+Let us know on our GitHub discussions or through our Discord if you are interested in seeing more work in this space, including the creation of [CDKs](https://chat.openai.com/providers/custom/building-custom-provider#future-features) that can simplify the process of scaffolding and building Nitric providers.

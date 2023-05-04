@@ -1,56 +1,56 @@
 ---
 title: Using Pulumi Cloud as a Backend
-description: Use pulumi cloud as a state backend when deploying your nitric applications
+description: Use Pulumi Cloud as a state backend when deploying your Nitric applications
 ---
 
-Nitric uses the [Pulumi Automation API](https://www.pulumi.com/automation/) for it's out of the box provider plugins, this can be a bit confusing at first as there is no need to create a workspace along with your project to manage your stacks. These stacks are instead managed by the program that uses the automation API to interact with Pulumi to get your infrastructure deployed, this could come in the form of a CLI, API or even plugins to other software.
+Nitric uses the [Pulumi Automation API](https://www.pulumi.com/automation/) for its pre-built provider plugins. At first, this may cause some confusion as there is no requirement to create a workspace for managing stacks alongside your project. Instead, the program that interacts with Pulumi via the automation API handles the management of these stacks, which could take the form of a CLI, API, or plugins for other software.
 
-Despite these differences this does not change how you can integrate nitric with Pulumi cloud and use it as a state backend for your stack infrastructure. You can get started quickly and try this out with the following steps
+Despite these differences, it does not change how you integrate Nitric with Pulumi Cloud and use it as a state backend for your stack infrastructure. You can get started quickly and try this out with the following steps:
 
-## Get the nitric CLI and scaffold a new project
+## Get the Nitric CLI and scaffold a new project
 
-You can get the nitric CLI by following the instructions [here](). Once its setup you can scaffold a new project by running:
+You can get the Nitric CLI by following the instructions [here](https://nitric.io/docs/installation). Once its setup you can scaffold a new project by running:
 
 ```bash
 nitric new
 ```
 
-And following the prompts to create your new project. Once that's jump into that directory with
+And follow the prompts to create your new project. Once that's done, jump into that directory with:
 
 ```bash
 cd <your_project_name>
 ```
 
-## Create a new nitric stack for your preferred cloud provider
+## Create a new Nitric stack for your preferred cloud provider
 
-To create a configure new stack run
+To create and configure a new Nitric stack run:
 
 ```
 nitric stack new
 ```
 
-And select the cloud you'd like to deploy to and follow the prompts to configure it.
+This above command will prompt you to set up and configure the cloud you want to deploy to.
 
 
-## Make sure pulumi is configured
+## Make sure Pulumi is configured
 
-If you don't have the pulumi CLI setup make sure you do. You can check if you're logged in with by running:
+If you don't have the Pulumi CLI setup take a look at their [installation documentation](https://www.pulumi.com/docs/get-started/install/). You can check if you're logged in with by running:
 
 ```bash
 pulumi whoami
 ```
 
-If you need to login to your pulumi cloud account you can do so with
+If you need to login to your Pulumi Cloud account you can do so with:
 
 ```bash
 pulumi login
 ```
 
-Once that's setup you can simply run
+Once that's setup you can simply run:
 
 ```bash
 nitric up
 ```
 
-Within your project directory and wait until the project has finished deploying. You can also follow your deployment on the [Pulumi cloud dashboard](https://app.pulumi.com)
+Within your project directory and wait until the project has finished deploying. You can also follow your deployment on the [Pulumi Cloud dashboard](https://app.pulumi.com)
 
