@@ -172,6 +172,20 @@ curl http://localhost:4001/hello/John
 Hello John
 ```
 
+## Your local dashboard
+
+Access your [local development dashboard](./local-dashboard.md) now and start streamlining your development process.
+
+> Simply open [http://localhost:4000](http://localhost:4000) in your browser to get started.
+
+Your development dashboard is a powerful tool designed to help you move faster when developing new features. With the API explorer, you can easily access automatically generated endpoints and path params. Additionally, the Schedules Explorer allows you to trigger your schedules with ease, making it easier than ever to stay on top of your tasks. Make the most of your local development process with this essential tool.
+
+Watch this brief video to see the development dashboard in action. You'll get a firsthand look at how the dashboard streamlines your development process by showcasing the debugging APIs and schedules in the popular code editor, VS Code.
+
+<div class="video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/cjbg-klgDNM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+</div>
+
 ## Making updates
 
 Most of Nitric's language templates enable hot-reloading by default, so at this point, you can start making changes to functions and see what happens.
