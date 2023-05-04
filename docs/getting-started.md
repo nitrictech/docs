@@ -78,7 +78,9 @@ nitric new
 ? Choose a template: official/Python - Starter
 ```
 
-Navigate to the new project directory and install the dependencies:
+We recommend using [Pipenv](https://pipenv.pypa.io/en/latest/) for dependency and virtual environment management for python. We have included it in our python templates. If you haven't installed it before, you can follow the [installation instructions](https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv).
+
+Now you can navigate to the new project directory and install the dependencies:
 
 ```bash
 cd hello-world
@@ -93,6 +95,7 @@ Your project should now look like this:
 |  +-- hello.py
 +--index.py
 +--Pipfile
++--Pipfile.lock
 +--nitric.yaml
 +--README.md
 ```
@@ -156,7 +159,13 @@ in this case, the URL for the API should be:
 http://localhost:4001/
 ```
 
-Once the API is registered, you can test the API using cURL, your browser, or any other HTTP client:
+And the local dashboard URL should be displayed underneath as:
+
+```txt
+http://localhost:49152/
+```
+
+Once the API is registered, you can test the API using any HTTP client, your browser, or our [Nitric dashboard](http://localhost:49152):
 
 ```bash
 curl http://localhost:4001/hello/John
