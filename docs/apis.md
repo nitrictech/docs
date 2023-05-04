@@ -94,6 +94,8 @@ The string used to match HTTP routes can include named parameters. The values co
 {% tab label="JavaScript" %}
 
 ```javascript
+import { getPlanet, updatePlanet, deletePlanet } from 'planets';
+
 galaxyApi.get('/planets/:name', async (ctx) => {
   const { name } = ctx.req.params;
   // get a specific planet
@@ -123,8 +125,10 @@ galaxyApi.delete('/planets/:name', async (ctx) => {
 {% tab label="Python" %}
 
 ```python
+from planets import get_planet, update_planet, delete_planet
+
 @galaxy_api.get("/planets/:name")
-async def get_planet(ctx):
+async def get_planet_route(ctx):
   name = ctx.req.params['name']
   # get a specific planet
   planet = get_planet(name)
@@ -132,14 +136,14 @@ async def get_planet(ctx):
   ctx.res.body = planet
 
 @galaxy_api.patch("/planets/:name")
-async def update_planet(ctx):
+async def update_planet_route(ctx):
   name = ctx.req.params['name']
-  update = ctx.req.json
+  data = ctx.req.json()
   # update a specific planet
-  update_planet(name, update)
+  update_planet(name, data)
 
 @galaxy_api.delete("/planets/:name")
-async def delete_planet(ctx):
+async def delete_planet_route(ctx):
   name = ctx.req.params['name']
   # delete a specific planet
   delete_planet(name)

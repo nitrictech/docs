@@ -34,5 +34,9 @@ Download & install the [latest CLI release](https://cloud.google.com/sdk/docs/in
 Authorize gcloud to access the Cloud Platform with Google user credentials:
 
 ```
-gcloud auth login
+gcloud auth application-default login
 ```
+
+### Create Billing Account
+
+For GCP to allow deployments, a billing account must be [created and attached](https://console.cloud.google.com/billing) to the project you deploy to.

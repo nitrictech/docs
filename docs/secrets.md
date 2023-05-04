@@ -60,7 +60,7 @@ const apiKey = secret('api-key').for('put', 'access');
 from nitric.resources import secret
 
 # Create a new secret
-api_key = secret("api-key").allow("accessing")
+api_key = secret("api-key").allow("putting", "accessing")
 ```
 
 {% /tab %}
