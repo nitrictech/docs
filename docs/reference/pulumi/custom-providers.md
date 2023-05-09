@@ -27,18 +27,18 @@ func (d *DeployServer) Up(request *deploy.DeployUpRequest, stream deploy.DeployS
     })
 
     if err != nil {
-	return err
-}
+	    return err
+    }
 
     res, err := pulumiStack.Up(context.TODO(), optup.ProgressStreams(messageWriter))
-if err != nil {
-	return err
-}
+    if err != nil {
+        return err
+    }
 
     // send final results
     // err = stream.Send(...)
 
-return err
+    return err
 }
 
 func (d *DeployServer) Down(request *deploy.DeployDownRequest, stream deploy.DeployService_DownServer) error {
