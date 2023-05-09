@@ -31,7 +31,6 @@ nitric stack new
 
 This above command will prompt you to set up and configure the cloud you want to deploy to.
 
-
 ## Make sure Pulumi is configured
 
 If you don't have the Pulumi CLI setup take a look at their [installation documentation](https://www.pulumi.com/docs/get-started/install/). You can check if you're logged in with by running:
@@ -53,4 +52,3 @@ nitric up
 ```
 
 Within your project directory and wait until the project has finished deploying. You can also follow your deployment on the [Pulumi Cloud dashboard](https://app.pulumi.com)
-
