@@ -8,3 +8,4 @@ description: Nitric framework component reference documentation.
 - [Python SDK](/docs/reference/python/v0) - Using Nitric with Python
 - [.NET SDK](/docs/reference/csharp/v0) (Experimental 🧪) - Using Nitric with .NET Core and C#
 - [Providers](/docs/reference/providers) - Learn about support Cloud Providers for Nitric
+- [Pulumi](/docs/reference/pulumi) - Learn about Nitric's integration with Pulumi

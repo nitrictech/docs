@@ -200,6 +200,10 @@
           {
             "title": "CLI",
             "href": "/docs/reference/cli"
+          },
+          {
+            "title": "Pulumi",
+            "href": "/docs/reference/pulumi"
           }
         ]
       }
@@ -796,6 +800,21 @@
           {
             "title": "schedule.every()",
             "href": "/docs/reference/csharp/v0/schedule/schedule-every"
+          }
+        ]
+      }
+    ],
+    "pulumi": [
+      {
+        "title": "Pulumi",
+        "links": [
+          {
+            "title": "Using Pulumi Cloud as a Backend",
+            "href": "/docs/reference/pulumi/pulumi-cloud"
+          },
+          {
+            "title": "Building Nitric providers using Pulumi",
+            "href": "/docs/reference/pulumi/custom-providers"
           }
         ]
       }

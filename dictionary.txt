@@ -7,6 +7,7 @@ BoltDB
 backends
 CLI
 CLI's
+CDKs
 CORS
 ECR
 GCP
@@ -68,6 +69,7 @@ pulumi
 Pulumi
 Pulumi's
 protobuf
+pluggable
 resolvers
 runtimes
 queryable
