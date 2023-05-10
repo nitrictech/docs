@@ -9,7 +9,7 @@ Despite these differences, it does not change how you integrate Nitric with Pulu
 
 ## Get the Nitric CLI and scaffold a new project
 
-You can get the Nitric CLI by following the instructions [here](https://nitric.io/docs/installation). Once its setup you can scaffold a new project by running:
+You can get the Nitric CLI by following the instructions [here](https://nitric.io/docs/installation). Once its set up you can scaffold a new project by running:
 
 ```bash
 nitric new
@@ -33,7 +33,7 @@ This above command will prompt you to set up and configure the cloud you want to
 
 ## Make sure Pulumi is configured
 
-If you don't have the Pulumi CLI setup take a look at their [installation documentation](https://www.pulumi.com/docs/get-started/install/). You can check if you're logged in with by running:
+If you don't have the Pulumi CLI set up take a look at their [installation documentation](https://www.pulumi.com/docs/get-started/install/). You can check if you're logged in with by running:
 
 ```bash
 pulumi whoami
@@ -45,7 +45,7 @@ If you need to login to your Pulumi Cloud account you can do so with:
 pulumi login
 ```
 
-Once that's setup you can simply run:
+Once that's set up you can simply run:
 
 ```bash
 nitric up

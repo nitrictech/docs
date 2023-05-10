@@ -56,6 +56,6 @@ func (d *DeployServer) Down(request *deploy.DeployDownRequest, stream deploy.Dep
 }
 ```
 
-For complete example implementations check out our [AWS](https://github.com/nitrictech/nitric/tree/develop/cloud/aws), [GCP](https://github.com/nitrictech/nitric/tree/develop/cloud/gcp) and [Azure](https://github.com/nitrictech/nitric/tree/develop/cloud/azure) providers in the nitric github repository.
+For complete example implementations check out our [AWS](https://github.com/nitrictech/nitric/tree/develop/cloud/aws), [GCP](https://github.com/nitrictech/nitric/tree/develop/cloud/gcp) and [Azure](https://github.com/nitrictech/nitric/tree/develop/cloud/azure) providers in the [Nitric GitHub repository](https://github.com/nitrictech/nitric).
 
 Let us know on our GitHub discussions or through our Discord if you are interested in seeing more work in this space, including the creation of [CDKs](https://chat.openai.com/providers/custom/building-custom-provider#future-features) that can simplify the process of scaffolding and building Nitric providers.
