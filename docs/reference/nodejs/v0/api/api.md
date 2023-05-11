@@ -74,11 +74,10 @@ const privateApi = api('private', { middleware: authMiddleware });
 ### Define middleware
 
 ```javascript
-const authMiddleware = (ctx, next) => {
+const authMiddleware = async (ctx, next) => {
   // Perform auth validation.
-  next(ctx);
+  return await next(ctx);
 };
-```
 
 ## Notes
 
