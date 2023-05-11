@@ -78,6 +78,7 @@ const authMiddleware = async (ctx, next) => {
   // Perform auth validation.
   return await next(ctx);
 };
+```
 
 ## Notes
 
