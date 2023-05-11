@@ -70,6 +70,18 @@ from myapp.middleware import auth
 publicApi = api("public", ApiOptions(middleware=[auth]))
 ```
 
+### Define middleware
+
+```python
+async def auth(ctx, nxt: HttpMiddleware):
+  # Perform auth validation.
+  return await nxt(ctx)
+```
+
+## Notes
+
+Middleware functions are supplied an `HttpContext` object and a `next()` function which calls the next middleware in the chain.
+
 ### Create an API with a base path
 
 If you need to put all the routes in your api below a shared base path, you can do that with the `path` option. In this example we ensure all routes start with `/api/v1/` before the route specific path.

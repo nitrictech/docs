@@ -287,9 +287,9 @@ const validate = (ctx, next) => {
 {% tab label="Python" %}
 
 ```python
-def validate(ctx, next):
+async def validate(ctx, nxt: HttpMiddleware):
   # Perform request validation, etc.
-  next()
+  return await nxt(ctx)
 ```
 
 {% /tab %}
