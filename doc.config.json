@@ -621,6 +621,10 @@
             "href": "/docs/reference/python/v0/storage/bucket"
           },
           {
+            "title": "bucket.on()",
+            "href": "/docs/reference/python/v0/storage/bucket-on"
+          },
+          {
             "title": "bucket.file()",
             "href": "/docs/reference/python/v0/storage/bucket-file"
           },
