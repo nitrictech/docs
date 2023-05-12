@@ -1,32 +1,32 @@
 ---
-title: Node.js - bucket.on()
-description: Reference for Nitric's Node.js library - Create a new bucket notification trigger
+title: Python - bucket.on()
+description: Reference for Nitric's Python library - Create a new bucket notification trigger
 ---
 
 Create a new bucket notification trigger when certain files are created or deleted.
 
-```javascript
-import { bucket } from '@nitric/sdk';
+```python
+from nitric.resources import bucket
 
-const assets = bucket('assets');
+assets = bucket("assets")
 
-const accessibleAssets = bucket('assets').for('reading');
+accessible_assets = bucket("assets").allow("reading")
 
-// The request will contain the name of the file `key` and the type of event `type`
-assets.on('delete', '*', (ctx) => {
-  console.log(`A file named ${ctx.req.key} was deleted`);
-});
+# The request will contain the name of the file `key` and the type of event `type`
+@assets.on("delete", "*")
+def delete_anything(ctx):
+  print(f"a file named {ctx.req.key} was deleted")
 
-assets.on('write', '/images/cat', (ctx) => {
-  console.log('A cat image was written');
-});
+@assets.on("write", "/images/cat")
+def create_cat_image(ctx):
+  print(f"A cat image was written")
 
-// If `on` is called with a permissioned bucket, a file will also be provided with the request
-accessibleAssets.on('write', '/images/dog', async (ctx) => {
-  const dogImage = await ctx.req.file.read();
+# If `on` is called with a permissioned bucket, a file will also be provided with the request
+@accessible_assets.on("write", "/images/dog")
+async def access_dog_file(ctx):
+  dog_image = await ctx.req.file.read()
 
-  console.log(dogImage);
-});
+  print(dog_image)
 ```
 
 ## Parameters
@@ -41,7 +41,7 @@ The notification type for a triggered event, either on a file write or a file de
 
 The file prefix filter that must match for a triggered event. If multiple filters overlap across notifications then an error will be thrown when registering the resource.
 
-**middleware** required `BucketNotificationMiddleware` or `BucketNotificationMiddleware[]`
+**middleware** required `BucketNotificationMiddleware`
 
 The middleware (code) to be triggered by the bucket notification being triggered.
 

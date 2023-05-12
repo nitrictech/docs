@@ -179,13 +179,31 @@ import { bucket } from '@nitric/sdk';
 
 const profiles = bucket('profiles');
 
-profiles.on('created:images/', (ctx) => {
-  console.log(`new image called '${ctx.req.key}' was created`);
+profiles.on('write', '/images', (ctx) => {
+  console.log(`new image called '${ctx.req.key}' was written`);
 });
 
-profiles.on('deleted:*', (ctx) => {
+profiles.on('delete', '*', (ctx) => {
   console.log(`${ctx.req.key} was deleted`);
 });
+```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+from nitric.resources import bucket
+
+profiles = bucket("profiles")
+
+# The request will contain the name of the file `key` and the type of event `type`
+@assets.on("write", "/images")
+def write_image_trigger(ctx):
+  print(f"new image called {ctx.req.key} was written")
+
+@assets.on("delete", "*")
+def delete_file_trigger(ctx):
+  print(f"{ctx.req.key} was deleted")
 ```
 
 {% /tab %}
