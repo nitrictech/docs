@@ -101,6 +101,10 @@
           "href": "/docs/guides/deploy"
         },
         {
+          "title": "Debugging",
+          "href": "/docs/guides/debugging"
+        },
+        {
           "title": "GraphQL",
           "href": "/docs/guides/graphql"
         },
