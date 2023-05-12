@@ -133,6 +133,7 @@ proto
 URI
 containerize
 openapi
+VS Code
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
