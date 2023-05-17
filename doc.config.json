@@ -813,6 +813,10 @@
         "title": "Pulumi",
         "links": [
           {
+            "title": "Overview",
+            "href": "/docs/reference/pulumi"
+          },
+          {
             "title": "Using Pulumi Cloud as a Backend",
             "href": "/docs/reference/pulumi/pulumi-cloud"
           },
@@ -824,6 +828,15 @@
       }
     ],
     "providers": [
+      {
+        "title": "Getting Started",
+        "links": [
+          {
+            "title": "Providers Overview",
+            "href": "/docs/reference/providers"
+          }
+        ]
+      },
       {
         "title": "AWS",
         "links": [
