@@ -98,7 +98,7 @@ userCreatedTopic.subscribe(async (ctx) => {
 ```python
 user_created_topic = topic("user-created")
 
-@user_created_topic.subscribe
+@user_created_topic.subscribe()
 async def updates_sub(ctx):
   email = ctx.req.json['email']
   send_welcome_email(email)
@@ -134,7 +134,7 @@ from nitric.resources import topic
 
 loop_topic = topic("infinite").allow("publishing")
 
-@loop_topic.subscribe
+@loop_topic.subscribe()
 async def danger(ctx):
   await loop_topic.publish(dict())
 ```
@@ -194,7 +194,7 @@ from common import is_duplicate
 
 updates = topic("updates")
 
-@updates.subscribe
+@updates.subscribe()
 async def process_update(ctx):
   if is_duplicate(ctx.req):
     return ctx

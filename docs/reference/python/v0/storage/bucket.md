@@ -51,6 +51,7 @@ This permission allows your function to delete files from the bucket
 
 See the following for examples on working with files in a bucket:
 
+- [on()](./bucket-on.md)
 - [file()](./bucket-file.md)
 - [file.read()](./bucket-file-read.md)
 - [file.write()](./bucket-file-write.md)
