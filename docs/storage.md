@@ -169,7 +169,7 @@ upload_url = await profiles.file('profile.png').upload_url()
 
 ### Create bucket notification
 
-You can create a trigger for when an object is created or deleted in a bucket. A common use case is to trigger data processing tasks, such as running analytics or machine learning models, when new files are added to a bucket.
+You can create a trigger for when an object is written or deleted in a bucket. A common use case is to trigger data processing tasks, such as running analytics or machine learning models, when new files are added to a bucket.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -197,11 +197,11 @@ from nitric.resources import bucket
 profiles = bucket("profiles")
 
 # The request will contain the name of the file `key` and the type of event `type`
-@assets.on("write", "/images")
+@profiles.on("write", "/images")
 def write_image_trigger(ctx):
   print(f"new image called {ctx.req.key} was written")
 
-@assets.on("delete", "*")
+@profiles.on("delete", "*")
 def delete_file_trigger(ctx):
   print(f"{ctx.req.key} was deleted")
 ```

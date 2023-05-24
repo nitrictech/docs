@@ -3,29 +3,15 @@ title: Node.js - bucket.on()
 description: Reference for Nitric's Node.js library - Create a new bucket notification trigger
 ---
 
-Create a new bucket notification trigger when certain files are created or deleted.
+Register a function to be called in response to bucket file changes.
 
 ```javascript
 import { bucket } from '@nitric/sdk';
 
-const assets = bucket('assets');
+const images = bucket('images');
 
-const accessibleAssets = bucket('assets').for('reading');
-
-// The request will contain the name of the file `key` and the type of event `type`
-assets.on('delete', '*', (ctx) => {
-  console.log(`A file named ${ctx.req.key} was deleted`);
-});
-
-assets.on('write', '/images/cat', (ctx) => {
-  console.log('A cat image was written');
-});
-
-// If `on` is called with a permissioned bucket, a file will also be provided with the request
-accessibleAssets.on('write', '/images/dog', async (ctx) => {
-  const dogImage = await ctx.req.file.read();
-
-  console.log(dogImage);
+images.on('write', '/images/cats/*', (ctx) => {
+  console.log(`A new cat image was written as ${ctx.req.key}`);
 });
 ```
 
@@ -33,17 +19,19 @@ accessibleAssets.on('write', '/images/dog', async (ctx) => {
 
 ---
 
-**notification type** required `write` or `delete`
+**trigger** required `write` | `delete`
 
-The notification type for a triggered event, either on a file write or a file delete.
+The type of file change notifications that should trigger the handler, either write or delete.
 
-**notification prefix filter** required `string`
+**keyMatch** required `string`
 
-The file prefix filter that must match for a triggered event. If multiple filters overlap across notifications then an error will be thrown when registering the resource.
+The file keys (paths) filter to use when determining which files this handler should receive events for.
 
-**middleware** required `BucketNotificationMiddleware` or `BucketNotificationMiddleware[]`
+> Note: If multiple filters overlap in the same application an error will be thrown when registering the resource.
 
-The middleware (code) to be triggered by the bucket notification being triggered.
+**middleware** required `BucketNotificationMiddleware` | `BucketNotificationMiddleware[]`
+
+The middleware (callback function) to be triggered when a matching file change occurs.
 
 ---
 
@@ -51,15 +39,69 @@ The middleware (code) to be triggered by the bucket notification being triggered
 
 **write**
 
-Run when a file in the bucket is created using: `file.write()`
+Run when a file in the bucket is created or updated using: `file.write()`
 
 **delete**
 
 Run when a file in the bucket is deleted using: `file.delete()`
 
-### Trigger type cloud mapping
+#### Trigger type cloud mapping
 
-| Permission | AWS                 | GCP             | Azure                         |
+| Notification | AWS                 | GCP             | Azure                         |
 | ---------- | ------------------- | --------------- | ----------------------------- |
 | write      | s3:ObjectCreated:\* | OBJECT_FINALIZE | Microsoft.Storage.BlobCreated |
 | delete     | s3:ObjectRemoved:\* | OBJECT_DELETE   | Microsoft.Storage.BlobDeleted |
+
+## Examples
+
+### Trigger on all new or updated files in a folder
+
+```javascript
+import { bucket } from '@nitric/sdk';
+
+const images = bucket('images');
+
+images.on('write', '/images/cats/*', (ctx) => {
+  console.log(`A new cat image was written as ${ctx.req.key}`);
+});
+```
+
+### Trigger on changes to a specific file
+
+```javascript
+import { bucket } from '@nitric/sdk';
+
+const images = bucket('images');
+
+images.on('write', '/images/cats/tabby.png', (ctx) => {
+  console.log('the tabby image was updated');
+});
+```
+
+### Trigger on deleted files
+
+```javascript
+import { bucket } from '@nitric/sdk';
+
+const images = bucket('images');
+
+images.on('delete', '*', (ctx) => {
+  console.log(`The image ${ctx.req.key} was deleted`);
+});
+```
+
+### Access the modified file
+
+When `on` is called on a bucket with `reading` access the callback's context object will automatically provide a reference to the modified file.
+
+```javascript
+import { bucket } from '@nitric/sdk';
+
+const images = bucket('images').for('reading');
+
+images.on('write', '/images/cats/*', async (ctx) => {
+  const newFileData = await ctx.req.file.read();
+
+  console.log(newFileData);
+});
+```
