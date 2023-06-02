@@ -1,5 +1,5 @@
 ---
-title: Building Blocks - Secrets
+title: Secrets
 description: Securely store and retrieve secrets values with Nitric
 ---
 

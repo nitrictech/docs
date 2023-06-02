@@ -1,5 +1,5 @@
 ---
-title: Building Blocks - APIs
+title: APIs
 description: Building HTTP APIs with Nitric
 ---
 

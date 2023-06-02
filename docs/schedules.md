@@ -1,5 +1,5 @@
 ---
-title: Building Blocks - Schedules
+title: Schedules
 description: Create and deploy schedules with Nitric
 ---
 
