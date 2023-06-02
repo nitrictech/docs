@@ -44,7 +44,7 @@ config:
       # https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html#configuration-timeout-console
       timeout: 15
       # set a provisioned concurrency value
-      # For info on provisioned concurrenct for AWS Lambda see:
+      # For info on provisioned concurrency for AWS Lambda see:
       # https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html
       provisioned-concurrency: 0
   # Additional deployment types
