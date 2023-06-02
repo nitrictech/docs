@@ -6,9 +6,9 @@ description: Configuring your GCP stacks
 # Complete Example with comments
 
 ```yaml
-# The name of your AWS stack
+# The name of your GCP stack
 name: my-gcp-stack-name
-# The target aws region to deploy to
+# The target GCP region to deploy to
 # See available regions:
 # https://cloud.google.com/run/docs/locations
 region: my-gcp-stack-region
