@@ -894,6 +894,10 @@
             "href": "/docs/reference/providers/azure"
           },
           {
+            "title": "Configuration",
+            "href": "/docs/reference/providers/azure/configuration"
+          },
+          {
             "title": "APIs",
             "href": "/docs/reference/providers/azure/apis"
           },
