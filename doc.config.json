@@ -931,6 +931,10 @@
             "href": "/docs/reference/providers/gcp"
           },
           {
+            "title": "Configuration",
+            "href": "/docs/reference/providers/gcp/configuration"
+          },
+          {
             "title": "APIs",
             "href": "/docs/reference/providers/gcp/apis"
           },
