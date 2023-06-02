@@ -162,15 +162,15 @@ Nitric uses traditional Unix formatted cron expressions
 
 #### Nitric schedules on AWS
 
-If you're familiar with AWS services that support cron expressions (such as EventBridge) you're probably aware that they use an alternate expression format which is incompatible with the traditional unix format.
+If you're familiar with AWS services that support cron expressions (such as EventBridge) you're probably aware that they use an alternate expression format which is incompatible with the traditional Unix format.
 
 AWS cron expression should **not** be used with Nitric. Instead, Nitric will automatically convert standard Unix expressions into AWS expressions during deployment.
 
 ##### Converting from AWS
 
-AWS cron expressions expect a value between 1-7 to represent day of week, while unix expressions use a value between 0-6. Additionally, AWS expressions contain an additional (6th) field for Year (with a value between 1970-2199). Lastly, they expect a special `?` wildcard character in either the day of week or day of month field.
+AWS cron expressions expect a value between 1-7 to represent day of week, while Unix expressions use a value between 0-6. Additionally, AWS expressions contain an additional (6th) field for Year (with a value between 1970-2199). Lastly, they expect a special `?` wildcard character in either the day of week or day of month field.
 
-To convert an AWS expression to a standard unix expression you need to do the following:
+To convert an AWS expression to a standard Unix expression you need to do the following:
 
 - Reduce any day of week values by 1
 - Remove the year field
