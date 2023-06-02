@@ -3,17 +3,13 @@ title: Building Blocks - APIs
 description: Building HTTP APIs with Nitric
 ---
 
-Nitric APIs make it dead simple to define and map functions to HTTP APIs.
+Nitric has built-in support for web apps and HTTP API development. The `api` resource allows you to create APIs in your applications, including routing, middleware and request handlers.
 
-## Concepts
+## Creating APIs
 
-### Request Context
+Nitric allows you define named APIs, each with their own routes, middleware, handlers and security.
 
-Nitric's way of handling requests and responses was inspired by a common pattern from frameworks like [Koa](https://koajs.com/) and [Next.js](https://nextjs.org/docs/api-routes/introduction) edge functions. We provide a single context object that gives you everything you need to read requests and write responses.
-
-## Creating a new API
-
-APIs are easy to declare with the Nitric SDK
+Here's an example of how to create a new API with Nitric:
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -21,7 +17,12 @@ APIs are easy to declare with the Nitric SDK
 ```javascript
 import { api } from '@nitric/sdk';
 
+// each API needs a unique name
 const galaxyApi = api('far-away-galaxy-api');
+
+galaxyApi.get('/moon', async ({ req, res }) => {
+  res.body = "that's no moon, it's a space station.";
+});
 ```
 
 {% /tab %}
@@ -30,7 +31,13 @@ const galaxyApi = api('far-away-galaxy-api');
 ```python
 from nitric.resources import api
 
+# each API needs a unique name
 galaxy_api = api('far-away-galaxy-api')
+
+@galaxy_api.get("/moon")
+async def get_moon(ctx):
+  ctx.res.body = "that's no moon, it's a space station."
+
 ```
 
 {% /tab %}
@@ -38,29 +45,23 @@ galaxy_api = api('far-away-galaxy-api')
 
 ## Routing
 
-You define your HTTP routes and the functions that handle incoming requests using methods on your API objects, for example, `post()`. When calling the methods you provide the path/pattern to match on and a handler callback function.
+You can define routes and handler functions for incoming requests using methods on your API objects.
 
-> The commonly used HTTP methods used for APIs are GET, POST, PUT, PATCH and DELETE.
+For example, you can declare a route that handles `POST` requests using the `post()` method. When declaring routes you provide the path to match and a callback that will serve as the handler for matching requests.
+
+> Depending on the language SDK, callbacks are either passed as parameters or defined using decorators.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
 
 ```javascript
-// List planets
 galaxyApi.get('/planets', async (ctx) => {
-  // get a list of planets
-  const planets = getPlanetsList();
-  ctx.res.json(planets);
-  return ctx;
+  ctx.res.json(getPlanetList());
 });
 
-// Create planets
 galaxyApi.post('/planets', async (ctx) => {
-  const data = ctx.req.json();
-  // create a new planet
-  createPlanet(data);
+  createPlanet(ctx.req.json());
   ctx.res.status = 201;
-  return ctx;
 });
 ```
 
@@ -68,27 +69,31 @@ galaxyApi.post('/planets', async (ctx) => {
 {% tab label="Python" %}
 
 ```python
-# List planets
 @galaxy_api.get("/planets")
 async def list_planets(ctx):
-  # get a list of planets
   ctx.res.body = get_planets_list()
 
-# Create planets
 @galaxy_api.post("/planets")
 async def create_planet(ctx):
-  data = ctx.req.json()
-  # create a new planet
-  create_planet(data)
+  create_planet(ctx.req.json())
   ctx.res.status = 201
+
 ```
 
 {% /tab %}
 {% /tabs %}
 
-### Handling parameters
+### Request Context
 
-The string used to match HTTP routes can include named parameters. The values collected from those parameters are included in the context object under `ctx.req.params` with the name provided in the route definition.
+Nitric provides callbacks with a single context object that gives you everything you need to read requests and write responses. By convention this object is typically named `ctx`.
+
+The context object includes a request `req` and response `res`, which in turn provide convenient methods for reading and writing bodies, as well as auto-extracted parameters and HTTP headers.
+
+#### Parameters
+
+The path string used to declare routes can include named parameters. The values collected from those parameters are automatically included in the context object under `ctx.req.params`.
+
+> Path parameters are denoted by a colon prefix `:`
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -96,28 +101,10 @@ The string used to match HTTP routes can include named parameters. The values co
 ```javascript
 import { getPlanet, updatePlanet, deletePlanet } from 'planets';
 
+// create a dynamic route and extract the parameter `name`
 galaxyApi.get('/planets/:name', async (ctx) => {
   const { name } = ctx.req.params;
-  // get a specific planet
-  const planet = getPlanet(name);
-  // set the response as json
-  ctx.res.json(planet);
-  return ctx;
-});
-
-galaxyApi.patch('/planets/:name', async (ctx) => {
-  const { name } = ctx.req.params;
-  const update = ctx.req.json();
-  // update a specific planet
-  updatePlanet(name, update);
-  return ctx;
-});
-
-galaxyApi.delete('/planets/:name', async (ctx) => {
-  const { name } = ctx.req.params;
-  // delete a specific planet
-  deletePlanet(name);
-  return ctx;
+  ctx.res.json(getPlanet(name));
 });
 ```
 
@@ -127,43 +114,29 @@ galaxyApi.delete('/planets/:name', async (ctx) => {
 ```python
 from planets import get_planet, update_planet, delete_planet
 
+# create a dynamic route and extract the parameter `name`
 @galaxy_api.get("/planets/:name")
 async def get_planet_route(ctx):
   name = ctx.req.params['name']
-  # get a specific planet
-  planet = get_planet(name)
-  # set the response as JSON
-  ctx.res.body = planet
+  ctx.res.body = get_planet(name)
 
-@galaxy_api.patch("/planets/:name")
-async def update_planet_route(ctx):
-  name = ctx.req.params['name']
-  data = ctx.req.json()
-  # update a specific planet
-  update_planet(name, data)
-
-@galaxy_api.delete("/planets/:name")
-async def delete_planet_route(ctx):
-  name = ctx.req.params['name']
-  # delete a specific planet
-  delete_planet(name)
 ```
 
 {% /tab %}
 {% /tabs %}
 
-### Setting HTTP status and headers
+#### HTTP status and headers
 
-The response object provides `status` and `headers` properties you can set to return an HTTP status code such as `201` or `404` and appropriate headers.
+The response object provides `status` and `headers` properties you can use to return HTTP status codes and headers.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
 
 ```javascript
+// return a redirect response using status 301
 galaxyApi.get('/planets/alderaan', async (ctx) => {
   ctx.res.status = 301;
   ctx.res.headers['Location'] = ['https://example.org/debris/alderann'];
-  return ctx;
 });
 ```
 
@@ -171,6 +144,7 @@ galaxyApi.get('/planets/alderaan', async (ctx) => {
 {% tab label="Python" %}
 
 ```python
+# return a redirect response using status 301
 @galaxy_api.get("/planets/alderaan")
 async def find_alderaan(ctx):
   ctx.res.status = 301
@@ -181,13 +155,74 @@ async def find_alderaan(ctx):
 {% /tab %}
 {% /tabs %}
 
-## Securing the API
+## API Security
 
 APIs can include security definitions for OIDC-compatible providers such as [Auth0](https://auth0.com/), [FusionAuth](https://fusionauth.io/) and [AWS Cognito](https://aws.amazon.com/cognito/).
 
-A `securityDefinitions` object can be provided to start defining the auth requirements of your API. `security` rules can also be specified on the API to apply a security definition to the entire API. The security definition defines the kind of auth and the configuration required. For a JWT this configuration is the JWT issuer and audiences. The security object defines the required scope to access that resource.
+> One benefit of applying security at the API is that cloud providers, such as AWS, Google Cloud and Azure, support rejecting unauthenticated or unauthorized requests at the API Gateway before invoking your application code. In serverless environments this reduces costs by limiting application load from unwanted or malicious requests.
 
-For a more in depth tutorial look at the [Auth0 integration guide](./guides/secure-api-auth0.md)
+### Authentication
+
+APIs can be configured to automatically authenticate and allow or reject incoming requests. A `securityDefinitions` object can be provided, which _defines_ the authentication requirements that can later be enforced by the API.
+
+The security definition describes the kind of authentication to perform and the configuration required to perform it. For a [JWT](https://jwt.io/) this configuration includes the JWT issuer and audiences.
+
+> ⚠️ Note: security definitions only define **available** security requirements for an API, they don't automatically **apply** those requirements.
+
+Once a security definition is available it can be applied to the entire API or selectively to individual routes.
+
+{% tabs query="lang" %}
+{% tab label="JavaScript" %}
+
+```javascript
+import { api } from '@nitric/sdk';
+
+const helloApi = api('main', {
+  // declare security definition named 'default'.
+  securityDefinitions: {
+    default: {
+      kind: 'jwt',
+      issuer: 'https://dev-abc123.us.auth0.com',
+      audiences: ['https://test-security-definition/'],
+    },
+  },
+  // apply the 'default' security definition to all routes in this API.
+  security: {
+    default: [],
+  },
+});
+```
+
+{% /tab %}
+{% tab label="Python" %}
+
+```python
+from nitric.resources import api, ApiOptions, JwtSecurityDefinition
+
+helloApi = api("main", opts=ApiOptions(
+        # declare security definition named 'default'.
+        security_definitions={
+            "default": JwtSecurityDefinition(
+                issuer="https://dev-abc123.us.auth0.com",
+                audiences=["https://test-security-definition/"],
+            )
+        }
+        # apply the 'default' security definition to all routes in this API.
+        security={
+            "default": [],
+        },
+    )
+)
+```
+
+{% /tab %}
+{% /tabs %}
+
+### Authorization
+
+In addition to authentication, Nitric APIs can also be configured to perform authorization based on scopes. Again, this can be done at the top level of the API or on individual routes.
+
+Add the required scopes to the `security` object when applying a security definition.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -195,6 +230,7 @@ For a more in depth tutorial look at the [Auth0 integration guide](./guides/secu
 ```javascript
 const helloApi = api('main', {
   security: {
+    // only authorize requests with the 'user.read' scope
     user: ['user.read'],
   },
   securityDefinitions: {
@@ -215,6 +251,7 @@ from nitric.resources import api, ApiOptions, JwtSecurityDefinition
 
 helloApi = api("main", opts=ApiOptions(
         security={
+            # only authorize requests with the 'user.read' scope
             "user": ["user.read"],
         },
         security_definitions={
@@ -230,20 +267,24 @@ helloApi = api("main", opts=ApiOptions(
 {% /tab %}
 {% /tabs %}
 
-### Overriding API-level security
+For an in-depth tutorial look at the [Auth0 integration guide](./guides/secure-api-auth0.md)
 
-Individual routes can also have their own security rules applied for any `securityDefinition` supplied at the API level.
+### Override API-level security
+
+Individual routes can have their own security rules which apply any available `securityDefinition`. The requirement defined on routes override any requirements previously set at the top level of the API.
+
+This allows you to selectively increase or decrease the security requirements for specific routes.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
 
 ```javascript
 galaxyApi.get('planets/unsecured-planet', async (ctx) => {}, {
-  // override top level security, and apply no security to this route
+  // override top level security, to remove security from this route
   security: {},
 });
 
-galaxyApi.post('planets/unsecured-planet', async (ctx) => {}, {
+galaxyApi.post('planets/secured-planet', async (ctx) => {}, {
   // override top level security to require user.write scope to access
   security: {
     user: ['user.write'],
@@ -255,13 +296,13 @@ galaxyApi.post('planets/unsecured-planet', async (ctx) => {}, {
 {% tab label="Python" %}
 
 ```python
-# Override top level security, and apply no security to the route
+# override top level security, to remove security from this route
 @galaxy_api.get("planets/unsecured-planet", opts=MethodOptions(security=dict()))
 async def get_planet(ctx):
     pass
 
-# Override top level security to require user.write scope to access
-@galaxy_api.post("planets/unsecured-planet", opts=MethodOptions(security={ "user": ['user.write'] }))
+# override top level security to require user.write scope to access
+@galaxy_api.post("planets/secured-planet", opts=MethodOptions(security={ "user": ['user.write'] }))
 async def get_planet(ctx):
     pass
 ```
@@ -271,16 +312,22 @@ async def get_planet(ctx):
 
 ## Defining Middleware
 
-APIs support middleware at the API level and the route level. Middleware functions are supplied an `HttpContext` object and a `next()` function which calls the next middleware in the chain.
+Behavior that's common to several APIs or routes can be applied using middleware functions. Multiple middleware can also be composed to create a cascading set of steps to perform on incoming requests or outgoing responses.
+
+Middleware functions look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
 
 ```javascript
-const validate = (ctx, next) => {
-  // Perform request validation, etc.
-  next();
-};
+async function validate(ctx, next) {
+  if (!ctx.req.headers['content-type']) {
+    ctx.res.status = 400;
+    ctx.res.body = 'header Content-Type is required';
+    return ctx;
+  }
+  return await next(ctx);
+}
 ```
 
 {% /tab %}
@@ -288,7 +335,10 @@ const validate = (ctx, next) => {
 
 ```python
 async def validate(ctx, nxt: HttpMiddleware):
-  # Perform request validation, etc.
+  if ctx.req.headers['content-type'] is None:
+    ctx.res.status = 400;
+    ctx.res.body = "header Content-Type is required"
+    return ctx
   return await nxt(ctx)
 ```
 
@@ -297,7 +347,7 @@ async def validate(ctx, nxt: HttpMiddleware):
 
 ### API level middleware
 
-Middleware defined at the API level will be called on every request on to every route.
+Middleware defined at the API level will be called on every request to every route.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -326,7 +376,7 @@ customers_api = api("customers", opts=ApiOptions(middleware=[log_request, valida
 
 ### Route level middleware
 
-Middleware defined at a route level will only be called for that route.
+Middleware defined at the route level will only be called for that route.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
