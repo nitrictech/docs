@@ -12,6 +12,8 @@ name: my-gcp-stack-name
 # See available regions:
 # https://cloud.google.com/run/docs/locations
 region: my-gcp-stack-region
+# ID of the google cloud project to deploy into
+gcp-project-id: my-gcp-project-id
 
 # All configuration below is optional
 
