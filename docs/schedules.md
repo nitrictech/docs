@@ -178,10 +178,21 @@ To convert an AWS expression to a standard Unix expression you need to do the fo
 
 Here are some examples:
 
-| AWS Expression     | Standard Expression |
-| ------------------ | ------------------- |
-| 0 10 \* _ ? _      | 0 10 \* \* \*       |
-| 0 18 ? _ 1-5 _     | 0 18 \* \* 0-4      |
-| 0 18 ? _ MON-FRI _ | 0 18 \* \* MON-FRI  |
+| AWS Expression       | Unix Expression (Nitric) |
+| -------------------- | ------------------------ |
+| 0 10 \* \* ? \*      | 0 10 \* \* \*            |
+| 0 18 ? \* 1-5 \*     | 0 18 \* \* 0-4           |
+| 0 18 ? \* MON-FRI \* | 0 18 \* \* MON-FRI       |
 
 > Note: if you're using the `year` field to control which years your expressions execute this should be moved to logic in the callback function instead.
+
+## Timezones
+
+To ensure your schedules run when you expect it's important to know what timezone they're being applied in. Nitric allows you to set a `schedule-timezone` per deployed environment (stack) on supported providers.
+
+See stack configuration docs for how to set the `schedule-timezone` property:
+
+- [AWS configuration](/docs/reference/providers/aws/configuration)
+- [Google Cloud configuration](/docs/reference/providers/gcp/configuration)
+
+> If a timezone is not configured the default for the target provider/region will be used, this is often Universal Coordinated Time (UTC).
