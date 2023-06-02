@@ -49,7 +49,6 @@ config:
             provisioned-concurrency: 0
     # Additional deployment types
     # You can target these types by setting a `type` in your project configuration
-    # See here for details: 
     big-service:
         telemetry: 0
         lambda:
