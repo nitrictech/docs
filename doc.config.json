@@ -446,6 +446,10 @@
           {
             "title": "schedule.every()",
             "href": "/docs/reference/nodejs/v0/schedule/schedule-every"
+          },
+          {
+            "title": "schedule.cron()",
+            "href": "/docs/reference/nodejs/v0/schedule/schedule-cron"
           }
         ]
       }

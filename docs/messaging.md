@@ -1,5 +1,5 @@
 ---
-title: Building Blocks - Messaging
+title: Messaging
 description: Using Queues and Topics for async messaging with Nitric
 ---
 
