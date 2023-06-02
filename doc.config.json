@@ -853,6 +853,10 @@
             "href": "/docs/reference/providers/aws"
           },
           {
+            "title": "Configuration",
+            "href": "/docs/reference/providers/aws/configuration"
+          },
+          {
             "title": "APIs",
             "href": "/docs/reference/providers/aws/apis"
           },
