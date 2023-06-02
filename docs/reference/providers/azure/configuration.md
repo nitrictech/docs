@@ -13,6 +13,11 @@ name: my-azure-stack-name
 # https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/?products=container-apps
 region: my-azure-stack-region
 
+# Org to associate deployed API Management services with
+org: example-org
+# Admin email to associate deployed API Management services with
+adminemail: test@example.com
+
 # All configuration below is optional
 
 # Configure your deployed functions/services
