@@ -33,16 +33,13 @@ import { bucket } from '@nitric/sdk';
 export const imageBucket = bucket('images');
 ```
 
-The trick for unit testing is that we want to define our functions separately from the routes, as testing anonymous functions in the route callback is difficult. Thus, we'll split them like this:
+The trick for unit testing is that we want to define our functions separately from the routes, as testing anonymous functions in the route callback is difficult. Thus, we'll split them into separate files like this:
 
 ```ts
-// functions/hello.ts
-import { imageBucket } from '../resources/buckets';
-import { helloApi } from '../resources/apis';
+// handlers/hello.ts
+import { faas } from '@nitric/sdk'
 
-export const imageWriter = imageBucket.for('writing');
-
-export const handleHello = async (ctx: any) => {
+export const handleHello = async (ctx: faas.HttpContext) => {
   const { name } = ctx.req.params;
 
   ctx.res.body = `Hello ${name}`;
@@ -50,7 +47,7 @@ export const handleHello = async (ctx: any) => {
   return ctx;
 };
 
-export const handleAddImage = async (ctx: any) => {
+export const handleAddImage = async (ctx: faas.HttpContext) => {
   const { name } = ctx.req.params;
 
   await imageWriter.file(name).write(Buffer.from(name));
@@ -59,6 +56,15 @@ export const handleAddImage = async (ctx: any) => {
 
   return ctx;
 };
+```
+
+```ts
+// functions/hello.ts
+import { imageBucket } from '../resources/buckets';
+import { helloApi } from '../resources/apis';
+import { handleHello, handleAddImage } from '../handlers/hello';
+
+export const imageWriter = imageBucket.for('writing');
 
 helloApi.get('/:name', handleHello);
 helloApi.post('/:name', handleAddImage);
@@ -73,7 +79,7 @@ Put the unit tests in a test directory, and name it `unit.test.ts`. The logic be
 We are first testing that if the function is passed a context with a set name parameter, it should return the same context, but with a body added to the response. The function handleHello is asynchronous, therefore we await it, expecting it to resolve to the expected value.
 
 ```ts
-import { handleHello } from '../functions/hello';
+import { handleHello } from '../handlers/hello';
 
 describe('Testing Hello Function', () => {
   const ctx = { req: { params: { name: 'Test' } }, res: { body: '' } };
@@ -286,7 +292,7 @@ Then define our routes and our functions:
 import { imageBucket } from '../resources/buckets';
 import { helloApi } from '../resources/apis';
 
-export const imageWriter = imageBucket.for('writing');
+const imageWriter = imageBucket.for('writing');
 
 export const handleHello = async (ctx: any) => {
   const { name } = ctx.req.params;
