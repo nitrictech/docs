@@ -37,7 +37,10 @@ The trick for unit testing is that we want to define our functions separately fr
 
 ```ts
 // handlers/hello.ts
-import { faas } from '@nitric/sdk'
+import { faas } from '@nitric/sdk';
+import { imageBucket } from '../resources/buckets';
+
+const imageWriter = imageBucket.for('writing');
 
 export const handleHello = async (ctx: faas.HttpContext) => {
   const { name } = ctx.req.params;
@@ -60,11 +63,8 @@ export const handleAddImage = async (ctx: faas.HttpContext) => {
 
 ```ts
 // functions/hello.ts
-import { imageBucket } from '../resources/buckets';
 import { helloApi } from '../resources/apis';
 import { handleHello, handleAddImage } from '../handlers/hello';
-
-export const imageWriter = imageBucket.for('writing');
 
 helloApi.get('/:name', handleHello);
 helloApi.post('/:name', handleAddImage);
