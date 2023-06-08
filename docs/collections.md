@@ -77,7 +77,7 @@ countries = collection('Countries').allow('reading', 'writing', 'deleting')
 
 ## Creating Documents
 
-Documents are created based on an ud and the contents of the document. If a document with that id already exists in the collection, then the document will be overwritten.
+Documents are created based on an id and the contents of the document. If a document with that id already exists in the collection, then the document will be overwritten.
 
 > Documents that are created using the Nitric SDK are compatible across cloud providers.
 
