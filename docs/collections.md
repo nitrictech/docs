@@ -1,17 +1,30 @@
 ---
 title: Collections
+
 description: Document stores and collections
 ---
 
-Nitric provides functionality to provision and interact with collections in NoSQL databases. In these databases you store data in documents, which are then organized into collections. Collections can most often be thought of as a category of related documents. E.g. `countries`.
+Nitric provides functionality for provisioning and interacting with collections in NoSQL databases.
+
+## Definitions
+
+### Collections
+
+In these databases you store data in `documents`, which are then organized into `collections`. Collections can most often be thought of as a category of related documents. E.g. `countries`.
+
+### Documents
 
 A document is a uniquely identifiable item within a collection. For example, if `countries` were a collection then `usa` might be a document within that collection. The documents themselves can be thought of as a simple `JSON` document.
 
-Subcollections are collections that are stored within a document. If we use the previous example, then `states` might be a subcollection that holds states within the `usa` document. Subcollections can be thought of as an array of documents within a `JSON` document. Subcollections behave identically to collections, but unlike collections, subcollections are created at runtime rather than deploy time.
+### Sub-collections
 
-> Nitric supports a single depth for subcollections.
+Sub-collections are collections that are stored within a document. If we use the previous example, then `states` might be a sub-collection that holds states within the `usa` document. Sub-collections can be thought of as an array of documents within a `JSON` document. Sub-collections behave identically to collections, but unlike collections, sub-collections are created at runtime rather than deploy time.
 
-Below is an example of a collection, documents, and a subcollection in `JSON` format to demonstrate the relationship that each of the types have. This is not indicative of how it is actually stored in the database.
+> Nitric supports single depth for sub-collections.
+
+### Relationship between Collections and Documents
+
+Below is an example of a collection, documents, and a sub-collection in JSON format to demonstrate the relationship that each of the types have.
 
 ```json
 // Countries collection
@@ -20,13 +33,13 @@ Below is an example of a collection, documents, and a subcollection in `JSON` fo
 	{
 		"id": "USA",
 		"population": 329500000,
-		// States subcollection
+		// States sub-collection
 		"states": [
 			// State document
-			{ "id": "Alabama" },
-			{ "id": "Alaska" },
+			{ id: "Alabama" },
+			{ id: "Alaska" },
 			...
-			{ "id": "Wyoming" }
+			{ id: "Wyoming" }
 		]
 	},
 	// Country Document
@@ -39,7 +52,7 @@ Below is an example of a collection, documents, and a subcollection in `JSON` fo
 
 ## Creating Collections
 
-Nitric allows you to define named collections. When defining collections, you can give permissions for reading, writing, or deleting documents in the collection.
+Nitric allows you to define named collections. When defining collections, you can give the function permissions for reading, writing, or deleting documents in the collection.
 
 Here's an example of how to create a collection, with permissions for reading, writing, and deleting:
 
@@ -52,7 +65,7 @@ import { collection } from '@nitric/sdk';
 const countries = collection('Countries').for('reading', 'writing', 'deleting');
 ```
 
-When creating a collection and using TypeScript, you can add typing by specifying the type of documents that are stored in the collection. This won't do validation of the documents written to the collection, but will give you type completion when interacting.
+When creating a collection and using TypeScript, you can add typing by specifying the type of documents that are stored in the collection. This won't do validation of the documents written to the collection, but will give you type completion when interacting with the collection.
 
 ```typescript
 type Country = {
@@ -77,7 +90,7 @@ countries = collection('Countries').allow('reading', 'writing', 'deleting')
 
 ## Creating Documents
 
-Documents are created based on an id and the contents of the document. If a document with that id already exists in the collection, then the document will be overwritten.
+Documents are created based on an `id` and the contents of the document. If a document with that `id` already exists in the collection, then the document will be overwritten.
 
 > Documents that are created using the Nitric SDK are compatible across cloud providers.
 
@@ -114,7 +127,7 @@ await countries.doc('USA').set({
 {% /tab %}
 {% /tabs %}
 
-If you then want to update the document, you will have to write over the existing document by referencing it by its id.
+If you then want to update the document, you will have to write over the existing document by referencing it be it's `id`.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -133,7 +146,7 @@ await countries.doc('USA').set({
 await countries.doc("USA").set({
 	"name": "United States of America",
 	"population": 330000000,
-})
+});
 ```
 
 {% /tab %}
@@ -240,7 +253,7 @@ large_countries = (
 {% /tab %}
 {% /tabs %}
 
-To limit the amount of results returned you can use `limit` on your queries. This will limit the amount of responses up to or equal to the amount provided. The following example shows searching for countries whose names start with S but only returning 10 results.
+To limit the amount of results returned you can use the `limit` function. This will limit the amount of responses up to or equal to the amount provided. The following example shows searching for countries whose names start with S but only returning 10 results.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -318,7 +331,7 @@ results = await query.fetch()
 
 ### Paging Results
 
-Pagination divides results into "pages" of data which are more manageable than getting all the data at once. Once the application processes the first page, it can then process the next page, and so on. To enable an application to know when the last page ended and the new page starts, a paging token is used. The below example shows fetching 1000 documents, and then using a paging token to get the next 1000 documents.
+Pagination divdes results into "pages" of data which are more manageable than getting all the data at once. Once the application processes the first page, it can then process the next page, and so on. To enable an application to know when the last page ended and the new page starts, a paging token is used. The below example shows fetching 1000 documents, and then using a paging token to get the next 1000 documents.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -390,9 +403,9 @@ async for doc in query.stream():
 {% /tab %}
 {% /tabs %}
 
-## Creating Subcollections
+## Creating Sub-collections
 
-Working with a subcollection is very similar to working with a collection, except they can be created dynamically at runtime. You can construct a reference to subcollection within an existing document to begin working with documents within that subcollection.
+Working with a sub-collection is very similar to working with a collection, except they can be created dynamically at runtime. You can construct a reference to sub-collection within an existing document to begin working with documents within that sub-collection.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -400,7 +413,7 @@ Working with a subcollection is very similar to working with a collection, excep
 ```javascript
 const states = countries.doc('USA').collection('States');
 
-// Get a document from the subcollection
+// Get a document from the sub-collection
 const stateOfColorado = await states.doc('Colorado').get();
 ```
 
@@ -410,16 +423,16 @@ const stateOfColorado = await states.doc('Colorado').get();
 ```python
 states = countries.doc('USA').collection('States')
 
-# Get a document from the subcollection
+# Get a document from the sub-collection
 state_of_colorado = await states.doc('Colorado').get()
 ```
 
 {% /tab %}
 {% /tabs %}
 
-## Query Subcollections
+## Query Sub-collections
 
-You can query subcollections in the same way that you can query collections, using fetching, paging, or streaming.
+You can query sub-collections in the same way that you can query collections, using fetching, paging, or streaming.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -461,9 +474,9 @@ async for doc in query.stream():
 {% /tab %}
 {% /tabs %}
 
-You can also query common subcollections across multiple documents when they have the same name.
+You can also query common sub-collections across multiple documents when they have the same name.
 
-> This subcollection reference is only queryable, since it's really an aggregate of all `States` subcollections across all `Countries` documents. i.e. Query every state in every country.
+> This sub-collection reference is only queryable, since it's really an aggregate of all `States` sub-collections across all `Countries` documents. i.e. Query every state in every country.
 
 For example, to query every state from every country, you can use the following code.
 
