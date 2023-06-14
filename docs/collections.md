@@ -331,7 +331,7 @@ results = await query.fetch()
 
 ### Paging Results
 
-Pagination divdes results into "pages" of data which are more manageable than getting all the data at once. Once the application processes the first page, it can then process the next page, and so on. To enable an application to know when the last page ended and the new page starts, a paging token is used. The below example shows fetching 1000 documents, and then using a paging token to get the next 1000 documents.
+Pagination divides results into "pages" of data which are more manageable than getting all the data at once. Once the application processes the first page, it can then process the next page, and so on. To enable an application to know when the last page ended and the new page starts, a paging token is used. The below example shows fetching 1000 documents, and then using a paging token to get the next 1000 documents.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
