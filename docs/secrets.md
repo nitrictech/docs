@@ -3,23 +3,25 @@ title: Secrets
 description: Securely store and retrieve secrets values with Nitric
 ---
 
-Nitric Secrets makes securely storing, updating and retrieving sensitive values like database credentials and API keys easy.
+Nitric Secrets simplifies the secure storage, updating, and retrieval of sensitive information like database credentials and API keys.
 
-You can also choose to store these values as [environment variables](/docs/env).
+Alternatively, you can choose to store these values as environment variables. Learn more about it [here](./env).
 
-## Secrets
+## Definitions
 
-Secrets are values stored in an encrypted Secrets Manager, usually containing sensitive data such as the username and password used to access a database. Since credentials and keys tend to change over time, Nitric Secrets act as a virtual storage location for these values with version control baked in.
+### Secrets
 
-## Versions
+Secrets refer to encrypted values stored in a secure Secrets Manager. They typically contain sensitive data like usernames and passwords required to access a database. Since credentials and keys tend to change over time, Nitric secrets act as a virtual storage location for these values with version control baked in.
 
-Each secret will contain at least a "latest" version, along with any historical versions of that secret's value. This ensures values, such as encryption keys, can be rotated without losing access to the key used with previously encrypted data.
+### Versions
 
-## Values
+Each secret has a "latest" version, and it may also have historical versions of the stored value. This ensures that values such as encryption keys can be rotated without losing access to the key used to encrypt previously stored data.
 
-Values are the secret data attached to a specific secret version, such as the current encryption key or database credentials.
+### Values
 
-## The relationship between Secrets, Versions and Values
+Values are the specific secret data associated with a particular version of the secret. For example, it could be the current encryption key or the database credentials.
+
+### Relationship between Secrets, Versions, and Values
 
 The schema below illustrates the relationship between secrets, versions and values for a secret named db.password with two versions:
 
@@ -35,13 +37,9 @@ The schema below illustrates the relationship between secrets, versions and valu
       +- SecretValue [ 'crummy_goofed_caddy_radiant' ]
 ```
 
-> Version IDs are for illustration only. The specific id/numbering strategy depends on the underlying secrets manager of the cloud provider.
+## Create Secrets
 
-## General usage
-
-### Create secrets
-
-Before sensitive values can be stored a secret must be defined.
+Nitric enables you to define named secrets with customizable permissions. When defining a secret, you can specify permissions for putting or accessing secret versions within the secret. In the example below, we declare a secret named `api-key` and indicate that our function requires access to put and access secret versions within secret:
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
@@ -66,14 +64,18 @@ api_key = secret("api-key").allow("putting", "accessing")
 {% /tab %}
 {% /tabs %}
 
-### Store secret values
+## Storing a secret value
 
-To store or update the latest version of a secret, use the `put()` method on the secret reference.
+To store or update the latest version of a secret, use the `put()` method on the secret reference. The function must have permissions to `put` to the secret.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
 
 ```javascript
+import { secret } from '@nitric/sdk';
+
+const apiKey = secret('api-key').for('put');
+
 const latestVersion = await apiKey.put('a new secret value');
 
 // We can get the version ID of our newly stored value
@@ -84,6 +86,10 @@ latestVersion.version;
 {% tab label="Python" %}
 
 ```python
+from nitric.resources import secret
+
+api_key = secret("api-key").allow("putting")
+
 latest = api_key.put("a new secret value")
 
 # We can get the version ID of our newly stored value
@@ -95,59 +101,71 @@ latest.version
 
 > Secret versioning is automatic. Every time you `put` a new secret value a new version will be created and set as the `latest` version.
 
-### Access a secret value
+## Accessing a secret value
 
-Accessing the contents of a secret version can be done by calling the `access()` method. The `latest()` method ensures we always get the latest value of a secret. This is the best option for retrieving credentials or API keys, where the latest is the only valid version.
+Accessing the contents of a secret version requires first getting a reference to it. There are two ways of getting a reference, either by using `latest()` to get the latest version or using `version()` to get a previous version. Getting the latest version is generally the best option for retrieving credentials or API keys, as the latest version is the only valid version.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
 
 ```javascript
-// access the details of the latest version of a secret
-const latest = await apiKey.latest().access();
+// Get a reference to the latest version
+const latest = apiKey.latest();
 
-// Retrieve the value of the secret as a string
-latest.asString();
+// Get a reference to a specific version
+const version = apiKey.version('7F5F86D0-D97F-487F');
 ```
 
 {% /tab %}
 {% tab label="Python" %}
 
 ```python
-# access the details of the latest version of a secret
-latest = await api_key.latest().access()
+# Get a reference to the latest version
+latest = api_key.latest()
 
-# Retrieve the value of the secret as a string
-str(latest)
+# Get a reference to a specific version
+version api_key.version("7F5F86D0-D97F-487F")
 ```
 
 {% /tab %}
 {% /tabs %}
 
-### Access a specific version of a secret
-
-If you need a previous version of a secret's value (not latest) you can use the `version()` method to specify the exact version ID. This is useful when you need a version that was used at a particular point in time.
+Once the secret reference is obtained accessing the contents of the secret version can be done by calling the `access()` method.
 
 {% tabs query="lang" %}
 {% tab label="JavaScript" %}
 
 ```javascript
-// access the details of a known version of a secret
-const specific = await apiKey.version('version-id').access();
+import { secret } from '@nitric/sdk';
 
-// Note, you can also retrieve the value of the secret as a byte array
-specific.asBytes();
+const apiKey = secret('api-key').for('access');
+
+// Access the details of the latest version of a secret
+const latest = await apiKey.latest().access();
+
+// Retrieve the value of the secret as a string
+const value = latest.asString();
+
+// Retrieve the value of the secret as bytes
+const bytes = latest.asBytes();
 ```
 
 {% /tab %}
 {% tab label="Python" %}
 
 ```python
-# access the details of a known version of a secret
-specific = await api_key.version('version-id').access()
+from nitric.resources import secret
 
-# Note, you can also retrieve the value of the secret as a byte array
-bytes(specific)
+api_key = secret("api-key").allow("accessing")
+
+# Access the details of the latest version of a secret
+latest = await api_key.latest().access()
+
+# Retrieve the value of the secret as a string
+value = latest.as_string()
+
+# Retrieving the value of the secret as bytes
+bytes = latest.as_bytes()
 ```
 
 {% /tab %}
