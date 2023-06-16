@@ -134,6 +134,7 @@ URI
 containerize
 openapi
 analytics
+const
 VS Code
 
 ^.+[-:_]\w+$

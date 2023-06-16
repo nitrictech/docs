@@ -1,5 +1,5 @@
 files:
-  - 'docs/**/*.{md,mdx}'
+  - 'src/pages/**/*.{md,mdx}'
 dictionaries:
   - dictionary.txt
 quiet: true

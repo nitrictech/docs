@@ -1,0 +1,35 @@
+export const description = 'Delete a file from a bucket.'
+
+# bucket.file.delete()
+
+Delete a file from a bucket.
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Storage;
+
+var assets = Nitric.Bucket('assets').With(BucketPermission.Deleting);
+
+var logo = assets.File('images/logo.png');
+
+logo.Delete();
+
+Nitric.Run();
+```
+
+## Examples
+
+### Delete a file
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Storage;
+
+var assets = Nitric.Bucket('assets').With(BucketPermission.Deleting);
+
+var logo = assets.File('images/logo.png');
+
+logo.Delete();
+
+Nitric.Run();
+```
