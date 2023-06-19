@@ -1,6 +1,6 @@
 ---
-title: bucket.file.delete()
-description: Delete a file from a bucket.
+title: .NET - bucket.file.delete()
+description: Reference for Nitric's .NET library - Delete a file from a bucket.
 ---
 
 Delete a file from a bucket.

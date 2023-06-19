@@ -1,6 +1,6 @@
 ---
-title: queue()
-description: Creates a new Queue to send and receive asynchronous tasks.
+title: .NET - queue()
+description: Reference for Nitric's .NET library - Creates a new Queue to send and receive asynchronous tasks.
 ---
 
 Creates a new Queue to send and receive asynchronous tasks.

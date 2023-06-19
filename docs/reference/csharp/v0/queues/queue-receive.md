@@ -1,6 +1,6 @@
 ---
-title: queue.receive()
-description: Receive tasks from a queue.
+title: .NET - queue.receive()
+description: Reference for Nitric's .NET library - Receive tasks from a queue.
 ---
 
 Receive tasks from a queue.

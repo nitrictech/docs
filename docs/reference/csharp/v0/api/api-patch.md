@@ -1,6 +1,6 @@
 ---
-title: api.patch()
-description: Register an API route and set a specific HTTP PATCH handler on that route.
+title: .NET - api.patch()
+description: Reference for Nitric's .NET library - Register an API route and set a specific HTTP PATCH handler on that route.
 ---
 
 Register an API route and set a specific HTTP PATCH handler on that route.

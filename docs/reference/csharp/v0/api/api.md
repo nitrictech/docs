@@ -1,6 +1,6 @@
 ---
-title: api()
-description: Create APIs with the Nitric C# SDK
+title: .NET - api()
+description: Reference for Nitric's .NET library - Create APIs with the Nitric C# SDK
 ---
 
 Creates a new HTTP API.

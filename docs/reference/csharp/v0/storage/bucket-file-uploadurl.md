@@ -1,6 +1,6 @@
 ---
-title: bucket.file.geUploadUrl()
-description: Get a upload url for a file from a bucket.
+title: .NET - bucket.file.geUploadUrl()
+description: Reference for Nitric's .NET library - Get a upload url for a file from a bucket.
 ---
 
 Create a upload url for a file within a bucket.

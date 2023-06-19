@@ -1,6 +1,6 @@
 ---
-title: schedule.every()
-description: Sets the frequency and one or many handlers to be triggered.
+title: .NET - schedule.every()
+description: Reference for Nitric's .NET library - Sets the frequency and one or many handlers to be triggered.
 ---
 
 Sets the frequency and one or many handlers to be triggered.

@@ -1,6 +1,6 @@
 ---
-title: api.route()
-description: Creates a new route (path) within an API.
+title: .NET - api.route()
+description: Reference for Nitric's .NET library - Creates a new route (path) within an API.
 ---
 
 Creates a new route (path) within an API.

@@ -1,6 +1,6 @@
 ---
-title: bucket.file.read()
-description: Read the contents of a file from a bucket.
+title: .NET - bucket.file.read()
+description: Reference for Nitric's .NET library - Read the contents of a file from a bucket.
 ---
 
 Read the contents of a file from a bucket.

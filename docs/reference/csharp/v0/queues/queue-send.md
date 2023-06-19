@@ -1,6 +1,6 @@
 ---
-title: queue.send()
-description: Send tasks to a queue.
+title: .NET - queue.send()
+description: Reference for Nitric's .NET library - Send tasks to a queue.
 ---
 
 Send tasks to a queue.

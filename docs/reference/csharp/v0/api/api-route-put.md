@@ -1,6 +1,6 @@
 ---
-title: api.route.put()
-description: Register a handler for HTTP PUT requests to the route.
+title: .NET - api.route.put()
+description: Reference for Nitric's .NET library - Register a handler for HTTP PUT requests to the route.
 ---
 
 Register a handler for HTTP PUT requests to the route.

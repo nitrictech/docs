@@ -1,6 +1,6 @@
 ---
-title: Nitric's .NET SDK
-description: Using Nitric with C# and .NET
+title: .NET - Nitric's .NET SDK
+description: Reference for Nitric's .NET library - Using Nitric with C# and .NET
 ---
 
 This SDK reference provides documentation for the functions and methods in Nitric's .NET library for C# and .NET.

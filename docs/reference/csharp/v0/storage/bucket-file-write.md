@@ -1,6 +1,6 @@
 ---
-title: bucket.file.write()
-description: Write a file to a bucket.
+title: .NET - bucket.file.write()
+description: Reference for Nitric's .NET library - Write a file to a bucket.
 ---
 
 Write a file to a bucket.

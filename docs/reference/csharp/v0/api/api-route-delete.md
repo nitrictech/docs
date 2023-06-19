@@ -1,6 +1,6 @@
 ---
-title: api.route.delete()
-description: Register a handler for HTTP DELETE requests to the route.
+title: .NET - api.route.delete()
+description: Reference for Nitric's .NET library - Register a handler for HTTP DELETE requests to the route.
 ---
 
 Register a handler for HTTP DELETE requests to the route.

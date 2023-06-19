@@ -1,6 +1,6 @@
 ---
-title: topic()
-description: Creates a new Topic.
+title: .NET - topic()
+description: Reference for Nitric's .NET library - Creates a new Topic.
 ---
 
 Creates a new Topic.

@@ -1,6 +1,6 @@
 ---
-title: bucket.files()
-description: Get a list of file references for files that exist in the bucket.
+title: .NET - bucket.files()
+description: Reference for Nitric's .NET library - Get a list of file references for files that exist in the bucket.
 ---
 
 Get a list of file references for files that exist in the bucket.

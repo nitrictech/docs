@@ -1,6 +1,6 @@
 ---
-title: topic.publish()
-description: Publish new events to the topic.
+title: .NET - topic.publish()
+description: Reference for Nitric's .NET library - Publish new events to the topic.
 ---
 
 Publish an event (push based message) to a topic.
