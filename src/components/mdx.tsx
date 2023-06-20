@@ -77,35 +77,31 @@ export function Properties({ children, nested }) {
     </ul>
   )
 
-  return (
-    <div className={'my-6'}>
-      {nested && (
-        <Button
-          onClick={() => setOpen(!open)}
-          variant="outline"
-          className="flex items-center gap-2"
-        >
-          {open ? (
-            <MinusCircleIcon className="mt-0.5 h-5 w-5" />
-          ) : (
-            <PlusCircleIcon className="mt-0.5 h-5 w-5" />
-          )}
-          {open ? 'Hide' : 'Show'} accepted values
-        </Button>
-      )}
-      {nested ? (
-        <div
-          className={clsx(
-            'mt-4 rounded-lg border border-zinc-600 p-4',
-            !open && 'sr-only'
-          )}
-        >
-          {content}
-        </div>
-      ) : (
-        content
-      )}
-    </div>
+  return nested ? (
+    <li>
+      <Button
+        onClick={() => setOpen(!open)}
+        variant="outline"
+        className="mt-4 flex items-center gap-2"
+      >
+        {open ? (
+          <MinusCircleIcon className="mt-0.5 h-5 w-5" />
+        ) : (
+          <PlusCircleIcon className="mt-0.5 h-5 w-5" />
+        )}
+        {open ? 'Hide' : 'Show'} accepted values
+      </Button>
+      <div
+        className={clsx(
+          'mt-4 rounded-lg border p-4 dark:border-zinc-600',
+          !open && 'sr-only'
+        )}
+      >
+        {content}
+      </div>
+    </li>
+  ) : (
+    <div className={'my-6'}>{content}</div>
   )
 }
 
