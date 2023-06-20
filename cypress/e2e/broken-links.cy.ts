@@ -49,6 +49,7 @@ describe('Broken links test suite', () => {
             cy.log(`link already checked`)
             expect(VISITED_SUCCESSFUL_LINKS[url]).to.be.true
           } else {
+            cy.wait(100)
             cy.request({
               url,
               followRedirect: false,

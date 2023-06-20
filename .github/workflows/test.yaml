@@ -17,20 +17,84 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Cache Yarn Cache
-        uses: actions/cache@v2
+      - name: Install dependencies
+        uses: cypress-io/github-action@v5
         with:
-          path: 'node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
-      - name: Install modules
-        run: yarn --frozen-lockfile
+          runTests: false
+          install-command: yarn --frozen-lockfile
       - name: Run format linting
         run: yarn format:check
       - name: Run spellcheck test
         run: yarn test:spellcheck
-      - name: Build website
+      - name: Build Website
         run: yarn build
-      - name: Generate pages fixture
-        run: node scripts/build-pages-fixture.js
-      - name: Run e2e tests
-        run: yarn e2e:headless
+      - name: Cache Build
+        uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: |
+            .next
+            public
+          key: ci-docs-test-${{ github.sha }}
+
+  test-broken-links:
+    runs-on: ubuntu-latest
+    needs: [tests]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Build
+        uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: |
+            .next
+            public
+          key: ci-docs-test-${{ github.sha }}
+      - name: Cypress tests 🧪
+        uses: cypress-io/github-action@v5
+        with:
+          headless: true
+          config: video=false
+          browser: chrome
+          spec: cypress/e2e/broken-links.cy.ts
+          build: node scripts/build-pages-fixture.js
+          start: yarn start
+          wait-on: 'http://localhost:3000'
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+  test-a11y:
+    runs-on: ubuntu-latest
+    needs: [tests]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Build
+        uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: |
+            .next
+            public
+          key: ci-docs-test-${{ github.sha }}
+      - name: Cypress tests 🧪
+        uses: cypress-io/github-action@v5
+        with:
+          headless: true
+          config: video=false
+          browser: chrome
+          spec: cypress/e2e/a11y.cy.ts
+          build: node scripts/build-pages-fixture.js
+          start: yarn start
+          wait-on: 'http://localhost:3000'
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
