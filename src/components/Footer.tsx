@@ -1,4 +1,4 @@
-import { forwardRef, ForwardRefRenderFunction, Fragment, useState } from 'react'
+import { forwardRef, Fragment, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Transition } from '@headlessui/react'
@@ -7,6 +7,7 @@ import { Button } from '@/components/Button'
 import { useCurrentNav } from '@/nav.config'
 import FeedbackForm from './FeedbackForm'
 import { GitHubIcon } from './icons/GitHubIcon'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 
 function CheckIcon(props) {
   return (
@@ -212,12 +213,29 @@ function SmallPrint() {
   )
 }
 
-export function Footer() {
-  let router = useRouter()
+export function Footer({ disableEditGithub }) {
+  const router = useRouter()
+
+  const branch = process.env.NEXT_PUBLIC_GITHUB_BRANCH || 'main'
 
   return (
     <footer className="mx-auto max-w-2xl space-y-10 pb-16 lg:max-w-5xl">
-      <Feedback key={router.pathname} />
+      <div className="flex flex-col gap-8 md:flex-row">
+        <div className="w-full">
+          <Feedback key={router.pathname} />
+        </div>
+        {!disableEditGithub && (
+          <div className="flex w-full items-center justify-center">
+            <Link
+              href={`https://github.com/nitrictech/docs/edit/${branch}/src/pages${router.pathname}.mdx`}
+              className="flex items-center gap-1 text-sm text-zinc-600 hover:underline dark:text-zinc-400 md:ml-auto"
+            >
+              Edit this page on GitHub
+              <ArrowTopRightOnSquareIcon className="h-4 w-4" />
+            </Link>
+          </div>
+        )}
+      </div>
       <PageNavigation />
       <SmallPrint />
     </footer>

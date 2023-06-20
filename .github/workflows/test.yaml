@@ -28,6 +28,8 @@ jobs:
         run: yarn test:spellcheck
       - name: Build Website
         run: yarn build
+        env:
+          NEXT_PUBLIC_GITHUB_BRANCH: ${{ github.head_ref || github.ref_name }}
       - name: Cache Build
         uses: actions/cache@v2
         id: restore-build

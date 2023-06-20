@@ -8,7 +8,7 @@ import { Navigation } from '@/components/Navigation'
 import { Prose } from '@/components/Prose'
 import { SectionProvider } from '@/components/SectionProvider'
 
-export function Layout({ children, sections = [] }) {
+export function Layout({ children, sections = [], disableEditGithub = false }) {
   return (
     <SectionProvider sections={sections}>
       <div className="lg:ml-72 xl:ml-80">
@@ -30,7 +30,7 @@ export function Layout({ children, sections = [] }) {
           <main className="py-16">
             <Prose as="article">{children}</Prose>
           </main>
-          <Footer />
+          <Footer disableEditGithub={disableEditGithub} />
         </div>
       </div>
     </SectionProvider>
