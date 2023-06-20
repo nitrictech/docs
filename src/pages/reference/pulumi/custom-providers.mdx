@@ -3,11 +3,11 @@ export const description =
 
 # Building Nitric providers using Pulumi
 
-If you're not already familiar with the basics of Nitric providers, a detailed overview on how Nitric providers work under the hood can be found [here](../providers/custom/building-custom-provider.md).
+If you're not already familiar with the basics of Nitric providers, a detailed overview on how Nitric providers work under the hood can be found [here](../providers/custom/building-custom-provider).
 
 Nitric's providers are simple programs that implement a plugin interface backed by gRPC. A Nitric provider is a simple server that will be started by the Nitric CLI at deploy time and will be provided with a cloud specification to deploy any way the provider sees fit.
 
-![nitric pulumi diagram](/docs/assets/img/nitric-pulumi.png)
+![nitric pulumi diagram](/assets/img/nitric-pulumi.png)
 
 Although Nitric providers can be developed using any language, we'd recommend using Go due to the availability of pre-existing Nitric Pulumi custom resources and generated protobuf contracts in the Nitric core repository.
 

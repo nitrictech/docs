@@ -73,7 +73,7 @@ const fullNav: FullNav = {
         },
         {
           title: 'Messages',
-          href: '/messages',
+          href: '/messaging',
           icon: MegaphoneIcon,
         },
         {
@@ -86,11 +86,11 @@ const fullNav: FullNav = {
     {
       showDividerAbove: true,
       links: [
-        {
-          title: 'Guides',
-          href: '/guides',
-          icon: MapIcon,
-        },
+        // {
+        //   title: 'Guides',
+        //   href: '/guides',
+        //   icon: MapIcon,
+        // },
         {
           title: 'Resources',
           href: '/resources',
@@ -210,11 +210,11 @@ const fullNav: FullNav = {
         },
         {
           title: 'Stripe',
-          href: '/guides/getting-started/nodejs/guides/stripe',
+          href: '/guides/getting-started/nodejs/stripe',
         },
         {
           title: 'Twilio',
-          href: '/guides/getting-started/nodejs/guides/twilio',
+          href: '/guides/getting-started/nodejs/twilio',
         },
         {
           title: 'Secure API with Auth0',

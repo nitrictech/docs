@@ -40,4 +40,4 @@ When it comes to application portability, we believe in opening up cloud technol
 
 ## Next Steps
 
-Start by installing the [Nitric CLI](/docs/installation), and try out a [Tutorial](/docs/quick-start) to get started!
+Start by installing the [Nitric CLI](/guides/getting-started/installation), and try out a [Tutorial](/quick-start) to get started!

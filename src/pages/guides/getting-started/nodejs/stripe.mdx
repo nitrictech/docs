@@ -16,7 +16,7 @@ Creating a Stripe checkout backed by a Nitric API and collections. This API will
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en/download/)
-- The [Nitric CLI](https://nitric.io/docs/installation)
+- The [Nitric CLI](/guides/getting-started/installation)
 - An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
 - A [Stripe](https://dashboard.stripe.com/login) account
 
@@ -235,7 +235,7 @@ Once we know its a checkout completed event, the session data is passed to the `
 ```typescript
 function handleOrder() {
   // Fulfill the order however you want. Some ideas are:
-  // 1. Add the order to a Nitric collection. https://nitric.io/docs/collections
+  // 1. Add the order to a Nitric collection. https://nitric.io/collections
   // 2. Send data down your shipping pipeline.
   // 3. Send the user a notification. https://nitric.io/guides/twilio
 }
@@ -270,7 +270,7 @@ localhost:4001/create-checkout-session \
 -d '{"items": [{ "price": "price_<ID>", "quantity": "1" }]}'
 ```
 
-This will return a stripe checkout url. Once you navigate to this page, you will have a checkout. Enter the [test credit card](https://stripe.com/docs/testing) details and it will redirect you to the success url you specified when constructing the checkout session.
+This will return a stripe checkout url. Once you navigate to this page, you will have a checkout. Enter the [test credit card](https://stripe.com/testing) details and it will redirect you to the success url you specified when constructing the checkout session.
 
 ### Testing the Stripe Webhook
 

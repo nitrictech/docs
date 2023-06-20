@@ -51,10 +51,10 @@ config:
 
 <Note>
   For more information on what can be configured, [look
-  here](/docs/deployment#configuring-deployment)
+  here](/guides/getting-started/deployment#configuring-deployment)
 </Note>
 
-Once you have created a stack, you're ready to deploy and undeploy to your deployment target. See the [CLI docs](/docs/reference/cli) for available commands.
+Once you have created a stack, you're ready to deploy and undeploy to your deployment target. See the [CLI docs](/reference/cli) for available commands.
 
 ### Legacy Stacks
 
@@ -72,7 +72,7 @@ config:
     memory: 4096
 ```
 
-The provider has been updated from `aws`, `gcp`, and `azure` to `nitric/aws@0.24.0`, `nitric/gcp@0.24.0`, and `nitric/azure@0.24.0` respectively. This change enables locking a version for your deployments, as it was previously tied to the CLI version. This change will also enable creation of your own [custom deployment providers](/docs/reference/providers/custom/building-custom-provider).
+The provider has been updated from `aws`, `gcp`, and `azure` to `nitric/aws@0.24.0`, `nitric/gcp@0.24.0`, and `nitric/azure@0.24.0` respectively. This change enables locking a version for your deployments, as it was previously tied to the CLI version. This change will also enable creation of your own [custom deployment providers](/reference/providers/custom/building-custom-provider).
 
 There was also a change to the way configuration is written to support multiple execution runtimes. Currently there are no new runtimes supported (just Lambda, Cloud Run, and Container Apps), however there are plans to support more in the near future, hence the change. The migration involves adding the runtime key to the configuration, letting the deployment know what runtime it should apply the configuration to.
 

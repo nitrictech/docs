@@ -70,7 +70,7 @@ const buildingBlocks = [
     },
   },
   {
-    href: '/messages',
+    href: '/messaging',
     name: 'Messages',
     description:
       'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
