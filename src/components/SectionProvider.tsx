@@ -39,6 +39,9 @@ function createSectionStore(sections) {
   }))
 }
 
+// offset for header
+const headerOffset = 40
+
 function useVisibleSections(sectionStore) {
   let setVisibleSections = useStore(sectionStore, (s) => s.setVisibleSections)
   let sections = useStore(sectionStore, (s) => s.sections)
@@ -47,6 +50,8 @@ function useVisibleSections(sectionStore) {
     function checkVisibleSections() {
       let { innerHeight, scrollY } = window
       let newVisibleSections = []
+
+      scrollY = scrollY - headerOffset
 
       for (
         let sectionIndex = 0;
