@@ -248,6 +248,66 @@ const fullNav: FullNav = {
       ],
     },
   ],
+  apis: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/apis',
+        },
+      ],
+    },
+  ],
+  collections: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/collections',
+        },
+      ],
+    },
+  ],
+  schedules: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/schedules',
+        },
+      ],
+    },
+  ],
+  storage: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/storage',
+        },
+      ],
+    },
+  ],
+  messaging: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/messaging',
+        },
+      ],
+    },
+  ],
+  secrets: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/secrets',
+        },
+      ],
+    },
+  ],
   ['reference/nodejs']: [
     {
       links: [
@@ -853,7 +913,6 @@ const fullNav: FullNav = {
       ],
     },
   ],
-
   ['reference/cli']: [
     {
       title: 'Nitric CLI',
