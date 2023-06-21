@@ -308,6 +308,49 @@ const fullNav: FullNav = {
       ],
     },
   ],
+  resources: [
+    {
+      links: [
+        {
+          title: 'Examples',
+          href: '/resources/examples',
+        },
+        {
+          title: 'Frequently Asked Questions',
+          href: '/resources/faq',
+        },
+        {
+          title: 'Environment Variables',
+          href: '/resources/env',
+        },
+        {
+          title: 'IAM and Access Control',
+          href: '/resources/access-control',
+        },
+        {
+          title: 'Flexibility with the Nitric Framework',
+          href: '/resources/eject',
+        },
+      ],
+    },
+    {
+      title: 'Compare Nitric with...',
+      links: [
+        {
+          title: 'AWS SAM',
+          href: '/resources/comparison/aws-sam',
+        },
+        {
+          title: 'GCP Deployment Manager',
+          href: '/resources/comparison/gcp-deployment-manager',
+        },
+        {
+          title: 'Azure Resource Manager',
+          href: '/resources/comparison/bicep',
+        },
+      ],
+    },
+  ],
   ['reference/nodejs']: [
     {
       links: [

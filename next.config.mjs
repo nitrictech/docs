@@ -90,6 +90,36 @@ const nextConfig = {
           permanent: true,
         })
       ),
+      {
+        source: '/docs/comparison/:slug',
+        destination: '/docs/resources/comparison/:slug',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/faq',
+        destination: '/docs/resources/faq',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/env',
+        destination: '/docs/resources/env',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/support/eject',
+        destination: '/docs/resources/eject',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/access-control',
+        destination: '/docs/resources/access-control',
+        basePath: false,
+        permanent: true,
+      }
     ]
   },
   async headers() {
