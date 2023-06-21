@@ -19,7 +19,7 @@ const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
   images: {
-    domains: ['github.com', 'raw.githubusercontent.com']
+    domains: ['github.com', 'raw.githubusercontent.com'],
   },
   async redirects() {
     return [
@@ -33,14 +33,63 @@ const nextConfig = {
         source: '/docs/guides',
         destination: '/docs',
         basePath: false,
-        permanent: false,
+        permanent: true,
       },
       {
         source: '/docs/reference',
         destination: '/docs#libraries',
         basePath: false,
-        permanent: false,
-      }
+        permanent: true,
+      },
+      // redirects from old docs
+      ...[
+        '/docs/testing',
+        '/docs/guides/debugging',
+        '/docs/guides/serverless-rest-api-example',
+        '/docs/guides/graphql',
+        '/docs/guides/serverless-api-with-planetscale-and-prisma',
+        '/docs/guides/nitric-and-supabase',
+        '/docs/guides/api-with-nextjs',
+        '/docs/guides/twilio',
+        '/docs/guides/stripe',
+        '/docs/guides/secure-api-auth0',
+        '/docs/guides/byo-database',
+      ].map((source) => ({
+        source: source,
+        destination: `/docs/guides/getting-started/nodejs${source.replace(
+          /^(\/docs\/guides\/|\/docs\/)/,
+          '/'
+        )}`,
+        basePath: false,
+        permanent: true,
+      })),
+      ...[
+        '/docs/local-dashboard',
+        '/docs/concepts',
+        '/docs/installation',
+        '/docs/deployment',
+        '/docs/language-support',
+        '/docs/guides/github-actions',
+      ].map((source) => ({
+        source: source,
+        destination: `/docs/guides/getting-started${source.replace(
+          /^(\/docs\/guides\/|\/docs\/)/,
+          '/'
+        )}`,
+        basePath: false,
+        permanent: true,
+      })),
+      ...['/docs/guides/text-prediction', '/docs/guides/create-histogram'].map(
+        (source) => ({
+          source: source,
+          destination: `/docs/guides/getting-started/python${source.replace(
+            /^(\/docs\/guides\/|\/docs\/)/,
+            '/'
+          )}`,
+          basePath: false,
+          permanent: true,
+        })
+      ),
     ]
   },
   async headers() {
