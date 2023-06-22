@@ -906,6 +906,10 @@ const fullNav: FullNav = {
           href: '/reference/csharp/v0/storage/bucket',
         },
         {
+          title: 'bucket.on()',
+          href: '/reference/csharp/v0/storage/bucket-on',
+        },
+        {
           title: 'bucket.file()',
           href: '/reference/csharp/v0/storage/bucket-file',
         },
