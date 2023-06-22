@@ -1,0 +1,282 @@
+export const description = 'How to build a custom provider using Nitric'
+
+# Building Custom Providers
+
+This guide is for those that are interested in building their own custom provider to provide support for a missing cloud, or implementing their own internal development platform, or just curious to know how it all works. Nitric's main goal is to keep a general interface for interacting with cloud resources, regardless of the provider. This abstraction enables portability, developer efficiency, and standardizes the way that code is written across teams.
+
+Nitric's cloud providers are individual plugins separated into a runtime and a deployment provider for AWS, GCP, and Azure. The [runtime provider](#runtime) is concerned with converting abstract SDK calls into direct cloud API calls. The [deployment provider](#deployments) takes a resource specification of topics, buckets, and functions and converts them into cloud resources. The providers, CLI, and SDK all work together to make the application deploy and run.
+
+![Nitric Architecture](../../../../assets/img/guides/custom-provider/custom-provider-architecture.png)
+
+## Deployments
+
+The Nitric CLI's core responsibility is to get the infrastructure requirements from a Nitric application's code. The requirements are then composed into a deployment specification which the CLI and deployment providers both expect. This deployment specification is written using [protocol buffers](https://protobuf.dev/) and transmitted to a deployment provider using [gRPC](https://grpc.io/).
+
+<Note>
+  The complete proto files can be found in our core [nitric
+  repository](https://github.com/nitrictech/nitric/blob/main/contracts/proto/deploy/v1/deploy.proto).
+</Note>
+
+The CLI will also containerize and build your function code, passing the information about the built image to the deployment provider. Given this deployment specification, the provider can deploy whatever resources are needed. For example, given the function below:
+
+```ts
+import { api, bucket, faas } from '@nitric/sdk'
+
+const helloApi = api('main')
+
+const buck = bucket('images').for('writing')
+
+helloApi.get('/hello/:name', async (ctx: faas.HttpContext) => {
+  const { name } = ctx.req.params
+
+  ctx.res.body = `Hello ${name}`
+
+  return ctx
+})
+```
+
+The CLI would convert it into the following resource spec:
+
+```json
+{
+  "spec": {
+    "resources": [
+      {
+        "name": "images",
+        "type": 2,
+        "Config": {
+          "Bucket": {}
+        }
+      },
+      {
+        "name": "main",
+        "type": 0,
+        "Config": {
+          "Api": {
+            "Document": {
+              "Openapi": "{\"components\":{},\"info\":{\"title\":\"main\",\"version\":\"v1\"},\"openapi\":\"3.0.1\",\"paths\":{\"/hello/{name}\":{\"get\":{\"operationId\":\"hellonameget\",\"responses\":{\"default\":{\"description\":\"\"}},\"x-nitric-target\":{\"name\":\"hello\",\"type\":\"function\"}},\"parameters\":[{\"in\":\"path\",\"name\":\"name\",\"required\":true,\"schema\":{\"type\":\"string\"}}]}}}"
+            }
+          }
+        }
+      },
+      {
+        "name": "435cb11ee277e61657218d6ecb595e7a",
+        "type": 8,
+        "Config": {
+          "Policy": {
+            "principals": [
+              {
+                "name": "hello",
+                "type": 1,
+                "Config": null
+              }
+            ],
+            "actions": [2],
+            "resources": [
+              {
+                "name": "images",
+                "type": 2,
+                "Config": null
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "hello",
+        "type": 1,
+        "Config": {
+          "ExecutionUnit": {
+            "Source": {
+              "Image": {
+                "uri": "custom-provider-demonstration-hello"
+              }
+            },
+            "workers": 1,
+            "type": "default"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "project": "custom-provider-demonstration",
+    "stack": "custom-stack"
+  }
+}
+```
+
+The spec contains a list of resources and global attributes that can be passed to the deployment provider. The list of resources for this deployment contains an API, bucket, and execution unit with the information required to configure them for the cloud. The default project and stack attributes are also provided. You will notice in the execution unit config the image is provided with a URI pointing to the local image name.
+
+### Setting up the server
+
+The deployment provider requires implementations for deploying and destroying cloud resources, called `Up` and `Down` respectively.
+
+```go
+type DeployServer struct {
+}
+
+func (d *DeployServer) Up(request *deploy.DeployUpRequest, stream deploy.DeployService_UpServer) error {
+}
+
+func (d *DeployServer) Down(request *deploy.DeployDownRequest, stream deploy.DeployService_DownServer) error {
+}
+```
+
+The `request` contains the resource specification, and the `stream` is to return logs to the CLI for output.
+
+Using this base, the provider can be registered with the CLI. The following provides a utility function for starting a gRPC server and registering the deployment provider with the CLI. The package `v1` is the compiled protocol buffers.
+
+```go
+import (
+  ...
+  v1 "github.com/nitrictech/nitric/core/pkg/api/nitric/deploy/v1"
+	"github.com/nitrictech/nitric/core/pkg/utils"
+	"google.golang.org/grpc"
+  ...
+)
+
+func StartServer(deploySrv v1.DeployServiceServer) {
+  // Check the port is available over TCP
+	lis, err := net.Listen("tcp", ":50051"))
+	if err != nil {
+		log.Fatalf("error listening on port %s %v", port, err)
+	}
+
+  // Create the gRPC server
+	srv := grpc.NewServer()
+
+  // Register the deployment server address with the CLI
+	v1.RegisterDeployServiceServer(srv, deploySrv)
+
+	fmt.Printf("Deployment server started on %s\n", lis.Addr().String())
+
+  // Start the gRPC server
+	err = srv.Serve(lis)
+	if err != nil {
+		log.Fatalf("error serving requests %v", err)
+	}
+}
+```
+
+<Note>
+  As protocol buffers can be compiled to any language, the deployment providers
+  can be written in any language.
+</Note>
+
+### Future features
+
+In the future, we may release developer resources that make writing the custom providers easier for the languages that Nitric supports. This would remove the need for this boilerplate so that you can focus on writing your code. This may look like the following:
+
+```ts
+import { deploy } from '@nitric/cdk'
+
+deploy.up(async ({ spec }) => {
+  // deploy the stack
+})
+
+deploy.down(async ({ spec }) => {
+  // tear down the stack
+})
+```
+
+<Note>
+  This would also include the utilities to make it easier to write runtime
+  plugins in your own language as well
+</Note>
+
+Check out the [discussion on GitHub](https://github.com/nitrictech/nitric/discussions/422) to contribute feedback on the approach, and how we can best enhance your platform development.
+
+### Writing the deployment code
+
+The next step is filling in the deployment code. For Nitric's deployment provider implementation we use [Pulumi](https://www.pulumi.com/), however other tools like Terraform CDK and AWS CDK can be used. There is a provider currently built for AWS, GCP, and Azure which means there's plenty of examples and inspiration for when you build your own deployment provider. The following example is using Pulumi to deploy an S3 bucket.
+
+```go
+for _, res := range request.Spec.Resources {
+  // Check the type to see if its a bucket
+  switch b := res.Config.(type) {
+  case *deploy.Resource_Bucket:
+    // Create a new bucket
+  	s3Bucket, err := s3.NewBucket(ctx, b.Bucket, &s3.BucketArgs{
+      Tags: pulumi.StringMap{
+        "x-nitric-project":    pulumi.String(ctx.Project()),
+        "x-nitric-stack":      stackID,
+        "x-nitric-stack-name": pulumi.String(ctx.Stack()),
+        "x-nitric-name":       pulumi.String(b.Bucket),
+      }
+    })
+    if err != nil {
+      return nil, errors.WithMessage(err, "s3 bucket "+name)
+    }
+  }
+}
+```
+
+Importantly, the resource needs to be tagged with the Nitric tags. This is so a runtime provider can do a lookup of the bucket by tag and get the original resource name.
+
+## Runtime
+
+The runtime provider is there to map the Nitric SDKs to the relevant cloud API. For example, using the SDK in application code, someone might define an API and a bucket with permissions for writing. This will be picked up by the CLI and added to the resource spec so the deployment provider can provision it. However, the actual action to write to the bucket will be performed at runtime. This is handled using a sidecar gRPC server that accepts the write request for that particular file.
+
+<Note>
+  If your provider only needs to deploy resources, and does not make use of any
+  of the Nitric SDKs, then the runtime code is unnecessary.
+</Note>
+
+In the following case, a bucket is written to with some image data.
+
+```ts
+const images = bucket("images").for("writing");
+
+...
+
+bucket.file('cat.png').write(data);
+```
+
+This is translated into a gRPC request which is sent to the runtime listener:
+
+```json
+{
+  "bucket_name": "images",
+  "key": "cat.png",
+  "body": ["68", "65", "6c", "6c", "6f"]
+}
+```
+
+The runtime code for writing to an S3 bucket would look like so:
+
+```go
+func (s *S3StorageService) Write(ctx context.Context, bucket string, key string, object []byte) error {
+  // Get the AWS bucket name
+	b, err := s.getBucketName(ctx, bucket)
+  if err == nil {
+    return err
+  }
+
+  // Use the AWS S3 Client library to put the object
+  if _, err := s.client.PutObject(ctx, &s3.PutObjectInput{
+    Bucket:      b,
+    Body:        bytes.NewReader(object),
+    Key:         aws.String(key),
+  }); err != nil {
+    return newErr(
+      codes.Internal,
+      "unable to put object",
+      err,
+    )
+  }
+
+	return nil
+}
+```
+
+All the runtime contracts are stored in the Nitric core repository [here](https://github.com/nitrictech/nitric/tree/main/contracts). There are examples for implementing a runtime for [AWS](https://github.com/nitrictech/nitric/tree/main/cloud/aws/runtime), [GCP](https://github.com/nitrictech/nitric/tree/main/cloud/gcp/runtime), and [Azure](https://github.com/nitrictech/nitric/tree/main/cloud/azure/runtime) within the same repository.
+
+<Note>
+  As protocol buffers can be compiled to any language, the runtime providers can
+  be written in any language.
+</Note>
+
+## Reach out
+
+If you are building a custom provider, or have any more questions about how Nitric works, reach out to us and we would love to help out. You can chat with the community on [Discord](https://discord.gg/Webemece5C) or open a discussion on [GitHub](https://github.com/nitrictech/nitric/discussions).

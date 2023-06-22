@@ -1,0 +1,18 @@
+export const description = 'Details on the cloud providers supported by Nitric'
+
+# Providers
+
+Nitric apps have access to important cloud features. These features are provided by the Nitric Server as APIs and are used via our SDKs.
+
+Here is a list of features offered by Nitric and primary services used to provide them:
+
+| **Feature**                            | **AWS**                                              | **Azure**                                  | **Google Cloud**                             | **Local**                                               |
+| -------------------------------------- | ---------------------------------------------------- | ------------------------------------------ | -------------------------------------------- | ------------------------------------------------------- |
+| [APIs](/apis)                          | [API Gateway](./providers/aws/apis)                  | [API Management](./providers/azure/apis)   | [API Gateway](./providers/gcp/apis)          | [Custom](https://github.com/nitrictech/dev-api-gateway) |
+| [Collections](/collections)            | [DynamoDB](./providers/aws/collections)              | [Cosmos DB](./providers/azure/collections) | [FireStore](./providers/gcp/collections)     | BoltDB                                                  |
+| [Messaging: Topics](/messaging#topics) | [SNS](./providers/aws/topics)                        | [Event Grid](./providers/azure/topics)     | [PubSub](./providers/gcp/topics)             | Custom                                                  |
+| [Messaging: Queues](/messaging#queues) | [SQS](./providers/aws/queues)                        | [Storage Queues](./providers/azure/queues) | [PubSub](./providers/gcp/queues)             | Custom                                                  |
+| [Schedules](/schedules)                | [CloudWatch Event Bridge](./providers/aws/schedules) | 🚧 _In Progress_                           | [Cloud Scheduler](./providers/gcp/schedules) | _currently unavailable_                                 |
+| [Secrets](/secrets)                    | [Secrets Manager](./providers/aws/secrets)           | [Key Vault](./providers/azure/secrets)     | [Secret Manager](./providers/gcp/secrets)    | Custom                                                  |
+| [Storage](/storage#buckets)            | [S3](./providers/aws/storage)                        | [Blob Storage](./providers/azure/storage)  | [Cloud Storage](./providers/gcp/storage)     | SeaweedFS                                               |
+| Compute _(Handlers)_                   | Lambda                                               | Container Apps                             | CloudRun                                     | Docker                                                  |
