@@ -8,10 +8,8 @@ import {
   GlobeAltIcon,
   HomeIcon,
   LockClosedIcon,
-  MapIcon,
   MegaphoneIcon,
   PlayIcon,
-  PuzzlePieceIcon,
 } from '@heroicons/react/24/outline'
 import { FaNodeJs, FaPython } from 'react-icons/fa'
 import { SiCsharp, SiPulumi } from 'react-icons/si'
@@ -86,21 +84,16 @@ const fullNav: FullNav = {
     {
       showDividerAbove: true,
       links: [
-        // {
-        //   title: 'Guides',
-        //   href: '/guides',
-        //   icon: MapIcon,
-        // },
         {
           title: 'Resources',
           href: '/resources',
           icon: FolderIcon,
         },
-        {
-          title: 'Integrations',
-          href: '/integrations',
-          icon: PuzzlePieceIcon,
-        },
+        // {
+        //   title: 'Integrations',
+        //   href: '/integrations',
+        //   icon: PuzzlePieceIcon,
+        // },
       ],
     },
     {
