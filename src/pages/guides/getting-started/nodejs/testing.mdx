@@ -357,7 +357,9 @@ describe('Testing Hello Api', () => {
 
 We can add another test case for hitting the `POST /:name` route. This will need to test whether the response from the API resolves correctly, as well as whether the image bucket was updated. It makes a post request to our route and then checks the response just like the last one. Additionally, this test reads from the bucket to verify that the correct content was written.
 
-> Make sure you remove the call to done from the assertion in the api route. Otherwise, the bucket test will not be run.
+<Note>
+Make sure you remove the call to done from the assertion in the api route. Otherwise, the bucket test will not be run.
+</Note>
 
 ```ts
 // tests/integration.test.ts
