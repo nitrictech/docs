@@ -8,6 +8,7 @@ import { useCurrentNav } from '@/nav.config'
 import FeedbackForm from './FeedbackForm'
 import { GitHubIcon } from './icons/GitHubIcon'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
+import type { FeedbackRequestBody } from '@/pages/api/feedback'
 
 function CheckIcon(props) {
   return (
@@ -41,11 +42,23 @@ const FeedbackThanks = forwardRef(function FeedbackThanks(_props, ref) {
 function Feedback() {
   let [submitted, setSubmitted] = useState(false)
 
-  function onSubmit(event) {
+  async function onSubmit(event) {
     event.preventDefault()
 
-    // event.nativeEvent.submitter.dataset.response
-    // => "yes" or "no"
+    const data: FeedbackRequestBody = {
+      url: window.location.href,
+      ua: navigator.userAgent,
+      // "yes" or "no"
+      answer: event.nativeEvent.submitter.dataset.response,
+    }
+
+    await fetch('/docs/api/feedback', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
     setSubmitted(true)
   }
