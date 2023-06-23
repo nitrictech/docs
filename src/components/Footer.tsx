@@ -9,6 +9,7 @@ import FeedbackForm from './FeedbackForm'
 import { GitHubIcon } from './icons/GitHubIcon'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import type { FeedbackRequestBody } from '@/pages/api/feedback'
+import { Spinner } from './Spinner'
 
 function CheckIcon(props) {
   return (
@@ -25,25 +26,40 @@ function CheckIcon(props) {
   )
 }
 
-const FeedbackThanks = forwardRef(function FeedbackThanks(_props, ref) {
+const FeedbackThanks = forwardRef(function FeedbackThanks(
+  { submitting }: { submitting: boolean },
+  ref
+) {
   return (
     <div
       ref={ref as any}
       className="absolute inset-0 flex justify-center md:justify-start"
     >
       <div className="flex items-center gap-3 rounded-full bg-primary-50/50 py-1 pl-1.5 pr-3 text-sm text-primary-900 ring-1 ring-inset ring-primary-500/20 dark:bg-primary-500/5 dark:text-primary-200 dark:ring-primary-500/30">
-        <CheckIcon className="h-5 w-5 flex-none fill-primary-500 stroke-white dark:fill-primary-200/20 dark:stroke-primary-200" />
-        Thanks for your feedback!
+        {submitting ? (
+          <>
+            <Spinner />
+            Submitting feedback
+          </>
+        ) : (
+          <>
+            <CheckIcon className="h-5 w-5 flex-none fill-primary-500 stroke-white dark:fill-primary-200/20 dark:stroke-primary-200" />
+            Thanks for your feedback!
+          </>
+        )}
       </div>
     </div>
   )
 })
 
 function Feedback() {
-  let [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   async function onSubmit(event) {
     event.preventDefault()
+
+    if (submitting) return
 
     const data: FeedbackRequestBody = {
       url: window.location.href,
@@ -51,6 +67,8 @@ function Feedback() {
       // "yes" or "no"
       answer: event.nativeEvent.submitter.dataset.response,
     }
+
+    setSubmitting(true)
 
     await fetch('/docs/api/feedback', {
       method: 'POST',
@@ -60,13 +78,14 @@ function Feedback() {
       },
     })
 
+    setSubmitting(false)
     setSubmitted(true)
   }
 
   return (
     <div className="relative h-8">
       <Transition
-        show={!submitted}
+        show={!submitted && !submitting}
         as={Fragment}
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
@@ -75,13 +94,13 @@ function Feedback() {
         <FeedbackForm onSubmit={onSubmit} />
       </Transition>
       <Transition
-        show={submitted}
+        show={submitted || submitting}
         as={Fragment}
         enterFrom="opacity-0"
         enterTo="opacity-100"
         enter="delay-150 duration-300"
       >
-        <FeedbackThanks />
+        <FeedbackThanks submitting={submitting} />
       </Transition>
     </div>
   )
