@@ -143,7 +143,7 @@ Nitric uses traditional Unix formatted cron expressions
 | Month          | 1-12 or JAN-DEC |
 | Day (of week)  | 0-6 or SUN-SAT  |
 
-**Common values**
+#### Common values
 
 | Value | Description          |
 | ----- | -------------------- |
@@ -158,7 +158,7 @@ If you're familiar with AWS services that support cron expressions (such as Even
 
 AWS cron expression should **not** be used with Nitric. Instead, Nitric will automatically convert standard Unix expressions into AWS expressions during deployment.
 
-##### Converting from AWS
+#### Converting from AWS
 
 AWS cron expressions expect a value between 1-7 to represent day of week, while Unix expressions use a value between 0-6. Additionally, AWS expressions contain an additional (6th) field for Year (with a value between 1970-2199). Lastly, they expect a special `?` wildcard character in either the day of week or day of month field.
 

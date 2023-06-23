@@ -273,7 +273,7 @@ nitric down
 
 If you want to go a bit deeper and create some other resources with Nitric, why not add images to your profiles API.
 
-#### Access profile buckets with permissions
+### Access profile buckets with permissions
 
 Define a bucket named `profilesImg` with reading/writing permissions
 
@@ -287,7 +287,7 @@ Add imports for time and date so that we can set up caching/expiry headers
 from datetime import datetime, timedelta
 ```
 
-#### Get a URL to upload a profile image
+### Get a URL to upload a profile image
 
 ```python
 @profile_api.get("/profiles/:id/image/upload")
@@ -305,7 +305,7 @@ async def upload_profile_image(ctx):
   ctx.res.body = photo_url
 ```
 
-#### Get a URL to download a profile image
+### Get a URL to download a profile image
 
 ```python
 @profile_api.get("/profiles/:id/image/view")
@@ -339,17 +339,17 @@ async def download_profile_image(ctx):
   ctx.res.status = 303
 ```
 
-**Time to test the updated API**
+#### Time to test the updated API
 
 Update all values in brackets `[]` and change the URL to your deployed URL if you're testing on the cloud.
 
-**Get an image upload URL**
+#### Get an image upload URL
 
 ```bash
 curl --location --request GET 'http://localhost:4001/profiles/[id]/image/upload'
 ```
 
-**Using the upload URL with curl**
+#### Using the upload URL with curl
 
 ```bash
 curl --location --request PUT '[url]' \
@@ -358,7 +358,7 @@ curl --location --request PUT '[url]' \
 
 ```
 
-**Get an image download URL**
+#### Get an image download URL
 
 ```bash
 curl --location --request GET 'http://localhost:4001/profiles/[id]/image/download'

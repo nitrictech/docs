@@ -45,7 +45,7 @@ Including Log files will provide a ton of useful information logged during local
 The output of the info command provides us with metadata such as OS, Chipset information, GoVersion, etc. which can be used to reproduce the issue raised.
 
 ```bash
-nitric info -o yaml`
+nitric info -o yaml
 ```
 
 ### Include bug description and reproduction
@@ -68,11 +68,11 @@ Any information about your environment and setup will be important to help repro
 
 ### Example Report
 
-**Describe the bug:**
+#### Describe the bug:
 
 Returning a JSON response in my list handler doesn't work, it returns nothing and times out.
 
-**Steps to reproduce:**
+#### Steps to reproduce:
 
 I created a simple function handler to set the response body to a JSON string.
 
@@ -88,11 +88,11 @@ api('public').get('/customers', (ctx) => {
 
 Then I run `nitric run -s ./ "functions/*.ts"` to run nitric locally.
 
-**What I expected:**
+#### What I expected:
 
 I expected to see a 200 status with the JSON response printed to my terminal in a readable format or at least an error explaining what I did wrong.
 
-**What I received:**
+#### What I received:
 
 I then use curl to test the handler's endpoint.
 
@@ -102,7 +102,7 @@ curl http://localhost:4001/customers
 
 I did not receive a response from the server.
 
-**Environment and setup information:**
+#### Environment and setup information:
 
 - Nitric CLI version: `Nitric Helper CLI v2.0`
 - Dependencies used: `@nitric/sdk@1.0.0`

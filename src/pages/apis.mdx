@@ -107,7 +107,6 @@ from planets import get_planet, update_planet, delete_planet
 async def get_planet_route(ctx):
   name = ctx.req.params['name']
   ctx.res.body = get_planet(name)
-
 ```
 
 </CodeGroup>

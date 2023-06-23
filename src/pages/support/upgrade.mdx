@@ -7,7 +7,7 @@ export const description =
 
 In this section, we will discuss changes and upgrade advice for users upgrading from versions of Nitric reliant on a nitric.yaml file.
 
-### What you’ll learn
+### What you'll learn
 
 - Install the new Nitric CLI
 - Upgrade existing Nitric projects
@@ -67,12 +67,12 @@ const publicApi = api('public')
 // Create profile with POST method on path /examples
 publicApi.post('/examples', async (ctx) => {
   ...
-}
+})
 
 // Create profile with GET method on path /examples
 publicApi.get('/examples', async (ctx) => {
   ...
-}
+})
 ```
 
 ### Refactoring functions
@@ -87,21 +87,20 @@ Refactor functions into middleware handlers which can be executed as API methods
 
 ```typescript
 // Start your function here
-faas
-  .http(async (ctx: faas.HttpContext): Promise<faas.HttpContext> => {
-    // Handler code goes here
-  }
+faas.http(async (ctx: faas.HttpContext): Promise<faas.HttpContext> => {
+  // Handler code goes here
+})
 ```
 
 #### After
 
 ```typescript
-const publicApi = api('public');
+const publicApi = api('public')
 
 // Create profile with post method
 publicApi.post('/examples', async (ctx) => {
   // Handler code goes here
-}
+})
 ```
 
 ```typescript
@@ -126,9 +125,9 @@ We'll go from code, yaml, and OpenAPI to just code.
 
 #### Before
 
-**`example.ts`**
-
 ```typescript
+// example.ts
+
 interface Example {
   name: string
   description: string
@@ -157,9 +156,9 @@ faas
   .start()
 ```
 
-**`nitric.yaml`**
-
 ```yaml
+# nitric.yaml
+
 name: examples
 # Nitric functions
 functions:
@@ -173,9 +172,9 @@ apis:
   examples: api.yaml
 ```
 
-**`api.yaml`**
-
 ```yaml
+# api.yaml
+
 openapi: 3.0.0
 info:
   version: 1.0.0
@@ -211,9 +210,9 @@ components:
 
 #### After
 
-**`example.ts`**
-
 ```typescript
+// example.ts
+
 import { api, collection } from '@nitric/sdk'
 import { uuid } from 'uuidv4'
 
@@ -241,6 +240,8 @@ publicApi.post('/examples', async (ctx) => {
 </Note>
 
 ```yaml
+# nitric.yaml
+
 name: examples
 handlers:
   - functions/*.ts
