@@ -20,53 +20,53 @@ First, define the resources:
 
 ```ts
 // resources/apis.ts
-import { api } from '@nitric/sdk';
+import { api } from '@nitric/sdk'
 
-export const helloApi = api('main');
+export const helloApi = api('main')
 ```
 
 ```ts
 // resources/buckets.ts
-import { bucket } from '@nitric/sdk';
+import { bucket } from '@nitric/sdk'
 
-export const imageBucket = bucket('images');
+export const imageBucket = bucket('images')
 ```
 
 The trick for unit testing is that we want to define our functions separately from the routes, as testing anonymous functions in the route callback is difficult. Thus, we'll split them into separate files like this:
 
 ```ts
 // handlers/hello.ts
-import { faas } from '@nitric/sdk';
-import { imageBucket } from '../resources/buckets';
+import { faas } from '@nitric/sdk'
+import { imageBucket } from '../resources/buckets'
 
-const imageWriter = imageBucket.for('writing');
+const imageWriter = imageBucket.for('writing')
 
 export const handleHello = async (ctx: faas.HttpContext) => {
-  const { name } = ctx.req.params;
+  const { name } = ctx.req.params
 
-  ctx.res.body = `Hello ${name}`;
+  ctx.res.body = `Hello ${name}`
 
-  return ctx;
-};
+  return ctx
+}
 
 export const handleAddImage = async (ctx: faas.HttpContext) => {
-  const { name } = ctx.req.params;
+  const { name } = ctx.req.params
 
-  await imageWriter.file(name).write(Buffer.from(name));
+  await imageWriter.file(name).write(Buffer.from(name))
 
-  ctx.res.body = `Successfully added '${name}' image to bucket!`;
+  ctx.res.body = `Successfully added '${name}' image to bucket!`
 
-  return ctx;
-};
+  return ctx
+}
 ```
 
 ```ts
 // functions/hello.ts
-import { helloApi } from '../resources/apis';
-import { handleHello, handleAddImage } from '../handlers/hello';
+import { helloApi } from '../resources/apis'
+import { handleHello, handleAddImage } from '../handlers/hello'
 
-helloApi.get('/:name', handleHello);
-helloApi.post('/:name', handleAddImage);
+helloApi.get('/:name', handleHello)
+helloApi.post('/:name', handleAddImage)
 ```
 
 ### Writing the tests
@@ -78,10 +78,10 @@ Put the unit tests in a test directory, and name it `unit.test.ts`. The logic be
 We are first testing that if the function is passed a context with a set name parameter, it should return the same context, but with a body added to the response. The function handleHello is asynchronous, therefore we await it, expecting it to resolve to the expected value.
 
 ```ts
-import { handleHello } from '../handlers/hello';
+import { handleHello } from '../handlers/hello'
 
 describe('Testing Hello Function', () => {
-  const ctx = { req: { params: { name: 'Test' } }, res: { body: '' } };
+  const ctx = { req: { params: { name: 'Test' } }, res: { body: '' } }
 
   describe('Given we want a greeting', () => {
     test('responds with Hello Test', async () => {
@@ -90,10 +90,10 @@ describe('Testing Hello Function', () => {
         res: {
           body: 'Hello Test',
         },
-      });
-    });
-  });
-});
+      })
+    })
+  })
+})
 ```
 
 **Mocking**
@@ -179,12 +179,12 @@ We also add `afterAll` and `beforeEach` functions to reset the mocks.
 
 ```ts
 afterAll(() => {
-  jest.resetAllMocks();
-});
+  jest.resetAllMocks()
+})
 
 beforeEach(() => {
-  jest.clearAllMocks();
-});
+  jest.clearAllMocks()
+})
 ```
 
 Now that we have the mocks, we can use them for the tests. The first test is testing that the function will succeed. On a success, the promise will both resolve and have a success message in the body of the context's response.
@@ -193,17 +193,17 @@ Update the mock so that it resolves, and check that the `write` function was onl
 
 ```ts
 test('adds a new image to the bucket', async () => {
-  writerSpy.mockResolvedValue();
+  writerSpy.mockResolvedValue()
 
   await expect(handleAddImage(ctx)).resolves.toEqual({
     ...ctx,
     res: {
       body: "Successfully added 'Test' to user collection",
     },
-  });
+  })
 
-  expect(writerSpy).toBeCalledTimes(1);
-});
+  expect(writerSpy).toBeCalledTimes(1)
+})
 ```
 
 The next test will instead test a write failure. The failure may be caused by any number of reasons, and therefore we should make sure our function is fit to handle them when they occur.
@@ -212,12 +212,12 @@ Change the mock this time so that it rejects with a new error. Still check that 
 
 ```ts
 test('throws an error', async () => {
-  writerSpy.mockRejectedValue(new Error('Mock error'));
+  writerSpy.mockRejectedValue(new Error('Mock error'))
 
-  await expect(handleAddImage(ctx)).rejects.toEqual(Error('Mock error'));
+  await expect(handleAddImage(ctx)).rejects.toEqual(Error('Mock error'))
 
-  expect(writerSpy).toBeCalledTimes(1);
-});
+  expect(writerSpy).toBeCalledTimes(1)
+})
 ```
 
 ### Running the tests
@@ -272,47 +272,47 @@ First, define the resources:
 
 ```ts
 // resources/apis.ts
-import { api } from '@nitric/sdk';
+import { api } from '@nitric/sdk'
 
-export const helloApi = api('main');
+export const helloApi = api('main')
 ```
 
 ```ts
 // resources/buckets.ts
-import { bucket } from '@nitric/sdk';
+import { bucket } from '@nitric/sdk'
 
-export const imageBucket = bucket('images');
+export const imageBucket = bucket('images')
 ```
 
 Then define our routes and our functions:
 
 ```ts
 // functions/hello.ts
-import { imageBucket } from '../resources/buckets';
-import { helloApi } from '../resources/apis';
+import { imageBucket } from '../resources/buckets'
+import { helloApi } from '../resources/apis'
 
-const imageWriter = imageBucket.for('writing');
+const imageWriter = imageBucket.for('writing')
 
 export const handleHello = async (ctx: any) => {
-  const { name } = ctx.req.params;
+  const { name } = ctx.req.params
 
-  ctx.res.body = `Hello ${name}`;
+  ctx.res.body = `Hello ${name}`
 
-  return ctx;
-};
+  return ctx
+}
 
 export const handleAddImage = async (ctx: any) => {
-  const { name } = ctx.req.params;
+  const { name } = ctx.req.params
 
-  await imageWriter.file(name).write(Buffer.from(name));
+  await imageWriter.file(name).write(Buffer.from(name))
 
-  ctx.res.body = `Successfully added '${name}' image to bucket!`;
+  ctx.res.body = `Successfully added '${name}' image to bucket!`
 
-  return ctx;
-};
+  return ctx
+}
 
-helloApi.get('/:name', handleHello);
-helloApi.post('/:name', handleAddImage);
+helloApi.get('/:name', handleHello)
+helloApi.post('/:name', handleAddImage)
 ```
 
 ### Writing the Tests
@@ -321,11 +321,11 @@ We will put the integration test in a test directory, and name it `integration.t
 
 ```ts
 // tests/integration.test.ts
-import supertest from 'supertest';
+import supertest from 'supertest'
 
 describe('Testing Hello Api', () => {
-  const api = supertest('http://localhost:4001');
-});
+  const api = supertest('http://localhost:4001')
+})
 ```
 
 We can then add some tests to hit this API. We'll start with testing the `GET /:name` route.
@@ -334,11 +334,11 @@ This request has the name parameter set to 'test'. This means we expect the resp
 
 ```ts
 // tests/integration.test.ts
-import supertest from 'supertest';
-import assert from 'assert';
+import supertest from 'supertest'
+import assert from 'assert'
 
 describe('Testing Hello Api', () => {
-  const api = supertest('http://localhost:4001');
+  const api = supertest('http://localhost:4001')
 
   describe('Given a request to GET /:name', () => {
     test('responds with Hello test', (done) => {
@@ -346,19 +346,20 @@ describe('Testing Hello Api', () => {
         .get('/test')
         .expect(200)
         .then((res) => {
-          assert.equal(res.text, 'Hello test');
-          done();
+          assert.equal(res.text, 'Hello test')
+          done()
         })
-        .catch((err) => done(err));
-    });
-  });
-});
+        .catch((err) => done(err))
+    })
+  })
+})
 ```
 
 We can add another test case for hitting the `POST /:name` route. This will need to test whether the response from the API resolves correctly, as well as whether the image bucket was updated. It makes a post request to our route and then checks the response just like the last one. Additionally, this test reads from the bucket to verify that the correct content was written.
 
 <Note>
-Make sure you remove the call to done from the assertion in the api route. Otherwise, the bucket test will not be run.
+  Make sure you remove the call to done from the assertion in the api route.
+  Otherwise, the bucket test will not be run.
 </Note>
 
 ```ts
@@ -444,7 +445,7 @@ We attempt to make the local run of nitric as similar as possible to the cloud e
 
 When you have an API deployed to the cloud, most cloud providers have a feature in the console to do endpoint testing. However, the tests are often just checking if the API resolves to a 200 status code. The process we are following here will lead to much more robust testing and a lot more confidence in your cloud application.
 
-Now for testing. The obvious first step before running our tests is to [deploy](./getting-started#deploying-the-app) the resources.
+Now for testing. The obvious first step before running our tests is to [deploy](/guides/getting-started/quickstart#deploying-the-app) the resources.
 
 ```
 nitric up
@@ -454,7 +455,7 @@ Then, to test against the deployed API, we just want to swap out our supertest a
 
 ```ts
 // tests/integration.test.ts
-const api = request('https://testerapi.us-east-1.amazonaws.com');
+const api = request('https://testerapi.us-east-1.amazonaws.com')
 ```
 
 To invoke our tests we can do `npm run test` locally. This will run the tests against the deployed instance and return your test results.

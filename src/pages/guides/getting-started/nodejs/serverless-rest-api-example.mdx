@@ -286,7 +286,7 @@ nitric down
 
 If you want to go a bit deeper and create some other resources with Nitric, why not add images to your profiles API.
 
-#### Access profile buckets with permissions
+### Access profile buckets with permissions
 
 Define a bucket named `profilesImg` with reading/writing permissions
 
@@ -294,7 +294,7 @@ Define a bucket named `profilesImg` with reading/writing permissions
 const profilesImg = bucket('profilesImg').for('reading', 'writing')
 ```
 
-#### Get a URL to upload a profile image
+### Get a URL to upload a profile image
 
 ```typescript
 profileApi.get('/profiles/:id/image/upload', async (ctx) => {
@@ -310,7 +310,7 @@ profileApi.get('/profiles/:id/image/upload', async (ctx) => {
 })
 ```
 
-#### Get a URL to download a profile image
+### Get a URL to download a profile image
 
 ```typescript
 profileApi.get('/profiles/:id/image/download', async (ctx) => {

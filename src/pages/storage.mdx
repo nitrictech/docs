@@ -45,7 +45,7 @@ You can obtain a reference to a `File` within a bucket by either using its name 
 To get a reference to a specific file in a bucket, use the `file()` method on the bucket reference. This returns a `File` reference so other operations can be performed on the file.
 
 <Note>
-No network calls are made when you get a file reference using `file()`
+  No network calls are made when you get a file reference using `file()`
 </Note>
 
 <CodeGroup>
@@ -70,9 +70,7 @@ profile_picture = profiles.file("users/bruce-wayne/profile.png")
 
 To list all files in a bucket, use the `files()` method on the bucket reference. The function must have `read` permissions to list the files within a bucket.
 
-<Note>
-A network call is made when you list files using `files()`
-</Note>
+<Note>A network call is made when you list files using `files()`</Note>
 
 <CodeGroup>
 
@@ -106,7 +104,8 @@ for file in files:
 You can read the contents of a file directly from your application code using the `read()` method on a file reference. The contents of the file are returned as a byte array.
 
 <Note>
-If a file with that name does not exist when `read()` is called a `NOT_FOUND` error will be thrown.
+  If a file with that name does not exist when `read()` is called a `NOT_FOUND`
+  error will be thrown.
 </Note>
 
 <CodeGroup>
@@ -188,7 +187,9 @@ The signed URL feature enables you to generate temporary URLs for downloading or
 You have the option to customize the expiration time of the URL by specifying a duration in seconds, ranging from 0 to 604,800 (a week). To obtain a download URL, the function needs to have `read` permissions on the bucket. For an upload URL, the function needs to have `write` permissions on the bucket.
 
 <Note>
-It's important to note that anyone with the signed URL can access or modify the file. Hence, it's crucial to exercise caution and only share the URL with trusted users.
+  It's important to note that anyone with the signed URL can access or modify
+  the file. Hence, it's crucial to exercise caution and only share the URL with
+  trusted users.
 </Note>
 
 <CodeGroup>

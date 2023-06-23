@@ -1,4 +1,5 @@
-export const description = "Reference for Nitric's .NET library - Create a new bucket notification trigger"
+export const description =
+  "Reference for Nitric's .NET library - Create a new bucket notification trigger"
 
 # bucket.on()
 
@@ -46,13 +47,24 @@ Nitric.Run();
   <Property name="name" required type="string">
     The unique name/reference to the file.
   </Property>
-  <Property name="notificationType" required type="BucketNotificationType.Write | BucketNotificationType.Delete">
-    The notification type for a triggered event, either on a file write or a file delete.
+  <Property
+    name="notificationType"
+    required
+    type="BucketNotificationType.Write | BucketNotificationType.Delete"
+  >
+    The notification type for a triggered event, either on a file write or a
+    file delete.
   </Property>
   <Property name="notificationPrefixFilter" required type="string">
-    The file prefix filter that must match for a triggered event. If multiple filters overlap across notifications then an error will be thrown when registering the resource.
+    The file prefix filter that must match for a triggered event. If multiple
+    filters overlap across notifications then an error will be thrown when
+    registering the resource.
   </Property>
-  <Property name="middleware" required type="BucketNotificationMiddleware | BucketNotificationMiddleware[]">
+  <Property
+    name="middleware"
+    required
+    type="BucketNotificationMiddleware | BucketNotificationMiddleware[]"
+  >
     The middleware (code) to be triggered when a bucket event is triggered.
   </Property>
 </Properties>
