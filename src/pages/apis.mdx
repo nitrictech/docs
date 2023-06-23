@@ -81,7 +81,7 @@ Nitric provides callbacks with a single context object that gives you everything
 
 The context object includes a request `req` and response `res`, which in turn provide convenient methods for reading and writing bodies, as well as auto-extracted parameters and HTTP headers.
 
-**Parameters**
+#### Parameters
 
 The path string used to declare routes can include named parameters. The values collected from those parameters are automatically included in the context object under `ctx.req.params`.
 
@@ -111,7 +111,7 @@ async def get_planet_route(ctx):
 
 </CodeGroup>
 
-**HTTP status and headers**
+#### HTTP status and headers
 
 The response object provides `status` and `headers` properties you can use to return HTTP status codes and headers.
 

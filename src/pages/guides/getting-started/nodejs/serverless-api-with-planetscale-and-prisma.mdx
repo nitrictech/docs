@@ -428,7 +428,7 @@ When running APIs locally, nitric will sub-route them by their name. So in this 
 
 Here are some example requests you can use to test the API:
 
-**Create a meme template**
+### Create a meme template
 
 ```bash
 curl -X POST http://localhost:4001/templates \
@@ -436,7 +436,7 @@ curl -X POST http://localhost:4001/templates \
    -d '{"name":"my-meme","source":"https://www.meme-arsenal.com/memes/89f28a7e83e28f15b1d8e560c788b4fc.jpg","textPositions":[{"name":"topText","posX":50,"posY":0,"width":50,"height":50},{"name":"bottomText","posX":50,"posY":50,"width":50,"height":50}]}'
 ```
 
-**Full Request Body**
+#### Full Request Body
 
 ```json
 {
@@ -466,7 +466,7 @@ curl -X POST http://localhost:4001/templates \
   like .png or .jpg
 </Note>
 
-**Create a new meme using the template**
+### Create a new meme using the template
 
 ```bash
 curl -X POST http://localhost:4001/memes \
@@ -474,7 +474,7 @@ curl -X POST http://localhost:4001/memes \
    -d '{"templateName":"my-meme","texts":[{"name":"topText","value":"top text content"},{"name":"bottomText","value":"bottom text content"}]}'
 ```
 
-**Full Request Body**
+#### Full Request Body
 
 ```json
 {
@@ -492,7 +492,7 @@ curl -X POST http://localhost:4001/memes \
 }
 ```
 
-**Retrieve the image**
+#### Retrieve the image
 
 Using the Meme ID returned from the previous request, open a browser and navigate to `http://localhost:4001/memes/{id}`.
 

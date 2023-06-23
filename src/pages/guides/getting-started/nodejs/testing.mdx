@@ -71,7 +71,7 @@ helloApi.post('/:name', handleAddImage)
 
 ### Writing the tests
 
-**Asserting**
+#### Asserting
 
 Put the unit tests in a test directory, and name it `unit.test.ts`. The logic being split into separate functions makes it very easy to test our API.
 
@@ -96,7 +96,7 @@ describe('Testing Hello Function', () => {
 })
 ```
 
-**Mocking**
+#### Mocking
 
 Our next function handleAddImage becomes more complex because it uses a bucket. This will need to be mocked as we want our unit tests to be fast, replicable, and isolated. By mocking a production system, we have an isolated environment that won't be affected by changes in the system. The trade-off is that the unit tests won't catch system-level failures. However, this is covered by [integration tests](#integration-testing).
 

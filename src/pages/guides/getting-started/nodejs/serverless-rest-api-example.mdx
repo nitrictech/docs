@@ -341,17 +341,17 @@ profileApi.get('/profiles/:id/image/view', async (ctx) => {
 })
 ```
 
-**Time to test the updated API**
+#### Time to test the updated API
 
 Update all values in brackets `[]` and change the URL to your deployed URL if you're testing on the cloud.
 
-**Get an image upload URL**
+#### Get an image upload URL
 
 ```bash
 curl --location --request GET 'http://localhost:4001/profiles/[id]/image/upload'
 ```
 
-**Using the upload URL with curl**
+#### Using the upload URL with curl
 
 ```bash
 curl --location --request PUT '[url]' \
@@ -360,7 +360,7 @@ curl --location --request PUT '[url]' \
 
 ```
 
-**Get an image download URL**
+#### Get an image download URL
 
 ```bash
 curl --location --request GET 'http://localhost:4001/profiles/[id]/image/download'
