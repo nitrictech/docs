@@ -7,10 +7,17 @@ export const description = 'Configuring your AWS stacks'
 ```yaml
 # The name of your AWS stack
 name: my-aws-stack-name
+
+# The provider to use and it's published version
+# See releases:
+# https://github.com/nitrictech/nitric/tags
+provider: nitric/aws@0.29.0
+
 # The target aws region to deploy to
 # See available regions:
 # https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
 region: my-aws-stack-region
+
 # The timezone that deployed schedules will run with
 # Format is in tz identifiers:
 # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones

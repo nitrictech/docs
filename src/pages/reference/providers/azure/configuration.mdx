@@ -7,6 +7,12 @@ export const description = 'Configuring your Azure stacks'
 ```yaml
 # The name of your Azure stack
 name: my-azure-stack-name
+
+# The provider to use and it's published version
+# See releases:
+# https://github.com/nitrictech/nitric/tags
+provider: nitric/azure@0.29.0
+
 # The target Azure region to deploy to
 # See available regions:
 # https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/?products=container-apps
@@ -14,6 +20,7 @@ region: my-azure-stack-region
 
 # Org to associate deployed API Management services with
 org: example-org
+
 # Admin email to associate deployed API Management services with
 adminemail: test@example.com
 
