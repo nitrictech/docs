@@ -8,7 +8,7 @@ export const description = 'Configuring your AWS stacks'
 # The name of your AWS stack
 name: my-aws-stack-name
 # The provider to use and it's published version (see [Releases](https://github.com/nitrictech/nitric/tags))
-provider: nitric/aws@0.29.0
+provider: nitric/aws@0.30.0
 # The target aws region to deploy to
 # See available regions:
 # https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
@@ -27,6 +27,15 @@ import:
     # In typescript this would import the provided secret reference for a secret declared as
     # const mySecret = secret('my-secret');
     my-secret: arn:...
+
+# Configure deployed apis
+apis:
+  # Use nitric name to select API to configure 
+  main:
+    # Bind custom domains to the API Gateway
+    # Domain must be a managed zone root or subdomain in Route53.
+    domains:
+      - api.example.com
 
 # Configure your deployed functions/services
 config:
