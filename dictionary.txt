@@ -131,6 +131,7 @@ numpy
 dotnet
 proto
 URI
+DNS
 containerize
 openapi
 analytics
