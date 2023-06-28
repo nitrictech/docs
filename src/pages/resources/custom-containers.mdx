@@ -1,0 +1,182 @@
+export const description = 'Customize how functions are built into containers'
+
+# Custom containers
+
+Nitric builds applications by identifying its entrypoints, which are typically defined in the `nitric.yaml` file as `handlers`. Each entrypoint in a Nitric app is built into its own container using Docker, then deployed to a cloud container runtime such as AWS Lambda, Google CloudRun or Azure Container Apps.
+
+The Nitric CLI decides how to build those containers based on the programming language used by the entrypoint, for example if the entrypoint is a python file it will be build using Nitric's python dockerfile template. These dockerfile templates are designed with compatibility and ease of use in mind, this makes building applications convenient but may not provide additional dependencies your code relies or the ideal optimization for your application.
+
+If you need to customize the docker container build process to add dependencies, optimize container size or some other reason, you can create a custom dockerfile template to be used by some or all of the entrypoints (functions) in your application.
+
+## Specify a dockerfile template
+
+<Note>
+  Custom dockerfiles is currently in preview, you will need to enable this
+  feature in your `nitric.yaml` file.
+</Note>
+
+To use a custom dockerfile template update the `handlers` configuration as shown below.
+
+```yaml {{ tag: "nitric.yaml" }}
+name: custom-example
+handlers:
+  - match: functions/*.ts
+    type: default
+    docker:
+      # All entrypoints in the functions directory will be built using this dockerfile
+      file: ./docker/node.dockerfile
+      args: {}
+# Enable preview feature
+preview-features:
+  - dockerfile
+```
+
+In this example we're specifying that any handlers that match the path `functions/*.ts` will use a custom `node.dockerfile` for their dockerfile template.
+
+## Create a dockerfile template
+
+It's important to note that the custom dockerfile you create needs to act as a template. This can look a bit different to how you might have written dockerfiles in the past, since the same template file will need to be used for all handlers that match the configuration the entrypoint will use a variable which contains the handler's filename.
+
+Here are some example dockerfiles:
+
+<Note>
+  Note the `$HANDLER` variable, which specifies the handler to execute in the
+  final container.
+</Note>
+
+<CodeGroup>
+
+```docker {{ title: "Python" }}
+FROM python:3.11-slim
+
+ARG HANDLER
+
+ENV HANDLER=${HANDLER}
+ENV PYTHONUNBUFFERED=TRUE
+
+RUN apt-get update -y && \
+    apt-get install -y ca-certificates && \
+    update-ca-certificates
+
+RUN pip install --upgrade pip pipenv
+
+# Copy either requirements.txt for Pipfile
+COPY requirements.tx[t] Pipfil[e] Pipfile.loc[k] ./
+
+# Guarantee lock file if we have a Pipfile and no Pipfile.lock
+RUN (stat Pipfile && pipenv lock) || echo "No Pipfile found"
+
+# Output a requirements.txt file for final module install if there is a Pipfile.lock found
+RUN (stat Pipfile.lock && pipenv requirements > requirements.txt) || echo "No Pipfile.lock found"
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+ENTRYPOINT python $HANDLER
+```
+
+```docker {{ title: "JavaScript" }}
+# syntax=docker/dockerfile:1
+FROM node:alpine
+
+ARG HANDLER
+ENV HANDLER=${HANDLER}
+
+RUN apk update && \
+    apk add --no-cache ca-certificates && \
+    update-ca-certificates
+
+# Python and make are required by certain native package build processes in NPM packages.
+ENV PYTHONUNBUFFERED=1
+RUN apk add --update --no-cache python3 make g++ && ln -sf python3 /usr/bin/python
+RUN python3 -m ensurepip
+RUN pip3 install --no-cache --upgrade pip setuptools
+
+COPY . .
+
+RUN \
+  set -ex; \
+  yarn install --production --frozen-lockfile --cache-folder /tmp/.cache; \
+  rm -rf /tmp/.cache; \
+  # prisma fix for docker installs: https://github.com/prisma/docs/issues/4365
+  test -d ./prisma && npx prisma generate || echo "";
+
+ENTRYPOINT node $HANDLER
+```
+
+```docker {{ title: "TypeScript" }}
+# syntax=docker/dockerfile:1
+FROM node:alpine as build
+
+ARG HANDLER
+
+# Python and make are required by certain native package build processes in NPM packages.
+RUN apk add g++ make py3-pip
+RUN yarn global add typescript @vercel/ncc
+
+WORKDIR /usr/app
+
+COPY package.json yarn.lock ./
+
+RUN yarn install --production --frozen-lockfile --cache-folder /tmp/.cache && \
+    rm -rf /tmp/.cache
+
+COPY . .
+
+RUN \
+  --mount=type=cache,target=/tmp/ncc-cache \
+  ncc build ${HANDLER} -o lib/ -t
+
+FROM node:alpine as final
+
+WORKDIR /usr/app
+
+RUN apk update && \
+    apk add --no-cache ca-certificates && \
+    update-ca-certificates
+
+COPY package.json yarn.lock ./
+
+RUN yarn install --production --frozen-lockfile --cache-folder /tmp/.cache && \
+    rm -rf /tmp/.cache
+
+COPY . .
+
+COPY --from=build /usr/app/lib/ ./lib/
+
+ENTRYPOINT ["node", "lib/index.js"]
+```
+
+```docker {{ title: "Go" }}
+FROM golang:alpine as build
+
+ARG HANDLER
+
+WORKDIR /app/
+
+COPY go.mod *.sum ./
+
+RUN go mod download
+
+COPY . .
+
+RUN go build -o /bin/main ./${HANDLER}/...
+
+FROM alpine
+
+COPY --from=build /bin/main /bin/main
+
+RUN chmod +x-rw /bin/main
+RUN apk update && \
+    apk add --no-cache tzdata ca-certificates && \
+    update-ca-certificates
+
+ENTRYPOINT ["/bin/main"]
+```
+
+</CodeGroup>
+
+### Create an ignore file
+
+Custom dockerfile templates also support co-located dockerignore files. If your custom docker template is at path `./docker/node.dockerfile` you can create an ignore file at `./docker/node.dockerfile.dockerignore`.

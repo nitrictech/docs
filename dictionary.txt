@@ -141,6 +141,11 @@ CockroachDB
 embeddings
 NoSQL
 customizable
+entrypoint
+entrypoints
+dockerfile
+dockerfiles
+dockerignore
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
