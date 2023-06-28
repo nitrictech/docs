@@ -142,8 +142,12 @@ CockroachDB
 embeddings
 NoSQL
 customizable
-src
 entrypoint
+entrypoints
+dockerfile
+dockerfiles
+dockerignore
+src
 proxied
 
 ^.+[-:_]\w+$
