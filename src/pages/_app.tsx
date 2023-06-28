@@ -44,6 +44,13 @@ export default function App({ Component, pageProps }) {
     pageProps.description ||
     'Documentation for the Nitric cloud application framework.'
 
+  const baseUrl =
+    process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+      ? 'https://nitric.io'
+      : `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+
+  const cleanedPath = router.asPath.split('#')[0].split('?')[0]
+
   return (
     <>
       <Head>
@@ -58,6 +65,12 @@ export default function App({ Component, pageProps }) {
         />
         <meta name="og:type" content="website" />
         <link rel="icon" href={`${router.basePath}/favicon.ico`} />
+        <link
+          rel="canonical"
+          href={
+            baseUrl + (cleanedPath === '/' ? '/docs' : `/docs${cleanedPath}`)
+          }
+        />
       </Head>
       <MDXProvider components={mdxComponents as any}>
         <Layout {...pageProps}>
