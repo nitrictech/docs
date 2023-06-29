@@ -1,8 +1,8 @@
 import { BoxGrid } from './BoxGrid'
 
-const resources = [
+const assets = [
   {
-    href: '/resources/examples',
+    href: '/assets/examples',
     name: 'Examples',
     description: 'Featured video, Official GitHub examples and more.',
     pattern: {
@@ -14,7 +14,7 @@ const resources = [
     },
   },
   {
-    href: '/resources/faq',
+    href: '/assets/faq',
     name: 'Frequency Asked Questions',
     description:
       'Find answers to commonly asked questions about Nitric. Discover valuable insights, practical tips, and solutions to common challenges.',
@@ -28,10 +28,10 @@ const resources = [
   },
 ]
 
-export function Resources() {
+export function Assets() {
   return (
     <div className="my-16 xl:max-w-none">
-      <BoxGrid boxes={resources} />
+      <BoxGrid boxes={assets} />
     </div>
   )
 }
