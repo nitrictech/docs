@@ -85,8 +85,8 @@ const fullNav: FullNav = {
       showDividerAbove: true,
       links: [
         {
-          title: 'Resources',
-          href: '/resources',
+          title: 'Assets',
+          href: '/assets',
           icon: FolderIcon,
         },
         // {
@@ -301,28 +301,28 @@ const fullNav: FullNav = {
       ],
     },
   ],
-  resources: [
+  assets: [
     {
       links: [
         {
           title: 'Examples',
-          href: '/resources/examples',
+          href: '/assets/examples',
         },
         {
           title: 'Frequently Asked Questions',
-          href: '/resources/faq',
+          href: '/assets/faq',
         },
         {
           title: 'Environment Variables',
-          href: '/resources/env',
+          href: '/assets/env',
         },
         {
           title: 'IAM and Access Control',
-          href: '/resources/access-control',
+          href: '/assets/access-control',
         },
         {
           title: 'Flexibility with the Nitric Framework',
-          href: '/resources/eject',
+          href: '/assets/eject',
         },
       ],
     },
@@ -331,15 +331,15 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'AWS SAM',
-          href: '/resources/comparison/aws-sam',
+          href: '/assets/comparison/aws-sam',
         },
         {
           title: 'GCP Deployment Manager',
-          href: '/resources/comparison/gcp-deployment-manager',
+          href: '/assets/comparison/gcp-deployment-manager',
         },
         {
           title: 'Azure Resource Manager',
-          href: '/resources/comparison/bicep',
+          href: '/assets/comparison/bicep',
         },
       ],
     },

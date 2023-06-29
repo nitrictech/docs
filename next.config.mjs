@@ -92,31 +92,31 @@ const nextConfig = {
       ),
       {
         source: '/docs/comparison/:slug',
-        destination: '/docs/resources/comparison/:slug',
+        destination: '/docs/assets/comparison/:slug',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/faq',
-        destination: '/docs/resources/faq',
+        destination: '/docs/assets/faq',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/env',
-        destination: '/docs/resources/env',
+        destination: '/docs/assets/env',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/support/eject',
-        destination: '/docs/resources/eject',
+        destination: '/docs/assets/eject',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/access-control',
-        destination: '/docs/resources/access-control',
+        destination: '/docs/assets/access-control',
         basePath: false,
         permanent: true,
       }

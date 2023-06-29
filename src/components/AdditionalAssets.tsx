@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { SiPulumi } from 'react-icons/si'
 
-const additionalResources = [
+const additionalAssets = [
   {
     href: '/reference/cli',
     name: 'Nitric CLI',
@@ -102,7 +102,7 @@ function ResourcePattern({ mouseX, mouseY, ...gridProps }) {
   )
 }
 
-function Resource({ block }) {
+function Asset({ block }) {
   let mouseX = useMotionValue(0)
   let mouseY = useMotionValue(0)
 
@@ -138,15 +138,15 @@ function Resource({ block }) {
   )
 }
 
-export function AdditionalResources() {
+export function AdditionalAssets() {
   return (
     <div className="my-16 xl:max-w-none">
-      <Heading level={2} id="resources">
-        Additional Resources
+      <Heading level={2} id="assets">
+        Additional Assets
       </Heading>
       <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 dark:border-white/5 sm:grid-cols-2 xl:grid-cols-4">
-        {additionalResources.map((block) => (
-          <Resource key={block.href} block={block} />
+        {additionalAssets.map((block) => (
+          <Asset key={block.href} block={block} />
         ))}
       </div>
     </div>
