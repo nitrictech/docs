@@ -168,6 +168,10 @@ const fullNav: FullNav = {
           title: 'Using GitHub Actions',
           href: '/guides/getting-started/github-actions',
         },
+        {
+          title: 'Nitric Deploy',
+          href: '/guides/getting-started/deploy',
+        },
       ],
     },
     {
