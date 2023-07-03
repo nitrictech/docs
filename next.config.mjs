@@ -69,6 +69,7 @@ const nextConfig = {
         '/docs/installation',
         '/docs/deployment',
         '/docs/language-support',
+        '/docs/guides/deploy',
         '/docs/guides/github-actions',
       ].map((source) => ({
         source: source,
@@ -117,6 +118,12 @@ const nextConfig = {
       {
         source: '/docs/access-control',
         destination: '/docs/assets/access-control',
+        basePath: false,
+        permanent: true,
+      }
+      {
+        source: '/docs/getting-started',
+        destination: '/docs/guides/getting-started',
         basePath: false,
         permanent: true,
       }
