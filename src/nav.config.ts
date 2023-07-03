@@ -194,6 +194,10 @@ const fullNav: FullNav = {
           href: '/guides/getting-started/nodejs/graphql',
         },
         {
+          title: 'Nest.js',
+          href: '/guides/getting-started/nodejs/nestjs',
+        },
+        {
           title: 'Next.js',
           href: '/guides/getting-started/nodejs/api-with-nextjs',
         },

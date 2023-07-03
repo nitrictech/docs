@@ -201,11 +201,12 @@ handlers:
   - src/main.ts
 ```
 
-We then want to add the `http` type to our main function, and pass in the Nest.js application.
+We then want to add the `http` type to our main function, and pass in the Nest.js application. The `http` wrapper will use the listen function when starting the application, being passed the port.
 
 <Note>
-  The `http` wrapper looks for a `listen` function on the app parameter, which
-  is passed the port and callback when the application is started.
+  The application port will be set by the NITRIC_HTTP_PROXY_PORT environment
+  variable, however it will find an open port if that environment variable isn't
+  set.
 </Note>
 
 ```typescript
@@ -215,16 +216,12 @@ import { http } from '@nitric/sdk'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 
-const port = 3000
-
 async function listen(port: number) {
   const app = await NestFactory.create(AppModule)
   await app.listen(port)
 }
 
-http({ listen }, port, () => {
-  console.log(`Application listening on port ${port}`)
-})
+http(listen)
 ```
 
 ## Creating the ProfileController
@@ -275,12 +272,12 @@ SUCCESS  Started Local Services! (1s)
 Local running, use ctrl-C to stop
 
 Proxy | Endpoint
-3000  | http://localhost:4001
+8000  | http://localhost:4001
 
 Dev Dashboard | http://localhost:49152
 ```
 
-You can use any http client to test the application. It should be running on port 3000, but accessible from port 4001 as well. It is important that http://localhost:4001 correctly wraps your application.
+You can use any http client to test the application. The application will be running from a random port, but proxied on port 4001. It is important that http://localhost:4001 correctly wraps your application.
 
 We can test that a create request works by using the following cURL command.
 

@@ -19,6 +19,7 @@ const IGNORED_URLS = [
   'https://scoop-docs.vercel.app/',
   'https://vercel.com/new/clone?repository-url=https://github.com/nitrictech/nitric-todo&env=API_BASE_URL',
   'http://localhost:4000',
+  'http://localhost:4001',
 ]
 
 const isExternalUrl = (url: string) => {

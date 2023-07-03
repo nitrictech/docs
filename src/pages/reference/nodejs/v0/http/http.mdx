@@ -10,29 +10,31 @@ import { http } from '@nitric/sdk'
 import express from 'express'
 
 const app = express()
-const port = 3000
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-http(app, port, () => {
-  console.log(`Application listening on port ${port}`)
+http(app, () => {
+  console.log(`Application started`)
 })
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="app" required type="NodeApplication">
-    Accepts an object that has a listen function on it. The listen function
-    accepts a port and an optional callback.
-  </Property>
-  <Property name="port" required type="number">
-    The port that the application will listen on.
+  <Property
+    name="app"
+    required
+    type="NodeApplication | (port: number, callback?: () => void)"
+  >
+    Accepts an object that has a listen function on it, or pass the listener
+    function itself. A listener function is a function that accepts a port and
+    an optional callback, and is used to start the application.
   </Property>
   <Property name="callback" type="() => void">
-    A callback that is run when the application is started.
+    A callback that is passed into the listen function when the application is
+    started.
   </Property>
 </Properties>
 
@@ -61,16 +63,12 @@ import { http } from '@nitric/sdk'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 
-const port = 3000
-
 async function listen(port: number) {
   const app = await NestFactory.create(AppModule)
   await app.listen(port)
 }
 
-http({ listen }, port, () => {
-  console.log(`Application listening on port ${port}`)
-})
+http(listen)
 ```
 
 ### Wrap an Express application
@@ -80,15 +78,12 @@ import { http } from '@nitric/sdk'
 import express from 'express'
 
 const app = express()
-const port = 3000
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-http(app, port, () => {
-  console.log(`Application listening on port ${port}`)
-})
+http(app)
 ```
 
 ### Wrap a Koa application
@@ -98,13 +93,10 @@ import { http } from '@nitric/sdk'
 import Koa from 'koa'
 
 const app = new Koa()
-const port = 3000
 
 app.use(async (ctx) => {
   ctx.body = 'Hello World'
 })
 
-http(app, port, () => {
-  console.log(`Application listening on port ${port}`)
-})
+http(app)
 ```
