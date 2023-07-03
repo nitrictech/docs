@@ -30,7 +30,7 @@
   --docsearch-muted-color: theme('colors.slate.400');
   --docsearch-emphasis-color: theme('colors.white');
   --docsearch-logo-color: theme('colors.slate.300');
-  --docsearch-modal-background: theme('colors.zinc.900');
+  --docsearch-modal-background: theme('colors.gray.800');
   --docsearch-modal-shadow: 0 0 0 1px theme('colors.slate.700'),
     theme('boxShadow.xl');
   --docsearch-hit-color: theme('colors.slate.300');

@@ -8,7 +8,7 @@ function FeedbackButton(props) {
   return (
     <button
       type="submit"
-      className="px-3 text-sm font-medium text-zinc-600 transition hover:bg-zinc-900/2.5 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
+      className="px-3 text-sm font-medium text-zinc-600 transition hover:bg-gray-800/2.5 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
       {...props}
     />
   )
@@ -31,7 +31,7 @@ const FeedbackForm: ForwardRefRenderFunction<
       </p>
       <div className="group grid h-8 grid-cols-[1fr,1px,1fr] overflow-hidden rounded-full border border-zinc-900/10 dark:border-white/10">
         <FeedbackButton data-response="yes">Yes</FeedbackButton>
-        <div className="bg-zinc-900/10 dark:bg-white/10" />
+        <div className="bg-gray-800/10 dark:bg-white/10" />
         <FeedbackButton data-response="no">No</FeedbackButton>
       </div>
     </form>

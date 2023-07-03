@@ -49,8 +49,8 @@ export const Header = forwardRef<HTMLDivElement, { className?: string }>(
           !isInsideMobileNavigation &&
             'backdrop-blur-sm dark:backdrop-blur lg:left-72 xl:left-80',
           isInsideMobileNavigation
-            ? 'bg-white dark:bg-zinc-900'
-            : 'bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]'
+            ? 'bg-white dark:bg-gray-800'
+            : 'bg-white/[var(--bg-opacity-light)] dark:bg-gray-800/[var(--bg-opacity-dark)]'
         )}
         style={
           {
@@ -63,7 +63,7 @@ export const Header = forwardRef<HTMLDivElement, { className?: string }>(
           className={clsx(
             'absolute inset-x-0 top-full h-px transition',
             (isInsideMobileNavigation || !mobileNavIsOpen) &&
-              'bg-zinc-900/7.5 dark:bg-white/7.5'
+              'bg-gray-800/7.5 dark:bg-white/7.5'
           )}
         />
         <div className="hidden lg:block">
@@ -85,13 +85,13 @@ export const Header = forwardRef<HTMLDivElement, { className?: string }>(
               ))}
             </ul>
           </nav>
-          <div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15" />
+          <div className="hidden md:block md:h-5 md:w-px md:bg-gray-800/10 md:dark:bg-white/15" />
           <div className="flex items-center gap-4">
             <div className="lg:hidden">
               <Search />
             </div>
             <Link
-              className="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 dark:hover:bg-white/5"
+              className="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-gray-800/5 dark:hover:bg-white/5"
               href="https://github.com/nitrictech/nitric"
               target="_blank"
             >
