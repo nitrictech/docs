@@ -120,7 +120,7 @@ const nextConfig = {
         destination: '/docs/assets/access-control',
         basePath: false,
         permanent: true,
-      }
+      },
       {
         source: '/docs/getting-started',
         destination: '/docs/guides/getting-started',
