@@ -87,7 +87,7 @@ export function Search() {
                 if (url.hash === '#overview') url.hash = ''
                 return {
                   ...item,
-                  url: url.href.replace(url.origin, ''),
+                  url: url.href.replace(url.origin, '').replace(/^\/docs/, ''),
                 }
               })
             }}
