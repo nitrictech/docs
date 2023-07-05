@@ -142,6 +142,9 @@ CockroachDB
 embeddings
 NoSQL
 customizable
+src
+entrypoint
+proxied
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
