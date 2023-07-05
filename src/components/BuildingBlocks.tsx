@@ -14,7 +14,7 @@ const buildingBlocks = [
     href: '/apis',
     name: 'APIs',
     description:
-      'Learn about the contact model and how to create, retrieve, update, delete, and list contacts.',
+      'Create powerful APIs with easy to setup routes, middleware and security.',
     icon: GlobeAltIcon,
     pattern: {
       y: 16,
@@ -28,7 +28,7 @@ const buildingBlocks = [
     href: '/collections',
     name: 'Collections',
     description:
-      'Learn about the conversation model and how to create, retrieve, update, delete, and list conversations.',
+      'A built-in No-SQL store to quickly store and retrieve unstructured data.',
     icon: ArchiveBoxIcon,
     pattern: {
       y: -6,
@@ -42,7 +42,7 @@ const buildingBlocks = [
     href: '/schedules',
     name: 'Schedules',
     description:
-      'Learn about the message model and how to create, retrieve, update, delete, and list messages.',
+      'Schedule actions easily using either simple rate expressions or cron.',
     icon: ClockIcon,
     pattern: {
       y: 32,
@@ -55,8 +55,7 @@ const buildingBlocks = [
   {
     href: '/storage',
     name: 'Storage',
-    description:
-      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+    description: 'Store and retrieve BLOB data effortlessly.',
     icon: CircleStackIcon,
     pattern: {
       y: 22,
@@ -67,7 +66,7 @@ const buildingBlocks = [
     href: '/messaging',
     name: 'Messages',
     description:
-      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+      'Use Topics and Queues to create event-driven distributed applications',
     icon: MegaphoneIcon,
     pattern: {
       y: 22,
@@ -77,8 +76,7 @@ const buildingBlocks = [
   {
     href: '/secrets',
     name: 'Secrets',
-    description:
-      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+    description: 'Securely store and retrieve secrets.',
     icon: LockClosedIcon,
     pattern: {
       y: 22,
