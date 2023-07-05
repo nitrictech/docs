@@ -10,6 +10,7 @@ import {
   LockClosedIcon,
   MegaphoneIcon,
   PlayIcon,
+  ServerIcon,
 } from '@heroicons/react/24/outline'
 import { FaNodeJs, FaPython } from 'react-icons/fa'
 import { SiCsharp, SiPulumi } from 'react-icons/si'
@@ -53,6 +54,11 @@ const fullNav: FullNav = {
           title: 'APIs',
           href: '/apis',
           icon: GlobeAltIcon,
+        },
+        {
+          title: 'HTTP',
+          href: '/http',
+          icon: ServerIcon,
         },
         {
           title: 'Collections',
