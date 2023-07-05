@@ -55,8 +55,7 @@ const buildingBlocks = [
   {
     href: '/storage',
     name: 'Storage',
-    description:
-      'Store and retrieve BLOB data effortlessly.',
+    description: 'Store and retrieve BLOB data effortlessly.',
     icon: CircleStackIcon,
     pattern: {
       y: 22,
@@ -77,8 +76,7 @@ const buildingBlocks = [
   {
     href: '/secrets',
     name: 'Secrets',
-    description:
-      'Securely store and retrieve secrets.',
+    description: 'Securely store and retrieve secrets.',
     icon: LockClosedIcon,
     pattern: {
       y: 22,
