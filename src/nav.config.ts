@@ -318,7 +318,7 @@ const fullNav: FullNav = {
         },
         {
           title: 'Custom Container Builds',
-          href: '/resources/custom-containers',
+          href: '/assets/custom-containers',
         },
         {
           title: 'Frequently Asked Questions',
