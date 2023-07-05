@@ -201,7 +201,7 @@ handlers:
   - src/main.ts
 ```
 
-We then want to add the `http` type to our main function, and pass in the Nest.js application. The `http` wrapper will use the listen function when starting the application, being passed the port.
+We then want to add the `http` type to our main function, and pass in the Nest.js application. The `http` wrapper will use the `bootstrap` function when starting the application and pass it the port.
 
 <Note>
   The application port will be set by the NITRIC_HTTP_PROXY_PORT environment
@@ -216,12 +216,12 @@ import { http } from '@nitric/sdk'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 
-async function listen(port: number) {
+async function bootstrap(port: number) {
   const app = await NestFactory.create(AppModule)
   await app.listen(port)
 }
 
-http(listen)
+http(bootstrap)
 ```
 
 ## Creating the ProfileController
