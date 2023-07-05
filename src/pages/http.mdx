@@ -21,13 +21,13 @@ Here are some examples of how to connect your existing API frameworks with Nitri
 
 ```javascript {{ title: "Node.js (express.js)" }}
 import { http } from '@nitric/sdk'
-import express from "express"
+import express from 'express'
 
 const app = express()
 
-app.use("/hello", (req, res) => {
-  res.send("hello from express")
-});
+app.use('/hello', (req, res) => {
+  res.send('hello from express')
+})
 
 http(app)
 ```
@@ -50,5 +50,3 @@ http(bootstrap)
 ```
 
 </CodeGroup>
-
-
