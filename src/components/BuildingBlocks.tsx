@@ -78,7 +78,7 @@ const buildingBlocks = [
     href: '/secrets',
     name: 'Secrets',
     description:
-      'Securely store secrets with nitrics secrets API',
+      'Securely store and retrieve secrets.',
     icon: LockClosedIcon,
     pattern: {
       y: 22,
