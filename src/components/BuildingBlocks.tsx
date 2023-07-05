@@ -28,7 +28,7 @@ const buildingBlocks = [
     href: '/collections',
     name: 'Collections',
     description:
-      'A built in No-SQL store to quickly store and retrieve unstructure data.',
+      'A built-in No-SQL store to quickly store and retrieve unstructured data.',
     icon: ArchiveBoxIcon,
     pattern: {
       y: -6,
@@ -42,7 +42,7 @@ const buildingBlocks = [
     href: '/schedules',
     name: 'Schedules',
     description:
-      'Schedule actions easily with nitric using either simple rate expressions or cron.',
+      'Schedule actions easily using either simple rate expressions or cron.',
     icon: ClockIcon,
     pattern: {
       y: 32,
@@ -67,7 +67,7 @@ const buildingBlocks = [
     href: '/messaging',
     name: 'Messages',
     description:
-      'Use Topics and Queues to create distributed applications',
+      'Use Topics and Queues to create event-driven distributed applications',
     icon: MegaphoneIcon,
     pattern: {
       y: 22,
