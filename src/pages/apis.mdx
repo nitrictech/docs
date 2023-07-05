@@ -364,3 +364,64 @@ Route level middleware currently not supported in python
 ```
 
 </CodeGroup>
+
+## Custom Domains
+
+<Note>Custom domains are currently only supported for AWS deployments.</Note>
+
+By default APIs deployed by Nitric will be assigned a domain by the target cloud provider. If you would like to deploy APIs with predefined custom domains you can specify the custom domains for each API in your project's stack files. For these domains to be successfully configured you will need to meet the prerequisites defined for each cloud provider below.
+
+<CodeGroup>
+
+```yaml {{ title: "AWS", tag: "nitric-prod.yaml (stack file)" }}
+name: my-aws-stack
+provider: nitric/aws@0.30.0
+region: ap-southeast-2
+
+# Add a key for configuring apis
+apis:
+  # Target an API by its nitric name
+  my-api-name:
+    # provide domains to be used for the api
+    domains:
+      - test.example.com
+```
+
+```yaml {{ title: "Azure", tag: "nitric-prod.yaml (stack file)" }}
+# currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
+```
+
+```yaml {{ title: "Google Cloud", tag: "nitric-prod.yaml (stack file)" }}
+# currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
+```
+
+</CodeGroup>
+
+### AWS Custom Domain Prerequisites
+
+To support custom domains with APIs deployed to AWS your domain (or subdomain) will need to be setup as a [hosted zone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html) in Route 53.
+
+The general steps to setup a hosted zone in Route 53 are as follows:
+
+- Navigate to Route 53 in the AWS Console
+- Select 'hosted zones' from the left navigation
+- Click 'Create hosted zone'
+- Enter your domain name and choose the 'Public hosted zone' type.
+- Click 'Create hosted zone'
+- You will now be provided with a set of NS DNS records to configure in the DNS provider for your domain
+- Create the required DNS records, then wait for the DNS changes to propagate
+
+Once this is done you will be able to use the hosted zone domain or any direct subdomain with your Nitric APIs.
+
+You can read more about how AWS suggests configuring hosted zones in their documentation on [Making Route 53 the DNS service for a domain that's in use](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/migrate-dns-domain-in-use.html) or [Making Route 53 the DNS service for an inactive domain](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/migrate-dns-domain-inactive.html)
+
+<Note>
+  If the hosted zone was `nitric.io`, `nitric.io` or `api.nitric.io` would be
+  supported for APIs, but not `public.api.nitric.io` since that is a subdomain
+  of a subdomain.
+</Note>
+
+<Note>
+  DNS propagation of the NS records can take a few seconds to a few hours due to
+  the nature of DNS.
+</Note>
