@@ -61,7 +61,7 @@ export function Search() {
       </button>
       <button
         type="button"
-        className="group flex h-10 w-10 items-center justify-center rounded-lg md:py-2.5 lg:hidden"
+        className="group flex h-5 w-5 items-center justify-center rounded-lg md:py-2.5 lg:hidden"
         onClick={onOpen}
       >
         <span className="sr-only">Search Docs</span>
