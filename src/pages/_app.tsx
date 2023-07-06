@@ -51,19 +51,31 @@ export default function App({ Component, pageProps }) {
 
   const cleanedPath = router.asPath.split('#')[0].split('?')[0]
 
+  const ogTitle =
+    router.pathname === '/' ? 'Nitric Docs' : title.split(' - ')[0]
+
   return (
     <>
       <Head>
         <title>{title}</title>
-        <meta name="og:title" content={title} />
         <meta name="description" content={description} />
-        <meta name="og:description" content={description} />
-        <meta name="og:url" content="https://nitric.io/docs" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content="https://nitric.io/docs" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Nitric Docs" />
         <meta
-          name="og:image"
-          content="https://nitric.io/images/og/og_image.png"
+          property="og:image"
+          content={`${baseUrl}/docs/api/og?title=${encodeURIComponent(
+            ogTitle
+          )}&description=${encodeURIComponent(description)}`}
         />
-        <meta name="og:type" content="website" />
+        <meta property="og:image:alt" content="Nitric Docs Og Image" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:site" content="@nitric_io" />
+        <meta property="twitter:creator" content="@nitric_io" />
         <link rel="icon" href={`${router.basePath}/favicon.ico`} />
         <link
           rel="canonical"
