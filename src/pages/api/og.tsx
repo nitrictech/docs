@@ -57,7 +57,10 @@ export default async function handler(req: NextRequest) {
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img alt="Nitric" src={`${imageBaseUrl}/docs/images/open_graph.png`} />
+            <img
+              alt="Nitric"
+              src={`${imageBaseUrl}/docs/images/open_graph.png`}
+            />
           </div>
           <div
             style={{
@@ -81,7 +84,7 @@ export default async function handler(req: NextRequest) {
             <div
               style={{
                 color: '#A1A1AA',
-                fontSize: '26px',
+                fontSize: '28px',
                 fontWeight: 500,
               }}
             >
