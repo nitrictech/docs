@@ -317,6 +317,10 @@ const fullNav: FullNav = {
           href: '/assets/examples',
         },
         {
+          title: 'Custom Container Builds',
+          href: '/assets/custom-containers',
+        },
+        {
           title: 'Frequently Asked Questions',
           href: '/assets/faq',
         },
