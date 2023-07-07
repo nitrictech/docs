@@ -2,11 +2,17 @@ export const description = 'Integrating with existing HTTP frameworks'
 
 # HTTP
 
-Nitric supports existing web app and API frameworks. The `http` resource allows you to connect Nitric to your existing applications.
+Nitric supports existing web app and API frameworks. The `http` resource allows you to connect Nitric to your existing applications. When deployed, this resource deploys a unique HTTP API Gateway in your choosen cloud provider and routes all incoming requests to your HTTP application.
 
-## Enabling in your project
+<Note>
+  The HTTP resource is currently only supported for Node.js projects. If you
+  would like support for another language let us know:
+  https://github.com/nitrictech/nitric/issues
+</Note>
 
-HTTP framework support is currently in preview, to enable it in your Nitric project add the following to your `nitric.yaml` file
+## Enabling HTTP framework support
+
+HTTP framework support is currently in Preview. To enable it in your project add the following to your `nitric.yaml` file
 
 ```yaml
 preview-features:
@@ -19,7 +25,7 @@ Here are some examples of how to connect your existing API frameworks with Nitri
 
 <CodeGroup>
 
-```javascript {{ title: "Node.js (express.js)" }}
+```javascript {{ title: "Express.js (Node.js)" }}
 import { http } from '@nitric/sdk'
 import express from 'express'
 
@@ -32,7 +38,7 @@ app.use('/hello', (req, res) => {
 http(app)
 ```
 
-```javascript {{ title: "Node.js (nestjs)", tag: "app.module.ts" }}
+```javascript {{ title: "NestJS (Node.js)", tag: "app.module.ts" }}
 import { http } from '@nitric/sdk'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
@@ -43,10 +49,6 @@ async function bootstrap(port: number) {
 }
 
 http(bootstrap)
-```
-
-```python
-# Not yet supported if you would like support let us know at: https://github.com/nitrictech/python-sdk/issues
 ```
 
 </CodeGroup>
