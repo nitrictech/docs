@@ -102,6 +102,7 @@ from uuid import uuid4
 
 from nitric.resources import api, collection, bucket
 from nitric.application import Nitric
+from nitric.faas import HttpContext
 
 # Create an api named public
 profile_api = api("public")
@@ -123,7 +124,7 @@ From here, let's add some features to that function that allow us to work with p
 
 ```python
 @profile_api.post("/profiles")
-async def create_profile(ctx):
+async def create_profile(ctx: HttpContext) -> None:
   pid = str(uuid4())
   name = ctx.req.json['name']
   age = ctx.req.json['age']
@@ -138,7 +139,7 @@ async def create_profile(ctx):
 
 ```python
 @profile_api.get("/profiles/:id")
-async def get_profile(ctx):
+async def get_profile(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
   d = await profiles.doc(pid).get()
 
@@ -150,7 +151,7 @@ async def get_profile(ctx):
 
 ```python
 @profile_api.get("/profiles")
-async def get_profiles(ctx):
+async def get_profiles(ctx: HttpContext) -> None:
   results = await profiles.query().fetch()
   r = [doc.content for doc in results.documents]
   ctx.res.body = f"{r}"
@@ -160,7 +161,7 @@ async def get_profiles(ctx):
 
 ```python
 @profile_api.delete("/profiles/:id")
-async def delete_profiles(ctx):
+async def delete_profiles(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
 
   try:
@@ -170,7 +171,9 @@ async def delete_profiles(ctx):
     ctx.res.status = 404
     ctx.res.body = { 'msg': f'Profile with id {pid} not found.'}
 
+
 Nitric.run()
+
 ```
 
 ## Ok, let's run this thing!
@@ -291,7 +294,7 @@ from datetime import datetime, timedelta
 
 ```python
 @profile_api.get("/profiles/:id/image/upload")
-async def upload_profile_image(ctx):
+async def upload_profile_image(ctx: HttpContext) -> None:
 
   pid = ctx.req.params['id']
 
@@ -309,7 +312,7 @@ async def upload_profile_image(ctx):
 
 ```python
 @profile_api.get("/profiles/:id/image/view")
-async def download_profile_image(ctx):
+async def download_profile_image(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
 
   photo =  photos.file(f'images/{pid}/photo.png')
@@ -326,7 +329,7 @@ You can also directly redirect to the photo URL.
 
 ```python
 @profile_api.get("/profiles/:id/image/view")
-async def download_profile_image(ctx):
+async def download_profile_image(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
 
   photo =  photos.file(f'images/{pid}/photo.png')

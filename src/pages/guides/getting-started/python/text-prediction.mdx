@@ -138,7 +138,7 @@ data = convert_numbers(data)
 
 # Save the cleaned data in a new file
 with open('clean_data.txt', 'w') as f:
-    f.write(data)
+  f.write(data)
 ```
 
 Before we are done, we will want to tokenize the data so that it can be processed by the model. After it's fit to the text, we will save it so we can use it later. To tokenize the data, we will use keras' pre-processing module. For this we require the keras module.
@@ -159,7 +159,7 @@ tokenizer.fit_on_texts(data.split())
 
 # Save tokenizer
 with open('tokenizer.pickle', 'wb') as handle:
-    pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+  pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 ```
 
 ## Training the model
@@ -172,7 +172,7 @@ Start by loading the tokenizer from the pre-processing stage.
 import pickle
 
 with open('tokenizer.pickle', 'rb') as handle:
-    tokenizer = pickle.load(handle)
+  tokenizer = pickle.load(handle)
 ```
 
 We can then create all the input sequences to train our model. This works by getting every 6 word combination in the text. First add numpy as a dependency.
@@ -194,8 +194,8 @@ def create_input_sequences(data: list[str], n_gram_size=6):
 
   # Sliding iteration which takes every 6 words in a row as an input sequence
   for i in range(1, len(token_list) - n_gram_size):
-      n_gram_sequence = token_list[i:i+n_gram_size]
-      input_sequences.append(n_gram_sequence)
+    n_gram_sequence = token_list[i:i+n_gram_size]
+    input_sequences.append(n_gram_sequence)
 
   # Pad sequences
   max_sequence_len = max([len(x) for x in input_sequences])
@@ -305,20 +305,20 @@ model = None
 tokenizer = None
 
 def load_tokenizer():
-    global tokenizer
-    if tokenizer is None:
-        # Load the tokenizer
-        with open('prediction/tokenizer.pickle', 'rb') as handle:
-            tokenizer = pickle.load(handle)
-    return tokenizer
+  global tokenizer
+  if tokenizer is None:
+    # Load the tokenizer
+    with open('prediction/tokenizer.pickle', 'rb') as handle:
+      tokenizer = pickle.load(handle)
+  return tokenizer
 
 def load_model():
-    global model
-    if model is None:
-        models = importlib.import_module("keras.models")
-        # Load the model
-        model = models.load_model('prediction/model.h5')
-    return model
+  global model
+  if model is None:
+    models = importlib.import_module("keras.models")
+    # Load the model
+    model = models.load_model('prediction/model.h5')
+  return model
 ```
 
 Once the model is loaded, we can write a function to predict the next 3 most likely words. This uses the tokenizer to create the same token list that was used to train the model. We can then get a prediction of all the most likely words, which we will reduce down to 3. We'll then get the actual word from the map of tokens by finding the word in the dictionary. The tokenizer word index is in the from `{ "word": token_num }`, e.g. `{ "the": 1, "and": 2 }`. The predictions we receive will be an array of the token numbers.
@@ -327,34 +327,34 @@ Once the model is loaded, we can write a function to predict the next 3 most lik
 # Predict text based on a set of seed text
 # Returns a list of 3 top choices for the next word
 def predict_text(seed_text: str) -> list[str]:
-    # Dynamically load the utils
-    utils = importlib.import_module("keras.utils")
+  # Dynamically load the utils
+  utils = importlib.import_module("keras.utils")
 
-    # Convert the seed text into a token list using the same process as the previous tokenization
-    token_list = load_tokenizer().texts_to_sequences([seed_text])[0]
-    token_list = utils.pad_sequences([token_list], maxlen=5, padding='pre')
+  # Convert the seed text into a token list using the same process as the previous tokenization
+  token_list = load_tokenizer().texts_to_sequences([seed_text])[0]
+  token_list = utils.pad_sequences([token_list], maxlen=5, padding='pre')
 
-    # Make the prediction
-    m  = load_model()
+  # Make the prediction
+  m  = load_model()
 
-    predict_x = m.predict(token_list, batch_size=500, verbose=0)
+  predict_x = m.predict(token_list, batch_size=500, verbose=0)
 
-    # Find the top three words
-    predict_x = np.argpartition(predict_x, -3, axis=1)[0][-3:]
+  # Find the top three words
+  predict_x = np.argpartition(predict_x, -3, axis=1)[0][-3:]
 
-    # Reverse the list so the most popular is first
-    predictions = list(predict_x)
-    predictions.reverse()
+  # Reverse the list so the most popular is first
+  predictions = list(predict_x)
+  predictions.reverse()
 
-    # Iterate over the predicted words, and find the word in the tokenizer dictionary that matches
-    output_words = []
-    for prediction in predictions:
-        for word, index in tokenizer.word_index.items():
-            if prediction == index:
-                output_words.append(word)
-                break
+  # Iterate over the predicted words, and find the word in the tokenizer dictionary that matches
+  output_words = []
+  for prediction in predictions:
+    for word, index in tokenizer.word_index.items():
+      if prediction == index:
+        output_words.append(word)
+        break
 
-    return output_words
+  return output_words
 ```
 
 ## Creating the API
@@ -364,6 +364,7 @@ Using the predictive text function, we can create our API. First we will make su
 ```python
 from nitric.resources import api
 from nitric.application import Nitric
+from nitric.faas import HttpContext
 ```
 
 We will then define the API and our first route.
@@ -372,8 +373,8 @@ We will then define the API and our first route.
 mainApi = api("main")
 
 @mainApi.get("/prediction")
-async def create_prediction(ctx):
-    pass
+async def create_prediction(ctx: HttpContext) -> None:
+  pass
 
 Nitric.run()
 ```
@@ -382,13 +383,13 @@ Within this function block we want to define the code that is run on a request. 
 
 ```python
 @mainApi.get("/prediction")
-async def create_prediction(ctx):
-    prompt = ctx.req.query.get("prompt")
+async def create_prediction(ctx: HttpContext) -> None:
+  prompt = ctx.req.query.get("prompt")
 
-    if prompt is None:
-      return
+  if prompt is None:
+    return
 
-    prompt = " ".join(prompt)
+  prompt = " ".join(prompt)
 
 Nitric.run()
 ```
@@ -397,14 +398,14 @@ With the users prompt we can then do the prediction and return to the user the p
 
 ```python
 @mainApi.get("/prediction")
-async def create_prediction(ctx):
-    ...
+async def create_prediction(ctx: HttpContext) -> None:
+  ...
 
-    prompt = " ".join(prompt)
+  prompt = " ".join(prompt)
 
-    prediction = predict_text(prompt)
+  prediction = predict_text(prompt)
 
-    ctx.res.body = f"{prompt} {prediction}"
+  ctx.res.body = f"{prompt} {prediction}"
 
 Nitric.run()
 ```

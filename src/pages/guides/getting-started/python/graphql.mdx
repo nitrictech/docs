@@ -234,7 +234,7 @@ Then add the api handler.
 
 ```python
 @graph_api.post("/")
-async def profile_handler(ctx):
+async def profile_handler(ctx: HttpContext) -> None:
     query = ctx.req.json
 
     success, result = await graphql(
