@@ -248,7 +248,7 @@ profiles = bucket("profiles")
 
 # Filter for 'write' events for files starting with '/users/images'
 @profiles.on("write", "/users/images")
-def image_written(ctx):
+async def image_written(ctx):
 	print(f"new profile image for {ctx.req.key} was written")
 ```
 
@@ -276,7 +276,7 @@ profiles = bucket("profiles")
 
 # Filter for 'delete' events for any file
 @profiles.on("delete", "*")
-def file_deleted(ctx):
+async def file_deleted(ctx):
 	print(f"{ctx.req.key} was deleted")
 ```
 

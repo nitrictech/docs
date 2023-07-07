@@ -14,11 +14,11 @@ accessible_assets = bucket("assets").allow("reading")
 
 # The request will contain the name of the file `key` and the type of event `type`
 @assets.on("delete", "*")
-def delete_anything(ctx):
+async def delete_anything(ctx):
   print(f"a file named {ctx.req.key} was deleted")
 
 @assets.on("write", "/images/cat")
-def create_cat_image(ctx):
+async def create_cat_image(ctx):
   print(f"A cat image was written")
 
 # If `on` is called with a permissioned bucket, a file will also be provided with the request

@@ -15,7 +15,7 @@ We'll be making a serverless application which can take information from a HTTP 
 
 ## Getting started
 
-We’ll start by creating a new project for our API.
+We'll start by creating a new project for our API.
 
 ```bash
 nitric new
@@ -45,10 +45,13 @@ Starting from scratch in the `hello.py` function file, lets start by importing a
 ```python
 from nitric.resources import api
 from nitric.application import Nitric
+from nitric.faas import HttpContext
 
-mainApi = api("main")
+
+main_api = api("main")
 
 Nitric.run()
+
 ```
 
 We can then define our api route which will accept the histogram data to then be returned as an image.
@@ -56,15 +59,18 @@ We can then define our api route which will accept the histogram data to then be
 ```python
 from nitric.resources import api
 from nitric.application import Nitric
+from nitric.faas import HttpContext
 import matplotlib as plt
 
-mainApi = api("main")
 
-@mainApi.get("/histogram")
-async def create_histogram(ctx):
+main_api = api("main")
+
+@main_api.get("/histogram")
+async def create_histogram(ctx: HttpContext) -> None:
   pass
 
 Nitric.run()
+
 ```
 
 The route will be registered for a GET method so that it is a link that can be embed. For example, once the api is complete, it will be able to be used in situations like:
@@ -78,8 +84,8 @@ The route will be registered for a GET method so that it is a link that can be e
 We can then write the logic for creating the histogram from the request. As seen in the above url, there are 4 query parameters that we want a user to be able to configure, the data, y-label, x-label, and title.
 
 ```python
-@mainApi.get("/histogram")
-async def create_histogram(ctx):
+@main_api.get("/histogram")
+async def create_histogram(ctx: HttpContext) -> None
   # Extract the comma-delimited data and split it into array
   data = ctx.req.query.get("data")[0].split(',')
 
