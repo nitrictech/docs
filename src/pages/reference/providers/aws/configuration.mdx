@@ -33,6 +33,15 @@ import:
     # const mySecret = secret('my-secret');
     my-secret: arn:...
 
+# Apply configuration to nitric APIs
+apis:
+  # The nitric name of the API to configure
+  my-api:
+    # Array of domains to apply the the API
+    # The domain or parent domain must have a hosted zone already in Route53
+    domains:
+      - api.example.com
+
 # Configure your deployed functions/services
 config:
   # How functions without a type will be deployed
@@ -53,6 +62,14 @@ config:
       # For info on provisioned concurrency for AWS Lambda see:
       # https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html
       provisioned-concurrency: 0
+      # Configure VPCs that the lambda can access
+      vpc:
+        # Array of existing security group ids to apply
+        security-group-ids:
+          - sg-xxx
+        # Array of existing subnet ids to apply
+        subnet-ids:
+          - subnet-xxx
   # Additional deployment types
   # You can target these types by setting a `type` in your project configuration
   big-service:
