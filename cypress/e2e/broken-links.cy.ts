@@ -26,6 +26,27 @@ const isExternalUrl = (url: string) => {
   return !url.includes('localhost')
 }
 
+const req = (
+  url: string,
+  retryCount = 0
+) => {
+  return cy.request({
+    url,
+    followRedirect: false,
+    failOnStatusCode: false,
+    gzip: false,
+  }).then((resp) => {
+    // retry on timeout
+    if (resp.status === 408 && retryCount < 3) {
+      cy.log(`request ${url} timed out, retrying again...`)
+      cy.wait(300)
+      return req(url, retryCount + 1)
+    }
+
+    return resp
+  })
+}
+
 describe('Broken links test suite', () => {
   const VISITED_SUCCESSFUL_LINKS = {}
 
@@ -51,12 +72,8 @@ describe('Broken links test suite', () => {
             expect(VISITED_SUCCESSFUL_LINKS[url]).to.be.true
           } else {
             cy.wait(100)
-            cy.request({
-              url,
-              followRedirect: false,
-              failOnStatusCode: false,
-              gzip: false,
-            }).then((res) => {
+
+            req(url).then((res: Cypress.Response<any>) => {
               let acceptableCodes = CORRECT_CODES
               if (REDIRECT_CODES.includes(res.status) && !isExternalUrl(url)) {
                 assert.fail(

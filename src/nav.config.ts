@@ -10,6 +10,7 @@ import {
   LockClosedIcon,
   MegaphoneIcon,
   PlayIcon,
+  ServerIcon,
 } from '@heroicons/react/24/outline'
 import { FaNodeJs, FaPython } from 'react-icons/fa'
 import { SiCsharp, SiPulumi } from 'react-icons/si'
@@ -30,6 +31,44 @@ interface FullNav {
   [startsWithPath: string]: DocNavGroup[]
 }
 
+const buildingBlockLinks = [
+  {
+    title: 'APIs',
+    href: '/apis',
+    icon: GlobeAltIcon,
+  },
+  {
+    title: 'HTTP',
+    href: '/http',
+    icon: ServerIcon,
+  },
+  {
+    title: 'Collections',
+    href: '/collections',
+    icon: ArchiveBoxIcon,
+  },
+  {
+    title: 'Schedules',
+    href: '/schedules',
+    icon: ClockIcon,
+  },
+  {
+    title: 'Storage',
+    href: '/storage',
+    icon: CircleStackIcon,
+  },
+  {
+    title: 'Messages',
+    href: '/messaging',
+    icon: MegaphoneIcon,
+  },
+  {
+    title: 'Secrets',
+    href: '/secrets',
+    icon: LockClosedIcon,
+  },
+]
+
 const fullNav: FullNav = {
   docs: [
     {
@@ -48,38 +87,7 @@ const fullNav: FullNav = {
     },
     {
       showDividerAbove: true,
-      links: [
-        {
-          title: 'APIs',
-          href: '/apis',
-          icon: GlobeAltIcon,
-        },
-        {
-          title: 'Collections',
-          href: '/collections',
-          icon: ArchiveBoxIcon,
-        },
-        {
-          title: 'Schedules',
-          href: '/schedules',
-          icon: ClockIcon,
-        },
-        {
-          title: 'Storage',
-          href: '/storage',
-          icon: CircleStackIcon,
-        },
-        {
-          title: 'Messages',
-          href: '/messaging',
-          icon: MegaphoneIcon,
-        },
-        {
-          title: 'Secrets',
-          href: '/secrets',
-          icon: LockClosedIcon,
-        },
-      ],
+      links: buildingBlockLinks,
     },
     {
       showDividerAbove: true,
@@ -258,6 +266,24 @@ const fullNav: FullNav = {
         },
       ],
     },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/apis'),
+    },
+  ],
+  http: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/http',
+        },
+      ],
+    },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/http'),
+    },
   ],
   collections: [
     {
@@ -267,6 +293,10 @@ const fullNav: FullNav = {
           href: '/collections',
         },
       ],
+    },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/collections'),
     },
   ],
   schedules: [
@@ -278,6 +308,10 @@ const fullNav: FullNav = {
         },
       ],
     },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/schedules'),
+    },
   ],
   storage: [
     {
@@ -287,6 +321,10 @@ const fullNav: FullNav = {
           href: '/storage',
         },
       ],
+    },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/storage'),
     },
   ],
   messaging: [
@@ -298,6 +336,10 @@ const fullNav: FullNav = {
         },
       ],
     },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/messaging'),
+    },
   ],
   secrets: [
     {
@@ -307,6 +349,10 @@ const fullNav: FullNav = {
           href: '/secrets',
         },
       ],
+    },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/secrets'),
     },
   ],
   assets: [
