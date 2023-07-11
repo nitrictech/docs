@@ -5,7 +5,8 @@ export const description = 'How to build an Express.js application with Nitric'
 In this guide we'll be scaffolding a new Express.js application and including the Nitric framework to allow for the addition of other cloud resources like topics, queues and buckets.
 
 <Note>
-This guide relies on the HTTP feature of Nitric which is currently in preview. See the docs for this feature to [see how to enable it](/http).
+  This guide relies on the HTTP feature of Nitric which is currently in preview.
+  See the docs for this feature to [see how to enable it](/http).
 </Note>
 
 ## Prerequisites
@@ -71,7 +72,9 @@ http(app)
 ```
 
 <Note>
-If you're familiar with Express.js you'll notice this example doesn't call `app.listen`. The Nitric `http` function takes care of that, as well as binding the application to the correct port in each environment.
+  If you're familiar with Express.js you'll notice this example doesn't call
+  `app.listen`. The Nitric `http` function takes care of that, as well as
+  binding the application to the correct port in each environment.
 </Note>
 
 At this point we're ready to start testing locally. The project comes with a `dev` script by default, let's run that now:
@@ -106,19 +109,18 @@ With everything working so far, now is a good time to see how we can add new res
 You can update the `app.js` file like so:
 
 ```javascript {{ label: 'functions/app.js' }}
-import express from "express";
-import { http, topic } from "@nitric/sdk";
+import express from 'express'
+import { http, topic } from '@nitric/sdk'
 
-const app = express();
-const workRequests = topic("work-requests").for("publishing");
+const app = express()
+const workRequests = topic('work-requests').for('publishing')
 
-app.get("/", async (req, res) => {
-  await workRequests.publish();
-  res.send("Hello World!");
-});
+app.get('/', async (req, res) => {
+  await workRequests.publish()
+  res.send('Hello World!')
+})
 
-http(app);
-
+http(app)
 ```
 
 We'll also add a new function to do the background work:
@@ -130,16 +132,16 @@ touch functions/worker.js
 Add this code to that file:
 
 ```javascript
-import { topic } from "@nitric/sdk";
+import { topic } from '@nitric/sdk'
 
-const sleep = ms => new Promise(res => setTimeout(res, ms));
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms))
 
-topic("work-requests").subscribe(async (ctx) => {
-  console.log("Starting new request");
+topic('work-requests').subscribe(async (ctx) => {
+  console.log('Starting new request')
   // wait for 2 seconds to simulate a long running task
-  await sleep(2000);
-  console.log("Request processed");
-});
+  await sleep(2000)
+  console.log('Request processed')
+})
 ```
 
 If it's still running, your application should hot-reload with these changes. Now, when you browse to `localhost:4001` you'll notice that the console outputs these lines with a 2 second delay between each line:
@@ -150,7 +152,8 @@ Request processed
 ```
 
 <Note>
-You should notice that while the background worker takes 2 seconds to finish, the HTTP request `GET: /` still returns instantly.
+  You should notice that while the background worker takes 2 seconds to finish,
+  the HTTP request `GET: /` still returns instantly.
 </Note>
 
 At this point we can stop the running application and try deploying to a cloud provider.
@@ -184,8 +187,8 @@ With the stack file in place we can run the deployment:
 nitric up
 SUCCESS  Images Built (51s)
 SUCCESS  Configuration gathered (6s)
-SUCCESS                       
-         API | Endpoint  
+SUCCESS
+         API | Endpoint
          app | https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com
 Deployed Stack (1m14s)
 ```
@@ -193,7 +196,8 @@ Deployed Stack (1m14s)
 Go ahead at test your new Express+Nitric app in the cloud, you can start with the API Gateway URL returned by the `up` command.
 
 <Note>
-When you're done with the cloud deployment you can tear it down using the `nitric down` command.
+  When you're done with the cloud deployment you can tear it down using the
+  `nitric down` command.
 </Note>
 
 ## What next?
