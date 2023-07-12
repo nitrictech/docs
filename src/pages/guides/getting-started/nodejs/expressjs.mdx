@@ -49,7 +49,7 @@ You can go ahead and open this new project in your editor of choice. You should 
 
 In this structure you'll notice the `functions` folder. By default, this is where Nitric expects the entrypoint code for your application. However, that's just a convention, we can change that to anything else that suits our needs.
 
-For this example let's replace the functions folder with a single entrypoint file called `app.js`.
+Let's start by replacing the default `hello.js` function with an `app.js` file ready for the Express.js application:
 
 ```bash {{ label: 'terminal' }}
 rm ./functions/hello.js
@@ -77,7 +77,7 @@ http(app)
   binding the application to the correct port in each environment.
 </Note>
 
-At this point we're ready to start testing locally. The project comes with a `dev` script by default, let's run that now:
+At this point, we're ready to start testing locally. The project comes with a `dev` script by default, let's run that now:
 
 ```bash {{ label: 'terminal' }}
 yarn dev
@@ -156,15 +156,15 @@ Request processed
   the HTTP request `GET: /` still returns instantly.
 </Note>
 
-At this point we can stop the running application and try deploying to a cloud provider.
+At this point, we can stop the running application and try to deploy it to a cloud provider.
 
 ## Deploy to the cloud
 
-This is where the value of Nitric really shows through. You don't need to perform any manual cloud deployment activities or add solutions like Terraform to get this project into your cloud environment, Nitric takes care of that for you.
+This is where the true value of Nitric shines. You don't need to perform any manual cloud deployment activities or add solutions like Terraform to get this project into your cloud environment, Nitric takes care of that for you.
 
 To perform the deployment we'll create a `stack`, stacks give Nitric the config needed for a specific cloud instance of this project, such as the provider and region.
 
-The new stack command can help you create the stack by following this prompts, in this case we'll use AWS as an example:
+The new stack command can help you create the stack by following prompts. In this case we'll use AWS as an example:
 
 ```txt {{ label: 'terminal' }}
 nitric stack new
@@ -193,7 +193,7 @@ SUCCESS
 Deployed Stack (1m14s)
 ```
 
-Go ahead at test your new Express+Nitric app in the cloud, you can start with the API Gateway URL returned by the `up` command.
+Go ahead and test your new Express+Nitric app in the cloud, you can start with the API Gateway URL returned by the `up` command.
 
 <Note>
   When you're done with the cloud deployment you can tear it down using the
