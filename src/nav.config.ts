@@ -11,6 +11,7 @@ import {
   MegaphoneIcon,
   PlayIcon,
   ServerIcon,
+  ChatBubbleLeftRightIcon,
 } from '@heroicons/react/24/outline'
 import { FaNodeJs, FaPython } from 'react-icons/fa'
 import { SiCsharp, SiPulumi } from 'react-icons/si'
@@ -66,6 +67,11 @@ const buildingBlockLinks = [
     title: 'Secrets',
     href: '/secrets',
     icon: LockClosedIcon,
+  },
+  {
+    title: 'Websockets',
+    href: '/websockets',
+    icon: ChatBubbleLeftRightIcon,
   },
 ]
 

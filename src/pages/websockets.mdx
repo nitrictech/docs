@@ -1,0 +1,127 @@
+export const description = 'Connect and manage websockets with Nitric'
+
+# Websockets
+
+Nitric provides support for serverless websockets. Allowing you to connect client applications to your nitric functions using websocket gateways such as AWS APIGateway.
+
+<Note>
+  The Websocket resource is currently only supported for Node.js projects. If
+  you would like support for another language let us know:
+  https://github.com/nitrictech/nitric/issues
+</Note>
+
+<Note>
+  Projects with websockets will only be deployable to AWS at the moment. If you
+  require support for additional clouds let us know:
+  https://github.com/nitrictech/nitric/issues
+</Note>
+
+## Enabling Websocket support
+
+HTTP framework support is currently in Preview. To enable it in your project add the following to your `nitric.yaml` file
+
+```yaml
+preview-features:
+  - websockets
+```
+
+## Listening for events
+
+There are three events that must be defined to deploy a valid websocket implementation. There are `connect`, `disconnect` and `message`.
+
+```javascript
+import { websocket } from '@nitric/sdk'
+
+const socket = websocket('socket')
+
+socket.on('connect', async (ctx) => {
+  // handle connections
+})
+
+socket.on('disconnect', async (ctx) => {
+  // handle disconnections
+})
+
+socket.on('message', async (ctx) => {
+  // handle messages
+})
+```
+
+## Managing connections
+
+Nitric connects your functions to a websocket interface, but it is up to you to manage the connections. Nitric provides `collections`
+out of the box that can be used to do this or you can use any other store or database you like.
+
+```javascript
+import { websocket, collection } from '@nitric/sdk'
+
+const socket = websocket('socket')
+const connections = collection('connections').for(
+  'reading',
+  'writing',
+  'deleting'
+)
+
+socket.on('connect', async (ctx) => {
+  await connections.doc(ctx.req.connectionId).set({
+    // store any metadata related to the connection here
+    connectionId: ctx.req.connectionId,
+  })
+})
+
+socket.on('disconnect', async (ctx) => {
+  await connections.doc(ctx.req.connectionId).delete()
+})
+```
+
+## Sending Messages
+
+```javascript
+import { websocket, collection } from '@nitric/sdk'
+
+const socket = websocket('socket')
+const connections = collection('connections').for(
+  'reading',
+  'writing',
+  'deleting'
+)
+
+socket.on('connect', async (ctx) => {
+  await connections.doc(ctx.req.connectionId).set({
+    // store any metadata related to the connection here
+    connectionId: ctx.req.connectionId,
+  })
+})
+
+socket.on('disconnect', async (ctx) => {
+  await connections.doc(ctx.req.connectionId).delete()
+})
+
+const broadcast = async (data: string | Uint8Array, as: string = 'server') => {
+  const connectionStream = connections.query().stream()
+
+  const streamEnd =
+    new Promise() <
+    any >
+    ((res) => {
+      connectionStream.on('end', res)
+    })
+
+  connectionStream.on('data', async ({ content }) => {
+    // Send message to a connection
+    await socket.send(content.connectionId, data)
+  })
+
+  await streamEnd
+}
+
+socket.on('message', async (ctx) => {
+  // broadcast message to all clients (including the sender)
+  await broadcast(ctx.req.data)
+})
+```
+
+<Note>
+  Do not send messages to a connection during it's `connect` callback, if you
+  need to acknowledge connection, do so by using a [topic](./messaging)
+</Note>

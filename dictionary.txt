@@ -1,6 +1,7 @@
 1000s
 1rem
 ACR
+APIGateway
 APIs
 ARNs
 BoltDB
@@ -149,6 +150,8 @@ dockerfiles
 dockerignore
 src
 proxied
+websocket
+websockets
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
