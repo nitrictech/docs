@@ -16,7 +16,7 @@ export function GettingStarted() {
         <div className="flex h-20 w-20 items-center justify-center rounded-full border-8 border-secondary-900/40 bg-secondary-200 dark:border-secondary-900/60 dark:bg-secondary-300">
           <PlayIcon className="h-8 w-8 text-white" />
         </div>
-        <div>
+        <div className="w-7/12 lg:w-auto">
           <h2 className="text-xl font-semibold text-zinc-900 dark:text-white">
             Getting Started
           </h2>
