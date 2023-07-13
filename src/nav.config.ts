@@ -369,6 +369,20 @@ const fullNav: FullNav = {
       links: buildingBlockLinks.filter((link) => link.href !== '/secrets'),
     },
   ],
+  websockets: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/websockets',
+        },
+      ],
+    },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/websockets'),
+    },
+  ],
   assets: [
     {
       links: [
