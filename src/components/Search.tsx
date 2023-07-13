@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { DocSearchModal, useDocSearchKeyboardEvents } from '@docsearch/react'
+import { useRouter } from 'next/router'
 
 const docSearchConfig = {
   appId: process.env.NEXT_PUBLIC_DOCSEARCH_APP_ID || '',
@@ -10,7 +11,21 @@ const docSearchConfig = {
 }
 
 function Hit({ hit, children }) {
-  return <Link href={`/docs${hit.url}`}>{children}</Link>
+  const router = useRouter()
+
+  return (
+    <Link
+      onKeyDown={(evt) => {
+        evt.preventDefault()
+        if (evt.code === '13') {
+          router.push(hit.url)
+        }
+      }}
+      href={hit.url}
+    >
+      {children}
+    </Link>
+  )
 }
 
 function SearchIcon(props) {
