@@ -10,7 +10,7 @@ const docSearchConfig = {
 }
 
 function Hit({ hit, children }) {
-  return <Link href={hit.url}>{children}</Link>
+  return <Link href={`/docs${hit.url}`}>{children}</Link>
 }
 
 function SearchIcon(props) {
