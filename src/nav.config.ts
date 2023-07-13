@@ -202,6 +202,14 @@ const fullNav: FullNav = {
           href: '/guides/getting-started/nodejs/graphql',
         },
         {
+          title: 'Express.js',
+          href: '/guides/getting-started/nodejs/expressjs',
+        },
+        {
+          title: 'Fastify',
+          href: '/guides/getting-started/nodejs/fastify',
+        },
+        {
           title: 'Nest.js',
           href: '/guides/getting-started/nodejs/nestjs',
         },
