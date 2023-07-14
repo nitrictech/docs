@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { DocSearchModal, useDocSearchKeyboardEvents } from '@docsearch/react'
+import { useRouter } from 'next/router'
 
 const docSearchConfig = {
   appId: process.env.NEXT_PUBLIC_DOCSEARCH_APP_ID || '',
@@ -9,8 +10,17 @@ const docSearchConfig = {
   indexName: process.env.NEXT_PUBLIC_DOCSEARCH_INDEX_NAME || '',
 }
 
+const cleanUrl = (href: string) => {
+  // We transform the absolute URL into a relative URL to
+  // work better on localhost, preview URLS.
+  const url = new URL(href, window.location.origin)
+  if (url.hash === '#overview') url.hash = ''
+
+  return url.href.replace(url.origin, '').replace(/^\/docs/, '')
+}
+
 function Hit({ hit, children }) {
-  return <Link href={hit.url}>{children}</Link>
+  return <Link href={cleanUrl(hit.url)}>{children}</Link>
 }
 
 function SearchIcon(props) {
@@ -22,6 +32,7 @@ function SearchIcon(props) {
 }
 
 export function Search() {
+  const router = useRouter()
   let [isOpen, setIsOpen] = useState(false)
   let [modifierKey, setModifierKey] = useState<string>()
 
@@ -79,17 +90,16 @@ export function Search() {
                 query
               )}%22`
             }
+            navigator={{
+              navigate({ itemUrl }) {
+                router.push(itemUrl)
+              },
+            }}
             transformItems={(items) => {
-              return items.map((item) => {
-                // We transform the absolute URL into a relative URL to
-                // work better on localhost, preview URLS.
-                const url = new URL(item.url)
-                if (url.hash === '#overview') url.hash = ''
-                return {
-                  ...item,
-                  url: url.href.replace(url.origin, '').replace(/^\/docs/, ''),
-                }
-              })
+              return items.map((item) => ({
+                ...item,
+                url: cleanUrl(item.url),
+              }))
             }}
           />,
           document.body
