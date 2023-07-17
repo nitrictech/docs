@@ -1,12 +1,13 @@
-export const description = 'Getting started building realtime applications on Nitric'
+export const description =
+  'Getting started building realtime applications on Nitric'
 
 # Websockets guide
 
 In this guide we'll be creating a simple realtime application using Nitric websockets.
 
 <Note>
-  This guide relies on the Websocket feature of Nitric which is currently in preview.
-  See the docs for this feature to [see how to enable it](/websockets).
+  This guide relies on the Websocket feature of Nitric which is currently in
+  preview. See the docs for this feature to [see how to enable it](/websockets).
 </Note>
 
 ## Prerequisites
@@ -64,9 +65,9 @@ socket.on('disconnect', async (ctx) => {
 })
 
 socket.on('message', async (ctx) => {
-  const message = ctx.req.text();
+  const message = ctx.req.text()
 
-  console.log(`got message from  ${ctx.req.connectionId}: ${message}`);
+  console.log(`got message from  ${ctx.req.connectionId}: ${message}`)
 })
 ```
 
@@ -88,7 +89,7 @@ example-websocket  | ws://localhost:4001
 Dev Dashboard | http://localhost:49152
 ```
 
-Your websocket will now be running with Nitric acting as a proxy, in this case it's available on port `4001`. 
+Your websocket will now be running with Nitric acting as a proxy, in this case it's available on port `4001`.
 
 In this guide we'll test this using [Insomnia](https://insomnia.rest/), however feel free to use any websocket capable testing client you like.
 
@@ -98,7 +99,7 @@ When you send messages you will start seeing your server log messages.
 
 ## Sending messages from server to clients
 
-Websockets only make sense when communication is bi-direcitional, now we've confirmed that the client can talk to our server lets get our server talking to the client. 
+Websockets only make sense when communication is bi-direcitional, now we've confirmed that the client can talk to our server lets get our server talking to the client.
 To do this we'll need to add some connection management.
 
 You can update the `hello.ts` file like so:
@@ -106,7 +107,11 @@ You can update the `hello.ts` file like so:
 ```typescript {{ label: 'functions/hello.ts' }}
 import { websocket, collection } from '@nitric/sdk'
 
-const connections = collection('connections').for('reading', 'writing', 'deleting');
+const connections = collection('connections').for(
+  'reading',
+  'writing',
+  'deleting'
+)
 const socket = websocket('example-websocket')
 
 socket.on('connect', async (ctx) => {
@@ -115,49 +120,48 @@ socket.on('connect', async (ctx) => {
   // add a connection
   await connections.doc(`connection:${ctx.req.connectionId}`).set({
     // Can add metadata here later if we need to
-  });
+  })
 })
 
 socket.on('disconnect', async (ctx) => {
-  console.log(`disconnecting: ${ctx.req.connectionId}`);
+  console.log(`disconnecting: ${ctx.req.connectionId}`)
 
   // remove connection
-  await connections.doc(`connection:${ctx.req.connectionId}`).delete();
+  await connections.doc(`connection:${ctx.req.connectionId}`).delete()
 })
 
 socket.on('message', async (ctx) => {
-  const message = ctx.req.text();
+  const message = ctx.req.text()
 
   // broadcast our message to all other clients
-  const allConnections = await connections.query().stream();
+  const allConnections = await connections.query().stream()
 
-  const streamPromise = new Promise<any>(res => {
-    allConnections.on('end', res);
-  });
+  const streamPromise = new Promise<any>((res) => {
+    allConnections.on('end', res)
+  })
 
   allConnections.on('data', async (connection) => {
-    const connectionId = connection.id.split(':')[1];
+    const connectionId = connection.id.split(':')[1]
 
-    // send message to everyone but message sender 
+    // send message to everyone but message sender
     if (connectionId && connectionId != ctx.req.connectionId) {
-      await socket.send(connectionId, ctx.req.data);
+      await socket.send(connectionId, ctx.req.data)
     }
-  });
+  })
 
-  await streamPromise;
+  await streamPromise
 })
 ```
+
 If nitric is still running and you've saved the new file, it should hot-reload the new code.
 
-If you connect multiple clients using your preferred client and send messages each client should recieve messages from other clients:
+If you connect multiple clients using your preferred client and send messages each client should receive messages from other clients:
 
 ![multiple clients test](/docs/images/guides/websocket-starter/second-test.png)
 
 ## Deploy to the cloud
 
-<Note>
-  Nitric only supports AWS for websockets at this time
-</Note>
+<Note>Nitric only supports AWS for websockets at this time</Note>
 
 To perform the deployment we'll create a `stack`, stacks give Nitric the config needed for a specific cloud instance of this project, such as the provider and region.
 
