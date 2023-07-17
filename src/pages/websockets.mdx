@@ -76,7 +76,7 @@ socket.on('disconnect', async (ctx) => {
 
 ## Sending Messages
 
-```javascript
+```typescript
 import { websocket, collection } from '@nitric/sdk'
 
 const socket = websocket('socket')
@@ -100,12 +100,9 @@ socket.on('disconnect', async (ctx) => {
 const broadcast = async (data: string | Uint8Array, as: string = 'server') => {
   const connectionStream = connections.query().stream()
 
-  const streamEnd =
-    new Promise() <
-    any >
-    ((res) => {
-      connectionStream.on('end', res)
-    })
+  const streamEnd = new Promise<any>((res) => {
+    connectionStream.on('end', res)
+  })
 
   connectionStream.on('data', async ({ content }) => {
     // Send message to a connection
