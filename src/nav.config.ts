@@ -247,6 +247,10 @@ const fullNav: FullNav = {
           title: 'Using a Database',
           href: '/guides/getting-started/nodejs/byo-database',
         },
+        {
+          title: 'Websockets',
+          href: '/guides/getting-started/nodejs/websockets',
+        },
       ],
     },
     {
