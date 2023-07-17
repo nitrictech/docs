@@ -55,17 +55,22 @@ describe('Broken links test suite', () => {
       cy.viewport('macbook-16')
       cy.visit(page)
 
-      const links = cy.get("a:not([href*='mailto:'])")
+      const links = cy.get("a:not([href*='mailto:']),img")
 
       links
         .filter((_i, link) => {
           return !IGNORED_URLS.some((l) =>
-            link.getAttribute('href')!.includes(l)
+            //@ts-ignore
+            (link.getAttribute('href') && link.getAttribute('href').includes(l)) ||
+            //@ts-ignore
+            (link.getAttribute('src') && link.getAttribute('src').includes(l))
           )
         })
         .each((link) => {
           cy.log(`link: ${link[0].textContent}`)
-          const url = link.prop('href').split('#')[0]
+          const baseUrl = link.prop('href') || link.prop('src');
+
+          const url = baseUrl.split('#')[0]
 
           if (VISITED_SUCCESSFUL_LINKS[url]) {
             cy.log(`link already checked`)
