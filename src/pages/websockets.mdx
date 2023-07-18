@@ -97,7 +97,7 @@ socket.on('disconnect', async (ctx) => {
   await connections.doc(ctx.req.connectionId).delete()
 })
 
-const broadcast = async (data: string | Uint8Array, as: string = 'server') => {
+const broadcast = async (data: string | Uint8Array) => {
   const connectionStream = connections.query().stream()
 
   const streamEnd = new Promise<any>((res) => {
