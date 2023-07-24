@@ -11,6 +11,7 @@ import {
   MegaphoneIcon,
   PlayIcon,
   ServerIcon,
+  ChatBubbleLeftRightIcon,
 } from '@heroicons/react/24/outline'
 import { FaNodeJs, FaPython } from 'react-icons/fa'
 import { SiCsharp, SiPulumi } from 'react-icons/si'
@@ -66,6 +67,11 @@ const buildingBlockLinks = [
     title: 'Secrets',
     href: '/secrets',
     icon: LockClosedIcon,
+  },
+  {
+    title: 'Websockets',
+    href: '/websockets',
+    icon: ChatBubbleLeftRightIcon,
   },
 ]
 
@@ -241,6 +247,10 @@ const fullNav: FullNav = {
           title: 'Using a Database',
           href: '/guides/getting-started/nodejs/byo-database',
         },
+        {
+          title: 'Websockets',
+          href: '/guides/getting-started/nodejs/websockets',
+        },
       ],
     },
     {
@@ -361,6 +371,20 @@ const fullNav: FullNav = {
     {
       title: 'More Building Blocks',
       links: buildingBlockLinks.filter((link) => link.href !== '/secrets'),
+    },
+  ],
+  websockets: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/websockets',
+        },
+      ],
+    },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/websockets'),
     },
   ],
   assets: [
