@@ -2,7 +2,7 @@ export const description = 'Connect and manage websockets with Nitric'
 
 # Websockets
 
-Nitric provides support for serverless websockets. Allowing you to connect client applications to your Nitric functions using websocket gateways such as AWS APIGateway.
+Nitric provides support for serverless websockets. This feature allows you to connect client applications to your Nitric functions using websocket gateways such as AWS APIGateway.
 
 <Note>
   The Websocket resource is currently only supported for Node.js projects. If
@@ -27,7 +27,7 @@ preview-features:
 
 ## Listening for events
 
-There are three events that must be defined to deploy a valid websocket implementation. There are `connect`, `disconnect` and `message`.
+There are three events that must be defined to deploy a valid websocket implementation. These are `connect`, `disconnect` and `message`.
 
 ```javascript
 import { websocket } from '@nitric/sdk'
