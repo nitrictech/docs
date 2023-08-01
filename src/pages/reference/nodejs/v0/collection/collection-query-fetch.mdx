@@ -8,7 +8,7 @@ Retrieve a page of results for a query. This is an alternative to [collection.qu
 ```javascript
 import { collection } from '@nitric/sdk'
 
-const profiles = collection('profiles')
+const profiles = collection('profiles').for('reading')
 
 const profileQuery = profiles.query()
 
@@ -22,7 +22,7 @@ const results = await profileQuery.fetch()
 ```javascript
 import { collection } from '@nitric/sdk'
 
-const profiles = collection('profiles')
+const profiles = collection('profiles').for('reading')
 
 const profileQuery = profiles.query()
 

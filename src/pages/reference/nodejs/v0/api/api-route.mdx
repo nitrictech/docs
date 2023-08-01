@@ -15,16 +15,20 @@ const customersRoute = api('public').route('/customers')
 
 <Properties>
   <Property name="match" required type="string">
-   The path matcher to use for this route. Calling `route` on the same API more than once with the same matcher will return the same route object. Matchers accept path parameters in the form of a colon prefixed string. The string provided will be used as that path parameter's name when calling middleware and handlers. See [create a route with path params](#create-a-route-with-path-params)
+    The path matcher to use for this route. Calling `route` on the same API more
+    than once with the same matcher will return the same route object. Matchers
+    accept path parameters in the form of a colon prefixed string. The string
+    provided will be used as that path parameter's name when calling middleware
+    and handlers. See [create a route with path
+    params](#create-a-route-with-path-params)
   </Property>
   <Property name="options" type="object">
-  Additional options when creating method.
+    Additional options when creating method.
     <Properties nested>
       <Property name="middleware" type="HttpMiddleware or HttpMiddleware[]">
         Middleware to apply to all methods on this route.
       </Property>
     </Properties>
-
   </Property>
 </Properties>
 

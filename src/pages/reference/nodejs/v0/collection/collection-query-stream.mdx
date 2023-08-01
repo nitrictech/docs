@@ -8,7 +8,7 @@ Process query results as a stream.
 ```javascript
 import { collection } from '@nitric/sdk'
 
-const profiles = collection('profiles')
+const profiles = collection('profiles').for('reading')
 
 const profileQuery = profiles.query()
 
@@ -22,7 +22,7 @@ const results = await profileQuery.stream()
 ```javascript
 import { collection } from '@nitric/sdk'
 
-const profiles = collection('profiles')
+const profiles = collection('profiles').for('reading')
 
 const profileQuery = profiles.query()
 

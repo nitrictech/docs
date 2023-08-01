@@ -16,7 +16,7 @@ const profileQuery = profiles.query().pagingFrom(pagingToken)
 ## Parameters
 
 <Properties>
-  <Property name="pagingToken" required type="Map<string, string>">
+  <Property name="pagingToken" required type="interface{}">
     The paging token to apply to the query. Tokens are returned from
     `query().fetch()`, when results cannot be returned in a single page.
   </Property>
