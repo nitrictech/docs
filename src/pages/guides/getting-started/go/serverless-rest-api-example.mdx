@@ -26,15 +26,9 @@ export const description =
 | `GET`      | profiles/[id]/image/download | Get a profile image download URL  |
 | `GET`      | profiles/[id]/image/view     | View the image that is downloaded |
 
-## Video
-
-Here's a video of this guide built with Node.js:
-
-[Build and Deploy a REST API for any Cloud](https://www.youtube.com/embed/PpIxtKDoL2Q)
-
 ## Prerequisites
 
-- [Pipenv](https://pypi.org/project/pipenv/) - for simplified dependency management
+- [Go](https://go.dev/dl/)
 - The [Nitric CLI](/guides/getting-started/installation)
 - An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
 
@@ -50,66 +44,85 @@ Create a project, name it and select your preferred starter template.
 
 ```bash
 ? What is the name of the project? my-profile-api
-? Choose a template: official/Python - Starter
+? Choose a template: official/Go - Starter
 ```
 
 Next, open the project in your editor of choice.
 
 ```bash
-> cd my-profile-api
+cd my-profile-api
 ```
 
 Make sure all dependencies are resolved:
 
-Using Pipenv:
-
 ```bash
-pipenv install --dev
+go mod tidy
 ```
 
 The scaffolded project should have the following structure:
 
 ```text
 +--functions/
-|  +-- hello.py
+|  +-- hello/
+|      +-- main.go
+|  ...
 +--nitric.yaml
-+--Pipfile
-+--Pipfile.lock
++--go.mod
++--go.sum
++--.gitignore
 +--README.md
 ```
 
 You can test the project to verify everything is working as expected:
 
-Start the Nitric server to emulate cloud services on your machine:
-
 ```bash
 nitric start
 ```
 
-Next, in a new terminal window, you can run your application:
+and in a separate terminal:
 
 ```bash
-pipenv run dev
+go run functions/hello
 ```
+
+<Note>
+  The first command starts the Nitric Server using `nitric start`, which
+  provides local interfaces to emulate cloud resources. Then `go run
+  functions/hello` runs your functions and allows them to connect.
+</Note>
 
 If everything is working as expected you can now delete all files in the `functions/` folder, we'll create new functions in this guide.
 
 ## Building the Profile API
 
-Let's start building our profiles API. Create a file named 'profiles.py' in the functions directory and add the following:
+Let's start building the profiles API. Create a file named `main.go` in the functions directory and add the following:
 
-```python
-from uuid import uuid4
+```go
+package main
 
-from nitric.resources import api, collection, bucket
-from nitric.application import Nitric
-from nitric.faas import HttpContext
+import (
+	"fmt"
 
-# Create an api named public
-profile_api = api("public")
+	"github.com/nitrictech/go-sdk/resources"
+)
 
-# Access profile collection with permissions
-profiles = collection('profiles').allow('reading','writing')
+func main() {
+	profilesApi, err := resources.NewApi("public")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 Here we're creating:
@@ -119,78 +132,105 @@ Here we're creating:
 
 From here, let's add some features to that function that allow us to work with profiles.
 
-> _Note:_ You could separate some or all of these request handlers their own functions if you prefer. For simplicity we'll group them together in this guide.
+<Note>
+  You could separate some or all of these request handlers into their own
+  functions if you prefer. For simplicity we'll group them together in this
+  guide.
+</Note>
 
 ### Create profiles with POST
 
-```python
-@profile_api.post("/profiles")
-async def create_profile(ctx: HttpContext) -> None:
-  pid = str(uuid4())
-  name = ctx.req.json['name']
-  age = ctx.req.json['age']
-  hometown = ctx.req.json['homeTown']
+```go
+profilesApi.Post("/profiles", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := uuid.New().String()
 
-  await profiles.doc(pid).set({ 'name': name, 'age': age, 'hometown': hometown} )
+  var profileRequest map[string]interface{}
+  err := json.Unmarshal(ctx.Request.Data(), &profileRequest)
+  if err != nil {
+    return ctx, err
+  }
 
-  ctx.res.body = { 'msg': f'Profile with id {pid} created.'}
+  err = profiles.Doc(id).Set(ctx.Request.Context(), profileRequest)
+  if err != nil {
+    return ctx, err
+  }
+
+  ctx.Response.Body = []byte(id)
+
+  return ctx, nil
+})
 ```
 
 ### Retrieve a profile with GET
 
-```python
-@profile_api.get("/profiles/:id")
-async def get_profile(ctx: HttpContext) -> None:
-  pid = ctx.req.params['id']
-  d = await profiles.doc(pid).get()
+```go
+profilesApi.Get("/profiles/:id", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
 
-  ctx.res.body = f"{d.content}"
+  profile, err := profiles.Doc(id).Get(ctx.Request.Context())
+  if err != nil {
+    ctx.Response.Status = 404
+    ctx.Response.Body = []byte(fmt.Sprintf("profile with id '%s' not found", id))
 
+    return ctx, nil
+  }
+
+  ctx.Response.Body, err = json.Marshal(profile.Content())
+
+  return ctx, err
+})
 ```
 
 ### List all profiles with GET
 
-```python
-@profile_api.get("/profiles")
-async def get_profiles(ctx: HttpContext) -> None:
-  results = await profiles.query().fetch()
-  r = [doc.content for doc in results.documents]
-  ctx.res.body = f"{r}"
+```go
+profilesApi.Get("/profiles", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  profiles, err := profiles.Query().Fetch(ctx.Request.Context())
+  if err != nil {
+    return ctx, err
+  }
+
+  var profileContent []map[string]interface{}
+  for _, doc := range profiles.Documents {
+    profileContent = append(profileContent, doc.Content())
+  }
+
+  ctx.Response.Body, err = json.Marshal(profileContent)
+
+  return ctx, err
+})
 ```
 
 ### Remove a profile with DELETE
 
-```python
-@profile_api.delete("/profiles/:id")
-async def delete_profiles(ctx: HttpContext) -> None:
-  pid = ctx.req.params['id']
+```go
+profilesApi.Delete("/profile/:id", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
 
-  try:
-    d = await profiles.doc(pid).delete()
-    ctx.res.body = { 'msg': f'Profile with id {pid} deleted.'}
-  except:
-    ctx.res.status = 404
-    ctx.res.body = { 'msg': f'Profile with id {pid} not found.'}
+  err := profiles.Doc(id).Delete(ctx.Request.Context())
+  if err != nil {
+    ctx.Response.Status = 404
+    ctx.Response.Body = []byte(fmt.Sprintf("profile with id '%s' not found", id))
 
+    return ctx, nil
+  }
 
-Nitric.run()
-
+  return ctx, nil
+})
 ```
 
 ## Ok, let's run this thing!
 
 Now that you have an API defined with handlers for each of its methods, it's time to test it locally.
 
-Start the Nitric server to emulate cloud services on your machine:
-
 ```bash
 nitric start
 ```
 
-Next, in a new terminal window, you can run your application:
+and in a separate terminal:
 
 ```bash
-pipenv run dev
+go run functions/hello
 ```
 
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
@@ -253,7 +293,7 @@ nitric stack new
 
 ### AWS
 
-> Note: You are responsible for staying within the limits of the free tier or any costs associated with deployment.
+Note: You are responsible for staying within the limits of the free tier or any costs associated with deployment.
 
 We called our stack `dev`, let's try deploying it with the `up` command
 
@@ -281,66 +321,67 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 
 Define a bucket named `profilesImg` with reading/writing permissions
 
-```python
-photos = bucket("photos").allow('reading','writing')
-```
-
-Add imports for time and date so that we can set up caching/expiry headers
-
-```python
-from datetime import datetime, timedelta
+```go
+profileImages, err := resources.NewBucket("profileImages").With(resources.BucketReading, resources.BucketWriting)
+if err != nil {
+  fmt.Println(err)
+  return
+}
 ```
 
 ### Get a URL to upload a profile image
 
-```python
-@profile_api.get("/profiles/:id/image/upload")
-async def upload_profile_image(ctx: HttpContext) -> None:
+```go
+profilesApi.Get("/profiles/:id/image/upload", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
+  photoId := fmt.Sprintf("images/%s/photo.png", id)
 
-  pid = ctx.req.params['id']
+  photoUrl, err := profileImages.File(photoId).UploadUrl(ctx.Request.Context(), 600)
+  if err != nil {
+    return ctx, err
+  }
 
-  photo =  photos.file(f'images/{pid}/photo.png')
-  photo_url = await photo.upload_url(expiry=3600)
+  ctx.Response.Body = []byte(photoUrl)
 
-  expires = datetime.utcnow() + timedelta(seconds=(3600))
-  expires = expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
-  ctx.res.headers['Expires'] = expires
-
-  ctx.res.body = photo_url
+  return ctx, nil
+})
 ```
 
 ### Get a URL to download a profile image
 
-```python
-@profile_api.get("/profiles/:id/image/view")
-async def download_profile_image(ctx: HttpContext) -> None:
-  pid = ctx.req.params['id']
+```go
+profilesApi.Get("/profiles/:id/image/download", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
+  photoId := fmt.Sprintf("images/%s/photo.png", id)
 
-  photo =  photos.file(f'images/{pid}/photo.png')
-  photo_url = await photo.download_url(expiry=3600)
+  photoUrl, err := profileImages.File(photoId).DownloadUrl(ctx.Request.Context(), 600)
+  if err != nil {
+    return ctx, err
+  }
 
-  expires = datetime.utcnow() + timedelta(seconds=(3600))
-  expires = expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
-  ctx.res.headers['Expires'] = expires
+  ctx.Response.Body = []byte(photoUrl)
 
-  ctx.res.body = photo_url
+  return ctx, nil
+})
 ```
 
 You can also directly redirect to the photo URL.
 
-```python
-@profile_api.get("/profiles/:id/image/view")
-async def download_profile_image(ctx: HttpContext) -> None:
-  pid = ctx.req.params['id']
+```go
+profilesApi.Get("/profiles/:id/image/view", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
+  photoId := fmt.Sprintf("images/%s/photo.png", id)
 
-  photo =  photos.file(f'images/{pid}/photo.png')
-  photo_url = await photo.download_url(expiry=3600)
+  photoUrl, err := profileImages.File(photoId).DownloadUrl(ctx.Request.Context(), 600)
+  if err != nil {
+    return ctx, err
+  }
 
-  expires = datetime.utcnow() + timedelta(seconds=(3600))
-  expires = expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
-  ctx.res.headers['Expires'] = expires
-  ctx.res.headers['Location'] = [photo_url]
-  ctx.res.status = 303
+  ctx.Response.Status = 303
+  ctx.Response.Headers["Location"] = []string{photoUrl}
+
+  return ctx, nil
+})
 ```
 
 #### Time to test the updated API
