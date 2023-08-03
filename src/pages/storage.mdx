@@ -4,6 +4,20 @@ export const description = 'Working with files and storage in Nitric'
 
 Nitric provides storage support for securely storing and retrieving large files in the cloud.
 
+Here is a quick introduction on Nitric storage if you'd prefer to learn via video.
+
+<div>
+  <div className="video-container">
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/5PSyecQ80zg"
+      title="Store Petabytes with Cloud Buckets"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen
+    />
+  </div>
+</div>
+
 ## Definitions
 
 ### Files
@@ -131,6 +145,11 @@ image = await profile.file("users/bruce-wayne/profile.png").read()
 ## Write files
 
 You can write the contents of a file directly from your application code using the `write()` method on a file reference. If the file doesn't exist then it will create a new one, if it does exist then it will overwrite the previous data.
+
+<Note>
+  Written data cannot exceed 4MB. If you need to upload more than that, consider
+  using an [upload url](#signed-urls).
+</Note>
 
 <CodeGroup>
 
