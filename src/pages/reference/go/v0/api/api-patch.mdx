@@ -84,7 +84,7 @@ api.Patch("/hello", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.Ht
 })
 ```
 
-### Create a route with with path params
+### Create a route with path params
 
 ```go
 api.Patch("/hello/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {

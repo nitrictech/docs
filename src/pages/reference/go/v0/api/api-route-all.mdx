@@ -73,7 +73,7 @@ api.NewRoute("/hello").Post(func(ctx *faas.HttpContext, next faas.HttpHandler) (
 })
 ```
 
-### Create a route with with path params
+### Create a route with path params
 
 ```go
 api.NewRoute("/hello/:name").Post(func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {

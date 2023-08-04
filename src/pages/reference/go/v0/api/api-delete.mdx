@@ -84,7 +84,7 @@ api.Delete("/hello", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.H
 })
 ```
 
-### Create a route with with path params
+### Create a route with path params
 
 ```go
 api.Delete("/hello/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
