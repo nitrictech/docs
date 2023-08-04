@@ -413,6 +413,10 @@ const fullNav: FullNav = {
           href: '/assets/env',
         },
         {
+          title: 'Resource Best Practices',
+          href: '/assets/resources-overview',
+        },
+        {
           title: 'IAM and Access Control',
           href: '/assets/access-control',
         },
