@@ -78,8 +78,28 @@ const countries = collection<Country>('Countries').for('reading')
 
 ```python
 from nitric.resources import collection
+from nitric.application import Nitric
 
 countries = collection('Countries').allow('reading', 'writing', 'deleting')
+
+Nitric.run()
+```
+
+```go
+import (
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	countries, err := resources.NewCollection("Countries").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
+	if err != nil {
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -116,6 +136,32 @@ await countries.doc('USA').set({
 })
 ```
 
+```go
+import (
+	"context"
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
+	if err != nil {
+		return
+	}
+
+	err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
+		"name": "United States of America",
+		"population": 329500000,
+	})
+	if err != nil {
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 </CodeGroup>
 
 If you then want to update the document, you will have to write over the existing document by referencing it be it's `id`.
@@ -134,6 +180,16 @@ await countries.doc("USA").set({
 	"name": "United States of America",
 	"population": 330000000,
 })
+```
+
+```go
+err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
+	"name": "United States of America",
+	"population": 329500000,
+})
+if err != nil {
+	return
+}
 ```
 
 </CodeGroup>
@@ -156,10 +212,36 @@ const country = await country.doc('USA').get()
 
 ```python
 from nitric.resources import collection
+from nitric.application import Nitric
 
 countries = collection("Countries").allow("reading")
 
 country = await countries.doc("USA").get()
+
+Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
+	if err != nil {
+		return
+	}
+
+	country, err := countries.Doc("USA").Get(context.TODO())
+	if err != nil {
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -184,6 +266,7 @@ countriesApi.get('/country/:name', async (ctx) => {
 
 ```python
 from nitric.resources import api, collection
+from nitric.application import Nitric
 
 countries = collection("Countries").allow("reading")
 
@@ -194,6 +277,45 @@ async def get_planet_route(ctx):
   name = ctx.req.params['name']
 
   ctx.res.body = await countries.doc(name).get()
+
+Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	countryApi, err := resources.NewApi("Countries")
+	if err != nil {
+		return
+	}
+
+	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
+	if err != nil {
+		return
+	}
+
+	countryApi.Get("/country/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+		name := ctx.Request.PathParams()["name"]
+
+		country, err := countries.Doc(id).Get(ctx.Request.Context())
+		if err != nil {
+			return ctx, err
+		}
+
+		ctx.Response.Body, err = json.Marshal(country.Content())
+
+		return ctx, err
+	})
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -221,6 +343,7 @@ await countries.doc('USA').delete()
 
 ```python
 from nitric.resources import collection
+from nitric.application import Nitric
 
 countries = collection('Countries').allow('writing')
 
@@ -230,6 +353,41 @@ await countries.doc('USA').set({
 })
 
 await countries.doc('USA').delete()
+
+Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
+	if err != nil {
+		return
+	}
+
+	// Set the USA document
+	err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
+		"name": "United States of America",
+		"population": 329500000,
+	})
+	if err != nil {
+		return
+	}
+
+	// Delete the document
+	err := Countries.Doc("USA").Delete(context.TODO())
+	if err != nil {
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -256,6 +414,15 @@ large_countries = (
 )
 ```
 
+```go
+import "github.com/nitrictech/go-sdk/api/documents"
+...
+largeCountries, err := countries.
+		Query().
+		Where(documents.Condition("population").Gt(documents.NumberValue(100000000))).
+		Fetch(context.TODO())
+```
+
 </CodeGroup>
 
 To limit the amount of results returned you can use the `limit` function. This will limit the amount of responses up to or equal to the amount provided. The following example shows searching for countries whose names start with S but only returning 10 results.
@@ -280,18 +447,28 @@ s_countries = (
 )
 ```
 
+```go
+import "github.com/nitrictech/go-sdk/api/documents"
+...
+largeCountries, err := countries.
+		Query().
+		Where(documents.Condition("name").StartsWith(documents.StringValue("S"))).
+		Limit(10).
+		Fetch(context.TODO())
+```
+
 </CodeGroup>
 
 ### Query Operators
 
 The `where()` method takes three parameters: the field to filter on, a comparison operator, and a value. Nitric supports the following comparison operators:
 
-- `<` less than
-- `<=` less than or equal to
-- `==` equal to
-- `>` greater than
-- `>=` greater than or equal to
-- `!=` not equal to
+- `<` less than (`Lt`)
+- `<=` less than or equal to (`Le`)
+- `==` equal to (`Eq`)
+- `>` greater than (`Gt`)
+- `>=` greater than or equal to (`Ge`)
+- `!=` not equal to (`Ne`)
 - `startsWith`
 
 ### Compound (AND) queries
@@ -320,6 +497,17 @@ query = (
 )
 
 results = await query.fetch()
+```
+
+```go
+import "github.com/nitrictech/go-sdk/api/documents"
+...
+query := countries.
+		Query().
+		Where(documents.Condition("name").Ne(documents.StringValue("United States of America"))).
+		Where(documents.Condition("population").Ge(documents.NumberValue(100000000)))
+
+results, err := query.Fetch(context.TODO())
 ```
 
 </CodeGroup>
@@ -361,6 +549,25 @@ if paging_token is not None:
 	paging_token = results.paging_token
 ```
 
+```go
+import "github.com/nitrictech/go-sdk/api/documents"
+...
+query := countries.Query().Limit(1000)
+
+results, err := query.Fetch(context.TODO())
+if err != nil {
+	return err
+}
+
+pagingToken := results.PagingToken
+
+for pagingToken != nil {
+	results, err = query.FromPagingToken(pagingToken).Fetch(context.TODO())
+
+	pagingToken = results.PagingToken
+}
+```
+
 </CodeGroup>
 
 ### Streaming Results
@@ -386,6 +593,23 @@ async for doc in query.stream():
 	print(doc.content)
 ```
 
+```go
+stream, err := countries.Query().Stream(context.TODO())
+if err != nil {
+	return
+}
+
+for {
+	res, err := stream.Next() // will return an EOF when done
+	if err != nil {
+		fmt.Println("finished processing stream")
+		break
+	}
+
+	fmt.Println(res.Content())
+}
+```
+
 </CodeGroup>
 
 ## Creating Sub-collections
@@ -406,6 +630,12 @@ states = countries.doc('USA').collection('States')
 
 # Get a document from the sub-collection
 state_of_colorado = await states.doc('Colorado').get()
+```
+
+```go
+states := countries.Doc("USA").Collection("States")
+
+stateOfColorado, err := states.Doc("Colorado").Get(context.TODO())
 ```
 
 </CodeGroup>
@@ -447,6 +677,21 @@ async for doc in query.stream():
 	print(doc.content)
 ```
 
+```go
+query := countries.Doc("USA").Collection("States").Query()
+
+ctx := context.TODO()
+
+// Fetching
+results, err := query.Fetch(ctx)
+
+// Paging
+results, err := query.FromPagingToken(results.PagingToken).Fetch(ctx)
+
+// Streaming
+stream, err := query.Stream(ctx)
+```
+
 </CodeGroup>
 
 You can also query common sub-collections across multiple documents when they have the same name.
@@ -467,6 +712,12 @@ const results = allStates.query().fetch()
 all_states = countries.collection('States')
 
 results = all_states.query().fetch()
+```
+
+```go
+allStates := countries.Collection("States")
+
+results, err := allStates.Query().Fetch(context.TODO())
 ```
 
 </CodeGroup>

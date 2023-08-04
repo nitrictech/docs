@@ -16,7 +16,6 @@ import (
 func main() {
 	api, err := resources.NewApi("public")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -61,7 +60,6 @@ import (
 func main() {
 	api, err := resources.NewApi("public")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -90,7 +88,6 @@ import (
 func main() {
 	api, err := resources.NewApi("public")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -121,7 +118,6 @@ func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpCon
 func main() {
 	api, err := resources.NewApi("public")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

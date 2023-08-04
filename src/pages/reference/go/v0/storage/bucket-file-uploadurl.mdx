@@ -16,13 +16,11 @@ import (
 func main() {
 	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketWriting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
-	uploadUrl, err := bucket.File("cat.png").UploadUrl(context.TODO())
+	uploadUrl, err := bucket.File("cat.png").UploadUrl(context.TODO(), 600)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -38,7 +36,7 @@ func main() {
   <Property name="ctx" required type="context">
     The context of the call, used for tracing.
   </Property>
-  <Property name="expiry" optional type="int">
+  <Property name="expiry" required type="int">
     Seconds until link expiry. Maximum of `604800` (7 days).
   </Property>
 </Properties>
@@ -58,13 +56,11 @@ import (
 func main() {
 	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketWriting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
-	uploadUrl, err := bucket.File("cat.png").UploadUrl(context.TODO())
+	uploadUrl, err := bucket.File("cat.png").UploadUrl(context.TODO(), 600)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

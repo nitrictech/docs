@@ -17,7 +17,6 @@ import (
 func main() {
 	queue, err := resources.NewQueue("queue-name").With(resources.QueueSending)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -31,7 +30,6 @@ func main() {
 		},
 	})
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -68,7 +66,6 @@ import (
 func main() {
 	queue, err := resources.NewQueue("blah").With(resources.QueueSending)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -82,7 +79,6 @@ func main() {
 		},
 	})
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

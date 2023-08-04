@@ -16,7 +16,6 @@ import (
 func main() {
 	api, err := resources.NewApi("public")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -103,7 +102,6 @@ func main() {
 		resources.WithSecurity("user", []string{"products:read"}),
 	)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -145,7 +143,6 @@ func handleRequest(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpCont
 func main() {
 	api, err := resources.NewApi("private")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -172,7 +169,6 @@ import (
 func main() {
 	api, err := resources.NewApi("public")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

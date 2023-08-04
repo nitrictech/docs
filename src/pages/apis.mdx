@@ -25,6 +25,7 @@ galaxyApi.get('/moon', async ({ req, res }) => {
 
 ```python
 from nitric.resources import api
+from nitric.application import Nitric
 
 # each API needs a unique name
 galaxy_api = api('far-away-galaxy-api')
@@ -33,6 +34,31 @@ galaxy_api = api('far-away-galaxy-api')
 async def get_moon(ctx):
   ctx.res.body = "that's no moon, it's a space station."
 
+Nitric.run()
+```
+
+```go
+import (
+  "github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+  galaxyApi, err := resources.NewApi("far-away-galaxy-api")
+  if err != nil {
+    return
+  }
+
+  galaxyApi.Get("/moon", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
+    ctx.Response.Body = []byte("that's no moon, it's a space station")
+
+    return ctx, nil
+  })
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -51,6 +77,8 @@ For example, you can declare a route that handles `POST` requests using the `pos
 <CodeGroup>
 
 ```javascript
+import { getPlanetList, createPlanet } from 'planets'
+
 galaxyApi.get('/planets', async (ctx) => {
   ctx.res.json(getPlanetList())
 })
@@ -62,6 +90,8 @@ galaxyApi.post('/planets', async (ctx) => {
 ```
 
 ```python
+from planets import get_planets_list, create_planet
+
 @galaxy_api.get("/planets")
 async def list_planets(ctx):
   ctx.res.body = get_planets_list()
@@ -70,7 +100,23 @@ async def list_planets(ctx):
 async def create_planet(ctx):
   create_planet(ctx.req.json())
   ctx.res.status = 201
+```
 
+```go
+import (
+  "planets"
+)
+
+galaxyApi.Get("/planets", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
+  ctx.Response.Body = planets.GetPlanetsList()
+  return ctx, nil
+})
+
+galaxyApi.Post("/planets", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
+  planets.CreatePlanet(ctx.Request.Data())
+  ctx.Response.Status = 201
+  return ctx, err
+})
 ```
 
 </CodeGroup>
@@ -90,7 +136,7 @@ The path string used to declare routes can include named parameters. The values 
 <CodeGroup>
 
 ```javascript
-import { getPlanet, updatePlanet, deletePlanet } from 'planets'
+import { getPlanet } from 'planets'
 
 // create a dynamic route and extract the parameter `name`
 galaxyApi.get('/planets/:name', async (ctx) => {
@@ -100,13 +146,25 @@ galaxyApi.get('/planets/:name', async (ctx) => {
 ```
 
 ```python
-from planets import get_planet, update_planet, delete_planet
+from planets import get_planet
 
 # create a dynamic route and extract the parameter `name`
 @galaxy_api.get("/planets/:name")
 async def get_planet_route(ctx):
   name = ctx.req.params['name']
   ctx.res.body = get_planet(name)
+```
+
+```go
+import (
+  "planets"
+)
+
+galaxyApi.Get("/planets/:name", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
+  name := ctx.Request.PathParams()["name"]
+  ctx.Response.Body = planets.GetPlanet(name)
+  return ctx, nil
+})
 ```
 
 </CodeGroup>
@@ -121,7 +179,7 @@ The response object provides `status` and `headers` properties you can use to re
 // return a redirect response using status 301
 galaxyApi.get('/planets/alderaan', async (ctx) => {
   ctx.res.status = 301
-  ctx.res.headers['Location'] = ['https://example.org/debris/alderann']
+  ctx.res.headers['Location'] = ['https://example.org/debris/alderaan']
 })
 ```
 
@@ -130,8 +188,15 @@ galaxyApi.get('/planets/alderaan', async (ctx) => {
 @galaxy_api.get("/planets/alderaan")
 async def find_alderaan(ctx):
   ctx.res.status = 301
-  ctx.res.headers["Location"] = "https://example.org/debris/alderann"
+  ctx.res.headers["Location"] = "https://example.org/debris/alderaan"
+```
 
+```go
+galaxyApi.Get("/planets/alderaan", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
+  ctx.Response.Status = 301
+  ctx.Response.Headers["Location"] = []string{ "https://example.org/debris/alderaan" }
+  return ctx, nil
+})
 ```
 
 </CodeGroup>
@@ -165,7 +230,7 @@ Once a security definition is available it can be applied to the entire API or s
 ```javascript
 import { api } from '@nitric/sdk'
 
-const helloApi = api('main', {
+const secureApi = api('main', {
   // declare security definition named 'default'.
   securityDefinitions: {
     default: {
@@ -183,8 +248,9 @@ const helloApi = api('main', {
 
 ```python
 from nitric.resources import api, ApiOptions, JwtSecurityDefinition
+from nitric.application import Nitric
 
-helloApi = api("main", opts=ApiOptions(
+secureApi = api("main", opts=ApiOptions(
         # declare security definition named 'default'.
         security_definitions={
             "default": JwtSecurityDefinition(
@@ -198,6 +264,33 @@ helloApi = api("main", opts=ApiOptions(
         },
     )
 )
+
+Nitric.run()
+```
+
+```go
+import (
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	secureApi, err := resources.NewApi("main",
+		// define a security definition named 'default'
+		resources.WithSecurityJwtRule("default", resources.JwtSecurityRule{
+			Issuer: "https://dev-abc123.us.auth0.com",
+			Audiences: []string{ "https://test-security-definition/" },
+		}),
+		// apply the 'default' security definition to all routes in this API.
+		resources.WithSecurity("default",	[]string{}),
+	)
+  if err != nil {
+    return
+  }
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -228,6 +321,7 @@ const helloApi = api('main', {
 
 ```python
 from nitric.resources import api, ApiOptions, JwtSecurityDefinition
+from nitric.application import Nitric
 
 helloApi = api("main", opts=ApiOptions(
         security={
@@ -242,6 +336,32 @@ helloApi = api("main", opts=ApiOptions(
         }
     )
 )
+
+Nitric.run()
+```
+
+```go
+import (
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	secureApi, err := resources.NewApi("main",
+    // only authorize requests with the 'user.read' scope
+    resources.WithSecurity("user", []string{ "user.read" }),
+		resources.WithSecurityJwtRule("user", resources.JwtSecurityRule{
+			Issuer: "https://dev-abc123.us.auth0.com",
+			Audiences: []string{ "https://test-security-definition/" },
+		}),
+	)
+  if err != nil {
+    return
+  }
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -282,6 +402,16 @@ async def get_planet(ctx):
     pass
 ```
 
+```go
+galaxyApi.Get("/planets/unsecured-planet", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  return ctx, nil
+}, resources.WithNoMethodSecurity())
+
+galaxyApi.Get("/planets/secured-planet", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  return ctx, nil
+}, resources.WithMethodSecurity("user", []string{ "user.write" }))
+```
+
 </CodeGroup>
 
 ## Defining Middleware
@@ -312,6 +442,18 @@ async def validate(ctx, nxt: HttpMiddleware):
   return await nxt(ctx)
 ```
 
+```go
+func validate(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+	_, ok := ctx.Request.Headers()["content-type"]
+	if !ok {
+		ctx.Response.Status = 400
+		ctx.Response.Body = []byte("header 'Content-Type' is required")
+		return ctx, nil
+	}
+	return next(ctx)
+}
+```
+
 </CodeGroup>
 
 ### API level middleware
@@ -332,8 +474,31 @@ const customersApi = api('customers', {
 ```python
 from nitric.resources import api, ApiOptions
 from common.middleware import validate, log_request
+from nitric.application import Nitric
 
 customers_api = api("customers", opts=ApiOptions(middleware=[log_request, validate]))
+
+Nitric.run()
+```
+
+```go
+import (
+  "middleware"
+  "github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+  customersApi, err := resources.NewApi("customers",
+    resources.WithMiddleware(middleware.LogRequest, middleware.ValidateRequest)
+  )
+  if err != nil {
+    return nil, err
+  }
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -361,6 +526,30 @@ customersApi.route('/customers').get([validate, getAllCustomers])
 
 ```txt {{ language: 'python' }}
 Route level middleware currently not supported in python
+```
+
+```go
+import (
+  "middleware"
+  "github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+  customersApi, err := resources.NewApi("customers")
+  if err != nil {
+    return nil, err
+  }
+
+  // Inline using .Get()
+	profilesApi.Get("/hello", faas.ComposeHttpMiddleware(middleware.ValidateRequest, middleware.LogRequest, handler))
+
+  // Using .NewRoute()
+	profilesApi.NewRoute("/hello", middleware.ValidateRequest, middleware.LogRequest).Post(handler)
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>

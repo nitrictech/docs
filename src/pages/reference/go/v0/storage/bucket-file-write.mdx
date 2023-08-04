@@ -16,13 +16,11 @@ import (
 func main() {
 	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketWriting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	err := bucket.File("cat.png").Write(context.TODO(), []byte("contents"))
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -58,13 +56,11 @@ import (
 func main() {
 	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketWriting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	err := bucket.File("cat.png").Write(context.TODO(), []byte("contents"))
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

@@ -37,11 +37,35 @@ schedule('send-reminder').cron('0 22 * * 1-5', async (ctx) => {
 
 ```python
 from nitric.resources import schedule
+from nitric.resources import Nitric
 
 # Run every 5 minutes
 @schedule("process-transactions", every="5 minutes")
 async def process_transactions(ctx):
     pass
+
+Nitric.run()
+```
+
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	resources.NewSchedule("aggregate-data").Every("3 days", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+		fmt.Println("aggregating data")
+
+		return ctx, nil
+	})
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -90,6 +114,20 @@ async def process_rarely(ctx):
 
 ```
 
+```go
+resources.NewSchedule("process-often").Every("5 minutes", func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+  return next(ctx)
+})
+
+resources.NewSchedule("process-sometimes").Every("2 hours", func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+  return next(ctx)
+})
+
+resources.NewSchedule("process-rarely").Every("30 days", func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+  return next(ctx)
+})
+```
+
 </CodeGroup>
 
 ### Rates
@@ -127,6 +165,22 @@ schedule('delete stale data').cron('0 1 1 * *', async (ctx) => {
 
 ```txt {{ language: 'python' }}
 `cron` schedules aren't supported in the Python SDK currently
+```
+
+```go
+// every 15 minutes
+resources.NewSchedule("check for updates").Cron("0/15 * * * *", func (ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+  fmt.Println("checking for updates")
+
+  return next(ctx)
+})
+
+// at 1:00am on the 1st of every month
+resources.NewSchedule("delete stale data").Cron("0 1 1 * *", func (ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+  fmt.Println("clearing data")
+
+  return next(ctx)
+})
 ```
 
 </CodeGroup>

@@ -1,5 +1,5 @@
 export const description =
-  "Reference for Nitric's Go library - Create APIs with the Nitric Node.js SDK"
+  "Reference for Nitric's Go library - Create APIs with the Nitric Go SDK"
 
 # Go - api()
 
@@ -15,7 +15,6 @@ import (
 func main() {
 	api, err := resources.NewApi("public")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -113,7 +112,6 @@ import (
 func main() {
 	api, err := resources.NewApi("public")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -141,7 +139,6 @@ func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpCon
 func main() {
 	api, err := resources.NewApi("private", resources.WithMiddleware(authMiddleware))
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -178,7 +175,6 @@ import (
 func main() {
 	v1Api, err := resources.NewApi("public", resources.WithPath("/api/v1/"))
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -215,7 +211,6 @@ func main() {
 		),
 	)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

@@ -16,13 +16,11 @@ import (
 func main() {
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	result, err := profiles.Query().Fetch(context.TODO())
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -55,13 +53,11 @@ import (
 func main() {
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	result, err := profiles.Query().Fetch(context.TODO())
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -82,7 +78,6 @@ import (
 func main() {
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -92,7 +87,6 @@ func main() {
 
 	results, err := query.Fetch(ctx)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

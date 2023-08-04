@@ -1,7 +1,7 @@
 export const description =
-  "Reference for Nitric's Node.js library - Create a new bucket notification trigger"
+  "Reference for Nitric's Go library - Create a new bucket notification trigger"
 
-# Node.js - bucket.on()
+# Go - bucket.on()
 
 Create a new bucket notification trigger when certain files are created or deleted.
 
@@ -19,7 +19,6 @@ func main() {
 
 	readableAssets, err := resources.NewBucket("assets").With(resources.BucketReading)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

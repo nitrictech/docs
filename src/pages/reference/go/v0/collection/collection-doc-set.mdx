@@ -16,7 +16,6 @@ import (
 func main() {
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionWriting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -27,7 +26,6 @@ func main() {
 		"lastName": "Mallard",
 	})
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -63,7 +61,6 @@ import (
 func main() {
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionWriting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -74,7 +71,6 @@ func main() {
 		"lastName": "Mallard",
 	})
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -97,7 +93,6 @@ import (
 func main() {
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -105,7 +100,6 @@ func main() {
 
 	existingProfile, err := drakeProfileRef.Get(context.TODO())
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -114,7 +108,6 @@ func main() {
 
 	err = drakeProfileRef.Set(context.TODO(), contents)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

@@ -14,9 +14,8 @@ import (
 )
 
 func main() {
-	queue, err := resources.NewQueue("queue-name").With(resources.QueueReceving)
+	queue, err := resources.NewQueue("queue-name").With(resources.QueueReceiving)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -25,7 +24,6 @@ func main() {
   // Receive up to 10 tasks from the queue
 	tasks, err := queue.Receive(ctx, 10)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -90,9 +88,8 @@ import (
 )
 
 func main() {
-	queue, err := resources.NewQueue("queue-name").With(resources.QueueReceving)
+	queue, err := resources.NewQueue("queue-name").With(resources.QueueReceiving)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -101,7 +98,6 @@ func main() {
   // Receive up to 10 tasks from the queue
 	tasks, err := queue.Receive(ctx, 10)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

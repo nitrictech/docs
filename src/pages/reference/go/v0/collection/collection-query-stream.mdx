@@ -16,13 +16,11 @@ import (
 func main() {
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	stream, err := profiles.Query().Stream(context.TODO())
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -55,13 +53,11 @@ import (
 func main() {
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	stream, err := profiles.Query().Stream(context.TODO())
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

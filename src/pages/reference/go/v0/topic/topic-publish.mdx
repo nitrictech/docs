@@ -1,7 +1,7 @@
 export const description =
-  "Reference for Nitric's Node.js library - Publish new events to the topic."
+  "Reference for Nitric's Go library - Publish new events to the topic."
 
-# Node.js - topic.publish()
+# Go - topic.publish()
 
 Publish an event (push based message) to a topic.
 
@@ -82,12 +82,11 @@ func main() {
 		return
 	}
 
-	updates.Publish(context.TODO(), &events.Event{
+	err := updates.Publish(context.TODO(), &events.Event{
 		Payload: map[string]interface{}{
 			"something": "amazing happened",
 		},
 	})
-
 	if err := resources.Run(); err != nil {
 		fmt.Println(err)
 	}

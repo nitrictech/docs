@@ -16,13 +16,11 @@ import (
 func main() {
 	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketReading)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
-	uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO())
+	uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), 3600)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -38,7 +36,7 @@ func main() {
   <Property name="ctx" required type="context">
     The context of the call, used for tracing.
   </Property>
-  <Property name="expiry" optional type="int">
+  <Property name="expiry" required type="int">
     Seconds until link expiry. Maximum of `604800` (7 days).
   </Property>
 </Properties>
@@ -58,13 +56,11 @@ import (
 func main() {
 	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketReading)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
-	uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO())
+	uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), 300)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -88,20 +84,18 @@ import (
 func main() {
   api, err := resources.NewApi("main")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	bucket, err := resources.NewBucket("images").With(resources.BucketReading)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	api.Get("/images/:id", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
 		id := ctx.Request.PathParams()["id"]
 
-		downloadUrl, err := bucket.File(id).DownloadUrl(context.TODO())
+		downloadUrl, err := bucket.File(id).DownloadUrl(context.TODO(), 600)
 		if err != nil {
 			return ctx, err
 		}

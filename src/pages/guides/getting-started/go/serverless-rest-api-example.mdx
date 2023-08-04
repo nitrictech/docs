@@ -109,13 +109,11 @@ import (
 func main() {
 	profilesApi, err := resources.NewApi("public")
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

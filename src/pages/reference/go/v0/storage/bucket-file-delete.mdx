@@ -16,13 +16,11 @@ import (
 func main() {
 	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketDeleting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
-	contents, err := bucket.File("cat.png").Delete(context.TODO())
+	err := bucket.File("cat.png").Delete(context.TODO())
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -55,13 +53,11 @@ import (
 func main() {
 	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketDeleting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
 	contents, err := bucket.File("cat.png").Delete(context.TODO())
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 

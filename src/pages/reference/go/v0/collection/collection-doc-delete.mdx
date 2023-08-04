@@ -16,7 +16,6 @@ import (
 func main() {
 	profiles, err := resources.NewCollection("profiles").With(resources.CollectionDeleting)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
@@ -24,7 +23,6 @@ func main() {
 
 	err = drakeProfileRef.Delete(context.TODO())
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 
