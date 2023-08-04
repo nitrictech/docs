@@ -280,6 +280,15 @@ const fullNav: FullNav = {
         },
       ],
     },
+    {
+      title: 'Go Guides',
+      links: [
+        {
+          title: 'REST API',
+          href: '/guides/getting-started/go/serverless-rest-api-example',
+        },
+      ],
+    },
   ],
   apis: [
     {
