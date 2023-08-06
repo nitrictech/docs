@@ -13,6 +13,20 @@ The `schedule` resource lets you define named schedules, including their frequen
 
 If you're looking for a way to perform once-off work at some point in the future, it's recommend to use [delayed messaging](./messaging#delayed-messaging) instead of schedules.
 
+Below, you'll find a video providing a short walk-through of Nitric's Schedules feature.
+
+<div>
+  <div className="video-container">
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/mY6WazbNszU"
+      title="Schedule Tasks from Your Cloud Application with Nitric"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen
+    />
+  </div>
+</div>
+
 ## Creating schedules
 
 There are two ways to define schedules. Using `every` allows simple rate definitions to trigger the callback or `cron` can be used for more complex scenarios.
@@ -194,19 +208,3 @@ See stack configuration docs for how to set the `schedule-timezone` property:
   If a timezone is not configured the default for the target provider/region
   will be used, this is often Universal Coordinated Time (UTC).
 </Note>
-
-## Tour of Schedules
-
-Below, you'll find a video providing a short walk-through of Nitric's Schedules feature.
-
-<div>
-  <div className="video-container">
-    <iframe
-      src="https://www.youtube-nocookie.com/embed/mY6WazbNszU"
-      title="Schedule Tasks from Your Cloud Application with Nitric"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowFullScreen
-    />
-  </div>
-</div>
