@@ -1102,6 +1102,10 @@ const fullNav: FullNav = {
           title: 'NewSchedule()',
           href: '/reference/go/v0/schedule/schedule',
         },
+        {
+          title: 'NewWebsocket()',
+          href: '/reference/go/v0/websocket/websocket',
+        },
       ],
     },
     {
@@ -1154,6 +1158,10 @@ const fullNav: FullNav = {
         {
           title: 'Api.Route.Patch()',
           href: '/reference/go/v0/api/api-route-patch',
+        },
+        {
+          title: 'Api.Details()',
+          href: '/reference/go/v0/api/api-details',
         },
       ],
     },
@@ -1304,6 +1312,27 @@ const fullNav: FullNav = {
         {
           title: 'Schedule.Cron()',
           href: '/reference/go/v0/schedule/schedule-cron',
+        },
+      ],
+    },
+    {
+      title: 'Websockets',
+      links: [
+        {
+          title: 'Websocket.On()',
+          href: '/reference/go/v0/websocket/websocket-on',
+        },
+        {
+          title: 'Websocket.Send()',
+          href: '/reference/go/v0/websocket/websocket-send',
+        },
+        {
+          title: 'Websocket.Close()',
+          href: '/reference/go/v0/websocket/websocket-close',
+        },
+        {
+          title: 'Websocket.Details()',
+          href: '/reference/go/v0/websocket/websocket-details',
         },
       ],
     },
