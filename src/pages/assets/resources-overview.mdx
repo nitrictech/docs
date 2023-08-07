@@ -227,7 +227,7 @@ package resources
 
 import (
 	"github.com/nitrictech/go-sdk/api/storage"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 type Resources struct {
@@ -240,17 +240,17 @@ var Manager *Resources
 
 func NewManager() (*Resources, error) {
 	if Manager == nil {
-		api, err := resources.NewApi("public")
+		api, err := nitric.NewApi("public")
 		if err != nil {
 			return nil, err
 		}
 
-		bucketOne, err := resources.NewBucket("bucket-one").With(resources.BucketReading)
+		bucketOne, err := nitric.NewBucket("bucket-one").With(nitric.BucketReading)
 		if err != nil {
 			return nil, err
 		}
 
-		bucketTwo, err := resources.NewBucket("bucket-two").With(resources.BucketReading)
+		bucketTwo, err := nitric.NewBucket("bucket-two").With(nitric.BucketReading)
 		if err != nil {
 			return nil, err
 		}
@@ -273,9 +273,9 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	nitric "github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 
-	resources "demoproject"
+	"demoproject"
 )
 
 func main() {
@@ -300,9 +300,9 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	nitric "github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 
-	resources "demoproject"
+	"demoproject"
 )
 
 func main() {

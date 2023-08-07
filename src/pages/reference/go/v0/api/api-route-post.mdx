@@ -34,9 +34,8 @@ func main() {
 
 <Properties>
   <Property name="middleware" required type="HttpMiddleware">
-    One or more middleware functions to use as the handler for HTTP requests. If
-    you want to compose more than one middleware use
-    `faas.ComposeHttpMiddleware`.
+    The middleware function to use as the handler for HTTP requests. If you want
+    to compose more than one middleware use `faas.ComposeHttpMiddleware`.
   </Property>
   <Property name="options" type="...MethodOption">
     Additional options for the route. See below.
