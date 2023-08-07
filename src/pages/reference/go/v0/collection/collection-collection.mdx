@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Get a query-only sub-collection reference, this can be used to query commonly named collections across documents."
 
-# Go - collection.collection()
+# Go - Collection.Collection()
 
 Get a query-only sub-collection reference, this can be used to query commonly named collections across documents.
 
@@ -9,18 +9,18 @@ Get a query-only sub-collection reference, this can be used to query commonly na
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
 	if err != nil {
 		return
 	}
 
 	enemies := profiles.Collection("enemies")
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -42,11 +42,11 @@ func main() {
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
 	if err != nil {
 		return
 	}
@@ -55,7 +55,7 @@ func main() {
 
 	enemiesQuery := enemies.Query()
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

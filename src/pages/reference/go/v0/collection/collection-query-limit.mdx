@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Limit the number of results returned by a query."
 
-# Go - collection.query.limit()
+# Go - Collection.Query.Limit()
 
 Limit the number of results returned by a query.
 
@@ -9,18 +9,18 @@ Limit the number of results returned by a query.
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
 	if err != nil {
 		return
 	}
 
 	profilesQuery := profiles.Query().Limit(10)
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

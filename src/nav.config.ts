@@ -1059,6 +1059,10 @@ const fullNav: FullNav = {
           title: 'schedule.every()',
           href: '/reference/csharp/v0/schedule/schedule-every',
         },
+        {
+          title: 'NewTopic()',
+          href: '/reference/go/v0/topic/topic',
+        },
       ],
     },
   ],
@@ -1072,58 +1076,83 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'APIs',
+      title: 'Resources',
       links: [
         {
-          title: 'api()',
+          title: 'NewApi()',
           href: '/reference/go/v0/api/api',
         },
         {
-          title: 'api.get()',
+          title: 'NewCollection()',
+          href: '/reference/go/v0/collection/collection',
+        },
+        {
+          title: 'NewQueue()',
+          href: '/reference/go/v0/queues/queue',
+        },
+        {
+          title: 'NewSecret()',
+          href: '/reference/go/v0/secrets/secret',
+        },
+        {
+          title: 'NewBucket()',
+          href: '/reference/go/v0/storage/bucket',
+        },
+        {
+          title: 'NewSchedule()',
+          href: '/reference/go/v0/schedule/schedule',
+        },
+      ],
+    },
+    {
+      title: 'APIs',
+      links: [
+        {
+          title: 'Api.Get()',
           href: '/reference/go/v0/api/api-get',
         },
         {
-          title: 'api.post()',
+          title: 'Api.Post()',
           href: '/reference/go/v0/api/api-post',
         },
         {
-          title: 'api.put()',
+          title: 'Api.Put()',
           href: '/reference/go/v0/api/api-put',
         },
         {
-          title: 'api.delete()',
+          title: 'Api.Delete()',
           href: '/reference/go/v0/api/api-delete',
         },
         {
-          title: 'api.patch()',
+          title: 'Api.Patch()',
           href: '/reference/go/v0/api/api-patch',
         },
         {
-          title: 'api.route()',
+          title: 'Api.NewRoute()',
           href: '/reference/go/v0/api/api-route',
         },
         {
-          title: 'api.route.all()',
+          title: 'Api.Route.All()',
           href: '/reference/go/v0/api/api-route-all',
         },
         {
-          title: 'api.route.get()',
+          title: 'Api.Route.Get()',
           href: '/reference/go/v0/api/api-route-get',
         },
         {
-          title: 'api.route.post()',
+          title: 'Api.Route.Post()',
           href: '/reference/go/v0/api/api-route-post',
         },
         {
-          title: 'api.route.put()',
+          title: 'Api.Route.Put()',
           href: '/reference/go/v0/api/api-route-put',
         },
         {
-          title: 'api.route.delete()',
+          title: 'Api.Route.Delete()',
           href: '/reference/go/v0/api/api-route-delete',
         },
         {
-          title: 'api.route.patch()',
+          title: 'Api.Route.Patch()',
           href: '/reference/go/v0/api/api-route-patch',
         },
       ],
@@ -1132,55 +1161,51 @@ const fullNav: FullNav = {
       title: 'Collections',
       links: [
         {
-          title: 'collection()',
-          href: '/reference/go/v0/collection/collection',
-        },
-        {
-          title: 'collection.collection()',
+          title: 'Collection.Collection()',
           href: '/reference/go/v0/collection/collection-collection',
         },
         {
-          title: 'collection.query()',
+          title: 'Collection.Query()',
           href: '/reference/go/v0/collection/collection-query',
         },
         {
-          title: 'collection.query.where()',
+          title: 'Collection.Query.Where()',
           href: '/reference/go/v0/collection/collection-query-where',
         },
         {
-          title: 'collection.query.limit()',
+          title: 'Collection.Query.Limit()',
           href: '/reference/go/v0/collection/collection-query-limit',
         },
         {
-          title: 'collection.query.pagingFrom()',
+          title: 'Collection.Query.FromPagingToken()',
           href: '/reference/go/v0/collection/collection-query-pagingfrom',
         },
         {
-          title: 'collection.query.fetch()',
+          title: 'Collection.Query.Fetch()',
           href: '/reference/go/v0/collection/collection-query-fetch',
         },
         {
-          title: 'collection.query.stream()',
+          title: 'Collection.Query.Stream()',
           href: '/reference/go/v0/collection/collection-query-stream',
         },
         {
-          title: 'collection.doc()',
+          title: 'Collection.Doc()',
           href: '/reference/go/v0/collection/collection-doc',
         },
         {
-          title: 'collection.doc.get()',
+          title: 'Collection.Doc.Get()',
           href: '/reference/go/v0/collection/collection-doc-get',
         },
         {
-          title: 'collection.doc.set()',
+          title: 'Collection.Doc.Set()',
           href: '/reference/go/v0/collection/collection-doc-set',
         },
         {
-          title: 'collection.doc.delete()',
+          title: 'Collection.Doc.Delete()',
           href: '/reference/go/v0/collection/collection-doc-delete',
         },
         {
-          title: 'collection.doc.collection()',
+          title: 'Collection.Doc.Collection()',
           href: '/reference/go/v0/collection/collection-doc-collection',
         },
       ],
@@ -1189,15 +1214,11 @@ const fullNav: FullNav = {
       title: 'Topics',
       links: [
         {
-          title: 'topic()',
-          href: '/reference/go/v0/topic/topic',
-        },
-        {
-          title: 'topic.publish()',
+          title: 'Topic.Publish()',
           href: '/reference/go/v0/topic/topic-publish',
         },
         {
-          title: 'topic.subscribe()',
+          title: 'Topic.Subscribe()',
           href: '/reference/go/v0/topic/topic-subscribe',
         },
       ],
@@ -1206,15 +1227,11 @@ const fullNav: FullNav = {
       title: 'Queues',
       links: [
         {
-          title: 'queue()',
-          href: '/reference/go/v0/queues/queue',
-        },
-        {
-          title: 'queue.send()',
+          title: 'Queue.Send()',
           href: '/reference/go/v0/queues/queue-send',
         },
         {
-          title: 'queue.receive()',
+          title: 'Queue.Receive()',
           href: '/reference/go/v0/queues/queue-receive',
         },
       ],
@@ -1223,23 +1240,19 @@ const fullNav: FullNav = {
       title: 'Secrets',
       links: [
         {
-          title: 'secret()',
-          href: '/reference/go/v0/secrets/secret',
-        },
-        {
-          title: 'secret.put()',
+          title: 'Secret.Put()',
           href: '/reference/go/v0/secrets/secret-put',
         },
         {
-          title: 'secret.version()',
+          title: 'Secret.Version()',
           href: '/reference/go/v0/secrets/secret-version',
         },
         {
-          title: 'secret.latest()',
+          title: 'Secret.Latest()',
           href: '/reference/go/v0/secrets/secret-latest',
         },
         {
-          title: 'secret.version.access()',
+          title: 'Secret.Version.Access()',
           href: '/reference/go/v0/secrets/secret-version-access',
         },
       ],
@@ -1248,39 +1261,35 @@ const fullNav: FullNav = {
       title: 'Storage',
       links: [
         {
-          title: 'bucket()',
-          href: '/reference/go/v0/storage/bucket',
-        },
-        {
-          title: 'bucket.on()',
+          title: 'Bucket.On()',
           href: '/reference/go/v0/storage/bucket-on',
         },
         {
-          title: 'bucket.file()',
+          title: 'Bucket.File()',
           href: '/reference/go/v0/storage/bucket-file',
         },
         {
-          title: 'bucket.files()',
+          title: 'Bucket.Files()',
           href: '/reference/go/v0/storage/bucket-files',
         },
         {
-          title: 'file.read()',
+          title: 'File.Read()',
           href: '/reference/go/v0/storage/bucket-file-read',
         },
         {
-          title: 'file.write()',
+          title: 'File.Write()',
           href: '/reference/go/v0/storage/bucket-file-write',
         },
         {
-          title: 'file.delete()',
+          title: 'File.Delete()',
           href: '/reference/go/v0/storage/bucket-file-delete',
         },
         {
-          title: 'file.getDownloadUrl()',
+          title: 'File.DownloadUrl()',
           href: '/reference/go/v0/storage/bucket-file-downloadurl',
         },
         {
-          title: 'file.getUploadUrl()',
+          title: 'File.UploadUrl()',
           href: '/reference/go/v0/storage/bucket-file-uploadurl',
         },
       ],
@@ -1289,15 +1298,11 @@ const fullNav: FullNav = {
       title: 'Schedules',
       links: [
         {
-          title: 'schedule()',
-          href: '/reference/go/v0/schedule/schedule',
-        },
-        {
-          title: 'schedule.every()',
+          title: 'Schedule.Every()',
           href: '/reference/go/v0/schedule/schedule-every',
         },
         {
-          title: 'schedule.cron()',
+          title: 'Schedule.Cron()',
           href: '/reference/go/v0/schedule/schedule-cron',
         },
       ],

@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Create a reference to a file within a bucket."
 
-# Go - bucket.file()
+# Go - Bucket.File()
 
 Create a reference to a file within a bucket.
 
@@ -9,18 +9,18 @@ Create a reference to a file within a bucket.
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketReading)
+	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
 	if err != nil {
 		return
 	}
 
 	file := bucket.File("cat.png")
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

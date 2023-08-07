@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Gets a reference to a child collection on a document."
 
-# Go - collection.doc.collection()
+# Go - Collection.Doc.Collection()
 
 Gets a reference to a child collection on a document.
 
@@ -9,11 +9,11 @@ Gets a reference to a child collection on a document.
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
 	if err != nil {
 		return
 	}
@@ -23,7 +23,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

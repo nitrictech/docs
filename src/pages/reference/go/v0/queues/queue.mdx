@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Creates a new Queue to send and receive asynchronous tasks."
 
-# Go - queue()
+# Go - NewQueue()
 
 Creates a new Queue to send and receive asynchronous tasks.
 
@@ -9,17 +9,17 @@ Creates a new Queue to send and receive asynchronous tasks.
 import (
   "fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := resources.NewQueue("queue-name").With(resources.QueueSending, resources.QueueReceiving)
+	queue, err := nitric.NewQueue("queue-name").With(nitric.QueueSending, nitric.QueueReceiving)
   if err != nil {
     fmt.Prinln(err)
     return
   }
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -66,17 +66,17 @@ In most instances, code should either send to or receive from a queue, usually n
 import (
   "fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := resources.NewQueue("queue-name").With(resources.QueueSending, resources.QueueReceiving)
+	queue, err := nitric.NewQueue("queue-name").With(nitric.QueueSending, nitric.QueueReceiving)
   if err != nil {
     fmt.Prinln(err)
     return
   }
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -88,17 +88,17 @@ func main() {
 import (
   "fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := resources.NewQueue("queue-name").With(resources.QueueReceiving)
+	queue, err := nitric.NewQueue("queue-name").With(nitric.QueueReceiving)
   if err != nil {
     fmt.Prinln(err)
     return
   }
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

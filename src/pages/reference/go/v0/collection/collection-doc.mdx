@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Get a reference to a document in the collection."
 
-# Go - collection.doc()
+# Go - Collection.Doc()
 
 Get a reference to a document in the collection.
 
@@ -9,18 +9,18 @@ Get a reference to a document in the collection.
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting)
 	if err != nil {
 		return
 	}
 
 	drakeProfileRef := profiles.Doc("Drake Mallard")
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

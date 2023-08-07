@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Subscribe a handler to a topic and receive new events for processing."
 
-# Go - topic.subscribe()
+# Go - Topic.Subscribe()
 
 Subscribe a handler to a topic and receive new events for processing.
 
@@ -10,17 +10,17 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	resources.NewTopic("updates").Subscribe(func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+	nitric.NewTopic("updates").Subscribe(func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
 		fmt.Println("received update")
 
 		return ctx, nil
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -43,17 +43,17 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	resources.NewTopic("updates").Subscribe(func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+	nitric.NewTopic("updates").Subscribe(func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
 		fmt.Println("received update")
 
 		return ctx, nil
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -66,7 +66,7 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func validateUpdate(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
@@ -82,9 +82,9 @@ func handleUpdate(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventCo
 }
 
 func main() {
-	resources.NewTopic("updates").Subscribe(faas.ComposeEventMiddleware(validateUpdate, handleUpdate))
+	nitric.NewTopic("updates").Subscribe(faas.ComposeEventMiddleware(validateUpdate, handleUpdate))
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

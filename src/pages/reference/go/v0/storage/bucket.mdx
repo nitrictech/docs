@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Create a new bucket for storing and retrieving files."
 
-# Go - bucket()
+# Go - NewBucket()
 
 Create a new bucket for storing and retrieving files.
 
@@ -9,16 +9,16 @@ Create a new bucket for storing and retrieving files.
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketWriting, resources.BucketReading, resources.BucketDeleting)
+	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketWriting, nitric.BucketReading, nitric.BucketDeleting)
 	if err != nil {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

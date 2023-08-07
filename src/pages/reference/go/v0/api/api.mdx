@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Create APIs with the Nitric Go SDK"
 
-# Go - api()
+# Go - NewApi()
 
 Creates a new HTTP API.
 
@@ -9,16 +9,16 @@ Creates a new HTTP API.
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := resources.NewApi("public")
+	api, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -106,16 +106,16 @@ func main() {
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := resources.NewApi("public")
+	api, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -128,7 +128,7 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
@@ -137,12 +137,12 @@ func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpCon
 }
 
 func main() {
-	api, err := resources.NewApi("private", resources.WithMiddleware(authMiddleware))
+	api, err := nitric.NewApi("private", nitric.WithMiddleware(authMiddleware))
 	if err != nil {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -169,16 +169,16 @@ If you need to put all the routes in your api below a shared base path, you can 
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	v1Api, err := resources.NewApi("public", resources.WithPath("/api/v1/"))
+	v1Api, err := nitric.NewApi("public", nitric.WithPath("/api/v1/"))
 	if err != nil {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -190,19 +190,19 @@ func main() {
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	secureApi, err := resources.NewApi(
+	secureApi, err := nitric.NewApi(
 		"secure",
 		// define a security definition called 'user'
-		resources.WithSecurityJwtRule("user", resources.JwtSecurityRule{
+		nitric.WithSecurityJwtRule("user", nitric.JwtSecurityRule{
 			Issuer: "https://example-issuer.com",
 			Audiences: []string{ "YOUR-AUDIENCES" },
 		}),
 		// You can optionally apply security rules to the entire API
-		resources.WithSecurity(
+		nitric.WithSecurity(
 			// apply the user security definition to the whole API
 			"user",
 			// Optionally apply required scopes to this api
@@ -214,7 +214,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

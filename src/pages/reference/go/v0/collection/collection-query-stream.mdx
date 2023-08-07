@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Process query results as a stream"
 
-# Go - collection.query.stream()
+# Go - Collection.Query.Stream()
 
 Process query results as a stream.
 
@@ -10,11 +10,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
 	if err != nil {
 		return
 	}
@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -47,11 +47,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
 	if err != nil {
 		return
 	}
@@ -71,7 +71,7 @@ func main() {
 		fmt.Println(res.Content())
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

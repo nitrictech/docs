@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Fetch paged results from a query."
 
-# Go - collection.query.fetch()
+# Go - Collection.Query.Fetch()
 
 Retrieve a page of results for a query. This is an alternative to [Collection.Query.Stream()](./collection-query-stream)
 
@@ -10,11 +10,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
 	if err != nil {
 		return
 	}
@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -47,11 +47,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
 	if err != nil {
 		return
 	}
@@ -61,7 +61,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -72,11 +72,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
 	if err != nil {
 		return
 	}
@@ -104,7 +104,7 @@ func main() {
 		}
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

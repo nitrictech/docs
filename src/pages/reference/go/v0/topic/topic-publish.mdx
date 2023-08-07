@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Publish new events to the topic."
 
-# Go - topic.publish()
+# Go - Topic.Publish()
 
 Publish an event (push based message) to a topic.
 
@@ -11,11 +11,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/api/events"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	updates, err := resources.NewTopic("updates").With(resources.TopicPublishing)
+	updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
 	if err != nil {
 		fmt.Println(err)
 
@@ -28,7 +28,7 @@ func main() {
 		},
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -71,11 +71,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/api/events"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	updates, err := resources.NewTopic("updates").With(resources.TopicPublishing)
+	updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
 	if err != nil {
 		fmt.Println(err)
 
@@ -87,7 +87,7 @@ func main() {
 			"something": "amazing happened",
 		},
 	})
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -104,11 +104,11 @@ import (
 	"time"
 
 	"github.com/nitrictech/go-sdk/api/events"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	updates, err := resources.NewTopic("updates").With(resources.TopicPublishing)
+	updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
 	if err != nil {
 		fmt.Println(err)
 
@@ -121,7 +121,7 @@ func main() {
 		},
 	}, events.WithDelay(time.Hour))
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

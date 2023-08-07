@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Get a list of file references for files that exist in the bucket."
 
-# Go - bucket.files()
+# Go - Bucket.Files()
 
 Get a list of file references for files that exist in the bucket.
 
@@ -10,11 +10,11 @@ import (
   "context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketReading)
+	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
 	if err != nil {
 		return
 	}
@@ -24,7 +24,7 @@ func main() {
     return
   }
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -47,11 +47,11 @@ import (
   "context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketReading)
+	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
 	if err != nil {
 		return
 	}
@@ -68,7 +68,7 @@ func main() {
     file.Delete(ctx)
   }
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

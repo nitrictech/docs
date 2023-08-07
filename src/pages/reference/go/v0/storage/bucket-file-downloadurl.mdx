@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Get a download url for a file from a bucket."
 
-# Go - bucket.file.getDownloadUrl()
+# Go - Bucket.File.DownloadUrl()
 
 Create a download url for a file within a bucket.
 
@@ -10,11 +10,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketReading)
+	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
 	if err != nil {
 		return
 	}
@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -50,11 +50,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketReading)
+	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -78,16 +78,16 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  api, err := resources.NewApi("main")
+  api, err := nitric.NewApi("main")
 	if err != nil {
 		return
 	}
 
-	bucket, err := resources.NewBucket("images").With(resources.BucketReading)
+	bucket, err := nitric.NewBucket("images").With(nitric.BucketReading)
 	if err != nil {
 		return
 	}
@@ -106,7 +106,7 @@ func main() {
 		return ctx, nil
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

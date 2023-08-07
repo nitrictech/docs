@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Creates a new route (path) within an API."
 
-# Go - api.route()
+# Go - Api.Route()
 
 Creates a new route (path) within an API.
 
@@ -10,18 +10,18 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := resources.NewApi("public")
+	api, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
 
 	route := api.NewRoute("/hello")
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -54,18 +54,18 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := resources.NewApi("public")
+	api, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
 
 	route := api.NewRoute("/hello")
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -82,11 +82,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := resources.NewApi("public")
+	api, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
@@ -94,7 +94,7 @@ func main() {
   // Define route with customerId param
 	route := api.NewRoute("/customers/:customerId")
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -107,7 +107,7 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
@@ -116,14 +116,14 @@ func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpCon
 }
 
 func main() {
-	api, err := resources.NewApi("public")
+	api, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
 
 	route := api.NewRoute("/hello", authMiddleware)
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

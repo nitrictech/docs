@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Send tasks to a queue."
 
-# Go - queue.send()
+# Go - Queue.Send()
 
 Send tasks to a queue.
 
@@ -11,11 +11,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/api/queues"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := resources.NewQueue("queue-name").With(resources.QueueSending)
+	queue, err := nitric.NewQueue("queue-name").With(nitric.QueueSending)
 	if err != nil {
 		return
 	}
@@ -33,7 +33,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -60,11 +60,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/api/queues"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := resources.NewQueue("blah").With(resources.QueueSending)
+	queue, err := nitric.NewQueue("blah").With(nitric.QueueSending)
 	if err != nil {
 		return
 	}
@@ -82,7 +82,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

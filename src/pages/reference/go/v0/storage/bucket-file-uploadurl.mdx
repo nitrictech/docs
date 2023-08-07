@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Get an upload URL for a file from a bucket."
 
-# Go - bucket.file.getUploadUrl()
+# Go - Bucket.File.UploadUrl()
 
 Create an upload URL for a file within a bucket.
 
@@ -10,11 +10,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketWriting)
+	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketWriting)
 	if err != nil {
 		return
 	}
@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -50,11 +50,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := resources.NewBucket("bucket-name").With(resources.BucketWriting)
+	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketWriting)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

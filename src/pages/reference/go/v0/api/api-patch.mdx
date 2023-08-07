@@ -1,13 +1,13 @@
 export const description =
   "Reference for Nitric's Go library - Register an API route and set a specific HTTP PATCH handler on that route."
 
-# Go - api.patch()
+# Go - Api.Patch()
 
 Register an API route and set a specific HTTP PATCH handler on that route.
 
 <Note>
   This method is a convenient short version of
-  [api().route().patch()](./api-route-patch)
+  [Api.Route.Patch()](./api-route-patch)
 </Note>
 
 ```go
@@ -15,11 +15,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := resources.NewApi("public")
+	api, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
@@ -29,7 +29,7 @@ func main() {
 		return next(ctx)
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -100,17 +100,17 @@ api.Patch("/hello/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*f
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	secureApi, err := resources.NewApi(
+	secureApi, err := nitric.NewApi(
 		"secure",
-		resources.WithSecurityJwtRule("user", resources.JwtSecurityRule{
+		nitric.WithSecurityJwtRule("user", nitric.JwtSecurityRule{
 			Issuer: "https://example-issuer.com",
 			Audiences: []string{ "YOUR-AUDIENCES" },
 		}),
-		resources.WithSecurity("user", []string{"products:read"}),
+		nitric.WithSecurity("user", []string{"products:read"}),
 	)
 	if err != nil {
 		return
@@ -120,9 +120,9 @@ func main() {
   api.Patch("/public", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
     // Handle request
     return next(ctx)
-  }, resources.WithNoMethodSecurity())
+  }, nitric.WithNoMethodSecurity())
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -137,7 +137,7 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
@@ -152,14 +152,14 @@ func handleRequest(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpCont
 }
 
 func main() {
-	api, err := resources.NewApi("private")
+	api, err := nitric.NewApi("private")
 	if err != nil {
 		return
 	}
 
   api.Patch("/hello/:name", faas.ComposeHttpMiddleware(authMiddleware, handleRequest))
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -174,11 +174,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := resources.NewApi("public")
+	api, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
@@ -191,7 +191,7 @@ func main() {
 		return next(ctx)
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

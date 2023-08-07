@@ -103,21 +103,21 @@ package main
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profilesApi, err := resources.NewApi("public")
+	profilesApi, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
 
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading, resources.CollectionWriting)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting)
 	if err != nil {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -320,7 +320,7 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 Define a bucket named `profilesImg` with reading/writing permissions
 
 ```go
-profileImages, err := resources.NewBucket("profileImages").With(resources.BucketReading, resources.BucketWriting)
+profileImages, err := nitric.NewBucket("profileImages").With(nitric.BucketReading, nitric.BucketWriting)
 if err != nil {
   fmt.Println(err)
   return

@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Adds a new where clause to a query, which filters the data returned."
 
-# Go - collection.query.where()
+# Go - Collection.Query.Where()
 
 Adds a new where clause to a query, which filters the data returned.
 
@@ -10,11 +10,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/api/documents"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
 	if err != nil {
 		return
 	}
@@ -23,7 +23,7 @@ func main() {
 		documents.Condition("name").StartsWith(documents.StringValue("T")),
 	)
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -50,11 +50,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/api/documents"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
 	if err != nil {
 		return
 	}
@@ -63,7 +63,7 @@ func main() {
 		documents.Condition("firstName").Eq(documents.StringValue("Drake")),
 	)
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -76,11 +76,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/api/documents"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewCollection("profiles").With(resources.CollectionReading)
+	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
 	if err != nil {
 		return
 	}
@@ -90,7 +90,7 @@ func main() {
 		documents.Condition("age").Gt(documents.DoubleValue(21)),
 	)
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

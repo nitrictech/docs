@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Receive tasks from a queue."
 
-# Go - queue.receive()
+# Go - Queue.Receive()
 
 Receive tasks from a queue.
 
@@ -10,11 +10,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := resources.NewQueue("queue-name").With(resources.QueueReceiving)
+	queue, err := nitric.NewQueue("queue-name").With(nitric.QueueReceiving)
 	if err != nil {
 		return
 	}
@@ -33,7 +33,7 @@ func main() {
 		t.Complete(ctx)
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -84,11 +84,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := resources.NewQueue("queue-name").With(resources.QueueReceiving)
+	queue, err := nitric.NewQueue("queue-name").With(nitric.QueueReceiving)
 	if err != nil {
 		return
 	}
@@ -107,7 +107,7 @@ func main() {
 		t.Complete(ctx)
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
