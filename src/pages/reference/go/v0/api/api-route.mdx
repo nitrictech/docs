@@ -91,7 +91,7 @@ func main() {
 		return
 	}
 
-  // Define route with customerId param
+	// Define route with customerId param
 	route := api.NewRoute("/customers/:customerId")
 
 	if err := nitric.Run(); err != nil {

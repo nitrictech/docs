@@ -78,8 +78,8 @@ func main() {
 
 ```go
 api.Delete("/hello", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-  ctx.Response.Body = []byte("Hello World")
-  return next(ctx)
+	ctx.Response.Body = []byte("Hello World")
+	return next(ctx)
 })
 ```
 
@@ -87,9 +87,9 @@ api.Delete("/hello", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.H
 
 ```go
 api.Delete("/hello/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-  name := ctx.Request.PathParams()["name"]
-  ctx.Response.Body = []byte("Hello " + name)
-  return next(ctx)
+	name := ctx.Request.PathParams()["name"]
+	ctx.Response.Body = []byte("Hello " + name)
+	return next(ctx)
 })
 ```
 
@@ -115,11 +115,11 @@ func main() {
 		return
 	}
 
-  // Override the APIs security requirements with `WithNoMethodSecurity()`
-  api.Delete("/public", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-    // Handle request
-    return next(ctx)
-  }, nitric.WithNoMethodSecurity())
+	// Override the APIs security requirements with `WithNoMethodSecurity()`
+	api.Delete("/public", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+		// Handle request
+		return next(ctx)
+	}, nitric.WithNoMethodSecurity())
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
@@ -145,9 +145,9 @@ func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpCon
 }
 
 func handleRequest(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-  name := ctx.Request.PathParams()["name"]
-  ctx.Response.Body = []byte("Hello " + name)
-  return next(ctx)
+	name := ctx.Request.PathParams()["name"]
+	ctx.Response.Body = []byte("Hello " + name)
+	return next(ctx)
 }
 
 func main() {
@@ -156,7 +156,7 @@ func main() {
 		return
 	}
 
-  api.Delete("/hello/:name", faas.ComposeHttpMiddleware(authMiddleware, handleRequest))
+	api.Delete("/hello/:name", faas.ComposeHttpMiddleware(authMiddleware, handleRequest))
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)

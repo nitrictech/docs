@@ -104,11 +104,11 @@ func main() {
 		return
 	}
 
-  // Override the APIs security requirements with `WithNoMethodSecurity()`
-  api.NewRoute("/public").Get(func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-    // Handle request
-    return next(ctx)
-  }, nitric.WithNoMethodSecurity())
+	// Override the APIs security requirements with `WithNoMethodSecurity()`
+	api.NewRoute("/public").Get(func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+	  // Handle request
+	  return next(ctx)
+	}, nitric.WithNoMethodSecurity())
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
@@ -134,9 +134,9 @@ func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpCon
 }
 
 func handleRequest(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-  name := ctx.Request.PathParams()["name"]
-  ctx.Response.Body = []byte("Hello " + name)
-  return next(ctx)
+	name := ctx.Request.PathParams()["name"]
+	ctx.Response.Body = []byte("Hello " + name)
+	return next(ctx)
 }
 
 func main() {
@@ -145,7 +145,7 @@ func main() {
 		return
 	}
 
-  api.NewRoute("/hello/:name").Get(faas.ComposeHttpMiddleware(authMiddleware, handleRequest))
+	api.NewRoute("/hello/:name").Get(faas.ComposeHttpMiddleware(authMiddleware, handleRequest))
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
