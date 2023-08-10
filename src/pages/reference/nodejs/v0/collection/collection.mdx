@@ -8,7 +8,7 @@ Creates a new Collection.
 ```javascript
 import { collection } from '@nitric/sdk'
 
-const profiles = collection('profiles')
+const profiles = collection('profiles').for('reading', 'writing', 'deleting')
 ```
 
 ## Parameters
@@ -53,5 +53,5 @@ This permission allows your code to delete documents from the collection.
 ```javascript
 import { collection } from '@nitric/sdk'
 
-const profiles = collection('profiles')
+const profiles = collection('profiles').for('reading', 'writing', 'deleting')
 ```

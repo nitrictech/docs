@@ -54,8 +54,30 @@ const userCreatedTopic = topic('user-created').for('publishing')
 
 ```python
 from nitric.resources import topic
+from nitric.application import Nitric
 
 user_created_topic = topic("user-created").allow("publishing")
+
+Nitric.run()
+```
+
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	updates, err := resources.NewTopic("updates").With(resources.TopicPublishing)
+  if err != nil {
+    return
+  }
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -82,6 +104,7 @@ await userCreatedTopic.publish({
 
 ```python
 from nitric.resources import topic
+from nitric.application import Nitric
 
 user_created_topic = topic("user-created").allow("publishing")
 
@@ -95,6 +118,33 @@ await user_created_topic.publish({
 		"email": "new.user@example.com"
 	}
 })
+
+Nitric.run()
+```
+
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	updates, err := resources.NewTopic("updates").With(resources.TopicPublishing)
+	if err != nil {
+    return
+  }
+
+  updates.Publish(context.TODO(), &events.Event{
+		Payload: map[string]interface{}{
+			"email": "new.user@example.com",
+		},
+	})
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -122,6 +172,7 @@ userCreatedTopic.subscribe(async (ctx) => {
 
 ```python
 from nitric.resources import topic
+from nitric.application import Nitric
 
 user_created_topic = topic("user-created")
 
@@ -130,6 +181,32 @@ async def updates_sub(ctx):
 	email = ctx.req.json['email']
 
 	send_welcome_email(email)
+
+Nitric.run()
+```
+
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+  updates := resources.NewTopic("updates")
+
+	updates.Subscribe(func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+		email := ctx.Request.Data()
+
+		err := sendWelcomeEmail(email)
+
+		return ctx, err
+	})
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -156,12 +233,41 @@ loopTopic.subscribe(async (ctx) => {
 ```python
 # this is invalid
 from nitric.resources import topic
+from nitric.application import Nitric
 
 loop_topic = topic("infinite").allow("publishing")
 
 @loop_topic.subscribe()
 async def danger(ctx):
 	await loop_topic.publish(dict())
+
+Nitric.run()
+```
+
+```go
+// this is invalid
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+  loopTopic, err := resources.NewTopic("updates").With(resources.TopicPublishing)
+  if err != nil {
+    return
+  }
+
+	loopTopic.Subscribe(func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+		err := loopTopic.Publish(ctx.Request.Context(), map[string]interface{}{})
+
+		return ctx, err
+	})
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -207,6 +313,7 @@ updates.subscribe((ctx) => {
 
 ```python
 from nitric.resources import topic
+from nitric.application import Nitric
 from common import is_duplicate
 
 updates = topic("updates")
@@ -218,6 +325,32 @@ async def process_update(ctx):
 
 	# not a duplicate, process the event
 	# ...
+
+Nitric.run()
+```
+
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+  updates := resources.NewTopic("updates")
+
+	updates.Subscribe(func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+		if isDuplicate(ctx.Request) {
+      return ctx, nil
+    }
+    // Not a duplicate, process the event
+    // ...
+	})
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -276,6 +409,26 @@ from nitric.resources import queue
 transaction_queue = queue("transactions").allow("sending", "receiving")
 ```
 
+```go
+import (
+  "fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	transactionQueue, err := resources.NewQueue("transactions").With(resources.QueueSending, resources.QueueReceiving)
+  if err != nil {
+    fmt.Prinln(err)
+    return
+  }
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 </CodeGroup>
 
 ### Sending Tasks
@@ -315,6 +468,38 @@ await transaction_queue.send({
 })
 ```
 
+```go
+import (
+  "fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+  "github.com/nitrictech/go-sdk/api/queues"
+)
+
+func main() {
+	transactionQueue, err := resources.NewQueue("transactions").With(resources.QueueSending)
+  if err != nil {
+    fmt.Prinln(err)
+    return
+  }
+
+  _, err := queue.Send(context.TODO(), []*queues.Task{
+		{
+			Payload: map[string]interface{}{
+				"message": "hello world",
+			},
+		},
+	})
+	if err != nil {
+		return
+	}
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 </CodeGroup>
 
 Tasks can also be sent in batches by providing an array of tasks.
@@ -342,29 +527,55 @@ await transactionQueue.send([
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 
 transaction_queue = queue("transactions").allow("sending")
 
-# Both will send the same events
-await transaction_queue.send([{
+await transaction_queue.send([
 	{
 		"message": "batch task 1"
 	}, {
 		"message": "batch task 2"
 	}
-}])
-
-await transaction_queue.send([
-	{
-		"payload": {
-			"message": "hello world"
-		}
-	}, {
-		"payload": {
-			"message": "hello world"
-		}
-	}
 ])
+
+Nitric.run()
+```
+
+```go
+import (
+  "fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+  "github.com/nitrictech/go-sdk/api/queues"
+)
+
+func main() {
+	transactionQueue, err := resources.NewQueue("transactions").With(resources.QueueSending)
+  if err != nil {
+    return
+  }
+
+  _, err := queue.Send(context.TODO(), []*queues.Task{
+		{
+			Payload: map[string]interface{}{
+				"message": "batch task 1",
+			},
+		},
+    {
+			Payload: map[string]interface{}{
+				"message": "batch task 2",
+			},
+		}
+	})
+	if err != nil {
+		return
+	}
+
+  if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -412,6 +623,40 @@ for task in tasks:
 
 	# acknowledge when the task is complete
 	await task.complete()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	transactionQueue, err := resources.NewQueue("queue-name").With(resources.QueueReceiving)
+	if err != nil {
+		return
+	}
+
+	ctx := context.TODO()
+
+  // Receive up to 10 tasks from the queue
+	tasks, err := queue.Receive(ctx, 10)
+	if err != nil {
+		return
+	}
+
+	for _, t := range tasks {
+		fmt.Println(t.Task().ID)
+
+		t.Complete(ctx)
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>

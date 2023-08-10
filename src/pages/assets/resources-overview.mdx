@@ -35,6 +35,7 @@ api('public').get('/files/:name', (ctx) => {
 
 ```python
 from nitric.resources import api, bucket
+from nitric.application import Nitric
 
 public_api = api('public')
 
@@ -45,6 +46,39 @@ files = bucket('files').allow('reading')
 async def get_file(ctx):
   # ❌ This declaration will not work, as this is only called at runtime.
   bad_bucket = bucket('wont-work').allow('writing')
+
+Nitric.run()
+```
+
+```go
+import (
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	publicApi, err := resources.NewApi("public")
+	if err != nil {
+		return
+	}
+
+  // ✅ This declaration will work
+  files, err := resources.NewBucket("files").With(resources.BucketReading)
+  if err != nil {
+    return
+  }
+
+  profiles.Get("/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+    // ❌ This declaration will not work, as this is only called at runtime.
+    badBucket, err := resources.NewBucket("wont-work").With(resources.BucketWriting)
+
+    return ctx, err
+  })
+
+  if err := resources.Run(); err != nil {
+    fmt.Println(err)
+  }
+}
 ```
 
 </CodeGroup>
@@ -157,28 +191,133 @@ publicApi.get('bucket-two/file/:name', (ctx) => {
 ```python
 # resources.py
 from nitric.resources import api, bucket
+from nitric.application import Nitric
 
 public_api = api('public')
 
-bucket_one = bucket('bucket-one').allow('reading');
-bucket_two = bucket('bucket-two').allow('reading');
+bucket_one = bucket('bucket-one').allow('reading')
+bucket_two = bucket('bucket-two').allow('reading')
 
 
 # functions/function-one.py
 from resources import public_api, bucket_one
+from nitric.application import Nitric
 
 @public_api.get("bucket-one/file/:name")
 async def get_file(ctx):
   pass # do something with the file
 
+Nitric.run()
+
 
 # functions/function-two.py
 from resources import public_api, bucket_two
+from nitric.application import Nitric
 
 @public_api.get("bucket-two/file/:name")
 async def get_file(ctx):
   pass # do something with the file
 
+Nitric.run()
+```
+
+```go
+// resources.go
+package resources
+
+import (
+	"github.com/nitrictech/go-sdk/api/storage"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+type Resources struct {
+	PublicApi resources.Api
+	BucketOne storage.Bucket
+	BucketTwo storage.Bucket
+}
+
+var Manager *Resources
+
+func NewManager() (*Resources, error) {
+	if Manager == nil {
+		api, err := nitric.NewApi("public")
+		if err != nil {
+			return nil, err
+		}
+
+		bucketOne, err := nitric.NewBucket("bucket-one").With(nitric.BucketReading)
+		if err != nil {
+			return nil, err
+		}
+
+		bucketTwo, err := nitric.NewBucket("bucket-two").With(nitric.BucketReading)
+		if err != nil {
+			return nil, err
+		}
+
+		Manager = &Resources{
+			PublicApi: api,
+			BucketOne: bucketOne,
+			BucketTwo: bucketTwo,
+		}
+	}
+
+	return Manager, nil
+}
+
+
+// functions/functionone.go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/nitric"
+
+	"demoproject"
+)
+
+func main() {
+	manager, err := resources.NewManager()
+
+  manager.PublicApi.Get("/bucket-one/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+    file := manager.BucketOne.File(ctx.Request.PathParams()["name"])
+
+    return ctx, err
+  })
+
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
+}
+
+
+// functions/functiontwo.go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/nitric"
+
+	"demoproject"
+)
+
+func main() {
+	manager, err := resources.NewManager()
+
+  manager.PublicApi.Get("/bucket-one/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+    file := manager.BucketTwo.File(ctx.Request.PathParams()["name"])
+
+    return ctx, err
+  })
+
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
+}
 ```
 
 </CodeGroup>

@@ -5,8 +5,8 @@ export const description = 'Connect and manage websockets with Nitric'
 Nitric provides support for serverless websockets. This feature allows you to connect client applications to your Nitric functions using websocket gateways such as AWS APIGateway.
 
 <Note>
-  The Websocket resource is currently only supported for Node.js projects. If
-  you would like support for another language let us know:
+  The Websocket resource is currently only supported for Node.js and Go
+  projects. If you would like support for another language let us know:
   https://github.com/nitrictech/nitric/issues
 </Note>
 
@@ -29,6 +29,8 @@ preview-features:
 
 There are three events that must be defined to deploy a valid websocket implementation. These are `connect`, `disconnect` and `message`.
 
+<CodeGroup>
+
 ```javascript
 import { websocket } from '@nitric/sdk'
 
@@ -47,10 +49,49 @@ socket.on('message', async (ctx) => {
 })
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	ws, err := nitric.NewWebsocket("public")
+	if err != nil {
+		return
+	}
+
+	ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+		// handle connections
+		return next(ctx)
+	})
+
+  ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+		// handle disconnections
+		return next(ctx)
+	})
+
+  ws.On(faas.WebsocketMessage, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+		// handle messages
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+</CodeGroup>
+
 ## Managing connections
 
 Nitric connects your functions to a websocket interface, but it is up to you to manage the connections. Nitric provides `collections`
 out of the box that can be used to do this or you can use any other store or database you like.
+
+<CodeGroup>
 
 ```javascript
 import { websocket, collection } from '@nitric/sdk'
@@ -74,7 +115,58 @@ socket.on('disconnect', async (ctx) => {
 })
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	ws, err := nitric.NewWebsocket("public")
+	if err != nil {
+		return
+	}
+
+	connections, err := nitric.NewCollection("connections").With(nitric.CollectionEverything...)
+	if err != nil {
+		return
+	}
+
+	ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+		err := connections.Doc(ctx.Request.ConnectionID()).Set(ctx.Request.Context(), map[string]interface{}{
+			// store any metadata related to the connection here
+			"connectionId": ctx.Request.ConnectionID(),
+		})
+		if err != nil {
+			return ctx, err
+		}
+
+		return next(ctx)
+	})
+
+	ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+		// remove the connection from the collection
+		err := connections.Doc(ctx.Request.ConnectionID()).Delete(ctx.Request.Context())
+		if err != nil {
+			return ctx, err
+		}
+
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+</CodeGroup>
+
 ## Sending Messages
+
+<CodeGroup>
 
 ```typescript
 import { websocket, collection } from '@nitric/sdk'
@@ -117,6 +209,82 @@ socket.on('message', async (ctx) => {
   await broadcast(ctx.req.data)
 })
 ```
+
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	ws, err := nitric.NewWebsocket("public")
+	if err != nil {
+		return
+	}
+
+	connections, err := nitric.NewCollection("connections").With(nitric.CollectionEverything...)
+	if err != nil {
+		return
+	}
+
+	// Register a new connection on connect
+	ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+		err := connections.Doc(ctx.Request.ConnectionID()).Set(ctx.Request.Context(), map[string]interface{}{
+			"connectionId": ctx.Request.ConnectionID(),
+		})
+		if err != nil {
+			return ctx, err
+		}
+
+		return next(ctx)
+	})
+
+	// Remove a registered connection on disconnect
+	ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+		err := connections.Doc(ctx.Request.ConnectionID()).Delete(ctx.Request.Context())
+		if err != nil {
+			return ctx, err
+		}
+
+		return next(ctx)
+	})
+
+	// Broadcast message to all the registered websocket connections
+	ws.On(faas.WebsocketMessage, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+		connectionStream, err := connections.Query().Stream(ctx.Request.Context())
+		if err != nil {
+			return ctx, err
+		}
+
+		for {
+			res, err := connectionStream.Next()
+			if err != nil {
+				break // reached the end of the documents
+			}
+
+			connectionId, ok := res.Content()["connectionId"].(string)
+			if !ok {
+				continue
+			}
+
+			err = ws.Send(ctx.Request.Context(), connectionId, ctx.Request.Data())
+			if err != nil {
+				return ctx, err
+			}
+		}
+
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+</CodeGroup>
 
 <Note>
   Do not send messages to a connection during it's `connect` callback, if you

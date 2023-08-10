@@ -50,6 +50,25 @@ from nitric.resources import bucket
 profiles = bucket('profiles').allow('reading', 'writing', 'deleting')
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	profiles, err := resources.NewBucket("profiles").With(resources.BucketWriting, resources.BucketReading, resources.BucketDeleting)
+	if err != nil {
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 </CodeGroup>
 
 ## File references
@@ -80,6 +99,27 @@ profiles = bucket("profiles").allow("reading")
 profile_picture = profiles.file("users/bruce-wayne/profile.png")
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	profiles, err := resources.NewBucket("profiles").With(resources.BucketReading)
+	if err != nil {
+		return
+	}
+
+	profilePicture := profiles.File("users/bruce-wayne/profile.png")
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 </CodeGroup>
 
 To list all files in a bucket, use the `files()` method on the bucket reference. The function must have `read` permissions to list the files within a bucket.
@@ -102,6 +142,7 @@ files.forEach((file) => {
 
 ```python
 from nitric.resources import bucket
+from nitric.application import Nitric
 
 profiles = bucket("profiles").allow("reading")
 
@@ -109,6 +150,37 @@ files = await profiles.files()
 
 for file in files:
 	print(file.name)
+
+Nitric.run()
+```
+
+```go
+import (
+  "context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	profiles, err := resources.NewBucket("profiles").With(resources.BucketReading)
+	if err != nil {
+		return
+	}
+
+	files, err := profiles.Files(context.TODO())
+  if err != nil {
+    return
+  }
+
+  for _, file := range files {
+    fmt.Println(file.Name)
+  }
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -134,10 +206,38 @@ const image = await profiles.file('users/bruce-wayne/profile.png').read()
 
 ```python
 from nitric.resources import bucket
+from nitric.application import Nitric
 
 profiles = bucket("profiles").allow("reading")
 
 image = await profile.file("users/bruce-wayne/profile.png").read()
+
+Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	profiles, err := resources.NewBucket("profiles").With(resources.BucketReading)
+	if err != nil {
+		return
+	}
+
+	image, err := profiles.File("users/bruce-wayne/profile.png").Read(context.TODO())
+	if err != nil {
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -165,12 +265,42 @@ await profiles.file('users/bruce-wayne/profile.png').write(profileImage)
 
 ```python
 from nitric.resources import bucket
+from nitric.application import Nitric
 
 profiles = bucket("profiles").allow("writing")
 
 profileImage = b"image data"
 
-await profile.file("users/bruce-wayne/profile.png").write(profileImage)
+await profiles.file("users/bruce-wayne/profile.png").write(profileImage)
+
+Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	profiles, err := resources.NewBucket("profiles").With(resources.BucketWriting)
+	if err != nil {
+		return
+	}
+
+  profileImage := []byte("image data")
+
+	err := profiles.File("users/bruce-wayne/profile.png").Write(context.TODO(), profileImage)
+	if err != nil {
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -191,10 +321,38 @@ await profiles.file('users/bruce-wayne/profile.png').delete()
 
 ```python
 from nitric.resources import bucket
+from nitric.application import Nitric
 
 profiles = bucket("profiles").allow("deleting")
 
 await profile.file("users/bruce-wayne/profile.png").delete()
+
+Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	profiles, err := resources.NewBucket("profiles").With(resources.BucketDeleting)
+	if err != nil {
+		return
+	}
+
+	err := profiles.File("users/bruce-wayne/profile.png").Delete(context.TODO())
+	if err != nil {
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -231,12 +389,48 @@ const uploadUrl = await profiles.file('profile.png').getUploadUrl({
 
 ```python
 from nitric.resources import bucket
+from nitric.application import Nitric
 
 profiles = bucket('profiles').allow('reading', 'writing')
 
 download_url = await profiles.file('profile.png').download_url()
 
 upload_url = await profiles.file('profile.png').upload_url()
+
+Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	profiles, err := resources.NewBucket("profiles").With(resources.BucketReading, resources.BucketWriting)
+	if err != nil {
+		return
+	}
+
+  ctx := context.TODO()
+  expiry := 3600
+
+  downloadUrl, err := profiles.file("profile.png").DownloadUrl(ctx, expiry)
+  if err != nil {
+    return
+  }
+
+	uploadUrl, err := profiles.File("profile.png").UploadUrl(ctx, expiry)
+	if err != nil {
+		return
+	}
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -246,6 +440,12 @@ upload_url = await profiles.file('profile.png').upload_url()
 Bucket notifications are functions that subscribe to changes in your bucket's files. You can configure these notifications to trigger specifically when a file is written or deleted. Additionally, you can apply filters based on file prefixes to specify which files should trigger a notification. When the function is triggered, it receives event data that includes details about the changed file, such as whether it was written or deleted, and the file's name.
 
 To illustrate, suppose we want to trigger a function whenever a new profile image is uploaded to a bucket. In this case, we can use the following code snippet:
+
+<Note>
+  Writing/Delete to a bucket from within a bucket notification will trigger the
+  same notification to run again (if it meets the requirement). This will cause
+  an infinite loop, which is highly undesirable for your cloud bill.
+</Note>
 
 <CodeGroup>
 
@@ -262,6 +462,7 @@ profiles.on('write', '/users/images', (ctx) => {
 
 ```python
 from nitric.resources import bucket
+from nitric.application import Nitric
 
 profiles = bucket("profiles")
 
@@ -269,6 +470,33 @@ profiles = bucket("profiles")
 @profiles.on("write", "/users/images")
 async def image_written(ctx):
 	print(f"new profile image for {ctx.req.key} was written")
+
+Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	assets := resources.NewBucket("assets")
+
+  // Filter for 'write' events for files starting with '/users/images'
+	assets.On(faas.WriteNotification, "/users/images", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
+	  fmt.Printf("new profile image for %s was written", ctx.Request.Key())
+
+		return ctx, nil
+	})
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>
@@ -290,6 +518,7 @@ profiles.on('delete', '*', (ctx) => {
 
 ```python
 from nitric.resources import bucket
+from nitric.application import Nitric
 
 profiles = bucket("profiles")
 
@@ -297,6 +526,33 @@ profiles = bucket("profiles")
 @profiles.on("delete", "*")
 async def file_deleted(ctx):
 	print(f"{ctx.req.key} was deleted")
+
+Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/resources"
+)
+
+func main() {
+	assets := resources.NewBucket("assets")
+
+  // Filter for 'delete' events for any file
+	assets.On(faas.DeleteNotification, "*", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
+		fmt.Printf("%s was deleted", ctx.Request.Key())
+
+		return ctx, nil
+	})
+
+	if err := resources.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 </CodeGroup>

@@ -15,6 +15,7 @@ const IGNORED_URLS = [
   'turborepo.org',
   'prisma.io',
   'jestjs.io',
+  'github.com/nitrictech/go-sdk',
   'https://account.region.auth0.com',
   'https://scoop-docs.vercel.app/',
   'https://vercel.com/new/clone?repository-url=https://github.com/nitrictech/nitric-todo&env=API_BASE_URL',
@@ -26,25 +27,24 @@ const isExternalUrl = (url: string) => {
   return !url.includes('localhost')
 }
 
-const req = (
-  url: string,
-  retryCount = 0
-) => {
-  return cy.request({
-    url,
-    followRedirect: false,
-    failOnStatusCode: false,
-    gzip: false,
-  }).then((resp) => {
-    // retry on timeout
-    if (resp.status === 408 && retryCount < 3) {
-      cy.log(`request ${url} timed out, retrying again...`)
-      cy.wait(300)
-      return req(url, retryCount + 1)
-    }
+const req = (url: string, retryCount = 0) => {
+  return cy
+    .request({
+      url,
+      followRedirect: false,
+      failOnStatusCode: false,
+      gzip: false,
+    })
+    .then((resp) => {
+      // retry on timeout
+      if (resp.status === 408 && retryCount < 3) {
+        cy.log(`request ${url} timed out, retrying again...`)
+        cy.wait(300)
+        return req(url, retryCount + 1)
+      }
 
-    return resp
-  })
+      return resp
+    })
 }
 
 describe('Broken links test suite', () => {
@@ -59,16 +59,18 @@ describe('Broken links test suite', () => {
 
       links
         .filter((_i, link) => {
-          return !IGNORED_URLS.some((l) =>
-            //@ts-ignore
-            (link.getAttribute('href') && link.getAttribute('href').includes(l)) ||
-            //@ts-ignore
-            (link.getAttribute('src') && link.getAttribute('src').includes(l))
+          return !IGNORED_URLS.some(
+            (l) =>
+              //@ts-ignore
+              (link.getAttribute('href') &&
+                link.getAttribute('href')?.includes(l)) ||
+              //@ts-ignore
+              (link.getAttribute('src') && link.getAttribute('src').includes(l))
           )
         })
         .each((link) => {
           cy.log(`link: ${link[0].textContent}`)
-          const baseUrl = link.prop('href') || link.prop('src');
+          const baseUrl = link.prop('href') || link.prop('src')
 
           const url = baseUrl.split('#')[0]
 
@@ -96,7 +98,10 @@ describe('Broken links test suite', () => {
                 VISITED_SUCCESSFUL_LINKS[url] = true
               }
 
-              expect(res.status).oneOf(acceptableCodes)
+              expect(res.status).oneOf(
+                acceptableCodes,
+                `${url} returned ${res.status}`
+              )
             })
           }
         })
