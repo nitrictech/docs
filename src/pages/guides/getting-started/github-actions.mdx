@@ -19,6 +19,8 @@ In your project you'll want to create a yaml file which contains your workflow c
 
 It should be placed the folder `.github/workflows`
 
+Double check and update the version of the Nitric CLI if necessary.
+
 ## Full example
 
 ```yaml
@@ -45,7 +47,7 @@ jobs:
       - name: Install Nitric CLI
         uses: nitrictech/setup-nitric@v1
         with:
-          version: 1.2.1
+          version: 1.28.0
       - name: Install dependencies
         uses: pulumi/setup-pulumi@v2
       - name: Checkout project
@@ -140,7 +142,7 @@ This makes it possible for you to run nitric commands e.g. `nitric up -s dev`.
 - name: Install Nitric CLI
   uses: nitrictech/setup-nitric@v1
   with:
-    version: 1.2.1
+    version: 1.28.0
 - name: Install dependencies
   uses: pulumi/setup-pulumi@v2
 ```
