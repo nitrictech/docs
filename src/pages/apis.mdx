@@ -628,3 +628,144 @@ If you're more of a visual learner, below is a video that walks through how to s
     />
   </div>
 </div>
+
+## Serving from multiple files
+
+Nitric APIs are scoped to the project and can be referenced from multiple `handlers`. This allows you to choose the granularity of functions that suites your project. For small projects you might have a single handler that serves all routes, while in larger projects multiple handlers might combine to serve paths and methods for your API.
+
+### Using the same resource name
+
+Since resource names are unique across each Nitric project, you can access a resource in multiple locations by simply reusing it's name. Here's an example of handlers in different files serving different paths on the same API.
+
+<CodeGroup>
+
+```javascript {{ tag: 'functions/one.js' }}
+import { api } from '@nitric/sdk'
+
+const accountsApi = api('accounts')
+
+accountsApi.get('/users/:id', async () => {
+  // your logic here
+})
+```
+
+```python {{ tag: 'functions/one.py' }}
+from nitric.application import Nitric
+from nitric.faas import HttpContext
+from nitric.resources import api
+
+accounts_api = api('accounts')
+
+@accounts_api.get("/users/:id")
+async def get_user(ctx: HttpContext):
+    pass # your logic here
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```javascript {{ tag: 'functions/two.js' }}
+import { api } from '@nitric/sdk'
+
+const accountsApi = api('accounts')
+
+accountsApi.get('/orgs/:id', async () => {
+  // your logic here
+})
+```
+
+```python {{ tag: 'functions/two.py' }}
+from nitric.application import Nitric
+from nitric.faas import HttpContext
+from nitric.resources import api
+
+accounts_api = api('accounts')
+
+@accounts_api.get("/orgs/:id")
+async def get_org(ctx: HttpContext):
+    pass # your logic here
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+<Note>
+  Calling `api()` multiple times with the same name returns the same API
+  resource each time, allowing it to be referenced in multiple handlers.
+</Note>
+
+### Importing an existing resource
+
+While reusing a name is useful, it can lead to errors due to typos or when the configuration of the resource is complex. For this reason it's often preferable to declare the resource in a shared location and import it into the handlers as needed.
+
+Here is the same example enhanced to import a common API resource.
+
+<CodeGroup>
+
+```javascript {{ tag: 'resources/index.js' }}
+import { api } from '@nitric/sdk'
+
+export const accountsApi = api('accounts')
+```
+
+```python {{ tag: 'common/resources.py' }}
+from nitric.resources import api
+
+accounts_api = api('accounts')
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```javascript {{ tag: 'functions/one.js' }}
+import { accountsApi } from '../resources'
+
+accountsApi.get('/users/:id', async () => {
+  // your logic here
+})
+```
+
+```python {{ tag: 'functions/one.py' }}
+from nitric.application import Nitric
+from nitric.faas import HttpContext
+from common.resources import accounts_api
+
+
+@accounts_api.get("/users/:id")
+async def get_user(ctx: HttpContext):
+    pass # your logic here
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+<CodeGroup>
+
+```javascript {{ tag: 'functions/function-two.js' }}
+import { accountsApi } from '../resources'
+
+accountsApi.get('/orgs/:id', async () => {
+  // your logic here
+})
+```
+
+```python {{ tag: 'functions/two.js' }}
+from nitric.application import Nitric
+from nitric.faas import HttpContext
+from common.resources import accounts_api
+
+
+@accounts_api.get("/orgs/:id")
+async def get_org(ctx: HttpContext):
+    pass # your logic here
+
+Nitric.run()
+```
+
+</CodeGroup>
