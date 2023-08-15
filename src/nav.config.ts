@@ -906,6 +906,23 @@ const fullNav: FullNav = {
         },
       ],
     },
+    {
+      title: 'Websockets',
+      links: [
+        {
+          title: 'websocket()',
+          href: '/reference/python/v0/websocket/websocket',
+        },
+        {
+          title: 'websocket.on()',
+          href: '/reference/python/v0/websocket/websocket-on',
+        },
+        {
+          title: 'websocket.send()',
+          href: '/reference/python/v0/websocket/websocket-send',
+        },
+      ],
+    },
   ],
   ['reference/csharp']: [
     {
