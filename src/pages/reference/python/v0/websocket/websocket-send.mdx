@@ -28,6 +28,11 @@ Nitric.run()
   </Property>
 </Properties>
 
+<Note>
+  Do not send messages to a connection during it's `connect` callback, if you
+  need to acknowledge connection, do so by using a [topic](../topic/topic)
+</Note>
+
 ## Examples
 
 ### Broadcast messages to all connected clients
