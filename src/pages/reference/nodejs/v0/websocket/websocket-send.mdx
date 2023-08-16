@@ -12,12 +12,12 @@ const socket = websocket('socket')
 
 /**
  * Send a message to a connected client.
- * 
+ *
  * @param connectionId the client received when connecting to the websocket
  * @param message to send to the client
  */
 const sendMessage = async (connectionId, message) => {
-  const env = new TextEncoder();
+  const env = new TextEncoder()
   await socket.send(connectionId, enc.encode(message))
 }
 ```
@@ -28,7 +28,11 @@ const sendMessage = async (connectionId, message) => {
   <Property name="connectionId" required type="string">
     The ID of the connection which should receive the message.
   </Property>
-  <Property name="message" required type="string | Uint8Array | Record<string, any>">
+  <Property
+    name="message"
+    required
+    type="string | Uint8Array | Record<string, any>"
+  >
     The message that should be sent to the connection.
   </Property>
 </Properties>
@@ -66,9 +70,12 @@ socket.on('disconnect', async (ctx) => {
 const broadcast = async (data: string | Uint8Array) => {
   const connectionStream = connections.query().stream()
 
-  const streamEnd = new Promise<any>((res) => {
-    connectionStream.on('end', res)
-  })
+  const streamEnd =
+    new Promise() <
+    any >
+    ((res) => {
+      connectionStream.on('end', res)
+    })
 
   connectionStream.on('data', async ({ content }) => {
     // Send message to a connection

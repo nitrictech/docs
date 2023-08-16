@@ -27,8 +27,8 @@ socket.on('message', async (ctx) => {
 
 <Properties>
   <Property name="eventType" required type="string">
-    The type of websocket event to listen for. Can be `connect`,
-    `disconnect`, or `message`.
+    The type of websocket event to listen for. Can be `connect`, `disconnect`,
+    or `message`.
   </Property>
   <Property name="middleware" required type="WebsocketMiddleware<T>">
     The middleware function(s) to use as handlers for the Websocket events.
@@ -42,7 +42,7 @@ socket.on('message', async (ctx) => {
 ```javascript
 socket.on('message', async (ctx) => {
   // handle messages
-  console.log(`new message from ${ctx.req.connectionId}: ${ctx.req.data}`);
+  console.log(`new message from ${ctx.req.connectionId}: ${ctx.req.data}`)
 })
 ```
 
@@ -70,5 +70,4 @@ socket.on('connect', async (ctx) => {
 socket.on('disconnect', async (ctx) => {
   await connections.doc(ctx.req.connectionId).delete()
 })
-
 ```
