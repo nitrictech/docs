@@ -67,15 +67,12 @@ socket.on('disconnect', async (ctx) => {
   await connections.doc(ctx.req.connectionId).delete()
 })
 
-const broadcast = async (data: string | Uint8Array) => {
+const broadcast = async (data) => {
   const connectionStream = connections.query().stream()
 
-  const streamEnd =
-    new Promise() <
-    any >
-    ((res) => {
-      connectionStream.on('end', res)
-    })
+  const streamEnd = new Promise()((res) => {
+    connectionStream.on('end', res)
+  })
 
   connectionStream.on('data', async ({ content }) => {
     // Send message to a connection
