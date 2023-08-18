@@ -17,8 +17,7 @@ const socket = websocket('socket')
  * @param message to send to the client
  */
 const sendMessage = async (connectionId, message) => {
-  const env = new TextEncoder()
-  await socket.send(connectionId, enc.encode(message))
+  await socket.send(connectionId, message)
 }
 ```
 
