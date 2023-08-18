@@ -41,7 +41,7 @@ socket.on('message', async (ctx) => {
 
 The `connect` event can be used to permit or deny new connections. Until the `connect` handler returns a successful response the client will be unable to send or receive messages via the websocket. If you need to perform any sort of client authentication before accepting the connection this is where it should be done.
 
-Unlike the other websocket events the `connect` event has access to the query parameteres provided during the connection request. This allows the client to provide relevant information needed to validate and establish the connection.
+Unlike the other websocket events the `connect` event has access to the query parameters provided during the connection request. This allows the client to provide relevant information needed to validate and establish the connection.
 
 Additionally, the `connectionId` provided during this event will be used for all future communication with the client via this connection, it should be persisted in your application until the connection is terminated.
 
