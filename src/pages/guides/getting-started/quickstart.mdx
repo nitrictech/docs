@@ -28,6 +28,18 @@ nitric new
 ? Choose a template: official/Python - Starter
 ```
 
+```bash {{ title: "Go" }}
+nitric new
+? What is the name of the project? hello-world
+? Choose a template: official/Go - Starter (experimental)
+```
+
+```bash {{ title: "C#" }}
+nitric new
+? What is the name of the project? hello-world
+? Choose a template: official/C# - Starter (experimental)
+```
+
 </CodeGroup>
 
 Navigate to the new project directory and install the dependencies:
@@ -53,6 +65,16 @@ cd hello-world
 #   We have included it in our python templates.
 #   Installation instructions: https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv
 pipenv install --dev
+```
+
+```bash {{ title: "Go" }}
+cd hello-world
+```
+
+```bash {{ title: "C#" }}
+cd hello-world
+
+dotnet build
 ```
 
 </CodeGroup>
@@ -93,6 +115,27 @@ Your project should now look like this:
 +--README.md
 ```
 
+```txt {{ title: "Go" }}
++--functions/
+|  +-- hello/
+|  |   +-- main.go
++--.gitignore
++--go.mod
++--go.sum
++--nitric.yaml
++--README.md
+```
+
+```txt {{ title: "C#" }}
++--functions/
+|  +-- Hello.cs
+|  +-- hello.csproj
++--.gitignore
++--csharp-starter.sln
++--nitric.yaml
++--README.md
+```
+
 </CodeGroup>
 
 ## Running your app
@@ -112,15 +155,31 @@ npm run dev
 ```
 
 ```bash {{ title: "Python" }}
+# start the nitric local development server
 nitric start
-# in another terminal run:
+# in another terminal run the code:
 pipenv run dev
+```
+
+```bash {{ title: "Go" }}
+# start the nitric local development server
+nitric start
+# in another terminal run the code:
+go run ./functions/hello
+```
+
+```bash {{ title: "C#" }}
+# start the nitric local development server
+nitric start
+# in another terminal run the code:
+dotnet run --project functions/hello.csproj
 ```
 
 </CodeGroup>
 
-After your function is running, it will register itself with the server.
-All the APIs are locally hosted under their own port which will be displayed in the CLI output as `http://localhost:<port_number>`, with local dashboard URL should be displayed underneath.
+After your function is running, it will register itself with the server. All the APIs are locally hosted on their own port, which will be displayed in the CLI output as `http://localhost:<port_number>`.
+
+The output will also show the local dashboard URL, the dashboard will automatically refresh with API details and other useful tools for building your application.
 
 In this case, the output should be:
 
@@ -131,7 +190,7 @@ main | http://localhost:4001
 Dev Dashboard | http://localhost:49152
 ```
 
-Once the API is registered, you can test the API using any HTTP client, your browser, or the local [Nitric dashboard](http://localhost:49152):
+Once the API is registered, you can test the API using any HTTP client, your browser, or the [local dashboard](/guides/getting-started/local-dashboard):
 
 ```bash
 curl http://localhost:4001/hello/John
@@ -140,7 +199,7 @@ Hello John
 
 ## Your local dashboard
 
-Access the [local development dashboard](./local-dashboard) by opening [http://localhost:4000](http://localhost:4000) in your browser.
+Access the [local development dashboard](./local-dashboard) by opening the URL and port displayed in the CLI output.
 
 The development dashboard is a powerful tool designed to help you move faster when developing new features. With the API explorer, you can easily access automatically generated endpoints and path params. Additionally, the Schedules Explorer allows you to trigger your schedules with ease, making it easier than ever to stay on top of your tasks. Make the most of your local development process with this essential tool.
 
@@ -226,7 +285,86 @@ async def hello_world(ctx):
 Nitric.run()
 ```
 
+```go {{ tag: "functions/hello/main.go" }}
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	mainApi, err := nitric.NewApi("main")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	mainApi.Get("/hello/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+		params := ctx.Request.PathParams()
+
+		if params == nil || len(params["name"]) == 0 {
+			ctx.Response.Body = []byte("error retrieving path params")
+			ctx.Response.Status = 400
+		} else {
+			ctx.Response.Body = []byte("Hello " + params["name"])
+			ctx.Response.Status = 200
+		}
+
+		return next(ctx)
+	})
+
+  mainApi.Get("/goodbye/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+		params := ctx.Request.PathParams()
+
+		if params == nil || len(params["name"]) == 0 {
+			ctx.Response.Body = []byte("error retrieving path params")
+			ctx.Response.Status = 400
+		} else {
+			ctx.Response.Body = []byte("Goodbye " + params["name"])
+			ctx.Response.Status = 200
+		}
+
+		return next(ctx)
+	})
+
+	fmt.Println("running main API")
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+```csharp {{ tag: "functions/Hello.cs", title: "C#" }}
+using Nitric.Sdk;
+
+var api = Nitric.Sdk.Nitric.Api("main");
+
+api.Get("/hello/:name", context =>
+{
+    var name = context.Req.PathParams["name"];
+    context.Res.Text($"Hello {name}!");
+    return context;
+});
+
+api.Get("/goodbye/:name", context =>
+{
+    var name = context.Req.PathParams["name"];
+    context.Res.Text($"Goodbye {name}!");
+    return context;
+});
+
+Nitric.Sdk.Nitric.Run();
+```
+
 </CodeGroup>
+
+<Note>
+  Depending on the language you choose the template may support hot-reloading,
+  if not you'll need to restart the function.
+</Note>
 
 After saving the file, the new route will be registered and you can test it:
 
