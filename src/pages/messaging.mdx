@@ -65,16 +65,16 @@ Nitric.run()
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	updates, err := resources.NewTopic("updates").With(resources.TopicPublishing)
+	updates, err := nitric.NewTopic("updates").With(resources.TopicPublishing)
   if err != nil {
     return
   }
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -126,11 +126,11 @@ Nitric.run()
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	updates, err := resources.NewTopic("updates").With(resources.TopicPublishing)
+	updates, err := nitric.NewTopic("updates").With(resources.TopicPublishing)
 	if err != nil {
     return
   }
@@ -141,7 +141,7 @@ func main() {
 		},
 	})
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -189,11 +189,11 @@ Nitric.run()
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  updates := resources.NewTopic("updates")
+  updates := nitric.NewTopic("updates")
 
 	updates.Subscribe(func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
 		email := ctx.Request.Data()
@@ -203,7 +203,7 @@ func main() {
 		return ctx, err
 	})
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -249,11 +249,11 @@ Nitric.run()
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  loopTopic, err := resources.NewTopic("updates").With(resources.TopicPublishing)
+  loopTopic, err := nitric.NewTopic("updates").With(resources.TopicPublishing)
   if err != nil {
     return
   }
@@ -264,7 +264,7 @@ func main() {
 		return ctx, err
 	})
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -333,11 +333,11 @@ Nitric.run()
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  updates := resources.NewTopic("updates")
+  updates := nitric.NewTopic("updates")
 
 	updates.Subscribe(func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
 		if isDuplicate(ctx.Request) {
@@ -347,7 +347,7 @@ func main() {
     // ...
 	})
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -413,17 +413,17 @@ transaction_queue = queue("transactions").allow("sending", "receiving")
 import (
   "fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	transactionQueue, err := resources.NewQueue("transactions").With(resources.QueueSending, resources.QueueReceiving)
+	transactionQueue, err := nitric.NewQueue("transactions").With(resources.QueueSending, resources.QueueReceiving)
   if err != nil {
     fmt.Prinln(err)
     return
   }
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -472,12 +472,12 @@ await transaction_queue.send({
 import (
   "fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/api/queues"
 )
 
 func main() {
-	transactionQueue, err := resources.NewQueue("transactions").With(resources.QueueSending)
+	transactionQueue, err := nitric.NewQueue("transactions").With(resources.QueueSending)
   if err != nil {
     fmt.Prinln(err)
     return
@@ -494,7 +494,7 @@ func main() {
 		return
 	}
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -546,12 +546,12 @@ Nitric.run()
 import (
   "fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/api/queues"
 )
 
 func main() {
-	transactionQueue, err := resources.NewQueue("transactions").With(resources.QueueSending)
+	transactionQueue, err := nitric.NewQueue("transactions").With(resources.QueueSending)
   if err != nil {
     return
   }
@@ -572,7 +572,7 @@ func main() {
 		return
 	}
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -630,11 +630,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	transactionQueue, err := resources.NewQueue("queue-name").With(resources.QueueReceiving)
+	transactionQueue, err := nitric.NewQueue("queue-name").With(resources.QueueReceiving)
 	if err != nil {
 		return
 	}
@@ -653,7 +653,7 @@ func main() {
 		t.Complete(ctx)
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

@@ -40,11 +40,12 @@ Nitric.run()
 ```go
 import (
   "github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  galaxyApi, err := resources.NewApi("far-away-galaxy-api")
+  // each API needs a unique name
+  galaxyApi, err := nitric.NewApi("far-away-galaxy-api")
   if err != nil {
     return
   }
@@ -55,7 +56,7 @@ func main() {
     return ctx, nil
   })
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -270,11 +271,11 @@ Nitric.run()
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	secureApi, err := resources.NewApi("main",
+	secureApi, err := nitric.NewApi("main",
 		// define a security definition named 'default'
 		resources.WithSecurityJwtRule("default", resources.JwtSecurityRule{
 			Issuer: "https://dev-abc123.us.auth0.com",
@@ -287,7 +288,7 @@ func main() {
     return
   }
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -342,11 +343,11 @@ Nitric.run()
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	secureApi, err := resources.NewApi("main",
+	secureApi, err := nitric.NewApi("main",
     // only authorize requests with the 'user.read' scope
     resources.WithSecurity("user", []string{ "user.read" }),
 		resources.WithSecurityJwtRule("user", resources.JwtSecurityRule{
@@ -358,7 +359,7 @@ func main() {
     return
   }
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -483,19 +484,19 @@ Nitric.run()
 
 ```go
 import (
-  "middleware"
-  "github.com/nitrictech/go-sdk/resources"
+  "example.com/middleware"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  customersApi, err := resources.NewApi("customers",
+  customersApi, err := nitric.NewApi("customers",
     resources.WithMiddleware(middleware.LogRequest, middleware.ValidateRequest)
   )
   if err != nil {
     return nil, err
   }
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -531,22 +532,22 @@ Route level middleware currently not supported in python
 ```go
 import (
   "middleware"
-  "github.com/nitrictech/go-sdk/resources"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  customersApi, err := resources.NewApi("customers")
+  customersApi, err := nitric.NewApi("customers")
   if err != nil {
     return nil, err
   }
 
   // Inline using .Get()
-	profilesApi.Get("/hello", faas.ComposeHttpMiddleware(middleware.ValidateRequest, middleware.LogRequest, handler))
+	customersApi.Get("/hello", faas.ComposeHttpMiddleware(middleware.ValidateRequest, middleware.LogRequest, handler))
 
   // Using .NewRoute()
-	profilesApi.NewRoute("/hello", middleware.ValidateRequest, middleware.LogRequest).Post(handler)
+	customersApi.NewRoute("/hello", middleware.ValidateRequest, middleware.LogRequest).Post(handler)
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

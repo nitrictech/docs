@@ -98,6 +98,8 @@ func main() {
     return
   }
 
+  tasks := queue.Receive(context.TODO(), 10)
+
   if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}

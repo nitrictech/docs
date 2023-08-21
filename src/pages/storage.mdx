@@ -54,16 +54,16 @@ profiles = bucket('profiles').allow('reading', 'writing', 'deleting')
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewBucket("profiles").With(resources.BucketWriting, resources.BucketReading, resources.BucketDeleting)
+	profiles, err := nitric.NewBucket("profiles").With(resources.BucketWriting, resources.BucketReading, resources.BucketDeleting)
 	if err != nil {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -103,18 +103,18 @@ profile_picture = profiles.file("users/bruce-wayne/profile.png")
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewBucket("profiles").With(resources.BucketReading)
+	profiles, err := nitric.NewBucket("profiles").With(resources.BucketReading)
 	if err != nil {
 		return
 	}
 
 	profilePicture := profiles.File("users/bruce-wayne/profile.png")
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -159,11 +159,11 @@ import (
   "context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewBucket("profiles").With(resources.BucketReading)
+	profiles, err := nitric.NewBucket("profiles").With(resources.BucketReading)
 	if err != nil {
 		return
 	}
@@ -177,7 +177,7 @@ func main() {
     fmt.Println(file.Name)
   }
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -220,11 +220,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewBucket("profiles").With(resources.BucketReading)
+	profiles, err := nitric.NewBucket("profiles").With(resources.BucketReading)
 	if err != nil {
 		return
 	}
@@ -234,7 +234,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -281,11 +281,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewBucket("profiles").With(resources.BucketWriting)
+	profiles, err := nitric.NewBucket("profiles").With(resources.BucketWriting)
 	if err != nil {
 		return
 	}
@@ -297,7 +297,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -335,11 +335,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewBucket("profiles").With(resources.BucketDeleting)
+	profiles, err := nitric.NewBucket("profiles").With(resources.BucketDeleting)
 	if err != nil {
 		return
 	}
@@ -349,7 +349,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -405,11 +405,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := resources.NewBucket("profiles").With(resources.BucketReading, resources.BucketWriting)
+	profiles, err := nitric.NewBucket("profiles").With(resources.BucketReading, resources.BucketWriting)
 	if err != nil {
 		return
 	}
@@ -427,7 +427,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -480,11 +480,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	assets := resources.NewBucket("assets")
+	assets := nitric.NewBucket("assets")
 
   // Filter for 'write' events for files starting with '/users/images'
 	assets.On(faas.WriteNotification, "/users/images", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
@@ -493,7 +493,7 @@ func main() {
 		return ctx, nil
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -536,11 +536,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	assets := resources.NewBucket("assets")
+	assets := nitric.NewBucket("assets")
 
   // Filter for 'delete' events for any file
 	assets.On(faas.DeleteNotification, "*", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
@@ -549,7 +549,7 @@ func main() {
 		return ctx, nil
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

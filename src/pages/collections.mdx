@@ -87,16 +87,16 @@ Nitric.run()
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
+	countries, err := nitric.NewCollection("Countries").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
 	if err != nil {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -139,11 +139,11 @@ await countries.doc('USA').set({
 ```go
 import (
 	"context"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
+	countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
 	if err != nil {
 		return
 	}
@@ -156,7 +156,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -224,11 +224,11 @@ Nitric.run()
 ```go
 import (
 	"context"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
+	countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
 	if err != nil {
 		return
 	}
@@ -238,7 +238,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -285,16 +285,16 @@ Nitric.run()
 import (
 	"context"
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countryApi, err := resources.NewApi("Countries")
+	countryApi, err := nitric.NewApi("Countries")
 	if err != nil {
 		return
 	}
 
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
+	countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
 	if err != nil {
 		return
 	}
@@ -312,7 +312,7 @@ func main() {
 		return ctx, err
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }
@@ -360,11 +360,11 @@ Nitric.run()
 ```go
 import (
 	"context"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
+	countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
 	if err != nil {
 		return
 	}
@@ -384,7 +384,7 @@ func main() {
 		return
 	}
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

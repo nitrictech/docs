@@ -66,7 +66,7 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
@@ -76,7 +76,7 @@ func main() {
 		return ctx, nil
 	})
 
-	if err := resources.Run(); err != nil {
+	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
 }

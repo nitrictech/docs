@@ -53,29 +53,29 @@ Nitric.run()
 ```go
 import (
 	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	publicApi, err := resources.NewApi("public")
+	publicApi, err := nitric.NewApi("public")
 	if err != nil {
 		return
 	}
 
   // ✅ This declaration will work
-  files, err := resources.NewBucket("files").With(resources.BucketReading)
+  files, err := nitric.NewBucket("files").With(resources.BucketReading)
   if err != nil {
     return
   }
 
   profiles.Get("/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
     // ❌ This declaration will not work, as this is only called at runtime.
-    badBucket, err := resources.NewBucket("wont-work").With(resources.BucketWriting)
+    badBucket, err := nitric.NewBucket("wont-work").With(resources.BucketWriting)
 
     return ctx, err
   })
 
-  if err := resources.Run(); err != nil {
+  if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
 }
@@ -275,7 +275,7 @@ import (
 	"github.com/nitrictech/go-sdk/faas"
 	"github.com/nitrictech/go-sdk/nitric"
 
-	"demoproject"
+	"example/resources"
 )
 
 func main() {
@@ -302,7 +302,7 @@ import (
 	"github.com/nitrictech/go-sdk/faas"
 	"github.com/nitrictech/go-sdk/nitric"
 
-	"demoproject"
+	"example/resources"
 )
 
 func main() {
