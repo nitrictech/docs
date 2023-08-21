@@ -3,11 +3,9 @@ export const description =
 
 # Debugging with Nitric
 
-Debugging is a critical skill for any developer, as it allows them to identify and fix errors in their code. Without debugging, developers would be unable to troubleshoot issues and improve the performance and functionality of their applications.
+Since Nitric applications are built with your choice of language you can use the tools and techniques you prefer to debug your applications. To get started, this guide will show you how to use Nitric's local development dashboard along with VS Code's debugger to quickly test an application on your own machine.
 
-Fortunately, Nitric provides a powerful solution for debugging that can be used with a wide range of programming languages and code editors. By leveraging the Nitric local dashboard, developers can quickly and easily identify issues in their code and use their favorite language debugger and code editor to make the necessary fixes. This streamlined process can save developers time and frustration, allowing them to focus on building high-quality applications that meet the needs of their users.
-
-Here's a quick video demonstrating how to use Nitric's local dashboard for debugging with VS Code:
+Here's a quick video demo of how to use Nitric's local dashboard for debugging with VS Code:
 
 <div>
   <div className="video-container">
@@ -23,11 +21,7 @@ Here's a quick video demonstrating how to use Nitric's local dashboard for debug
 
 ## VS Code Debugging with Nitric Templates
 
-### TypeScript and JavaScript
-
-Nitric's JavaScript and TypeScript templates include pre-made launch.json files that enable seamless debugging in VS Code.
-
-Once you have created your new Nitric project, your directory structure will resemble the following:
+Nitric's JavaScript and TypeScript templates include `launch.json` files which enable debugging in VS Code. A new project built from one of these templates will contain a directory structure that resembles the following:
 
 ```
 project-root/
@@ -37,7 +31,7 @@ project-root/
 ├── ...
 ```
 
-Before running the debugger, it is necessary to install the project's dependencies. In the case of TypeScript or JavaScript, you can do this by running:
+Before running the debugger, it's necessary to install the project's dependencies. In the case of TypeScript or JavaScript, you can do this by running:
 
 <CodeGroup>
 
@@ -55,15 +49,13 @@ pnpm install
 
 </CodeGroup>
 
-Then go to the Run and Debug tab and click the start debugging button (The Green arrow) for `Debug Nitric App`:
+Next, in VS Code go to the `Run and Debug` tab and click start debugging (the green arrow) for `Debug Nitric App`:
 
 ![Debug Button VS Code](/docs/images/guides/debugging/run-debug.png)
 
 To learn more about debugging with VS Code, you can explore [additional resources and documentation](https://code.visualstudio.com/docs/editor/debugging).
 
-### Other languages
-
-In the future, we might include debugging guides for more languages, and it's likely that they will be unique enough to require their own guides.
+From here you can use the Local Dashboard to send API requests or trigger other events in your application, catching errors and breakpoints in the debugger like any other application.
 
 ## Next Steps
 
