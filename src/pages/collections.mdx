@@ -73,7 +73,11 @@ type Country = {
   population: number
 }
 
-const countries = collection<Country>('Countries').for('reading')
+const countries = collection<Country>('Countries').for(
+  'reading',
+  'writing',
+  'deleting'
+)
 ```
 
 ```python
@@ -99,6 +103,48 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.CollectionPermission;
+
+// A country class to store in the countries collection
+class Country {
+	String name;
+	int population;
+
+	public Country(String name, int population) {
+		this.name = name;
+		this.population = population;
+	}
+}
+
+public class Application {
+	public static void main(String[] args) {
+		var countries = Nitric.INSTANCE
+			.collection("countries", Country.class)
+			.with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete);
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.CollectionPermission
+
+// A country class to store in the countries collection
+data class Country(val name: String, val population: Int)
+
+fun main() {
+  val countries = Nitric
+    .collection("countries", Country::class.java)
+    .with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete)
+
+	Nitric.run()
 }
 ```
 
@@ -162,6 +208,52 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.CollectionPermission;
+
+// A country class to store in the countries collection
+class Country {
+	String name;
+	int population;
+
+	public Country(String name, int population) {
+		this.name = name;
+		this.population = population;
+	}
+}
+
+public class Application {
+	public static void main(String[] args) {
+		var countries = Nitric.INSTANCE
+			.collection("countries", Country.class)
+			.with(CollectionPermission.Write);
+
+		countries.doc("USA").set(new Country("United States of America", 329500000))
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.CollectionPermission
+
+// A country class to store in the countries collection
+data class Country(val name: String, val population: Int)
+
+fun main() {
+  val countries = Nitric
+    .collection("countries", Country::class.java)
+    .with(CollectionPermission.Write)
+
+	countries.doc("USA").set(Country("United States of America", 329500000))
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 If you then want to update the document, you will have to write over the existing document by referencing it be it's `id`.
@@ -185,11 +277,25 @@ await countries.doc("USA").set({
 ```go
 err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
   "name": "United States of America",
-  "population": 329500000,
+  "population": 330000000,
 })
 if err != nil {
   return
 }
+```
+
+```java
+countries.doc("USA").set(new Country(
+	"United States of America",
+	330000000
+));
+```
+
+```kotlin
+countries.doc("USA").set(Country(
+	name = "United States of America",
+	population = 330000000
+))
 ```
 
 </CodeGroup>
@@ -228,7 +334,7 @@ import (
 )
 
 func main() {
-  countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
+  countries, err := nitric.NewCollection("Countries").With(resources.CollectionReading)
   if err != nil {
     return
   }
@@ -241,6 +347,38 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.CollectionPermission;
+
+class Country { ... }
+
+public class Application {
+	public static void main(String[] args) {
+		var countries = Nitric.INSTANCE.collection("countries", Country.class).with(CollectionPermission.Read);
+
+		var country = countries.doc("USA").get();
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.CollectionPermission
+
+data class Country(...)
+
+fun main() {
+	val countries = Nitric.collection("countries", Country::class.java).with(CollectionPermission.Read)
+
+	val country = countries.doc("USA").get()
+
+	Nitric.run()
 }
 ```
 
@@ -273,7 +411,7 @@ countries = collection("Countries").allow("reading")
 country_api = api("Countries")
 
 @country_api.get("/country/:name")
-async def get_planet_route(ctx):
+async def get_country_route(ctx):
   name = ctx.req.params['name']
 
   ctx.res.body = await countries.doc(name).get()
@@ -294,7 +432,7 @@ func main() {
     return
   }
 
-  countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
+  countries, err := nitric.NewCollection("Countries").With(resources.CollectionReading)
   if err != nil {
     return
   }
@@ -315,6 +453,58 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.CollectionPermission;
+
+class Country { ... }
+
+public class Application {
+	public static void main(String[] args) {
+		var countriesApi = Nitric.api("countries");
+
+		var countries = Nitric.INSTANCE.collection("countries", Country.class).with(CollectionPermission.Read);
+
+		countriesApi.get("/country/:name", (ctx) -> {
+			var name = ctx.getReq().getParams().get("name");
+
+			var country = countries.doc(name).get();
+
+			ctx.getResp().json(country)
+
+			return ctx;
+		})
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.CollectionPermission
+
+data class Country(...)
+
+fun main() {
+	val countriesApi = Nitric.api("countries")
+
+	val countries = Nitric.collection<Country>("countries").with(CollectionPermission.Read)
+
+	countriesApi.get("/country/:name") { ctx ->
+		val name = ctx.resp.params["name"]
+
+		val country = countries.doc(name!!).get()
+
+		ctx.resp.json(country!!)
+
+		ctx
+	}
+
+	Nitric.run()
 }
 ```
 
@@ -390,6 +580,51 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.CollectionPermission;
+
+class Country { ... }
+
+public class Application {
+	public static void main(String[] args) {
+		var countries = Nitric.INSTANCE.collection("countries")
+			.with(CollectionPermission.Write, CollectionPermission.Delete);
+
+		// Set the USA document
+		countries.doc("USA").set(new Country("United Sates of America", 329500000));
+
+		// Delete the document
+		countries.doc("USA").delete();
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.CollectionPermission
+
+data class Country(...)
+
+fun main() {
+	val countries = Nitric.collection<Country>("countries")
+		.with(CollectionPermission.Write, CollectionPermission.Delete)
+
+	// Set the USA document
+	countries.doc("USA").set(Country(
+		name = "United States of America",
+		population = 329500000
+	))
+
+	// Delete the document
+	countries.doc("USA").delete()
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 ## Querying Collections
@@ -421,6 +656,28 @@ largeCountries, err := countries.
     Query().
     Where(documents.Condition("population").Gt(documents.NumberValue(100000000))).
     Fetch(context.TODO())
+```
+
+```java
+import io.nitric.api.documents.v0.Operator;
+
+...
+
+var largeCountries = countries
+	.query()
+	.where("population", Operator.GT, 100000000)
+	.fetch();
+```
+
+```kotlin
+import io.nitric.api.documents.v0.Operator
+
+...
+
+val largeCountries = countries
+	.query()
+	.where("population", Operator.GT, 100000000)
+	.fetch()
 ```
 
 </CodeGroup>
@@ -455,6 +712,26 @@ largeCountries, err := countries.
     Where(documents.Condition("name").StartsWith(documents.StringValue("S"))).
     Limit(10).
     Fetch(context.TODO())
+```
+
+```java
+import io.nitric.api.documents.v0.Operator;
+
+var largeCountries = countries
+	.query()
+	.where("name", Operator.STARTS_WITH, "S")
+	.limit(10)
+	.fetch();
+```
+
+```kotlin
+import io.nitric.api.documents.v0.Operator
+
+val largeCountries = countries
+	.query()
+	.where("name", Operator.STARTS_WITH, "S")
+	.limit(10)
+	.fetch()
 ```
 
 </CodeGroup>
@@ -510,6 +787,28 @@ query := countries.
 results, err := query.Fetch(context.TODO())
 ```
 
+```java
+import io.nitric.api.documents.v0.Operator;
+
+var query = countries
+	.query()
+	.where("name", Operator.NE, "United States of America")
+	.where("population", Operator.GTE, 100000000);
+
+var results = query.fetch();
+```
+
+```kotlin
+import io.nitric.api.documents.v0.Operator
+
+val query = countries
+	.query()
+	.where("name", Operator.NE, "United States of America")
+	.where("population", Operator.GTE, 100000000)
+
+val results = query.fetch()
+```
+
 </CodeGroup>
 
 ### Paging Results
@@ -554,6 +853,7 @@ import "github.com/nitrictech/go-sdk/api/documents"
 ...
 query := countries.Query().Limit(1000)
 
+// Fetch first page
 results, err := query.Fetch(context.TODO())
 if err != nil {
   return err
@@ -561,10 +861,46 @@ if err != nil {
 
 pagingToken := results.PagingToken
 
+// Fetch next page
 for pagingToken != nil {
   results, err = query.FromPagingToken(pagingToken).Fetch(context.TODO())
 
   pagingToken = results.PagingToken
+}
+```
+
+```java
+import io.nitric.api.documents.v0;
+
+var query = countries.query().limit(1000);
+
+// Fetch first page
+var results = query.fetch();
+
+var pagingToken = results.getPagingToken();
+
+// Fetch next page
+while (pagingToken != null) {
+	results = query.pagingFrom(pagingToken).fetch();
+
+	pagingToken = results.getPagingToken();
+}
+```
+
+```kotlin
+import io.nitric.api.documents.v0
+
+val query = countries.query().limit(1000)
+
+// Fetch first page
+var results = query.fetch()
+
+var pagingToken = results.pagingToken
+
+while (pagingToken != null) {
+	results = query.pagingFrom(pagingToken).fetch()
+
+	pagingToken = results.pagingToken
 }
 ```
 
@@ -610,6 +946,22 @@ for {
 }
 ```
 
+```java
+var stream = countries.query().stream();
+
+while (stream.hasNext()) {
+	var country = countries.next();
+}
+```
+
+```kotlin
+val stream = countries.query().stream()
+
+while (stream.hasNext()) {
+	val country = countries.next()
+}
+```
+
 </CodeGroup>
 
 ## Creating Sub-collections
@@ -635,7 +987,22 @@ state_of_colorado = await states.doc('Colorado').get()
 ```go
 states := countries.Doc("USA").Collection("States")
 
+// Get a document from the sub-collection
 stateOfColorado, err := states.Doc("Colorado").Get(context.TODO())
+```
+
+```java
+var states = countries.doc("USA").collection("States");
+
+// Get a document from the sub-collection
+var stateOfColorado = states.doc("Colorado").get();
+```
+
+```kotlin
+val states = countries.doc("USA").collection("States")
+
+// Get a document from the sub-collection
+val stateOfColorado = states.doc("Colorado").get()
 ```
 
 </CodeGroup>
@@ -692,6 +1059,32 @@ results, err := query.FromPagingToken(results.PagingToken).Fetch(ctx)
 stream, err := query.Stream(ctx)
 ```
 
+```java
+var query = countries.doc("USA").collection("States").query()
+
+// Fetching
+var results = query.fetch()
+
+// Paging
+results = query.pagingFrom(results.getPagingToken()).fetch()
+
+// Streaming
+var stream = query.stream()
+```
+
+```kotlin
+val query = countries.doc("USA").collection("States").query()
+
+// Fetching
+var results = query.fetch()
+
+// Paging
+results = query.pagingFrom(results.pagingToken).fetch()
+
+// Streaming
+val stream = query.stream()
+```
+
 </CodeGroup>
 
 You can also query common sub-collections across multiple documents when they have the same name.
@@ -718,6 +1111,18 @@ results = all_states.query().fetch()
 allStates := countries.Collection("States")
 
 results, err := allStates.Query().Fetch(context.TODO())
+```
+
+```java
+var allStates = countries.collection("States");
+
+var results = allStates.query().fetch();
+```
+
+```kotlin
+val allStates = countries.collection("States")
+
+val results = allStates.query().fetch()
 ```
 
 </CodeGroup>

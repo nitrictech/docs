@@ -13,21 +13,23 @@ import io.nitric.resources.CollectionPermission;
 
 // A user class to store in the profiles collection
 class User {
-    String name;
-    int age;
+  String name;
+  int age;
 
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
+  public User(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
 }
 
-public class Test {
-    public static void main(String[] args) {
-        var profiles = Nitric.INSTANCE
-                .collection("profiles", User.class)
-                .with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete);
-    }
+public class Application {
+  public static void main(String[] args) {
+    var profiles = Nitric.INSTANCE
+      .collection("profiles", User.class)
+      .with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete);
+
+    Nitric.INSTANCE.run();
+  }
 }
 ```
 
@@ -42,6 +44,8 @@ fun main() {
   val profiles = Nitric
     .collection("profiles", User::class.java)
     .with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete)
+
+  Nitric.run()
 }
 ```
 
@@ -106,7 +110,7 @@ class User {
   }
 }
 
-public class Test {
+public class Application {
   public static void main(String[] args) {
     var profiles = Nitric.INSTANCE
       .collection("profiles", User.class)

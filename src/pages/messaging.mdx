@@ -80,6 +80,30 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.TopicPermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var userCreatedTopic = Nitric.INSTANCE.topic("user-created").with(TopicPermission.Publishing);
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.TopicPermission
+
+fun main() {
+	val userCreatedTopic = Nitric.topic("user-created").with(TopicPermission.Publishing);
+
+	Nitric.run();
+}
+```
+
 </CodeGroup>
 
 ### Publishing an event
@@ -147,6 +171,57 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.api.events.v0.NitricEvent;
+import io.nitric.resources.TopicPermission;
+
+import java.util.Map;
+public class Application {
+	public static void main(String[] args) {
+		var userCreatedTopic = Nitric.INSTANCE.topic("user-created").with(TopicPermission.Publishing);
+
+		// Specifying a map will produce a Nitric event with a generated ID and 'none' payloadType
+		userCreatedTopic.publish(Map.of(
+			"email", "new.user@example.com"
+		));
+
+		// You can also specify a Nitric event with a set ID and payload type
+		userCreatedTopic.publish(new NitricEvent(
+			Map.of("email", "new.user@example.com"), // payload
+			"0F95D606-61ED-4B6E-B82C-80490948F7D7", // ID
+			"none" // payload type
+		));
+
+		Nitric.INSTANCE.run();
+	}
+}
+
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.api.events.v0.NitricEvent
+import io.nitric.resources.TopicPermission
+
+fun main() {
+	val userCreatedTopic = Nitric.topic("user-created").with(TopicPermission.Publishing);
+
+	// Both of these will publish the same event
+	userCreatedTopic.publish(mapOf(
+		"email" to "new.user@example.com"
+	))
+
+	userCreatedTopic.publish(NitricEvent(
+		payload = mapOf(
+			"email" to "new.user@example.com"
+		)
+	))
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 ### Subscribing to a topic
@@ -209,6 +284,49 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+
+class NewUserEvent {
+	String email;
+	public NewUserEvent(String email) {
+		this.email = email;
+	}
+}
+
+public class Application {
+	public static void main(String[] args) {
+		var userCreatedTopic = Nitric.INSTANCE.topic("user-created");
+
+		userCreatedTopic.subscribe((ctx) -> {
+			var request = ctx.getReq().json(NewUserEvent.class);
+			sendWelcomeEmail(request);
+			return ctx;
+		});
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+
+data class NewUserEvent(val email: String)
+
+fun main() {
+	val userCreatedTopic = Nitric.topic("user-created")
+
+	userCreatedTopic.subscribe { ctx ->
+		val request = ctx.req.json<NewUserEvent>()
+		sendWelcomeEmail(request)
+		ctx
+	}
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 ### Limitations on Publishing and Subscribing
@@ -267,6 +385,45 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+// this is invalid
+import io.nitric.Nitric;
+import io.nitric.resources.TopicPermission;
+
+import java.util.Map;
+
+public class Application {
+	public static void main(String[] args) {
+		var loopTopic = Nitric.INSTANCE.topic("updates").with(TopicPermission.Publishing);
+
+		loopTopic.subscribe((ctx) -> {
+			loopTopic.publish(Map.of())
+			return ctx;
+		})
+
+		Nitric.INSTANCE.run();
+	}
+}
+
+```
+
+```kotlin
+// this is invalid
+import io.nitric.Nitric
+import io.nitric.resources.TopicPermission
+
+fun main() {
+	val loopTopic = Nitric.topic("updates").with(TopicPermission.Publishing)
+
+	loopTopic.subscribe { ctx ->
+		loopTopic.publish(mapOf())
+		ctx
+	}
+
+	Nitric.run()
 }
 ```
 
@@ -353,6 +510,47 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.TopicPermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var updates = Nitric.INSTANCE.topic("updates");
+
+		updates.subscribe((ctx) -> {
+			if (isDuplicate(ctx.getReq())) {
+				return ctx;
+			}
+			// Not a duplicate, process the event
+			// ...
+		})
+
+		Nitric.INSTANCE.run();
+	}
+}
+
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.TopicPermission
+
+fun main() {
+	val loopTopic = Nitric.topic("updates")
+
+	loopTopic.subscribe { ctx ->
+		if (isDuplicate(ctx.req)) {
+			return@subscribe ctx
+		}
+		// Not a duplicate, process the event
+		// ...
+	}
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 <Note>
@@ -429,6 +627,32 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.QueuePermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var transactionQueue = Nitric.INSTANCE.queue("transactions")
+			.with(QueuePermission.Send, QueuePermission.Receive);
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.QueuePermission
+
+fun main() {
+	val transactionQueue = Nitric.queue("transactions")
+		.with(QueuePermission.Send, QueuePermission.Receive)
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 ### Sending Tasks
@@ -497,6 +721,38 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.QueuePermission;
+
+import java.util.Map;
+
+public class Application {
+	public static void main(String[] args) {
+		var transactionQueue = Nitric.INSTANCE.queue("transactions")
+			.with(QueuePermission.Send);
+
+		transactionQueue.send(Map.of("message", "hello world"));
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.QueuePermission
+
+fun main() {
+	val transactionQueue = Nitric.queue("transactions")
+		.with(QueuePermission.Send)
+
+	transationQueue.send(mapOf("message" to "hello world"))
+
+	Nitric.run()
 }
 ```
 
@@ -578,6 +834,44 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.QueuePermission;
+
+import java.util.Map;
+
+public class Application {
+	public static void main(String[] args) {
+		var transactionQueue = Nitric.INSTANCE.queue("transactions")
+			.with(QueuePermission.Send);
+
+		transactionQueue.send(
+			new Task(Map.of("message", "batch task 1"), "task-1", "1", "none"),
+			new Task(Map.of("message", "batch task 2"), "task-2", "2", "none")
+		);
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.QueuePermission
+
+fun main() {
+	val transactionQueue = Nitric.queue("transactions")
+		.with(QueuePermission.Send)
+
+	transationQueue.send(
+		Task(payload = mapOf("message" to "batch task 1")),
+		Task(payload = mapOf("message" to "batch task 2"))
+	)
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 ### Receiving and Acknowledging Tasks
@@ -634,7 +928,7 @@ import (
 )
 
 func main() {
-  transactionQueue, err := nitric.NewQueue("queue-name").With(resources.QueueReceiving)
+  transactionQueue, err := nitric.NewQueue("transactions").With(resources.QueueReceiving)
   if err != nil {
     return
   }
@@ -642,7 +936,7 @@ func main() {
   ctx := context.TODO()
 
   // Receive up to 10 tasks from the queue
-  tasks, err := queue.Receive(ctx, 10)
+  tasks, err := transactions.Receive(ctx, 10)
   if err != nil {
     return
   }
@@ -656,6 +950,48 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.QueuePermission;
+
+import java.util.Map;
+
+public class Application {
+	public static void main(String[] args) {
+		var transactionQueue = Nitric.INSTANCE.queue("transactions")
+			.with(QueuePermission.Receive);
+
+		// Receive up to 10 tasks from the queue
+		var tasks = transactionQueue.receive(10);
+
+		tasks.forEach((task) -> {
+			System.out.println(task.getId());
+		});
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.QueuePermission
+
+fun main() {
+	val transactionQueue = Nitric.queue("transactions")
+		.with(QueuePermission.Receive)
+
+	// Receive up to 10 tasks from the queue
+	val tasks = transactionQueue.receive(10)
+
+	tasks.forEach { task ->
+		println(task.id)
+	}
+
+	Nitric.run()
 }
 ```
 

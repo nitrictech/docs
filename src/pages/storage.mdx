@@ -69,6 +69,30 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Write);
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+
+fun main() {
+	val profiles = Nitric.bucket("profiles").with(BucketPermission.Write)
+
+	Nitric.INSTANCE.run()
+}
+```
+
 </CodeGroup>
 
 ## File references
@@ -117,6 +141,34 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Read);
+
+		var profilePicture = profiles.file("users/bruce-wayne/profile.png");
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+
+fun main() {
+	val profiles = Nitric.bucket("profiles").with(BucketPermission.Read)
+
+	val profilePicture = profiles.file("users/bruce-wayne/profile.png")
+
+	Nitric.run()
 }
 ```
 
@@ -183,6 +235,42 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Read);
+
+		var files = profiles.files();
+
+		files.forEach((file) -> {
+			System.out.println(file.getName());
+		});
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+
+fun main() {
+	val profiles = Nitric.bucket("profiles").witH(BucketPermission.Read)
+
+	val files = profiles.files()
+
+	files.forEach { file ->
+		println(file.name)
+	}
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 ## Read files
@@ -237,6 +325,34 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Read);
+
+		var image = profiles.file("users/bruce-wayne/profile.png");
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+
+fun main() {
+	val profiles = Nitric.bucket("profiles").with(BucketPermission.Read)
+
+	val image = profiles.file("users/bruce-wayne/profile.png")
+
+	Nitric.run()
 }
 ```
 
@@ -303,6 +419,34 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Write);
+
+		profiles.file("users/bruce-wayne/profile.png").write("image data");
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+
+fun main() {
+	val profiles = Nitric.bucket("profiles").with(BucketPermission.Write)
+
+	profiles.file("users/bruce-wayne/profile.png").write("image data")
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 ## Delete files
@@ -355,6 +499,34 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Delete);
+
+		profiles.file("users/bruce-wayne/profile.png").delete();
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+
+fun main() {
+	val profiles = Nitric.bucket("profiles").with(BucketPermission.Delete)
+
+	profiles.file("users/bruce-wayne/profile.png").delete()
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 ## Signed URLs
@@ -377,7 +549,6 @@ import { bucket } from '@nitric/sdk'
 const profiles = bucket('profiles').for('reading', 'writing')
 
 // Get pre-signed URLs for downloading or uploading
-
 const downloadUrl = await profiles.file('profile.png').getDownloadUrl({
   expiry: 3600, // Defaults to 600 (10 minutes)
 })
@@ -430,6 +601,38 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+
+public class Application {
+	public static void main(String[] args) {
+		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Read, BucketPermission.Write);
+
+		var downloadUrl = profiles.file("profile.png").getDownloadUrl();
+
+		var uploadUrl = profiles.file("profile.png").getUploadUrl();
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+
+fun main() {
+	val profiles = Nitric.bucket("profiles").with(BucketPermission.Read, BucketPermission.Write)
+
+	val downloadUrl = profiles.file("profile.png").getDownloadUrl()
+
+	val uploadUrl = profiles.file("profile.png").getUploadUrl()
+
+	Nitric.run()
 }
 ```
 
@@ -499,6 +702,42 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+import io.nitric.faas.v0.BucketNotificationType;
+
+public class Application {
+	public static void main(String[] args) {
+		var assets = Nitric.INSTANCE.bucket("assets");
+
+		// Filter for 'write' events for files starting with '/users/images'
+		assets.on(BucketNotificationType.Write, "/users/images", (ctx) -> {
+			System.out.printf("new profile image for %s was written", ctx.getReq().getKey());
+		});
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+import io.nitric.faas.v0.BucketNotificationType
+
+fun main() {
+	val assets = Nitric.bucket("assets")
+
+	// Filter for 'write' events for files starting with '/users/images'
+	assets.on(BucketNotificationType.Write, "/users/images") { ctx ->
+		printf("new profile image for ${ctx.req.key} was written")
+	}
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 If we instead wanted to trigger the function whenever any file was deleted from the bucket, we would use the following snippet:
@@ -552,6 +791,42 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+import io.nitric.faas.v0.BucketNotificationType;
+
+public class Application {
+	public static void main(String[] args) {
+		var assets = Nitric.INSTANCE.bucket("assets");
+
+		// Filter for 'delete' events for any file
+		assets.on(BucketNotificationType.Delete, "*", (ctx) -> {
+			System.out.printf("%s was deleted", ctx.getReq().getKey());
+		});
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+import io.nitric.faas.v0.BucketNotificationType
+
+fun main() {
+	val assets = Nitric.bucket("assets")
+
+	// Filter for 'delete' events for any file
+	assets.on(BucketNotificationType.Delete, "*") { ctx ->
+		print("${ctx.req.key} was deleted")
+	}
+
+	Nitric.run()
 }
 ```
 
