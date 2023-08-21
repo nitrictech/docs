@@ -1,30 +1,26 @@
 export const description =
-  'Deploy to AWS using GitHub Actions and the Nitric CLI'
+  'Deploy to AWS, Google Cloud or Microsoft Azure using GitHub Actions and the Nitric CLI'
 
-# CI/CD with GitHub Actions and Nitric
+# Deployment Automation with GitHub Actions and Nitric
 
-## What we'll be doing
+This guide will demonstrate how Nitric can be used, along with [GitHub Actions](https://github.com/features/actions), to create a continuous deployment pipeline. The actions in the example below target AWS, but can be modified to target Google Cloud or Microsoft Azure.
 
-In this guide we will demonstrate how Nitric can be used for continuous deployments to AWS in a GitHub action CI/CD pipeline. The action we write can be simply modified for GCP or Azure deployments.
+<Note>
+  This guide assumes basic knowledge about GitHub Actions. If you're new to the
+  feature you could start by reviewing [GitHub's
+  docs](https://github.com/features/actions)
+</Note>
 
-## Setting up CI/CD with Nitric and GitHub actions
+## Workflow setup
 
-GitHub has comprehensive [documentation](https://github.com/features/actions) which can guide you through advanced workflows.
+To begin you'll need a Nitric project ready to be deployed. If you haven't created a project yet, take a look at the [quickstart guide](/guides/getting-started/quickstart).
 
-Here we'll walk through the simple example of deploying a Nitric project to AWS.
+Next, we'll add a GitHub Actions workflow file to the project. This is where you'll configure the deployment automation steps. Create a yaml file in a `.github/` folder at the root of your project. The file can be named how you like, in our case we'll name it `deploy-aws.yaml`.
 
-## Lets start by getting our workflow setup
+Here is example content you can copy into your workflow file. In the next sections we'll breakdown what's happening in this file, so you can modify it as you see fit.
 
-In your project you'll want to create a yaml file which contains your workflow config. You can name this file anything you like, in this example we've gone with 'deploy-aws.yaml'.
-
-It should be placed the folder `.github/workflows`
-
-Double check and update the version of the Nitric CLI if necessary.
-
-## Full example
-
-```yaml
-name: Sample configuration to deploy to AWS
+```yaml {{ tag: ".github/deploy-aws.yaml" }}
+name: Example Nitric AWS Deployment
 on:
   workflow_dispatch:
   push:
@@ -35,7 +31,7 @@ env:
   PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 jobs:
   update:
-    name: Update
+    name: Update Deployment
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS Credentials
@@ -55,7 +51,7 @@ jobs:
       - name: Resolve packages
         run: npm install
       - name: Deploy stack to aws
-        run: nitric up -s dev -v0
+        run: nitric up -s dev -v2
 ```
 
 ## Breaking it down
@@ -63,17 +59,17 @@ jobs:
 Edit the config file and start by defining a name.
 
 ```yaml
-name: Sample configuration to deploy to AWS
+name: Example Nitric AWS Deployment
 ```
 
-### Setup action triggers
+### Setup the workflow trigger(s)
 
-Action triggers tell your workflow when to run.
+Triggers tell your workflow when to run.
 
 - workflow_dispatch
   - This trigger allows the workflow to be manually run from GitHub
 - push -> branches -> main
-  - This will trigger this workflow each time a push is performed on the main branch
+  - This will trigger the workflow each time there is a push to the `main` branch
 
 ```yaml
 on:
@@ -83,17 +79,14 @@ on:
       - main
 ```
 
-### Configuring environment variables
+### Environment variables
 
-Configure the environment variables required by Nitric's dependency Pulumi as GitHub secrets. Which can be found by navigating to `https://github.com/{user}/{project}/settings/secrets/actions`.
+Configure the environment variables required by Nitric's dependency Pulumi. In this example we store the required values in GitHub secrets. Secrets can be found by navigating to `https://github.com/{user}/{project}/settings/secrets/actions`.
 
 - PULUMI_ACCESS_TOKEN
-
-  - You can get a pulumi access token by logging into pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
-
+  - You can get a pulumi access token by logging into Pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
 - PULUMI_CONFIG_PASSPHRASE
-
-  - For interaction free experiences, Pulumi also requires a passphrase to be configured. Your passphrase is used to generate a unique key which encrypts configuration and state values. E.g. 'my-secret-password'
+  - For interaction free experiences, Pulumi also requires a passphrase to be configured. Your passphrase is used to generate a unique key which encrypts configuration and state values.
 
 ```yaml
 env:
@@ -103,14 +96,14 @@ env:
 
 ### Intialize your workflow
 
-Assign a name and set what os it will be run on.
+Assign a name to the first job in the workflow and set which operating system the workflow will be run on.
 
-<Note>Nitric currently only supports ubuntu-latest.</Note>
+<Note>We suggest using `ubuntu-latest` as the runs-on value.</Note>
 
 ```yaml
 jobs:
   update:
-    name: Deploy
+    name: Update Deployment
     runs-on: ubuntu-latest
 ```
 
@@ -122,7 +115,7 @@ Setup your AWS action with the following credentials as GitHub secrets:
 - AWS_SECRET_ACCESS_KEY
 - AWS_REGION
 
-You'll obtain both of these keys from the amazon console, an example region would be us-east-2.
+You can obtain a key, including its ID and value, from the amazon console. You can then set your preferred region, such as `us-east-2`.
 
 ```yaml
 steps:
@@ -136,7 +129,7 @@ steps:
 
 ### Install Nitric and dependencies
 
-This makes it possible for you to run nitric commands e.g. `nitric up -s dev`.
+These steps install the Nitric CLI and Pulumi, allowing the use of commands such as `nitric up`.
 
 ```yaml
 - name: Install Nitric CLI
@@ -147,9 +140,9 @@ This makes it possible for you to run nitric commands e.g. `nitric up -s dev`.
   uses: pulumi/setup-pulumi@v2
 ```
 
-### Deploying the stack
+### Deploy the stack
 
-Finally, checkout your project and run the up command to deploy your project. In this project we've initialized a stack which deploys to AWS named dev with the command `nitric up -s dev -v0`
+Finally, checkout your project and run the `up` command to deploy your project. In this example our project has a stack named `dev`, which we can select with the `-s` argument, e.g. `nitric up -s dev -v2`. The final argument `-v2` sets the Nitric CLI output to verbosity level 2, so the workflow will log plenty of detail for us to use to debug any issues.
 
 ```yaml
 - name: Checkout project
@@ -157,5 +150,5 @@ Finally, checkout your project and run the up command to deploy your project. In
 - name: Resolve packages
   run: npm install
 - name: Deploy stack to aws
-  run: nitric up -s dev -v0
+  run: nitric up -s dev -v2
 ```
