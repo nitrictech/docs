@@ -2,42 +2,29 @@ export const description = 'How to deploy Nitric applications'
 
 # Deployment
 
-## Managed Nitric with Deploy
+Nitric can automatically deploy your application to a supported cloud provider. As discussed in the [concepts](/guides/getting-started/concepts) page, Nitric has three standard `providers`, one each for AWS, Microsoft Azure and Google Cloud. If none of those fit your needs you're also able to [build a custom provider](/reference/providers/custom/building-custom-provider) to target the host you prefer with your own tools and configuration.
 
-[Nitric Deploy](https://deploy.nitric.io) is the fastest way to deploy your Nitric application with no configuration.
+The Nitric CLI command to perform deployments is `nitric up`. However, before your first deployment you'll need to create a `stack`, stacks represent deployment targets. If you haven't created a stack before we recommend reading the steps in our [quickstart guide](/guides/getting-started/quickstart#deploying-the-app).
 
-When managing your application with Nitric Deploy, the platform detects the presence of nitric and runs `nitric up` to the cloud you've set up in your Nitric Deploy environment and fully manages your deployment including:
+## Using the official providers
 
-- Integrate with GitHub to connect your repositories
-- Build Nitric Framework applications
-- Clone a sample project to see how it works
-- Configure multiple Stacks for each project (e.g. Production & Staging)
-- Connect & deploy your apps to your own AWS account
+The current providers in Nitric for AWS, Google Cloud and Azure all use [Pulumi](https://pulumi.com) under the hood for their deployments, so Pulumi will need to be configured to persist your stack state and to run the deployment to the cloud of your choice.
 
-With more on the way...
+### Configuring cloud credentials
 
-## Self-Hosting
+You will need to configure your cloud credentials, either locally or in your CI/CD pipeline, to allow Nitric to create resources in a cloud account. Instructions on how to setup credentials for your target provider can be found in our provider documentation: [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure).
 
-You can self-host nitric deployments in your own CI/CD as well using the Nitric CLI.
+### Configuring State Backend
 
-### Configuring Pulumi
-
-The current providers in nitric for AWS, GCP and Azure all use [Pulumi](https://pulumi.com) under the hood for their deployments, so Pulumi will need to be configured to persist your stack state and to run the deployment to the cloud of your choice.
-
-#### Configuring cloud credentials
-
-You will need to configure your cloud credentials for your CI/CD pipeline to allow nitric to create resources in your cloud account, instructions on doing this can be found in our provider documentation for each of the clouds: [AWS](/reference/providers/aws), [GCP](/reference/providers/gcp) and [Azure](/reference/providers/azure)
-
-#### Configuring State Backend
-
-For nitric to maintain the state of your deployment between runs you will also need to configure a backend for Pulumi to store its stack state. For this, you can use either [Pulumi's managed service](https://www.pulumi.com/intro/concepts/state/#logging-into-the-pulumi-service-backend), or you could use one of the other state [backends](https://www.pulumi.com/intro/concepts/state/#logging-into-a-self-managed-backend) they provide support for.
+To maintain the state of your deployment between runs you'll need to configure a backend for Pulumi to store its stack state. For this, you can use either [Pulumi's managed service](https://www.pulumi.com/intro/concepts/state/#logging-into-the-pulumi-service-backend), or you could use one of the other state [backends](https://www.pulumi.com/intro/concepts/state/#logging-into-a-self-managed-backend) they provide support for.
 
 ## Configuring Deployment
 
-When deploying the application, you can add extra configuration for specific functions or a global function. This configuration is individualized for each stack file. Below is an example of config added to an AWS stack to augment the memory, timeout, and telemetry sampling percentage.
+When deploying the application, you can add extra configuration for specific handlers or a globally for all handlers. This configuration is unique to each stack file, allowing you to deploy the same application to different environments with different configuration.
 
-```yaml
-# nitric-aws-deployment.yaml
+Below is an example of configuration added to an AWS stack to augment the memory, timeout, and telemetry sampling percentage for deployed handlers.
+
+```yaml {{ tag: "nitric-aws-deployment.yaml" }}
 name: project
 provider: nitric/aws@0.24.0
 region: us-east-1
@@ -51,10 +38,11 @@ config:
       memory: 4096
 ```
 
-And pointing the handlers to each different config happens in the project file:
+Note that the configuration above creates two types of handlers with different configuration for each. The `default` configuration, which we'll apply to most handlers. There is also a `memory-optimized` handler group, which we've used to allocate more memory to those handlers specifically.
 
-```yaml
-# nitric.yaml
+To apply these handler group configurations, we need to create the groups. That's done by updating the project file to create groups and match them to different source code locations:
+
+```yaml {{ tag: "nitric.yaml" }}
 name: my-project
 handlers:
   - match: functions/*.ts
@@ -63,12 +51,7 @@ handlers:
     type: memory-optimized
 ```
 
-You can point config to all functions, or to a specific function. Either by using the `default` key or the function type i.e. `memory-optimized`. The following configurations can be made:
-
-- `memory`: The memory of the compute instance in MB. Defaults to 512.
-- `timeout`: The max running time of the function in seconds. Defaults to 15.
-- `telemetry`: The percentage of requests to be sampled for tracing. Defaults to 0%.
-
-For AWS, [provisioned concurrency](https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html) can also be added:
-
-- `provisioned-concurrency`: The number of lambda instances that should remain warm for immediate invocation.
+<Note>
+  Provider specific stack configuration can be viewed in the reference docs for
+  each [provider](/reference/providers).
+</Note>
