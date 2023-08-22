@@ -51,7 +51,6 @@ fun main() {
 ### Notes
 
 - Schedules do not require access permissions to be specified.
-
 - During local development schedules can be triggered manually from the local development dashboard
 
 ## Examples
@@ -66,11 +65,13 @@ import io.nitric.faas.v0.Frequency;
 
 public class Application {
   public static void main(String[] args) {
+    // Can be defined as a rate using `.every()`
     Nitric.INSTANCE.schedule("send-reminders").every(3, Frequency.Minutes, (ctx) -> {
       // add code to run here
       return ctx;
     });
 
+    // Can be defined as a cron expression using `.cron()`
     Nitric.INSTANCE.schedule("archive-orders").cron("0 1 1 * *", (ctx) -> {
       // add code to run here
       return ctx;
@@ -86,11 +87,13 @@ import io.nitric.Nitric
 import io.nitric.faas.v0.Frequency
 
 fun main() {
+  // Can be defined as a rate using `.every()`
   Nitric.schedule("send-reminders").every(3, Frequency.Minutes) { ctx ->
     // add code to run here
     ctx
   }
 
+  // Can be defined as a cron expression using `.cron()`
   Nitric.schedule("archive-orders").cron("0 1 1 * *") { ctx ->
     // add code to run here
     ctx

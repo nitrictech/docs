@@ -1,9 +1,9 @@
 export const description =
-  "Reference for Nitric's JVM library - Create an upload url for a file from a bucket."
+  "Reference for Nitric's JVM library - Create a download url for a file from a bucket."
 
-# JVM - bucket.file.getUploadUrl()
+# JVM - bucket.file.getDownloadUrl()
 
-Create an upload URL for a file from a bucket.
+Create a download URL for a file from a bucket.
 
 <CodeGroup>
 
@@ -13,10 +13,10 @@ import io.nitric.resources.BucketPermission;
 
 public class Application {
   public static void main(String[] args) {
-    var bucket = Nitric.INSTANCE.bucket("images").with(BucketPermission.Write);
+    var bucket = Nitric.INSTANCE.bucket("images").with(BucketPermission.Read);
 
-    // Get an upload url that lasts 600 seconds
-    var url = bucket.file("cat.png").getUploadUrl(600);
+    // Get a download url that lasts 600 seconds
+    var url = bucket.file("cat.png").getDownloadUrl(600);
 
     Nitric.INSTANCE.run();
   }
@@ -28,10 +28,10 @@ import io.nitric.Nitric
 import io.nitric.resources.BucketPermission
 
 fun main() {
-  val bucket = Nitric.bucket("images").with(BucketPermission.Write)
+  val bucket = Nitric.bucket("images").with(BucketPermission.Read)
 
-  // Get an upload url that lasts 600 seconds
-  val url = bucket.file("cat.png").getUploadUrl()
+  // Get a download url that lasts 600 seconds
+  val url = bucket.file("cat.png").getDownloadUrl()
 
   Nitric.run()
 }
@@ -49,7 +49,7 @@ fun main() {
 
 ## Examples
 
-### Create a temporary file upload link for a user
+### Create a temporary file download link for a user
 
 <CodeGroup>
 
@@ -59,10 +59,10 @@ import io.nitric.resources.BucketPermission;
 
 public class Application {
   public static void main(String[] args) {
-    var bucket = Nitric.INSTANCE.bucket("images").with(BucketPermission.Write);
+    var bucket = Nitric.INSTANCE.bucket("images").with(BucketPermission.Read);
 
-    // Get an upload url that lasts 600 seconds
-    var url = bucket.file("cat.png").getUploadUrl();
+    // Get a download url that lasts 600 seconds
+    var url = bucket.file("cat.png").getDownloadUrl();
 
     Nitric.INSTANCE.run();
   }
@@ -76,8 +76,8 @@ import io.nitric.resources.BucketPermission
 fun main() {
   val bucket = Nitric.bucket("images").with(BucketPermission.Write)
 
-  // Get an upload url that lasts 600 seconds
-  val url = bucket.file("cat.png").getUploadUrl()
+  // Get a download url that lasts 600 seconds
+  val url = bucket.file("cat.png").getDownloadUrl()
 
   Nitric.run()
 }

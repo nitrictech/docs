@@ -43,7 +43,7 @@ data class User(val name: String, val age: Int)
 fun main() {
   val api = Nitric.api("public")
 
-  api.route("/customer").get() { ctx ->
+  api.route("/customer").get { ctx ->
     // construct response for the GET: /customers request...
     ctx.resp.json(User("John Smith", 31))
     ctx
@@ -53,7 +53,7 @@ fun main() {
 }
 ```
 
-<CodeGroup>
+</CodeGroup>
 
 ## Parameters
 
@@ -110,7 +110,7 @@ data class User(val name: String, val age: Int)
 fun main() {
   val api = Nitric.api("public")
 
-  api.route("/customer").get() { ctx ->
+  api.route("/customer").get { ctx ->
     // construct response for the GET: /customers request...
     ctx.resp.json(User("John Smith", 31))
     ctx
@@ -120,7 +120,7 @@ fun main() {
 }
 ```
 
-<CodeGroup>
+</CodeGroup>
 
 ### Chain functions as a single method handler
 
@@ -180,4 +180,4 @@ fun main() {
 }
 ```
 
-<CodeGroup>
+</CodeGroup>

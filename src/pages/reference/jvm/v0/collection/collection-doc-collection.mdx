@@ -27,7 +27,7 @@ public class Application {
 
     var drakesProfile = profiles.doc("Drake Mallard");
 
-    var drakesEnemies = drakesProfile.collection("enemies");
+    var drakesEnemies = drakesProfile.collection("enemies", User.class);
 
     Nitric.INSTANCE.run();
   }
@@ -41,11 +41,11 @@ import io.nitric.resources.CollectionPermission
 data class User(val name: String, val age: Int)
 
 fun main() {
-  val profiles = Nitric.collection("profiles", User::class.java).with(CollectionPermission.Read)
+  val profiles = Nitric.collection<User>("profiles").with(CollectionPermission.Read)
 
   val drakesProfile = profiles.doc("Drake Mallard")
 
-  val drakesEnemies = drakesProfile.collection("enemies")
+  val drakesEnemies = drakesProfile.collection<User>("enemies")
 
   Nitric.run()
 }
@@ -56,26 +56,15 @@ fun main() {
 ## Parameters
 
 <Properties>
-  <Property name="name" required type="string">
+  <Property name="name" required type="String">
     The name of the child collection to reference
+  </Property>
+  <Property name="type" required type="Class<T>">
+    The type of documents that will be stored in the collection.
   </Property>
 </Properties>
 
-### Notes
-
-Document collection relationships can be at most 1 deep.
-
-```javascript
-import { collection } from '@nitric/sdk'
-
-const profiles = collection('profiles').for('reading')
-
-profiles
-  .doc('Drake Mallard')
-  .collection('enemies')
-  .doc('Steel Beak') // ✔️ We can go this deep
-  .collection('enemies') // ❌ But not this deep
-```
+<Note>Document collection relationships can be at most 1 deep.</Note>
 
 <CodeGroup>
 
@@ -99,9 +88,9 @@ public class Application {
 
     profiles
       .doc("Drake Mallard")
-      .collection("enemies")
+      .collection("enemies", User.class))
       .doc('Steel Beak') // ✔️ We can go this deep
-      .collection('enemies') // ❌ But not this deep
+      .collection('enemies', User.class) // ❌ But not this deep
 
     Nitric.INSTANCE.run();
   }
@@ -115,13 +104,13 @@ import io.nitric.resources.CollectionPermission
 data class User(val name: String, val age: Int)
 
 fun main() {
-  val profiles = Nitric.collection("profiles", User::class.java).with(CollectionPermission.Read)
+  val profiles = Nitric.collection<User>("profiles").with(CollectionPermission.Read)
 
   profiles
     .doc("Drake Mallard")
-    .collection("enemies")
+    .collection<User>("enemies")
     .doc('Steel Beak') // ✔️ We can go this deep
-    .collection('enemies') // ❌ But not this deep
+    .collection<User>('enemies') // ❌ But not this deep
 
   Nitric.run()
 }

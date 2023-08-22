@@ -28,12 +28,12 @@ import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
 fun main() {
-    val queue = Nitric.queue("batch").with(QueuePermission.Send)
+  val queue = Nitric.queue("batch").with(QueuePermission.Send)
 
-    var payload = mapOf("message" to "hello")
-    queue.send(payload)
+  var payload = mapOf("message" to "hello")
+  queue.send(payload)
 
-    Nitric.run()
+  Nitric.run()
 }
 ```
 
@@ -74,12 +74,12 @@ import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
 fun main() {
-    val queue = Nitric.queue("batch").with(QueuePermission.Send)
+  val queue = Nitric.queue("batch").with(QueuePermission.Send)
 
-    var payload = mapOf("message" to "payloads can be any serializable object")
-    queue.send(payload)
+  var payload = mapOf("message" to "payloads can be any serializable object")
+  queue.send(payload)
 
-    Nitric.run()
+  Nitric.run()
 }
 ```
 
@@ -87,37 +87,13 @@ fun main() {
 
 ### Send multiple tasks to a queue
 
-```javascript
-import { queue } from '@nitric/sdk'
-
-const batchQueue = queue('batch').for('sending')
-
-const tasks = [
-  {
-    payload: {
-      type: 'Email',
-      to: 'hello@example.com',
-      subject: 'Notification',
-      message: 'A notification from Nitric',
-    },
-  },
-  {
-    payload: {
-      type: 'SMS',
-      to: '+17200000000',
-      message: 'A text message from Nitric',
-    },
-  },
-]
-
-await batchQueue.send(tasks)
-```
-
 <CodeGroup>
 
 ```java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
+
+import java.util.List;
 
 public class Application {
   public static void main(String[] args) {
@@ -136,7 +112,7 @@ public class Application {
         "subject", "Notification",
         "message", "A notification from Nitric",
       )
-    )
+    );
     queue.send(payloads);
 
     Nitric.INSTANCE.run();
@@ -149,25 +125,25 @@ import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
 fun main() {
-    val queue = Nitric.queue("batch").with(QueuePermission.Send)
+  val queue = Nitric.queue("batch").with(QueuePermission.Send)
 
-    var payloads = listOf(
-      mapOf(
-        "type" to "SMS",
-        "to" to "+172000000000",
-        "subject" to "Notification",
-        "message" to "A text message from Nitric"
-      ),
-      mapOf(
-        "type" to "Email",
-        "to" to "hello@example.com",
-        "subject" to "Notification",
-        "message" to "A notification from Nitric",
-      )
+  var payloads = listOf(
+    mapOf(
+      "type" to "SMS",
+      "to" to "+172000000000",
+      "subject" to "Notification",
+      "message" to "A text message from Nitric"
+    ),
+    mapOf(
+      "type" to "Email",
+      "to" to "hello@example.com",
+      "subject" to "Notification",
+      "message" to "A notification from Nitric",
     )
-    queue.send(payload)
+  )
+  queue.send(payload)
 
-    Nitric.run()
+  Nitric.run()
 }
 ```
 
@@ -176,14 +152,6 @@ fun main() {
 ### Dealing with failures
 
 In rare cases when sending tasks to a queue some tasks might fail to be sent. The response from `send()` will include an array of any tasks that failed to send. You can process this array to retry or log the error.
-
-```javascript
-const failed = await batchQueue.send(tasks)
-
-for (const task in failed) {
-  console.log(task)
-}
-```
 
 <CodeGroup>
 

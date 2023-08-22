@@ -34,18 +34,18 @@ import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
 fun main() {
-    val queue = Nitric.queue("batch").with(QueuePermission.Send)
+  val queue = Nitric.queue("batch").with(QueuePermission.Send)
 
-    val tasks = queue.receive()
+  val tasks = queue.receive()
 
-    tasks.forEach { task ->
-      // Work on a task...
+  tasks.forEach { task ->
+    // Work on a task...
 
-      // Complete the task
-      task.complete()
-    }
+    // Complete the task
+    task.complete()
+  }
 
-    Nitric.run()
+  Nitric.run()
 }
 ```
 

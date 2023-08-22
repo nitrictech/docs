@@ -118,18 +118,18 @@ import io.nitric.faas.v0.HttpContext;
 import io.nitric.resources.ApiOptions;
 
 public class Application {
-    static HttpContext authMiddleware(HttpContext ctx, Handler<HttpContext> next) {
-      // perform auth validation
-      return next.invoke(ctx);
-    }
+  static HttpContext authMiddleware(HttpContext ctx, Handler<HttpContext> next) {
+    // perform auth validation
+    return next.invoke(ctx);
+  }
 
-    public static void main(String[] args) {
-      var apiOpts = new ApiOptions.Builder().middleware(Application::authMiddleware).build();
+  public static void main(String[] args) {
+    var apiOpts = new ApiOptions.Builder().middleware(Application::authMiddleware).build();
 
-      var api = Nitric.INSTANCE.api("public", apiOpts);
+    var api = Nitric.INSTANCE.api("public", apiOpts);
 
-      Nitric.INSTANCE.run();
-    }
+    Nitric.INSTANCE.run();
+  }
 }
 ```
 
@@ -168,13 +168,13 @@ import io.nitric.Nitric;
 import io.nitric.resources.ApiOptions;
 
 public class Application {
-    public static void main(String[] args) {
-      var apiOpts = new ApiOptions.Builder().basePath("/api/v1").build();
+  public static void main(String[] args) {
+    var apiOpts = new ApiOptions.Builder().basePath("/api/v1").build();
 
-      var api = Nitric.INSTANCE.api("private", apiOpts);
+    var api = Nitric.INSTANCE.api("private", apiOpts);
 
-      Nitric.INSTANCE.run();
-    }
+    Nitric.INSTANCE.run();
+  }
 }
 ```
 
@@ -217,8 +217,8 @@ public class Application {
       .securityDefinitions(Map.of(
         // define a security definition called 'user'
         "user", new JwtSecurityDefinition(
-            "https://example-issuer.com",
-            List.of("YOUR-AUDIENCES")
+          "https://example-issuer.com",
+          List.of("YOUR-AUDIENCES")
         )
       )).security(Map.of(
         // apply the 'user' security definition to the whole API with the scopes required.

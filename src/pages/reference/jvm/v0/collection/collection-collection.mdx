@@ -1,9 +1,9 @@
 export const description =
-  "Reference for Nitric's JVM library - Process query results as a stream"
+  "Reference for Nitric's JVM library - Get a query-only sub-collection reference, this can be used to query commonly named collections across documents."
 
-# JVM - collection.query.stream()
+# JVM - collection.collection()
 
-Process query results as a stream.
+Get a query-only sub-collection reference, this can be used to query commonly named collections across documents.
 
 <CodeGroup>
 
@@ -19,14 +19,15 @@ class User {
     this.name = name;
     this.age = age;
   }
-
 }
 
 public class Application {
   public static void main(String[] args) {
     var profiles = Nitric.INSTANCE.collection("profiles", User.class).with(CollectionPermission.Read);
 
-    var profileQuery = profiles.query().stream();
+    var drakesProfile = profiles.doc("Drake Mallard");
+
+    var drakesEnemies = drakesProfile.collection("enemies", User.class);
 
     Nitric.INSTANCE.run();
   }
@@ -42,7 +43,7 @@ data class User(val name: String, val age: Int)
 fun main() {
   val profiles = Nitric.collection<User>("profiles").with(CollectionPermission.Read)
 
-  val profilesQuery = profiles.query().stream()
+  val enemies = profiles.collection<User>("enemies")
 
   Nitric.run()
 }
@@ -50,9 +51,20 @@ fun main() {
 
 </CodeGroup>
 
+## Parameters
+
+<Properties>
+  <Property name="name" required type="String">
+    The name of the sub-collection to reference
+  </Property>
+  <Property name="type" required type="Class<T>">
+    The type of documents that will be stored in the collection.
+  </Property>
+</Properties>
+
 ## Examples
 
-### Streaming results from a query
+### Create a query for a sub collection
 
 <CodeGroup>
 
@@ -68,19 +80,15 @@ class User {
     this.name = name;
     this.age = age;
   }
-
 }
 
 public class Application {
   public static void main(String[] args) {
     var profiles = Nitric.INSTANCE.collection("profiles", User.class).with(CollectionPermission.Read);
 
-    var profileQuery = profiles.query().stream();
+    var drakesProfile = profiles.doc("Drake Mallard");
 
-    while (profileQuery.hasNext()) {
-      var user = profileQuery.next();
-      System.out.println(user);
-    }
+    var drakesEnemies = drakesProfile.collection("enemies", User.class);
 
     Nitric.INSTANCE.run();
   }
@@ -96,12 +104,7 @@ data class User(val name: String, val age: Int)
 fun main() {
   val profiles = Nitric.collection<User>("profiles").with(CollectionPermission.Read)
 
-  val profilesQuery = profiles.query().stream()
-
-  while (profilesQuery.hasNext()) {
-    val user = profilesQuery.next()
-    println(user)
-  }
+  val enemies = profiles.collection<User>("enemies")
 
   Nitric.run()
 }
@@ -111,6 +114,4 @@ fun main() {
 
 ### See also
 
-- [query().where()](./collection-query-where)
-- [query().limit()](./collection-query-limit)
-- [query().pagingFrom()](./collection-query-pagingfrom)
+- [collection().query()](./collection-query)

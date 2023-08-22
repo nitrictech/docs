@@ -12,14 +12,14 @@ import io.nitric.Nitric;
 
 public class Application {
   public static void main(String[] args) {
-    var api = Nitric.INSTANCE.api("public");
+	var api = Nitric.INSTANCE.api("public");
 
-    api.route("/customers").post((ctx) -> {
-      // handle POST request
-      return ctx;
-    });
+	api.route("/customers").post((ctx) -> {
+	  // handle POST request
+	  return ctx;
+	});
 
-    Nitric.INSTANCE.run();
+	Nitric.INSTANCE.run();
   }
 }
 ```
@@ -30,16 +30,16 @@ import io.nitric.Nitric
 fun main() {
   val api = Nitric.api("public")
 
-  api.route("/customer").post() { ctx ->
-    // handle POST request
-    ctx
+  api.route("/customer").post { ctx ->
+	// handle POST request
+	ctx
   }
 
   Nitric.run()
 }
 ```
 
-<CodeGroup>
+</CodeGroup>
 
 ## Parameters
 
@@ -65,14 +65,14 @@ import io.nitric.Nitric;
 
 public class Application {
   public static void main(String[] args) {
-    var api = Nitric.INSTANCE.api("public");
+	var api = Nitric.INSTANCE.api("public");
 
-    api.route("/customers").post((ctx) -> {
-      // handle POST request
-      return ctx;
-    });
+	api.route("/customers").post((ctx) -> {
+	  // handle POST request
+	  return ctx;
+	});
 
-    Nitric.INSTANCE.run();
+	Nitric.INSTANCE.run();
   }
 }
 ```
@@ -83,16 +83,16 @@ import io.nitric.Nitric
 fun main() {
   val api = Nitric.api("public")
 
-  api.route("/customer").post() { ctx ->
-    // handle POST request
-    ctx
+  api.route("/customer").post { ctx ->
+	// handle POST request
+	ctx
   }
 
   Nitric.run()
 }
 ```
 
-<CodeGroup>
+</CodeGroup>
 
 ### Chain functions as a single method handler
 
@@ -109,21 +109,21 @@ import java.util.List;
 
 public class Application {
   static HttpContext validateRequest(HttpContext ctx, Handler<HttpContext> next) {
-    // validateRequest
-    return next.invoke(ctx);
+	// validateRequest
+	return next.invoke(ctx);
   }
 
   static HttpContext handleRequest(HttpContext ctx, Handler<HttpContext> next) {
-    // handle request
-    return next.invoke(ctx);
+	// handle request
+	return next.invoke(ctx);
   }
 
   public static void main(String[] args) {
-    var api = Nitric.INSTANCE.api("public");
+	var api = Nitric.INSTANCE.api("public");
 
-    api.route("/customer").post(List.of(Application::validateRequest, Application::handleRequest));
+	api.route("/customer").post(List.of(Application::validateRequest, Application::handleRequest));
 
-    Nitric.INSTANCE.run();
+	Nitric.INSTANCE.run();
   }
 }
 ```
@@ -152,7 +152,7 @@ fun main() {
 }
 ```
 
-<CodeGroup>
+</CodeGroup>
 
 ### Access the request body
 
@@ -165,14 +165,14 @@ import io.nitric.Nitric;
 
 public class Application {
   public static void main(String[] args) {
-    var api = Nitric.INSTANCE.api("public");
+	var api = Nitric.INSTANCE.api("public");
 
-    api.route("/customer").post((ctx) -> {
-      var customerData = ctx.getReq().getData();
-      // parse, validate, and store the request payload...
-    });
+	api.route("/customer").post((ctx) -> {
+	  var customerData = ctx.getReq().getData();
+	  // parse, validate, and store the request payload...
+	});
 
-    Nitric.INSTANCE.run();
+	Nitric.INSTANCE.run();
   }
 }
 ```
@@ -183,13 +183,13 @@ import io.nitric.Nitric
 fun main() {
   val api = Nitric.api("public")
 
-  api.route("/customer").post() { ctx ->
-    val customerData = ctx.req.data
-    // parse, validate, and store the request payload...
+  api.route("/customer").post { ctx ->
+	val customerData = ctx.req.data
+	// parse, validate, and store the request payload...
   }
 
   Nitric.run()
 }
 ```
 
-<CodeGroup>
+</CodeGroup>

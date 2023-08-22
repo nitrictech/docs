@@ -74,7 +74,7 @@ import io.nitric.faas.v0.Frequency;
 
 public class Application {
   public static void main(String[] args) {
-    // create a schedule that runs every 3 hours
+    // create a schedule that runs every 3 minutes
     Nitric.INSTANCE.schedule("send-reminders").every(3, Frequency.Minutes, (ctx) -> {
       // add code to run here
       return ctx;
@@ -90,7 +90,7 @@ import io.nitric.Nitric
 import io.nitric.faas.v0.Frequency
 
 fun main() {
-  // create a schedule that runs every 3 hours
+  // create a schedule that runs every 3 minutes
   Nitric.schedule("send-reminders").every(3, Frequency.Minutes) { ctx ->
     // add code to run here
     ctx
@@ -115,23 +115,23 @@ import io.nitric.faas.v0.Handler;
 import java.util.List;
 
 public class Application {
-    // Create a middleware to handle report generation
-    static EventContext generateReport(EventContext ctx, Handler<EventContext> next) {
-        // code which generates a report
-        return next.invoke(ctx);
-    }
+  // Create a middleware to handle report generation
+  static EventContext generateReport(EventContext ctx, Handler<EventContext> next) {
+    // code which generates a report
+    return next.invoke(ctx);
+  }
 
-    // Create a middleware to handle notifications
-    static EventContext sendNotification(EventContext ctx, Handler<EventContext> next) {
-        // code which sends a notification
-        return next.invoke(ctx);
-    }
+  // Create a middleware to handle notifications
+  static EventContext sendNotification(EventContext ctx, Handler<EventContext> next) {
+    // code which sends a notification
+    return next.invoke(ctx);
+  }
 
-    public static void main(String[] args) {
-        Nitric.INSTANCE.schedule("send-reminders").every(7, Frequency.Days, List.of(Test::generateReport, Test::sendNotification));
+  public static void main(String[] args) {
+    Nitric.INSTANCE.schedule("send-reminders").every(7, Frequency.Days, List.of(Test::generateReport, Test::sendNotification));
 
-        Nitric.INSTANCE.run();
-    }
+    Nitric.INSTANCE.run();
+  }
 }
 ```
 
@@ -143,20 +143,20 @@ import io.nitric.faas.v0.Middleware
 
 // create a middleware to handle report generation
 val generateReport = Middleware<EventContext>{ ctx, next ->
-    // code which generates a report
-    return@Middleware next(ctx)
+  // code which generates a report
+  return@Middleware next(ctx)
 }
 
 // create a middleware to handle notifications
 val sendNotification = Middleware<EventContext>{ ctx, next ->
-    // code which sends a notification
-    return@Middleware next(ctx)
+  // code which sends a notification
+  return@Middleware next(ctx)
 }
 
 fun main() {
-    Nitric.schedule("send-reminders").every(7, Frequency.Days, listOf(generateReport, sendNotification))
+  Nitric.schedule("send-reminders").every(7, Frequency.Days, listOf(generateReport, sendNotification))
 
-    Nitric.run()
+  Nitric.run()
 }
 ```
 

@@ -42,7 +42,7 @@ data class User(val name: String, val age: Int)
 
 fun main() {
   val profiles = Nitric
-    .collection("profiles", User::class.java)
+    .collection<User>("profiles")
     .with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete)
 
   Nitric.run()
@@ -130,7 +130,7 @@ data class User(val name: String, val age: Int)
 
 fun main() {
   val profiles = Nitric
-    .collection("profiles", User::class.java)
+    .collection<User>("profiles")
     .with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete)
 
   Nitric.run()

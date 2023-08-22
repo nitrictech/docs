@@ -5,14 +5,6 @@ export const description =
 
 Get a reference to a document in the collection.
 
-```javascript
-import { collection } from '@nitric/sdk'
-
-const profiles = collection('profiles').for('reading', 'writing')
-
-const drakesProfile = profiles.doc('Drake Mallard')
-```
-
 <CodeGroup>
 
 ```java
@@ -47,7 +39,7 @@ import io.nitric.resources.CollectionPermission
 data class User(val name: String, val age: Int)
 
 fun main() {
-  val profiles = Nitric.collection("profiles", User::class.java).with(CollectionPermission.Read, CollectionPermission.Write)
+  val profiles = Nitric.collection<User>("profiles").with(CollectionPermission.Read, CollectionPermission.Write)
 
   val drakesProfile = profiles.doc("Drake Mallard")
 

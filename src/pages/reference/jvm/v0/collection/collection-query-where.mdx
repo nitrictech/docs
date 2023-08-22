@@ -14,23 +14,23 @@ import io.nitric.api.documents.v0.Operator;
 
 // A user class to store in the profiles collection
 class User {
-    String name;
-    int age;
+  String name;
+  int age;
 
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
+  public User(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
 }
 
 public class Application {
-    public static void main(String[] args) {
-        var profiles = Nitric.INSTANCE.collection("profiles", User.class).with(CollectionPermission.Read);
+  public static void main(String[] args) {
+    var profiles = Nitric.INSTANCE.collection("profiles", User.class).with(CollectionPermission.Read);
 
-        var profilesQuery = profiles.query().where("name", Operator.STARTS_WITH, "T");
+    var profilesQuery = profiles.query().where("name", Operator.STARTS_WITH, "T");
 
-        NITRIC.INSTANCE.run();
-    }
+    NITRIC.INSTANCE.run();
+  }
 }
 ```
 
@@ -43,7 +43,7 @@ import io.nitric.api.documents.v0.Operator
 data class User(val name: String, val age: Int)
 
 fun main() {
-  val profiles = Nitric.collection("profiles", User::class.java).with(CollectionPermission.Read)
+  val profiles = Nitric.collection<User>("profiles").with(CollectionPermission.Read)
 
   val profilesQuery = profiles.query().where("name", Operator.STARTS_WITH, "T")
 
@@ -69,9 +69,7 @@ fun main() {
   </Property>
 </Properties>
 
-### Notes
-
-Where clauses combined together are always considered `AND`
+<Note>Where clauses combined together are always considered `AND`</Note>
 
 ## Examples
 
@@ -86,23 +84,23 @@ import io.nitric.api.documents.v0.Operator;
 
 // A user class to store in the profiles collection
 class User {
-    String name;
-    int age;
+  String name;
+  int age;
 
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
+  public User(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
 }
 
 public class Application {
-    public static void main(String[] args) {
-        var profiles = Nitric.INSTANCE.collection("profiles", User.class).with(CollectionPermission.Read);
+  public static void main(String[] args) {
+    var profiles = Nitric.INSTANCE.collection("profiles", User.class).with(CollectionPermission.Read);
 
-        var profilesQuery = profiles.query().where("name", Operator.STARTS_WITH, "T");
+    var profilesQuery = profiles.query().where("name", Operator.STARTS_WITH, "T");
 
-        NITRIC.INSTANCE.run();
-    }
+    NITRIC.INSTANCE.run();
+  }
 }
 ```
 
@@ -115,7 +113,7 @@ import io.nitric.api.documents.v0.Operator
 data class User(val name: String, val age: Int)
 
 fun main() {
-  val profiles = Nitric.collection("profiles", User::class.java).with(CollectionPermission.Read)
+  val profiles = Nitric.collection<User>("profiles").with(CollectionPermission.Read)
 
   val profilesQuery = profiles.query().where("name", Operator.STARTS_WITH, "T")
 

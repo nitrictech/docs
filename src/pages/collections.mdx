@@ -141,7 +141,7 @@ data class Country(val name: String, val population: Int)
 
 fun main() {
   val countries = Nitric
-    .collection("countries", Country::class.java)
+    .collection<Country>("countries")
     .with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete)
 
 	Nitric.run()
@@ -245,7 +245,7 @@ data class Country(val name: String, val population: Int)
 
 fun main() {
   val countries = Nitric
-    .collection("countries", Country::class.java)
+    .collection<Country>("countries")
     .with(CollectionPermission.Write)
 
 	countries.doc("USA").set(Country("United States of America", 329500000))
@@ -374,7 +374,7 @@ import io.nitric.resources.CollectionPermission
 data class Country(...)
 
 fun main() {
-	val countries = Nitric.collection("countries", Country::class.java).with(CollectionPermission.Read)
+	val countries = Nitric.collection<Country>("countries").with(CollectionPermission.Read)
 
 	val country = countries.doc("USA").get()
 

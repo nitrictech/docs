@@ -13,7 +13,7 @@ import io.nitric.faas.v0.Frequency;
 
 public class Application {
   public static void main(String[] args) {
-    // create a schedule that runs every 3 hours
+    // Create a schedule that runs at 1:00am on the 1st of every month
     Nitric.INSTANCE.schedule("send-reminder").cron("0 1 1 * *", (ctx) -> {
       // add code to run here
       return ctx;
@@ -29,7 +29,7 @@ import io.nitric.Nitric
 import io.nitric.faas.v0.Frequency
 
 fun main() {
-  // create a schedule that runs every 3 hours
+  // Create a schedule that runs at 1:00am on the 1st of every month
   Nitric.schedule("send-reminder").cron("0 1 1 * *") { ctx ->
     // add code to run here
     ctx

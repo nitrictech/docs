@@ -30,7 +30,7 @@ import io.nitric.Nitric
 fun main() {
   val api = Nitric.api("public")
 
-  api.route("/customer").delete() { ctx ->
+  api.route("/customer").delete { ctx ->
     // handle DELETE request
     ctx
   }
@@ -39,7 +39,7 @@ fun main() {
 }
 ```
 
-<CodeGroup>
+</CodeGroup>
 
 ## Parameters
 
@@ -83,7 +83,7 @@ import io.nitric.Nitric
 fun main() {
   val api = Nitric.api("public")
 
-  api.route("/customer").delete() { ctx ->
+  api.route("/customer").delete { ctx ->
     // handle DELETE request
     ctx
   }
@@ -92,7 +92,7 @@ fun main() {
 }
 ```
 
-<CodeGroup>
+</CodeGroup>
 
 ### Chain functions as a single method handler
 
@@ -152,7 +152,7 @@ fun main() {
 }
 ```
 
-<CodeGroup>
+</CodeGroup>
 
 ### Access the request body
 
@@ -183,7 +183,7 @@ import io.nitric.Nitric
 fun main() {
   val api = Nitric.api("public")
 
-  api.route("/customer").delete() { ctx ->
+  api.route("/customer").delete { ctx ->
     val customerData = ctx.req.data
     // parse, validate, and store the request payload...
   }
@@ -192,4 +192,4 @@ fun main() {
 }
 ```
 
-<CodeGroup>
+</CodeGroup>
