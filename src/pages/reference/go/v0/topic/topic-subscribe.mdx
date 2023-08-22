@@ -7,22 +7,22 @@ Subscribe a handler to a topic and receive new events for processing.
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	nitric.NewTopic("updates").Subscribe(func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
-		fmt.Println("received update")
+  nitric.NewTopic("updates").Subscribe(func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+    fmt.Println("received update")
 
-		return ctx, nil
-	})
+    return ctx, nil
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -40,22 +40,22 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	nitric.NewTopic("updates").Subscribe(func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
-		fmt.Println("received update")
+  nitric.NewTopic("updates").Subscribe(func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+    fmt.Println("received update")
 
-		return ctx, nil
-	})
+    return ctx, nil
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -63,30 +63,30 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func validateUpdate(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
-	// validate update
+  // validate update
 
-	return next(ctx)
+  return next(ctx)
 }
 
 func handleUpdate(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
-	// handle update
+  // handle update
 
-	return next(ctx)
+  return next(ctx)
 }
 
 func main() {
-	nitric.NewTopic("updates").Subscribe(faas.ComposeEventMiddleware(validateUpdate, handleUpdate))
+  nitric.NewTopic("updates").Subscribe(faas.ComposeEventMiddleware(validateUpdate, handleUpdate))
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

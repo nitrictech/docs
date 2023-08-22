@@ -7,26 +7,26 @@ Write a file to a bucket.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketWriting)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketWriting)
+  if err != nil {
+    return
+  }
 
-	err := bucket.File("cat.png").Write(context.TODO(), []byte("contents"))
-	if err != nil {
-		return
-	}
+  err := bucket.File("cat.png").Write(context.TODO(), []byte("contents"))
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -47,25 +47,25 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketWriting)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketWriting)
+  if err != nil {
+    return
+  }
 
-	err := bucket.File("cat.png").Write(context.TODO(), []byte("contents"))
-	if err != nil {
-		return
-	}
+  err := bucket.File("cat.png").Write(context.TODO(), []byte("contents"))
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

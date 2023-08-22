@@ -7,31 +7,31 @@ Set the value of a document.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionWriting)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionWriting)
+  if err != nil {
+    return
+  }
 
-	drakeProfileRef := profiles.Doc("Drake Mallard")
+  drakeProfileRef := profiles.Doc("Drake Mallard")
 
-	err = drakeProfileRef.Set(context.TODO(), map[string]interface{}{
-		"firstName": "Drake",
-		"lastName": "Mallard",
-	})
-	if err != nil {
-		return
-	}
+  err = drakeProfileRef.Set(context.TODO(), map[string]interface{}{
+    "firstName": "Drake",
+    "lastName": "Mallard",
+  })
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -52,31 +52,31 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionWriting)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionWriting)
+  if err != nil {
+    return
+  }
 
-	drakeProfileRef := profiles.Doc("Drake Mallard")
+  drakeProfileRef := profiles.Doc("Drake Mallard")
 
-	err = drakeProfileRef.Set(context.TODO(), map[string]interface{}{
-		"firstName": "Drake",
-		"lastName": "Mallard",
-	})
-	if err != nil {
-		return
-	}
+  err = drakeProfileRef.Set(context.TODO(), map[string]interface{}{
+    "firstName": "Drake",
+    "lastName": "Mallard",
+  })
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -84,36 +84,36 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting)
+  if err != nil {
+    return
+  }
 
-	drakeProfileRef := profiles.Doc("Drake Mallard")
+  drakeProfileRef := profiles.Doc("Drake Mallard")
 
-	existingProfile, err := drakeProfileRef.Get(context.TODO())
-	if err != nil {
-		return
-	}
+  existingProfile, err := drakeProfileRef.Get(context.TODO())
+  if err != nil {
+    return
+  }
 
-	contents := existingProfile.Content()
-	contents["firstName"] = "Drake"
+  contents := existingProfile.Content()
+  contents["firstName"] = "Drake"
 
-	err = drakeProfileRef.Set(context.TODO(), contents)
-	if err != nil {
-		return
-	}
+  err = drakeProfileRef.Set(context.TODO(), contents)
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

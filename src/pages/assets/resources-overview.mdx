@@ -52,15 +52,15 @@ Nitric.run()
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	publicApi, err := nitric.NewApi("public")
-	if err != nil {
-		return
-	}
+  publicApi, err := nitric.NewApi("public")
+  if err != nil {
+    return
+  }
 
   // ✅ This declaration will work
   files, err := nitric.NewBucket("files").With(resources.BucketReading)
@@ -226,43 +226,43 @@ Nitric.run()
 package resources
 
 import (
-	"github.com/nitrictech/go-sdk/api/storage"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/api/storage"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 type Resources struct {
-	PublicApi resources.Api
-	BucketOne storage.Bucket
-	BucketTwo storage.Bucket
+  PublicApi resources.Api
+  BucketOne storage.Bucket
+  BucketTwo storage.Bucket
 }
 
 var Manager *Resources
 
 func NewManager() (*Resources, error) {
-	if Manager == nil {
-		api, err := nitric.NewApi("public")
-		if err != nil {
-			return nil, err
-		}
+  if Manager == nil {
+    api, err := nitric.NewApi("public")
+    if err != nil {
+      return nil, err
+    }
 
-		bucketOne, err := nitric.NewBucket("bucket-one").With(nitric.BucketReading)
-		if err != nil {
-			return nil, err
-		}
+    bucketOne, err := nitric.NewBucket("bucket-one").With(nitric.BucketReading)
+    if err != nil {
+      return nil, err
+    }
 
-		bucketTwo, err := nitric.NewBucket("bucket-two").With(nitric.BucketReading)
-		if err != nil {
-			return nil, err
-		}
+    bucketTwo, err := nitric.NewBucket("bucket-two").With(nitric.BucketReading)
+    if err != nil {
+      return nil, err
+    }
 
-		Manager = &Resources{
-			PublicApi: api,
-			BucketOne: bucketOne,
-			BucketTwo: bucketTwo,
-		}
-	}
+    Manager = &Resources{
+      PublicApi: api,
+      BucketOne: bucketOne,
+      BucketTwo: bucketTwo,
+    }
+  }
 
-	return Manager, nil
+  return Manager, nil
 }
 
 
@@ -270,16 +270,16 @@ func NewManager() (*Resources, error) {
 package main
 
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 
-	"example/resources"
+  "example/resources"
 )
 
 func main() {
-	manager, err := resources.NewManager()
+  manager, err := resources.NewManager()
 
   manager.PublicApi.Get("/bucket-one/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
     file := manager.BucketOne.File(ctx.Request.PathParams()["name"])
@@ -297,16 +297,16 @@ func main() {
 package main
 
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 
-	"example/resources"
+  "example/resources"
 )
 
 func main() {
-	manager, err := resources.NewManager()
+  manager, err := resources.NewManager()
 
   manager.PublicApi.Get("/bucket-one/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
     file := manager.BucketTwo.File(ctx.Request.PathParams()["name"])

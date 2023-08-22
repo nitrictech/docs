@@ -7,20 +7,20 @@ Creates a new HTTP API.
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := nitric.NewApi("public")
-	if err != nil {
-		return
-	}
+  api, err := nitric.NewApi("public")
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -104,20 +104,20 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := nitric.NewApi("public")
-	if err != nil {
-		return
-	}
+  api, err := nitric.NewApi("public")
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -125,26 +125,26 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-	// Perform auth validation
-	return next(ctx)
+  // Perform auth validation
+  return next(ctx)
 }
 
 func main() {
-	api, err := nitric.NewApi("private", nitric.WithMiddleware(authMiddleware))
-	if err != nil {
-		return
-	}
+  api, err := nitric.NewApi("private", nitric.WithMiddleware(authMiddleware))
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -152,8 +152,8 @@ func main() {
 
 ```go
 func authMiddleware(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-	// Perform auth validation
-	return next(ctx)
+  // Perform auth validation
+  return next(ctx)
 }
 ```
 
@@ -167,20 +167,20 @@ If you need to put all the routes in your api below a shared base path, you can 
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	v1Api, err := nitric.NewApi("public", nitric.WithPath("/api/v1/"))
-	if err != nil {
-		return
-	}
+  v1Api, err := nitric.NewApi("public", nitric.WithPath("/api/v1/"))
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -188,34 +188,34 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	secureApi, err := nitric.NewApi(
-		"secure",
-		// define a security definition called 'user'
-		nitric.WithSecurityJwtRule("user", nitric.JwtSecurityRule{
-			Issuer: "https://example-issuer.com",
-			Audiences: []string{ "YOUR-AUDIENCES" },
-		}),
-		// You can optionally apply security rules to the entire API
-		nitric.WithSecurity(
-			// apply the user security definition to the whole API
-			"user",
-			// Optionally apply required scopes to this api
-			// in this case users will require the 'products:read' scope to access the API
-			[]string{"products:read"},
-		),
-	)
-	if err != nil {
-		return
-	}
+  secureApi, err := nitric.NewApi(
+    "secure",
+    // define a security definition called 'user'
+    nitric.WithSecurityJwtRule("user", nitric.JwtSecurityRule{
+      Issuer: "https://example-issuer.com",
+      Audiences: []string{ "YOUR-AUDIENCES" },
+    }),
+    // You can optionally apply security rules to the entire API
+    nitric.WithSecurity(
+      // apply the user security definition to the whole API
+      "user",
+      // Optionally apply required scopes to this api
+      // in this case users will require the 'products:read' scope to access the API
+      []string{"products:read"},
+    ),
+  )
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

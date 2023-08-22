@@ -7,30 +7,30 @@ Publish an event (push based message) to a topic.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/api/events"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/api/events"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
-	if err != nil {
-		fmt.Println(err)
+  updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
+  if err != nil {
+    fmt.Println(err)
 
-		return
-	}
+    return
+  }
 
-	updates.Publish(context.TODO(), &events.Event{
-		Payload: map[string]interface{}{
-			"something": "amazing happened",
-		},
-	})
+  updates.Publish(context.TODO(), &events.Event{
+    Payload: map[string]interface{}{
+      "something": "amazing happened",
+    },
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -67,29 +67,29 @@ Publishing messages to a topic will push a copy of the message to each of the to
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/api/events"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/api/events"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
-	if err != nil {
-		fmt.Println(err)
+  updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
+  if err != nil {
+    fmt.Println(err)
 
-		return
-	}
+    return
+  }
 
-	err := updates.Publish(context.TODO(), &events.Event{
-		Payload: map[string]interface{}{
-			"something": "amazing happened",
-		},
-	})
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  err := updates.Publish(context.TODO(), &events.Event{
+    Payload: map[string]interface{}{
+      "something": "amazing happened",
+    },
+  })
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -99,31 +99,31 @@ You can delay the delivery of messages sent to a topic. The current maximum dela
 
 ```go
 import (
-	"context"
-	"fmt"
-	"time"
+  "context"
+  "fmt"
+  "time"
 
-	"github.com/nitrictech/go-sdk/api/events"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/api/events"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
-	if err != nil {
-		fmt.Println(err)
+  updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
+  if err != nil {
+    fmt.Println(err)
 
-		return
-	}
+    return
+  }
 
-	updates.Publish(context.TODO(), &events.Event{
-		Payload: map[string]interface{}{
-			"something": "amazing happened",
-		},
-	}, events.WithDelay(time.Hour))
+  updates.Publish(context.TODO(), &events.Event{
+    Payload: map[string]interface{}{
+      "something": "amazing happened",
+    },
+  }, events.WithDelay(time.Hour))
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

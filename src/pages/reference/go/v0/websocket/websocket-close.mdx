@@ -7,23 +7,23 @@ Closes a connection to a websocket
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
+  ws, err := nitric.NewWebsocket("public")
+  if err != nil {
+    return
+  }
 
-	ws.Close(context.TODO(), "D28BA458-BFF4-404A")
+  ws.Close(context.TODO(), "D28BA458-BFF4-404A")
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -44,31 +44,31 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
+  ws, err := nitric.NewWebsocket("public")
+  if err != nil {
+    return
+  }
 
-	// Broadcast message to all the registered websocket connections
-	ws.On(faas.WebsocketMessage, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-		message := string(ctx.Request.Data())
-		if message == "close" {
-			err := ws.Close(ctx.Request.Context(), ctx.Request.ConnectionID())
-			return ctx, err
-		}
+  // Broadcast message to all the registered websocket connections
+  ws.On(faas.WebsocketMessage, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+    message := string(ctx.Request.Data())
+    if message == "close" {
+      err := ws.Close(ctx.Request.Context(), ctx.Request.ConnectionID())
+      return ctx, err
+    }
 
-		return next(ctx)
-	})
+    return next(ctx)
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

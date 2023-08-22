@@ -7,22 +7,22 @@ Limit the number of results returned by a query.
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
+  if err != nil {
+    return
+  }
 
-	profilesQuery := profiles.Query().Limit(10)
+  profilesQuery := profiles.Query().Limit(10)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

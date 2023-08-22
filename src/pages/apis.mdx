@@ -40,7 +40,7 @@ Nitric.run()
 ```go
 import (
   "github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
@@ -57,8 +57,8 @@ func main() {
   })
 
   if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -271,26 +271,26 @@ Nitric.run()
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	secureApi, err := nitric.NewApi("main",
-		// define a security definition named 'default'
-		resources.WithSecurityJwtRule("default", resources.JwtSecurityRule{
-			Issuer: "https://dev-abc123.us.auth0.com",
-			Audiences: []string{ "https://test-security-definition/" },
-		}),
-		// apply the 'default' security definition to all routes in this API.
-		resources.WithSecurity("default",	[]string{}),
-	)
+  secureApi, err := nitric.NewApi("main",
+    // define a security definition named 'default'
+    resources.WithSecurityJwtRule("default", resources.JwtSecurityRule{
+      Issuer: "https://dev-abc123.us.auth0.com",
+      Audiences: []string{ "https://test-security-definition/" },
+    }),
+    // apply the 'default' security definition to all routes in this API.
+    resources.WithSecurity("default",  []string{}),
+  )
   if err != nil {
     return
   }
 
   if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -343,25 +343,25 @@ Nitric.run()
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	secureApi, err := nitric.NewApi("main",
+  secureApi, err := nitric.NewApi("main",
     // only authorize requests with the 'user.read' scope
     resources.WithSecurity("user", []string{ "user.read" }),
-		resources.WithSecurityJwtRule("user", resources.JwtSecurityRule{
-			Issuer: "https://dev-abc123.us.auth0.com",
-			Audiences: []string{ "https://test-security-definition/" },
-		}),
-	)
+    resources.WithSecurityJwtRule("user", resources.JwtSecurityRule{
+      Issuer: "https://dev-abc123.us.auth0.com",
+      Audiences: []string{ "https://test-security-definition/" },
+    }),
+  )
   if err != nil {
     return
   }
 
   if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -445,13 +445,14 @@ async def validate(ctx, nxt: HttpMiddleware):
 
 ```go
 func validate(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-	_, ok := ctx.Request.Headers()["content-type"]
-	if !ok {
-		ctx.Response.Status = 400
-		ctx.Response.Body = []byte("header 'Content-Type' is required")
-		return ctx, nil
-	}
-	return next(ctx)
+  _, ok := ctx.Request.Headers()["content-type"]
+  if !ok {
+    ctx.Response.Status = 400
+    ctx.Response.Body = []byte("header 'Content-Type' is required")
+    return ctx, nil
+  }
+
+  return next(ctx)
 }
 ```
 
@@ -497,8 +498,8 @@ func main() {
   }
 
   if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -542,14 +543,14 @@ func main() {
   }
 
   // Inline using .Get()
-	customersApi.Get("/hello", faas.ComposeHttpMiddleware(middleware.ValidateRequest, middleware.LogRequest, handler))
+  customersApi.Get("/hello", faas.ComposeHttpMiddleware(middleware.ValidateRequest, middleware.LogRequest, handler))
 
   // Using .NewRoute()
-	customersApi.NewRoute("/hello", middleware.ValidateRequest, middleware.LogRequest).Post(handler)
+  customersApi.NewRoute("/hello", middleware.ValidateRequest, middleware.LogRequest).Post(handler)
 
   if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+    fmt.Println(err)
+  }
 }
 ```
 

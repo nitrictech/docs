@@ -7,35 +7,35 @@ Send tasks to a queue.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/api/queues"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/api/queues"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := nitric.NewQueue("queue-name").With(nitric.QueueSending)
-	if err != nil {
-		return
-	}
+  queue, err := nitric.NewQueue("queue-name").With(nitric.QueueSending)
+  if err != nil {
+    return
+  }
 
-	_, err := queue.Send(context.TODO(), []*queues.Task{
-		{
-			ID: "1234",
-			PayloadType: "message",
-			Payload: map[string]interface{}{
-				"message": "hello world",
-			},
-		},
-	})
-	if err != nil {
-		return
-	}
+  _, err := queue.Send(context.TODO(), []*queues.Task{
+    {
+      ID: "1234",
+      PayloadType: "message",
+      Payload: map[string]interface{}{
+        "message": "hello world",
+      },
+    },
+  })
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -56,35 +56,35 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/api/queues"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/api/queues"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := nitric.NewQueue("blah").With(nitric.QueueSending)
-	if err != nil {
-		return
-	}
+  queue, err := nitric.NewQueue("blah").With(nitric.QueueSending)
+  if err != nil {
+    return
+  }
 
-	_, err := queue.Send(context.TODO(), []*queues.Task{
-		{
-			ID: "1234",
-			PayloadType: "message",
-			Payload: map[string]interface{}{
-				"message": "hello world",
-			},
-		},
-	})
-	if err != nil {
-		return
-	}
+  _, err := queue.Send(context.TODO(), []*queues.Task{
+    {
+      ID: "1234",
+      PayloadType: "message",
+      Payload: map[string]interface{}{
+        "message": "hello world",
+      },
+    },
+  })
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

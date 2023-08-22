@@ -12,26 +12,26 @@ Retrieve details about the deployed Websocket at runtime. These details include:
 
 ```go
 import (
-	"fmt"
+  "fmt"
   "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
+  ws, err := nitric.NewWebsocket("public")
+  if err != nil {
+    return
+  }
 
   details, err := ws.Details(context.TODO())
   if err != nil {
     return
   }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -49,17 +49,17 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
   "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
+  ws, err := nitric.NewWebsocket("public")
+  if err != nil {
+    return
+  }
 
   details, err := ws.Details(context.TODO())
   if err != nil {
@@ -68,8 +68,8 @@ func main() {
 
   fmt.Println(details.URL)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

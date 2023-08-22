@@ -7,30 +7,30 @@ Retrieve the value of a document.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
+  if err != nil {
+    return
+  }
 
-	drakeProfileRef := profiles.Doc("Drake Mallard")
+  drakeProfileRef := profiles.Doc("Drake Mallard")
 
-	doc, err := drakeProfileRef.Get(context.TODO())
-	if err != nil {
-		return
-	}
+  doc, err := drakeProfileRef.Get(context.TODO())
+  if err != nil {
+    return
+  }
 
-	fmt.Println(doc.Content())
+  fmt.Println(doc.Content())
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

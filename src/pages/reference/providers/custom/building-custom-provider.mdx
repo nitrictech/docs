@@ -131,31 +131,31 @@ Using this base, the provider can be registered with the CLI. The following prov
 import (
   ...
   v1 "github.com/nitrictech/nitric/core/pkg/api/nitric/deploy/v1"
-	"github.com/nitrictech/nitric/core/pkg/utils"
-	"google.golang.org/grpc"
+  "github.com/nitrictech/nitric/core/pkg/utils"
+  "google.golang.org/grpc"
   ...
 )
 
 func StartServer(deploySrv v1.DeployServiceServer) {
   // Check the port is available over TCP
-	lis, err := net.Listen("tcp", ":50051"))
-	if err != nil {
-		log.Fatalf("error listening on port %s %v", port, err)
-	}
+  lis, err := net.Listen("tcp", ":50051"))
+  if err != nil {
+    log.Fatalf("error listening on port %s %v", port, err)
+  }
 
   // Create the gRPC server
-	srv := grpc.NewServer()
+  srv := grpc.NewServer()
 
   // Register the deployment server address with the CLI
-	v1.RegisterDeployServiceServer(srv, deploySrv)
+  v1.RegisterDeployServiceServer(srv, deploySrv)
 
-	fmt.Printf("Deployment server started on %s\n", lis.Addr().String())
+  fmt.Printf("Deployment server started on %s\n", lis.Addr().String())
 
   // Start the gRPC server
-	err = srv.Serve(lis)
-	if err != nil {
-		log.Fatalf("error serving requests %v", err)
-	}
+  err = srv.Serve(lis)
+  if err != nil {
+    log.Fatalf("error serving requests %v", err)
+  }
 }
 ```
 
@@ -197,7 +197,7 @@ for _, res := range request.Spec.Resources {
   switch b := res.Config.(type) {
   case *deploy.Resource_Bucket:
     // Create a new bucket
-  	s3Bucket, err := s3.NewBucket(ctx, b.Bucket, &s3.BucketArgs{
+    s3Bucket, err := s3.NewBucket(ctx, b.Bucket, &s3.BucketArgs{
       Tags: pulumi.StringMap{
         "x-nitric-project":    pulumi.String(ctx.Project()),
         "x-nitric-stack":      stackID,
@@ -248,7 +248,7 @@ The runtime code for writing to an S3 bucket would look like so:
 ```go
 func (s *S3StorageService) Write(ctx context.Context, bucket string, key string, object []byte) error {
   // Get the AWS bucket name
-	b, err := s.getBucketName(ctx, bucket)
+  b, err := s.getBucketName(ctx, bucket)
   if err == nil {
     return err
   }
@@ -266,7 +266,7 @@ func (s *S3StorageService) Write(ctx context.Context, bucket string, key string,
     )
   }
 
-	return nil
+  return nil
 }
 ```
 

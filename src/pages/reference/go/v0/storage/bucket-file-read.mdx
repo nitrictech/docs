@@ -7,28 +7,28 @@ Read the contents of a file from a bucket.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
+  if err != nil {
+    return
+  }
 
-	contents, err := bucket.File("cat.png").Read(context.TODO())
-	if err != nil {
-		return
-	}
+  contents, err := bucket.File("cat.png").Read(context.TODO())
+  if err != nil {
+    return
+  }
 
-	fmt.Println(contents)
+  fmt.Println(contents)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -46,27 +46,27 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
+  if err != nil {
+    return
+  }
 
-	contents, err := bucket.File("cat.png").Read(context.TODO())
-	if err != nil {
-		return
-	}
+  contents, err := bucket.File("cat.png").Read(context.TODO())
+  if err != nil {
+    return
+  }
 
-	fmt.Println(contents)
+  fmt.Println(contents)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

@@ -7,35 +7,35 @@ Receive tasks from a queue.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := nitric.NewQueue("queue-name").With(nitric.QueueReceiving)
-	if err != nil {
-		return
-	}
+  queue, err := nitric.NewQueue("queue-name").With(nitric.QueueReceiving)
+  if err != nil {
+    return
+  }
 
-	ctx := context.TODO()
+  ctx := context.TODO()
 
   // Receive up to 10 tasks from the queue
-	tasks, err := queue.Receive(ctx, 10)
-	if err != nil {
-		return
-	}
+  tasks, err := queue.Receive(ctx, 10)
+  if err != nil {
+    return
+  }
 
-	for _, t := range tasks {
-		fmt.Println(t.Task().ID)
+  for _, t := range tasks {
+    fmt.Println(t.Task().ID)
 
-		t.Complete(ctx)
-	}
+    t.Complete(ctx)
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -81,34 +81,34 @@ This means calls to receive will return between 0 and _depth_ tasks.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	queue, err := nitric.NewQueue("queue-name").With(nitric.QueueReceiving)
-	if err != nil {
-		return
-	}
+  queue, err := nitric.NewQueue("queue-name").With(nitric.QueueReceiving)
+  if err != nil {
+    return
+  }
 
-	ctx := context.TODO()
+  ctx := context.TODO()
 
   // Receive up to 10 tasks from the queue
-	tasks, err := queue.Receive(ctx, 10)
-	if err != nil {
-		return
-	}
+  tasks, err := queue.Receive(ctx, 10)
+  if err != nil {
+    return
+  }
 
-	for _, t := range tasks {
-		fmt.Println(t.Task().ID)
+  for _, t := range tasks {
+    fmt.Println(t.Task().ID)
 
-		t.Complete(ctx)
-	}
+    t.Complete(ctx)
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

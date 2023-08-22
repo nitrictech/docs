@@ -9,7 +9,7 @@ Creates a new Queue to send and receive asynchronous tasks.
 import (
   "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
@@ -20,8 +20,8 @@ func main() {
   }
 
   if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -66,7 +66,7 @@ In most instances, code should either send to or receive from a queue, usually n
 import (
   "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
@@ -77,8 +77,8 @@ func main() {
   }
 
   if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -88,7 +88,7 @@ func main() {
 import (
   "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
@@ -101,8 +101,8 @@ func main() {
   tasks := queue.Receive(context.TODO(), 10)
 
   if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+    fmt.Println(err)
+  }
 }
 ```
 
