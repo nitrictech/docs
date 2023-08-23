@@ -27,7 +27,7 @@ func (d *DeployServer) Up(request *deploy.DeployUpRequest, stream deploy.DeployS
     })
 
     if err != nil {
-	    return err
+      return err
     }
 
     res, err := pulumiStack.Up(context.TODO(), optup.ProgressStreams(messageWriter))
@@ -44,15 +44,15 @@ func (d *DeployServer) Up(request *deploy.DeployUpRequest, stream deploy.DeployS
 func (d *DeployServer) Down(request *deploy.DeployDownRequest, stream deploy.DeployService_DownServer) error {
     // Nitric provides details such as stack and project name on the request, but you're free to change these up to suit your needs
     s, err := auto.UpsertStackInlineSource(context.TODO(), "<your_stack_name>", "<your_project_name>", nil)
-	if err != nil {
-		return status.Errorf(codes.Internal, err.Error())
-	}
+  if err != nil {
+    return status.Errorf(codes.Internal, err.Error())
+  }
 
-	// destroy the stack
-	_, err = s.Destroy(context.TODO(), optdestroy.ProgressStreams(dsMessageWriter))
-	if err != nil {
-		return err
-	}
+  // destroy the stack
+  _, err = s.Destroy(context.TODO(), optdestroy.ProgressStreams(dsMessageWriter))
+  if err != nil {
+    return err
+  }
 }
 ```
 

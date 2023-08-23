@@ -7,26 +7,26 @@ Retrieve a page of results for a query. This is an alternative to [Collection.Qu
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
+  if err != nil {
+    return
+  }
 
-	result, err := profiles.Query().Fetch(context.TODO())
-	if err != nil {
-		return
-	}
+  result, err := profiles.Query().Fetch(context.TODO())
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -44,69 +44,69 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
+  if err != nil {
+    return
+  }
 
-	result, err := profiles.Query().Fetch(context.TODO())
-	if err != nil {
-		return
-	}
+  result, err := profiles.Query().Fetch(context.TODO())
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
+  if err != nil {
+    return
+  }
 
-	query := profiles.Query()
+  query := profiles.Query()
 
-	ctx := context.TODO()
+  ctx := context.TODO()
 
-	results, err := query.Fetch(ctx)
-	if err != nil {
-		return
-	}
+  results, err := query.Fetch(ctx)
+  if err != nil {
+    return
+  }
 
-	for len(results.Documents) > 0 || results.PagingToken != nil {
-		for _, doc := range results.Documents {
-			fmt.Println(doc)
-		}
+  for len(results.Documents) > 0 || results.PagingToken != nil {
+    for _, doc := range results.Documents {
+      fmt.Println(doc)
+    }
 
-		if results.PagingToken != nil {
-			results, err = query.FromPagingToken(results.PagingToken).Fetch(ctx)
-			if err != nil {
-				fmt.Println(err)
-				return
-			}
-		}
-	}
+    if results.PagingToken != nil {
+      results, err = query.FromPagingToken(results.PagingToken).Fetch(ctx)
+      if err != nil {
+        fmt.Println(err)
+        return
+      }
+    }
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

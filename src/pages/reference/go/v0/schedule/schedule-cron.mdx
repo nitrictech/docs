@@ -7,10 +7,10 @@ Sets the cron expressions that determines when the schedule triggers and a callb
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
@@ -20,9 +20,9 @@ func main() {
     return ctx, nil
   })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -45,10 +45,10 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
@@ -66,9 +66,9 @@ func main() {
     return ctx, nil
   })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -76,29 +76,29 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func generateReport(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
-	// generate report
+  // generate report
 
-	return next(ctx)
+  return next(ctx)
 }
 
 func sendNotification(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
-	// send notification with the report
+  // send notification with the report
 
-	return next(ctx)
+  return next(ctx)
 }
 
 func main() {
-	nitric.NewSchedule("check for updates").Cron("0 1 1 * *", faas.ComposeEventMiddleware(generateReport, sendNotification))
+  nitric.NewSchedule("check for updates").Cron("0 1 1 * *", faas.ComposeEventMiddleware(generateReport, sendNotification))
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

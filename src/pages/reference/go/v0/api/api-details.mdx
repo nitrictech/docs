@@ -12,26 +12,26 @@ Retrieve details about the deployed API at runtime. These details include:
 
 ```go
 import (
-	"fmt"
-	"context"
+  "fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := nitric.NewApi("public")
-	if err != nil {
-		return
-	}
+  api, err := nitric.NewApi("public")
+  if err != nil {
+    return
+  }
 
-	details, err := api.Details(context.TODO())
-	if err != nil {
-		return
-	}
+  details, err := api.Details(context.TODO())
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -49,27 +49,27 @@ func main() {
 
 ```go
 import (
-	"fmt"
-	"context"
+  "fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	api, err := nitric.NewApi("public")
-	if err != nil {
-		return
-	}
+  api, err := nitric.NewApi("public")
+  if err != nil {
+    return
+  }
 
-	details, err := api.Details(context.TODO())
-	if err != nil {
-		return
-	}
+  details, err := api.Details(context.TODO())
+  if err != nil {
+    return
+  }
 
-	fmt.Println(details.URL)
+  fmt.Println(details.URL)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

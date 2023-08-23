@@ -7,47 +7,47 @@ Create a new bucket notification trigger when certain files are created or delet
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	assets := nitric.NewBucket("assets")
+  assets := nitric.NewBucket("assets")
 
-	readableAssets, err := nitric.NewBucket("assets").With(nitric.BucketReading)
-	if err != nil {
-		return
-	}
+  readableAssets, err := nitric.NewBucket("assets").With(nitric.BucketReading)
+  if err != nil {
+    return
+  }
 
-	assets.On(faas.DeleteNotification, "*", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
-		fmt.Printf("a file named %s was deleted\n", ctx.Request.Key())
+  assets.On(faas.DeleteNotification, "*", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
+    fmt.Printf("a file named %s was deleted\n", ctx.Request.Key())
 
-		return ctx, nil
-	})
+    return ctx, nil
+  })
 
-	assets.On(faas.WriteNotification, "/images/cat", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
-		fmt.Printf("a cat image was written")
+  assets.On(faas.WriteNotification, "/images/cat", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
+    fmt.Printf("a cat image was written")
 
-		return ctx, nil
-	})
+    return ctx, nil
+  })
 
-	assets.On(faas.WriteNotification, "/images/dog", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
-		dogImage, err := readableAssets.File(ctx.Request.Key()).Read(context.TODO())
-		if err != nil {
-			return ctx, err
-		}
+  assets.On(faas.WriteNotification, "/images/dog", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
+    dogImage, err := readableAssets.File(ctx.Request.Key()).Read(context.TODO())
+    if err != nil {
+      return ctx, err
+    }
 
-		fmt.Println(dogImage)
+    fmt.Println(dogImage)
 
-		return ctx, nil
-	})
+    return ctx, nil
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

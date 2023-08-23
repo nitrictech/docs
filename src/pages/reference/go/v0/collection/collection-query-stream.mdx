@@ -7,26 +7,26 @@ Process query results as a stream.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
+  if err != nil {
+    return
+  }
 
-	stream, err := profiles.Query().Stream(context.TODO())
-	if err != nil {
-		return
-	}
+  stream, err := profiles.Query().Stream(context.TODO())
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -44,36 +44,36 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
+  if err != nil {
+    return
+  }
 
-	stream, err := profiles.Query().Stream(context.TODO())
-	if err != nil {
-		return
-	}
+  stream, err := profiles.Query().Stream(context.TODO())
+  if err != nil {
+    return
+  }
 
-	for {
-		res, err := stream.Next()
-		if err != nil {
-			fmt.Println("finished processing with: %w", err)
-			break
-		}
+  for {
+    res, err := stream.Next()
+    if err != nil {
+      fmt.Println("finished processing with: %w", err)
+      break
+    }
 
-		fmt.Println(res.Content())
-	}
+    fmt.Println(res.Content())
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

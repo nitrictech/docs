@@ -8,25 +8,25 @@ Get a list of file references for files that exist in the bucket.
 ```go
 import (
   "context"
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
-	if err != nil {
-		return
-	}
-
-	files, err := bucket.Files(context.TODO())
+  bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
   if err != nil {
     return
   }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  files, err := bucket.Files(context.TODO())
+  if err != nil {
+    return
+  }
+
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -45,20 +45,20 @@ Deleting all files in a bucket
 ```go
 import (
   "context"
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
+  if err != nil {
+    return
+  }
 
   ctx := context.TODO()
 
-	files, err := bucket.Files(ctx)
+  files, err := bucket.Files(ctx)
   if err != nil {
     fmt.Println(err)
     return
@@ -68,9 +68,9 @@ func main() {
     file.Delete(ctx)
   }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

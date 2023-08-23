@@ -27,24 +27,24 @@ Below is an example of a collection, documents, and a sub-collection in JSON for
 ```json
 // Countries collection
 [
-	// Country document
-	{
-		"id": "USA",
-		"population": 329500000,
-		// States sub-collection
-		"states": [
-			// State document
-			{ "id": "Alabama" },
-			{ "id": "Alaska" },
-			...
-			{ "id": "Wyoming" }
-		]
-	},
-	// Country Document
-	{
-		"id": "Canada",
-		"population": 38250000
-	}
+  // Country document
+  {
+    "id": "USA",
+    "population": 329500000,
+    // States sub-collection
+    "states": [
+      // State document
+      { "id": "Alabama" },
+      { "id": "Alaska" },
+      ...
+      { "id": "Wyoming" }
+    ]
+  },
+  // Country Document
+  {
+    "id": "Canada",
+    "population": 38250000
+  }
 ]
 ```
 
@@ -87,18 +87,18 @@ Nitric.run()
 
 ```go
 import (
-	"github.com/nitrictech/go-sdk/resources"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
-	if err != nil {
-		return
-	}
+  countries, err := nitric.NewCollection("Countries").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
+  if err != nil {
+    return
+  }
 
-	if err := resources.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -131,34 +131,34 @@ from nitric.resources import collection
 countries = collection('Countries').allow('writing')
 
 await countries.doc('USA').set({
-	"name": "United States of America",
-	"population": 329500000
+  "name": "United States of America",
+  "population": 329500000
 })
 ```
 
 ```go
 import (
-	"context"
-	"github.com/nitrictech/go-sdk/resources"
+  "context"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
-	if err != nil {
-		return
-	}
+  countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
+  if err != nil {
+    return
+  }
 
-	err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
-		"name": "United States of America",
-		"population": 329500000,
-	})
-	if err != nil {
-		return
-	}
+  err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
+    "name": "United States of America",
+    "population": 329500000,
+  })
+  if err != nil {
+    return
+  }
 
-	if err := resources.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -177,18 +177,18 @@ await countries.doc('USA').set({
 
 ```python
 await countries.doc("USA").set({
-	"name": "United States of America",
-	"population": 330000000,
+  "name": "United States of America",
+  "population": 330000000,
 })
 ```
 
 ```go
 err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
-	"name": "United States of America",
-	"population": 329500000,
+  "name": "United States of America",
+  "population": 329500000,
 })
 if err != nil {
-	return
+  return
 }
 ```
 
@@ -223,24 +223,24 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"github.com/nitrictech/go-sdk/resources"
+  "context"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
-	if err != nil {
-		return
-	}
+  countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
+  if err != nil {
+    return
+  }
 
-	country, err := countries.Doc("USA").Get(context.TODO())
-	if err != nil {
-		return
-	}
+  country, err := countries.Doc("USA").Get(context.TODO())
+  if err != nil {
+    return
+  }
 
-	if err := resources.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -283,38 +283,38 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+  "context"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countryApi, err := resources.NewApi("Countries")
-	if err != nil {
-		return
-	}
+  countryApi, err := nitric.NewApi("Countries")
+  if err != nil {
+    return
+  }
 
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
-	if err != nil {
-		return
-	}
+  countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
+  if err != nil {
+    return
+  }
 
-	countryApi.Get("/country/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-		name := ctx.Request.PathParams()["name"]
+  countryApi.Get("/country/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+    name := ctx.Request.PathParams()["name"]
 
-		country, err := countries.Doc(id).Get(ctx.Request.Context())
-		if err != nil {
-			return ctx, err
-		}
+    country, err := countries.Doc(id).Get(ctx.Request.Context())
+    if err != nil {
+      return ctx, err
+    }
 
-		ctx.Response.Body, err = json.Marshal(country.Content())
+    ctx.Response.Body, err = json.Marshal(country.Content())
 
-		return ctx, err
-	})
+    return ctx, err
+  })
 
-	if err := resources.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -348,8 +348,8 @@ from nitric.application import Nitric
 countries = collection('Countries').allow('writing')
 
 await countries.doc('USA').set({
-	"name": "United States of America",
-	"population": 329500000
+  "name": "United States of America",
+  "population": 329500000
 })
 
 await countries.doc('USA').delete()
@@ -359,34 +359,34 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"github.com/nitrictech/go-sdk/resources"
+  "context"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	countries, err := resources.NewCollection("Countries").With(resources.CollectionWriting)
-	if err != nil {
-		return
-	}
+  countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
+  if err != nil {
+    return
+  }
 
-	// Set the USA document
-	err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
-		"name": "United States of America",
-		"population": 329500000,
-	})
-	if err != nil {
-		return
-	}
+  // Set the USA document
+  err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
+    "name": "United States of America",
+    "population": 329500000,
+  })
+  if err != nil {
+    return
+  }
 
-	// Delete the document
-	err := Countries.Doc("USA").Delete(context.TODO())
-	if err != nil {
-		return
-	}
+  // Delete the document
+  err := Countries.Doc("USA").Delete(context.TODO())
+  if err != nil {
+    return
+  }
 
-	if err := resources.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -407,10 +407,10 @@ const largeCountries = await countries
 
 ```python
 large_countries = (
-	await countries
-		.query()
-		.where("population", ">", 100000000)
-		.fetch()
+  await countries
+    .query()
+    .where("population", ">", 100000000)
+    .fetch()
 )
 ```
 
@@ -418,9 +418,9 @@ large_countries = (
 import "github.com/nitrictech/go-sdk/api/documents"
 ...
 largeCountries, err := countries.
-		Query().
-		Where(documents.Condition("population").Gt(documents.NumberValue(100000000))).
-		Fetch(context.TODO())
+    Query().
+    Where(documents.Condition("population").Gt(documents.NumberValue(100000000))).
+    Fetch(context.TODO())
 ```
 
 </CodeGroup>
@@ -439,11 +439,11 @@ const sCountries = await countries
 
 ```python
 s_countries = (
-	await countries
-		.query()
-		.where("name", "startsWith", "S")
-		.limit(10)
-		.fetch()
+  await countries
+    .query()
+    .where("name", "startsWith", "S")
+    .limit(10)
+    .fetch()
 )
 ```
 
@@ -451,10 +451,10 @@ s_countries = (
 import "github.com/nitrictech/go-sdk/api/documents"
 ...
 largeCountries, err := countries.
-		Query().
-		Where(documents.Condition("name").StartsWith(documents.StringValue("S"))).
-		Limit(10).
-		Fetch(context.TODO())
+    Query().
+    Where(documents.Condition("name").StartsWith(documents.StringValue("S"))).
+    Limit(10).
+    Fetch(context.TODO())
 ```
 
 </CodeGroup>
@@ -490,10 +490,10 @@ const results = await query.fetch()
 
 ```python
 query = (
-	countries
-		.query()
-		.where('name', '!=', 'United States of America')
-		.where('population', '>=', 100000000)
+  countries
+    .query()
+    .where('name', '!=', 'United States of America')
+    .where('population', '>=', 100000000)
 )
 
 results = await query.fetch()
@@ -503,9 +503,9 @@ results = await query.fetch()
 import "github.com/nitrictech/go-sdk/api/documents"
 ...
 query := countries.
-		Query().
-		Where(documents.Condition("name").Ne(documents.StringValue("United States of America"))).
-		Where(documents.Condition("population").Ge(documents.NumberValue(100000000)))
+    Query().
+    Where(documents.Condition("name").Ne(documents.StringValue("United States of America"))).
+    Where(documents.Condition("population").Ge(documents.NumberValue(100000000)))
 
 results, err := query.Fetch(context.TODO())
 ```
@@ -546,7 +546,7 @@ paging_token = results.paging_token
 if paging_token is not None:
     results = await query.page_from(paging_token).fetch()
 
-	paging_token = results.paging_token
+  paging_token = results.paging_token
 ```
 
 ```go
@@ -556,15 +556,15 @@ query := countries.Query().Limit(1000)
 
 results, err := query.Fetch(context.TODO())
 if err != nil {
-	return err
+  return err
 }
 
 pagingToken := results.PagingToken
 
 for pagingToken != nil {
-	results, err = query.FromPagingToken(pagingToken).Fetch(context.TODO())
+  results, err = query.FromPagingToken(pagingToken).Fetch(context.TODO())
 
-	pagingToken = results.PagingToken
+  pagingToken = results.PagingToken
 }
 ```
 
@@ -590,23 +590,23 @@ stream.on('data', (doc) => {
 query = countries.query()
 
 async for doc in query.stream():
-	print(doc.content)
+  print(doc.content)
 ```
 
 ```go
 stream, err := countries.Query().Stream(context.TODO())
 if err != nil {
-	return
+  return
 }
 
 for {
-	res, err := stream.Next() // will return an EOF when done
-	if err != nil {
-		fmt.Println("finished processing stream")
-		break
-	}
+  res, err := stream.Next() // will return an EOF when done
+  if err != nil {
+    fmt.Println("finished processing stream")
+    break
+  }
 
-	fmt.Println(res.Content())
+  fmt.Println(res.Content())
 }
 ```
 
@@ -674,7 +674,7 @@ results = query.page_from(results.paging_token).fetch()
 
 # Streaming
 async for doc in query.stream():
-	print(doc.content)
+  print(doc.content)
 ```
 
 ```go

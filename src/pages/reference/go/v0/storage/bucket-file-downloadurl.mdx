@@ -7,26 +7,26 @@ Create a download url for a file within a bucket.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
+  if err != nil {
+    return
+  }
 
-	uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), 3600)
-	if err != nil {
-		return
-	}
+  uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), 3600)
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -47,26 +47,26 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketReading)
+  if err != nil {
+    return
+  }
 
-	uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), 300)
-	if err != nil {
-		return
-	}
+  uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), 300)
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -74,40 +74,40 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
   api, err := nitric.NewApi("main")
-	if err != nil {
-		return
-	}
+  if err != nil {
+    return
+  }
 
-	bucket, err := nitric.NewBucket("images").With(nitric.BucketReading)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("images").With(nitric.BucketReading)
+  if err != nil {
+    return
+  }
 
-	api.Get("/images/:id", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
-		id := ctx.Request.PathParams()["id"]
+  api.Get("/images/:id", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
+    id := ctx.Request.PathParams()["id"]
 
-		downloadUrl, err := bucket.File(id).DownloadUrl(context.TODO(), 600)
-		if err != nil {
-			return ctx, err
-		}
+    downloadUrl, err := bucket.File(id).DownloadUrl(context.TODO(), 600)
+    if err != nil {
+      return ctx, err
+    }
 
-		ctx.Response.Headers["Location"] = []string{downloadUrl}
-		ctx.Response.Status = 303
+    ctx.Response.Headers["Location"] = []string{downloadUrl}
+    ctx.Response.Status = 303
 
-		return ctx, nil
-	})
+    return ctx, nil
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

@@ -7,20 +7,20 @@ Create a new bucket for storing and retrieving files.
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketWriting, nitric.BucketReading, nitric.BucketDeleting)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("bucket-name").With(nitric.BucketWriting, nitric.BucketReading, nitric.BucketDeleting)
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

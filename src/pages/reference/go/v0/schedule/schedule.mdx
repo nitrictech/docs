@@ -7,22 +7,22 @@ Creates a new Schedule to run a function on a defined frequency.
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	nitric.NewSchedule("aggregate-data").Every("3 days", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
-		fmt.Println("aggregating data")
+  nitric.NewSchedule("aggregate-data").Every("3 days", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+    fmt.Println("aggregating data")
 
-		return ctx, nil
-	})
+    return ctx, nil
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -47,18 +47,18 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	nitric.NewSchedule("send-reminder").Every("1 day", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
-		fmt.Println("sending data")
+  nitric.NewSchedule("send-reminder").Every("1 day", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+    fmt.Println("sending data")
 
-		return ctx, nil
-	})
+    return ctx, nil
+  })
 
   nitric.NewSchedule("archive-data").Cron("0 1 1 * *", func (ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
     fmt.Println("archiving data")
@@ -66,8 +66,8 @@ func main() {
     return ctx, nil
   })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```

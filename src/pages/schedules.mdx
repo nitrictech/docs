@@ -63,22 +63,22 @@ Nitric.run()
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/resources"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	resources.NewSchedule("aggregate-data").Every("3 days", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
-		fmt.Println("aggregating data")
+  resources.NewSchedule("aggregate-data").Every("3 days", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+    fmt.Println("aggregating data")
 
-		return ctx, nil
-	})
+    return ctx, nil
+  })
 
-	if err := resources.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

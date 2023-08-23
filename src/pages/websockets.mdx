@@ -51,36 +51,36 @@ socket.on('message', async (ctx) => {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
+  ws, err := nitric.NewWebsocket("public")
+  if err != nil {
+    return
+  }
 
-	ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-		// handle connections
-		return next(ctx)
-	})
+  ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+    // handle connections
+    return next(ctx)
+  })
 
   ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-		// handle disconnections
-		return next(ctx)
-	})
+    // handle disconnections
+    return next(ctx)
+  })
 
   ws.On(faas.WebsocketMessage, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-		// handle messages
-		return next(ctx)
-	})
+    // handle messages
+    return next(ctx)
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -117,48 +117,48 @@ socket.on('disconnect', async (ctx) => {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
+  ws, err := nitric.NewWebsocket("public")
+  if err != nil {
+    return
+  }
 
-	connections, err := nitric.NewCollection("connections").With(nitric.CollectionEverything...)
-	if err != nil {
-		return
-	}
+  connections, err := nitric.NewCollection("connections").With(nitric.CollectionEverything...)
+  if err != nil {
+    return
+  }
 
-	ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-		err := connections.Doc(ctx.Request.ConnectionID()).Set(ctx.Request.Context(), map[string]interface{}{
-			// store any metadata related to the connection here
-			"connectionId": ctx.Request.ConnectionID(),
-		})
-		if err != nil {
-			return ctx, err
-		}
+  ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+    err := connections.Doc(ctx.Request.ConnectionID()).Set(ctx.Request.Context(), map[string]interface{}{
+      // store any metadata related to the connection here
+      "connectionId": ctx.Request.ConnectionID(),
+    })
+    if err != nil {
+      return ctx, err
+    }
 
-		return next(ctx)
-	})
+    return next(ctx)
+  })
 
-	ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-		// remove the connection from the collection
-		err := connections.Doc(ctx.Request.ConnectionID()).Delete(ctx.Request.Context())
-		if err != nil {
-			return ctx, err
-		}
+  ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+    // remove the connection from the collection
+    err := connections.Doc(ctx.Request.ConnectionID()).Delete(ctx.Request.Context())
+    if err != nil {
+      return ctx, err
+    }
 
-		return next(ctx)
-	})
+    return next(ctx)
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -212,75 +212,75 @@ socket.on('message', async (ctx) => {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/faas"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
+  ws, err := nitric.NewWebsocket("public")
+  if err != nil {
+    return
+  }
 
-	connections, err := nitric.NewCollection("connections").With(nitric.CollectionEverything...)
-	if err != nil {
-		return
-	}
+  connections, err := nitric.NewCollection("connections").With(nitric.CollectionEverything...)
+  if err != nil {
+    return
+  }
 
-	// Register a new connection on connect
-	ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-		err := connections.Doc(ctx.Request.ConnectionID()).Set(ctx.Request.Context(), map[string]interface{}{
-			"connectionId": ctx.Request.ConnectionID(),
-		})
-		if err != nil {
-			return ctx, err
-		}
+  // Register a new connection on connect
+  ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+    err := connections.Doc(ctx.Request.ConnectionID()).Set(ctx.Request.Context(), map[string]interface{}{
+      "connectionId": ctx.Request.ConnectionID(),
+    })
+    if err != nil {
+      return ctx, err
+    }
 
-		return next(ctx)
-	})
+    return next(ctx)
+  })
 
-	// Remove a registered connection on disconnect
-	ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-		err := connections.Doc(ctx.Request.ConnectionID()).Delete(ctx.Request.Context())
-		if err != nil {
-			return ctx, err
-		}
+  // Remove a registered connection on disconnect
+  ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+    err := connections.Doc(ctx.Request.ConnectionID()).Delete(ctx.Request.Context())
+    if err != nil {
+      return ctx, err
+    }
 
-		return next(ctx)
-	})
+    return next(ctx)
+  })
 
-	// Broadcast message to all the registered websocket connections
-	ws.On(faas.WebsocketMessage, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-		connectionStream, err := connections.Query().Stream(ctx.Request.Context())
-		if err != nil {
-			return ctx, err
-		}
+  // Broadcast message to all the registered websocket connections
+  ws.On(faas.WebsocketMessage, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
+    connectionStream, err := connections.Query().Stream(ctx.Request.Context())
+    if err != nil {
+      return ctx, err
+    }
 
-		for {
-			res, err := connectionStream.Next()
-			if err != nil {
-				break // reached the end of the documents
-			}
+    for {
+      res, err := connectionStream.Next()
+      if err != nil {
+        break // reached the end of the documents
+      }
 
-			connectionId, ok := res.Content()["connectionId"].(string)
-			if !ok {
-				continue
-			}
+      connectionId, ok := res.Content()["connectionId"].(string)
+      if !ok {
+        continue
+      }
 
-			err = ws.Send(ctx.Request.Context(), connectionId, ctx.Request.Data())
-			if err != nil {
-				return ctx, err
-			}
-		}
+      err = ws.Send(ctx.Request.Context(), connectionId, ctx.Request.Data())
+      if err != nil {
+        return ctx, err
+      }
+    }
 
-		return next(ctx)
-	})
+    return next(ctx)
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

@@ -40,26 +40,26 @@ var imageData = logo.Read();
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	bucket, err := nitric.NewBucket("profiles").With(nitric.BucketReading)
-	if err != nil {
-		return
-	}
+  bucket, err := nitric.NewBucket("profiles").With(nitric.BucketReading)
+  if err != nil {
+    return
+  }
 
-	contents, err := bucket.File("users/bruce-wayne.png").Read(context.TODO())
-	if err != nil {
-		return
-	}
+  contents, err := bucket.File("users/bruce-wayne.png").Read(context.TODO())
+  if err != nil {
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

@@ -7,25 +7,25 @@ Adds a new where clause to a query, which filters the data returned.
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/api/documents"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/api/documents"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
+  if err != nil {
+    return
+  }
 
-	query := profiles.Query().Where(
-		documents.Condition("name").StartsWith(documents.StringValue("T")),
-	)
+  query := profiles.Query().Where(
+    documents.Condition("name").StartsWith(documents.StringValue("T")),
+  )
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -47,25 +47,25 @@ Multiple query expressions combined together are always considered `AND`
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/api/documents"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/api/documents"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
+  if err != nil {
+    return
+  }
 
-	query := profiles.Query().Where(
-		documents.Condition("firstName").Eq(documents.StringValue("Drake")),
-	)
+  query := profiles.Query().Where(
+    documents.Condition("firstName").Eq(documents.StringValue("Drake")),
+  )
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 
@@ -73,26 +73,26 @@ func main() {
 
 ```go
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/api/documents"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/api/documents"
+  "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-	profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
-	if err != nil {
-		return
-	}
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading)
+  if err != nil {
+    return
+  }
 
-	query := profiles.Query().Where(
-		documents.Condition("name").Eq(documents.StringValue("Drake")),
-		documents.Condition("age").Gt(documents.DoubleValue(21)),
-	)
+  query := profiles.Query().Where(
+    documents.Condition("name").Eq(documents.StringValue("Drake")),
+    documents.Condition("age").Gt(documents.DoubleValue(21)),
+  )
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
 }
 ```
 

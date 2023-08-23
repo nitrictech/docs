@@ -1116,6 +1116,10 @@ const fullNav: FullNav = {
           href: '/reference/go/v0/storage/bucket',
         },
         {
+          title: 'NewTopic()',
+          href: '/reference/go/v0/topic/topic',
+        },
+        {
           title: 'NewSchedule()',
           href: '/reference/go/v0/schedule/schedule',
         },
