@@ -14,7 +14,7 @@ import {
   ChatBubbleLeftRightIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
-import { FaNodeJs, FaPython } from 'react-icons/fa'
+import { FaNodeJs, FaPython, FaJava } from 'react-icons/fa'
 import { SiCsharp, SiPulumi } from 'react-icons/si'
 import { BiLogoGoLang } from 'react-icons/bi'
 import { useRouter } from 'next/router'
@@ -283,6 +283,15 @@ const fullNav: FullNav = {
         {
           title: 'REST API',
           href: '/guides/getting-started/go/serverless-rest-api-example',
+        },
+      ],
+    },
+    {
+      title: 'JVM Guides',
+      links: [
+        {
+          title: 'REST API',
+          href: '/guides/getting-started/jvm/serverless-rest-api-example',
         },
       ],
     },
