@@ -38,10 +38,19 @@ nitric new
 
 Create a project, name it and select your preferred starter template. In this case, you can choose the Java or Kotlin starter, examples for both are provided.
 
-```bash
+<CodeGroup>
+
+```bash {{ title: "Java" }}
 ? What is the name of the project? my-profile-api
 ? Choose a template: official/Java - Starter
 ```
+
+```bash {{ title: "Kotlin" }}
+? What is the name of the project? my-profile-api
+? Choose a template: official/Kotlin - Starter
+```
+
+</CodeGroup>
 
 Next, open the project in your editor of choice.
 
@@ -74,7 +83,7 @@ We will create a class to represent the profiles that we will store in the colle
 
 <CodeGroup>
 
-```java
+```java {{ title: "Java" }}
 class Profile {
   String name;
   int age;
@@ -88,7 +97,7 @@ class Profile {
 }
 ```
 
-```kotlin
+```kotlin {{ title: "Kotlin" }}
 data class Profile(val name: String, val age: Int, val homeTown: String)
 ```
 
@@ -100,7 +109,7 @@ Applications built with Nitric can contain many APIs, let's start by adding one 
 
 <CodeGroup>
 
-```java {{ tag: "src/main/java/Application.java" }}
+```java {{ tag: "src/main/java/Application.java", title: "Java" }}
 import io.nitric.Nitric;
 import io.nitric.resources.CollectionPermission;
 
@@ -115,7 +124,7 @@ public class Application {
 }
 ```
 
-```kotlin {{ tag: "src/main/kotlin/Application.kt" }}
+```kotlin {{ tag: "src/main/kotlin/Application.kt", title: "Kotlin" }}
 import io.nitric.Nitric
 import io.nitric.resources.CollectionPermission
 
@@ -152,7 +161,7 @@ Let's start adding features that allow our API consumers to work with profile da
 
 <CodeGroup>
 
-```java
+```java {{ title: "Java" }}
 import java.util.UUID;
 
 ...
@@ -173,7 +182,7 @@ profileApi.post("/profiles", (ctx) -> {
 });
 ```
 
-```kotlin
+```kotlin {{ title: "Kotlin" }}
 import java.util.UUID;
 
 data class Profile(val name: String, val age: Int, val homeTown: String)
@@ -202,7 +211,7 @@ profileApi.post("/profiles") { ctx ->
 
 <CodeGroup>
 
-```java
+```java {{ title: "Java" }}
 profileApi.get("/profiles/:id", (ctx) -> {
   var id = ctx.getReq().getParams().get("id");
 
@@ -220,7 +229,7 @@ profileApi.get("/profiles/:id", (ctx) -> {
 });
 ```
 
-```kotlin
+```kotlin {{ title: "Kotlin" }}
 profileApi.get("/profiles/:id") { ctx ->
   val id = ctx.req.params["id"]
 
@@ -244,7 +253,7 @@ profileApi.get("/profiles/:id") { ctx ->
 
 <CodeGroup>
 
-```java
+```java {{ title: "Java" }}
 profileApi.get("/profiles", (ctx) -> {
   var allProfiles = profiles.query().fetch();
 
@@ -252,7 +261,7 @@ profileApi.get("/profiles", (ctx) -> {
 });
 ```
 
-```kotlin
+```kotlin {{ title: "Kotlin" }}
 profileApi.get("/profiles") { ctx ->
   val allProfiles = profiles.query().fetch()
 
@@ -266,7 +275,7 @@ profileApi.get("/profiles") { ctx ->
 
 <CodeGroup>
 
-```java
+```java {{ title: "Java" }}
 profileApi.delete("/profiles/:id", (ctx) -> {
   var id = ctx.getReq().getParams().get("id");
 
@@ -282,7 +291,7 @@ profileApi.delete("/profiles/:id", (ctx) -> {
 });
 ```
 
-```kotlin
+```kotlin {{ title: "Kotlin" }}
 profileApi.delete("/profiles/:id") { ctx ->
   val id = ctx.req.params["id"]
 
@@ -397,11 +406,11 @@ Define a bucket named `profilesImg` with reading/writing permissions.
 
 <CodeGroup>
 
-```java
+```java {{ title: "Java" }}
 var profilesImg = Nitric.INSTANCE.bucket("profilesImg").with(BucketPermission.Read, BucketPermission.Write);
 ```
 
-```kotlin
+```kotlin {{ title: "Kotlin" }}
 val profilesImg = Nitric.bucket("profilesImg").with(BucketPermission.Read, BucketPermission.Write)
 ```
 
@@ -411,7 +420,7 @@ val profilesImg = Nitric.bucket("profilesImg").with(BucketPermission.Read, Bucke
 
 <CodeGroup>
 
-```java
+```java {{ title: "Java" }}
 profileApi.get("/profiles/:id/image/upload", (ctx) -> {
   var id = ctx.getReq().getParams().get("id");
 
@@ -426,7 +435,7 @@ profileApi.get("/profiles/:id/image/upload", (ctx) -> {
 });
 ```
 
-```kotlin
+```kotlin {{ title: "Kotlin" }}
 profileApi.get("/profiles/:id/image/upload") { ctx ->
   val id = ctx.req.params["id"]
 
@@ -445,7 +454,7 @@ profileApi.get("/profiles/:id/image/upload") { ctx ->
 
 <CodeGroup>
 
-```java
+```java {{ title: "Java" }}
 profileApi.get("/profiles/:id/image/download", (ctx) -> {
   var id = ctx.getReq().getParams().get("id");
 
@@ -460,7 +469,7 @@ profileApi.get("/profiles/:id/image/download", (ctx) -> {
 });
 ```
 
-```kotlin
+```kotlin {{ title: "Kotlin" }}
 profileApi.get("/profiles/:id/image/download") { ctx ->
   val id = ctx.req.params["id"]
 
@@ -479,7 +488,7 @@ You can also return a redirect response that takes the HTTP client directly to t
 
 <CodeGroup>
 
-```java
+```java {{ title: "Java" }}
 import java.util.Map;
 import java.util.List;
 
@@ -500,7 +509,7 @@ profileApi.get("/profiles/:id/image/download", (ctx) -> {
 });
 ```
 
-```kotlin
+```kotlin {{ title: "Kotlin" }}
 profileApi.get("/profiles/:id/image/download") { ctx ->
   val id = ctx.req.params["id"]
 
