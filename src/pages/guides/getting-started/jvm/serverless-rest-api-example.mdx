@@ -58,16 +58,17 @@ Next, open the project in your editor of choice.
 cd my-profile-api
 ```
 
-The scaffolded project should have a structure similar to below (it will differ depending on Java or Kotlin):
+You can delete the `common`, `hello-service`, and `goodbye-service` modules and instead structure your project similar to below (it will differ depending on Java or Kotlin):
 
 ```text
 gradle/
+common/
 src/
 ├── main/
 ├──── java/
-├────── io/
+├────── org/
 ├──────── example/
-├────────── Application.java
+├────────── Main.java
 .gitignore
 build.gradle.kts
 settings.gradle.kts
@@ -75,6 +76,22 @@ gradle.properties
 gradlew
 gradlew.bat
 README.md
+```
+
+For JVM projects, the commands `nitric up` and `nitric run` expect that your project is compiled into a [fat JAR file](https://dzone.com/articles/the-skinny-on-fat-thin-hollow-and-uber).
+
+The `build.gradle.kts` in the template project shows how to use the [shadow jar plugin](https://github.com/johnrengelman/shadow) to create fat JARs. You can then run the `gradle` task with:
+
+```bash
+./gradlew build
+```
+
+You can then the point to the compiled JARs in your handlers.
+
+```yaml {{ title: 'nitric.yaml' }}
+name: my-profile-api
+handlers:
+  - 'build/libs/*.jar'
 ```
 
 ## Create a Profile class
@@ -313,7 +330,7 @@ profileApi.delete("/profiles/:id") { ctx ->
 
 Now that you have an API defined with handlers for each of its methods, it's time to test it locally.
 
-First start by running the nitric server using `nitric start`,
+First start by running the nitric server using `nitric start`, then use `./gradlew run` to run your project.
 
 Once it starts, the application will receive requests via the API port. You can use the Local Dashboard or any HTTP client to test the API. We'll keep it running for our tests. If you want to update your functions, just save them, they'll be reloaded automatically.
 
