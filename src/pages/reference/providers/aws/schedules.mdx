@@ -16,7 +16,7 @@ The following resources are created when deploying to Schedules to AWS:
 
 ## Deployment
 
-To maximize consistency between cloud providers, Schedules are implemented by Nitric in AWS using SNS Topics. Nitric's CLI builds subscribers and deploys schedules:
+To maximize consistency between cloud providers, Schedules are implemented by Nitric in AWS using SNS Topics. the Nitric CLI builds subscribers and deploys schedules:
 
 - SNS Topics are created for each schedule
 - CloudWatch Rules with cron expressions that match the schedule definitions are created

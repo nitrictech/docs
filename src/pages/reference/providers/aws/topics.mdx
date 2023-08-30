@@ -2,7 +2,7 @@ export const description = 'How Nitric deploys Topics to AWS'
 
 # AWS Resources - Topics
 
-Nitric Topics & Events are deployed to AWS using [Amazon Simple Notification Service (SNS)](https://aws.amazon.com/sns/).
+Nitric Topics and Events are deployed to AWS using [Amazon Simple Notification Service (SNS)](https://aws.amazon.com/sns/).
 
 ## AWS Resources
 
@@ -12,7 +12,7 @@ Nitric Topics & Events are deployed to AWS using [Amazon Simple Notification Ser
 
 ## Deployment
 
-During deployment Nitric's CLI builds your subscribers, then deploys topics and subscriptions:
+During deployment the Nitric CLI builds your subscribers, then deploys topics and subscriptions:
 
 - Files containing subscriber functions are built into container images
 - Built container images are pushed to the [Amazon Elastic Container Registry](https://aws.amazon.com/ecr/) as private images
