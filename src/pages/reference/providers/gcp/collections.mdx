@@ -1,15 +1,15 @@
 export const description = 'How Nitric deploys Collections to Google Cloud'
 
-# GCP Resources - Collections
+# Google Cloud Resources - Collections
 
-Nitric Collections are deployed to GCP using [Firestore](https://cloud.google.com/firestore).
+Nitric Collections are deployed to Google Cloud using [Firestore](https://cloud.google.com/firestore).
 
-## GCP Resources
+## Google Cloud Resources
 
 No resources are provisioned at deploy time, collections will be created as needed at runtime.
 
 ## Deployment
 
-During deployment, nitric may deploy an App Engine application to your project if one does not already exist, this ensures the App Engine region of your GCP project is set.
+During deployment, nitric may deploy an App Engine application to your project if one does not already exist, this ensures the App Engine region of your Google Cloud project is set.
 
 <Note>Note: This is required for firestore to operate.</Note>
