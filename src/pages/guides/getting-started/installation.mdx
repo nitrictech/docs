@@ -15,34 +15,54 @@ Please follow these links to the official installation steps for each.
 
 ## Installing the Nitric CLI
 
-### macOS
+<CodeGroup>
 
-`nitric` is available via [homebrew](https://brew.sh/)
-
-```bash
+```bash {{ title: 'macOS', label: 'nitric is available via <a href="https://brew.sh/">homebrew</a>' }}
 brew install nitrictech/tap/nitric
 ```
 
-### Windows
-
-`nitric` is available via [scoop](https://scoop-docs.vercel.app/)
-
-```
+```bash {{ title: 'Windows', label: 'nitric is available via <a href="https://scoop.sh/">scoop</a>' }}
 scoop bucket add nitric https://github.com/nitrictech/scoop-bucket.git
 scoop install nitric
 ```
 
-### Linux
-
-`nitric` can be downloaded as a scripted install via curl.
-
-```bash
+```bash {{ title: 'Linux', label: 'nitric can be downloaded as a scripted install via curl.' }}
 curl https://nitric.io/install | bash
 ```
 
-### Manual
+```bash {{ title: 'Brew', label: 'nitric is available via <a href="https://brew.sh/">homebrew</a>' }}
+brew install nitrictech/tap/nitric
+```
+
+</CodeGroup>
+
+### Manual Install
 
 You can download pre-compiled binaries from the [releases](https://github.com/nitrictech/cli/releases) page and copy them into your desired location
+
+## Update to the latest version
+
+<CodeGroup>
+
+```bash {{ title: 'macOS' }}
+brew upgrade nitric
+```
+
+```bash {{ title: 'Windows' }}
+scoop update nitric
+```
+
+```bash {{ title: 'Linux' }}
+curl https://nitric.io/install | bash
+```
+
+```bash {{ title: 'Brew' }}
+brew upgrade nitric
+```
+
+</CodeGroup>
+
+You can easily check which version you're on and if you're up to date by running `nitric version`.
 
 ## What's next
 
