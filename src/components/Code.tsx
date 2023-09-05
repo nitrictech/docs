@@ -118,8 +118,12 @@ function CodePanelHeader({ tag, label }) {
   )
 }
 
-function CodePanel({ tag, label, code, children }) {
+function CodePanel({ tag, label, code, compare, children }) {
   let child = Children.only(children)
+
+  if (compare) {
+    return child
+  }
 
   return (
     <div className="group dark:bg-white/2.5">
@@ -253,7 +257,7 @@ function useTabGroupProps(availableLanguages) {
 
 export const CodeGroupContext = createContext(false)
 
-export function CodeGroup({ children, title, ...props }) {
+export function CodeGroup({ children, title, compare, ...props }) {
   let languages = Children.map(children, (child) => getPanelTitle(child.props))
   let tabGroupProps = useTabGroupProps(languages)
   let hasTabs = Children.count(children) > 1
@@ -262,6 +266,33 @@ export function CodeGroup({ children, title, ...props }) {
   let headerProps = hasTabs
     ? { selectedIndex: tabGroupProps.selectedIndex }
     : {}
+
+  if (compare) {
+    const groups = {}
+
+    Children.forEach(children, (child) => {
+      if (child.props.title) {
+        groups[child.props.title] = [
+          ...(groups[child.props.title] || []),
+          child,
+        ]
+      }
+    })
+
+    return (
+      <div className="gap-4 md:grid md:grid-cols-2">
+        {Object.entries(groups).map(([key, value]) => (
+          <div key={key}>
+            {value.map((child, i) => (
+              <CodePanel key={i} {...props} compare={compare}>
+                {child}
+              </CodePanel>
+            ))}
+          </div>
+        ))}
+      </div>
+    )
+  }
 
   return (
     <CodeGroupContext.Provider value={true}>
