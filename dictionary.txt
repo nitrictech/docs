@@ -154,6 +154,7 @@ websocket
 websockets
 realtime
 quickstart
+FAQGrid
 dapr
 
 ^.+[-:_]\w+$

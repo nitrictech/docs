@@ -56,7 +56,7 @@ function Block({ block }) {
     >
       <ResourcePattern {...block.pattern} mouseX={mouseX} mouseY={mouseY} />
       <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-zinc-900/7.5 group-hover:ring-zinc-900/10 dark:ring-white/10 dark:group-hover:ring-white/20" />
-      <div className="relative rounded-2xl p-8">
+      <div className="relative w-full rounded-2xl p-8">
         <div className="mb-4 flex items-center gap-2.5">
           {block.icon && <ResourceIcon icon={block.icon} />}
           <h3 className="text-sm font-semibold leading-7 text-zinc-900 dark:text-white">
