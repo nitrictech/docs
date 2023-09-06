@@ -1,5 +1,4 @@
-export const description =
-  'Comparison to Pulumi'
+export const description = 'Comparison to Pulumi'
 
 # Pulumi vs. Nitric
 
@@ -20,91 +19,96 @@ Nitric is a framework designed to aid developers in building full cloud applicat
 
 To showcase the power of the abstraction provided by nitric here is a showcase of a nitric programe with an equivalent Pulumi program with application code.
 
-
 <CodeGroup compare>
 
 ```javascript {{title: 'Nitric', label: 'handle.ts' }}
-import * as nitric from "@nitric/sdk";
+import * as nitric from '@nitric/sdk'
 
-const bucket = nitric.bucket("my-bucket").for("reading", "writing");
+const bucket = nitric.bucket('my-bucket').for('reading', 'writing')
 
-bucket.on("create", "*", async (ctx) => {
-   console.log(ctx.file.key, "was created");
-});
+bucket.on('create', '*', async (ctx) => {
+  console.log(ctx.file.key, 'was created')
+})
 ```
 
 ```javascript {{title: 'Pulumi', label: 'lib/handle-stack.ts'}}
-import * as pulumi from "@pulumi/pulumi";
-import * as aws from "@pulumi/aws";
-import * as fs from "fs";
-import * as mime from "mime";
-import * as path from "path";
+import * as pulumi from '@pulumi/pulumi'
+import * as aws from '@pulumi/aws'
+import * as fs from 'fs'
+import * as mime from 'mime'
+import * as path from 'path'
 
-const config = new pulumi.Config();
-const region = config.require("aws:region");
+const config = new pulumi.Config()
+const region = config.require('aws:region')
 
-const bucket = new aws.s3.Bucket("s3-bucket");
+const bucket = new aws.s3.Bucket('s3-bucket')
 
-const role = new aws.iam.Role("lambdaRole", {
+const role = new aws.iam.Role('lambdaRole', {
   assumeRolePolicy: JSON.stringify({
-    Version: "2012-10-17",
+    Version: '2012-10-17',
     Statement: [
       {
-        Action: "sts:AssumeRole",
-        Effect: "Allow",
+        Action: 'sts:AssumeRole',
+        Effect: 'Allow',
         Principal: {
-          Service: "lambda.amazonaws.com",
+          Service: 'lambda.amazonaws.com',
         },
       },
     ],
   }),
-});
+})
 
-const policy = new aws.iam.RolePolicy("lambdaPolicy", {
+const policy = new aws.iam.RolePolicy('lambdaPolicy', {
   role: role,
   policy: JSON.stringify({
-    Version: "2012-10-17",
+    Version: '2012-10-17',
     Statement: [
       {
-        Action: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
-        Effect: "Allow",
-        Resource: "arn:aws:logs:*:*:*",
+        Action: [
+          'logs:CreateLogGroup',
+          'logs:CreateLogStream',
+          'logs:PutLogEvents',
+        ],
+        Effect: 'Allow',
+        Resource: 'arn:aws:logs:*:*:*',
       },
       {
-        Action: ["s3:PutObject"],
-        Effect: "Allow",
+        Action: ['s3:PutObject'],
+        Effect: 'Allow',
         Resource: `${bucket.arn}/*`,
       },
     ],
   }),
-});
+})
 
-const lambdaFunction = new aws.lambda.Function("s3UploaderLambda", {
-  runtime: "nodejs14.x",
+const lambdaFunction = new aws.lambda.Function('s3UploaderLambda', {
+  runtime: 'nodejs14.x',
   code: new pulumi.asset.AssetArchive({
-    ".": new pulumi.asset.FileArchive("./"),
+    '.': new pulumi.asset.FileArchive('./'),
   }),
   timeout: 10,
-  handler: "index.handler",
+  handler: 'index.handler',
   role: role.arn,
   environment: {
     variables: {
       BUCKET_NAME: bucket.bucket,
     },
   },
-});
+})
 
-export const bucketName = bucket.bucket;
-export const lambdaFunctionName = lambdaFunction.name;
+export const bucketName = bucket.bucket
+export const lambdaFunctionName = lambdaFunction.name
 ```
 
 ```javascript {{title: 'Pulumi', label: 'src/index.js'}}
-const AWS = require('aws-sdk');
+const AWS = require('aws-sdk')
 
 exports.handler = async (event) => {
-  const { s3: { object } } = event;
-  console.log(object.key, "was created");
-};
+  const {
+    s3: { object },
+  } = event
+  console.log(object.key, 'was created')
+}
 ```
 
 </CodeGroup>
@@ -113,13 +117,13 @@ exports.handler = async (event) => {
 
 The below table contains the main differences that you can see in the code examples, and also some that cannot fit in such a small app, but we still would like you to know about :)
 
-| Feature |	Nitric | Pulumi |
-|---------|--------|--------|
-| Language | Your choice | YAML + your choice |
-| Lines of code | 7 | 69 |
-| Cloud Infrasutrcture | Inferred | Explicit |
-| Extensibility | Custom providers | Custom/dynamic providers |
-| Local Simulation | Built-in to CLI | N/A |
-| Cross-cloud support |	Same code compiles to different clouds | No (need to write different code for different clouds) |
-| Provisioning engine | Custom providers can be written with any IaC tech (e.g. Terraform/AWS CDK) | Proprietary |
-| Testing |	Same tests run on local simulator and cloud, without mocks | Need mocks for local testing |
+| Feature              | Nitric                                                                     | Pulumi                                                 |
+| -------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Language             | Your choice                                                                | YAML + your choice                                     |
+| Lines of code        | 7                                                                          | 69                                                     |
+| Cloud Infrasutrcture | Inferred                                                                   | Explicit                                               |
+| Extensibility        | Custom providers                                                           | Custom/dynamic providers                               |
+| Local Simulation     | Built-in to CLI                                                            | N/A                                                    |
+| Cross-cloud support  | Same code compiles to different clouds                                     | No (need to write different code for different clouds) |
+| Provisioning engine  | Custom providers can be written with any IaC tech (e.g. Terraform/AWS CDK) | Proprietary                                            |
+| Testing              | Same tests run on local simulator and cloud, without mocks                 | Need mocks for local testing                           |
