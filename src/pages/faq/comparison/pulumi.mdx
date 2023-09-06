@@ -2,22 +2,22 @@ export const description = 'Comparison to Pulumi'
 
 # Pulumi vs. Nitric
 
-> NOTE: Nitric is not designed to replace IaC tools like Pulumi, but instead introduces a method of brining developer self service for infrastructure directly into the developer application (Nitric's default deployment engines are built with Pulumi).
-> Nitric can be augmented through use of tools like Pulumi and even be fully customised using such tools see [Custom Providers]() for more details
+> NOTE: Nitric is not designed to replace IaC tools like Pulumi, but instead introduces a method of bringing developer self service for infrastructure directly into the developer application (Nitric's default deployment engines are built with Pulumi).
+> Nitric can be augmented through use of tools like Pulumi and even be fully customized using such tools see [Custom Providers]() for more details
 
 Nitric is a framework designed to aid developers in building full cloud applications, including declaring their infrastructure and application code in one place. Pulumi is an Infrastructure as Code tool that enables developers to define infrastructure using traditional programming languages or YAML (Cuelang). The main differences between these are:
 
-1. Nitric is cloud-agnostic, code that is written using nitric constructs can be deployed to any cloud. Pulumi supports many clouds, infrastructure declarations are explicitely defined for the provider that a resource is provided by.
+1. Nitric is cloud-agnostic, code that is written using nitric constructs can be deployed to any cloud. Pulumi supports many clouds, infrastructure declarations are explicitly defined for the provider that a resource is provided by.
 
-1. Nitric defines not only the infrastructure but how it is interacted with at runtime, so infrastructure can be automattically inferred from application code to ensure best practice deployments and least priviledge security.
+1. Nitric defines not only the infrastructure but how it is interacted with at runtime, so infrastructure can be automatically inferred from application code to ensure best practice deployments and least privilege security.
 
 1. Nitric uses Pulumi under the hood for the Out of the Box providers. By extensions Pulumi is a great option for extending infrastructure that is deployed by nitric, or can even be used to deploy Nitric applications to clouds Nitric does not support by default.
 
-1. Nitric provides tools for locally simulating a cloud environment (using the nitric CLI), to allow applicaiton to be tested locally. Pulumi programs can be unit tested but applications written to be deployed will need a separate solution for local development such as LocalStack.
+1. Nitric provides tools for locally simulating a cloud environment (using the nitric CLI), to allow application to be tested locally. Pulumi programs can be unit tested but applications written to be deployed will need a separate solution for local development such as LocalStack.
 
 # Side by Side
 
-To showcase the power of the abstraction provided by nitric here is a showcase of a nitric programe with an equivalent Pulumi program with application code.
+To showcase the power of the abstraction provided by nitric here is a showcase of a nitric program with an equivalent Pulumi program with application code.
 
 <CodeGroup compare>
 
