@@ -47,6 +47,17 @@ const assets = [
     },
   },
   {
+    href: '/faq/comparison/pulumi',
+    name: 'Pulumi',
+    pattern: {
+      y: 16,
+      squares: [
+        [0, 1],
+        [1, 3],
+      ],
+    },
+  },
+  {
     href: '/faq/comparison/terraform',
     name: 'Terraform',
     pattern: {
