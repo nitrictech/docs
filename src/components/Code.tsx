@@ -112,7 +112,10 @@ function CodePanelHeader({ tag, label }) {
         <span className="h-0.5 w-0.5 rounded-full bg-zinc-500" />
       )}
       {label && (
-        <span className="font-mono text-xs text-zinc-400">{label}</span>
+        <span
+          className="font-mono text-xs text-zinc-400"
+          dangerouslySetInnerHTML={{ __html: label }}
+        />
       )}
     </div>
   )
@@ -126,7 +129,7 @@ function CodePanel({ tag, label, code, compare, children }) {
   }
 
   return (
-    <div className="group dark:bg-white/2.5">
+    <div className="code-panel group dark:bg-white/2.5">
       <CodePanelHeader
         tag={child.props.tag ?? tag}
         label={child.props.label ?? label}

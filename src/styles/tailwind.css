@@ -34,6 +34,21 @@
   @apply font-semibold text-[var(--tw-prose-headings)];
 }
 
+.code-panel a {
+  color: var(--tw-prose-links);
+  -webkit-text-decoration: underline transparent;
+  text-decoration: underline transparent;
+  font-weight: 500;
+  transition-property: color, text-decoration-color;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.code-panel a:hover {
+  color: var(--tw-prose-links-hover);
+  text-decoration-color: var(--tw-prose-links-underline);
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
