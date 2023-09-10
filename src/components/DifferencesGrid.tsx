@@ -3,6 +3,17 @@ import { Heading } from './Heading'
 
 const assets = [
   {
+    href: '/faq/comparison/aws-cdk',
+    name: 'AWS CDK',
+    pattern: {
+      y: 16,
+      squares: [
+        [0, 1],
+        [1, 3],
+      ],
+    },
+  },
+  {
     href: '/faq/comparison/aws-sam',
     name: 'AWS SAM',
     pattern: {

@@ -442,6 +442,10 @@ const fullNav: FullNav = {
       title: 'Differences From Other Solutions',
       links: [
         {
+          title: 'AWS CDK',
+          href: '/faq/comparison/aws-cdk',
+        },
+        {
           title: 'AWS SAM',
           href: '/faq/comparison/aws-sam',
         },
