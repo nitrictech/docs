@@ -11,9 +11,9 @@ Nitric is a framework designed to aid developers in building full cloud applicat
 
 1. Nitric defines not only the infrastructure but how it is interacted with at runtime, so infrastructure can be automatically inferred from application code to ensure best practice deployments and least privilege security.
 
-1. Nitric uses Pulumi under the hood for the Out of the Box providers. By extensions Pulumi is a great option for extending infrastructure that is deployed by nitric, or can even be used to deploy Nitric applications to clouds Nitric does not support by default.
+1. Nitric uses Pulumi under the hood for the Out of the Box providers. Pulumi is a great option for extending infrastructure deployed by Nitric or for deploying Nitric applications to clouds not supported by Nitric by default.
 
-1. Nitric provides tools for locally simulating a cloud environment (using the nitric CLI), to allow application to be tested locally. Pulumi programs can be unit tested but applications written to be deployed will need a separate solution for local development such as LocalStack.
+1. Nitric provides tools for locally simulating a cloud environment (using the nitric CLI), to allow applications to be tested locally. Pulumi programs can be unit tested but applications written to be deployed will need a separate solution for local development such as LocalStack.
 
 # Side by Side
 
@@ -121,7 +121,7 @@ The below table contains the main differences that you can see in the code examp
 | -------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------ |
 | Language             | Your choice                                                                | YAML + your choice                                     |
 | Lines of code        | 7                                                                          | 69                                                     |
-| Cloud Infrasutrcture | Inferred                                                                   | Explicit                                               |
+| Cloud Infrastructure | Inferred                                                                   | Explicit                                               |
 | Extensibility        | Custom providers                                                           | Custom/dynamic providers                               |
 | Local Simulation     | Built-in to CLI                                                            | N/A                                                    |
 | Cross-cloud support  | Same code compiles to different clouds                                     | No (need to write different code for different clouds) |
