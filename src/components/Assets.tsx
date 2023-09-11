@@ -14,7 +14,7 @@ const assets = [
     },
   },
   {
-    href: '/assets/faq',
+    href: '/faq',
     name: 'Frequency Asked Questions',
     description:
       'Find answers to commonly asked questions about Nitric. Discover valuable insights, practical tips, and solutions to common challenges.',

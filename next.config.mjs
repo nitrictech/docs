@@ -98,8 +98,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/docs/faq',
-        destination: '/docs/assets/faq',
+        source: '/docs/assets/faq',
+        destination: '/docs/faq',
         basePath: false,
         permanent: true,
       },
@@ -126,7 +126,14 @@ const nextConfig = {
         destination: '/docs/guides/getting-started',
         basePath: false,
         permanent: true,
-      }
+      },
+
+      {
+        source: '/docs/assets/comparison/:path*',
+        destination: '/docs/faq/comparison/:path*',
+        basePath: false,
+        permanent: true,
+      },
     ]
   },
   async headers() {

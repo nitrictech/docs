@@ -12,6 +12,7 @@ import {
   PlayIcon,
   ServerIcon,
   ChatBubbleLeftRightIcon,
+  QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
 import { FaNodeJs, FaPython } from 'react-icons/fa'
 import { SiCsharp, SiPulumi } from 'react-icons/si'
@@ -104,11 +105,11 @@ const fullNav: FullNav = {
           href: '/assets',
           icon: FolderIcon,
         },
-        // {
-        //   title: 'Integrations',
-        //   href: '/integrations',
-        //   icon: PuzzlePieceIcon,
-        // },
+        {
+          title: 'FAQ',
+          href: '/faq',
+          icon: QuestionMarkCircleIcon,
+        },
       ],
     },
     {
@@ -410,10 +411,6 @@ const fullNav: FullNav = {
           href: '/assets/custom-containers',
         },
         {
-          title: 'Frequently Asked Questions',
-          href: '/assets/faq',
-        },
-        {
           title: 'Environment Variables',
           href: '/assets/env',
         },
@@ -431,20 +428,34 @@ const fullNav: FullNav = {
         },
       ],
     },
+  ],
+  faq: [
     {
-      title: 'Compare Nitric with...',
       links: [
         {
+          title: 'Common Questions',
+          href: '/faq/common-questions',
+        },
+      ],
+    },
+    {
+      title: 'Differences From Other Solutions',
+      links: [
+        {
+          title: 'AWS CDK',
+          href: '/faq/comparison/aws-cdk',
+        },
+        {
           title: 'AWS SAM',
-          href: '/assets/comparison/aws-sam',
+          href: '/faq/comparison/aws-sam',
         },
         {
           title: 'GCP Deployment Manager',
-          href: '/assets/comparison/gcp-deployment-manager',
+          href: '/faq/comparison/gcp-deployment-manager',
         },
         {
           title: 'Azure Resource Manager',
-          href: '/assets/comparison/bicep',
+          href: '/faq/comparison/bicep',
         },
       ],
     },

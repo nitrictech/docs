@@ -154,7 +154,10 @@ websocket
 websockets
 realtime
 quickstart
+FAQGrid
 dapr
+CDK's
+CDKTF
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
