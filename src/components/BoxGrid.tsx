@@ -3,6 +3,7 @@ import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
 
 import { GridPattern } from '@/components/GridPattern'
 import { Heading } from '@/components/Heading'
+import clsx from 'clsx'
 
 function ResourceIcon({ icon: Icon }) {
   return (
@@ -57,7 +58,12 @@ function Block({ block }) {
       <ResourcePattern {...block.pattern} mouseX={mouseX} mouseY={mouseY} />
       <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-zinc-900/7.5 group-hover:ring-zinc-900/10 dark:ring-white/10 dark:group-hover:ring-white/20" />
       <div className="relative w-full rounded-2xl p-8">
-        <div className="mb-4 flex items-center gap-2.5">
+        <div
+          className={clsx(
+            'flex items-center gap-2.5',
+            block.description && 'mb-4'
+          )}
+        >
           {block.icon && <ResourceIcon icon={block.icon} />}
           <h3 className="text-sm font-semibold leading-7 text-zinc-900 dark:text-white">
             <Link href={block.href}>
@@ -66,9 +72,11 @@ function Block({ block }) {
             </Link>
           </h3>
         </div>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-          {block.description}
-        </p>
+        {block.description && (
+          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+            {block.description}
+          </p>
+        )}
       </div>
     </div>
   )
