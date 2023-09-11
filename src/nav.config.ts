@@ -461,6 +461,10 @@ const fullNav: FullNav = {
           title: 'SST',
           href: '/faq/comparison/sst',
         },
+        {
+          title: 'Wing',
+          href: '/faq/comparison/winglang',
+        },
       ],
     },
   ],

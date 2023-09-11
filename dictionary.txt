@@ -158,6 +158,8 @@ FAQGrid
 dapr
 CDK's
 CDKTF
+terraform
+transpiled
 modularity
 
 ^.+[-:_]\w+$

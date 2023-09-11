@@ -57,6 +57,17 @@ const assets = [
       ],
     },
   },
+  {
+    href: '/faq/comparison/winglang',
+    name: 'Wing',
+    pattern: {
+      y: 16,
+      squares: [
+        [0, 1],
+        [1, 3],
+      ],
+    },
+  },
 ]
 
 export function DifferencesGrid() {
