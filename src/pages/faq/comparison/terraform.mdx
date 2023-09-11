@@ -7,7 +7,7 @@ export const description = 'Comparison to Terraform'
   introduces a method of bringing developer self-service for infrastructure
   directly into the developer application (Nitric's default deployment engines
   are built with Pulumi). Nitric can be augmented through use of tools like
-  Pulumi and even be fully customized using such tools see [Custom
+  Pulumi or Terraform and even be fully customized using such tools see [Custom
   Providers](/docs/reference/providers/custom/building-custom-provider) for more
   details.
 </Note>
@@ -167,9 +167,9 @@ output "lambda_function_name" {
 
 </CodeGroup>
 
-> In the Terraform example we get control over absolutely every facet of our infrastructure which is great, but for the majority of use cases, a repeatable pattern of deployment is enough and scales much better than applying fine-grained configuration every time we need to define a new deployment.
+<Note>In the Terraform example we get control over absolutely every facet of our infrastructure which is great, but for the majority of use cases, a repeatable pattern of deployment is enough and scales much better than applying fine-grained configuration every time we need to define a new deployment.</Note>
 
-The below table contains the main differences that you can see in the code examples, and also some that cannot fit in such a small app, but we still would like you to know about :)
+The table below contains the main differences you can see in the code examples, and also some that cannot fit in such a small app, but we'd like you to know about 🙂
 
 | Feature              | Nitric                                                                     | Terraform                                                |
 | -------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------- |
