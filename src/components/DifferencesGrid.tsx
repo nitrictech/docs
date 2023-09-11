@@ -46,6 +46,17 @@ const assets = [
       ],
     },
   },
+  {
+    href: '/faq/comparison/sst',
+    name: 'SST',
+    pattern: {
+      y: 16,
+      squares: [
+        [0, 1],
+        [1, 3],
+      ],
+    },
+  },
 ]
 
 export function DifferencesGrid() {
