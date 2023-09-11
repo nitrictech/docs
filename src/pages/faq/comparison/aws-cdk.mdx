@@ -75,12 +75,12 @@ Nitric offers a simplified, user-friendly way to define APIs with the added bene
 
 ## Differences
 
-|                                    | Nitric                                                                                  | AWS CDK                                                                                                 |
-| ---------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Language                           | Your choice                                                                             | Your choice                                                                                             |
-| Lines of code                      | 9                                                                                       | 33                                                                                                      |
-| Cloud Infrastructure               | Inferred                                                                                | Explicit                                                                                                |
-| Extensibility                      | [Custom providers](/reference/providers/custom/building-custom-provider) can be created | Custom Constructs / Resource Providers                                                                  |
-| Local simulation                   | Built-in local simulator with instant hot reloading                                     | No                                                                                                      |
-| Supports all major cloud providers | Yes                                                                                     | No                                                                                                      |
-| Provisioning engine                | Pulumi by default, other custom providers can be created                                | CloudFormation (CDKTF is used for Terraform, but you cannot compile the same code to different engines) |
+|                      | Nitric                                                                                       | AWS CDK                                                                                                 |
+| -------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Language             | Your choice                                                                                  | Your choice                                                                                             |
+| Lines of code        | 9                                                                                            | 33                                                                                                      |
+| Cloud Infrastructure | Inferred                                                                                     | Explicit                                                                                                |
+| Extensibility        | [Custom providers](/reference/providers/custom/building-custom-provider) can be created      | Custom Constructs / Resource Providers                                                                  |
+| Local simulation     | Built-in local simulator with instant hot reloading                                          | No                                                                                                      |
+| Cloud providers      | AWS, Azure, GCP and [Custom providers](/reference/providers/custom/building-custom-provider) | AWS                                                                                                     |
+| Provisioning engine  | Pulumi by default, other custom providers can be created                                     | CloudFormation (CDKTF is used for Terraform, but you cannot compile the same code to different engines) |
