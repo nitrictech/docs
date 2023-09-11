@@ -21,6 +21,7 @@ const IGNORED_URLS = [
   'https://vercel.com/new/clone?repository-url=https://github.com/nitrictech/nitric-todo&env=API_BASE_URL',
   'http://localhost:4000',
   'http://localhost:4001',
+  'https://www.gutenberg.org/cache/epub/42671/pg42671.txt',
 ]
 
 const isExternalUrl = (url: string) => {
