@@ -69,6 +69,17 @@ const assets = [
     },
   },
   {
+    href: '/faq/comparison/encore',
+    name: 'Encore',
+    pattern: {
+      y: 16,
+      squares: [
+        [0, 1],
+        [1, 3],
+      ],
+    },
+  },
+  {
     href: '/faq/comparison/winglang',
     name: 'Wing',
     pattern: {
