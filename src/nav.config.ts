@@ -458,6 +458,10 @@ const fullNav: FullNav = {
           href: '/faq/comparison/bicep',
         },
         {
+          title: 'Terraform',
+          href: '/faq/comparison/terraform',
+        },
+        {
           title: 'SST',
           href: '/faq/comparison/sst',
         },

@@ -47,6 +47,17 @@ const assets = [
     },
   },
   {
+    href: '/faq/comparison/terraform',
+    name: 'Terraform',
+    pattern: {
+      y: 16,
+      squares: [
+        [0, 1],
+        [1, 3],
+      ],
+    },
+  },
+  {
     href: '/faq/comparison/sst',
     name: 'SST',
     pattern: {
