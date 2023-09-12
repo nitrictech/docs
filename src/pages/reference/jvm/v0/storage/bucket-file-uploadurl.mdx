@@ -1,0 +1,86 @@
+export const description =
+  "Reference for Nitric's JVM library - Create an upload url for a file from a bucket."
+
+# JVM - bucket.file.getUploadUrl()
+
+Create an upload URL for a file from a bucket.
+
+<CodeGroup>
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+
+public class Application {
+  public static void main(String[] args) {
+    var bucket = Nitric.INSTANCE.bucket("images").with(BucketPermission.Write);
+
+    // Get an upload url that lasts 600 seconds
+    var url = bucket.file("cat.png").getUploadUrl(600);
+
+    Nitric.INSTANCE.run();
+  }
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+
+fun main() {
+  val bucket = Nitric.bucket("images").with(BucketPermission.Write)
+
+  // Get an upload url that lasts 600 seconds
+  val url = bucket.file("cat.png").getUploadUrl()
+
+  Nitric.run()
+}
+```
+
+</CodeGroup>
+
+## Parameters
+
+<Properties>
+  <Property name="expiry" type="Int">
+    Seconds until link expiry. Defaults to `600`. Maximum of `604800` (7 days).
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a temporary file upload link for a user
+
+<CodeGroup>
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.BucketPermission;
+
+public class Application {
+  public static void main(String[] args) {
+    var bucket = Nitric.INSTANCE.bucket("images").with(BucketPermission.Write);
+
+    // Get an upload url that lasts 600 seconds
+    var url = bucket.file("cat.png").getUploadUrl();
+
+    Nitric.INSTANCE.run();
+  }
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.BucketPermission
+
+fun main() {
+  val bucket = Nitric.bucket("images").with(BucketPermission.Write)
+
+  // Get an upload url that lasts 600 seconds
+  val url = bucket.file("cat.png").getUploadUrl()
+
+  Nitric.run()
+}
+```
+
+</CodeGroup>

@@ -82,6 +82,34 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+
+public class Application {
+  public static void main(String[] args) {
+    Nitric.INSTANCE.schedule("aggregate-data").every("3 days", (ctx) -> {
+      System.out.println("aggregating data");
+
+      return ctx;
+    });
+
+    Nitric.INSTANCE.run();
+  }
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+
+fun main() {
+  Nitric.schedule("aggregate-data").every("3 days") { ctx ->
+    println("aggregating data")
+
+    ctx
+  }
+}
+```
+
 </CodeGroup>
 
 <Note>`cron` schedules aren't currently supported in the Python SDK</Note>
@@ -113,7 +141,6 @@ schedule('process-rarely').every('30 days', async (ctx) => {
 ```python
 from nitric.resources import schedule
 
-
 @schedule("process-often", every="5 minutes")
 async def process_often(ctx):
     pass
@@ -129,17 +156,49 @@ async def process_rarely(ctx):
 ```
 
 ```go
-resources.NewSchedule("process-often").Every("5 minutes", func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+import "github.com/nitrictech/go-sdk/nitric"
+
+nitric.NewSchedule("process-often").Every("5 minutes", func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
   return next(ctx)
 })
 
-resources.NewSchedule("process-sometimes").Every("2 hours", func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+nitric.NewSchedule("process-sometimes").Every("2 hours", func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
   return next(ctx)
 })
 
-resources.NewSchedule("process-rarely").Every("30 days", func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+nitric.NewSchedule("process-rarely").Every("30 days", func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
   return next(ctx)
 })
+```
+
+```java
+import io.nitric.Nitric;
+
+Nitric.INSTANCE.schedule("process-often").every("5 minutes", (ctx) -> {
+  return ctx;
+});
+
+Nitric.INSTANCE.schedule("process-sometimes").every("2 hours", (ctx) -> {
+  return ctx;
+});
+
+Nitric.INSTANCE.schedule("process-rarely").every("30 days", (ctx) -> {
+  return ctx;
+});
+```
+
+```kotlin
+Nitric.schedule("process-often").every("5 minutes") { ctx ->
+  ctx
+}
+
+Nitric.schedule("process-sometimes").every("2 hours") { ctx ->
+  ctx
+}
+
+Nitric.schedule("process-rarely").every("30 days") { ctx ->
+  ctx
+}
 ```
 
 </CodeGroup>
@@ -182,19 +241,53 @@ schedule('delete stale data').cron('0 1 1 * *', async (ctx) => {
 ```
 
 ```go
+import "github.com/nitrictech/go-sdk/nitric"
+
 // every 15 minutes
-resources.NewSchedule("check for updates").Cron("0/15 * * * *", func (ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
+nitric.NewSchedule("check for updates").Cron("0/15 * * * *", func (ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
   fmt.Println("checking for updates")
 
   return next(ctx)
 })
 
 // at 1:00am on the 1st of every month
-resources.NewSchedule("delete stale data").Cron("0 1 1 * *", func (ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+nitric.NewSchedule("delete stale data").Cron("0 1 1 * *", func (ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
   fmt.Println("clearing data")
 
   return next(ctx)
 })
+```
+
+```java
+import io.nitric.Nitric;
+
+Nitric.INSTANCE.schedule("check for updates").cron("0/15 * * * *", (ctx) -> {
+  System.out.println("checking for updates");
+
+  return ctx;
+});
+
+Nitric.INSTANCE.schedule("delete stale data").cron("0 1 1 * *", (ctx) -> {
+  System.out.println("clearing data");
+
+  return ctx;
+});
+```
+
+```kotlin
+import io.nitric.Nitric
+
+Nitric.schedule("check for updates").cron("0/15 * * * *") { ctx ->
+  println("checking for updates")
+
+  ctx
+}
+
+Nitric.schedule("delete stale data").cron("0 1 1 * *") { ctx ->
+  println("clearing data")
+
+  ctx
+}
 ```
 
 </CodeGroup>

@@ -5,6 +5,7 @@ import logoNode from '@/images/logos/node.svg'
 import logoPython from '@/images/logos/python.svg'
 import logoCsharp from '@/images/logos/csharp.svg'
 import logoGo from '@/images/logos/go.svg'
+import logoJava from '@/images/logos/java.svg'
 import Link from 'next/link'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
@@ -32,6 +33,12 @@ const libraries = [
     name: 'Go',
     description: 'View full API for Go',
     logo: logoGo,
+  },
+  {
+    href: '/reference/jvm/v0',
+    name: 'JVM',
+    description: 'View full API for JVM',
+    logo: logoJava,
   },
 ]
 

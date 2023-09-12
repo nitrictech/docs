@@ -62,5 +62,5 @@ import { queue } from '@nitric/sdk'
 const payload = {}
 const batchQueue = queue('batch').for('receiving')
 
-await batchQueue.send([{ payload }])
+const tasks = await batchQueue.receive()
 ```

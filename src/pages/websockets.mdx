@@ -84,6 +84,60 @@ func main() {
 }
 ```
 
+```java
+import io.nitric.Nitric;
+import io.nitric.faas.v0.WebsocketEventType;
+
+public class Application {
+	public static void main(String[] args) {
+		var websocket = Nitric.INSTANCE.websocket("public");
+
+		websocket.on(WebsocketEventType.Connect, (ctx) -> {
+			// handle connections
+			return ctx;
+		});
+
+		websocket.on(WebsocketEventType.Disconnect, (ctx) -> {
+			// handle disconnections
+			return ctx;
+		});
+
+		websocket.on(WebsocketEventType.Message, (ctx) -> {
+			// handle messages
+			return ctx;
+		});
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.faas.v0.WebsocketEventType
+
+fun main() {
+	val websocket = Nitric.websocket("public")
+
+	websocket.on(WebsocketEventType.Connect) { ctx ->
+		// handle connections
+		ctx
+	}
+
+	websocket.on(WebsocketEventType.Disconnect) { ctx ->
+		// handle disconnections
+		ctx
+	}
+
+	websocket.on(WebsocketEventType.Message) { ctx ->
+		// handle messages
+		ctx
+	}
+
+	Nitric.run()
+}
+```
+
 </CodeGroup>
 
 ## Managing connections
@@ -281,6 +335,95 @@ func main() {
   if err := nitric.Run(); err != nil {
     fmt.Println(err)
   }
+}
+```
+
+```java
+import io.nitric.Nitric;
+import io.nitric.faas.v0.WebsocketEventType;
+import io.nitric.resources.CollectionPermission;
+
+class Connection {
+	String connectionId;
+	public Connection(String connectionId) {
+		this.connectionId = connectionId;
+	}
+}
+
+public class Application {
+	public static void main(String[] args) {
+		var socket = Nitric.INSTANCE.websocket("socket");
+		var connections = Nitric.INSTANCE.collection("connections", Connection.class)
+			.with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete);
+
+		// Register a new connection on connect
+		socket.on(WebsocketEventType.Connect, (ctx) -> {
+			var connectionId = ctx.getReq().getConnectionId();
+			connections.doc(connectionId).set(
+				new Connection(connectionId)
+			);
+			return ctx;
+		});
+
+		// Remove a registered connection on disconnect
+		socket.on(WebsocketEventType.Disconnect, (ctx) -> {
+			connections.doc(ctx.getReq().getConnectionId()).delete();
+			return ctx;
+		});
+
+		// Broadcast message to all the registered websocket connections
+		socket.on(WebsocketEventType.Message, (ctx) -> {
+			var connectionStream = connections.query().stream();
+
+			while (connectionStream.hasNext()) {
+				var connection = connectionStream.next();
+				socket.send(connection.getId(), ctx.getReq().getData());
+			}
+
+			return ctx;
+		});
+
+		Nitric.INSTANCE.run();
+	}
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.faas.v0.WebsocketEventType
+import io.nitric.resources.CollectionPermission
+
+data class Connection(var connectionId: String)
+
+fun main() {
+	val socket = Nitric.websocket("socket")
+	val connections = Nitric.collection<Connection>("connections")
+		.with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete)
+
+	// Register a new connection on connect
+	socket.on(WebsocketEventType.Connect) { ctx ->
+		val connectionId = ctx.req.connectionId
+		connections.doc(connectionId).set(Connection(connectionId))
+		ctx
+	}
+
+	// Remove a registered connection on disconnect
+	socket.on(WebsocketEventType.Disconnect) { ctx ->
+		connections.doc(ctx.req.connectionId).delete()
+		ctx
+	}
+
+	// Broadcast message to all the registered websocket connections
+	socket.on(WebsocketEventType.Message) { ctx ->
+		val connectionStream = connections.query().stream()
+		while (connectionStream.hasNext()) {
+			val connection = connectionStream.next()
+			socket.send(connection.getId(), ctx.req.data)
+		}
+		ctx
+	}
+
+	Nitric.run()
 }
 ```
 
