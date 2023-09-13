@@ -96,6 +96,23 @@ const lambdaFunction = new aws.lambda.Function('s3UploaderLambda', {
   },
 })
 
+const allowBucket = new aws.lambda.Permission("allowBucket", {
+    action: "lambda:InvokeFunction",
+    "function": lambdaFunction.arn,
+    principal: "s3.amazonaws.com",
+    sourceArn: bucket.arn,
+})
+
+const bucketNotification = new aws.s3.BucketNotification("bucketNotification", {
+    bucket: bucket.id,
+    lambdaFunctions: [{
+        lambdaFunctionArn: func.arn,
+        events: ["s3:ObjectCreated:*"],
+    }],
+}, {
+    dependsOn: [allowBucket],
+})
+
 export const bucketName = bucket.bucket
 export const lambdaFunctionName = lambdaFunction.name
 ```
