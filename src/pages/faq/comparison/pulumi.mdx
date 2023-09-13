@@ -2,8 +2,10 @@ export const description = 'Comparison to Pulumi'
 
 # Pulumi vs. Nitric
 
-> NOTE: Nitric is not designed to replace IaC tools like Pulumi, but instead introduces a method of bringing developer self service for infrastructure directly into the developer application (Nitric's default deployment engines are built with Pulumi).
-> Nitric can be augmented through use of tools like Pulumi and even be fully customized using such tools see [Custom Providers]() for more details
+<Note>
+NOTE: Nitric is not designed to replace IaC tools like Pulumi, but instead introduces a method of bringing developer self service for infrastructure directly into the developer application (Nitric's default deployment engines are built with Pulumi).
+Nitric can be augmented through use of tools like Pulumi and even be fully customized using such tools see [Custom Providers](/reference/providers/custom/building-custom-provider) for more details
+</Node>
 
 Nitric is a framework designed to aid developers in building full cloud applications, including declaring their infrastructure and application code in one place. Pulumi is an Infrastructure as Code tool that enables developers to define infrastructure using traditional programming languages or YAML (Cuelang). The main differences between these are:
 
@@ -96,22 +98,28 @@ const lambdaFunction = new aws.lambda.Function('s3UploaderLambda', {
   },
 })
 
-const allowBucket = new aws.lambda.Permission("allowBucket", {
-    action: "lambda:InvokeFunction",
-    "function": lambdaFunction.arn,
-    principal: "s3.amazonaws.com",
-    sourceArn: bucket.arn,
+const allowBucket = new aws.lambda.Permission('allowBucket', {
+  action: 'lambda:InvokeFunction',
+  function: lambdaFunction.arn,
+  principal: 's3.amazonaws.com',
+  sourceArn: bucket.arn,
 })
 
-const bucketNotification = new aws.s3.BucketNotification("bucketNotification", {
+const bucketNotification = new aws.s3.BucketNotification(
+  'bucketNotification',
+  {
     bucket: bucket.id,
-    lambdaFunctions: [{
+    lambdaFunctions: [
+      {
         lambdaFunctionArn: func.arn,
-        events: ["s3:ObjectCreated:*"],
-    }],
-}, {
+        events: ['s3:ObjectCreated:*'],
+      },
+    ],
+  },
+  {
     dependsOn: [allowBucket],
-})
+  }
+)
 
 export const bucketName = bucket.bucket
 export const lambdaFunctionName = lambdaFunction.name
@@ -130,7 +138,14 @@ exports.handler = async (event) => {
 
 </CodeGroup>
 
-> In the pulumi example we get control over absolutely every facet of our infrastructure which is great, but for the majority of use cases a repeatable pattern of deployment is enough and scales much better than applying fine grained configuration every time we need to define a new deployment (with Pulumi this would typically be done by sharing infrastructure as libraries e.g. Pulumi Crosswalks).
+<Note>
+  In the pulumi example we get control over absolutely every facet of our
+  infrastructure which is great, but for the majority of use cases a repeatable
+  pattern of deployment is enough and scales much better than applying fine
+  grained configuration every time we need to define a new deployment (with
+  Pulumi this would typically be done by sharing infrastructure as libraries
+  e.g. Pulumi Crosswalks).
+</Note>
 
 The below table contains the main differences that you can see in the code examples, and also some that cannot fit in such a small app, but we still would like you to know about :)
 
