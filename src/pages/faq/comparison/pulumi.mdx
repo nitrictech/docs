@@ -38,6 +38,17 @@ bucket.on('create', '*', async (ctx) => {
 })
 ```
 
+```javascript {{title: 'Pulumi', label: 'src/index.js'}}
+const AWS = require('aws-sdk')
+
+exports.handler = async (event) => {
+  const {
+    s3: { object },
+  } = event
+  console.log(object.key, 'was created')
+}
+```
+
 ```javascript {{title: 'Pulumi', label: 'lib/handle-stack.ts'}}
 import * as pulumi from '@pulumi/pulumi'
 import * as aws from '@pulumi/aws'
@@ -128,17 +139,6 @@ const bucketNotification = new aws.s3.BucketNotification(
 
 export const bucketName = bucket.bucket
 export const lambdaFunctionName = lambdaFunction.name
-```
-
-```javascript {{title: 'Pulumi', label: 'src/index.js'}}
-const AWS = require('aws-sdk')
-
-exports.handler = async (event) => {
-  const {
-    s3: { object },
-  } = event
-  console.log(object.key, 'was created')
-}
 ```
 
 </CodeGroup>
