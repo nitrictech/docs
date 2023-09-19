@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's .NET library - Register a handler for HTTP PUT requests to the route."
 
-# .NET - api.route.put()
+# .NET - Api.Route.Put()
 
 Register a handler for HTTP PUT requests to the route.
 
@@ -104,7 +104,7 @@ using Nitric.Sdk;
 var api = Nitric.Api("main").Route("/customers");
 
 route.Put(context => {
-  var body = context.Req.FromJson<Dictionary<string, string>>();
+  var body = context.Req.Json<Dictionary<string, string>>();
   // parse, validate and store the request payload...
 });
 

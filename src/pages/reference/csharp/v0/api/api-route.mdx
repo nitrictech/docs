@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's .NET library - Creates a new route (path) within an API."
 
-# .NET - api.route()
+# .NET - Api.Route()
 
 Creates a new route (path) within an API.
 
@@ -42,7 +42,7 @@ The `middleware` property on the `options` param is useful for applying universa
 
 ### Create a route
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers");
@@ -56,7 +56,7 @@ Route paths can include dynamic parameters. These values will automatically be p
 
 For example, if you have a customers path and you want to include a `customerId` param you would define the route like this.
 
-```c#
+```csharp
 using Nitric.Sdk;
 
 var route = Nitric.Api("main").Route("/customers/:customerId");

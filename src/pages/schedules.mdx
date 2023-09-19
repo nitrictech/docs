@@ -70,7 +70,7 @@ import (
 )
 
 func main() {
-  resources.NewSchedule("aggregate-data").Every("3 days", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+  nitric.NewSchedule("aggregate-data").Every("3 days", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
     fmt.Println("aggregating data")
 
     return ctx, nil
@@ -80,6 +80,18 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Function;
+
+Nitric.Schedule("aggregate-data").Every(3, Frequency.Days, ctx =>
+{
+  return ctx;
+});
+
+Nitric.Run();
 ```
 
 ```java
@@ -171,6 +183,28 @@ nitric.NewSchedule("process-rarely").Every("30 days", func(ctx *faas.EventContex
 })
 ```
 
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Function;
+
+Nitric.Schedule("process-often").Every(5, Frequency.Minutes, ctx =>
+{
+  return ctx;
+});
+
+Nitric.Schedule("process-sometimes").Every(2, Frequency.Hours, ctx =>
+{
+  return ctx;
+});
+
+Nitric.Schedule("process-rarely").Every(30, Frequency.Days, ctx =>
+{
+  return ctx;
+});
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 
@@ -256,6 +290,24 @@ nitric.NewSchedule("delete stale data").Cron("0 1 1 * *", func (ctx *faas.EventC
 
   return next(ctx)
 })
+```
+
+```csharp
+// every 15 minutes
+Nitric.Schedule("check for updates").Cron("0/15 * * * *", ctx =>
+{
+  Console.WriteLine("checking for updates")
+
+  return ctx;
+});
+
+// at 1:00am on the 1st of every month
+Nitric.Schedule("delete stale data").Cron("0 1 1 * *", ctx =>
+{
+  Console.WriteLine("clearing data");
+
+  return ctx;
+});
 ```
 
 ```java

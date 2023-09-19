@@ -62,6 +62,21 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+
+// Each API needs a unique name
+var galaxyApi = Nitric.Api("far-away-galaxy-api");
+
+galaxyApi.Get("/moon", context => {
+  context.Res.Text("that's no moon, it's a space station");
+
+  return context;
+});
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 
@@ -153,6 +168,26 @@ galaxyApi.Post("/planets", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faa
 })
 ```
 
+```csharp
+using Nitric.Sdk;
+using Planets;
+
+galaxyApi.Get("/planets", context => {
+  context.Res.Body = Planets.GetPlanetsList();
+
+  return context;
+});
+
+galaxyApi.Post("/planets", context => {
+  Planets.CreatePlanet(ctx.Req.Body);
+  context.Res.Status = 201;
+
+  return context;
+});
+
+Nitric.Run();
+```
+
 ```java
 import io.planets.Planets;
 
@@ -224,11 +259,28 @@ import (
   "planets"
 )
 
+// create a dynamic route and extract the parameter `name`
 galaxyApi.Get("/planets/:name", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
   name := ctx.Request.PathParams()["name"]
   ctx.Response.Body = planets.GetPlanet(name)
   return ctx, nil
 })
+```
+
+```csharp
+using Nitric.Sdk;
+using Planets;
+
+// create a dynamic route and extract the parameter `name`
+galaxyApi.Get("/planets/:name", context => {
+  var name = context.Req.PathParams.get("name");
+
+  context.Res.Body = Planets.GetPlanet(name);
+
+  return context;
+});
+
+Nitric.Run();
 ```
 
 ```java
@@ -276,11 +328,20 @@ async def find_alderaan(ctx):
 ```
 
 ```go
+// return a redirect response using status 301
 galaxyApi.Get("/planets/alderaan", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
   ctx.Response.Status = 301
   ctx.Response.Headers["Location"] = []string{ "https://example.org/debris/alderaan" }
   return ctx, nil
 })
+```
+
+```csharp
+galaxyApi.Get("/planets/alderaan", context => {
+  ctx.Res.Status = 301;
+  ctx.Res.Headers.Add("Location", new string[]{ "https://example.org/debris/alderaan" })
+  return context;
+});
 ```
 
 ```java
@@ -391,6 +452,33 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+
+var secureApi = Nitric.Api("main", new ApiOptions(
+  // define a security definition named 'default'
+  SecurityDefinitions: new Dictionary<string, SecurityDefinition>
+  {
+    { "default",
+      new JwtSecurityDefinition(
+        'https://dev-abc123.us.auth0.com',
+        new string[] { "https://test-security-definition/" }
+      )
+    }
+  },
+  // apply the 'default' security definition to all routes in this API.
+  Security: new Dictionary<string, string[]>
+  {
+    {
+      "default",
+      new string[] {}
+    },
+  }
+));
+
+Nitric.Run();
 ```
 
 ```java
@@ -507,6 +595,32 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+
+var secureApi = Nitric.Api("main", new ApiOptions(
+  // only authorize requests with the 'user.read' scope
+  Security: new Dictionary<string, string[]>
+  {
+    {
+      "user",
+      new string[] { "user.read" }
+    },
+  },
+  SecurityDefinitions: new Dictionary<string, SecurityDefinition>
+  {
+    { "default",
+      new JwtSecurityDefinition(
+        'https://dev-abc123.us.auth0.com',
+        new string[] { "https://test-security-definition/" }
+      )
+    }
+  }
+));
+
+Nitric.Run();
 ```
 
 ```java
@@ -669,6 +783,19 @@ func validate(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, 
 }
 ```
 
+```csharp
+HttpContext Validate(HttpContext context, Func<HttpContext, HttpContext> next)
+{
+  if (context.Req.Headers.ContainsKey("content-type"))
+  {
+    context.Res.Status = 400;
+    context.Res.Text("Header Content-Type is required");
+    return context;
+  }
+  return next(context);
+}
+```
+
 ```java
 HttpContext validate(HttpContext ctx, Handler<HttpContext> next) {
   if (!ctx.getReq().getHeaders().containsKey("content-type")) {
@@ -736,6 +863,18 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Function;
+using Nitric.Sdk.Resource;
+
+var customersApi = Nitric.Api("customers",
+  new ApiOptions(Middleware: new Middleware<HttpContext>[] { ValidateRequest })
+)
+
+Nitric.Run();
 ```
 
 ```java
@@ -816,6 +955,22 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Function;
+using Nitric.Sdk.Resource;
+
+var customersApi = Nitric.Api("customers")
+
+customersApi.Get("/hello", new Middleware<HttpContext>[] { ValidateRequest, LogRequest });
+
+customersApi.Route("/hello", new RouteOptions {
+  Middlewares = new Middleware<HttpContext>[] { ValidateRequest, LogRequest }
+}).Post(Handler);
+
+Nitric.Run();
 ```
 
 ```java
