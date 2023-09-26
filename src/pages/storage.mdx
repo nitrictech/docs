@@ -183,7 +183,7 @@ To list all files in a bucket, use the `files()` method on the bucket reference.
 ```typescript
 import { bucket } from '@nitric/sdk'
 
-const profiles = bucket('profiles').allow('reading')
+const profiles = bucket('profiles').for('reading')
 
 const files = await profiles.files()
 
@@ -259,7 +259,7 @@ import io.nitric.Nitric
 import io.nitric.resources.BucketPermission
 
 fun main() {
-	val profiles = Nitric.bucket("profiles").witH(BucketPermission.Read)
+	val profiles = Nitric.bucket("profiles").with(BucketPermission.Read)
 
 	val files = profiles.files()
 
