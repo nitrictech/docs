@@ -252,6 +252,10 @@ const fullNav: FullNav = {
           href: '/guides/getting-started/nodejs/secure-api-auth0',
         },
         {
+          title: 'Secure APIs with AWS Cognito',
+          href: '/guides/getting-started/nodejs/amazon-cognito',
+        },
+        {
           title: 'Using a Database',
           href: '/guides/getting-started/nodejs/byo-database',
         },
