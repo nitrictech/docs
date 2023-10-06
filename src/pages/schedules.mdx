@@ -70,7 +70,7 @@ import (
 )
 
 func main() {
-  resources.NewSchedule("aggregate-data").Every("3 days", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
+  nitric.NewSchedule("aggregate-data").Every("3 days", func(ctx *faas.EventContext, _ faas.EventHandler) (*faas.EventContext, error) {
     fmt.Println("aggregating data")
 
     return ctx, nil
