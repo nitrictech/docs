@@ -1,6 +1,6 @@
 import * as pages from '../fixtures/pages.json'
 
-const CORRECT_CODES = [200, 403]
+const CORRECT_CODES = [200]
 // site should not return internal redirects
 const REDIRECT_CODES = [301, 302, 304, 307, 308]
 // other non standard codes, like 999 from linkedin
