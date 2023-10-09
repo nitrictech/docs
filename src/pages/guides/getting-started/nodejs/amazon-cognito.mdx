@@ -59,7 +59,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 [Nitric APIs](/apis#api-security) allow initial token authentication to be performed by the API Gateways of various cloud providers, such as AWS API Gateway. When configured correctly this will ensure unauthenticated requests are rejected before reaching your application code.
 
-To add this API Gateway authentication we need to create a `security definition` and then apply that definition to specific routes or the entire API. Here we'll update the `'main'` API by adding a new security definition named `cognito`.
+To add this API Gateway authentication we need to create a `security definition` and then apply that definition to specific routes or the entire API. Here we'll update the `main` API by adding a new security definition named `cognito`.
 
 <CodeGroup>
 
