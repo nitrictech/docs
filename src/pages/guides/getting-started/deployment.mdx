@@ -39,7 +39,7 @@ To track the state of your stack between deployments you'll need to configure a 
 
 When using stacks to deploy to different environments such as a development, testing or production environment, you'll typically want to go beyond the default configuration Nitric uses when deploying cloud resources. This environment specific configuration is added to the stack files.
 
-When deploying the application, you can add extra configuration for specific handlers or a globally for all handlers. This configuration is unique to each stack file, allowing you to deploy the same application to different environments with different configuration. Since the configuration options available are unique to the cloud platform and the services they offer these settings are typically different between provider implementations.
+When deploying the application, you can add extra configuration for specific handlers or globally for all handlers. This configuration is unique to each stack file, allowing you to deploy the same application to different environments with different configurations. Since the configuration options available are unique to the cloud platform and the services they offer these settings are typically different between provider implementations.
 
 Below is an example of configuration added to an AWS stack to augment the memory, timeout, and telemetry sampling percentage for deployed handlers.
 
