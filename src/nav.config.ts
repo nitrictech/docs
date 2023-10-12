@@ -295,6 +295,15 @@ const fullNav: FullNav = {
         },
       ],
     },
+    {
+      title: 'JVM Guides',
+      links: [
+        {
+          title: 'REST API',
+          href: '/guides/getting-started/jvm/serverless-rest-api-example',
+        },
+      ],
+    },
   ],
   apis: [
     {
