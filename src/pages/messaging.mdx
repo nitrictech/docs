@@ -80,6 +80,21 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+class User
+{
+  public string Name { get; set; }
+  public string Email { get; set; }
+}
+
+var userCreatedTopic = Nitric.Topic<User>("user-created").With(TopicPermission.Publishing);
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 import io.nitric.resources.TopicPermission;
@@ -169,6 +184,24 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+
+class User
+{
+  public string Name { get; set; }
+  public string Email { get; set; }
+}
+
+var updates = Nitric.Topic<User>("updates").With(TopicPermission.Publishing);
+
+updates.Publish(new User { Name = "John Smith", Email = "john.smith@email.com" });
+
+Nitric.Run();
 ```
 
 ```java
@@ -284,6 +317,29 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+
+class User
+{
+  public string Name { get; set; }
+  public string Email { get; set; }
+}
+
+var updates = Nitric.Topic<User>("updates");
+
+updates.Subscribe(ctx =>
+{
+  var profile = ctx.Req.Payload();
+
+  SendWelcomeEmail(profile.Email);
+
+  return ctx;
+});
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 
@@ -386,6 +442,29 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+// this is invalid
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+class User
+{
+  public string Name { get; set; }
+  public string Email { get; set; }
+}
+
+var loopTopic = Nitric.Topic<User>("updates").With(TopicPermission.Publishing);
+
+updates.Subscribe(ctx =>
+{
+  loopTopic.Publish(new User { Name = "John Smith", Email = "john.smith@email.com" });
+
+  return ctx;
+});
+
+Nitric.Run();
 ```
 
 ```java
@@ -510,6 +589,24 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+
+var updates = Nitric.Topic<User>("updates");
+
+updates.Subscribe(ctx =>
+{
+  if (isDuplicate(ctx.Req))
+  {
+    return ctx;
+  }
+  // Not a duplicate, process the event
+  // ...
+});
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 import io.nitric.resources.TopicPermission;
@@ -579,8 +676,8 @@ A task is a form of message that can be sent to a queue. They can be thought of 
     Unique id to apply to the task. If an id isn't provided, a version 4 UUID
     will be auto-generated instead.
   </Property>
-  <Property name="payload" required type="Map<string, any>">
-    Payload to be sent with the task.
+  <Property name="payload" required type="T">
+    Payload to be sent with the task. Has type T.
   </Property>
   <Property name="payloadType" type="string">
     The type of payload supplied.
@@ -625,6 +722,20 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+class TransactionRequest
+{
+  public string Message { get; set; }
+}
+
+var transactionQueue = Nitric.Queue<TransactionRequest>("transactions").With(QueuePermission.Sending, QueuePermission.Receiving);
+
+Nitric.Run();
 ```
 
 ```java
@@ -722,6 +833,23 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Queue;
+using Nitric.Sdk.Resources;
+
+class TransactionRequest
+{
+  public string Message { get; set; }
+}
+
+var transactionQueue = Nitric.Queue<TransactionRequest>("transactions").With(QueuePermission.Sending, QueuePermission.Receiving);
+
+transactionQueue.Send(new TransactionRequest { Message = "hello world" });
+
+Nitric.Run();
 ```
 
 ```java
@@ -832,6 +960,26 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Queue;
+using Nitric.Sdk.Resources;
+
+class TransactionRequest
+{
+  public string Message { get; set; }
+}
+
+var transactionQueue = Nitric.Queue<TransactionRequest>("transactions").With(QueuePermission.Sending, QueuePermission.Receiving);
+
+transactionQueue.Send(
+  new TransactionRequest { Message = "batch task 1" },
+  new TransactionRequest { Message = "batch task 2" }
+);
+
+Nitric.Run();
 ```
 
 ```java
@@ -951,6 +1099,29 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Queue;
+using Nitric.Sdk.Resources;
+
+class TransactionRequest
+{
+  public string Message { get; set; }
+}
+
+var transactionQueue = Nitric.Queue<TransactionRequest>("transactions").With(QueuePermission.Sending, QueuePermission.Receiving);
+
+var tasks = transactionQueue.Receive();
+
+tasks.ForEach(task => {
+  Console.WriteLine(task.Payload.Message);
+
+  task.Complete();
+});
+
+Nitric.Run();
 ```
 
 ```java

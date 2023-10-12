@@ -1,19 +1,24 @@
 export const description =
   "Reference for Nitric's .NET library - Subscribe a handler to a topic and receive new events for processing."
 
-# .NET - topic.subscribe()
+# .NET - Topic.Subscribe()
 
 Subscribe a handler to a topic and receive new events for processing.
 
 ```csharp
 using Nitric.Sdk;
 
-var updates = Nitric.Topic("updates");
+class EventUpdate
+{
+  public string Message { get; set; }
+}
 
-updates.Subscribe(context => {
-  Console.WriteLine(context.Req.Payload);
+var updates = Nitric.Topic<EventUpdate>("updates");
 
-  return context;
+updates.Subscribe(ctx => {
+  Console.WriteLine(ctx.Req.Payload);
+
+  return ctx;
 });
 
 Nitric.Run();
@@ -40,10 +45,10 @@ using Nitric.Sdk;
 
 var updates = Nitric.Topic("updates");
 
-updates.Subscribe(context => {
-  Console.WriteLine(context.Req.Payload);
+updates.Subscribe(ctx => {
+  Console.WriteLine(ctx.Req.Payload);
 
-  return context;
+  return ctx;
 });
 
 Nitric.Run();
@@ -54,17 +59,25 @@ Nitric.Run();
 ```csharp
 using Nitric.Sdk;
 
-var updates = Nitric.Topic("updates");
+class EventUpdate
+{
+  public string Message { get; set; }
+}
 
-updates.Subscribe((context, next) =>
+var updates = Nitric.Topic<EventUpdate>("updates");
+
+
+updates.Subscribe((ctx, next) =>
   {
     // Validate request
-
-    return next(context);
-  }, (context, next) => {
-    Console.WriteLine(context.Req.Payload);
-
-    return next(context);
+    if (invalidRequest(ctx))
+    {
+      return ctx;
+    }
+    return next(ctx);
+  }, (ctx, next) => {
+    // Handle request
+    return next(ctx);
   }
 );
 

@@ -46,8 +46,11 @@ const profiles = bucket('profiles').for('reading', 'writing', 'deleting')
 
 ```python
 from nitric.resources import bucket
+from nitric.application import Nitric
 
 profiles = bucket('profiles').allow('reading', 'writing', 'deleting')
+
+Nitric.run()
 ```
 
 ```go
@@ -67,6 +70,15 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+var profiles = Nitric.Bucket("profiles").With(BucketPermission.Writing, BucketPermission.Reading, BucketPermission.Deleting);
+
+Nitric.Run();
 ```
 
 ```java
@@ -117,10 +129,13 @@ const profilePicture = profiles.file('users/bruce-wayne/profile.png')
 
 ```python
 from nitric.resources import bucket
+from nitric.application import Nitric
 
 profiles = bucket("profiles").allow("reading")
 
 profile_picture = profiles.file("users/bruce-wayne/profile.png")
+
+Nitric.run()
 ```
 
 ```go
@@ -142,6 +157,17 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+var profiles = Nitric.Bucket("profiles").With(BucketPermission.Reading);
+
+var profilePicture = profiles.File("users/bruce-wayne/profile.png");
+
+Nitric.Run();
 ```
 
 ```java
@@ -233,6 +259,21 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+var profiles = Nitric.Bucket("profiles").With(BucketPermission.Reading);
+
+var files = profiles.Files();
+
+files.ForEach(file => {
+  Console.WriteLine(file.Name);
+});
+
+Nitric.Run();
 ```
 
 ```java
@@ -328,6 +369,17 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+var profiles = Nitric.Bucket("profiles").With(BucketPermission.Reading);
+
+var image = profiles.File("users/bruce-wayne/profile.png").Read();
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 import io.nitric.resources.BucketPermission;
@@ -419,6 +471,19 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+var profiles = Nitric.Bucket("profiles").With(BucketPermission.Writing);
+
+var profileImage = "image data";
+
+var image = profiles.File("users/bruce-wayne/profile.png").Write(profileImage);
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 import io.nitric.resources.BucketPermission;
@@ -499,6 +564,17 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+var profiles = Nitric.Bucket("profiles").With(BucketPermission.Deleting);
+
+var image = profiles.File("users/bruce-wayne/profile.png").Delete();
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 import io.nitric.resources.BucketPermission;
@@ -550,11 +626,11 @@ const profiles = bucket('profiles').for('reading', 'writing')
 
 // Get pre-signed URLs for downloading or uploading
 const downloadUrl = await profiles.file('profile.png').getDownloadUrl({
-  expiry: 3600, // Defaults to 600 (10 minutes)
+  expiry: 3600, // Expiry defaults to 600 (10 minutes)
 })
 
 const uploadUrl = await profiles.file('profile.png').getUploadUrl({
-  expiry: 3600, // Defaults to 600 (10 minutes)
+  expiry: 3600, // Expiry defaults to 600 (10 minutes)
 })
 ```
 
@@ -564,9 +640,9 @@ from nitric.application import Nitric
 
 profiles = bucket('profiles').allow('reading', 'writing')
 
-download_url = await profiles.file('profile.png').download_url()
+download_url = await profiles.file('profile.png').download_url(3600) # Expiry defaults to 600 (10 minutes)
 
-upload_url = await profiles.file('profile.png').upload_url()
+upload_url = await profiles.file('profile.png').upload_url(3600) # Expiry defaults to 600 (10 minutes)
 
 Nitric.run()
 ```
@@ -588,12 +664,12 @@ func main() {
   ctx := context.TODO()
   expiry := 3600
 
-  downloadUrl, err := profiles.file("profile.png").DownloadUrl(ctx, expiry)
+  downloadUrl, err := profiles.file("profile.png").DownloadUrl(ctx, expiry) // Expiry defaults to 600 (10 minutes)
   if err != nil {
     return
   }
 
-  uploadUrl, err := profiles.File("profile.png").UploadUrl(ctx, expiry)
+  uploadUrl, err := profiles.File("profile.png").UploadUrl(ctx, expiry) // Expiry defaults to 600 (10 minutes)
   if err != nil {
     return
   }
@@ -602,6 +678,19 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+var profiles = Nitric.Bucket("profiles").With(BucketPermission.Deleting);
+
+var downloadUrl = profiles.File("profile.png").GetDownloadUrl(3600); // Expiry defaults to 600 (10 minutes)
+
+var uploadUrl = profiles.File("profile.png").GetUploadUrl(3600); // Expiry defaults to 600 (10 minutes)
+
+Nitric.Run();
 ```
 
 ```java
@@ -702,6 +791,23 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Function;
+using Nitric.Sdk.Resources;
+
+var assets = Nitric.Bucket("assets");
+
+// Filter for 'write' events for files starting with '/users/images'
+assets.On(BucketNotificationType.Write, "/users/images", ctx =>
+{
+  Console.WriteLine($"new profile image for {ctx.Req.Key} was written");
+  return ctx;
+});
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 import io.nitric.resources.BucketPermission;
@@ -792,6 +898,23 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Function;
+using Nitric.Sdk.Resources;
+
+var assets = Nitric.Bucket("assets");
+
+// Filter for 'delete' events for any file
+assets.On(BucketNotificationType.Delete, "*", ctx =>
+{
+  Console.WriteLine($"{ctx.Req.Key} was deleted");
+  return ctx;
+});
+
+Nitric.Run();
 ```
 
 ```java

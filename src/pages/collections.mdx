@@ -106,6 +106,23 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+using nitric.Sdk.Resources;
+
+class Country
+{
+  public string Name { get; set; }
+  public double Population { get; set; }
+}
+
+var countries = Nitric.Collection<Country>("Countries").With(
+  CollectionPermission.Reading, CollectionPermission.Writing, CollectionPermission.Deleting
+);
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 import io.nitric.resources.CollectionPermission;
@@ -173,6 +190,7 @@ await countries.doc('USA').set({
 
 ```python
 from nitric.resources import collection
+from nitric.application import Nitric
 
 countries = collection('Countries').allow('writing')
 
@@ -180,6 +198,8 @@ await countries.doc('USA').set({
   "name": "United States of America",
   "population": 329500000
 })
+
+Nitric.run()
 ```
 
 ```go
@@ -206,6 +226,20 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using Nitric.Sdk.Resources;
+
+var countries = Nitric.Collection<Country>("Countries").With(CollectionPermission.Writing);
+
+countries.Doc("USA").Set(new Country {
+  Name = "United States of America",
+  Population = 329500000.0
+});
+
+Nitric.Run();
 ```
 
 ```java
@@ -284,6 +318,13 @@ if err != nil {
 }
 ```
 
+```csharp
+countries.Doc("USA").Set(new Country {
+  Name = "United States of America",
+  Population = 329500000.0
+});
+```
+
 ```java
 countries.doc("USA").set(new Country(
 	"United States of America",
@@ -348,6 +389,17 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using nitric.Sdk.Resources;
+
+var countries = Nitric.Collection("Countries").With(CollectionPermission.Reading);
+
+var country = countries.Doc("USA").Get();
+
+Nitric.Run();
 ```
 
 ```java
@@ -440,7 +492,7 @@ func main() {
   countryApi.Get("/country/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
     name := ctx.Request.PathParams()["name"]
 
-    country, err := countries.Doc(id).Get(ctx.Request.Context())
+    country, err := countries.Doc(name).Get(ctx.Request.Context())
     if err != nil {
       return ctx, err
     }
@@ -454,6 +506,27 @@ func main() {
     fmt.Println(err)
   }
 }
+```
+
+```csharp
+using Nitric.Sdk;
+using nitric.Sdk.Resources;
+
+var countryApi = Nitric.Api("Countries");
+
+var countries = Nitric.Collection<Country>("Countries").With(CollectionPermission.Reading);
+
+countryApi.Get("/country/:name", (ctx) => {
+  var name = ctx.Req.PathParams["name"];
+
+  var country = countries.Doc(name).Get();
+
+  ctx.Resp.Json(country);
+
+  return ctx;
+});
+
+Nitric.Run();
 ```
 
 ```java
@@ -580,6 +653,22 @@ func main() {
 }
 ```
 
+```csharp
+using Nitric.Sdk;
+using nitric.Sdk.Resources;
+
+var countries = Nitric.Collection<Country>("Countries").With(CollectionPermission.Reading);
+
+countries.Doc("USA").Set(new Country {
+  Name = "United States of America",
+  Population = 329500000.0
+});
+
+countries.Doc("USA").Delete();
+
+Nitric.Run();
+```
+
 ```java
 import io.nitric.Nitric;
 import io.nitric.resources.CollectionPermission;
@@ -658,6 +747,13 @@ largeCountries, err := countries.
     Fetch(context.TODO())
 ```
 
+```csharp
+var largeCountries = countries
+  .Query()
+  .Where("population", ">", 1000000000)
+  .Fetch();
+```
+
 ```java
 import io.nitric.api.documents.v0.Operator;
 
@@ -712,6 +808,14 @@ largeCountries, err := countries.
     Where(documents.Condition("name").StartsWith(documents.StringValue("S"))).
     Limit(10).
     Fetch(context.TODO())
+```
+
+```csharp
+var largeCountries = countries
+  .Query()
+  .Where("population", ">", 1000000000)
+  .Limit(10)
+  .Fetch();
 ```
 
 ```java
@@ -785,6 +889,15 @@ query := countries.
     Where(documents.Condition("population").Ge(documents.NumberValue(100000000)))
 
 results, err := query.Fetch(context.TODO())
+```
+
+```csharp
+var query = countries
+  .Query()
+  .Where("name", "!=", "United States of America")
+  .Where("population", ">=", 1000000000);
+
+var results = query.Fetch();
 ```
 
 ```java
@@ -869,6 +982,22 @@ for pagingToken != nil {
 }
 ```
 
+```csharp
+var query = countries.Query().Limit(1000);
+
+// Fetch first page
+var results = query.Fetch();
+
+var pagingToken = results.PagingToken;
+
+// Fetch next page
+if (pagingToken != null) {
+  var results = query.PagingFrom(pagingToken).Fetch();
+
+  pagingToken = results.PagingToken;
+}
+```
+
 ```java
 import io.nitric.api.documents.v0;
 
@@ -946,6 +1075,10 @@ for {
 }
 ```
 
+```csharp
+// Streaming is currently not supported in C#
+```
+
 ```java
 var stream = countries.query().stream();
 
@@ -989,6 +1122,13 @@ states := countries.Doc("USA").Collection("States")
 
 // Get a document from the sub-collection
 stateOfColorado, err := states.Doc("Colorado").Get(context.TODO())
+```
+
+```csharp
+var states = countries.Doc("USA").Collection("States");
+
+// Get a document from the sub-collection
+var stateOfColorado = states.Doc("Colorado").Get();
 ```
 
 ```java
@@ -1059,6 +1199,16 @@ results, err := query.FromPagingToken(results.PagingToken).Fetch(ctx)
 stream, err := query.Stream(ctx)
 ```
 
+```csharp
+var query = countries.Doc("USA").Collection("States").Query();
+
+// Fetching
+var results = query.Fetch();
+
+// Paging
+var results = query.PagingFrom(results.PagingToken).Fetch();
+```
+
 ```java
 var query = countries.doc("USA").collection("States").query()
 
@@ -1111,6 +1261,12 @@ results = all_states.query().fetch()
 allStates := countries.Collection("States")
 
 results, err := allStates.Query().Fetch(context.TODO())
+```
+
+```csharp
+var allStates = countries.Collection("States");
+
+var results = allStates.Query().Fetch();
 ```
 
 ```java

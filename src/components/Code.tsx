@@ -24,6 +24,7 @@ const languageNames = {
   ruby: 'Ruby',
   go: 'Go',
   java: 'Java',
+  csharp: 'C#',
   kotlin: 'Kotlin',
 }
 

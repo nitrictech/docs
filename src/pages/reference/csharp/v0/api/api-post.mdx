@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's .NET library - Register an API route and set a specific HTTP POST handler on that route."
 
-# .NET - api.post()
+# .NET - Api.Post()
 
 Register an API route and set a specific HTTP POST handler on that route.
 
@@ -112,7 +112,7 @@ using Nitric.Sdk;
 var api = Nitric.Api("main");
 
 api.Post("/hello/:name", context => {
-  var body = context.Req.FromJson<Dictionary<string, string>>();
+  var body = context.Req.Json<Dictionary<string, string>>();
   // parse, validate and store the request payload...
 });
 

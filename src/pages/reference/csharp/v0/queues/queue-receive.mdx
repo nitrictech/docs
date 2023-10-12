@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's .NET library - Receive tasks from a queue."
 
-# .NET - queue.receive()
+# .NET - Queue.Receive()
 
 Receive tasks from a queue.
 
@@ -9,15 +9,22 @@ Receive tasks from a queue.
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 
-var batchQueue = Nitric.Queue("batch").With(QueuePermission.Receiving);
+class UserRequest
+{
+    public string UserId { get; set; }
+    public string Message { get; set; }
+}
+
+var batchQueue = Nitric.Queue<UserRequest>("batch").With(QueuePermission.Receiving);
 
 var tasks = batchQueue.Receive();
 
 tasks.ForEach(task => {
-  // Work on a task...
+    // Work on a task...
+    Console.WriteLine($"Request from user {task.Payload.UserId}: {task.Payload.Message}");
 
-  // Complete the task
-  task.Complete();
+    // Complete the task
+    task.Complete();
 });
 
 Nitric.Run();
@@ -64,13 +71,21 @@ This means calls to receive will return between 0 and _depth_ tasks.
 using Nitric.Sdk;
 using Nitric.Sdk.Queue;
 
-var batchQueue = Nitric.Queue("batch").With(QueuePermission.Receiving);
+class UserRequest
+{
+    public string UserId { get; set; }
+    public string Message { get; set; }
+}
+
+
+var batchQueue = Nitric.Queue<UserRequest>("batch").With(QueuePermission.Receiving);
 
 // Receive tasks with a limit of 10
 var tasks = batchQueue.Receive(10);
 
 tasks.ForEach(task => {
   // Work on a task...
+  Console.WriteLine($"Request from user {task.Payload.UserId}: {task.Payload.Message}");
 
   // Complete the task
   task.Complete();

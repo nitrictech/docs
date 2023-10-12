@@ -104,7 +104,7 @@ using Nitric.Sdk;
 var api = Nitric.Api("main").Route("/customers");
 
 route.Delete(context => {
-  var body = context.Req.FromJson<Dictionary<string, string>>();
+  var body = context.Req.Json<Dictionary<string, string>>();
   // parse, validate and store the request payload...
 });
 

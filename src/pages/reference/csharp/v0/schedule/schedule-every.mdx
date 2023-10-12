@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's .NET library - Sets the frequency and one or many handlers to be triggered."
 
-# .NET - schedule.every()
+# .NET - Schedule.Every()
 
 Sets the frequency and one or many handlers to be triggered.
 
@@ -27,7 +27,7 @@ Nitric.Run();
   </Property>
   <Property
     name="middleware"
-    type="Middleware<EventContext> | Middleware<EventContext>[]"
+    type="Func<EventContext, EventContext> or List<Middleware<EventContext>"
     required
   >
     One or more middleware functions to use as the handler which will run on
