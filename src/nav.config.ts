@@ -495,6 +495,10 @@ const fullNav: FullNav = {
           title: 'Wing',
           href: '/faq/comparison/winglang',
         },
+        {
+          title: 'Ampt',
+          href: '/faq/comparison/ampt',
+        },
       ],
     },
   ],
