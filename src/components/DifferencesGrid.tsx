@@ -101,6 +101,17 @@ const assets = [
       ],
     },
   },
+  {
+    href: '/faq/comparison/ampt',
+    name: 'Ampt',
+    pattern: {
+      y: 16,
+      squares: [
+        [0, 1],
+        [1, 3],
+      ],
+    },
+  },
 ]
 
 export function DifferencesGrid() {
