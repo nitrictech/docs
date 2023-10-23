@@ -28,6 +28,17 @@ const languageNames = {
   kotlin: 'Kotlin',
 }
 
+const copyToClipboard = (str: string, callback = () => {}) => {
+  const focused = window.document.hasFocus()
+  if (focused) {
+    window.navigator?.clipboard?.writeText(str).then(() => {
+      callback()
+    })
+  } else {
+    console.warn('Unable to copy to clipboard')
+  }
+}
+
 function getPanelTitle({ title, language }) {
   return title ?? languageNames[language] ?? 'Code'
 }
@@ -71,7 +82,7 @@ function CopyButton({ code }) {
           : 'bg-white/5 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5'
       )}
       onClick={() => {
-        window.navigator.clipboard.writeText(code).then(() => {
+        copyToClipboard(code.trim(), () => {
           setCopyCount((count) => count + 1)
         })
       }}
