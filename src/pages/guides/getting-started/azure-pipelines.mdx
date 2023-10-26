@@ -14,7 +14,7 @@ This guide will illustrate how Nitric can be integrated with Azure Pipelines to 
 
 #### Pipeline Setup
 
-Firstly, ensure you have a Nitric project prepared for deployment. If not, refer to Nitric's [quickstart guide](https://nitric.io/docs/).
+Firstly, ensure you have a Nitric project prepared for deployment. If not, refer to Nitric's [quickstart guide](/guides/getting-started/quickstart).
 
 Then, you'll need to create an Azure Pipelines YAML file for your project. This will dictate the automated deployment steps. Let's name this file `azure-pipelines.yml`.
 
@@ -28,15 +28,6 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '10.x'
-    displayName: 'Install Node.js'
-
-  - script: |
-      npm install
-    displayName: 'npm install and build'
-
   - script: |
       # Install Pulumi
       curl -fsSL https://get.pulumi.com | sh
@@ -47,28 +38,31 @@ steps:
       # Install Nitric
       curl https://nitric.io/install | bash
       export PATH=$PATH:$HOME/.nitric/bin
-      nitric up --ci
-    displayName: 'Install Pulumi and Nitric'
+
+      # Login to Azure (assuming using Service Principal and Certificate)
+      az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CERTIFICATE_PATH) --tenant $(AZURE_TENANT_ID)
+
+      # Execute the nitric command
+      nitric up --ci -v2
+    displayName: 'Install Pulumi and Nitric CLI'
     env:
       PULUMI_CONFIG_PASSPHRASE: $(PULUMI_CONFIG_PASSPHRASE)
       PULUMI_ACCESS_TOKEN: $(PULUMI_ACCESS_TOKEN)
-      AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-      AWS_REGION: 'us-east-1'
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+      AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+      AZURE_CERTIFICATE_PATH: $(AZURE_CERTIFICATE_PATH)
 ```
 
 ## Breaking it down
 
 ### Pipeline Triggers
 
-Triggers indicate when the pipeline should execute:
+Triggers indicate when the pipeline should execute, in this example the main branch is targetted.
 
 ```yaml
 trigger:
   - main
 ```
-
-The above config will activate the pipeline each time there's a commit to the main branch.
 
 ### Virtual Machine Image
 
@@ -79,33 +73,12 @@ pool:
   vmImage: ubuntu-latest
 ```
 
-### Installing Node.js
-
-The next step is to install Node.js, a requirement for many modern web projects:
-
-```yaml
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
-```
-
-### Installing Dependencies
-
-Use the following step to install project dependencies for your project, we used `npm install` here for a node project:
-
-```yaml
-- script: |
-    npm install
-  displayName: 'npm install and build'
-```
-
 ### Pulumi and Nitric Setup
 
 Install Pulumi and Nitric, which are necessary for deployment and set the relevant environment paths:
 
 ```yaml
-- script: |
+- steps
   - script: |
       # Install Pulumi
       curl -fsSL https://get.pulumi.com | sh
@@ -116,14 +89,19 @@ Install Pulumi and Nitric, which are necessary for deployment and set the releva
       # Install Nitric
       curl https://nitric.io/install | bash
       export PATH=$PATH:$HOME/.nitric/bin
-      nitric up --ci
-  displayName: 'Install Pulumi and Nitric'
-  env:
+
+      # Login to Azure (assuming using Service Principal and Certificate)
+      az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CERTIFICATE_PATH) --tenant $(AZURE_TENANT_ID)
+
+      # Execute the nitric command
+      nitric up --ci -v2
+    displayName: 'Install Pulumi and Nitric CLI'
+    env:
       PULUMI_CONFIG_PASSPHRASE: $(PULUMI_CONFIG_PASSPHRASE)
       PULUMI_ACCESS_TOKEN: $(PULUMI_ACCESS_TOKEN)
-      AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
-      AWS_REGION: 'us-east-1'
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+      AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+      AZURE_CERTIFICATE_PATH: $(AZURE_CERTIFICATE_PATH)
 ```
 
 To set up these secrets, navigate to the Azure Pipelines dashboard, select your pipeline, and add new secrets under the 'Variables' section.
