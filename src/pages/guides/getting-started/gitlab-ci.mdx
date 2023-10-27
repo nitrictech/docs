@@ -45,11 +45,7 @@ deploy:
     - pulumi login
     - apk add --no-cache docker-cli-buildx
     - docker buildx create --driver=docker-container --name=buildkit-builder --driver-opt network=host --use
-    - apk add nodejs npm
-    - apk add --no-cache --virtual .gyp python3 make g++
-    - npm i -g yarn
   script:
-    - yarn install
     - nitric up --ci -v2
 ```
 
@@ -161,34 +157,11 @@ before_script:
   - docker buildx create --driver=docker-container --name=buildkit-builder --use
 ```
 
-Then install additional project-specific dependencies like `nodejs` and `npm`.
-
-```yaml
-before_script:
-  - ...
-  - apk add nodejs npm
-  - apk add --no-cache --virtual .gyp python3 make g++ # Dependencies of `node-gyp`
-```
-
-Finally, add `yarn` using `npm`.
-
-```yaml
-before_script:
-  - ...
-  - npm i -g yarn
-```
-
-<Note>
-  `nodejs`, `yarn` and `npm` are only required for Node.js projects. A Python
-  project might require `pip` and `pipenv` instead.
-</Note>
-
 ### Deploy the stack
 
 Finally, in the `script:` section of the job, the `up` command can be used to deploy your project. The first argument `--ci` tells the CLI that we are running in a ci pipeline and should have raw output. The final argument `-v2` sets the Nitric CLI output to verbosity level 2, so the workflow will log plenty of detail for us to use to debug any issues.
 
 ```yaml
 script:
-  - yarn install
   - nitric up --ci -v2
 ```
