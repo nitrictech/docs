@@ -61,7 +61,7 @@ import (
 )
 
 func main() {
-  profiles, err := nitric.NewBucket("profiles").With(resources.BucketWriting, resources.BucketReading, resources.BucketDeleting)
+  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketWriting, nitric.BucketReading, nitric.BucketDeleting)
   if err != nil {
     return
   }
@@ -146,7 +146,7 @@ import (
 )
 
 func main() {
-  profiles, err := nitric.NewBucket("profiles").With(resources.BucketReading)
+  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketReading)
   if err != nil {
     return
   }
@@ -241,7 +241,7 @@ import (
 )
 
 func main() {
-  profiles, err := nitric.NewBucket("profiles").With(resources.BucketReading)
+  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketReading)
   if err != nil {
     return
   }
@@ -353,7 +353,7 @@ import (
 )
 
 func main() {
-  profiles, err := nitric.NewBucket("profiles").With(resources.BucketReading)
+  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketReading)
   if err != nil {
     return
   }
@@ -453,7 +453,7 @@ import (
 )
 
 func main() {
-  profiles, err := nitric.NewBucket("profiles").With(resources.BucketWriting)
+  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketWriting)
   if err != nil {
     return
   }
@@ -548,7 +548,7 @@ import (
 )
 
 func main() {
-  profiles, err := nitric.NewBucket("profiles").With(resources.BucketDeleting)
+  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketDeleting)
   if err != nil {
     return
   }
@@ -656,7 +656,7 @@ import (
 )
 
 func main() {
-  profiles, err := nitric.NewBucket("profiles").With(resources.BucketReading, resources.BucketWriting)
+  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketReading, nitric.BucketWriting)
   if err != nil {
     return
   }

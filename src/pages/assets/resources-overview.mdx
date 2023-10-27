@@ -63,14 +63,14 @@ func main() {
   }
 
   // ✅ This declaration will work
-  files, err := nitric.NewBucket("files").With(resources.BucketReading)
+  files, err := nitric.NewBucket("files").With(nitric.BucketReading)
   if err != nil {
     return
   }
 
   profiles.Get("/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
     // ❌ This declaration will not work, as this is only called at runtime.
-    badBucket, err := nitric.NewBucket("wont-work").With(resources.BucketWriting)
+    badBucket, err := nitric.NewBucket("wont-work").With(nitric.BucketWriting)
 
     return ctx, err
   })

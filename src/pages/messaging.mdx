@@ -69,7 +69,7 @@ import (
 )
 
 func main() {
-  updates, err := nitric.NewTopic("updates").With(resources.TopicPublishing)
+  updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
   if err != nil {
     return
   }
@@ -169,7 +169,7 @@ import (
 )
 
 func main() {
-  updates, err := nitric.NewTopic("updates").With(resources.TopicPublishing)
+  updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
   if err != nil {
     return
   }
@@ -427,7 +427,7 @@ import (
 )
 
 func main() {
-  loopTopic, err := nitric.NewTopic("updates").With(resources.TopicPublishing)
+  loopTopic, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
   if err != nil {
     return
   }
@@ -712,7 +712,7 @@ import (
 )
 
 func main() {
-  transactionQueue, err := nitric.NewQueue("transactions").With(resources.QueueSending, resources.QueueReceiving)
+  transactionQueue, err := nitric.NewQueue("transactions").With(nitric.QueueSending, nitric.QueueReceiving)
   if err != nil {
     fmt.Prinln(err)
     return
@@ -812,7 +812,7 @@ import (
 )
 
 func main() {
-  transactionQueue, err := nitric.NewQueue("transactions").With(resources.QueueSending)
+  transactionQueue, err := nitric.NewQueue("transactions").With(nitric.QueueSending)
   if err != nil {
     fmt.Prinln(err)
     return
@@ -935,7 +935,7 @@ import (
 )
 
 func main() {
-  transactionQueue, err := nitric.NewQueue("transactions").With(resources.QueueSending)
+  transactionQueue, err := nitric.NewQueue("transactions").With(nitric.QueueSending)
   if err != nil {
     return
   }
@@ -1076,7 +1076,7 @@ import (
 )
 
 func main() {
-  transactionQueue, err := nitric.NewQueue("transactions").With(resources.QueueReceiving)
+  transactionQueue, err := nitric.NewQueue("transactions").With(nitric.QueueReceiving)
   if err != nil {
     return
   }
