@@ -43,8 +43,6 @@ deploy:
     - curl -fsSL https://get.pulumi.com/ | bash
     - export PATH=$PATH:$HOME/.pulumi/bin
     - pulumi login
-    - apk add --no-cache docker-cli-buildx
-    - docker buildx create --driver=docker-container --name=buildkit-builder --driver-opt network=host --use
   script:
     - nitric up --ci -v2
 ```
@@ -55,7 +53,7 @@ Edit the config file and start by defining a new job which uses a docker image a
 
 ```yaml
 deploy:
-  image: docker:25.0.5
+  image: docker:24.0.5
   services:
     - docker:24.0.5-dind
 ```
@@ -146,15 +144,6 @@ before_script:
   - curl -fsSL https://get.pulumi.com/ | bash
   - export PATH=$PATH:$HOME/.pulumi/bin
   - pulumi login
-```
-
-We then need to download the `docker buildx` plugin for Docker. `buildx` is required by the Nitric CLI as it builds the cloud-compatible images before deploying.
-
-```yaml
-before_script:
-  - ...
-  - apk add --no-cache docker-cli-buildx
-  - docker buildx create --driver=docker-container --name=buildkit-builder --use
 ```
 
 ### Deploy the stack
