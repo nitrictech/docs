@@ -28,12 +28,10 @@ deploy:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   variables:
-    DOCKER_HOST: tcp://docker:2375
     PULUMI_CONFIG_PASSPHRASE: $PULUMI_ACCESS_TOKEN
     PULUMI_ACCESS_TOKEN: $PULUMI_ACCESS_TOKEN
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-    OSTYPE: 'linux-musl'
     HOST_DOCKER_INTERNAL_IFACE: 'eth0'
   before_script:
     - apk update
@@ -42,7 +40,6 @@ deploy:
     - export PATH=$PATH:$HOME/.nitric/bin
     - curl -fsSL https://get.pulumi.com/ | bash
     - export PATH=$PATH:$HOME/.pulumi/bin
-    - pulumi login
   script:
     - nitric up --ci -v2
 ```
@@ -76,11 +73,6 @@ rules:
 
 Configure the environment variables required by Nitric and Nitric's dependency Pulumi. In this example we store the required values in Gitlab CI variables. Variables can be found by navigating to `https://gitlab.com/{user}/{project}/-/settings/ci_cd`.
 
-#### Docker
-
-- DOCKER_HOST
-  - Set the docker host to `tcp://docker:2375` so Docker will communicate with the docker-in-docker daemon started inside of the service.
-
 #### Pulumi
 
 - PULUMI_ACCESS_TOKEN
@@ -101,22 +93,16 @@ Configure the environment variables required by Nitric and Nitric's dependency P
 
 #### Nitric
 
-- OSTYPE
-
-  - The operating system which the Nitric CLI is installing on. Gitlab CI clears the OSTYPE by default, meaning this value is normally empty.
-
 - HOST_DOCKER_INTERNAL_IFACE
 
   - The network interface that the Nitric CLI will temporarily run the containers on. Without this, the containers can't communicate with the Nitric server whilst gathering the resource definitions.
 
 ```yaml
 variables:
-  DOCKER_HOST: tcp://docker:2375
-  PULUMI_CONFIG_PASSPHRASE: $PULUMI_ACCESS_TOKEN
+  PULUMI_CONFIG_PASSPHRASE: $PULUMI_CONFIG_PASSPHRASE
   PULUMI_ACCESS_TOKEN: $PULUMI_ACCESS_TOKEN
   AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
   AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-  OSTYPE: 'linux-musl'
   HOST_DOCKER_INTERNAL_IFACE: 'eth0'
 ```
 
@@ -143,7 +129,6 @@ before_script:
   - export PATH=$PATH:$HOME/.nitric/bin
   - curl -fsSL https://get.pulumi.com/ | bash
   - export PATH=$PATH:$HOME/.pulumi/bin
-  - pulumi login
 ```
 
 ### Deploy the stack
