@@ -194,6 +194,10 @@ const fullNav: FullNav = {
           title: 'Using GitHub Actions',
           href: '/guides/getting-started/github-actions',
         },
+        {
+          title: 'Using Google Cloud Build',
+          href: '/guides/getting-started/google-cloud-build',
+        },
       ],
     },
     {
