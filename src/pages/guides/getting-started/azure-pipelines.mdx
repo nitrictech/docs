@@ -77,6 +77,8 @@ pool:
 
 Install Pulumi and Nitric, which are necessary for deployment and set the relevant environment paths:
 
+The `up` command can be used to deploy your project. The first argument `--ci` tells the CLI that we are running in a ci pipeline and should have raw output. The final argument `-v2` sets the Nitric CLI output to verbosity level 2, so the workflow will log plenty of detail for us to use to debug any issues.
+
 ```yaml
 - steps
   - script: |
