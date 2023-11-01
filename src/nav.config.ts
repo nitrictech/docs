@@ -716,6 +716,10 @@ const fullNav: FullNav = {
           href: '/reference/nodejs/v0/storage/bucket-files',
         },
         {
+          title: 'file.exists()',
+          href: '/reference/nodejs/v0/storage/bucket-file-exists',
+        },
+        {
           title: 'file.read()',
           href: '/reference/nodejs/v0/storage/bucket-file-read',
         },
