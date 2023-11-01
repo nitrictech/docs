@@ -437,12 +437,12 @@ import (
 func main() {
   secureApi, err := nitric.NewApi("main",
     // define a security definition named 'default'
-    resources.WithSecurityJwtRule("default", resources.JwtSecurityRule{
+    nitric.WithSecurityJwtRule("default", nitric.JwtSecurityRule{
       Issuer: "https://dev-abc123.us.auth0.com",
       Audiences: []string{ "https://test-security-definition/" },
     }),
     // apply the 'default' security definition to all routes in this API.
-    resources.WithSecurity("default",  []string{}),
+    nitric.WithSecurity("default",  []string{}),
   )
   if err != nil {
     return
@@ -581,8 +581,8 @@ import (
 func main() {
   secureApi, err := nitric.NewApi("main",
     // only authorize requests with the 'user.read' scope
-    resources.WithSecurity("user", []string{ "user.read" }),
-    resources.WithSecurityJwtRule("user", resources.JwtSecurityRule{
+    nitric.WithSecurity("user", []string{ "user.read" }),
+    nitric.WithSecurityJwtRule("user", nitric.JwtSecurityRule{
       Issuer: "https://dev-abc123.us.auth0.com",
       Audiences: []string{ "https://test-security-definition/" },
     }),
@@ -708,12 +708,12 @@ async def get_planet(ctx):
 // override top level security to remove security from this route
 galaxyApi.Get("/planets/unsecured-planet", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
   return ctx, nil
-}, resources.WithNoMethodSecurity())
+}, nitric.WithNoMethodSecurity())
 
 // override top level security to require user.write scope to access
 galaxyApi.Get("/planets/secured-planet", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
   return ctx, nil
-}, resources.WithMethodSecurity("user", []string{ "user.write" }))
+}, nitric.WithMethodSecurity("user", []string{ "user.write" }))
 ```
 
 ```java
@@ -853,7 +853,7 @@ import (
 
 func main() {
   customersApi, err := nitric.NewApi("customers",
-    resources.WithMiddleware(middleware.LogRequest, middleware.ValidateRequest)
+    nitric.WithMiddleware(middleware.LogRequest, middleware.ValidateRequest)
   )
   if err != nil {
     return nil, err

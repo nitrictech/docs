@@ -95,7 +95,7 @@ import (
 )
 
 func main() {
-  countries, err := nitric.NewCollection("Countries").With(resources.CollectionReading, resources.CollectionWriting, resources.CollectionDeleting)
+  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
   if err != nil {
     return
   }
@@ -209,7 +209,7 @@ import (
 )
 
 func main() {
-  countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
+  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionWriting)
   if err != nil {
     return
   }
@@ -375,7 +375,7 @@ import (
 )
 
 func main() {
-  countries, err := nitric.NewCollection("Countries").With(resources.CollectionReading)
+  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionReading)
   if err != nil {
     return
   }
@@ -484,7 +484,7 @@ func main() {
     return
   }
 
-  countries, err := nitric.NewCollection("Countries").With(resources.CollectionReading)
+  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionReading)
   if err != nil {
     return
   }
@@ -627,7 +627,7 @@ import (
 )
 
 func main() {
-  countries, err := nitric.NewCollection("Countries").With(resources.CollectionWriting)
+  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionWriting)
   if err != nil {
     return
   }
