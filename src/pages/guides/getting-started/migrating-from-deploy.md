@@ -5,7 +5,7 @@ export const description = 'Migrating your application away from Nitric Deploy'
 <Note>
 The public preview phase for Nitric Deploy has concluded, and we're no longer accepting sign-ups at this time. We are incredibly thankful for the support and feedback we've received from our preview participants. This feedback has been invaluable in helping us improve both Nitric Deploy and the open-source Nitric Framework.
 
-We're hard at work on the future of the open-source Nitric Framework and other services from the Nitric team. We appreciate your interest and encourage you to follow our latest announcements elsewhere on this site, [GitHub](https://github.com/nitrictech/nitric) and [Discord](https://discord.gg/Webemece5C).
+We're hard at work on the future of the open-source Nitric Framework and other services from the Nitric team. We appreciate your interest and encourage you to follow our latest announcements elsewhere on this site, [GitHub](https://github.com/nitrictech/nitric) and [Discord](https://nitric.io/chat).
 
 </Note>
 
@@ -25,7 +25,7 @@ Each CI (GitHub, Azure, etc.) is slightly different. However, they all follow a 
 
 Click [here](https://nitric.io/docs/guides/getting-started/github-actions) for a guide on setting up a GitHub Actions.
 
-> Note: Please reach out on [Discord](https://discord.gg/Webemece5C) if you encounter any difficulties or if you would like instructions on migrating to other CI solutions.
+> Note: Please reach out on [Discord](https://nitric.io/chat) if you encounter any difficulties or if you would like instructions on migrating to other CI solutions.
 
 ## Pulumi Configuration
 
