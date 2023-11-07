@@ -37,6 +37,10 @@ const publicApi = api('public')
         Security rules to apply with scopes to the entire API. Keys must match a
         **securityDefinition**.
       </Property>
+      <Property name="cors" type="boolean or CorsOptions">
+        CORS support applied to all endpoints in this API. Keys must match
+        **CorsOptions**. Defaults to false.
+      </Property>
     </Properties>
   </Property>
 </Properties>
@@ -56,9 +60,85 @@ const publicApi = api('public')
   </Property>
 </Properties>
 
+### CorsOptions Parameters
+
+Below are the CORS properties you can override and their defaults. Learn more about <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS" target="_blank">CORS</a>.
+
+<Properties>
+  <Property name="allowCredentials" type="boolean">
+    Specifies whether credentials are included in the CORS request. Defaults to false.
+  </Property>
+  <Property name="allowHeaders" type="string[]">
+    The collection of allowed headers. Defaults to allow all headers.
+
+    <CodeGroup>
+
+```javascript
+// Allow all headers
+allowHeaders: ['*']
+
+// Allow specific headers
+allowHeaders: ['Accept', 'Content-Type', 'Authorization']
+```
+
+</CodeGroup>
+
+  </Property>
+  <Property
+    name="allowMethods"
+    type="('GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'OPTIONS')[]"
+  >
+    The collection of allowed HTTP methods. Defaults to allow all methods.
+
+<CodeGroup>
+
+```javascript
+// Allow specific methods
+allowMethods: ['GET', 'POST']
+```
+
+</CodeGroup>
+
+  </Property>
+  <Property name="allowOrigins" type="string[]">
+    The collection of allowed origins. Defaults to allow all origins.
+
+<CodeGroup>
+
+```javascript
+// Allow all origins
+allowOrigins: ['*']
+
+// Allow specific origins. Note that the url protocol, ie. "https://", is required.
+allowOrigins: ['https://domain.com']
+```
+
+</CodeGroup>
+
+  </Property>
+  <Property name="exposeHeaders" type="string[]">
+    The collection of exposed headers. Defaults to no expose headers are allowed.
+  </Property>
+  <Property
+    name="maxAge"
+    type="${number} second | ${number} seconds | ${number} minute | ${number} minutes | ${number} hour | ${number} hours | ${number} day | ${number} days"
+  >
+    Specify how long the results of a preflight response can be cached. Defaults to no caching.
+
+<CodeGroup>
+
+```javascript
+maxAge: '1 day'
+```
+
+</CodeGroup>
+
+  </Property>
+</Properties>
+
 ### Notes
 
-The `middleware` property on the `options` param is useful for applying universal middleware such as CORS headers or Auth, across an entire API from a single place.
+The `middleware` property on the `options` param is useful for applying universal middleware such as Auth, across an entire API from a single place.
 
 ## Examples
 
@@ -68,6 +148,30 @@ The `middleware` property on the `options` param is useful for applying universa
 import { api } from '@nitric/sdk'
 
 const publicApi = api('public')
+```
+
+### Create an API with default CORS options
+
+```javascript
+import { api } from '@nitric/sdk'
+
+const publicApi = api('public', {
+  cors: true,
+})
+```
+
+### Create an API with overriding specific CORS options
+
+```javascript
+import { api } from '@nitric/sdk'
+
+const publicApi = api('public', {
+  cors: {
+    allowOrigins: ['https://foo.example'],
+    allowCredentials: true,
+    allowMethods: ['GET'],
+  },
+})
 ```
 
 ### Create an API with universal middleware
