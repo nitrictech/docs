@@ -1469,3 +1469,163 @@ fun main() {
 ```
 
 </CodeGroup>
+
+## Handling CORS
+
+To enable [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) (Cross-Origin Resource Sharing), you can use the `cors` option to define CORS policies for all API routes. If you need to configure CORS for a specific route manually, you can use a middleware function.
+
+By default, CORS is disabled. To enable it, set the `cors` option to `true`, which will allow all HTTP methods and headers from any origin. You also have the flexibility to customize these default options as needed.
+
+<CodeGroup>
+
+```javascript {{ tag: 'resources/index.js' }}
+import { api } from '@nitric/sdk'
+
+// enable cors with defaults
+export const mainApi = api('main', {
+  cors: true,
+})
+
+// enable cors and override defaults
+export const secondApi = api('second', {
+  cors: {
+    allowOrigins: ['https://www.domain.com'],
+    allowHeaders: ['Authorization'],
+  },
+})
+```
+
+```python {{ tag: 'common/resources.py' }}
+# global support is being added to the SDK soon. In the meantime you can do it manually by using middleware and adding options routes.
+from nitric.application import Nitric
+from nitric.resources import api, ApiOptions
+from nitric.faas import HttpContext, HttpMiddleware
+
+def cors(ctx: HttpContext, next: HttpMiddleware):
+  # Allow all Origins
+  ctx.res.headers["Access-Control-Allow-Origin"] = ["*"]
+
+  # Local dev only (i.e. localhost)
+  ctx.res.headers["Access-Control-Allow-Origin"] = ["http://localhost:4001"]
+
+  ctx.res.headers["Access-Control-Allow-Methods"] = [
+    "GET, POST, PATCH, DELETE, OPTIONS"
+  ]
+
+  access_control = ctx.res.headers["Access-Control-Request-Headers"]
+  if access_control is not None:
+    if not isinstance(access_control, list):
+      access_control = [access_control]
+    ctx.res.headers["Access-Control-Allow-Headers"] = access_control
+
+  return next(ctx)
+
+mainApi = api("main", ApiOptions(middleware = [cors]))
+```
+
+```go {{ tag: 'resources.go' }}
+// global support is being added to the SDK soon. In the meantime you can do it manually by using middleware and adding options routes.
+package main
+
+import (
+	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func cors(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+	headers := ctx.Request.Headers()
+
+	// Allow all Origins
+	ctx.Response.Headers["Access-Control-Allow-Origin"] = []string{"*"}
+
+	// Local dev only (i.e. localhost)
+	ctx.Response.Headers["Access-Control-Allow-Origin"] = []string{"http://localhost:4001"}
+
+	ctx.Response.Headers["Access-Control-Allow-Methods"] = []string{"GET, POST, PATCH, DELETE, OPTIONS"}
+
+	if headers["Access-Control-Request-Headers"] != nil {
+		ctx.Response.Headers["Access-Control-Allow-Methods"] = headers["Access-Control-Request-Headers"]
+	}
+
+	return next(ctx)
+}
+
+
+func NewMainApi() (nitric.Api, error) {
+	mainApi, err := nitric.NewApi("main",  nitric.WithMiddleware(cors))
+	if err != nil {
+		return nil, nil
+	}
+
+	return mainApi, nil
+}
+```
+
+```java {{ tag: 'Resources.java' }}
+// global support is being added to the SDK soon. In the meantime you can do it manually by using middleware and adding options routes.
+package org.example;
+
+import io.nitric.Nitric;
+import io.nitric.faas.v0.Handler;
+import io.nitric.faas.v0.HttpContext;
+import io.nitric.resources.ApiOptions;
+import io.nitric.resources.ApiResource;
+import java.util.List;
+
+public class Apis {
+  static HttpContext cors(HttpContext ctx, Handler<HttpContext> next) {
+    // Allow all origins
+    ctx.getResp().getHeaders().put("Access-Control-Allow-Origin", List.of("*"));
+
+    // Local dev only (i.e. localhost)
+    ctx.getResp().getHeaders().put("Access-Control-Allow-Origin", List.of("http://localhost:4001"));
+
+    ctx.getResp().getHeaders().put("Access-Control-Allow-Methods", List.of("GET, POST, PATCH, DELETE, OPTIONS"));
+
+    var accessControl = ctx.getResp().getHeaders().get("Access-Control-Request-Headers");
+    if (accessControl != null) {
+      ctx.getResp().getHeaders().put("Access-Control-Allow-Headers", accessControl);
+    }
+
+    return next.invoke(ctx);
+  }
+
+  public static ApiResource mainApi() {
+    return Nitric.INSTANCE.api("main",
+      new ApiOptions.Builder().middleware(Apis::cors).build()
+    );
+  }
+}
+```
+
+```kotlin
+// global support is being added to the SDK soon. In the meantime you can do it manually by using middleware and adding options routes.
+import io.nitric.faas.v0.HttpContext
+import io.nitric.Nitric
+import io.nitric.faas.v0.Middleware
+import io.nitric.resources.ApiOptions
+import io.nitric.resources.ApiResource
+
+val cors = Middleware<HttpContext> { ctx, next ->
+  // Allow all origins
+  ctx.resp.headers["Access-Control-Allow-Origin"] = listOf("*");
+
+  // Local dev only (i.e. localhost)
+  ctx.resp.headers["Access-Control-Allow-Origin"] = listOf("http://localhost:4001");
+
+  ctx.resp.headers["Access-Control-Allow-Methods"] = listOf("GET, POST, PATCH, DELETE, OPTIONS");
+
+  val accessControl = ctx.resp.headers["Access-Control-Request-Headers"];
+  if (accessControl != null) {
+    ctx.resp.headers["Access-Control-Allow-Headers"] = accessControl;
+  }
+
+  return@Middleware next(ctx)
+}
+
+fun mainApi(): ApiResource {
+  return Nitric.api("main", ApiOptions(middleware = listOf(cors)))
+}
+```
+
+</CodeGroup>
