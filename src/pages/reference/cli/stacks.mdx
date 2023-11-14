@@ -18,25 +18,69 @@ nitric stack new
 
 Follow the prompts to create a stack for your provider.
 
+<CodeGroup>
+
+```{{ title: "AWS" }}
+What should we name this stack? aws-stack
+Which provider do you want to deploy with? aws
+Which region should the stack deploy to? us-east-1
 ```
-? What do you want to call your new stack? aws-stack
-? Which Cloud do you wish to deploy to? aws
-? select the region us-east-1
+
+```{{ title: "Azure" }}
+What should we name this stack? azure-stack
+Which provider do you want to deploy with? azure
+Which region should the stack deploy to? eastus
+Provide the organisation to associate with the API: my-org
+Provide the Admin email to associate with the API: admin@company.co
 ```
+
+```{{ title: "Google Cloud" }}
+What should we name this stack? gcp-stack
+Which provider do you want to deploy with? gcp
+Which region should the stack deploy to? us-east1
+Provide the gcp project ID to deploy to: project-id
+```
+
+</CodeGroup>
 
 The stack definition will be created in the root of your project as a YAML file prefixed with `nitric-` e.g. `nitric-aws-stack.yaml`
 
-```yaml
+<CodeGroup>
+
+```yaml{{ title: "AWS" }}
 name: my-aws-stack
-provider: nitric/aws@0.24.0
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/aws@latest
 region: us-east-1
 ```
 
+```yaml{{ title: "Azure" }}
+name: azure
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/azure@latest
+adminemail: admin@company.co
+org: my-org
+region: eastus
+```
+
+```yaml{{ title: "Google Cloud" }}
+name: my-aws-stack
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/gcp@latest
+gcp-project-id: project-id
+region: us-east1
+```
+
+</CodeGroup>
+
 If you want to specify different configuration for your functions you can use the following syntax:
 
-```yaml
+<CodeGroup>
+
+```yaml{{ title: "AWS" }}
 name: my-aws-stack
-provider: nitric/aws@0.24.0
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/aws@latest
 region: us-east-1
 config:
   default:
@@ -48,6 +92,37 @@ config:
     lambda:
       memory: 4096
 ```
+
+```yaml{{ title: "Azure" }}
+name: azure
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/azure@latest
+adminemail: admin@company.co
+org: my-org
+region: eastus
+config:
+  default:
+    telemetry: 0
+    containerapps:
+      memory: 0.5
+      cpu: 0.25
+```
+
+```yaml{{ title: "Google Cloud" }}
+name: my-aws-stack
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/gcp@latest
+gcp-project-id: project-id
+region: us-east1
+config:
+  default:
+    telemetry: 0
+    cloudrun:
+      memory: 512
+      timeout: 15
+```
+
+</CodeGroup>
 
 <Note>
   For more information on what can be configured, [look
@@ -72,7 +147,7 @@ config:
     memory: 4096
 ```
 
-The provider has been updated from `aws`, `gcp`, and `azure` to `nitric/aws@0.24.0`, `nitric/gcp@0.24.0`, and `nitric/azure@0.24.0` respectively. This change enables locking a version for your deployments, as it was previously tied to the CLI version. This change will also enable creation of your own [custom deployment providers](/reference/providers/custom/building-custom-provider).
+The provider has been updated from `aws`, `gcp`, and `azure` to `nitric/aws@x.x.x`, `nitric/gcp@x.x.x`, and `nitric/azure@x.x.x` respectively. This change enables locking a version for your deployments, as it was previously tied to the CLI version. This change will also enable creation of your own [custom deployment providers](/reference/providers/custom/building-custom-provider).
 
 There was also a change to the way configuration is written to support multiple execution runtimes. Currently there are no new runtimes supported (just Lambda, Cloud Run, and Container Apps), however there are plans to support more in the near future, hence the change. The migration involves adding the runtime key to the configuration, letting the deployment know what runtime it should apply the configuration to.
 
@@ -119,4 +194,4 @@ config:
 
 ## Updating a stack definition
 
-You are free to manually edit the stack definition if required, ensure that both the provider and region values are valid or simply run the `nitric stack new` command again.
+You are free to manually edit the stack definition if required, ensure that both the provider and region values are valid or simply run the `nitric stack new` command again with the `--force` flag.
