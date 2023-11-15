@@ -25,15 +25,7 @@ Creating a Stripe checkout backed by a Nitric API and collections. This API will
 We'll start by creating a new project for our API.
 
 ```bash
-nitric new
-```
-
-Create a project name, select the TypeScript template and choose the default glob handler.
-
-```bash
-? What is the name of the stack? nitric-stripe
-? Choose a template: official/TypeScript - Starter
-? Glob for the function handlers? functions/*.ts
+nitric new nitric-stripe "official/TypeScript - Starter"
 ```
 
 Next, open the project in your editor of choice.
@@ -306,9 +298,9 @@ nitric stack new
 ```
 
 ```
-? What do you want to call your new stack? dev
-? Which Cloud do you wish to deploy to? aws
-? select the region us-east-1
+? What should we name this stack? dev
+? Which provider do you want to deploy with? aws
+? Which region should the stack deploy to? us-east-1
 ```
 
 To deploy the stack run the following command:

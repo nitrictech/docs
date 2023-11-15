@@ -18,14 +18,7 @@ We'll be making a serverless application which can take information from a HTTP 
 We'll start by creating a new project for our API.
 
 ```bash
-nitric new
-```
-
-Create a project, name it and select your preferred starter template.
-
-```bash
-? What is the name of the project? histogram-api
-? Choose a template: official/Python - Starter
+nitric new histogram-api "official/Python - Starter"
 ```
 
 Next, open the project in your editor of choice.
@@ -184,9 +177,9 @@ nitric stack new
 ```
 
 ```
-? What do you want to call your new stack? dev
-? Which Cloud do you wish to deploy to? aws
-? select the region us-east-1
+? What should we name this stack? dev
+? Which provider do you want to deploy with? aws
+? Which region should the stack deploy to? us-east-1
 ```
 
 You can then deploy using the following command:

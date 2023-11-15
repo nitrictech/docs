@@ -32,10 +32,7 @@ Let's start with a new nitric project and select the TypeScript starter template
 
 ```bash
 # create the project
-nitric new api-guide
-? Choose a template:  [Use arrows to move, type to filter]
-> official/TypeScript - Starter
-  official/JavaScript - Starter
+nitric new api-guide "official/TypeScript - Starter"
 
 # navigate to the new project directory
 cd api-guide
@@ -506,9 +503,9 @@ You can create a new stack by running `nitric stack new` and following the promp
 
 ```txt
 nitric stack new
-? What do you want to call your new stack? awsdev
-? Which Cloud do you wish to deploy to? aws
-? select the region us-east-1
+? What should we name this stack? awsdev
+? Which provider do you want to deploy with? aws
+? Which region should the stack deploy to? us-east-1
 ```
 
 Finally, run the `up` command to deploy the stack and push your code to the cloud:

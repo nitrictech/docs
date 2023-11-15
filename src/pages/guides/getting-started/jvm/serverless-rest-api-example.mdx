@@ -30,24 +30,16 @@ There is also an extended section of the guide that adds file operations using a
 
 ## Getting started
 
-Let's start by creating a new project from a Nitric template, this will provide a base to start building the API.
-
-```bash
-nitric new
-```
-
-Create a project, name it and select your preferred starter template. In this case, you can choose the Java or Kotlin starter, examples for both are provided.
+Let's start by creating a new project from a Nitric template, this will provide a base to start building the API. In this case, you can choose the Java or Kotlin starter, examples for both are provided.
 
 <CodeGroup>
 
 ```bash {{ title: "Java" }}
-? What is the name of the project? my-profile-api
-? Choose a template: official/Java - Starter
+nitric new my-profile-api "official/Java - Starter (experimental)"
 ```
 
 ```bash {{ title: "Kotlin" }}
-? What is the name of the project? my-profile-api
-? Choose a template: official/Kotlin - Starter
+nitric new my-profile-api "official/Kotlin - Starter (experimental)"
 ```
 
 </CodeGroup>
@@ -383,9 +375,9 @@ nitric stack new
 ```
 
 ```
-? What do you want to call your new stack? dev
-? Which Cloud do you wish to deploy to? aws
-? select the region us-east-1
+? What should we name this stack? dev
+? Which provider do you want to deploy with? aws
+? Which region should the stack deploy to? us-east-1
 ```
 
 ### AWS
