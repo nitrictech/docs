@@ -33,9 +33,9 @@ const FeedbackThanks = forwardRef(function FeedbackThanks(
   return (
     <div
       ref={ref as any}
-      className="absolute inset-0 flex justify-center md:justify-start"
+      className="flex items-center justify-center md:justify-start"
     >
-      <div className="flex items-center gap-3 rounded-full bg-primary-50/50 py-1 pl-1.5 pr-3 text-sm text-primary-900 ring-1 ring-inset ring-primary-500/20 dark:bg-primary-500/5 dark:text-primary-200 dark:ring-primary-500/30">
+      <div className="m-1 flex items-center gap-3 rounded-full bg-primary-50/50 py-1 pl-1.5 pr-3 text-sm text-primary-900 ring-1 ring-inset ring-primary-500/20 dark:bg-primary-500/5 dark:text-primary-200 dark:ring-primary-500/30">
         {submitting ? (
           <>
             <Spinner />
@@ -44,7 +44,7 @@ const FeedbackThanks = forwardRef(function FeedbackThanks(
         ) : (
           <>
             <CheckIcon className="h-5 w-5 flex-none fill-primary-500 stroke-white dark:fill-primary-200/20 dark:stroke-primary-200" />
-            Thanks for your feedback!
+            Thank you for your feedback! 🙌
           </>
         )}
       </div>
@@ -61,9 +61,12 @@ function Feedback() {
 
     if (submitting) return
 
+    const comment = event.target.elements.comment.value
+
     const data: FeedbackRequestBody = {
       url: window.location.href,
       ua: navigator.userAgent,
+      comment,
       // "yes" or "no"
       answer: event.nativeEvent.submitter.dataset.response,
     }
@@ -83,7 +86,7 @@ function Feedback() {
   }
 
   return (
-    <div className="relative h-8">
+    <div className="relative">
       <Transition
         show={!submitted && !submitting}
         as={Fragment}
@@ -201,45 +204,52 @@ function SocialLink({ href, icon: Icon, children }) {
 }
 
 function SmallPrint() {
+  const router = useRouter()
+
   return (
-    <div className="flex flex-col items-center justify-between gap-5 border-t border-zinc-900/5 pt-8 dark:border-white/5 sm:flex-row">
-      <div className="flex gap-4">
-        <p className="text-xs text-zinc-500 dark:text-zinc-300">
-          &copy; {new Date().getFullYear()} Nitric Inc.
-        </p>
-        <span className="text-xs text-zinc-500">—</span>
-        <Link
-          href={'/contributions'}
-          className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
-        >
-          Contributions
-        </Link>
-        <Link
-          href={'/support'}
-          className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
-        >
-          Support
-        </Link>
+    <div className="flex flex-col gap-10 border-t border-zinc-900/5 pt-8 dark:border-white/5">
+      <div className="w-full">
+        <Feedback key={router.pathname} />
       </div>
-      <div className="flex gap-4">
-        <SocialLink href="https://x.com/nitric_io" icon={TwitterIcon}>
-          Follow us on Twitter
-        </SocialLink>
-        <SocialLink
-          href="https://github.com/nitrictech/nitric"
-          icon={GitHubIcon}
-        >
-          Follow us on GitHub
-        </SocialLink>
-        <SocialLink href="https://discord.gg/Webemece5C" icon={DiscordIcon}>
-          Join our Discord server
-        </SocialLink>
-        <SocialLink
-          href="https://www.youtube.com/channel/UCZIWNF4ck7zcEdtwq2qQ2lg"
-          icon={YouTubeIcon}
-        >
-          YouTube
-        </SocialLink>
+      <div className="flex flex-col items-center justify-between gap-5 sm:flex-row">
+        <div className="flex gap-4">
+          <p className="text-xs text-zinc-500 dark:text-zinc-300">
+            &copy; {new Date().getFullYear()} Nitric Inc.
+          </p>
+          <span className="text-xs text-zinc-500">—</span>
+          <Link
+            href={'/contributions'}
+            className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
+          >
+            Contributions
+          </Link>
+          <Link
+            href={'/support'}
+            className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
+          >
+            Support
+          </Link>
+        </div>
+        <div className="flex gap-4">
+          <SocialLink href="https://x.com/nitric_io" icon={TwitterIcon}>
+            Follow us on Twitter
+          </SocialLink>
+          <SocialLink
+            href="https://github.com/nitrictech/nitric"
+            icon={GitHubIcon}
+          >
+            Follow us on GitHub
+          </SocialLink>
+          <SocialLink href="https://discord.gg/Webemece5C" icon={DiscordIcon}>
+            Join our Discord server
+          </SocialLink>
+          <SocialLink
+            href="https://www.youtube.com/channel/UCZIWNF4ck7zcEdtwq2qQ2lg"
+            icon={YouTubeIcon}
+          >
+            YouTube
+          </SocialLink>
+        </div>
       </div>
     </div>
   )
@@ -252,10 +262,7 @@ export function Footer({ disableEditGithub }) {
 
   return (
     <footer className="mx-auto max-w-2xl space-y-10 pb-16 lg:max-w-5xl">
-      <div className="flex flex-col gap-8 md:flex-row">
-        <div className="w-full">
-          <Feedback key={router.pathname} />
-        </div>
+      <div className="flex flex-col items-end gap-8 md:flex-row">
         {!disableEditGithub && (
           <div className="flex w-full items-center justify-center">
             <Link

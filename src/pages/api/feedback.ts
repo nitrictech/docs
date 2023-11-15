@@ -6,6 +6,7 @@ const prisma = new PrismaClient()
 export interface FeedbackRequestBody {
   url: string
   answer: string
+  comment: string
   ua: string
 }
 
@@ -14,7 +15,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    const { url, answer, ua } = req.body as FeedbackRequestBody
+    const { url, answer, ua, comment = '' } = req.body as FeedbackRequestBody
 
     // disable on non prod
     if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
@@ -26,7 +27,7 @@ export default async function handler(
     }
 
     // validate answer
-    if (!['yes', 'no'].includes(answer)) {
+    if (!['yes', 'no', 'feedback'].includes(answer)) {
       res.status(422).json({ success: false, error: 'Invalid answer' })
       return
     }
@@ -36,6 +37,7 @@ export default async function handler(
         data: {
           url,
           answer,
+          comment,
           label: 'is docs page helpful',
           ua,
         },

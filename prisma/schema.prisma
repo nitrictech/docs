@@ -15,6 +15,7 @@ model Feedback {
   id      Int     @id @default(autoincrement())
   url     String
   answer  String
+  comment String  @default("")
   label   String
   ua      String
   createdAt DateTime @default(now())

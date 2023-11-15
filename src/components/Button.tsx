@@ -27,7 +27,7 @@ const variantStyles = {
   text: 'text-primary-500 hover:text-black dark:text-primary-300 dark:hover:text-white',
 }
 
-type ButtonProps = {
+export type ButtonProps = {
   variant?: keyof typeof variantStyles
   className?: string
   arrow?: 'left' | 'right'
