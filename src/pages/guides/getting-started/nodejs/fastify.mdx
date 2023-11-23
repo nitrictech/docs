@@ -22,11 +22,12 @@ To complete this guide you'll need the following:
 Let's start by setting up a Nitric project and adding Fastify:
 
 ```bash {{ label: 'terminal' }}
-nitric new
-? What is the name of the project? fastify-example
-? Choose a template: official/JavaScript - Starter
+nitric new fastify-example "official/JavaScript - Starter"
+```
 
-# install depedencies and add fastify
+Then install dependencies and add fastify:
+
+```
 cd fastify-example
 yarn install
 yarn add fastify
@@ -173,9 +174,9 @@ The new stack command can help you create the stack by following prompts. In thi
 
 ```txt {{ label: 'terminal' }}
 nitric stack new
-? What do you want to call your new stack? dev
-? Which Cloud do you wish to deploy to? aws
-? select the region us-east-1
+? What should we name this stack? dev
+? Which provider do you want to deploy with? aws
+? Which region should the stack deploy to? us-east-1
 ```
 
 This command will create a file named `nitric-dev.yaml`, with contents like this:

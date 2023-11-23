@@ -33,33 +33,23 @@ The Nitric CLI's `new` command provides prompts to scaffold new projects from te
 <CodeGroup>
 
 ```bash {{ title: "TypeScript" }}
-nitric new
-? What is the name of the project? hello-world
-? Choose a template: official/TypeScript - Starter
+nitric new hello-world "official/TypeScript - Starter"
 ```
 
 ```bash {{ title: "JavaScript" }}
-nitric new
-? What is the name of the project? hello-world
-? Choose a template: official/JavaScript - Starter
+nitric new hello-world "official/JavaScript - Starter"
 ```
 
 ```bash {{ title: "Python" }}
-nitric new
-? What is the name of the project? hello-world
-? Choose a template: official/Python - Starter
+nitric new hello-world "official/Python - Starter"
 ```
 
 ```bash {{ title: "Go" }}
-nitric new
-? What is the name of the project? hello-world
-? Choose a template: official/Go - Starter (experimental)
+nitric new hello-world "official/Go - Starter (experimental)"
 ```
 
 ```bash {{ title: "C#" }}
-nitric new
-? What is the name of the project? hello-world
-? Choose a template: official/C# - Starter (experimental)
+nitric new hello-world "official/C# - Starter (experimental)"
 ```
 
 </CodeGroup>
@@ -409,17 +399,13 @@ The first step is to set up your credentials for the cloud provider.
 
 You'll then need to create a [stack](/reference/cli#stacks) that represents your project and a deployment target.
 
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
+
 ```bash
-nitric stack new
+nitric stack new dev aws
 ```
 
-Follow the prompts to create a stack for your provider, this example will use `aws`.
-
-```
-? What do you want to call your new stack? dev
-? Which Cloud do you wish to deploy to? aws
-? select the region us-east-1
-```
+Continue by picking a region for your stack.
 
 Now you can deploy your `dev` stack with the `up` command.
 

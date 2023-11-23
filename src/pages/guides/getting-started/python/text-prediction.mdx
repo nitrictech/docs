@@ -18,14 +18,7 @@ We'll be making a simple text based prediction model based off of the book Pride
 We'll start by creating a new project for our API.
 
 ```bash
-nitric new
-```
-
-Create a project, name it and select your preferred starter template.
-
-```bash
-? What is the name of the project? prediction-api
-? Choose a template: official/Python - Starter
+nitric new prediction-api "official/Python - Starter"
 ```
 
 Next, open the project in your editor of choice.
@@ -441,14 +434,12 @@ Setup your credentials and any other cloud specific configuration:
 Create a stack - a collection of resources identified in your project which will be deployed.
 
 ```bash
-nitric stack new
+nitric stack new dev gcp
 ```
 
 ```
-? What do you want to call your new stack? dev
-? Which Cloud do you wish to deploy to? gcp
-? select the region us-west2
-? Provide the gcp project to use gcp-project-123456
+? Which region should the stack deploy to? us-west2
+? Provide the gcp project to use: gcp-project-123456
 ```
 
 This project will run perfectly fine with a default memory configuration of 512 MB. However, to get instant predictions we will amend the memory to be 1 GB. In the newly created stack file we want to add some config.
