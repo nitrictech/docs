@@ -6,11 +6,6 @@ Nitric provides schedules support for writing applications that process batch ta
 
 The `schedule` resource lets you define named schedules, including their frequency or cron expression and a callback to run on that schedule.
 
-<Note>
-  Schedules aren't currently supported by Nitric on Azure due to the limitations
-  of that provider.
-</Note>
-
 If you're looking for a way to perform once-off work at some point in the future, it's recommend to use [delayed messaging](./messaging#delayed-messaging) instead of schedules.
 
 Below, you'll find a video providing a short walk-through of Nitric's Schedules feature.
@@ -365,7 +360,23 @@ Nitric uses traditional Unix formatted cron expressions
 | -     | Value range          |
 | /     | Step values          |
 
-#### Nitric schedules on AWS
+## Timezones
+
+To ensure your schedules run when you expect it's important to know what timezone they're being applied in. Nitric allows you to set a `schedule-timezone` per deployed environment (stack) on supported providers.
+
+See stack configuration docs for how to set the `schedule-timezone` property:
+
+- [AWS configuration](/reference/providers/aws/configuration)
+- [Google Cloud configuration](/reference/providers/gcp/configuration)
+
+<Note>
+  If a timezone is not configured the default for the target provider/region
+  will be used, this is often Universal Coordinated Time (UTC).
+</Note>
+
+## Provider specific notes
+
+### Schedules on AWS
 
 If you're familiar with AWS services that support cron expressions (such as EventBridge) you're probably aware that they use an alternate expression format which is incompatible with the traditional Unix format.
 
@@ -394,16 +405,13 @@ Here are some examples:
   execute this should be moved to logic in the callback function instead.
 </Note>
 
-## Timezones
+### Schedules on Azure
 
-To ensure your schedules run when you expect it's important to know what timezone they're being applied in. Nitric allows you to set a `schedule-timezone` per deployed environment (stack) on supported providers.
+Schedules deployed to Azure with Nitric's default Azure provider will use Container Apps to run the schedule callback. The schedule trigger is defined as a Dapr Cron Binding. Due to the way this service operates Nitric will configure the minimum container instances to 1 to ensure there is always a container available to run the schedule callback.
 
-See stack configuration docs for how to set the `schedule-timezone` property:
-
-- [AWS configuration](/reference/providers/aws/configuration)
-- [Google Cloud configuration](/reference/providers/gcp/configuration)
+If you're using schedules on Azure you will be charged for at least 1 container instance per handler containing a schedule. For this reason, when your application requires multiple schedules, it can be cost effective to use a single handler file with several schedule definitions.
 
 <Note>
-  If a timezone is not configured the default for the target provider/region
-  will be used, this is often Universal Coordinated Time (UTC).
+  This may change in the future as Nitric's Azure provider evolves, allowing for
+  scale to zero as is the case with other providers.
 </Note>
