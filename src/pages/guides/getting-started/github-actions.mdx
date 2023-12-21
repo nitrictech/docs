@@ -26,32 +26,27 @@ on:
   push:
     branches:
       - main
-env:
-  PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 jobs:
   update:
     name: Update Deployment
     runs-on: ubuntu-latest
     steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Install and configure Pulumi 📦
+        uses: pulumi/actions@v4
+
+      - name: Applying infrastructure 🚀
+        uses: nitrictech/actions@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Install Nitric CLI
-        uses: nitrictech/setup-nitric@v1
-        with:
-          version: 1.28.0
-      - name: Install dependencies
-        uses: pulumi/setup-pulumi@v2
-      - name: Checkout project
-        uses: actions/checkout@v3
-      - name: Resolve packages
-        run: npm install
-      - name: Deploy stack to aws
-        run: nitric up -s dev -v2
+          command: up
+          stack-name: dev
+        env:
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
 ## Breaking it down
@@ -79,21 +74,6 @@ on:
       - main
 ```
 
-### Environment variables
-
-Configure the environment variables required by Nitric's dependency Pulumi. In this example we store the required values in GitHub secrets. Secrets can be found by navigating to `https://github.com/{user}/{project}/settings/secrets/actions`.
-
-- PULUMI_ACCESS_TOKEN
-  - You can get a pulumi access token by logging into Pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
-- PULUMI_CONFIG_PASSPHRASE
-  - For interaction free experiences, Pulumi also requires a passphrase to be configured. Your passphrase is used to generate a unique key which encrypts configuration and state values.
-
-```yaml
-env:
-  PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-```
-
 ### Intialize your workflow
 
 Assign a name to the first job in the workflow and set which operating system the workflow will be run on.
@@ -107,48 +87,57 @@ jobs:
     runs-on: ubuntu-latest
 ```
 
-### AWS Credentials
+### Install Dependencies
 
-Setup your AWS action with the following credentials as GitHub secrets:
-
-- AWS_ACCESS_KEY_ID
-- AWS_SECRET_ACCESS_KEY
-- AWS_REGION
-
-You can obtain a key, including its ID and value, from the amazon console. You can then set your preferred region, such as `us-east-2`.
+This step installs Pulumi, allowing you to configure Pulumi settings such as `cloud-url`. You can read more about the Pulumi action configuration at https://github.com/pulumi/actions.
 
 ```yaml
-steps:
-  - name: Configure AWS Credentials
-    uses: aws-actions/configure-aws-credentials@v1
-    with:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-region: ${{ secrets.AWS_REGION }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-```
-
-### Install Nitric and dependencies
-
-These steps install the Nitric CLI and Pulumi, allowing the use of commands such as `nitric up`.
-
-```yaml
-- name: Install Nitric CLI
-  uses: nitrictech/setup-nitric@v1
-  with:
-    version: 1.28.0
-- name: Install dependencies
-  uses: pulumi/setup-pulumi@v2
+- name: Install and configure Pulumi 📦
+  uses: pulumi/actions@v4
 ```
 
 ### Deploy the stack
 
-Finally, checkout your project and run the `up` command to deploy your project. In this example our project has a stack named `dev`, which we can select with the `-s` argument, e.g. `nitric up -s dev -v2`. The final argument `-v2` sets the Nitric CLI output to verbosity level 2, so the workflow will log plenty of detail for us to use to debug any issues.
+Finally, checkout your project and run the `up` command to deploy your project. In this example our project has a stack named `dev`. This job uses the official Nitric GitHub action. To learn more, check out the repository at https://github.com/nitrictech/actions.
 
 ```yaml
-- name: Checkout project
-  uses: actions/checkout@v3
-- name: Resolve packages
-  run: npm install
-- name: Deploy stack to aws
-  run: nitric up -s dev -v2
+- name: Applying infrastructure 🚀
+  uses: nitrictech/actions@v1
+  with:
+    command: up
+    stack-name: dev
+  env:
+    PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+    PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
+
+### Environment variables
+
+Configure the environment variables required by Nitric's dependency Pulumi and AWS. In this example we store the required values in GitHub secrets. Secrets can be found by navigating to `https://github.com/{user}/{project}/settings/secrets/actions`.
+
+- PULUMI_ACCESS_TOKEN
+  - You can get a pulumi access token by logging into Pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
+- PULUMI_CONFIG_PASSPHRASE
+  - For interaction free experiences, Pulumi also requires a passphrase to be configured. Your passphrase is used to generate a unique key which encrypts configuration and state values.
+- AWS_ACCESS_KEY_ID
+  - You can obtain an ID key from the [AWS console](https://console.aws.amazon.com/).
+- AWS_SECRET_ACCESS_KEY
+  - You can obtain an access key from the [AWS console](https://console.aws.amazon.com/).
+
+```yaml
+env:
+  PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+  PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+```
+
+## Examples
+
+Below are some example workflows available in the [actions repo](https://github.com/nitrictech/actions):
+
+- [AWS](https://github.com/nitrictech/actions/blob/main/examples/aws.yaml)
+- [Azure](https://github.com/nitrictech/actions/blob/main/examples/azure.yaml)
+- [Google Cloud](https://github.com/nitrictech/actions/blob/main/examples/gcp.yaml)

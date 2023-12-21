@@ -37,10 +37,10 @@ const req = (url: string, retryCount = 0) => {
       gzip: false,
     })
     .then((resp) => {
-      // retry on timeout
-      if (resp.status === 408 && retryCount < 3) {
+      // retry on timeout and too many requests
+      if ([408, 429].includes(resp.status) && retryCount < 3) {
         cy.log(`request ${url} timed out, retrying again...`)
-        cy.wait(300)
+        cy.wait(500)
         return req(url, retryCount + 1)
       }
 
