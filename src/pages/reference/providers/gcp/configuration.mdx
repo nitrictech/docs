@@ -15,7 +15,7 @@ provider: nitric/gcp@0.29.0
 
 # The target GCP region to deploy to
 # See available regions:
-# https://cloud.google.com/run/locations
+# https://cloud.google.com/run/docs/locations
 region: my-gcp-stack-region
 
 # ID of the google cloud project to deploy into
@@ -38,19 +38,19 @@ config:
     cloudrun: # Available since v0.26.0
       # set 512MB of RAM
       # See cloudrun configuration docs here:
-      # https://cloud.google.com/run/configuring/memory-limits
+      # https://cloud.google.com/run/docs/configuring/memory-limits
       memory: 512
       # set a timeout of 15 seconds
-      # https://cloud.google.com/run/configuring/request-timeout
+      # https://cloud.google.com/run/docs/configuring/request-timeout
       timeout: 15
       # The maximum number of instances to scale down to
-      # https://cloud.google.com/run/configuring/min-instances
+      # https://cloud.google.com/run/docs/configuring/min-instances
       min-instances: 0
       # The maximum number of instances to scale up to
-      # https://cloud.google.com/run/configuring/max-instances
+      # https://cloud.google.com/run/docs/configuring/max-instances
       max-instances: 10
       # Number of concurrent requests that each instance can handle
-      # https://cloud.google.com/run/configuring/concurrency
+      # https://cloud.google.com/run/docs/configuring/concurrency
       concurrency: 80
   # Additional deployment types
   # You can target these types by setting a `type` in your project configuration
@@ -63,6 +63,17 @@ config:
       max-instances: 100
       concurrency: 1000
 ```
+
+## Document Reference Links:
+
+- https://github.com/nitrictech/nitric/tags
+- https://cloud.google.com/run/docs/locations
+- https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+- https://cloud.google.com/run/docs/configuring/memory-limits
+- https://cloud.google.com/run/docs/configuring/request-timeout
+- https://cloud.google.com/run/docs/configuring/min-instances
+- https://cloud.google.com/run/docs/configuring/max-instances
+- https://cloud.google.com/run/docs/configuring/concurrency
 
 <Note>
   Missing something? Let us know by raising an issue in
