@@ -33,6 +33,12 @@ aws_access_key_id = your_access_key_id
 aws_secret_access_key = your_secret_access_key
 ```
 
+<Note>
+  To use a different AWS profile for your deployments, you can use the
+  `AWS_PROFILE` environment variable. If no profile is supplied, we will use the
+  `[default]` profile.
+</Note>
+
 Replace `your_access_key_id` and `your_secret_access_key` with your own values.
 
 You can create an Access Key by logging into the [AWS console](https://aws.amazon.com/console/) and navigating to:
