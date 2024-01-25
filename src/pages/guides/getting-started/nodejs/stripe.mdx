@@ -147,7 +147,7 @@ paymentApi.post('/webhook', async (ctx) => {
     let event: Stripe.Event;
 
     try {
-        if (!sig || stripeWebhookSecret) {
+        if (!sig || !stripeWebhookSecret) {
             ctx.res.status = 400;
             ctx.res.body = "No sig or webhook secret";
         }
@@ -189,7 +189,7 @@ const sig = ctx.req.headers['stripe-signature']
 let event: Stripe.Event
 
 try {
-  if (!sig || stripeWebhookSecret) {
+  if (!sig || !stripeWebhookSecret) {
     ctx.res.status = 400
     ctx.res.body = 'No sig or webhook secret'
   }
