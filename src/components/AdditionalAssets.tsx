@@ -53,7 +53,7 @@ const additionalAssets = [
     },
   },
   {
-    href: '/guides/getting-started/local-dashboard',
+    href: '/guides/getting-started/v0/local-dashboard',
     name: 'Local Dashboard',
     description:
       "Streamline your local development workflow with Nitric's intuitive Local Development Dashboard.",

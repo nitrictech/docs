@@ -9,7 +9,7 @@ export function GettingStarted() {
   return (
     <div className="not-prose my-16 xl:max-w-none">
       <Link
-        href={'/guides/getting-started'}
+        href={'/guides/getting-started/v0'}
         className="group relative flex gap-8 rounded-2xl bg-zinc-50 p-6 transition-shadow hover:shadow-md hover:shadow-zinc-900/5 dark:bg-white/2.5 dark:hover:shadow-black/5"
       >
         <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-zinc-900/7.5 group-hover:ring-zinc-900/10 dark:ring-white/10 dark:group-hover:ring-white/20" />

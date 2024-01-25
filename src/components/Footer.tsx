@@ -240,7 +240,7 @@ function SmallPrint() {
           >
             Follow us on GitHub
           </SocialLink>
-          <SocialLink href="https://discord.gg/Webemece5C" icon={DiscordIcon}>
+          <SocialLink href="https://nitric.io/chat" icon={DiscordIcon}>
             Join our Discord server
           </SocialLink>
           <SocialLink
