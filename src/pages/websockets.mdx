@@ -1,0 +1,226 @@
+export const description = 'Connect and manage websockets with Nitric'
+
+# Websockets
+
+Nitric provides support for serverless websockets. This feature allows you to connect client applications to your Nitric services using websocket gateways such as AWS APIGateway.
+
+<Note>
+  Projects with websockets will only be deployable to AWS at the moment. If you
+  require support for additional clouds let us know:
+  https://github.com/nitrictech/nitric/issues
+</Note>
+
+## Enabling Websocket support
+
+Websocket support is currently in Preview. To enable it in your project add the following to your `nitric.yaml` file
+
+```yaml
+preview-features:
+  - websockets
+```
+
+## Listening for events
+
+There are three events that must be defined to deploy a valid websocket implementation. These are `connect`, `disconnect` and `message`.
+
+<CodeGroup>
+
+```javascript
+import { websocket } from '@nitric/sdk'
+
+const socket = websocket('socket')
+
+socket.on('connect', async (ctx) => {
+  // handle connections
+})
+
+socket.on('disconnect', async (ctx) => {
+  // handle disconnections
+})
+
+socket.on('message', async (ctx) => {
+  // handle messages
+})
+```
+
+```python
+from nitric.resources import websocket
+from nitric.application import Nitric
+
+socket = websocket("socket")
+
+@socket.on("connect")
+async def on_connect(ctx):
+  # handle connections
+
+@socket.on("disconnect")
+async def on_disconnect(ctx):
+  # handle disconnections
+
+@socket.on("message")
+async def on_message(ctx):
+  # handle messages
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+## Managing connections
+
+Nitric connects your functions to a websocket interface, but it is up to you to manage the connections. Nitric provides `collections`
+out of the box that can be used to do this or you can use any other store or database you like.
+
+<CodeGroup>
+
+```javascript
+import { websocket, collection } from '@nitric/sdk'
+
+const socket = websocket('socket')
+const connections = kv('connections').for('getting', 'setting', 'deleting')
+
+socket.on('connect', async (ctx) => {
+  const connectionList = await connections.get('connections')
+  await connections.set([
+    ...connectionList,
+    {
+      // store any metadata related to the connection here
+      connectionId: ctx.req.connectionId,
+    },
+  ])
+})
+
+socket.on('disconnect', async (ctx) => {
+  const connectionList = await connections.get('connections')
+  await connections.set(
+    'connections',
+    connectionList.filter((c) => c.connectionId === ctx.req.connectionId)
+  )
+})
+```
+
+```python
+from nitric.resources import websocket
+from nitric.application import Nitric
+
+socket = websocket("socket")
+connections = kv("connections").for("getting", "setting", "deleting")
+
+@socket.on("connect")
+async def on_connect(ctx):
+  connection_list = await connections.get("connections")
+  await connections.set([
+    *connection_list,
+    {
+      # Store any metadata related to the connection here
+      "connectionId": ctx.req.connection_id
+    }
+  ])
+
+@socket.on("disconnect")
+async def on_disconnect(ctx):
+  connection_list = await connections.get('connections')
+  await connections.set(
+    'connections',
+    filter(lambda c: c.connection_id == ctx.req.connection_id, connection_list)
+  )
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+## Sending Messages
+
+<CodeGroup>
+
+```typescript
+import { websocket, collection } from '@nitric/sdk'
+
+const socket = websocket('socket')
+const connections = kv('connections').for('getting', 'setting', 'deleting')
+
+socket.on('connect', async (ctx) => {
+  const connectionList = await connections.get('connections')
+  await connections.set([
+    ...connectionList,
+    {
+      // store any metadata related to the connection here
+      connectionId: ctx.req.connectionId,
+    },
+  ])
+})
+
+socket.on('disconnect', async (ctx) => {
+  const connectionList = await connections.get('connections')
+  await connections.set(
+    'connections',
+    connectionList.filter((c) => c.connectionId === ctx.req.connectionId)
+  )
+})
+
+const broadcast = async (data) => {
+  const connectionList = await connections.get('connections')
+
+  await Promise.all(
+    connectionList.forEach(async (connection) => {
+      // Send message to a connection
+      await socket.send(connection.connectionId, data)
+    })
+  )
+}
+
+socket.on('message', async (ctx) => {
+  // broadcast message to all clients (including the sender)
+  await broadcast(ctx.req.data)
+})
+```
+
+```python
+from nitric.resources import websocket
+from nitric.application import Nitric
+
+socket = websocket("socket")
+connections = kv("connections").for("getting", "setting", "deleting")
+
+@socket.on("connect")
+async def on_connect(ctx):
+  connection_list = await connections.get("connections")
+  await connections.set([
+    *connection_list,
+    {
+      # Store any metadata related to the connection here
+      "connectionId": ctx.req.connection_id
+    }
+  ])
+
+@socket.on("disconnect")
+async def on_disconnect(ctx):
+  connection_list = await connections.get('connections')
+  await connections.set(
+    'connections',
+    filter(lambda c: c.connection_id == ctx.req.connection_id, connection_list)
+  )
+
+async def broadcast(data):
+  connection_list = await connections.get("connections")
+
+  for connection in connection_list:
+    # Send message to a connection
+    await socket.send(connection.connection_id, data)
+
+
+@socket.on("message")
+async def on_message(ctx):
+  # broadcast message to all clients (including the sender)
+  await broadcast(ctx.req.data)
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+<Note>
+  Do not send messages to a connection during it's `connect` callback, if you
+  need to acknowledge connection, do so by using a [topic](./messaging)
+</Note>
