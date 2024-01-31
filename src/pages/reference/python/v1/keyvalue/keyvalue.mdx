@@ -1,14 +1,17 @@
 export const description =
-  "Reference for Nitric's Node.js library - Creates a new key value store to get, set, and delete key value pairs."
+  "Reference for Nitric's Python library - Creates a new key value store to get, set, and delete key value pairs."
 
-# Node.js - kv()
+# Python - kv()
 
 Creates a new key value store to get, set, and delete key value pairs.
 
-```javascript
-import { kv } from '@nitric/sdk'
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
 
-const profiles = kv('profiles').for('getting', 'setting', 'deleting')
+profiles = kv('profiles').allow('getting', 'setting', 'deleting')
+
+Nitric.run()
 ```
 
 ## Parameters
@@ -50,38 +53,50 @@ This permission allows your service to delete key value pairs in the key value s
 
 ### Create a key value store
 
-```javascript
-import { kv } from '@nitric/sdk'
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
 
-const profiles = kv('profiles')
+profiles = kv('profiles').allow('getting', 'setting', 'deleting')
+
+Nitric.run()
 ```
 
 ### Get value from a key value store
 
-```javascript
-import { kv } from '@nitric/sdk'
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
 
-const profiles = kv('profiles').for('getting')
+profiles = kv('profiles').allow('getting')
 
-const profile = await profiles.get('profile-1a2b3c')
+profile = await profiles.get('profile-1a2b3c')
+
+Nitric.run()
 ```
 
 ### Set a key in a key value store
 
-```javascript
-import { kv } from '@nitric/sdk'
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
 
-const profiles = kv('profiles').for('setting')
+profiles = kv('profiles').allow('setting')
 
-await profiles.set('profile-1a2b3c', { name: 'John Smith' })
+await profiles.set('profile-1a2b3c', { 'name': 'John Smith' })
+
+Nitric.run()
 ```
 
 ### Delete a key from a key value store
 
-```javascript
-import { kv } from '@nitric/sdk'
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
 
-const profiles = kv('profiles').for('deleting')
+profiles = kv('profiles').allow('deleting')
 
-profiles.delete('profile-1a2b3c')
+await profiles.delete('profile-1a2b3c')
+
+Nitric.run()
 ```
