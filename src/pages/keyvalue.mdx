@@ -1,200 +1,84 @@
-export const description = 'Document stores and collections'
+export const description = 'Key value stores'
 
-# Collections
+# Key Value Stores
 
 Nitric provides functionality for provisioning and interacting with collections in NoSQL databases.
 
 ## Definitions
 
-### Collections
+### Key Value Store
 
-In these databases you store data in `documents`, which are then organized into `collections`. Collections can most often be thought of as a category of related documents. E.g. `countries`.
+Key value stores act as a database which provides the functionality for efficient reading and writing. The data is fetched via a unique key, which is associated with a value. Due to the uniqueness of the key, accessing the data is incredibly efficient and will occur in constant time as there is no need for complex lookups.
 
-### Documents
+### Key Value Pair
 
-A document is a uniquely identifiable item within a collection. For example, if `countries` were a collection then `usa` might be a document within that collection. The documents themselves can be thought of as a simple `JSON` document.
+A key value pair refers to the unique key that has a value that it references. The key must be a unique string. The value can be any json serializable object.
 
-### Sub-collections
+## Creating Key Value Stores
 
-Sub-collections are collections that are stored within a document. If we use the previous example, then `states` might be a sub-collection that holds states within the `usa` document. Sub-collections can be thought of as an array of documents within a `JSON` document. Sub-collections behave identically to collections, but unlike collections, sub-collections are created at runtime rather than deploy time.
-
-<Note>Nitric supports single depth for sub-collections.</Note>
-
-### Relationship between Collections and Documents
-
-Below is an example of a collection, documents, and a sub-collection in JSON format to demonstrate the relationship that each of the types have.
-
-```json
-// Countries collection
-[
-  // Country document
-  {
-    "id": "USA",
-    "population": 329500000,
-    // States sub-collection
-    "states": [
-      // State document
-      { "id": "Alabama" },
-      { "id": "Alaska" },
-      ...
-      { "id": "Wyoming" }
-    ]
-  },
-  // Country Document
-  {
-    "id": "Canada",
-    "population": 38250000
-  }
-]
-```
-
-## Creating Collections
-
-Nitric allows you to define named collections. When defining collections, you can give the function permissions for reading, writing, or deleting documents in the collection.
-
-Here's an example of how to create a collection, with permissions for reading, writing, and deleting:
+Here's an example of how to create a key value store, with permissions for getting, setting, and deleting:
 
 <CodeGroup>
 
 ```javascript
-import { collection } from '@nitric/sdk'
+import { kv } from '@nitric/sdk'
 
-const countries = collection('Countries').for('reading', 'writing', 'deleting')
+const countries = kv('Countries').for('getting', 'setting', 'deleting')
 ```
 
 ```typescript
 // You can add typing by specifying the type of documents that are stored in the collection.
 // This won't do validation of the documents written to the collection.
 // However, it will give you type completion when interacting with the collection.
-import { collection } from '@nitric/sdk'
+import { kv } from '@nitric/sdk'
 
 type Country = {
   name: string
   population: number
 }
 
-const countries = collection<Country>('Countries').for(
-  'reading',
-  'writing',
-  'deleting'
-)
+const countries = kv<Country>('Countries').for('getting', 'setting', 'deleting')
 ```
 
 ```python
-from nitric.resources import collection
+from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = collection('Countries').allow('reading', 'writing', 'deleting')
+countries = kv('Countries').allow('getting', 'setting', 'deleting')
 
 Nitric.run()
 ```
 
-```go
-import (
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionReading, nitric.CollectionWriting, nitric.CollectionDeleting)
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using nitric.Sdk.Resources;
-
-class Country
-{
-  public string Name { get; set; }
-  public double Population { get; set; }
-}
-
-var countries = Nitric.Collection<Country>("Countries").With(
-  CollectionPermission.Reading, CollectionPermission.Writing, CollectionPermission.Deleting
-);
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.CollectionPermission;
-
-// A country class to store in the countries collection
-class Country {
-	String name;
-	int population;
-
-	public Country(String name, int population) {
-		this.name = name;
-		this.population = population;
-	}
-}
-
-public class Application {
-	public static void main(String[] args) {
-		var countries = Nitric.INSTANCE
-			.collection("countries", Country.class)
-			.with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete);
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.CollectionPermission
-
-// A country class to store in the countries collection
-data class Country(val name: String, val population: Int)
-
-fun main() {
-  val countries = Nitric
-    .collection<Country>("countries")
-    .with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete)
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
-## Creating Documents
+## Creating Key Value Pairs
 
-Documents are created based on an `id` and the contents of the document. If a document with that `id` already exists in the collection, then the document will be overwritten.
+Key value pairs are created based on the `key` and the contents of the `value`. If a key already exists in the key value store, then the key and it's value will be overwritten.
 
-> Documents that are created using the Nitric SDK are compatible across cloud providers.
+> Key value stores that are created using the Nitric SDK are compatible across cloud providers.
 
-The below example first creates a collection that has permissions for writing. It then adds a document to that collection, with an id of `USA` and contents which describe the document.
+The below example first creates a key value store that has permissions for setting. It then adds a key to the store called `USA` and a value which describes the country.
 
 <CodeGroup>
 
 ```javascript
-import { collection } from '@nitric/sdk'
+import { kv } from '@nitric/sdk'
 
-const countries = collection('Countries').for('writing')
+const countries = kv('Countries').for('setting')
 
-await countries.doc('USA').set({
+await countries.set('USA', {
   name: 'United States of America',
   population: 329500000,
 })
 ```
 
 ```python
-from nitric.resources import collection
+from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = collection('Countries').allow('writing')
+countries = kv('Countries').allow('setting')
 
-await countries.doc('USA').set({
+await countries.set('USA', {
   "name": "United States of America",
   "population": 329500000
 })
@@ -202,1083 +86,92 @@ await countries.doc('USA').set({
 Nitric.run()
 ```
 
-```go
-import (
-  "context"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionWriting)
-  if err != nil {
-    return
-  }
-
-  err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
-    "name": "United States of America",
-    "population": 329500000,
-  })
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-var countries = Nitric.Collection<Country>("Countries").With(CollectionPermission.Writing);
-
-countries.Doc("USA").Set(new Country {
-  Name = "United States of America",
-  Population = 329500000.0
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.CollectionPermission;
-
-// A country class to store in the countries collection
-class Country {
-	String name;
-	int population;
-
-	public Country(String name, int population) {
-		this.name = name;
-		this.population = population;
-	}
-}
-
-public class Application {
-	public static void main(String[] args) {
-		var countries = Nitric.INSTANCE
-			.collection("countries", Country.class)
-			.with(CollectionPermission.Write);
-
-		countries.doc("USA").set(new Country("United States of America", 329500000))
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.CollectionPermission
-
-// A country class to store in the countries collection
-data class Country(val name: String, val population: Int)
-
-fun main() {
-  val countries = Nitric
-    .collection<Country>("countries")
-    .with(CollectionPermission.Write)
-
-	countries.doc("USA").set(Country("United States of America", 329500000))
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
-If you then want to update the document, you will have to write over the existing document by referencing it be it's `id`.
+If you then want to update the value, you will have to write over the existing value by referencing it by it's key.
 
 <CodeGroup>
 
 ```javascript
-await countries.doc('USA').set({
+await countries.set('USA', {
   name: 'United States of America',
   population: 330000000,
 })
 ```
 
 ```python
-await countries.doc("USA").set({
+await countries.set('USA', {
   "name": "United States of America",
   "population": 330000000,
 })
 ```
 
-```go
-err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
-  "name": "United States of America",
-  "population": 330000000,
-})
-if err != nil {
-  return
-}
-```
-
-```csharp
-countries.Doc("USA").Set(new Country {
-  Name = "United States of America",
-  Population = 329500000.0
-});
-```
-
-```java
-countries.doc("USA").set(new Country(
-	"United States of America",
-	330000000
-));
-```
-
-```kotlin
-countries.doc("USA").set(Country(
-	name = "United States of America",
-	population = 330000000
-))
-```
-
 </CodeGroup>
 
-## Accessing Documents
+## Accessing Values
 
-To access documents you can either use an id lookup or a document query. An id lookup will return the exact document with that id, however you must know the id ahead of time. A query allows you to search for documents within a document that match specified criteria. Queries are discussed in "Querying Collections".
+To access a specific value you can use the key that references it.
 
-The below is an example of accessing a document from a collection.
+The below is an example of accessing a value from a key value store.
 
 <CodeGroup>
 
 ```javascript
-import { collection } from '@nitric/sdk'
+import { kv } from '@nitric/sdk'
 
-const countries = collection('Countries').for('reading')
+const countries = kv('Countries').for('reading')
 
-const country = await country.doc('USA').get()
+const country = await country.get('USA')
 ```
 
 ```python
-from nitric.resources import collection
+from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = collection("Countries").allow("reading")
+countries = kv("Countries").allow("getting")
 
-country = await countries.doc("USA").get()
+country = await countries.get("USA")
 
 Nitric.run()
 ```
 
-```go
-import (
-  "context"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionReading)
-  if err != nil {
-    return
-  }
-
-  country, err := countries.Doc("USA").Get(context.TODO())
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using nitric.Sdk.Resources;
-
-var countries = Nitric.Collection("Countries").With(CollectionPermission.Reading);
-
-var country = countries.Doc("USA").Get();
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.CollectionPermission;
-
-class Country { ... }
-
-public class Application {
-	public static void main(String[] args) {
-		var countries = Nitric.INSTANCE.collection("countries", Country.class).with(CollectionPermission.Read);
-
-		var country = countries.doc("USA").get();
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.CollectionPermission
-
-data class Country(...)
-
-fun main() {
-	val countries = Nitric.collection<Country>("countries").with(CollectionPermission.Read)
-
-	val country = countries.doc("USA").get()
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
-The below is a more complete example of searching for a document based on a country name provided by a path parameter.
+## Deleting Values
+
+Values can be deleted from the key value store by referencing the key.
+
+The below example first creates a key value store that has permissions for deleting and setting. It then creates a value called `USA`, which is deleted using `delete` on the key.
 
 <CodeGroup>
 
 ```javascript
-import { api, collection } from '@nitric/sdk'
+import { kv } from '@nitric/sdk'
 
-const countries = collection('Countries').for('reading')
+const countries = kv('Countries').for('deleting', 'setting')
 
-const countriesApi = api('Countries')
-
-countriesApi.get('/country/:name', async (ctx) => {
-  const id = ctx.req.params['name']
-
-  ctx.res.body = await countries.doc(id).get()
-})
-```
-
-```python
-from nitric.resources import api, collection
-from nitric.application import Nitric
-
-countries = collection("Countries").allow("reading")
-
-country_api = api("Countries")
-
-@country_api.get("/country/:name")
-async def get_country_route(ctx):
-  name = ctx.req.params['name']
-
-  ctx.res.body = await countries.doc(name).get()
-
-Nitric.run()
-```
-
-```go
-import (
-  "context"
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  countryApi, err := nitric.NewApi("Countries")
-  if err != nil {
-    return
-  }
-
-  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionReading)
-  if err != nil {
-    return
-  }
-
-  countryApi.Get("/country/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-    name := ctx.Request.PathParams()["name"]
-
-    country, err := countries.Doc(name).Get(ctx.Request.Context())
-    if err != nil {
-      return ctx, err
-    }
-
-    ctx.Response.Body, err = json.Marshal(country.Content())
-
-    return ctx, err
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using nitric.Sdk.Resources;
-
-var countryApi = Nitric.Api("Countries");
-
-var countries = Nitric.Collection<Country>("Countries").With(CollectionPermission.Reading);
-
-countryApi.Get("/country/:name", (ctx) => {
-  var name = ctx.Req.PathParams["name"];
-
-  var country = countries.Doc(name).Get();
-
-  ctx.Resp.Json(country);
-
-  return ctx;
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.CollectionPermission;
-
-class Country { ... }
-
-public class Application {
-	public static void main(String[] args) {
-		var countriesApi = Nitric.api("countries");
-
-		var countries = Nitric.INSTANCE.collection("countries", Country.class).with(CollectionPermission.Read);
-
-		countriesApi.get("/country/:name", (ctx) -> {
-			var name = ctx.getReq().getParams().get("name");
-
-			var country = countries.doc(name).get();
-
-			ctx.getResp().json(country)
-
-			return ctx;
-		})
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.CollectionPermission
-
-data class Country(...)
-
-fun main() {
-	val countriesApi = Nitric.api("countries")
-
-	val countries = Nitric.collection<Country>("countries").with(CollectionPermission.Read)
-
-	countriesApi.get("/country/:name") { ctx ->
-		val name = ctx.resp.params["name"]
-
-		val country = countries.doc(name!!).get()
-
-		ctx.resp.json(country!!)
-
-		ctx
-	}
-
-	Nitric.run()
-}
-```
-
-</CodeGroup>
-
-## Deleting Documents
-
-Documents can be deleted based on a documents `id`.
-
-The below example first creates a collection that has permissions for deleting and writing. It then creates a document called `USA`, which is deleted using `delete` on the document reference.
-
-<CodeGroup>
-
-```javascript
-import { collection } from '@nitric/sdk'
-
-const countries = collection('Countries').for('deleting', 'writing')
-
-await countries.doc('USA').set({
+await countries.set('USA', {
   name: 'United States of America',
   population: 329500000,
 })
 
-await countries.doc('USA').delete()
+await countries.delete('USA')
 ```
 
 ```python
-from nitric.resources import collection
+from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = collection('Countries').allow('writing')
+countries = kv('Countries').allow('writing')
 
-await countries.doc('USA').set({
+await countries.set('USA', {
   "name": "United States of America",
   "population": 329500000
 })
 
-await countries.doc('USA').delete()
+await countries.delete('USA')
 
 Nitric.run()
-```
-
-```go
-import (
-  "context"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  countries, err := nitric.NewCollection("Countries").With(nitric.CollectionWriting)
-  if err != nil {
-    return
-  }
-
-  // Set the USA document
-  err := countries.Doc("USA").Set(context.TODO(), map[string]interface{}{
-    "name": "United States of America",
-    "population": 329500000,
-  })
-  if err != nil {
-    return
-  }
-
-  // Delete the document
-  err := Countries.Doc("USA").Delete(context.TODO())
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using nitric.Sdk.Resources;
-
-var countries = Nitric.Collection<Country>("Countries").With(CollectionPermission.Reading);
-
-countries.Doc("USA").Set(new Country {
-  Name = "United States of America",
-  Population = 329500000.0
-});
-
-countries.Doc("USA").Delete();
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.CollectionPermission;
-
-class Country { ... }
-
-public class Application {
-	public static void main(String[] args) {
-		var countries = Nitric.INSTANCE.collection("countries")
-			.with(CollectionPermission.Write, CollectionPermission.Delete);
-
-		// Set the USA document
-		countries.doc("USA").set(new Country("United Sates of America", 329500000));
-
-		// Delete the document
-		countries.doc("USA").delete();
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.CollectionPermission
-
-data class Country(...)
-
-fun main() {
-	val countries = Nitric.collection<Country>("countries")
-		.with(CollectionPermission.Write, CollectionPermission.Delete)
-
-	// Set the USA document
-	countries.doc("USA").set(Country(
-		name = "United States of America",
-		population = 329500000
-	))
-
-	// Delete the document
-	countries.doc("USA").delete()
-
-	Nitric.run()
-}
-```
-
-</CodeGroup>
-
-## Querying Collections
-
-Querying documents allows for searching for a set of documents that meet a certain constraint. An example of this is searching for any country that has a population of over 100 million.
-
-<CodeGroup>
-
-```javascript
-const largeCountries = await countries
-  .query()
-  .where('population', '>', 100000000)
-  .fetch()
-```
-
-```python
-large_countries = (
-  await countries
-    .query()
-    .where("population", ">", 100000000)
-    .fetch()
-)
-```
-
-```go
-import "github.com/nitrictech/go-sdk/api/documents"
-...
-largeCountries, err := countries.
-    Query().
-    Where(documents.Condition("population").Gt(documents.NumberValue(100000000))).
-    Fetch(context.TODO())
-```
-
-```csharp
-var largeCountries = countries
-  .Query()
-  .Where("population", ">", 1000000000)
-  .Fetch();
-```
-
-```java
-import io.nitric.api.documents.v0.Operator;
-
-...
-
-var largeCountries = countries
-	.query()
-	.where("population", Operator.GT, 100000000)
-	.fetch();
-```
-
-```kotlin
-import io.nitric.api.documents.v0.Operator
-
-...
-
-val largeCountries = countries
-	.query()
-	.where("population", Operator.GT, 100000000)
-	.fetch()
-```
-
-</CodeGroup>
-
-To limit the amount of results returned you can use the `limit` function. This will limit the amount of responses up to or equal to the amount provided. The following example shows searching for countries whose names start with S but only returning 10 results.
-
-<CodeGroup>
-
-```javascript
-const sCountries = await countries
-  .query()
-  .where('name', 'startsWith', 'S')
-  .limit(10)
-  .fetch()
-```
-
-```python
-s_countries = (
-  await countries
-    .query()
-    .where("name", "startsWith", "S")
-    .limit(10)
-    .fetch()
-)
-```
-
-```go
-import "github.com/nitrictech/go-sdk/api/documents"
-...
-largeCountries, err := countries.
-    Query().
-    Where(documents.Condition("name").StartsWith(documents.StringValue("S"))).
-    Limit(10).
-    Fetch(context.TODO())
-```
-
-```csharp
-var largeCountries = countries
-  .Query()
-  .Where("population", ">", 1000000000)
-  .Limit(10)
-  .Fetch();
-```
-
-```java
-import io.nitric.api.documents.v0.Operator;
-
-var largeCountries = countries
-	.query()
-	.where("name", Operator.STARTS_WITH, "S")
-	.limit(10)
-	.fetch();
-```
-
-```kotlin
-import io.nitric.api.documents.v0.Operator
-
-val largeCountries = countries
-	.query()
-	.where("name", Operator.STARTS_WITH, "S")
-	.limit(10)
-	.fetch()
-```
-
-</CodeGroup>
-
-### Query Operators
-
-The `where()` method takes three parameters: the field to filter on, a comparison operator, and a value. Nitric supports the following comparison operators:
-
-- `<` less than (`Lt`)
-- `<=` less than or equal to (`Le`)
-- `==` equal to (`Eq`)
-- `>` greater than (`Gt`)
-- `>=` greater than or equal to (`Ge`)
-- `!=` not equal to (`Ne`)
-- `startsWith`
-
-### Compound (AND) queries
-
-You can combine constraints with a logical `AND` by chaining multiple `where()` operations together.
-
-The following example shows looking for a country that has over 100 million population and is not the United States of America.
-
-<CodeGroup>
-
-```javascript
-const query = countries
-  .query()
-  .where('name', '!=', 'United States of America')
-  .where('population', '>=', 100000000)
-
-const results = await query.fetch()
-```
-
-```python
-query = (
-  countries
-    .query()
-    .where('name', '!=', 'United States of America')
-    .where('population', '>=', 100000000)
-)
-
-results = await query.fetch()
-```
-
-```go
-import "github.com/nitrictech/go-sdk/api/documents"
-...
-query := countries.
-    Query().
-    Where(documents.Condition("name").Ne(documents.StringValue("United States of America"))).
-    Where(documents.Condition("population").Ge(documents.NumberValue(100000000)))
-
-results, err := query.Fetch(context.TODO())
-```
-
-```csharp
-var query = countries
-  .Query()
-  .Where("name", "!=", "United States of America")
-  .Where("population", ">=", 1000000000);
-
-var results = query.Fetch();
-```
-
-```java
-import io.nitric.api.documents.v0.Operator;
-
-var query = countries
-	.query()
-	.where("name", Operator.NE, "United States of America")
-	.where("population", Operator.GTE, 100000000);
-
-var results = query.fetch();
-```
-
-```kotlin
-import io.nitric.api.documents.v0.Operator
-
-val query = countries
-	.query()
-	.where("name", Operator.NE, "United States of America")
-	.where("population", Operator.GTE, 100000000)
-
-val results = query.fetch()
-```
-
-</CodeGroup>
-
-### Paging Results
-
-Pagination divides results into "pages" of data which are more manageable than getting all the data at once. Once the application processes the first page, it can then process the next page, and so on. To enable an application to know when the last page ended and the new page starts, a paging token is used. The below example shows fetching 1000 documents, and then using a paging token to get the next 1000 documents.
-
-<CodeGroup>
-
-```javascript
-const query = countries.query().limit(1000)
-
-// Fetch first page
-let results = await query.fetch()
-
-let pagingToken = results.pagingToken
-
-// Fetch next page
-if (pagingToken) {
-  results = await query.pagingFrom(pagingToken).fetch()
-
-  pagingToken = results.pagingToken
-}
-```
-
-```python
-query = countries.query().limit(1000)
-
-# Fetch first page
-results = await query.fetch()
-
-paging_token = results.paging_token
-
-# Fetch next page
-if paging_token is not None:
-    results = await query.page_from(paging_token).fetch()
-
-  paging_token = results.paging_token
-```
-
-```go
-import "github.com/nitrictech/go-sdk/api/documents"
-...
-query := countries.Query().Limit(1000)
-
-// Fetch first page
-results, err := query.Fetch(context.TODO())
-if err != nil {
-  return err
-}
-
-pagingToken := results.PagingToken
-
-// Fetch next page
-for pagingToken != nil {
-  results, err = query.FromPagingToken(pagingToken).Fetch(context.TODO())
-
-  pagingToken = results.PagingToken
-}
-```
-
-```csharp
-var query = countries.Query().Limit(1000);
-
-// Fetch first page
-var results = query.Fetch();
-
-var pagingToken = results.PagingToken;
-
-// Fetch next page
-if (pagingToken != null) {
-  var results = query.PagingFrom(pagingToken).Fetch();
-
-  pagingToken = results.PagingToken;
-}
-```
-
-```java
-import io.nitric.api.documents.v0;
-
-var query = countries.query().limit(1000);
-
-// Fetch first page
-var results = query.fetch();
-
-var pagingToken = results.getPagingToken();
-
-// Fetch next page
-while (pagingToken != null) {
-	results = query.pagingFrom(pagingToken).fetch();
-
-	pagingToken = results.getPagingToken();
-}
-```
-
-```kotlin
-import io.nitric.api.documents.v0
-
-val query = countries.query().limit(1000)
-
-// Fetch first page
-var results = query.fetch()
-
-var pagingToken = results.pagingToken
-
-while (pagingToken != null) {
-	results = query.pagingFrom(pagingToken).fetch()
-
-	pagingToken = results.pagingToken
-}
-```
-
-</CodeGroup>
-
-### Streaming Results
-
-An alternative solution to paging is to stream the documents from the query. This way documents can be handled asynchronously rather than page by page.
-
-<CodeGroup>
-
-```javascript
-const query = countries.query()
-
-const stream = query.stream()
-
-stream.on('data', (doc) => {
-  console.log(doc.content)
-})
-```
-
-```python
-query = countries.query()
-
-async for doc in query.stream():
-  print(doc.content)
-```
-
-```go
-stream, err := countries.Query().Stream(context.TODO())
-if err != nil {
-  return
-}
-
-for {
-  res, err := stream.Next() // will return an EOF when done
-  if err != nil {
-    fmt.Println("finished processing stream")
-    break
-  }
-
-  fmt.Println(res.Content())
-}
-```
-
-```csharp
-// Streaming is currently not supported in C#
-```
-
-```java
-var stream = countries.query().stream();
-
-while (stream.hasNext()) {
-	var country = countries.next();
-}
-```
-
-```kotlin
-val stream = countries.query().stream()
-
-while (stream.hasNext()) {
-	val country = countries.next()
-}
-```
-
-</CodeGroup>
-
-## Creating Sub-collections
-
-Working with a sub-collection is very similar to working with a collection, except they can be created dynamically at runtime. You can construct a reference to sub-collection within an existing document to begin working with documents within that sub-collection.
-
-<CodeGroup>
-
-```javascript
-const states = countries.doc('USA').collection('States')
-
-// Get a document from the sub-collection
-const stateOfColorado = await states.doc('Colorado').get()
-```
-
-```python
-states = countries.doc('USA').collection('States')
-
-# Get a document from the sub-collection
-state_of_colorado = await states.doc('Colorado').get()
-```
-
-```go
-states := countries.Doc("USA").Collection("States")
-
-// Get a document from the sub-collection
-stateOfColorado, err := states.Doc("Colorado").Get(context.TODO())
-```
-
-```csharp
-var states = countries.Doc("USA").Collection("States");
-
-// Get a document from the sub-collection
-var stateOfColorado = states.Doc("Colorado").Get();
-```
-
-```java
-var states = countries.doc("USA").collection("States");
-
-// Get a document from the sub-collection
-var stateOfColorado = states.doc("Colorado").get();
-```
-
-```kotlin
-val states = countries.doc("USA").collection("States")
-
-// Get a document from the sub-collection
-val stateOfColorado = states.doc("Colorado").get()
-```
-
-</CodeGroup>
-
-## Query Sub-collections
-
-You can query sub-collections in the same way that you can query collections, using fetching, paging, or streaming.
-
-<CodeGroup>
-
-```javascript
-const query = countries.doc('USA').collection('States').query()
-
-// Fetching
-const results = query.fetch()
-
-// Paging
-const results = query.pagingFrom(results.pagingToken).fetch()
-
-// Streaming
-const stream = query.stream()
-
-stream.on('data', (doc) => {
-  console.log(doc.content)
-})
-```
-
-```python
-query = countries.doc("USA").collection("States").query()
-
-# Fetching
-results = query.fetch()
-
-# Paging
-results = query.page_from(results.paging_token).fetch()
-
-# Streaming
-async for doc in query.stream():
-  print(doc.content)
-```
-
-```go
-query := countries.Doc("USA").Collection("States").Query()
-
-ctx := context.TODO()
-
-// Fetching
-results, err := query.Fetch(ctx)
-
-// Paging
-results, err := query.FromPagingToken(results.PagingToken).Fetch(ctx)
-
-// Streaming
-stream, err := query.Stream(ctx)
-```
-
-```csharp
-var query = countries.Doc("USA").Collection("States").Query();
-
-// Fetching
-var results = query.Fetch();
-
-// Paging
-var results = query.PagingFrom(results.PagingToken).Fetch();
-```
-
-```java
-var query = countries.doc("USA").collection("States").query()
-
-// Fetching
-var results = query.fetch()
-
-// Paging
-results = query.pagingFrom(results.getPagingToken()).fetch()
-
-// Streaming
-var stream = query.stream()
-```
-
-```kotlin
-val query = countries.doc("USA").collection("States").query()
-
-// Fetching
-var results = query.fetch()
-
-// Paging
-results = query.pagingFrom(results.pagingToken).fetch()
-
-// Streaming
-val stream = query.stream()
-```
-
-</CodeGroup>
-
-You can also query common sub-collections across multiple documents when they have the same name.
-
-> This sub-collection reference is only queryable, since it's really an aggregate of all `States` sub-collections across all `Countries` documents. i.e. Query every state in every country.
-
-For example, to query every state from every country, you can use the following code.
-
-<CodeGroup>
-
-```javascript
-const allStates = countries.collection('States')
-
-const results = allStates.query().fetch()
-```
-
-```python
-all_states = countries.collection('States')
-
-results = all_states.query().fetch()
-```
-
-```go
-allStates := countries.Collection("States")
-
-results, err := allStates.Query().Fetch(context.TODO())
-```
-
-```csharp
-var allStates = countries.Collection("States");
-
-var results = allStates.Query().Fetch();
-```
-
-```java
-var allStates = countries.collection("States");
-
-var results = allStates.query().fetch();
-```
-
-```kotlin
-val allStates = countries.collection("States")
-
-val results = allStates.query().fetch()
 ```
 
 </CodeGroup>
