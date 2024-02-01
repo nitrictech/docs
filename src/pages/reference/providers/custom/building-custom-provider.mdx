@@ -20,13 +20,13 @@ The Nitric CLI's core responsibility is to get the infrastructure requirements f
 The CLI will also containerize and build your function code, passing the information about the built image to the deployment provider. Given this deployment specification, the provider can deploy whatever resources are needed. For example, given the function below:
 
 ```ts
-import { api, bucket, faas } from '@nitric/sdk'
+import { api, bucket, HttpContext } from '@nitric/sdk'
 
 const helloApi = api('main')
 
 const buck = bucket('images').for('writing')
 
-helloApi.get('/hello/:name', async (ctx: faas.HttpContext) => {
+helloApi.get('/hello/:name', async (ctx: HttpContext) => {
   const { name } = ctx.req.params
 
   ctx.res.body = `Hello ${name}`

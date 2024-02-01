@@ -463,7 +463,7 @@ Since resource names are unique across each Nitric project, you can access a res
 
 <CodeGroup>
 
-```javascript {{ tag: 'functions/one.js' }}
+```javascript {{ tag: 'services/one.js' }}
 import { api } from '@nitric/sdk'
 
 const accountsApi = api('accounts')
@@ -473,9 +473,9 @@ accountsApi.get('/users/:id', async () => {
 })
 ```
 
-```python {{ tag: 'functions/one.py' }}
+```python {{ tag: 'services/one.py' }}
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 from nitric.resources import api
 
 accounts_api = api('accounts')
@@ -491,7 +491,7 @@ Nitric.run()
 
 <CodeGroup>
 
-```javascript {{ tag: 'functions/two.js' }}
+```javascript {{ tag: 'services/two.js' }}
 import { api } from '@nitric/sdk'
 
 const accountsApi = api('accounts')
@@ -501,9 +501,9 @@ accountsApi.get('/orgs/:id', async () => {
 })
 ```
 
-```python {{ tag: 'functions/two.py' }}
+```python {{ tag: 'services/two.py' }}
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 from nitric.resources import api
 
 accounts_api = api('accounts')
@@ -546,7 +546,7 @@ accounts_api = api('accounts')
 
 <CodeGroup>
 
-```javascript {{ tag: 'functions/one.js' }}
+```javascript {{ tag: 'services/one.js' }}
 import { accountsApi } from '../resources'
 
 accountsApi.get('/users/:id', async () => {
@@ -554,9 +554,9 @@ accountsApi.get('/users/:id', async () => {
 })
 ```
 
-```python {{ tag: 'functions/one.py' }}
+```python {{ tag: 'services/one.py' }}
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 from common.resources import accounts_api
 
 
@@ -571,7 +571,7 @@ Nitric.run()
 
 <CodeGroup>
 
-```javascript {{ tag: 'functions/two.js' }}
+```javascript {{ tag: 'services/two.js' }}
 import { accountsApi } from '../resources'
 
 accountsApi.get('/orgs/:id', async () => {
@@ -579,9 +579,9 @@ accountsApi.get('/orgs/:id', async () => {
 })
 ```
 
-```python {{ tag: 'functions/two.py' }}
+```python {{ tag: 'services/two.py' }}
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 from common.resources import accounts_api
 
 

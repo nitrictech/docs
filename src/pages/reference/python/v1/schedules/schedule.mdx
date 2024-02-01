@@ -8,7 +8,7 @@ Creates a new Schedule to run a function on a defined frequency.
 ```python
 from nitric.resources import schedule
 from nitric.application import Nitric
-from nitric.faas import EventContext
+from nitric.context import EventContext
 
 report_schedule = schedule('run-a-report')
 
@@ -66,7 +66,7 @@ backup = schedule("backup")
 ```python
 from nitric.resources import schedule
 from nitric.application import Nitric
-from nitric.faas import EventContext
+from nitric.context import EventContext
 
 processor = schedule("processor")
 

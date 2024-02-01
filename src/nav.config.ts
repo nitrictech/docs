@@ -14,9 +14,8 @@ import {
   ChatBubbleLeftRightIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
-import { FaNodeJs, FaPython, FaJava } from 'react-icons/fa'
-import { SiCsharp, SiPulumi } from 'react-icons/si'
-import { BiLogoGoLang } from 'react-icons/bi'
+import { FaNodeJs, FaPython } from 'react-icons/fa'
+import { SiPulumi } from 'react-icons/si'
 import { useRouter } from 'next/router'
 
 export const topLevelNavigation = [
@@ -46,8 +45,8 @@ const buildingBlockLinks = [
     icon: ServerIcon,
   },
   {
-    title: 'Collections',
-    href: '/collections',
+    title: 'Key Value Stores',
+    href: '/keyvalue',
     icon: ArchiveBoxIcon,
   },
   {
@@ -117,28 +116,13 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'Node.js',
-          href: '/reference/nodejs/v0',
+          href: '/reference/nodejs/v1',
           icon: FaNodeJs,
         },
         {
           title: 'Python',
-          href: '/reference/python/v0',
+          href: '/reference/python/v1',
           icon: FaPython,
-        },
-        {
-          title: 'Go (Experimental 🧪)',
-          href: '/reference/go/v0',
-          icon: BiLogoGoLang,
-        },
-        {
-          title: 'C# .NET (Experimental 🧪)',
-          href: '/reference/csharp/v0',
-          icon: SiCsharp,
-        },
-        {
-          title: 'JVM (Experimental 🧪)',
-          href: '/reference/jvm/v0',
-          icon: FaJava,
         },
       ],
     },
@@ -345,18 +329,18 @@ const fullNav: FullNav = {
       links: buildingBlockLinks.filter((link) => link.href !== '/http'),
     },
   ],
-  collections: [
+  keyvalue: [
     {
       links: [
         {
           title: 'Overview',
-          href: '/collections',
+          href: '/keyvalue',
         },
       ],
     },
     {
       title: 'More Building Blocks',
-      links: buildingBlockLinks.filter((link) => link.href !== '/collections'),
+      links: buildingBlockLinks.filter((link) => link.href !== '/keyvalue'),
     },
   ],
   schedules: [
@@ -519,7 +503,7 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'Getting Started',
-          href: '/reference/nodejs/v0',
+          href: '/reference/nodejs/v1',
         },
       ],
     },
@@ -528,112 +512,76 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'api()',
-          href: '/reference/nodejs/v0/api/api',
+          href: '/reference/nodejs/v1/api/api',
         },
         {
           title: 'api.get()',
-          href: '/reference/nodejs/v0/api/api-get',
+          href: '/reference/nodejs/v1/api/api-get',
         },
         {
           title: 'api.post()',
-          href: '/reference/nodejs/v0/api/api-post',
+          href: '/reference/nodejs/v1/api/api-post',
         },
         {
           title: 'api.put()',
-          href: '/reference/nodejs/v0/api/api-put',
+          href: '/reference/nodejs/v1/api/api-put',
         },
         {
           title: 'api.delete()',
-          href: '/reference/nodejs/v0/api/api-delete',
+          href: '/reference/nodejs/v1/api/api-delete',
         },
         {
           title: 'api.patch()',
-          href: '/reference/nodejs/v0/api/api-patch',
+          href: '/reference/nodejs/v1/api/api-patch',
         },
         {
           title: 'api.route()',
-          href: '/reference/nodejs/v0/api/api-route',
+          href: '/reference/nodejs/v1/api/api-route',
         },
         {
           title: 'api.route.all()',
-          href: '/reference/nodejs/v0/api/api-route-all',
+          href: '/reference/nodejs/v1/api/api-route-all',
         },
         {
           title: 'api.route.get()',
-          href: '/reference/nodejs/v0/api/api-route-get',
+          href: '/reference/nodejs/v1/api/api-route-get',
         },
         {
           title: 'api.route.post()',
-          href: '/reference/nodejs/v0/api/api-route-post',
+          href: '/reference/nodejs/v1/api/api-route-post',
         },
         {
           title: 'api.route.put()',
-          href: '/reference/nodejs/v0/api/api-route-put',
+          href: '/reference/nodejs/v1/api/api-route-put',
         },
         {
           title: 'api.route.delete()',
-          href: '/reference/nodejs/v0/api/api-route-delete',
+          href: '/reference/nodejs/v1/api/api-route-delete',
         },
         {
           title: 'api.route.patch()',
-          href: '/reference/nodejs/v0/api/api-route-patch',
+          href: '/reference/nodejs/v1/api/api-route-patch',
         },
       ],
     },
     {
-      title: 'Collections',
+      title: 'Key Value Stores',
       links: [
         {
-          title: 'collection()',
-          href: '/reference/nodejs/v0/collection/collection',
+          title: 'kv()',
+          href: '/reference/nodejs/v1/keyvalue/keyvalue',
         },
         {
-          title: 'collection.collection()',
-          href: '/reference/nodejs/v0/collection/collection-collection',
+          title: 'kv.get()',
+          href: '/reference/nodejs/v1/keyvalue/keyvalue-get',
         },
         {
-          title: 'collection.query()',
-          href: '/reference/nodejs/v0/collection/collection-query',
+          title: 'kv.set()',
+          href: '/reference/nodejs/v1/keyvalue/keyvalue-set',
         },
         {
-          title: 'collection.query.where()',
-          href: '/reference/nodejs/v0/collection/collection-query-where',
-        },
-        {
-          title: 'collection.query.limit()',
-          href: '/reference/nodejs/v0/collection/collection-query-limit',
-        },
-        {
-          title: 'collection.query.pagingFrom()',
-          href: '/reference/nodejs/v0/collection/collection-query-pagingfrom',
-        },
-        {
-          title: 'collection.query.fetch()',
-          href: '/reference/nodejs/v0/collection/collection-query-fetch',
-        },
-        {
-          title: 'collection.query.stream()',
-          href: '/reference/nodejs/v0/collection/collection-query-stream',
-        },
-        {
-          title: 'collection.doc()',
-          href: '/reference/nodejs/v0/collection/collection-doc',
-        },
-        {
-          title: 'collection.doc.get()',
-          href: '/reference/nodejs/v0/collection/collection-doc-get',
-        },
-        {
-          title: 'collection.doc.set()',
-          href: '/reference/nodejs/v0/collection/collection-doc-set',
-        },
-        {
-          title: 'collection.doc.delete()',
-          href: '/reference/nodejs/v0/collection/collection-doc-delete',
-        },
-        {
-          title: 'collection.doc.collection()',
-          href: '/reference/nodejs/v0/collection/collection-doc-collection',
+          title: 'kv.delete()',
+          href: '/reference/nodejs/v1/keyvalue/keyvalue-delete',
         },
       ],
     },
@@ -642,15 +590,15 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'topic()',
-          href: '/reference/nodejs/v0/topic/topic',
+          href: '/reference/nodejs/v1/topic/topic',
         },
         {
           title: 'topic.publish()',
-          href: '/reference/nodejs/v0/topic/topic-publish',
+          href: '/reference/nodejs/v1/topic/topic-publish',
         },
         {
           title: 'topic.subscribe()',
-          href: '/reference/nodejs/v0/topic/topic-subscribe',
+          href: '/reference/nodejs/v1/topic/topic-subscribe',
         },
       ],
     },
@@ -659,15 +607,15 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'queue()',
-          href: '/reference/nodejs/v0/queues/queue',
+          href: '/reference/nodejs/v1/queues/queue',
         },
         {
           title: 'queue.send()',
-          href: '/reference/nodejs/v0/queues/queue-send',
+          href: '/reference/nodejs/v1/queues/queue-send',
         },
         {
           title: 'queue.receive()',
-          href: '/reference/nodejs/v0/queues/queue-receive',
+          href: '/reference/nodejs/v1/queues/queue-receive',
         },
       ],
     },
@@ -676,23 +624,23 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'secret()',
-          href: '/reference/nodejs/v0/secrets/secret',
+          href: '/reference/nodejs/v1/secrets/secret',
         },
         {
           title: 'secret.put()',
-          href: '/reference/nodejs/v0/secrets/secret-put',
+          href: '/reference/nodejs/v1/secrets/secret-put',
         },
         {
           title: 'secret.version()',
-          href: '/reference/nodejs/v0/secrets/secret-version',
+          href: '/reference/nodejs/v1/secrets/secret-version',
         },
         {
           title: 'secret.latest()',
-          href: '/reference/nodejs/v0/secrets/secret-latest',
+          href: '/reference/nodejs/v1/secrets/secret-latest',
         },
         {
           title: 'secret.version.access()',
-          href: '/reference/nodejs/v0/secrets/secret-version-access',
+          href: '/reference/nodejs/v1/secrets/secret-version-access',
         },
       ],
     },
@@ -701,43 +649,43 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'bucket()',
-          href: '/reference/nodejs/v0/storage/bucket',
+          href: '/reference/nodejs/v1/storage/bucket',
         },
         {
           title: 'bucket.on()',
-          href: '/reference/nodejs/v0/storage/bucket-on',
+          href: '/reference/nodejs/v1/storage/bucket-on',
         },
         {
           title: 'bucket.file()',
-          href: '/reference/nodejs/v0/storage/bucket-file',
+          href: '/reference/nodejs/v1/storage/bucket-file',
         },
         {
           title: 'bucket.files()',
-          href: '/reference/nodejs/v0/storage/bucket-files',
+          href: '/reference/nodejs/v1/storage/bucket-files',
         },
         {
           title: 'file.exists()',
-          href: '/reference/nodejs/v0/storage/bucket-file-exists',
+          href: '/reference/nodejs/v1/storage/bucket-file-exists',
         },
         {
           title: 'file.read()',
-          href: '/reference/nodejs/v0/storage/bucket-file-read',
+          href: '/reference/nodejs/v1/storage/bucket-file-read',
         },
         {
           title: 'file.write()',
-          href: '/reference/nodejs/v0/storage/bucket-file-write',
+          href: '/reference/nodejs/v1/storage/bucket-file-write',
         },
         {
           title: 'file.delete()',
-          href: '/reference/nodejs/v0/storage/bucket-file-delete',
+          href: '/reference/nodejs/v1/storage/bucket-file-delete',
         },
         {
           title: 'file.getDownloadUrl()',
-          href: '/reference/nodejs/v0/storage/bucket-file-downloadurl',
+          href: '/reference/nodejs/v1/storage/bucket-file-downloadurl',
         },
         {
           title: 'file.getUploadUrl()',
-          href: '/reference/nodejs/v0/storage/bucket-file-uploadurl',
+          href: '/reference/nodejs/v1/storage/bucket-file-uploadurl',
         },
       ],
     },
@@ -746,15 +694,15 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'schedule()',
-          href: '/reference/nodejs/v0/schedule/schedule',
+          href: '/reference/nodejs/v1/schedule/schedule',
         },
         {
           title: 'schedule.every()',
-          href: '/reference/nodejs/v0/schedule/schedule-every',
+          href: '/reference/nodejs/v1/schedule/schedule-every',
         },
         {
           title: 'schedule.cron()',
-          href: '/reference/nodejs/v0/schedule/schedule-cron',
+          href: '/reference/nodejs/v1/schedule/schedule-cron',
         },
       ],
     },
@@ -763,19 +711,19 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'websocket()',
-          href: '/reference/nodejs/v0/websocket/websocket',
+          href: '/reference/nodejs/v1/websocket/websocket',
         },
         {
           title: 'websocket.on()',
-          href: '/reference/nodejs/v0/websocket/websocket-on',
+          href: '/reference/nodejs/v1/websocket/websocket-on',
         },
         {
           title: 'websocket.send()',
-          href: '/reference/nodejs/v0/websocket/websocket-send',
+          href: '/reference/nodejs/v1/websocket/websocket-send',
         },
         {
           title: 'websocket.close()',
-          href: '/reference/nodejs/v0/websocket/websocket-close',
+          href: '/reference/nodejs/v1/websocket/websocket-close',
         },
       ],
     },
@@ -785,7 +733,7 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'Getting Started',
-          href: '/reference/python/v0',
+          href: '/reference/python/v1',
         },
       ],
     },
@@ -794,92 +742,56 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'api()',
-          href: '/reference/python/v0/api/api',
+          href: '/reference/python/v1/api/api',
         },
         {
           title: 'api.get()',
-          href: '/reference/python/v0/api/api-get',
+          href: '/reference/python/v1/api/api-get',
         },
         {
           title: 'api.post()',
-          href: '/reference/python/v0/api/api-post',
+          href: '/reference/python/v1/api/api-post',
         },
         {
           title: 'api.put()',
-          href: '/reference/python/v0/api/api-put',
+          href: '/reference/python/v1/api/api-put',
         },
         {
           title: 'api.delete()',
-          href: '/reference/python/v0/api/api-delete',
+          href: '/reference/python/v1/api/api-delete',
         },
         {
           title: 'api.patch()',
-          href: '/reference/python/v0/api/api-patch',
+          href: '/reference/python/v1/api/api-patch',
         },
         {
           title: 'api.methods()',
-          href: '/reference/python/v0/api/api-methods',
+          href: '/reference/python/v1/api/api-methods',
         },
         {
           title: 'api.all()',
-          href: '/reference/python/v0/api/api-all',
+          href: '/reference/python/v1/api/api-all',
         },
       ],
     },
     {
-      title: 'Collections',
+      title: 'Key Value Stores',
       links: [
         {
-          title: 'collection()',
-          href: '/reference/python/v0/collection/collection',
+          title: 'kv()',
+          href: '/reference/python/v1/keyvalue/keyvalue',
         },
         {
-          title: 'collection.collection()',
-          href: '/reference/python/v0/collection/collection-collection',
+          title: 'kv.get()',
+          href: '/reference/python/v1/keyvalue/keyvalue-get',
         },
         {
-          title: 'collection.query()',
-          href: '/reference/python/v0/collection/collection-query',
+          title: 'kv.set()',
+          href: '/reference/python/v1/keyvalue/keyvalue-set',
         },
         {
-          title: 'collection.query.where()',
-          href: '/reference/python/v0/collection/collection-query-where',
-        },
-        {
-          title: 'collection.query.limit()',
-          href: '/reference/python/v0/collection/collection-query-limit',
-        },
-        {
-          title: 'collection.query.page_from()',
-          href: '/reference/python/v0/collection/collection-query-pagingfrom',
-        },
-        {
-          title: 'collection.query.fetch()',
-          href: '/reference/python/v0/collection/collection-query-fetch',
-        },
-        {
-          title: 'collection.query.stream()',
-          href: '/reference/python/v0/collection/collection-query-stream',
-        },
-        {
-          title: 'collection.doc()',
-          href: '/reference/python/v0/collection/collection-doc',
-        },
-        {
-          title: 'collection.doc.get()',
-          href: '/reference/python/v0/collection/collection-doc-get',
-        },
-        {
-          title: 'collection.doc.set()',
-          href: '/reference/python/v0/collection/collection-doc-set',
-        },
-        {
-          title: 'collection.doc.delete()',
-          href: '/reference/python/v0/collection/collection-doc-delete',
-        },
-        {
-          title: 'collection.doc.collection()',
-          href: '/reference/python/v0/collection/collection-doc-collection',
+          title: 'kv.delete()',
+          href: '/reference/python/v1/keyvalue/keyvalue-delete',
         },
       ],
     },
@@ -888,15 +800,15 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'topic()',
-          href: '/reference/python/v0/topic/topic',
+          href: '/reference/python/v1/topic/topic',
         },
         {
           title: 'topic.publish()',
-          href: '/reference/python/v0/topic/topic-publish',
+          href: '/reference/python/v1/topic/topic-publish',
         },
         {
           title: 'topic.subscribe()',
-          href: '/reference/python/v0/topic/topic-subscribe',
+          href: '/reference/python/v1/topic/topic-subscribe',
         },
       ],
     },
@@ -905,15 +817,15 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'queue()',
-          href: '/reference/python/v0/queues/queue',
+          href: '/reference/python/v1/queues/queue',
         },
         {
           title: 'queue.send()',
-          href: '/reference/python/v0/queues/queue-send',
+          href: '/reference/python/v1/queues/queue-send',
         },
         {
           title: 'queue.receive()',
-          href: '/reference/python/v0/queues/queue-receive',
+          href: '/reference/python/v1/queues/queue-receive',
         },
       ],
     },
@@ -922,23 +834,23 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'secret()',
-          href: '/reference/python/v0/secrets/secret',
+          href: '/reference/python/v1/secrets/secret',
         },
         {
           title: 'secret.put()',
-          href: '/reference/python/v0/secrets/secret-put',
+          href: '/reference/python/v1/secrets/secret-put',
         },
         {
           title: 'secret.version()',
-          href: '/reference/python/v0/secrets/secret-version',
+          href: '/reference/python/v1/secrets/secret-version',
         },
         {
           title: 'secret.latest()',
-          href: '/reference/python/v0/secrets/secret-latest',
+          href: '/reference/python/v1/secrets/secret-latest',
         },
         {
           title: 'secret.version.access()',
-          href: '/reference/python/v0/secrets/secret-version-access',
+          href: '/reference/python/v1/secrets/secret-version-access',
         },
       ],
     },
@@ -947,39 +859,39 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'bucket()',
-          href: '/reference/python/v0/storage/bucket',
+          href: '/reference/python/v1/storage/bucket',
         },
         {
           title: 'bucket.on()',
-          href: '/reference/python/v0/storage/bucket-on',
+          href: '/reference/python/v1/storage/bucket-on',
         },
         {
           title: 'bucket.file()',
-          href: '/reference/python/v0/storage/bucket-file',
+          href: '/reference/python/v1/storage/bucket-file',
         },
         {
           title: 'bucket.files()',
-          href: '/reference/python/v0/storage/bucket-files',
+          href: '/reference/python/v1/storage/bucket-files',
         },
         {
           title: 'file.read()',
-          href: '/reference/python/v0/storage/bucket-file-read',
+          href: '/reference/python/v1/storage/bucket-file-read',
         },
         {
           title: 'file.write()',
-          href: '/reference/python/v0/storage/bucket-file-write',
+          href: '/reference/python/v1/storage/bucket-file-write',
         },
         {
           title: 'file.delete()',
-          href: '/reference/python/v0/storage/bucket-file-delete',
+          href: '/reference/python/v1/storage/bucket-file-delete',
         },
         {
           title: 'file.download_url()',
-          href: '/reference/python/v0/storage/bucket-file-downloadurl',
+          href: '/reference/python/v1/storage/bucket-file-downloadurl',
         },
         {
           title: 'file.upload_url()',
-          href: '/reference/python/v0/storage/bucket-file-uploadurl',
+          href: '/reference/python/v1/storage/bucket-file-uploadurl',
         },
       ],
     },
@@ -988,7 +900,7 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'schedule()',
-          href: '/reference/python/v0/schedules/schedule',
+          href: '/reference/python/v1/schedules/schedule',
         },
       ],
     },
@@ -997,690 +909,15 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'websocket()',
-          href: '/reference/python/v0/websocket/websocket',
+          href: '/reference/python/v1/websocket/websocket',
         },
         {
           title: 'websocket.on()',
-          href: '/reference/python/v0/websocket/websocket-on',
+          href: '/reference/python/v1/websocket/websocket-on',
         },
         {
           title: 'websocket.send()',
-          href: '/reference/python/v0/websocket/websocket-send',
-        },
-      ],
-    },
-  ],
-  ['reference/csharp']: [
-    {
-      links: [
-        {
-          title: 'Getting Started',
-          href: '/reference/csharp/v0',
-        },
-      ],
-    },
-    {
-      title: 'APIs',
-      links: [
-        {
-          title: 'api()',
-          href: '/reference/csharp/v0/api/api',
-        },
-        {
-          title: 'api.get()',
-          href: '/reference/csharp/v0/api/api-get',
-        },
-        {
-          title: 'api.post()',
-          href: '/reference/csharp/v0/api/api-post',
-        },
-        {
-          title: 'api.put()',
-          href: '/reference/csharp/v0/api/api-put',
-        },
-        {
-          title: 'api.delete()',
-          href: '/reference/csharp/v0/api/api-delete',
-        },
-        {
-          title: 'api.patch()',
-          href: '/reference/csharp/v0/api/api-patch',
-        },
-        {
-          title: 'api.route()',
-          href: '/reference/csharp/v0/api/api-route',
-        },
-        {
-          title: 'api.route.all()',
-          href: '/reference/csharp/v0/api/api-route-all',
-        },
-        {
-          title: 'api.route.get()',
-          href: '/reference/csharp/v0/api/api-route-get',
-        },
-        {
-          title: 'api.route.post()',
-          href: '/reference/csharp/v0/api/api-route-post',
-        },
-        {
-          title: 'api.route.put()',
-          href: '/reference/csharp/v0/api/api-route-put',
-        },
-        {
-          title: 'api.route.delete()',
-          href: '/reference/csharp/v0/api/api-route-delete',
-        },
-        {
-          title: 'api.route.patch()',
-          href: '/reference/csharp/v0/api/api-route-patch',
-        },
-      ],
-    },
-    {
-      title: 'Topics',
-      links: [
-        {
-          title: 'topic()',
-          href: '/reference/csharp/v0/topic/topic',
-        },
-        {
-          title: 'topic.publish()',
-          href: '/reference/csharp/v0/topic/topic-publish',
-        },
-        {
-          title: 'topic.subscribe()',
-          href: '/reference/csharp/v0/topic/topic-subscribe',
-        },
-      ],
-    },
-    {
-      title: 'Queues',
-      links: [
-        {
-          title: 'queue()',
-          href: '/reference/csharp/v0/queues/queue',
-        },
-        {
-          title: 'queue.send()',
-          href: '/reference/csharp/v0/queues/queue-send',
-        },
-        {
-          title: 'queue.receive()',
-          href: '/reference/csharp/v0/queues/queue-receive',
-        },
-      ],
-    },
-    {
-      title: 'Storage',
-      links: [
-        {
-          title: 'bucket()',
-          href: '/reference/csharp/v0/storage/bucket',
-        },
-        {
-          title: 'bucket.on()',
-          href: '/reference/csharp/v0/storage/bucket-on',
-        },
-        {
-          title: 'bucket.file()',
-          href: '/reference/csharp/v0/storage/bucket-file',
-        },
-        {
-          title: 'bucket.files()',
-          href: '/reference/csharp/v0/storage/bucket-files',
-        },
-        {
-          title: 'file.read()',
-          href: '/reference/csharp/v0/storage/bucket-file-read',
-        },
-        {
-          title: 'file.write()',
-          href: '/reference/csharp/v0/storage/bucket-file-write',
-        },
-        {
-          title: 'file.delete()',
-          href: '/reference/csharp/v0/storage/bucket-file-delete',
-        },
-        {
-          title: 'file.getDownloadUrl()',
-          href: '/reference/csharp/v0/storage/bucket-file-downloadurl',
-        },
-        {
-          title: 'file.getUploadUrl()',
-          href: '/reference/csharp/v0/storage/bucket-file-uploadurl',
-        },
-      ],
-    },
-    {
-      title: 'Schedules',
-      links: [
-        {
-          title: 'schedule()',
-          href: '/reference/csharp/v0/schedule/schedule',
-        },
-        {
-          title: 'schedule.every()',
-          href: '/reference/csharp/v0/schedule/schedule-every',
-        },
-        {
-          title: 'NewTopic()',
-          href: '/reference/go/v0/topic/topic',
-        },
-      ],
-    },
-  ],
-  ['reference/go']: [
-    {
-      links: [
-        {
-          title: 'Getting Started',
-          href: '/reference/go/v0',
-        },
-      ],
-    },
-    {
-      title: 'Resources',
-      links: [
-        {
-          title: 'NewApi()',
-          href: '/reference/go/v0/api/api',
-        },
-        {
-          title: 'NewCollection()',
-          href: '/reference/go/v0/collection/collection',
-        },
-        {
-          title: 'NewQueue()',
-          href: '/reference/go/v0/queues/queue',
-        },
-        {
-          title: 'NewSecret()',
-          href: '/reference/go/v0/secrets/secret',
-        },
-        {
-          title: 'NewBucket()',
-          href: '/reference/go/v0/storage/bucket',
-        },
-        {
-          title: 'NewTopic()',
-          href: '/reference/go/v0/topic/topic',
-        },
-        {
-          title: 'NewSchedule()',
-          href: '/reference/go/v0/schedule/schedule',
-        },
-        {
-          title: 'NewWebsocket()',
-          href: '/reference/go/v0/websocket/websocket',
-        },
-      ],
-    },
-    {
-      title: 'APIs',
-      links: [
-        {
-          title: 'Api.Get()',
-          href: '/reference/go/v0/api/api-get',
-        },
-        {
-          title: 'Api.Post()',
-          href: '/reference/go/v0/api/api-post',
-        },
-        {
-          title: 'Api.Put()',
-          href: '/reference/go/v0/api/api-put',
-        },
-        {
-          title: 'Api.Delete()',
-          href: '/reference/go/v0/api/api-delete',
-        },
-        {
-          title: 'Api.Patch()',
-          href: '/reference/go/v0/api/api-patch',
-        },
-        {
-          title: 'Api.NewRoute()',
-          href: '/reference/go/v0/api/api-route',
-        },
-        {
-          title: 'Api.Route.All()',
-          href: '/reference/go/v0/api/api-route-all',
-        },
-        {
-          title: 'Api.Route.Get()',
-          href: '/reference/go/v0/api/api-route-get',
-        },
-        {
-          title: 'Api.Route.Post()',
-          href: '/reference/go/v0/api/api-route-post',
-        },
-        {
-          title: 'Api.Route.Put()',
-          href: '/reference/go/v0/api/api-route-put',
-        },
-        {
-          title: 'Api.Route.Delete()',
-          href: '/reference/go/v0/api/api-route-delete',
-        },
-        {
-          title: 'Api.Route.Patch()',
-          href: '/reference/go/v0/api/api-route-patch',
-        },
-        {
-          title: 'Api.Details()',
-          href: '/reference/go/v0/api/api-details',
-        },
-      ],
-    },
-    {
-      title: 'Collections',
-      links: [
-        {
-          title: 'Collection.Collection()',
-          href: '/reference/go/v0/collection/collection-collection',
-        },
-        {
-          title: 'Collection.Query()',
-          href: '/reference/go/v0/collection/collection-query',
-        },
-        {
-          title: 'Collection.Query.Where()',
-          href: '/reference/go/v0/collection/collection-query-where',
-        },
-        {
-          title: 'Collection.Query.Limit()',
-          href: '/reference/go/v0/collection/collection-query-limit',
-        },
-        {
-          title: 'Collection.Query.FromPagingToken()',
-          href: '/reference/go/v0/collection/collection-query-pagingfrom',
-        },
-        {
-          title: 'Collection.Query.Fetch()',
-          href: '/reference/go/v0/collection/collection-query-fetch',
-        },
-        {
-          title: 'Collection.Query.Stream()',
-          href: '/reference/go/v0/collection/collection-query-stream',
-        },
-        {
-          title: 'Collection.Doc()',
-          href: '/reference/go/v0/collection/collection-doc',
-        },
-        {
-          title: 'Collection.Doc.Get()',
-          href: '/reference/go/v0/collection/collection-doc-get',
-        },
-        {
-          title: 'Collection.Doc.Set()',
-          href: '/reference/go/v0/collection/collection-doc-set',
-        },
-        {
-          title: 'Collection.Doc.Delete()',
-          href: '/reference/go/v0/collection/collection-doc-delete',
-        },
-        {
-          title: 'Collection.Doc.Collection()',
-          href: '/reference/go/v0/collection/collection-doc-collection',
-        },
-      ],
-    },
-    {
-      title: 'Topics',
-      links: [
-        {
-          title: 'Topic.Publish()',
-          href: '/reference/go/v0/topic/topic-publish',
-        },
-        {
-          title: 'Topic.Subscribe()',
-          href: '/reference/go/v0/topic/topic-subscribe',
-        },
-      ],
-    },
-    {
-      title: 'Queues',
-      links: [
-        {
-          title: 'Queue.Send()',
-          href: '/reference/go/v0/queues/queue-send',
-        },
-        {
-          title: 'Queue.Receive()',
-          href: '/reference/go/v0/queues/queue-receive',
-        },
-      ],
-    },
-    {
-      title: 'Secrets',
-      links: [
-        {
-          title: 'Secret.Put()',
-          href: '/reference/go/v0/secrets/secret-put',
-        },
-        {
-          title: 'Secret.Version()',
-          href: '/reference/go/v0/secrets/secret-version',
-        },
-        {
-          title: 'Secret.Latest()',
-          href: '/reference/go/v0/secrets/secret-latest',
-        },
-        {
-          title: 'Secret.Version.Access()',
-          href: '/reference/go/v0/secrets/secret-version-access',
-        },
-      ],
-    },
-    {
-      title: 'Storage',
-      links: [
-        {
-          title: 'Bucket.On()',
-          href: '/reference/go/v0/storage/bucket-on',
-        },
-        {
-          title: 'Bucket.File()',
-          href: '/reference/go/v0/storage/bucket-file',
-        },
-        {
-          title: 'Bucket.Files()',
-          href: '/reference/go/v0/storage/bucket-files',
-        },
-        {
-          title: 'File.Read()',
-          href: '/reference/go/v0/storage/bucket-file-read',
-        },
-        {
-          title: 'File.Write()',
-          href: '/reference/go/v0/storage/bucket-file-write',
-        },
-        {
-          title: 'File.Delete()',
-          href: '/reference/go/v0/storage/bucket-file-delete',
-        },
-        {
-          title: 'File.DownloadUrl()',
-          href: '/reference/go/v0/storage/bucket-file-downloadurl',
-        },
-        {
-          title: 'File.UploadUrl()',
-          href: '/reference/go/v0/storage/bucket-file-uploadurl',
-        },
-      ],
-    },
-    {
-      title: 'Schedules',
-      links: [
-        {
-          title: 'Schedule.Every()',
-          href: '/reference/go/v0/schedule/schedule-every',
-        },
-        {
-          title: 'Schedule.Cron()',
-          href: '/reference/go/v0/schedule/schedule-cron',
-        },
-      ],
-    },
-    {
-      title: 'Websockets',
-      links: [
-        {
-          title: 'Websocket.On()',
-          href: '/reference/go/v0/websocket/websocket-on',
-        },
-        {
-          title: 'Websocket.Send()',
-          href: '/reference/go/v0/websocket/websocket-send',
-        },
-        {
-          title: 'Websocket.Close()',
-          href: '/reference/go/v0/websocket/websocket-close',
-        },
-        {
-          title: 'Websocket.Details()',
-          href: '/reference/go/v0/websocket/websocket-details',
-        },
-      ],
-    },
-  ],
-  ['reference/jvm']: [
-    {
-      links: [
-        {
-          title: 'Getting Started',
-          href: '/reference/jvm/v0',
-        },
-      ],
-    },
-    {
-      title: 'APIs',
-      links: [
-        {
-          title: 'api()',
-          href: '/reference/jvm/v0/api/api',
-        },
-        {
-          title: 'api.get()',
-          href: '/reference/jvm/v0/api/api-get',
-        },
-        {
-          title: 'api.post()',
-          href: '/reference/jvm/v0/api/api-post',
-        },
-        {
-          title: 'api.put()',
-          href: '/reference/jvm/v0/api/api-put',
-        },
-        {
-          title: 'api.delete()',
-          href: '/reference/jvm/v0/api/api-delete',
-        },
-        {
-          title: 'api.patch()',
-          href: '/reference/jvm/v0/api/api-patch',
-        },
-        {
-          title: 'api.route()',
-          href: '/reference/jvm/v0/api/api-route',
-        },
-        {
-          title: 'api.route.all()',
-          href: '/reference/jvm/v0/api/api-route-all',
-        },
-        {
-          title: 'api.route.get()',
-          href: '/reference/jvm/v0/api/api-route-get',
-        },
-        {
-          title: 'api.route.post()',
-          href: '/reference/jvm/v0/api/api-route-post',
-        },
-        {
-          title: 'api.route.put()',
-          href: '/reference/jvm/v0/api/api-route-put',
-        },
-        {
-          title: 'api.route.delete()',
-          href: '/reference/jvm/v0/api/api-route-delete',
-        },
-        {
-          title: 'api.route.patch()',
-          href: '/reference/jvm/v0/api/api-route-patch',
-        },
-      ],
-    },
-    {
-      title: 'Collections',
-      links: [
-        {
-          title: 'collection()',
-          href: '/reference/jvm/v0/collection/collection',
-        },
-        {
-          title: 'collection.collection()',
-          href: '/reference/jvm/v0/collection/collection-collection',
-        },
-        {
-          title: 'collection.query()',
-          href: '/reference/jvm/v0/collection/collection-query',
-        },
-        {
-          title: 'collection.query.where()',
-          href: '/reference/jvm/v0/collection/collection-query-where',
-        },
-        {
-          title: 'collection.query.limit()',
-          href: '/reference/jvm/v0/collection/collection-query-limit',
-        },
-        {
-          title: 'collection.query.pagingFrom()',
-          href: '/reference/jvm/v0/collection/collection-query-pagingfrom',
-        },
-        {
-          title: 'collection.query.fetch()',
-          href: '/reference/jvm/v0/collection/collection-query-fetch',
-        },
-        {
-          title: 'collection.query.stream()',
-          href: '/reference/jvm/v0/collection/collection-query-stream',
-        },
-        {
-          title: 'collection.doc()',
-          href: '/reference/jvm/v0/collection/collection-doc',
-        },
-        {
-          title: 'collection.doc.get()',
-          href: '/reference/jvm/v0/collection/collection-doc-get',
-        },
-        {
-          title: 'collection.doc.set()',
-          href: '/reference/jvm/v0/collection/collection-doc-set',
-        },
-        {
-          title: 'collection.doc.delete()',
-          href: '/reference/jvm/v0/collection/collection-doc-delete',
-        },
-        {
-          title: 'collection.doc.collection()',
-          href: '/reference/jvm/v0/collection/collection-doc-collection',
-        },
-      ],
-    },
-    {
-      title: 'Topics',
-      links: [
-        {
-          title: 'topic()',
-          href: '/reference/jvm/v0/topic/topic',
-        },
-        {
-          title: 'topic.publish()',
-          href: '/reference/jvm/v0/topic/topic-publish',
-        },
-        {
-          title: 'topic.subscribe()',
-          href: '/reference/jvm/v0/topic/topic-subscribe',
-        },
-      ],
-    },
-    {
-      title: 'Queues',
-      links: [
-        {
-          title: 'queue()',
-          href: '/reference/jvm/v0/queues/queue',
-        },
-        {
-          title: 'queue.send()',
-          href: '/reference/jvm/v0/queues/queue-send',
-        },
-        {
-          title: 'queue.receive()',
-          href: '/reference/jvm/v0/queues/queue-receive',
-        },
-      ],
-    },
-    {
-      title: 'Secrets',
-      links: [
-        {
-          title: 'secret()',
-          href: '/reference/jvm/v0/secrets/secret',
-        },
-        {
-          title: 'secret.put()',
-          href: '/reference/jvm/v0/secrets/secret-put',
-        },
-        {
-          title: 'secret.version()',
-          href: '/reference/jvm/v0/secrets/secret-version',
-        },
-        {
-          title: 'secret.latest()',
-          href: '/reference/jvm/v0/secrets/secret-latest',
-        },
-        {
-          title: 'secret.version.access()',
-          href: '/reference/jvm/v0/secrets/secret-version-access',
-        },
-      ],
-    },
-    {
-      title: 'Storage',
-      links: [
-        {
-          title: 'bucket()',
-          href: '/reference/jvm/v0/storage/bucket',
-        },
-        {
-          title: 'bucket.on()',
-          href: '/reference/jvm/v0/storage/bucket-on',
-        },
-        {
-          title: 'bucket.file()',
-          href: '/reference/jvm/v0/storage/bucket-file',
-        },
-        {
-          title: 'bucket.files()',
-          href: '/reference/jvm/v0/storage/bucket-files',
-        },
-        {
-          title: 'file.read()',
-          href: '/reference/jvm/v0/storage/bucket-file-read',
-        },
-        {
-          title: 'file.write()',
-          href: '/reference/jvm/v0/storage/bucket-file-write',
-        },
-        {
-          title: 'file.delete()',
-          href: '/reference/jvm/v0/storage/bucket-file-delete',
-        },
-        {
-          title: 'file.getDownloadUrl()',
-          href: '/reference/jvm/v0/storage/bucket-file-downloadurl',
-        },
-        {
-          title: 'file.getUploadUrl()',
-          href: '/reference/jvm/v0/storage/bucket-file-uploadurl',
-        },
-      ],
-    },
-    {
-      title: 'Schedules',
-      links: [
-        {
-          title: 'schedule()',
-          href: '/reference/jvm/v0/schedule/schedule',
-        },
-        {
-          title: 'schedule.every()',
-          href: '/reference/jvm/v0/schedule/schedule-every',
-        },
-        {
-          title: 'schedule.cron()',
-          href: '/reference/jvm/v0/schedule/schedule-cron',
+          href: '/reference/python/v1/websocket/websocket-send',
         },
       ],
     },
@@ -1729,8 +966,8 @@ const fullNav: FullNav = {
           href: '/reference/providers/aws/apis',
         },
         {
-          title: 'Collections',
-          href: '/reference/providers/aws/collections',
+          title: 'Key Value Store',
+          href: '/reference/providers/aws/keyvalue',
         },
         {
           title: 'Queues',
@@ -1770,8 +1007,8 @@ const fullNav: FullNav = {
           href: '/reference/providers/azure/apis',
         },
         {
-          title: 'Collections',
-          href: '/reference/providers/azure/collections',
+          title: 'Key Value Stores',
+          href: '/reference/providers/azure/keyvalue',
         },
         {
           title: 'Queues',
@@ -1811,8 +1048,8 @@ const fullNav: FullNav = {
           href: '/reference/providers/gcp/apis',
         },
         {
-          title: 'Collections',
-          href: '/reference/providers/gcp/collections',
+          title: 'Key Value Stores',
+          href: '/reference/providers/gcp/keyvalue',
         },
         {
           title: 'Queues',

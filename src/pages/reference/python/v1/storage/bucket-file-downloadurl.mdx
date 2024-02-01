@@ -48,7 +48,7 @@ Nitric.run()
 ```python
 from nitric.resources import api, bucket
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 
 main_api = api('main')
 images = bucket('images').allow('reading')

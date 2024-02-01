@@ -8,7 +8,7 @@ Subscribes to a topic.
 ```python
 from nitric.resources import topic
 from nitric.application import Nitric
-from nitric.faas import EventContext
+from nitric.context import EventContext
 
 updates = topic("updates")
 
@@ -34,7 +34,7 @@ Nitric.run()
 ```python
 from nitric.resources import topic
 from nitric.application import Nitric
-from nitric.faas import EventContext
+from nitric.context import EventContext
 
 updates = topic("updates")
 

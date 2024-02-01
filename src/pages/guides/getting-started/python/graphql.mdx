@@ -24,8 +24,8 @@ Here's a video of this guide built with Node.js:
 ## Prerequisites
 
 - [Pipenv](https://pypi.org/project/pipenv/) - for simplified dependency management
-- The [Nitric CLI](/guides/getting-started/v0/installation)
-- An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
+- The [Nitric CLI](/guides/getting-started/installation)
+- _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account
 
 ## Getting started
 
@@ -52,7 +52,7 @@ pipenv install --dev
 The scaffolded project should have the following structure:
 
 ```text
-+--functions/
++--services/
 |  +-- hello.py
 +--nitric.yaml
 +--Pipfile
@@ -68,13 +68,7 @@ Start the Nitric server to emulate cloud services on your machine:
 nitric start
 ```
 
-Next, in a new terminal window, you can run your application:
-
-```bash
-pipenv run dev
-```
-
-If everything is working as expected you can now delete all files in the `functions/` folder, we'll create new functions in this guide.
+If everything is working as expected you can now delete all files in the `services/` folder, we'll create new services in this guide.
 
 ## Build the GraphQL Schema
 
@@ -86,7 +80,7 @@ Let's first add the [Ariadne library](https://ariadnegraphql.org/)
 pipenv install ariadne
 ```
 
-Create a new file named 'graphql.py' in the functions folder.
+Create a new file named 'graphql.py' in the services folder.
 We can then import our dependencies, and write out the schema.
 
 ```python
@@ -112,7 +106,6 @@ type_defs = gql("""
   }
 
   type Query {
-    getProfiles: [Profile]
     getProfile(pid: String!): Profile
   }
 
@@ -123,15 +116,15 @@ type_defs = gql("""
 """)
 ```
 
-## Define a Collection
+## Define a Key Value store
 
-Lets define a collections resource for the resolvers get/set data from.
+Lets define a key value store resource for the resolvers get/set data from.
 
 ```python
-from nitric.resources import api, collection
+from nitric.resources import api, kv
 from nitric.application import Nitric
 
-profiles = collection('profiles').allow('reading','writing')
+profiles = kv('profiles').allow('getting','setting')
 ```
 
 ## Create Resolvers
@@ -143,7 +136,7 @@ query = QueryType()
 mutation = MutationType()
 ```
 
-We can then use the collection within these functions. Each resolver will receive a parent and info arguments, as well as any query or mutation's arguments as keyword arguments.
+We can then use the key value store within these services. Each resolver will receive a parent and info arguments, as well as any query or mutation's arguments as keyword arguments.
 
 An example of this is converting the GraphQL query function into Python:
 
@@ -154,6 +147,7 @@ updateProfile(pid: String!, profile: ProfileInput!): Profile
 ```python
 @mutation.field("updateProfile")
 async def update_profiles(obj, info, pid, profile):
+  pass
 ```
 
 ## Create a profile
@@ -161,13 +155,12 @@ async def update_profiles(obj, info, pid, profile):
 ```python
 @mutation.field("createProfile")
 async def resolve_create_profile(obj, info, profile):
+  pid = str(uuid4())
 
-    pid = str(uuid4())
+  p = { 'pid': pid, 'name': profile['name'], 'age': profile['age'], 'home': profile['home'] }
+  await profiles.set(pid, p)
 
-    p = { 'pid': pid, 'name': profile['name'], 'age': profile['age'], 'home': profile['home'] }
-    await profiles.doc(pid).set(p)
-
-    return p
+  return p
 ```
 
 ## Update a profile
@@ -175,31 +168,14 @@ async def resolve_create_profile(obj, info, profile):
 ```python
 @mutation.field("updateProfile")
 async def update_profiles(obj, info, pid, profile):
+  profile = await profiles.get(pid)
+  if profile is None:
+    return { 'msg': f'Profile with id {pid} not found.'}
 
-    try:
-        await profiles.doc(pid).get()
-    except:
-        return { 'msg': f'Profile with id {pid} not found.'}
+  p = { 'pid': pid, 'name': profile['name'], 'age': profile['age'], 'home': profile['home'] }
+  await profiles.doc(pid).set(p)
 
-    p = { 'pid': pid, 'name': profile['name'], 'age': profile['age'], 'home': profile['home'] }
-    await profiles.doc(pid).set(p)
-
-    return p
-```
-
-## Get all profiles
-
-```python
-@query.field("getProfiles")
-async def resolve_get_profiles(obj, info):
-
-    results = await profiles.query().fetch()
-
-    r = []
-    for docs in results.documents:
-        r.append(docs.content)
-
-    return r
+  return p
 ```
 
 ## Get a profile by its ID
@@ -207,23 +183,27 @@ async def resolve_get_profiles(obj, info):
 ```python
 @query.field("getProfile")
 async def resolve_get_profile(obj, info, pid):
-
-    p = await profiles.doc(pid).get()
-    return { 'pid': pid, 'name': p.content['name'], 'age': p.content['age'], 'home': p.content['home'] }
+  profile = await profiles.get(pid)
+  return { 'pid': pid, 'name': profile['name'], 'age': profile['age'], 'home': profile['home'] }
 ```
 
 ## GraphQL Handler
 
-We'll define an api to put our handler in. This api will only have one endpoint, which will handle all the requests.
+We'll define an API to put our handler in. This API will only have one endpoint, which will handle all the requests.
 
 First load the schema with our queries and mutations.
 
 ```python
+from nitric.resources import kv, api
+from nitric.application import Nitric
+
 graph_api = api("public")
 schema = make_executable_schema(type_defs, [query, mutation])
+
+Nitric.run()
 ```
 
-Then add the api handler.
+Then add the API handler.
 
 ```python
 @graph_api.post("/")
@@ -251,15 +231,13 @@ Start your Nitric server:
 nitric start
 ```
 
-Then test out your application with the following command in a new terminal:
+Then test out your service with the following command in a new terminal:
 
 ```bash
 pipenv run dev
 ```
 
-Once it starts, the application will be able to receive requests via the API port.
-
-Pressing `ctrl + c` will end the application.
+Once it starts, the service will be able to receive requests via the API port.
 
 ## GraphQL Queries
 
@@ -376,16 +354,10 @@ Setup your credentials and any other cloud specific configuration:
 - [Azure](/reference/providers/azure)
 - [GCP](/reference/providers/gcp)
 
-Create a stack - a collection of resources identified in your project which will be deployed.
+Create your stack. This is an environment configuration file for the cloud provider for which your project will be deployed.
 
 ```bash
 nitric stack new
-```
-
-```
-? What should we name this stack? dev
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
 ```
 
 You can then deploy using the following command:

@@ -47,15 +47,15 @@ schedule('send-reminder').every('3 minutes', async (ctx) => {
 ### Create a Schedule with multiple middleware/handlers
 
 ```javascript
-import { schedule } from '@nitric/sdk'
+import { schedule, EventContext } from '@nitric/sdk'
 
 // Create a middleware to handle report generation
-async function generateReport(ctx: faas.EventContext): Promise<void> {
+async function generateReport(ctx: EventContext): Promise<void> {
   // code which generates a report
 }
 
 // Create a middleware to handle notifications
-async function sendNotification(ctx: faas.EventContext): Promise<void> {
+async function sendNotification(ctx: EventContext): Promise<void> {
   // code which sends a notification
 }
 

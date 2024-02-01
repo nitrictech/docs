@@ -22,24 +22,24 @@ const libraries = [
     description: 'View full API for Python',
     logo: logoPython,
   },
-  {
-    href: '/reference/csharp/v0',
-    name: 'C# .NET',
-    description: 'View full API for C# .NET',
-    logo: logoCsharp,
-  },
-  {
-    href: '/reference/go/v0',
-    name: 'Go',
-    description: 'View full API for Go',
-    logo: logoGo,
-  },
-  {
-    href: '/reference/jvm/v0',
-    name: 'JVM',
-    description: 'View full API for JVM',
-    logo: logoJava,
-  },
+  // {
+  //   href: '/reference/csharp/v0',
+  //   name: 'C# .NET',
+  //   description: 'View full API for C# .NET',
+  //   logo: logoCsharp,
+  // },
+  // {
+  //   href: '/reference/go/v0',
+  //   name: 'Go',
+  //   description: 'View full API for Go',
+  //   logo: logoGo,
+  // },
+  // {
+  //   href: '/reference/jvm/v0',
+  //   name: 'JVM',
+  //   description: 'View full API for JVM',
+  //   logo: logoJava,
+  // },
 ]
 
 export function Libraries() {

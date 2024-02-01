@@ -163,7 +163,7 @@ const broadcast = async (data) => {
   const connectionList = await connections.get('connections')
 
   await Promise.all(
-    connectionList.forEach(async (connection) => {
+    connectionList.map(async (connection) => {
       // Send message to a connection
       await socket.send(connection.connectionId, data)
     })
