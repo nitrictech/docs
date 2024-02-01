@@ -124,7 +124,7 @@ profileApi.post('/profiles', async (ctx) => {
 
   // Set a JSON HTTP response
   ctx.res.json({
-    msg: `Profile with id $[id] created.`,
+    msg: `Profile with id ${id} created.`,
   })
 })
 ```
@@ -144,7 +144,7 @@ profileApi.get('/profiles/:id', async (ctx) => {
     console.error(error)
     ctx.res.status = 404
     ctx.res.json({
-      msg: `Profile with id $[id] not found.`,
+      msg: `Profile with id ${id} not found.`,
     })
   }
 })
@@ -162,7 +162,7 @@ profileApi.delete('/profiles/:id', async (ctx) => {
   } catch (error) {
     ctx.res.status = 404
     ctx.res.json({
-      msg: `Profile with id $[id] not found.`,
+      msg: `Profile with id ${id} not found.`,
     })
   }
 })
