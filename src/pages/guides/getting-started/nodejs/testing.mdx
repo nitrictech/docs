@@ -26,7 +26,7 @@ export const imageBucket = bucket('images')
 
 We want to be able to test individual API route handler callbacks without running the entire API or application. Since testing anonymous functions in the route callback can be difficult, we'll separate the callbacks into their own files to help with isolation.
 
-```javascript {{ label: "services/hello.js" }}
+```javascript {{ label: "handlers/hello.js" }}
 import { imageBucket } from '../resources/buckets'
 
 const imageWriter = imageBucket.for('writing')
