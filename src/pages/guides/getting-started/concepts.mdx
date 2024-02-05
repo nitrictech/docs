@@ -73,8 +73,8 @@ A typical `nitric.yaml` file looks like this:
 ```yaml {{ tag: 'nitric.yaml' }}
 name: my-project
 services:
-  - match: functions/*.ts
-    start: ts-node {{filename}}
+  - match: ./services/*.ts
+    start: yarn dev:services %s
 ```
 
 ## Stack files
