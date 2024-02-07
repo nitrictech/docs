@@ -74,7 +74,7 @@ out of the box that can be used to do this or you can use any other store or dat
 <CodeGroup>
 
 ```javascript
-import { websocket, collection } from '@nitric/sdk'
+import { websocket, kv } from '@nitric/sdk'
 
 const socket = websocket('socket')
 const connections = kv('connections').for('getting', 'setting', 'deleting')
