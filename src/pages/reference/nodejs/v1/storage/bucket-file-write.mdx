@@ -32,7 +32,8 @@ import { bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').for('writing')
 
-const logo = assets.file('images/logo.png')
+const txt = assets.file('my-text-file.txt')
+const buffer = Buffer.from('My Test File...')
 
-await logo.write(someImageData)
+await txt.write(buffer)
 ```
