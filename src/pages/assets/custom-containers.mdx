@@ -1,4 +1,4 @@
-export const description = 'Customize how functions are built into containers'
+export const description = 'Customize how services are built into containers'
 
 # Custom containers
 
@@ -6,7 +6,7 @@ Nitric builds applications by identifying its entrypoints, which are typically d
 
 The Nitric CLI decides how to build those containers based on the programming language used by the entrypoint, for example if the entrypoint is a python file it will be built using Nitric's python dockerfile template. These dockerfile templates are designed with compatibility and ease of use in mind, this makes building applications convenient but may not provide additional dependencies your code relies on the ideal optimization for your application.
 
-If you need to customize the docker container build process to add dependencies, optimize container size or some other reason, you can create a custom dockerfile template to be used by some or all of the entrypoints (functions) in your application.
+If you need to customize the docker container build process to add dependencies, optimize container size or some other reason, you can create a custom dockerfile template to be used by some or all of the entrypoints (services) in your application.
 
 ## Specify a dockerfile template
 
@@ -20,10 +20,10 @@ To use a custom dockerfile template update the `handlers` configuration as shown
 ```yaml {{ tag: "nitric.yaml" }}
 name: custom-example
 handlers:
-  - match: functions/*.ts
+  - match: services/*.ts
     type: default
     docker:
-      # All entrypoints in the functions directory will be built using this dockerfile
+      # All entrypoints in the services directory will be built using this dockerfile
       file: ./docker/node.dockerfile
       args: {}
 # Enable preview feature
@@ -31,7 +31,7 @@ preview-features:
   - dockerfile
 ```
 
-In this example we're specifying that any handlers that match the path `functions/*.ts` will use a custom `node.dockerfile` for their dockerfile template.
+In this example we're specifying that any handlers that match the path `services/*.ts` will use a custom `node.dockerfile` for their dockerfile template.
 
 ## Create a dockerfile template
 

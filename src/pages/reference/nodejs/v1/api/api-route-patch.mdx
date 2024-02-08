@@ -23,7 +23,7 @@ customerRoute.patch((ctx) => {
 
 <Properties>
   <Property name="middleware" required type="HttpMiddleware | HttpMiddleware[]">
-    One or more middleware functions to use as the handler for HTTP requests.
+    One or more middleware services to use as the handler for HTTP requests.
     Handlers can be sync or async
   </Property>
   <Property name="opts" type="object">
@@ -56,9 +56,9 @@ customerRoute.patch((ctx) => {
 })
 ```
 
-### Chain functions as a single method handler
+### Chain services as a single method handler
 
-When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
+When multiple services are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
 ```javascript
 import { api } from '@nitric/sdk'

@@ -5,7 +5,7 @@ export const description =
 
 ## What we'll be doing
 
-In this guide we will create an API using serverless functions, then use [PlanetScale](https://planetscale.com) and [Prisma](https://www.prisma.io/) for data persistence. We will then deploy the application to the cloud of your choice, [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com), or [Azure](https://azure.microsoft.com).
+In this guide we will create an API using serverless services, then use [PlanetScale](https://planetscale.com) and [Prisma](https://www.prisma.io/) for data persistence. We will then deploy the application to the cloud of your choice, [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com), or [Azure](https://azure.microsoft.com).
 
 To keep things light, the API we'll create generates memes by allowing uploads of image templates, then generating new images with overlaid text. Feel free to adapt the steps for any other API you'd like to build.
 
@@ -306,7 +306,7 @@ The incoming `context` object _(which has been destructured into `req` and `res`
 
 ### Create the meme service
 
-Similar to the `templates` example, we'll create another new file `functions/memes.ts`, with the code below:
+Similar to the `templates` example, we'll create another new file `services/memes.ts`, with the code below:
 
 ```typescript {{ label: "services/memes.ts" }}
 import Jimp from 'jimp'

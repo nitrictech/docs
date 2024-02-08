@@ -63,7 +63,7 @@ To apply these handler group configurations, we need to create the groups. That'
 ```yaml {{ tag: "nitric.yaml" }}
 name: my-project
 services:
-  - match: functions/*.ts
+  - match: services/*.ts
     start: ts-node {{filename}}
     type: default
   - match: custom/*.ts

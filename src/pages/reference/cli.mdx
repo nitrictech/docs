@@ -57,12 +57,12 @@ nitric new
 
 This will walk through creating the project, including the name and what template you want to start from.
 
-The command will also create a `nitric.yaml` file. This file contains the configuration for your project. The services key is list of globs for your functions. The services should point to all services you want to run or deploy.
+The command will also create a `nitric.yaml` file. This file contains the configuration for your project. The services key is list of globs for your services. The services should point to all services you want to run or deploy.
 
 ```yaml
 name: my-project
 services:
-  - match: functions/*.ts
+  - match: services/*.ts
     start: ts-node {{filename}}
 ```
 
@@ -71,7 +71,7 @@ If you want to specify a specific type of service that matches your stack config
 ```yaml
 name: my-project
 services:
-  - match: functions/*.ts
+  - match: services/*.ts
     start: ts-node {{filename}}
     type: default
   - match: custom/*.ts
@@ -102,7 +102,7 @@ region: us-east-1
   following the guide in the cloud's section in the reference documentation.
 </Note>
 
-If you want to specify different configuration for your functions you can use the following syntax:
+If you want to specify different configuration for your services you can use the following syntax:
 
 ```yaml
 # nitric.my-aws-stack.yaml

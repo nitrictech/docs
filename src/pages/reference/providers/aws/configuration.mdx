@@ -42,13 +42,13 @@ apis:
     domains:
       - api.example.com
 
-# Configure your deployed functions/services
+# Configure your deployed services
 config:
-  # How functions without a type will be deployed
+  # How services without a type will be deployed
   default:
     # configure a sample rate for telemetry (between 0 and 1) e.g. 0.5 is 50%
     telemetry: 0
-    # configure functions to deploy to AWS lambda
+    # configure services to deploy to AWS lambda
     lambda: # Available since v0.26.0
       # set 128MB of RAM
       # See lambda configuration docs here:

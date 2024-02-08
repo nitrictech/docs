@@ -24,7 +24,7 @@ import { bucket } from '@nitric/sdk'
 export const imageBucket = bucket('images')
 ```
 
-We want to be able to test individual API route handler callbacks without running the entire API or application. Since testing anonymous functions in the route callback can be difficult, we'll separate the callbacks into their own files to help with isolation.
+We want to be able to test individual API route handler callbacks without running the entire API or application. Since testing anonymous services in the route callback can be difficult, we'll separate the callbacks into their own files to help with isolation.
 
 ```javascript {{ label: "handlers/hello.js" }}
 import { imageBucket } from '../resources/buckets'
@@ -57,7 +57,7 @@ helloApi.post('/:name', handleAddImage)
 
 #### Asserting
 
-Next create a `test` directory, then add the example test file as shown below. The logic being split into separate functions makes it very easy to test our API.
+Next create a `test` directory, then add the example test file as shown below. The logic being split into separate services makes it very easy to test our API.
 
 In this example we're testing that if the function is passed a context with a set name parameter, it should return the same context with a body added to the response. Since the `handleHello` function is async we use an async test and await the results.
 
@@ -99,7 +99,7 @@ We'll go over it section by section, but here is the full example:
       bucketSpy = jest.spyOn(BucketResource.prototype, 'for');
 
       // Doing dynamic imports to mock the BucketResource.for
-      const helloModule = await import('../functions/hello');
+      const helloModule = await import('../services/hello');
       handleAddImage = helloModule.handleAddImage;
     })
 
@@ -129,7 +129,7 @@ We'll go over it section by section, but here is the full example:
 
 Let's start by looking at the mocks. These are done in the beforeAll function, which means it happens before all the tests are run.
 
-The functions to create a bucket `for` and write to it `write` make gRPC calls on the backend. This means that they need to be mocked, since during unit testing the Nitric server is not available to call, and will result in an UNAVAILABLE error. We mock these using jest's `spyOn` functions on the object prototype.
+The services to create a bucket `for` and write to it `write` make gRPC calls on the backend. This means that they need to be mocked, since during unit testing the Nitric server is not available to call, and will result in an UNAVAILABLE error. We mock these using jest's `spyOn` functions on the object prototype.
 
 This works fine for mocking the `write` method as it's within the `handleAddImage` function, but the `for` method is called when the module is imported. For that reason, we add a dynamic import after `for` is mocked.
 
@@ -146,7 +146,7 @@ beforeAll(async () => {
   bucketSpy = jest.spyOn(BucketResource.prototype, 'for');
 
   // Doing dynamic imports to include the BucketResource.for method mock
-  const helloModule = await import('../functions/hello');
+  const helloModule = await import('../services/hello');
   handleAddImage = helloModule.handleAddImage;
 })
 ```
@@ -241,7 +241,7 @@ export const imageBucket = bucket('images')
 
 Next, let's create an API by defining our routes and their callback functions:
 
-```javascript {{ label: "functions/hello.js" }}
+```javascript {{ label: "services/hello.js" }}
 import { imageBucket } from '../resources/buckets'
 import { helloApi } from '../resources/apis'
 

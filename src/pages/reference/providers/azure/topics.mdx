@@ -17,7 +17,7 @@ The following resources are created when deploying Topics to Azure:
 During deployment the Nitric CLI builds your Topics as follows:
 
 - The Topic definitions as Event Grid Topics
-- Subscriber functions are built into container images
+- Subscriber services are built into container images
 - Container images are pushed to [Azure Container Registry](https://azure.microsoft.com/en-us/services/container-registry/) as private images
 - Container Apps are setup to run the containers
 - Container Apps are subscribed to defined Topics in Event Grid

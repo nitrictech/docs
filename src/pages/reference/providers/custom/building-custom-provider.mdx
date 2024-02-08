@@ -4,7 +4,7 @@ export const description = 'How to build a custom provider using Nitric'
 
 This guide is for those that are interested in building their own custom provider to provide support for a missing cloud, or implementing their own internal development platform, or just curious to know how it all works. Nitric's main goal is to keep a general interface for interacting with cloud resources, regardless of the provider. This abstraction enables portability, developer efficiency, and standardizes the way that code is written across teams.
 
-Nitric's cloud providers are individual plugins separated into a runtime and a deployment provider for AWS, GCP, and Azure. The [runtime provider](#runtime) is concerned with converting abstract SDK calls into direct cloud API calls. The [deployment provider](#deployments) takes a resource specification of topics, buckets, and functions and converts them into cloud resources. The providers, CLI, and SDK all work together to make the application deploy and run.
+Nitric's cloud providers are individual plugins separated into a runtime and a deployment provider for AWS, GCP, and Azure. The [runtime provider](#runtime) is concerned with converting abstract SDK calls into direct cloud API calls. The [deployment provider](#deployments) takes a resource specification of topics, buckets, and services and converts them into cloud resources. The providers, CLI, and SDK all work together to make the application deploy and run.
 
 ![Nitric Architecture](/docs/images/guides/custom-provider/custom-provider-architecture.png)
 

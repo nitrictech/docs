@@ -41,7 +41,7 @@ Nitric.run()
 
 ## Routing
 
-You can define routes and handler functions for incoming requests using methods on your API objects.
+You can define routes and handler services for incoming requests using methods on your API objects.
 
 For example, you can declare a route that handles `POST` requests using the `post()` method. When declaring routes you provide the path to match and a callback that will serve as the handler for matching requests.
 
@@ -296,9 +296,9 @@ async def get_planet(ctx):
 
 ## Defining Middleware
 
-Behavior that's common to several APIs or routes can be applied using middleware functions. Multiple middleware can also be composed to create a cascading set of steps to perform on incoming requests or outgoing responses.
+Behavior that's common to several APIs or routes can be applied using middleware services. Multiple middleware can also be composed to create a cascading set of steps to perform on incoming requests or outgoing responses.
 
-Middleware functions look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
+Middleware services look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
 
 <CodeGroup>
 

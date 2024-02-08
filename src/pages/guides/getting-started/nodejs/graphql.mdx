@@ -52,7 +52,7 @@ npm install
 The scaffolded project should have the following structure:
 
 ```text
-+--functions/
++--services/
 |  +-- hello.ts
 +--node_modules/
 |  ...
@@ -69,11 +69,11 @@ npm run dev
 
 <Note>
   The `dev` script starts the Nitric Server using `nitric start`, which provides
-  local interfaces to emulate cloud resources, then runs your functions and
+  local interfaces to emulate cloud resources, then runs your services and
   allows them to connect.
 </Note>
 
-If everything is working as expected you can now delete all files in the `functions/` folder, we'll create new functions in this guide.
+If everything is working as expected you can now delete all files in the `services/` folder, we'll create new services in this guide.
 
 ## Build the GraphQL Schema
 
@@ -86,7 +86,7 @@ npm install graphql
 npm install uuidv4
 ```
 
-Create a new file named 'graphql.ts' in the functions folder.
+Create a new file named 'graphql.ts' in the services folder.
 We can then import `buildSchema`, and write out the schema.
 
 ```typescript
@@ -155,9 +155,9 @@ const resolvers = {
 }
 ```
 
-These functions don't exist, so we'll have to define them.
+These services don't exist, so we'll have to define them.
 
-We can then use the collection within these functions. Each resolver will receive an `args` object which holds the graphql arguments from the query.
+We can then use the collection within these services. Each resolver will receive an `args` object which holds the graphql arguments from the query.
 
 An example of this is converting the GraphQL query function:
 
@@ -266,7 +266,7 @@ npm run dev
 
 <Note>
   The `dev` script in the template starts the Nitric Server using `nitric start`
-  and runs your functions.
+  and runs your services.
 </Note>
 
 Once it starts, the application will be able to receive requests via the API port.
