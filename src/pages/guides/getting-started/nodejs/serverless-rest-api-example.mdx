@@ -12,7 +12,6 @@ The API will provide the following routes:
 | `GET`      | /profiles/[id] | Get a specific profile by its Id |
 | `POST`     | /profiles      | Create a new profile             |
 | `DELETE`   | /profiles/[id] | Delete a profile                 |
-| `PUT`      | /profiles/[id] | Update a profile                 |
 
 There is also an extended section of the guide that adds file operations using a Nitric [bucket](/storage) to store and retrieve profile pictures. The extension adds these routes to the API:
 
@@ -101,9 +100,36 @@ Here we're creating an API named `public` and key value store named `profiles`, 
   value store` resource uses DynamoDB in AWS or FireStore on Google Cloud.
 </Note>
 
+We will need some helper functions to serialize and deserialize our profiles for the keyvalue store.
+
+```javascript {{ tag: "services/profiles.ts" }}
+// Helper function to get current profiles
+async function getProfiles() {
+  try {
+    const serializedList = await profiles.get('profiles')
+    return serializedList && serializedList['ids']
+      ? JSON.parse(serializedList['ids'])
+      : []
+  } catch (error) {
+    await profiles.set('profiles', { ids: [] })
+    return []
+  }
+}
+
+// Helper function to update profiles list
+async function updateProfiles(profiles) {
+  try {
+    const updatedSerializedList = JSON.stringify(profiles)
+    await profiles.set('profiles', { ids: updatedSerializedList })
+  } catch (error) {
+    console.error('Error updating profiles:', error)
+  }
+}
+```
+
 ### Create profiles with POST
 
-Let's start adding features that allow our API consumers to work with profile data.
+Next we will add features that allow our API consumers to work with profile data.
 
 <Note>
   You could separate some or all of these handlers into their own files if you
@@ -115,12 +141,14 @@ profileApi.post('/profiles', async (ctx) => {
   let id = uuid()
   const { name, age, homeTown } = ctx.req.json()
 
-  // Store the new profile in the profiles collection
-  await profiles.set(id, {
+  const profileList = await getProfiles()
+  profileList.push({
+    id,
     name,
     age,
     homeTown,
   })
+  await updateProfiles(profileList)
 
   // Set a JSON HTTP response
   ctx.res.json({
@@ -136,12 +164,14 @@ profileApi.get('/profiles/:id', async (ctx) => {
   const { id } = ctx.req.params
 
   try {
-    // Retrieve and return the profile data
-    const profile = await profiles.get(id)
-    return ctx.res.json(profile)
+    const profileList = await getProfiles()
+    const profile = profileList.find((profile) => profile.id === id)
+    if (profile != undefined) {
+      ctx.res.json(profile)
+    } else {
+      throw new Error()
+    }
   } catch (error) {
-    // log errors and return a Not Found status.
-    console.error(error)
     ctx.res.status = 404
     ctx.res.json({
       msg: `Profile with id ${id} not found.`,
@@ -155,10 +185,9 @@ profileApi.get('/profiles/:id', async (ctx) => {
 ```javascript {{ tag: "services/profiles.ts" }}
 profileApi.delete('/profiles/:id', async (ctx) => {
   const { id } = ctx.req.params
-
-  // Delete the profile
   try {
-    profiles.delete(id)
+    const profileList = await getProfiles()
+    await updateProfiles(profileList.filter((profile) => profile.id !== id))
   } catch (error) {
     ctx.res.status = 404
     ctx.res.json({
