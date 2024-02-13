@@ -7,13 +7,16 @@ Publishes a topic.
 
 ```python
 from nitric.resources import topic
+from nitric.application import Nitric
 from nitric.api import Event
 
 updates = topic('updates').allow('publishing')
 
-await updates.publish(Event(
-  payload={'something': 'amazing happened'}
-))
+await updates.publish({
+  'something': 'amazing happened'
+})
+
+Nitric.run()
 ```
 
 ## Parameters
@@ -41,16 +44,18 @@ await updates.publish(Event(
 
 ```python
 from nitric.resources import topic
+from nitric.application import Nitric
 from nitric.api import Event
 
 updates = topic('updates').allow('publishing')
 
-await updates.publish(Event(
-  payload={'something': 'amazing happened'}
-))
+await updates.publish({
+  'something': 'amazing happened'
+})
+
+Nitric.run()
 ```
 
 ## Notes
 
-- If an id is not supplied with an event, a UUID(v4) will be generated for you.
-- A function may subscribe to OR publish to a topic but not both. This is in place to stop functions calling themselves infinitely.
+- A service may subscribe to OR publish to a topic but not both. This is in place to stop services calling themselves infinitely.

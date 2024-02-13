@@ -7,12 +7,17 @@ Creates a new Schedule to run a function on a defined frequency.
 
 ```python
 from nitric.resources import schedule
-from nitric.faas import EventContext
+from nitric.application import Nitric
+from nitric.context import EventContext
 
-@schedule('run-a-report', '1 days')
+report_schedule = schedule('run-a-report')
+
+@report_schedule.every('1 days')
 async def process_transactions(ctx: EventContext):
   # do some processing
   pass
+
+Nitric.run()
 ```
 
 ## Parameters
@@ -26,7 +31,9 @@ async def process_transactions(ctx: EventContext):
     Using `every` as a keyword argument can help with readability of schedules, e.g.
 
 ```python
-@schedule("backup", every="2 days")
+backup = schedule("backup")
+
+@backup.every("2 days")
 ```
 
   </Property>
@@ -34,11 +41,12 @@ async def process_transactions(ctx: EventContext):
 
 ### Examples:
 
-| description      | example schedule                    |
-| ---------------- | ----------------------------------- |
-| Every day        | @schedule("work", every="day")      |
-| Every 14 hours   | @schedule("work", every="14 hours") |
-| Every 30 minutes | @schedule("work", "30 minutes")     |
+| description      | example schedule                       |
+| ---------------- | -------------------------------------- |
+| Every day        | @schedule("work").every("day")         |
+| Every 14 hours   | @schedule("work").every("14 hours")    |
+| Every 30 minutes | @schedule("work").every("30 minutes")  |
+| Every day (cron) | @schedule("work").cron("0 0 \* \* \*") |
 
 <Note>
   Singular rates will be automatically converted. e.g. "day" will be interpreted
@@ -49,13 +57,7 @@ async def process_transactions(ctx: EventContext):
 
 - Schedules do not require access permissions to be specified.
 
-- Currently, local execution and testing of schedules is not supported.
-
-- You can directly test the functions that respond to scheduled triggers by sending HTTP requests to those functions with the same payload as defined in your schedule.
-
-<Note>Coming Soon</Note>
-
-- Local and manual testing of schedules is on our backlog to be completed soon.
+- Local execution and testing can be done with the local dashboard.
 
 ## Examples
 
@@ -63,20 +65,30 @@ async def process_transactions(ctx: EventContext):
 
 ```python
 from nitric.resources import schedule
-from nitric.faas import EventContext
+from nitric.application import Nitric
+from nitric.context import EventContext
 
-@schedule('process-transactions', '5 minutes')
+processor = schedule("processor")
+
+@processor.every('5 minutes')
 async def process_transactions(ctx: EventContext):
   # do some processing
   pass
 
-@schedule('send-reminder', '3 hours')
+@processor.every('3 hours')
 async def process_transactions(ctx: EventContext):
   # do some processing
   pass
 
-@schedule('send-reports', '1 days')
+@processor.every('1 days')
 async def process_transactions(ctx: EventContext):
   # do some processing
   pass
+
+@processor.cron('0 0 * * *')
+async def process_transactions(ctx: EventContext)
+  # do some processing
+  pass
+
+Nitric.run()
 ```

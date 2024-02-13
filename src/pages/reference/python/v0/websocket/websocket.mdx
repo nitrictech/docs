@@ -7,8 +7,11 @@ Creates a new Websocket API.
 
 ```python
 from nitric.resources import websocket
+from nitric.application import Nitric
 
 public_websocket = websocket("public")
+
+Nitric.run()
 ```
 
 ## Parameters
@@ -28,6 +31,9 @@ public_websocket = websocket("public")
 
 ```python
 from nitric.resources import websocket
+from nitric.application import Nitric
 
 chat_websocket = websocket("chat")
+
+Nitric.run()
 ```

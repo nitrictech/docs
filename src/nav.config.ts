@@ -1596,8 +1596,8 @@ const fullNav: FullNav = {
           href: '/reference/csharp/v0/schedule/schedule-every',
         },
         {
-          title: 'NewTopic()',
-          href: '/reference/go/v0/topic/topic',
+          title: 'schedule.cron()',
+          href: '/reference/csharp/v0/schedule/schedule-cron',
         },
       ],
     },
