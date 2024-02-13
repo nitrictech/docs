@@ -117,9 +117,9 @@ async function getProfiles() {
 }
 
 // Helper function to update profiles list
-async function updateProfiles(profiles) {
+async function updateProfiles(profileList) {
   try {
-    const updatedSerializedList = JSON.stringify(profiles)
+    const updatedSerializedList = JSON.stringify(profileList)
     await profiles.set('profiles', { ids: updatedSerializedList })
   } catch (error) {
     console.error('Error updating profiles:', error)
