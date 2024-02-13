@@ -50,7 +50,7 @@ export function VersionSelect({
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Stable releases</SelectLabel>
+          <SelectLabel>Releases</SelectLabel>
           {versions.map((version) => (
             <SelectItem
               key={version}
