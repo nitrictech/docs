@@ -5,7 +5,7 @@ export const description =
 
 ## What we'll be doing
 
-Creating a Stripe checkout backed by a Nitric API and collections. This API will be completely compatible with Stripe's checkout components, and can be deployed to the cloud of you choice.
+Creating a Stripe checkout backed by a Nitric API. This API will be completely compatible with Stripe's checkout components, and can be deployed to the cloud of you choice.
 
 1. Add stripe to the project
 2. Create handler for checkout sessions
@@ -43,7 +43,7 @@ npm install
 The scaffolded project should have the following structure:
 
 ```text
-+--functions/
++--services/
 |  +-- hello.ts
 +--node_modules/
 |  ...
@@ -62,7 +62,7 @@ npm install stripe
 
 We will also add a utils file for our stripe object and some environment variables. We'll put ours in `common/utils.ts`
 
-```ts
+```ts {{ label: 'common/utils.ts' }}
 import Stripe from 'stripe'
 import dotenv from 'dotenv'
 
@@ -95,7 +95,7 @@ We'll first create a handler for creating checkout sessions. We will define a `P
 
 There is also an optional choice for a success and cancel url for where to redirect the user after the checkout has been completed.
 
-```typescript
+```typescript {{ label: 'services/hello.ts' }}
 import { api } from '@nitric/sdk'
 import { stripe } from '../common/utils'
 
@@ -134,7 +134,7 @@ Creating a webhook that connects to stripe means that you can have reactive logi
 
 This route is simple, but quite long. We will break it down, but here is the full example:
 
-```typescript
+```typescript {{ label: 'services/hello.ts' }}
 import { api } from '@nitric/sdk';
 import Stripe from 'stripe';
 import { stripe, stripeWebhookSecret } from '../common/utils';
@@ -142,9 +142,9 @@ import { stripe, stripeWebhookSecret } from '../common/utils';
 ...
 
 paymentApi.post('/webhook', async (ctx) => {
-    const buf = Buffer.from(ctx.req.data);
-    const sig = ctx.req.headers["stripe-signature"];
-    let event: Stripe.Event;
+  const buf = Buffer.from(ctx.req.data);
+  const sig = ctx.req.headers["stripe-signature"];
+  let event: Stripe.Event;
 
     try {
         if (!sig || !stripeWebhookSecret) {
@@ -157,23 +157,29 @@ paymentApi.post('/webhook', async (ctx) => {
         ctx.res.body = `Webhook Error: ${err.message}`;
         return ctx;
     }
-
-    try {
-        switch (event.type) {
-            case "checkout.session.completed":
-                ctx.res.status = 200;
-                ctx.res.body = `Successfully completed checkout`
-                handleOrder(event.data);
-                break;
-            default:
-                throw new Error(`Unhandled event of type: ${event.type}`);
-        }
-    } catch (err) {
-        console.log(err);
-        ctx.res.status = 400;
-        ctx.res.body = 'Webhoook error: "Webhook handler failed. View logs"';
-    }
+    event = stripe.webhooks.constructEvent(buf, sig, stripeWebhookSecret)
+  } catch (err) {
+    ctx.res.status = 400;
+    ctx.res.body = `Webhook Error: ${err.message}`;
     return ctx;
+  }
+
+  try {
+    switch (event.type) {
+      case "checkout.session.completed":
+        ctx.res.status = 200;
+        ctx.res.body = `Successfully completed checkout`
+        handleOrder(event.data);
+        break;
+      default:
+        throw new Error(`Unhandled event of type: ${event.type}`);
+    }
+  } catch (err) {
+    console.log(err);
+    ctx.res.status = 400;
+    ctx.res.body = 'Webhoook error: "Webhook handler failed. View logs"';
+  }
+  return ctx;
 });
 
 const handleOrder = (session: Stripe.Event.Data) => {
@@ -183,7 +189,7 @@ const handleOrder = (session: Stripe.Event.Data) => {
 
 The first step is to verify that the event signature is correct, thus validating that the event came from Stripe. We extract the stripe-signature from the request headers, then compare the signature against our Stripe webhook secret. The webhook secret comes from the environment variables and can be set when we start testing. We use the `stripe.webhooks.constructEvent` function for doing this comparison. It will throw an error if it runs into an error.
 
-```typescript
+```typescript {{ label: 'services/hello.ts' }}
 const buf = Buffer.from(ctx.req.data)
 const sig = ctx.req.headers['stripe-signature']
 let event: Stripe.Event
@@ -203,7 +209,7 @@ try {
 
 After the event is constructed, we can write the logic to handle it based on the type. This will compare the event type in a switch statement. In this case, we only have the event type `checkout.session.completed`, but this is where you would put further event handling features.
 
-```typescript
+```typescript {{ label: 'services/hello.ts' }}
 try {
   switch (event.type) {
     case 'checkout.session.completed':
@@ -227,9 +233,9 @@ Once we know its a checkout completed event, the session data is passed to the `
 ```typescript
 function handleOrder() {
   // Fulfill the order however you want. Some ideas are:
-  // 1. Add the order to a Nitric collection. https://nitric.io/collections
-  // 2. Send data down your shipping pipeline.
-  // 3. Send the user a notification. https://nitric.io/guides/twilio
+  // 1. Send data down your shipping pipeline.
+  // 2. Send the user a notification. https://nitric.io/docs/guides/getting-started/nodejs/twilio
+  // 3. Connect your own database and store the order details. https://nitric.io/docs/guides/getting-started/nodejs/byo-database
 }
 ```
 
@@ -237,18 +243,11 @@ function handleOrder() {
 
 Now that you have an API defined with a handler and the webhook, it's time to test it out locally.
 
-Test out your application with the `npm run dev` command:
+Test out your application with the `nitric start` command:
 
 ```bash
-npm run dev
+nitric start
 ```
-
-<Note>
-  The `dev` script in the template starts the Nitric Server using `nitric start`
-  and runs your functions.
-</Note>
-
-Pressing `ctrl + a + k` will end the application.
 
 ### Testing the Checkout Session
 
@@ -279,7 +278,7 @@ We can then trigger events in a separate terminal, using:
 stripe trigger checkout.session.completed
 ```
 
-We should then see in our `strip listen` terminal logs that it has received requests.
+We should then see in our `stripe listen` terminal logs that it has received requests.
 
 ## Deploy to the cloud
 
@@ -291,16 +290,10 @@ Setup your credentials and any other cloud specific configuration:
 - [Azure](/reference/providers/azure)
 - [GCP](/reference/providers/gcp)
 
-Create a stack - a collection of resources identified in your project which will be deployed.
+Create your stack. This is an environment configuration file for the cloud provider for which your project will be deployed.
 
 ```bash
 nitric stack new
-```
-
-```
-? What should we name this stack? dev
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
 ```
 
 To deploy the stack run the following command:

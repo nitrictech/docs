@@ -1,11 +1,11 @@
 export const description =
-  'Add functions, queues, events or secrets to Supabase apps using the Nitric framework'
+  'Add services, queues, events or secrets to Supabase apps using the Nitric framework'
 
 # Extend Supabase Apps with Nitric
 
 ## What we'll be doing
 
-In this guide we'll use the Nitric Framework with a [Supabase](https://supabase.com/) project to build serverless functions that can respond to Insert, Update or Delete operations in your Supabase tables.
+In this guide we'll use the Nitric Framework with a [Supabase](https://supabase.com/) project to build serverless services that can respond to Insert, Update or Delete operations in your Supabase tables.
 
 This example sends welcome emails to new user profiles with [SendGrid](https://sendgrid.com/), but you could adapt the steps for other situations, like:
 
@@ -16,7 +16,7 @@ This example sends welcome emails to new user profiles with [SendGrid](https://s
 You could even go the other way and build powerful SaaS APIs with Nitric, connected to your Supabase backend. Or, use Nitric [schedules](/schedules) to clean up old data in batches.
 
 <Note>
-  Want guides for the topics above? Great! [come and tell
+  Want guides for the topics above? Great! [Come and tell
   us](https://github.com/nitrictech/nitric/discussions) what you need and we'll
   write it for you.
 </Note>
@@ -26,6 +26,7 @@ You could even go the other way and build powerful SaaS APIs with Nitric, connec
 - [Node.js](https://nodejs.org/en/download/)
 - The [Nitric CLI](/guides/getting-started/installation)
 - An account with [Supabase](https://app.supabase.io)
+- An account with [SendGrid](https://sendgrid.com)
 
 ## Create a Supabase project
 
@@ -114,21 +115,21 @@ For this project we'll also want to install the `@sendgrid/mail` and `dotenv` pa
 npm install @sendgrid/mail dotenv
 ```
 
-The starter template comes with an example function called `functions/hello.js`, let's rename that file to `functions/welcome.js` so it matches what we're going to build.
+The starter template comes with an example service called `services/hello.js`, let's rename that file to `services/welcome.js` so it matches what we're going to build.
 
 ```bash
-mv functions/hello.js functions/welcome.js
+mv services/hello.js services/welcome.js
 ```
 
 With those steps complete, your project should look like this:
 
 ![example project structure](/docs/images/guides/nitric-and-supabase/project_structure.png)
 
-## Update the welcome function
+## Update the welcome service
 
-Open `functions/welcome.js` in your editor and replace the file contents with this:
+Open `services/welcome.js` in your editor and replace the file contents with this:
 
-```javascript
+```javascript {{ label: 'services/welcome.js' }}
 import 'dotenv/config'
 import sendgrid from '@sendgrid/mail'
 import { api } from '@nitric/sdk'
@@ -172,13 +173,13 @@ Let's breakdown what the code above is doing.
 
 First, we import `dotenv/config` so that environment variables are automatically loaded from `.env` files.
 
-```javascript
+```javascript {{ label: 'services/welcome.js' }}
 import 'dotenv/config'
 ```
 
 Next, we setup the SendGrid client by providing it with an API key stored in the `SENDGRID_API_KEY` environment variable, which we'll create later. We also retrieve the sender email address from the `SENDGRID_SENDER` variable, which is used as the _from_ email address.
 
-```javascript
+```javascript {{ label: 'services/welcome.js' }}
 import sendgrid from '@sendgrid/mail'
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
@@ -187,24 +188,24 @@ const sender = process.env.SENDGRID_SENDER
 
 After that, we create a new Nitric API and set it up with handler for _POST_ requests to `/welcome`. This handler checks for an API key in the request headers, which helps make sure that only _our_ Supabase project can make these requests. Then, it pulls the user emails address and name from the `record` object in the POST request body and uses those values to send the user an email.
 
-```javascript
-import { api } from "@nitric/sdk";
+```javascript {{ label: 'services/welcome.js' }}
+import { api } from '@nitric/sdk'
 
-const payApi = api("notifications");
+const payApi = api('notifications')
 
-payApi.post("/welcome", async ({ req, res }) => {
-  if (req.headers["x-api-key"] !== process.env.API_KEY) {
-    res.status = "401";
-    res.body = "Unauthorized";
-    return;
+payApi.post('/welcome', async ({ req, res }) => {
+  if (req.headers['x-api-key'] !== process.env.API_KEY) {
+    res.status = '401'
+    res.body = 'Unauthorized'
+    return
   }
 
-  const { email, name } = req.json().record;
+  const { email, name } = req.json().record
 
   const msg = {
     to: email,
     from: sender,
-    subject: "Welcome to Nitric!",
+    subject: 'Welcome to Nitric!',
     text: `Hi ${name}, thanks for joining, we're so glad you're here!`,
     html: `
       <h1>
@@ -216,10 +217,10 @@ payApi.post("/welcome", async ({ req, res }) => {
         Thanks for joining, we're so glad you're here!
       </p>
     `,
-  };
-  await sendgrid.send(msg);
-  console.log(`welcome sent to: ${email}`);
-}
+  }
+  await sendgrid.send(msg)
+  console.log(`welcome sent to: ${email}`)
+})
 ```
 
 ## Create the .env file
@@ -228,7 +229,7 @@ There are plenty of ways to setup environment variables, but we'll keep it simpl
 
 In the root of your Nitric project create a new file named `.env`, then copy the following into the file:
 
-```
+```txt
 # SendGrid Details
 SENDGRID_API_KEY=
 SENDGRID_SENDER=
@@ -247,18 +248,13 @@ Update these variables in this file with your own values.
 
 ## Run the API locally
 
-At this point everything in your Nitric app should be ready to go. You can test that it's all working by running the app locally and making POST requests to the API route.
+At this point everything in your Nitric services should be ready to go. You can test that it's all working by running the services locally and making POST requests to the API route.
 
-Start the app:
+Start the services:
 
 ```bash
-npm run dev
+nitric start
 ```
-
-<Note>
-  _Note:_ the `dev` script in the template starts the Nitric Server using
-  `nitric start` and runs your functions.
-</Note>
 
 In another terminal or HTTP client, send POST requests to the API:
 
@@ -270,7 +266,7 @@ curl -X POST http://localhost:4001/welcome \
    -d '{"record":{"email":"you@example.com","name":"Your Name"}}'
 ```
 
-Running this code should result in an email being sent to your inbox.
+Sending this request should result in an email being sent to your inbox.
 
 <Note>
   If you don't receive the email, make sure to check your _junk_ folder. They
@@ -279,11 +275,11 @@ Running this code should result in an email being sent to your inbox.
 
 ## Bringing it all together
 
-Here we are in the home stretch! For this last section we'll get your Supabase app connected to your Nitric app, so that every new record in the `profiles` table results in a welcome email being sent to the user.
+Here we are in the home stretch! For this last section we'll get your Supabase app connected to your Nitric services, so that every new record in the `profiles` table results in a welcome email being sent to the user.
 
 You could deploy your app to a cloud provider like AWS, but for development, let's just connect your Supabase project to your local development server. One neat tool for doing this is called _Ngrok_. Ngrok can forward requests from a public URL to a port on your local machine.
 
-You can install ngrok with npm like so:
+You can install `ngrok` with npm like so:
 
 ```bash
 npm install --save-dev ngrok
@@ -312,9 +308,9 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
                               0       0       0.00    0.00    0.00    0.00
 ```
 
-You can see in this example that the URL `http://61f5-194-193-39-11.ngrok.io` is being forward to port `4001` on my local machine. When you run it, the URL will be different, so take note of that value.
+You can see in this example that the URL `http://61f5-194-193-39-11.ngrok.io` is being forwarded to port `4001` on my local machine. When you run it, the URL will be different, so take note of that value.
 
-In Supabase navigate to _database_, _Function Hooks_, then click _Create Function Hook_
+In Supabase, navigate to _database_, _Function Hooks_, then click _Create Function Hook_
 
 <Note>
   You'll need to enable Function Hooks first if this is the first time you're

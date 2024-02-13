@@ -9,34 +9,21 @@ Nitric provides unique names for specific message types. Messages sent to a _Top
 
 ## Topics & Events
 
-Topics and Events provide a scalable, decoupled, way to communicate between functions and containers.
+Topics and Events provide a scalable, decoupled, way to communicate between services.
 
 ### Topics
 
-A topic is a named target where events can be published. They can be thought of as a subject that your functions can discuss with each other.
+A topic is a named target where events can be published. They can be thought of as a subject that your services can discuss with each other.
 
-They're awesome for allowing serverless functions to communicate in a stateless, scalable and highly decoupled way.
+They're awesome for allowing serverless services to communicate in a stateless, scalable and highly decoupled way.
 
 ### Events
 
-Events are messages that can be published on a topic. They can be thought of as a notification that is sent to say that something new has happened. Events have the following properties:
-
-<Properties>
-  <Property name="id" type="string">
-    Unique id to apply to the event. If an id isn't provided, a version 4 UUID
-    will be auto-generated instead.
-  </Property>
-  <Property name="payload" required type="Map<string, any>">
-    Payload to be sent with the event.
-  </Property>
-  <Property name="payloadType" type="string">
-    The type of payload supplied.
-  </Property>
-</Properties>
+Events are messages that can be published on a topic. They can be thought of as a notification that is sent to say that something new has happened.
 
 ### Subscriptions
 
-A subscription is something that listens to a topic. You can think of it as a channel that notifies your application when something new arrives on the topic.
+A subscription is something that listens to a topic. You can think of it as a channel that notifies your services when something new arrives on the topic.
 
 ### Creating a Topic
 
@@ -61,69 +48,11 @@ user_created_topic = topic("user-created").allow("publishing")
 Nitric.run()
 ```
 
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-class User
-{
-  public string Name { get; set; }
-  public string Email { get; set; }
-}
-
-var userCreatedTopic = Nitric.Topic<User>("user-created").With(TopicPermission.Publishing);
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.TopicPermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var userCreatedTopic = Nitric.INSTANCE.topic("user-created").with(TopicPermission.Publishing);
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.TopicPermission
-
-fun main() {
-	val userCreatedTopic = Nitric.topic("user-created").with(TopicPermission.Publishing);
-
-	Nitric.run();
-}
-```
-
 </CodeGroup>
 
 ### Publishing an event
 
-To send an event to a topic and notify all subscribers, use the `publish()` method on the topic reference. The function must have permissions to `publish` to the topic.
+To send an event to a topic and notify all subscribers, use the `publish()` method on the topic reference. The service must have permissions to `publish` to the topic.
 
 The below example publishes a message to a topic called `user-created`.
 
@@ -135,9 +64,7 @@ import { topic } from '@nitric/sdk'
 const userCreatedTopic = topic('user-created').for('publishing')
 
 await userCreatedTopic.publish({
-  payload: {
-    email: 'new.user@example.com',
-  },
+  email: 'new.user@example.com',
 })
 ```
 
@@ -147,112 +74,11 @@ from nitric.application import Nitric
 
 user_created_topic = topic("user-created").allow("publishing")
 
-# Both of these will publish the same event
 await user_created_topic.publish({
   "email": "new.user@example.com"
 })
 
-await user_created_topic.publish({
-  "payload": {
-    "email": "new.user@example.com"
-  }
-})
-
 Nitric.run()
-```
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  updates, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
-  if err != nil {
-    return
-  }
-
-  updates.Publish(context.TODO(), &events.Event{
-    Payload: map[string]interface{}{
-      "email": "new.user@example.com",
-    },
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-
-class User
-{
-  public string Name { get; set; }
-  public string Email { get; set; }
-}
-
-var updates = Nitric.Topic<User>("updates").With(TopicPermission.Publishing);
-
-updates.Publish(new User { Name = "John Smith", Email = "john.smith@email.com" });
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.api.events.v0.NitricEvent;
-import io.nitric.resources.TopicPermission;
-
-import java.util.Map;
-public class Application {
-	public static void main(String[] args) {
-		var userCreatedTopic = Nitric.INSTANCE.topic("user-created").with(TopicPermission.Publishing);
-
-		// Specifying a map will produce a Nitric event with a generated ID and 'none' payloadType
-		userCreatedTopic.publish(Map.of(
-			"email", "new.user@example.com"
-		));
-
-		// You can also specify a Nitric event with a set ID and payload type
-		userCreatedTopic.publish(new NitricEvent(
-			Map.of("email", "new.user@example.com"), // payload
-			"0F95D606-61ED-4B6E-B82C-80490948F7D7", // ID
-			"none" // payload type
-		));
-
-		Nitric.INSTANCE.run();
-	}
-}
-
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.api.events.v0.NitricEvent
-import io.nitric.resources.TopicPermission
-
-fun main() {
-	val userCreatedTopic = Nitric.topic("user-created").with(TopicPermission.Publishing);
-
-	// Both of these will publish the same event
-	userCreatedTopic.publish(mapOf(
-		"email" to "new.user@example.com"
-	))
-
-	userCreatedTopic.publish(NitricEvent(
-		payload = mapOf(
-			"email" to "new.user@example.com"
-		)
-	))
-
-	Nitric.run()
-}
 ```
 
 </CodeGroup>
@@ -293,108 +119,18 @@ async def updates_sub(ctx):
 Nitric.run()
 ```
 
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  updates := nitric.NewTopic("updates")
-
-  updates.Subscribe(func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
-    email := ctx.Request.Data()
-
-    err := sendWelcomeEmail(email)
-
-    return ctx, err
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-
-class User
-{
-  public string Name { get; set; }
-  public string Email { get; set; }
-}
-
-var updates = Nitric.Topic<User>("updates");
-
-updates.Subscribe(ctx =>
-{
-  var profile = ctx.Req.Payload();
-
-  SendWelcomeEmail(profile.Email);
-
-  return ctx;
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-
-class NewUserEvent {
-	String email;
-	public NewUserEvent(String email) {
-		this.email = email;
-	}
-}
-
-public class Application {
-	public static void main(String[] args) {
-		var userCreatedTopic = Nitric.INSTANCE.topic("user-created");
-
-		userCreatedTopic.subscribe((ctx) -> {
-			var request = ctx.getReq().json(NewUserEvent.class);
-			sendWelcomeEmail(request);
-			return ctx;
-		});
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-
-data class NewUserEvent(val email: String)
-
-fun main() {
-	val userCreatedTopic = Nitric.topic("user-created")
-
-	userCreatedTopic.subscribe { ctx ->
-		val request = ctx.req.json<NewUserEvent>()
-		sendWelcomeEmail(request)
-		ctx
-	}
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
 ### Limitations on Publishing and Subscribing
 
 Nitric won't allow you to request publishing access and set up a subscriber in the same function.
 
-The limitation exists to protect you from infinite loops in deployed functions where a function calls itself indirectly via a topic. These sorts of mistakes can lead to large unintentional cloud charges - something you probably want to avoid.
+The limitation exists to protect you from infinite loops in deployed services where a service calls itself indirectly via a topic. These sorts of mistakes can lead to large unintentional cloud charges - something you probably want to avoid.
 
 <CodeGroup>
 
 ```javascript
-// this is invalid
+// 🚫 this is invalid
 import { topic } from '@nitric/sdk'
 
 const loopTopic = topic('infinite').for('publishing')
@@ -405,7 +141,7 @@ loopTopic.subscribe(async (ctx) => {
 ```
 
 ```python
-# this is invalid
+# 🚫 this is invalid
 from nitric.resources import topic
 from nitric.application import Nitric
 
@@ -416,94 +152,6 @@ async def danger(ctx):
   await loop_topic.publish(dict())
 
 Nitric.run()
-```
-
-```go
-// this is invalid
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  loopTopic, err := nitric.NewTopic("updates").With(nitric.TopicPublishing)
-  if err != nil {
-    return
-  }
-
-  loopTopic.Subscribe(func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
-    err := loopTopic.Publish(ctx.Request.Context(), map[string]interface{}{})
-
-    return ctx, err
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-// this is invalid
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-class User
-{
-  public string Name { get; set; }
-  public string Email { get; set; }
-}
-
-var loopTopic = Nitric.Topic<User>("updates").With(TopicPermission.Publishing);
-
-updates.Subscribe(ctx =>
-{
-  loopTopic.Publish(new User { Name = "John Smith", Email = "john.smith@email.com" });
-
-  return ctx;
-});
-
-Nitric.Run();
-```
-
-```java
-// this is invalid
-import io.nitric.Nitric;
-import io.nitric.resources.TopicPermission;
-
-import java.util.Map;
-
-public class Application {
-	public static void main(String[] args) {
-		var loopTopic = Nitric.INSTANCE.topic("updates").with(TopicPermission.Publishing);
-
-		loopTopic.subscribe((ctx) -> {
-			loopTopic.publish(Map.of())
-			return ctx;
-		})
-
-		Nitric.INSTANCE.run();
-	}
-}
-
-```
-
-```kotlin
-// this is invalid
-import io.nitric.Nitric
-import io.nitric.resources.TopicPermission
-
-fun main() {
-	val loopTopic = Nitric.topic("updates").with(TopicPermission.Publishing)
-
-	loopTopic.subscribe { ctx ->
-		loopTopic.publish(mapOf())
-		ctx
-	}
-
-	Nitric.run()
-}
 ```
 
 </CodeGroup>
@@ -565,89 +213,6 @@ async def process_update(ctx):
 Nitric.run()
 ```
 
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  updates := nitric.NewTopic("updates")
-
-  updates.Subscribe(func(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventContext, error) {
-    if isDuplicate(ctx.Request) {
-      return ctx, nil
-    }
-    // Not a duplicate, process the event
-    // ...
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-
-var updates = Nitric.Topic<User>("updates");
-
-updates.Subscribe(ctx =>
-{
-  if (isDuplicate(ctx.Req))
-  {
-    return ctx;
-  }
-  // Not a duplicate, process the event
-  // ...
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.TopicPermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var updates = Nitric.INSTANCE.topic("updates");
-
-		updates.subscribe((ctx) -> {
-			if (isDuplicate(ctx.getReq())) {
-				return ctx;
-			}
-			// Not a duplicate, process the event
-			// ...
-		})
-
-		Nitric.INSTANCE.run();
-	}
-}
-
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.TopicPermission
-
-fun main() {
-	val loopTopic = Nitric.topic("updates")
-
-	loopTopic.subscribe { ctx ->
-		if (isDuplicate(ctx.req)) {
-			return@subscribe ctx
-		}
-		// Not a duplicate, process the event
-		// ...
-	}
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
 <Note>
@@ -659,34 +224,21 @@ You can read more about idempotent subscribers and patterns to handle it [here](
 
 ## Queues
 
-Queues and Tasks provide a scalable, decoupled, way for functions and containers to communicate asynchronously.
+Queues and Tasks provide a scalable, decoupled, way for services to communicate asynchronously.
 
 ### Queues
 
-Queues are named targets where tasks can be sent. They can be thought of as a group of related tasks. Unlike [topics](#topics), tasks sent to a queue won't automatically trigger functions to process them. Instead, functions receive tasks from the queue by requesting them.
+Queues are named targets where tasks can be sent. They can be thought of as a group of related tasks. Unlike [topics](#topics), tasks sent to a queue won't automatically trigger services to process them. Instead, services receive tasks from the queue by requesting them.
 
 This makes queues awesome for processing work asynchronously, often paired with [schedules](/schedules) to support batch workloads, like nightly processes.
 
 ### Tasks
 
-A task is a form of message that can be sent to a queue. They can be thought of as a collection of data that has been queued for processing some time in the future. Tasks have the following properties:
-
-<Properties>
-  <Property name="id" type="string">
-    Unique id to apply to the task. If an id isn't provided, a version 4 UUID
-    will be auto-generated instead.
-  </Property>
-  <Property name="payload" required type="T">
-    Payload to be sent with the task. Has type T.
-  </Property>
-  <Property name="payloadType" type="string">
-    The type of payload supplied.
-  </Property>
-</Properties>
+A task is a form of message that can be sent to a queue. They can be thought of as a collection of data that has been queued for processing some time in the future.
 
 ### Creating a Queue
 
-Nitric allows you to define named queues. When defining queues, you can give the function permissions for receiving and sending.
+Nitric allows you to define named queues. When defining queues, you can give the service permissions for receiving and sending.
 
 Here's an example of how to create a queue with permissions for sending and receiving.
 
@@ -702,66 +254,8 @@ const transactionQueue = queue('transactions').for('sending', 'receiving')
 from nitric.resources import queue
 
 transaction_queue = queue("transactions").allow("sending", "receiving")
-```
 
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  transactionQueue, err := nitric.NewQueue("transactions").With(nitric.QueueSending, nitric.QueueReceiving)
-  if err != nil {
-    fmt.Prinln(err)
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-class TransactionRequest
-{
-  public string Message { get; set; }
-}
-
-var transactionQueue = Nitric.Queue<TransactionRequest>("transactions").With(QueuePermission.Sending, QueuePermission.Receiving);
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.QueuePermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var transactionQueue = Nitric.INSTANCE.queue("transactions")
-			.with(QueuePermission.Send, QueuePermission.Receive);
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.QueuePermission
-
-fun main() {
-	val transactionQueue = Nitric.queue("transactions")
-		.with(QueuePermission.Send, QueuePermission.Receive)
-
-	Nitric.run()
-}
+Nitric.run()
 ```
 
 </CodeGroup>
@@ -780,9 +274,7 @@ import { queue } from '@nitric/sdk'
 const transactionQueue = queue('transactions').for('sending')
 
 await transactionQueue.send({
-  payload: {
-    message: 'hello world',
-  },
+  message: 'hello world',
 })
 ```
 
@@ -791,97 +283,11 @@ from nitric.resources import queue
 
 transaction_queue = queue("transactions").allow("sending")
 
-# Both will send the same event
 await transaction_queue.send({
   "message": "hello world"
 })
 
-await transaction_queue.send({
-  "payload": {
-    "message": "hello world"
-  }
-})
-```
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-  "github.com/nitrictech/go-sdk/api/queues"
-)
-
-func main() {
-  transactionQueue, err := nitric.NewQueue("transactions").With(nitric.QueueSending)
-  if err != nil {
-    fmt.Prinln(err)
-    return
-  }
-
-  _, err := queue.Send(context.TODO(), []*queues.Task{
-    {
-      Payload: map[string]interface{}{
-        "message": "hello world",
-      },
-    },
-  })
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Queue;
-using Nitric.Sdk.Resources;
-
-class TransactionRequest
-{
-  public string Message { get; set; }
-}
-
-var transactionQueue = Nitric.Queue<TransactionRequest>("transactions").With(QueuePermission.Sending, QueuePermission.Receiving);
-
-transactionQueue.Send(new TransactionRequest { Message = "hello world" });
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.QueuePermission;
-
-import java.util.Map;
-
-public class Application {
-	public static void main(String[] args) {
-		var transactionQueue = Nitric.INSTANCE.queue("transactions")
-			.with(QueuePermission.Send);
-
-		transactionQueue.send(Map.of("message", "hello world"));
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.QueuePermission
-
-fun main() {
-	val transactionQueue = Nitric.queue("transactions")
-		.with(QueuePermission.Send)
-
-	transationQueue.send(mapOf("message" to "hello world"))
-
-	Nitric.run()
-}
+Nitric.run()
 ```
 
 </CodeGroup>
@@ -897,14 +303,10 @@ const transactionQueue = queue('transactions').for('sending')
 
 await transactionQueue.send([
   {
-    payload: {
-      message: 'batch task 1',
-    },
+    message: 'batch task 1',
   },
   {
-    payload: {
-      message: 'batch task 2',
-    },
+    message: 'batch task 2',
   },
 ])
 ```
@@ -926,113 +328,19 @@ await transaction_queue.send([
 Nitric.run()
 ```
 
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-  "github.com/nitrictech/go-sdk/api/queues"
-)
-
-func main() {
-  transactionQueue, err := nitric.NewQueue("transactions").With(nitric.QueueSending)
-  if err != nil {
-    return
-  }
-
-  _, err := queue.Send(context.TODO(), []*queues.Task{
-    {
-      Payload: map[string]interface{}{
-        "message": "batch task 1",
-      },
-    },
-    {
-      Payload: map[string]interface{}{
-        "message": "batch task 2",
-      },
-    }
-  })
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Queue;
-using Nitric.Sdk.Resources;
-
-class TransactionRequest
-{
-  public string Message { get; set; }
-}
-
-var transactionQueue = Nitric.Queue<TransactionRequest>("transactions").With(QueuePermission.Sending, QueuePermission.Receiving);
-
-transactionQueue.Send(
-  new TransactionRequest { Message = "batch task 1" },
-  new TransactionRequest { Message = "batch task 2" }
-);
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.QueuePermission;
-
-import java.util.Map;
-
-public class Application {
-	public static void main(String[] args) {
-		var transactionQueue = Nitric.INSTANCE.queue("transactions")
-			.with(QueuePermission.Send);
-
-		transactionQueue.send(
-			new Task(Map.of("message", "batch task 1"), "task-1", "1", "none"),
-			new Task(Map.of("message", "batch task 2"), "task-2", "2", "none")
-		);
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.QueuePermission
-
-fun main() {
-	val transactionQueue = Nitric.queue("transactions")
-		.with(QueuePermission.Send)
-
-	transationQueue.send(
-		Task(payload = mapOf("message" to "batch task 1")),
-		Task(payload = mapOf("message" to "batch task 2"))
-	)
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
 ### Receiving and Acknowledging Tasks
 
-When you pull tasks from a queue, they are not immediately deleted. Instead, they are leased, which means they are temporarily hidden from other functions until the lease expires.
+When you pull tasks from a queue, they are not immediately deleted. Instead, they are leased, which means they are temporarily hidden from other services until the lease expires.
 
 To ensure proper handling, your code should mark a task as `complete` after successfully processing it. This action permanently removes the task from the queue.
 
-If a lease expires before a task is marked as complete, the task will reappear in the queue and can be received again. This mechanism prevents tasks from getting lost in case of failures. If your function encounters an error or is terminated before completing a task, it will automatically reappear in the queue, ready to be processed again.
+If a lease expires before a task is marked as complete, the task will reappear in the queue and can be received again. This mechanism prevents tasks from getting lost in case of failures. If your service encounters an error or is terminated before completing a task, it will automatically reappear in the queue, ready to be processed again.
 
 By following this approach, you can ensure reliable task processing and minimize the chances of losing tasks in failure scenarios.
 
-The below example receives 10 tasks using the `receive()` method, and then acknowledges the task as completed using the `complete()` method. You'll note that the function has permissions to receive messages.
+The below example receives 10 tasks using the `receive()` method, and then acknowledges the task as completed using the `complete()` method. You'll note that the service has permissions to receive messages.
 
 <CodeGroup>
 
@@ -1065,105 +373,6 @@ for task in tasks:
 
   # acknowledge when the task is complete
   await task.complete()
-```
-
-```go
-import (
-  "context"
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  transactionQueue, err := nitric.NewQueue("transactions").With(nitric.QueueReceiving)
-  if err != nil {
-    return
-  }
-
-  ctx := context.TODO()
-
-  // Receive up to 10 tasks from the queue
-  tasks, err := transactions.Receive(ctx, 10)
-  if err != nil {
-    return
-  }
-
-  for _, t := range tasks {
-    fmt.Println(t.Task().ID)
-
-    t.Complete(ctx)
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Queue;
-using Nitric.Sdk.Resources;
-
-class TransactionRequest
-{
-  public string Message { get; set; }
-}
-
-var transactionQueue = Nitric.Queue<TransactionRequest>("transactions").With(QueuePermission.Sending, QueuePermission.Receiving);
-
-var tasks = transactionQueue.Receive();
-
-tasks.ForEach(task => {
-  Console.WriteLine(task.Payload.Message);
-
-  task.Complete();
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.QueuePermission;
-
-import java.util.Map;
-
-public class Application {
-	public static void main(String[] args) {
-		var transactionQueue = Nitric.INSTANCE.queue("transactions")
-			.with(QueuePermission.Receive);
-
-		// Receive up to 10 tasks from the queue
-		var tasks = transactionQueue.receive(10);
-
-		tasks.forEach((task) -> {
-			System.out.println(task.getId());
-		});
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.QueuePermission
-
-fun main() {
-	val transactionQueue = Nitric.queue("transactions")
-		.with(QueuePermission.Receive)
-
-	// Receive up to 10 tasks from the queue
-	val tasks = transactionQueue.receive(10)
-
-	tasks.forEach { task ->
-		println(task.id)
-	}
-
-	Nitric.run()
-}
 ```
 
 </CodeGroup>

@@ -52,7 +52,7 @@ Follow our [installation guide](/guides/getting-started/installation) to set up 
 
 ### If projects don't have a nitric.yaml file, where do the resources get defined?
 
-All resources (topics, queues, collections, buckets, apis, api routes and methods, schedules and secrets) are defined by your code.
+All resources (topics, queues, key value stores, buckets, apis, api routes and methods, schedules and secrets) are defined by your service code.
 
 ```typescript
 // A topic named updates will be created on deploy
@@ -119,7 +119,7 @@ updates.subscribe(async (ctx) => {
 
 ### Complete refactoring example
 
-The example is a POST request of an API which creates a record in a Collection.
+The example is a POST request of an API which creates a record in a KV Store.
 
 We'll go from code, yaml, and OpenAPI to just code.
 
@@ -213,22 +213,21 @@ components:
 ```typescript
 // example.ts
 
-import { api, collection } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 import { uuid } from 'uuidv4'
 
 // Create an auto-scaling secure API
 const publicApi = api('public')
 
 // Access profile collection with permissions
-const examples = collection('examples').for('writing', 'reading')
+const examples = kv('examples').for('getting', 'setting')
 
 // Create profile with post method
 publicApi.post('/examples', async (ctx) => {
-  let name = ctx.req.json().name
-  let description = ctx.req.json().age
+  const { name, description } = ctx.req.json()
 
   // Create the new profile
-  await examples.doc(name).set({ name, description })
+  await examples.set(name, description)
 })
 ```
 
@@ -243,6 +242,7 @@ publicApi.post('/examples', async (ctx) => {
 # nitric.yaml
 
 name: examples
-handlers:
-  - functions/*.ts
+services:
+  - match: functions/*.ts
+    start: ts-node {{filename}}
 ```

@@ -1,5 +1,9 @@
 @import './docsearch.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @layer base {
   :root {
     --shiki-color-text: theme('colors.white');
@@ -11,6 +15,66 @@
     --shiki-token-function: theme('colors.violet.300');
     --shiki-token-string-expression: theme('colors.emerald.300');
     --shiki-token-punctuation: theme('colors.zinc.200');
+
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
   }
 
   [inert] ::-webkit-scrollbar {
@@ -18,37 +82,42 @@
   }
 }
 
-:root {
-  color-scheme: dark;
-}
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 
-.video-container {
-  @apply relative w-full overflow-hidden rounded-xl border border-gray-700/50 pb-[56.25%];
-}
+  :root {
+    color-scheme: dark;
+  }
 
-.video-container iframe {
-  @apply absolute left-0 top-0 h-full w-full border-0;
-}
+  .video-container {
+    @apply relative w-full overflow-hidden rounded-xl border border-gray-700/50 pb-[56.25%];
+  }
 
-.prose :where(h4):not(:where([class~='not-prose'] *)) {
-  @apply font-semibold text-[var(--tw-prose-headings)];
-}
+  .video-container iframe {
+    @apply absolute left-0 top-0 h-full w-full border-0;
+  }
 
-.code-panel a {
-  color: var(--tw-prose-links);
-  -webkit-text-decoration: underline transparent;
-  text-decoration: underline transparent;
-  font-weight: 500;
-  transition-property: color, text-decoration-color;
-  transition-duration: 150ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
+  .prose :where(h4):not(:where([class~='not-prose'] *)) {
+    @apply font-semibold text-[var(--tw-prose-headings)];
+  }
 
-.code-panel a:hover {
-  color: var(--tw-prose-links-hover);
-  text-decoration-color: var(--tw-prose-links-underline);
-}
+  .code-panel a {
+    color: var(--tw-prose-links);
+    -webkit-text-decoration: underline transparent;
+    text-decoration: underline transparent;
+    font-weight: 500;
+    transition-property: color, text-decoration-color;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+  .code-panel a:hover {
+    color: var(--tw-prose-links-hover);
+    text-decoration-color: var(--tw-prose-links-underline);
+  }
+}

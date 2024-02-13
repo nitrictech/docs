@@ -2,13 +2,7 @@ export const description = 'Connect and manage websockets with Nitric'
 
 # Websockets
 
-Nitric provides support for serverless websockets. This feature allows you to connect client applications to your Nitric functions using websocket gateways such as AWS APIGateway.
-
-<Note>
-  The Websocket resource is currently only supported for Node.js and Go
-  projects. If you would like support for another language let us know:
-  https://github.com/nitrictech/nitric/issues
-</Note>
+Nitric provides support for serverless websockets. This feature allows you to connect client applications to your Nitric services using websocket gateways such as AWS APIGateway.
 
 <Note>
   Projects with websockets will only be deployable to AWS at the moment. If you
@@ -18,7 +12,7 @@ Nitric provides support for serverless websockets. This feature allows you to co
 
 ## Enabling Websocket support
 
-HTTP framework support is currently in Preview. To enable it in your project add the following to your `nitric.yaml` file
+Websocket support is currently in Preview. To enable it in your project add the following to your `nitric.yaml` file
 
 ```yaml
 preview-features:
@@ -49,230 +43,113 @@ socket.on('message', async (ctx) => {
 })
 ```
 
-```go
-import (
-  "fmt"
+```python
+from nitric.resources import websocket
+from nitric.application import Nitric
 
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-)
+socket = websocket("socket")
 
-func main() {
-  ws, err := nitric.NewWebsocket("public")
-  if err != nil {
-    return
-  }
+@socket.on("connect")
+async def on_connect(ctx):
+  # handle connections
 
-  ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-    // handle connections
-    return next(ctx)
-  })
+@socket.on("disconnect")
+async def on_disconnect(ctx):
+  # handle disconnections
 
-  ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-    // handle disconnections
-    return next(ctx)
-  })
+@socket.on("message")
+async def on_message(ctx):
+  # handle messages
 
-  ws.On(faas.WebsocketMessage, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-    // handle messages
-    return next(ctx)
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Function;
-
-var websocket = Nitric.Websocket("public");
-
-websocket.On(WebsocketEventType.Connected, ctx => {
-  // handle connections
-  return ctx;
-});
-
-websocket.On(WebsocketEventType.Disconnected, ctx => {
-  // handle disconnections
-  return ctx;
-});
-
-websocket.On(WebsocketEventType.Message, ctx => {
-  // handle message
-  return ctx;
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.faas.v0.WebsocketEventType;
-
-public class Application {
-	public static void main(String[] args) {
-		var websocket = Nitric.INSTANCE.websocket("public");
-
-		websocket.on(WebsocketEventType.Connect, (ctx) -> {
-			// handle connections
-			return ctx;
-		});
-
-		websocket.on(WebsocketEventType.Disconnect, (ctx) -> {
-			// handle disconnections
-			return ctx;
-		});
-
-		websocket.on(WebsocketEventType.Message, (ctx) -> {
-			// handle messages
-			return ctx;
-		});
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.faas.v0.WebsocketEventType
-
-fun main() {
-	val websocket = Nitric.websocket("public")
-
-	websocket.on(WebsocketEventType.Connect) { ctx ->
-		// handle connections
-		ctx
-	}
-
-	websocket.on(WebsocketEventType.Disconnect) { ctx ->
-		// handle disconnections
-		ctx
-	}
-
-	websocket.on(WebsocketEventType.Message) { ctx ->
-		// handle messages
-		ctx
-	}
-
-	Nitric.run()
-}
+Nitric.run()
 ```
 
 </CodeGroup>
 
 ## Managing connections
 
-Nitric connects your functions to a websocket interface, but it is up to you to manage the connections. Nitric provides `collections`
+Nitric connects your services to a websocket interface, but it is up to you to manage the connections. Nitric provides `kv`
 out of the box that can be used to do this or you can use any other store or database you like.
 
 <CodeGroup>
 
 ```javascript
-import { websocket, collection } from '@nitric/sdk'
+import { websocket, kv } from '@nitric/sdk'
 
-const socket = websocket('socket')
-const connections = collection('connections').for(
-  'reading',
-  'writing',
-  'deleting'
-)
+// Initialize KV store for connections and a WebSocket
+const kvStore = kv('connections').for('getting', 'setting', 'deleting')
+const socket = websocket('example-websocket')
 
+// Helper function to get current connections
+async function getCurrentConnections() {
+  try {
+    const serializedList = await kvStore.get('connections')
+    return serializedList && serializedList['ids']
+      ? JSON.parse(serializedList['ids'])
+      : []
+  } catch (error) {
+    console.error('Error getting current connections:', error)
+    return []
+  }
+}
+
+// Helper function to update connections list
+async function updateConnections(connections) {
+  try {
+    const updatedSerializedList = JSON.stringify(connections)
+    await kvStore.set('connections', { ids: updatedSerializedList })
+  } catch (error) {
+    console.error('Error updating connections:', error)
+  }
+}
+
+// Handle new connections
 socket.on('connect', async (ctx) => {
-  await connections.doc(ctx.req.connectionId).set({
-    // store any metadata related to the connection here
-    connectionId: ctx.req.connectionId,
-  })
+  const connections = await getCurrentConnections()
+  connections.push(ctx.req.connectionId)
+  await updateConnections(connections)
 })
 
+// Handle disconnections
 socket.on('disconnect', async (ctx) => {
-  await connections.doc(ctx.req.connectionId).delete()
+  const disconnectedId = ctx.req.connectionId
+  const connections = await getCurrentConnections()
+  const index = connections.indexOf(disconnectedId)
+
+  if (index > -1) {
+    connections.splice(index, 1)
+    await updateConnections(connections)
+  }
 })
 ```
 
-```go
-import (
-  "fmt"
+```python
+from nitric.resources import websocket
+from nitric.application import Nitric
 
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-)
+socket = websocket("socket")
+connections = kv("connections").for("getting", "setting", "deleting")
 
-func main() {
-  ws, err := nitric.NewWebsocket("public")
-  if err != nil {
-    return
-  }
-
-  connections, err := nitric.NewCollection("connections").With(nitric.CollectionEverything...)
-  if err != nil {
-    return
-  }
-
-  ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-    err := connections.Doc(ctx.Request.ConnectionID()).Set(ctx.Request.Context(), map[string]interface{}{
-      // store any metadata related to the connection here
-      "connectionId": ctx.Request.ConnectionID(),
-    })
-    if err != nil {
-      return ctx, err
+@socket.on("connect")
+async def on_connect(ctx):
+  connection_list = await connections.get("connections")
+  await connections.set([
+    *connection_list,
+    {
+      # Store any metadata related to the connection here
+      "connectionId": ctx.req.connection_id
     }
+  ])
 
-    return next(ctx)
-  })
+@socket.on("disconnect")
+async def on_disconnect(ctx):
+  connection_list = await connections.get('connections')
+  await connections.set(
+    'connections',
+    filter(lambda c: c.connection_id == ctx.req.connection_id, connection_list)
+  )
 
-  ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-    // remove the connection from the collection
-    err := connections.Doc(ctx.Request.ConnectionID()).Delete(ctx.Request.Context())
-    if err != nil {
-      return ctx, err
-    }
-
-    return next(ctx)
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using System;
-using Nitric.Sdk.Function;
-using Nitric.Sdk.Resource;
-
-class OpenConnection
-{
-    public string Id { get; set; }
-    public Dictionary<string, string> Metadata { get; set; }
-}
-
-var websocket = Nitric.Websocket("public");
-
-var collections = Nitric.Collection<OpenConnection>("connections").With(
-    CollectionPermission.Writing, CollectionPermission.Deleting
-);
-
-websocket.On(WebsocketEventType.Connected, ctx =>
-{
-    collections.Doc(ctx.Req.ConnectionId).Set(new OpenConnection {
-        Id = ctx.Req.ConnectionId,
-        Metadata = new Dictionary<string, string> { } // store any metadata related to the connection here
-    });
-    return ctx;
-});
-
-websocket.On(WebsocketEventType.Disconnected, ctx =>
-{
-    collections.Doc(ctx.Req.ConnectionId).Delete();
-    return ctx;
-});
-
-Nitric.Run();
+Nitric.run()
 ```
 
 </CodeGroup>
@@ -282,254 +159,112 @@ Nitric.Run();
 <CodeGroup>
 
 ```typescript
-import { websocket, collection } from '@nitric/sdk'
+import { websocket, kv } from '@nitric/sdk'
 
-const socket = websocket('socket')
-const connections = collection('connections').for(
-  'reading',
-  'writing',
-  'deleting'
-)
+// Initialize KV store for connections and a WebSocket
+const kvStore = kv('connections').for('getting', 'setting', 'deleting')
+const socket = websocket('example-websocket')
 
+// Helper function to get current connections
+async function getCurrentConnections() {
+  try {
+    const serializedList = await kvStore.get('connections')
+    return serializedList && serializedList['ids']
+      ? JSON.parse(serializedList['ids'])
+      : []
+  } catch (error) {
+    console.error('Error getting current connections:', error)
+    return []
+  }
+}
+
+// Helper function to update connections list
+async function updateConnections(connections) {
+  try {
+    const updatedSerializedList = JSON.stringify(connections)
+    await kvStore.set('connections', { ids: updatedSerializedList })
+  } catch (error) {
+    console.error('Error updating connections:', error)
+  }
+}
+
+// Handle new connections
 socket.on('connect', async (ctx) => {
-  await connections.doc(ctx.req.connectionId).set({
-    // store any metadata related to the connection here
-    connectionId: ctx.req.connectionId,
-  })
+  const connections = await getCurrentConnections()
+  connections.push(ctx.req.connectionId)
+  await updateConnections(connections)
 })
 
+// Handle disconnections
 socket.on('disconnect', async (ctx) => {
-  await connections.doc(ctx.req.connectionId).delete()
+  const disconnectedId = ctx.req.connectionId
+  const connections = await getCurrentConnections()
+  const index = connections.indexOf(disconnectedId)
+
+  if (index > -1) {
+    connections.splice(index, 1)
+    await updateConnections(connections)
+  }
 })
 
-const broadcast = async (data: string | Uint8Array) => {
-  const connectionStream = connections.query().stream()
-
-  const streamEnd = new Promise<any>((res) => {
-    connectionStream.on('end', res)
-  })
-
-  connectionStream.on('data', async ({ content }) => {
-    // Send message to a connection
-    await socket.send(content.connectionId, data)
-  })
-
-  await streamEnd
-}
-
+// Send messages
 socket.on('message', async (ctx) => {
-  // broadcast message to all clients (including the sender)
-  await broadcast(ctx.req.data)
+  const message = ctx.req.text()
+  const connections = await getCurrentConnections()
+
+  // Send the message to each connection
+  connections.forEach(async (connectionId) => {
+    try {
+      if (connectionId !== ctx.req.connectionId) {
+        await socket.send(connectionId, message)
+      }
+    } catch (error) {
+      console.error(`Error sending message to ${connectionId}:`, error)
+    }
+  })
 })
 ```
 
-```go
-import (
-  "fmt"
+```python
+from nitric.resources import websocket
+from nitric.application import Nitric
 
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-)
+socket = websocket("socket")
+connections = kv("connections").for("getting", "setting", "deleting")
 
-func main() {
-  ws, err := nitric.NewWebsocket("public")
-  if err != nil {
-    return
-  }
-
-  connections, err := nitric.NewCollection("connections").With(nitric.CollectionEverything...)
-  if err != nil {
-    return
-  }
-
-  // Register a new connection on connect
-  ws.On(faas.WebsocketConnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-    err := connections.Doc(ctx.Request.ConnectionID()).Set(ctx.Request.Context(), map[string]interface{}{
-      "connectionId": ctx.Request.ConnectionID(),
-    })
-    if err != nil {
-      return ctx, err
+@socket.on("connect")
+async def on_connect(ctx):
+  connection_list = await connections.get("connections")
+  await connections.set([
+    *connection_list,
+    {
+      # Store any metadata related to the connection here
+      "connectionId": ctx.req.connection_id
     }
+  ])
 
-    return next(ctx)
-  })
+@socket.on("disconnect")
+async def on_disconnect(ctx):
+  connection_list = await connections.get('connections')
+  await connections.set(
+    'connections',
+    filter(lambda c: c.connection_id == ctx.req.connection_id, connection_list)
+  )
 
-  // Remove a registered connection on disconnect
-  ws.On(faas.WebsocketDisconnect, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-    err := connections.Doc(ctx.Request.ConnectionID()).Delete(ctx.Request.Context())
-    if err != nil {
-      return ctx, err
-    }
+async def broadcast(data):
+  connection_list = await connections.get("connections")
 
-    return next(ctx)
-  })
+  for connection in connection_list:
+    # Send message to a connection
+    await socket.send(connection.connection_id, data)
 
-  // Broadcast message to all the registered websocket connections
-  ws.On(faas.WebsocketMessage, func(ctx *faas.WebsocketContext, next faas.WebsocketHandler) (*faas.WebsocketContext, error) {
-    connectionStream, err := connections.Query().Stream(ctx.Request.Context())
-    if err != nil {
-      return ctx, err
-    }
 
-    for {
-      res, err := connectionStream.Next()
-      if err != nil {
-        break // reached the end of the documents
-      }
+@socket.on("message")
+async def on_message(ctx):
+  # broadcast message to all clients (including the sender)
+  await broadcast(ctx.req.data)
 
-      connectionId, ok := res.Content()["connectionId"].(string)
-      if !ok {
-        continue
-      }
-
-      err = ws.Send(ctx.Request.Context(), connectionId, ctx.Request.Data())
-      if err != nil {
-        return ctx, err
-      }
-    }
-
-    return next(ctx)
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using System;
-using Nitric.Sdk.Function;
-using Nitric.Sdk.Resource;
-
-class OpenConnection
-{
-    public string Id { get; set; }
-}
-
-var websocket = Nitric.Websocket("public");
-
-var collections = Nitric.Collection<OpenConnection>("connections").With(
-    CollectionPermission.Writing, CollectionPermission.Reading, CollectionPermission.Deleting
-);
-
-// Register a new connection on connect
-websocket.On(WebsocketEventType.Connected, ctx =>
-{
-    collections.Doc(ctx.Req.ConnectionId).Set(new OpenConnection { Id = ctx.Req.ConnectionId });
-    return ctx;
-});
-
-// Remove a registered connection on disconnect
-websocket.On(WebsocketEventType.Disconnected, ctx =>
-{
-    collections.Doc(ctx.Req.ConnectionId).Delete();
-    return ctx;
-});
-
-// Broadcast message to all the registered websocket connections
-websocket.On(WebsocketEventType.Message, ctx =>
-{
-    var connections = collections.Query().Fetch();
-
-    connections.Documents.ForEach(connection => {
-        var message = ctx.Req.Message();
-        websocket.Connection(connection.Content.Id).Send(message);
-    });
-
-    return ctx;
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.faas.v0.WebsocketEventType;
-import io.nitric.resources.CollectionPermission;
-
-class Connection {
-	String connectionId;
-	public Connection(String connectionId) {
-		this.connectionId = connectionId;
-	}
-}
-
-public class Application {
-	public static void main(String[] args) {
-		var socket = Nitric.INSTANCE.websocket("socket");
-		var connections = Nitric.INSTANCE.collection("connections", Connection.class)
-			.with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete);
-
-		// Register a new connection on connect
-		socket.on(WebsocketEventType.Connect, (ctx) -> {
-			var connectionId = ctx.getReq().getConnectionId();
-			connections.doc(connectionId).set(
-				new Connection(connectionId)
-			);
-			return ctx;
-		});
-
-		// Remove a registered connection on disconnect
-		socket.on(WebsocketEventType.Disconnect, (ctx) -> {
-			connections.doc(ctx.getReq().getConnectionId()).delete();
-			return ctx;
-		});
-
-		// Broadcast message to all the registered websocket connections
-		socket.on(WebsocketEventType.Message, (ctx) -> {
-			var connectionStream = connections.query().stream();
-
-			while (connectionStream.hasNext()) {
-				var connection = connectionStream.next();
-				socket.send(connection.getId(), ctx.getReq().getData());
-			}
-
-			return ctx;
-		});
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.faas.v0.WebsocketEventType
-import io.nitric.resources.CollectionPermission
-
-data class Connection(var connectionId: String)
-
-fun main() {
-	val socket = Nitric.websocket("socket")
-	val connections = Nitric.collection<Connection>("connections")
-		.with(CollectionPermission.Read, CollectionPermission.Write, CollectionPermission.Delete)
-
-	// Register a new connection on connect
-	socket.on(WebsocketEventType.Connect) { ctx ->
-		val connectionId = ctx.req.connectionId
-		connections.doc(connectionId).set(Connection(connectionId))
-		ctx
-	}
-
-	// Remove a registered connection on disconnect
-	socket.on(WebsocketEventType.Disconnect) { ctx ->
-		connections.doc(ctx.req.connectionId).delete()
-		ctx
-	}
-
-	// Broadcast message to all the registered websocket connections
-	socket.on(WebsocketEventType.Message) { ctx ->
-		val connectionStream = connections.query().stream()
-		while (connectionStream.hasNext()) {
-			val connection = connectionStream.next()
-			socket.send(connection.getId(), ctx.req.data)
-		}
-		ctx
-	}
-
-	Nitric.run()
-}
+Nitric.run()
 ```
 
 </CodeGroup>

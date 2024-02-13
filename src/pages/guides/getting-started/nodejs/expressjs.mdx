@@ -4,11 +4,6 @@ export const description = 'How to build an Express.js application with Nitric'
 
 In this guide we'll be scaffolding a new Express.js application and including the Nitric framework to allow for the addition of other cloud resources like topics, queues and buckets.
 
-<Note>
-  This guide relies on the HTTP feature of Nitric which is currently in preview.
-  See the docs for this feature to [see how to enable it](/http).
-</Note>
-
 ## Prerequisites
 
 To complete this guide you'll need the following:
@@ -21,7 +16,7 @@ To complete this guide you'll need the following:
 
 Let's start by setting up a Nitric project and adding Express.js:
 
-```bash {{ label: 'terminal' }}
+```bash
 nitric new express-example "official/JavaScript - Starter"
 ```
 
@@ -36,7 +31,7 @@ yarn add express
 You can go ahead and open this new project in your editor of choice. You should see a project structure similar to:
 
 ```txt
-├── functions
+├── services
 │   ├── hello.js
 ├── node_modules
 │   ├── ...
@@ -48,19 +43,19 @@ You can go ahead and open this new project in your editor of choice. You should 
 └── yarn.lock
 ```
 
-In this structure you'll notice the `functions` folder. By default, this is where Nitric expects the entrypoint code for your application. However, that's just a convention, we can change that to anything else that suits our needs.
+In this structure you'll notice the `services` folder. By default, this is where Nitric expects the entrypoint code for your application. However, that's just a convention, we can change that to anything else that suits our needs.
 
-Let's start by replacing the default `hello.js` function with an `app.js` file ready for the Express.js application:
+Let's start by replacing the default `hello.js` service with an `app.js` file ready for the Express.js application:
 
-```bash {{ label: 'terminal' }}
-rm ./functions/hello.js
+```bash
+rm ./services/hello.js
 
-touch ./functions/app.js
+touch ./services/app.js
 ```
 
 Now, let's add some express code to get things started.
 
-```javascript {{ label: 'functions/app.js' }}
+```javascript {{ label: 'services/app.js' }}
 import express from 'express'
 import { http } from '@nitric/sdk'
 const app = express()
@@ -78,38 +73,26 @@ http(app)
   binding the application to the correct port in each environment.
 </Note>
 
-At this point, we're ready to start testing locally. The project comes with a `dev` script by default, let's run that now:
+At this point, we're ready to start testing locally.
 
-```bash {{ label: 'terminal' }}
-yarn dev
+```bash
+nitric start
 ```
 
-If everything is working, part of the output will look like this:
+Your express application will now be running with Nitric acting as a proxy. We can test this in another terminal or web browser.
 
-```txt
-SUCCESS  Started Local Services! (1s)
-Local running, use ctrl-C to stop
-
-Proxy | Endpoint
-8000  | http://localhost:4001
-
-Dev Dashboard | http://localhost:49152
-```
-
-Your express application will now be running with Nitric acting as a proxy, in this case it's available on port `4001`. We can test this in another terminal or web browser.
-
-```bash {{ label: 'terminal' }}
-curl localhost:4001
+```bash
+curl http://localhost:4001
 Hello World!
 ```
 
 ## Enhancing Express.js with Nitric
 
-With everything working so far, now is a good time to see how we can add new resources to the Express app using Nitric. In this example, let's add a pub/sub topic which allows us to perform work in the background, but still respond quick via the HTTP API.
+With everything working so far, now is a good time to see how we can add new resources to the Express app using Nitric. In this example, let's add a pub/sub topic which allows us to perform work in the background, but still respond quickly via the HTTP API.
 
 You can update the `app.js` file like so:
 
-```javascript {{ label: 'functions/app.js' }}
+```javascript {{ label: 'services/app.js' }}
 import express from 'express'
 import { http, topic } from '@nitric/sdk'
 
@@ -124,15 +107,15 @@ app.get('/', async (req, res) => {
 http(app)
 ```
 
-We'll also add a new function to do the background work:
+We'll also add a new service to do the background work:
 
 ```bash
-touch functions/worker.js
+touch services/worker.js
 ```
 
 Add this code to that file:
 
-```javascript
+```javascript {{ label: 'services/worker.js' }}
 import { topic } from '@nitric/sdk'
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms))
@@ -145,7 +128,7 @@ topic('work-requests').subscribe(async (ctx) => {
 })
 ```
 
-If it's still running, your application should hot-reload with these changes. Now, when you browse to `localhost:4001` you'll notice that the console outputs these lines with a 2 second delay between each line:
+Now, when you browse to `localhost:4001` you'll notice that the console outputs these lines with a 2 second delay between each line:
 
 ```txt
 Starting new request
@@ -163,35 +146,25 @@ At this point, we can stop the running application and try to deploy it to a clo
 
 This is where the true value of Nitric shines. You don't need to perform any manual cloud deployment activities or add solutions like Terraform to get this project into your cloud environment, Nitric takes care of that for you.
 
-To perform the deployment we'll create a `stack`, stacks give Nitric the config needed for a specific cloud instance of this project, such as the provider and region.
+To perform the deployment we'll create a `stack`, stacks give Nitric the configuration needed for a specific cloud instance of this project, such as the provider and region.
 
-The new stack command can help you create the stack by following prompts. In this case we'll use AWS as an example:
+The new stack command can help you create the stack by following prompts.
 
-```txt {{ label: 'terminal' }}
+```bash
 nitric stack new
-? What should we name this stack? dev
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
 ```
 
-This command will create a file named `nitric-dev.yaml`, with contents like this:
+This command will create a file named `nitric.dev.yaml`, with contents like this:
 
-```yaml {{ label: 'nitric-dev.yaml' }}
-name: dev
-provider: nitric/aws@0.30.0
+```yaml {{ label: 'nitric.dev.yaml' }}
+provider: nitric/aws@1.0.0
 region: us-east-1
 ```
 
 With the stack file in place we can run the deployment:
 
-```bash {{ label: 'terminal' }}
+```bash
 nitric up
-SUCCESS  Images Built (51s)
-SUCCESS  Configuration gathered (6s)
-SUCCESS
-         API | Endpoint
-         app | https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com
-Deployed Stack (1m14s)
 ```
 
 Go ahead and test your new Express+Nitric app in the cloud, you can start with the API Gateway URL returned by the `up` command.
@@ -201,11 +174,11 @@ Go ahead and test your new Express+Nitric app in the cloud, you can start with t
   `nitric down` command.
 </Note>
 
-## What next?
+## What's next?
 
 Now that you have the basics down, try exploring other Nitric resources available to enhance your app.
 
-- [Collections](/collections)
+- [Key Value Stores](/keyvalue)
 - [Schedules](/schedules)
 - [Storage](/storage)
 - [Messages](/messaging)

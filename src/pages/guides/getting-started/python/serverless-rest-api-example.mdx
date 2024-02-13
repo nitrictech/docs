@@ -11,7 +11,6 @@ export const description =
 | **Method** | **Route**      | **Description**                  |
 | ---------- | -------------- | -------------------------------- |
 | `GET`      | /profiles/[id] | Get a specific profile by its Id |
-| `GET`      | /profiles      | List all profiles                |
 | `POST`     | /profiles      | Create a new profile             |
 | `DELETE`   | /profiles/[id] | Delete a profile                 |
 | `PUT`      | /profiles/[id] | Update a profile                 |
@@ -26,17 +25,11 @@ export const description =
 | `GET`      | profiles/[id]/image/download | Get a profile image download URL  |
 | `GET`      | profiles/[id]/image/view     | View the image that is downloaded |
 
-## Video
-
-Here's a video of this guide built with Node.js:
-
-[Build and Deploy a REST API for any Cloud](https://www.youtube.com/embed/PpIxtKDoL2Q)
-
 ## Prerequisites
 
 - [Pipenv](https://pypi.org/project/pipenv/) - for simplified dependency management
 - The [Nitric CLI](/guides/getting-started/installation)
-- An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
+- _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account
 
 ## Getting started
 
@@ -52,9 +45,7 @@ Next, open the project in your editor of choice.
 > cd my-profile-api
 ```
 
-Make sure all dependencies are resolved:
-
-Using Pipenv:
+Make sure all dependencies are resolved using Pipenv:
 
 ```bash
 pipenv install --dev
@@ -63,7 +54,7 @@ pipenv install --dev
 The scaffolded project should have the following structure:
 
 ```text
-+--functions/
++--services/
 |  +-- hello.py
 +--nitric.yaml
 +--Pipfile
@@ -71,48 +62,42 @@ The scaffolded project should have the following structure:
 +--README.md
 ```
 
-You can test the project to verify everything is working as expected:
-
 Start the Nitric server to emulate cloud services on your machine:
 
 ```bash
 nitric start
 ```
 
-Next, in a new terminal window, you can run your application:
-
-```bash
-pipenv run dev
-```
-
-If everything is working as expected you can now delete all files in the `functions/` folder, we'll create new functions in this guide.
+If everything is working as expected you can now delete all files in the `services/` folder, we'll create new services in this guide.
 
 ## Building the Profile API
 
-Let's start building our profiles API. Create a file named 'profiles.py' in the functions directory and add the following:
+Let's start building our profiles API. Create a file named 'profiles.py' in the services directory and add the following:
 
 ```python
 from uuid import uuid4
 
-from nitric.resources import api, collection, bucket
+from nitric.resources import api, kv, bucket
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 
 # Create an api named public
 profile_api = api("public")
 
-# Access profile collection with permissions
-profiles = collection('profiles').allow('reading','writing')
+# Access profile key value store with permissions
+profiles = kv('profiles').allow('getting', 'setting')
+
+Nitric.run()
 ```
 
 Here we're creating:
 
 - An API named `public`,
-- A collection named `profiles` and giving our function permission to read and write to that collection.
+- A key value store named `profiles` and giving our service permission to get and set to that store.
 
-From here, let's add some features to that function that allow us to work with profiles.
+From here, let's add some features to that service that allow us to work with profiles.
 
-> _Note:_ You could separate some or all of these request handlers their own functions if you prefer. For simplicity we'll group them together in this guide.
+> _Note:_ You could separate some or all of these request handlers their own services if you prefer. For simplicity we'll group them together in this guide.
 
 ### Create profiles with POST
 
@@ -124,7 +109,7 @@ async def create_profile(ctx: HttpContext) -> None:
   age = ctx.req.json['age']
   hometown = ctx.req.json['homeTown']
 
-  await profiles.doc(pid).set({ 'name': name, 'age': age, 'hometown': hometown} )
+  await profiles.set(pid, { 'name': name, 'age': age, 'hometown': hometown} )
 
   ctx.res.body = { 'msg': f'Profile with id {pid} created.'}
 ```
@@ -135,20 +120,9 @@ async def create_profile(ctx: HttpContext) -> None:
 @profile_api.get("/profiles/:id")
 async def get_profile(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
-  d = await profiles.doc(pid).get()
+  d = await profiles.get(pid)
 
   ctx.res.body = f"{d.content}"
-
-```
-
-### List all profiles with GET
-
-```python
-@profile_api.get("/profiles")
-async def get_profiles(ctx: HttpContext) -> None:
-  results = await profiles.query().fetch()
-  r = [doc.content for doc in results.documents]
-  ctx.res.body = f"{r}"
 ```
 
 ### Remove a profile with DELETE
@@ -159,15 +133,11 @@ async def delete_profiles(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
 
   try:
-    d = await profiles.doc(pid).delete()
+    d = await profiles.delete(pid)
     ctx.res.body = { 'msg': f'Profile with id {pid} deleted.'}
   except:
     ctx.res.status = 404
     ctx.res.body = { 'msg': f'Profile with id {pid} not found.'}
-
-
-Nitric.run()
-
 ```
 
 ## Ok, let's run this thing!
@@ -180,15 +150,9 @@ Start the Nitric server to emulate cloud services on your machine:
 nitric start
 ```
 
-Next, in a new terminal window, you can run your application:
-
-```bash
-pipenv run dev
-```
-
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
 
-We will keep it running for our tests. If you want to update your functions, just save them, they'll be reloaded automatically.
+We will keep it running for our tests. If you want to update your services, just save them, they'll be reloaded automatically.
 
 ## Test your API
 
@@ -210,12 +174,6 @@ curl --location --request POST 'http://localhost:4001/profiles' \
 
 ```bash
 curl --location --request GET 'http://localhost:4001/profiles/[id]'
-```
-
-### Fetch All Profiles
-
-```bash
-curl --location --request GET 'http://localhost:4001/profiles'
 ```
 
 ### Delete Profile
@@ -252,10 +210,6 @@ We called our stack `dev`, let's try deploying it with the `up` command
 
 ```bash
 nitric up
-┌───────────────────────────────────────────────────────────────┐
-| API  | Endpoint                                               |
-| main | https://XXXXXXXX.execute-api.us-east-1.amazonaws.com   |
-└───────────────────────────────────────────────────────────────┘
 ```
 
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
@@ -289,7 +243,6 @@ from datetime import datetime, timedelta
 ```python
 @profile_api.get("/profiles/:id/image/upload")
 async def upload_profile_image(ctx: HttpContext) -> None:
-
   pid = ctx.req.params['id']
 
   photo =  photos.file(f'images/{pid}/photo.png')
@@ -352,7 +305,6 @@ curl --location --request GET 'http://localhost:4001/profiles/[id]/image/upload'
 curl --location --request PUT '[url]' \
 --header 'content-type: image/png' \
 --data-binary '@/home/user/Pictures/photo.png'
-
 ```
 
 #### Get an image download URL

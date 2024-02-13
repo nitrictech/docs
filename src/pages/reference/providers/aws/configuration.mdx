@@ -11,7 +11,7 @@ name: my-aws-stack-name
 # The provider to use and it's published version
 # See releases:
 # https://github.com/nitrictech/nitric/tags
-provider: nitric/aws@0.33.0
+provider: nitric/aws@1.0.0
 
 # The target aws region to deploy to
 # See available regions:
@@ -42,13 +42,13 @@ apis:
     domains:
       - api.example.com
 
-# Configure your deployed functions/services
+# Configure your deployed services
 config:
-  # How functions without a type will be deployed
+  # How services without a type will be deployed
   default:
     # configure a sample rate for telemetry (between 0 and 1) e.g. 0.5 is 50%
     telemetry: 0
-    # configure functions to deploy to AWS lambda
+    # configure services to deploy to AWS lambda
     lambda: # Available since v0.26.0
       # set 128MB of RAM
       # See lambda configuration docs here:
@@ -82,6 +82,6 @@ config:
 
 <Note>
   Missing something? Let us know by raising an issue in
-  [github](https://github.com/nitrictech/nitric) or by dropping us a line on
-  [discord](https://discord.com/invite/Webemece5C)
+  [GitHub](https://github.com/nitrictech/nitric) or by dropping us a line on
+  [Discord](https://nitric.io/chat)
 </Note>

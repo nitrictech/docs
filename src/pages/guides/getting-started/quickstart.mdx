@@ -16,7 +16,7 @@ scoop install nitric
 ```
 
 ```bash {{ title: 'Linux' }}
-curl https://nitric.io/install | bash
+curl https://nitric.io/install?version=latest | bash
 ```
 
 </CodeGroup>
@@ -42,14 +42,6 @@ nitric new hello-world "official/JavaScript - Starter"
 
 ```bash {{ title: "Python" }}
 nitric new hello-world "official/Python - Starter"
-```
-
-```bash {{ title: "Go" }}
-nitric new hello-world "official/Go - Starter (experimental)"
-```
-
-```bash {{ title: "C#" }}
-nitric new hello-world "official/C# - Starter (experimental)"
 ```
 
 </CodeGroup>
@@ -79,16 +71,6 @@ cd hello-world
 pipenv install --dev
 ```
 
-```bash {{ title: "Go" }}
-cd hello-world
-```
-
-```bash {{ title: "C#" }}
-cd hello-world
-
-dotnet build
-```
-
 </CodeGroup>
 
 Your project should now look like this:
@@ -96,7 +78,7 @@ Your project should now look like this:
 <CodeGroup>
 
 ```txt {{ title: "TypeScript" }}
-+--functions/
++--services/
 |  +-- hello.ts
 +--node_modules/
 |  ...
@@ -107,7 +89,7 @@ Your project should now look like this:
 ```
 
 ```txt {{ title: "JavaScript" }}
-+--functions/
++--services/
 |  +-- hello.js
 +--node_modules/
 |  ...
@@ -118,32 +100,11 @@ Your project should now look like this:
 ```
 
 ```txt {{ title: "Python" }}
-+--functions/
++--services/
 |  +-- hello.py
 +--index.py
 +--Pipfile
 +--Pipfile.lock
-+--nitric.yaml
-+--README.md
-```
-
-```txt {{ title: "Go" }}
-+--functions/
-|  +-- hello/
-|  |   +-- main.go
-+--.gitignore
-+--go.mod
-+--go.sum
-+--nitric.yaml
-+--README.md
-```
-
-```txt {{ title: "C#" }}
-+--functions/
-|  +-- Hello.cs
-|  +-- hello.csproj
-+--.gitignore
-+--csharp-starter.sln
 +--nitric.yaml
 +--README.md
 ```
@@ -173,34 +134,11 @@ nitric start
 pipenv run dev
 ```
 
-```bash {{ title: "Go" }}
-# start the nitric local development server
-nitric start
-# in another terminal run the code:
-go run ./functions/hello
-```
-
-```bash {{ title: "C#" }}
-# start the nitric local development server
-nitric start
-# in another terminal run the code:
-dotnet run --project functions/hello.csproj
-```
-
 </CodeGroup>
 
-After your function is running, it will register itself with the server. All the APIs are locally hosted on their own port, which will be displayed in the CLI output as `http://localhost:<port_number>`.
+After your service is running, it will register itself with the server. All the APIs are locally hosted on their own port, which will be displayed in the CLI output as `http://localhost:<port_number>`.
 
 The output will also show the local dashboard URL, the dashboard will automatically refresh with API details and other useful tools for building your application.
-
-In this case, the output should be:
-
-```txt
-Api  | Endpoint
-main | http://localhost:4001
-
-Dev Dashboard | http://localhost:49152
-```
 
 Once the API is registered, you can test the API using any HTTP client, your browser, or the [local dashboard](/guides/getting-started/local-dashboard):
 
@@ -231,13 +169,13 @@ Watch this brief video to see the development dashboard in action. You'll get a 
 
 ## Making updates
 
-Most of Nitric's language templates enable hot-reloading by default, so at this point, you can start making changes to functions and see what happens.
+Most of Nitric's language templates enable hot-reloading by default, so at this point, you can start making changes to services and see what happens.
 
-Start by opening the `hello` function in your editor and adding a new route to the API, then save, and execute the file:
+Start by opening the `hello` service in your editor and adding a new route to the API, then save, and execute the file:
 
 <CodeGroup>
 
-```typescript {{ tag: "functions/hello.ts" }}
+```typescript {{ tag: "services/hello.ts" }}
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -256,7 +194,7 @@ helloApi.get('/goodbye/:name', async (ctx) => {
 })
 ```
 
-```javascript {{ tag: "functions/hello.js" }}
+```javascript {{ tag: "services/hello.js" }}
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -275,7 +213,7 @@ helloApi.get('/goodbye/:name', async (ctx) => {
 })
 ```
 
-```python {{ tag: "functions/hello.py" }}
+```python {{ tag: "services/hello.py" }}
 from nitric.resources import api
 from nitric.application import Nitric
 
@@ -297,85 +235,11 @@ async def hello_world(ctx):
 Nitric.run()
 ```
 
-```go {{ tag: "functions/hello/main.go" }}
-package main
-
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  mainApi, err := nitric.NewApi("main")
-  if err != nil {
-    fmt.Println(err)
-    return
-  }
-
-  mainApi.Get("/hello/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-    params := ctx.Request.PathParams()
-
-    if params == nil || len(params["name"]) == 0 {
-      ctx.Response.Body = []byte("error retrieving path params")
-      ctx.Response.Status = 400
-    } else {
-      ctx.Response.Body = []byte("Hello " + params["name"])
-      ctx.Response.Status = 200
-    }
-
-    return next(ctx)
-  })
-
-  mainApi.Get("/goodbye/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-    params := ctx.Request.PathParams()
-
-    if params == nil || len(params["name"]) == 0 {
-      ctx.Response.Body = []byte("error retrieving path params")
-      ctx.Response.Status = 400
-    } else {
-      ctx.Response.Body = []byte("Goodbye " + params["name"])
-      ctx.Response.Status = 200
-    }
-
-    return next(ctx)
-  })
-
-  fmt.Println("running main API")
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp {{ tag: "functions/Hello.cs", title: "C#" }}
-using Nitric.Sdk;
-
-var api = Nitric.Sdk.Nitric.Api("main");
-
-api.Get("/hello/:name", context =>
-{
-    var name = context.Req.PathParams["name"];
-    context.Res.Text($"Hello {name}!");
-    return context;
-});
-
-api.Get("/goodbye/:name", context =>
-{
-    var name = context.Req.PathParams["name"];
-    context.Res.Text($"Goodbye {name}!");
-    return context;
-});
-
-Nitric.Sdk.Nitric.Run();
-```
-
 </CodeGroup>
 
 <Note>
   Depending on the language you choose the template may support hot-reloading,
-  if not you'll need to restart the function.
+  if not you'll need to restart the service.
 </Note>
 
 After saving the file, the new route will be registered and you can test it:
@@ -411,17 +275,6 @@ Now you can deploy your `dev` stack with the `up` command.
 
 ```bash
 nitric up
-```
-
-```{{ tag: "output" }}
- SUCCESS  Configuration gathered (2s)
- SUCCESS  Images built (3s)
- Deployed  Function/hello (15)
- Deployed  Stack (25s)
-┌───────────────────────────────────────────────────────────────┐
-| API  | Endpoint                                               |
-| main | https://XXXXXXXX.execute-api.us-east-1.amazonaws.com   |
-└───────────────────────────────────────────────────────────────┘
 ```
 
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.

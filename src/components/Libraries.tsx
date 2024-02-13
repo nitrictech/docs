@@ -11,13 +11,13 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 const libraries = [
   {
-    href: '/reference/nodejs/v0',
+    href: '/reference/nodejs',
     name: 'Node.js',
     description: 'View full API for Node.js',
     logo: logoNode,
   },
   {
-    href: '/reference/python/v0',
+    href: '/reference/python',
     name: 'Python',
     description: 'View full API for Python',
     logo: logoPython,
@@ -56,6 +56,7 @@ export function Libraries() {
             className="group relative flex items-center gap-4 rounded-2xl bg-zinc-50 p-4 transition-shadow hover:shadow-md hover:shadow-zinc-900/5 dark:bg-white/2.5 dark:hover:shadow-black/5"
           >
             <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-zinc-900/7.5 group-hover:ring-zinc-900/10 dark:ring-white/10 dark:group-hover:ring-white/20" />
+
             <Image
               src={library.logo}
               alt={library.name + ' Logo'}

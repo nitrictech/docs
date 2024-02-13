@@ -23,11 +23,13 @@ export const topLevelNavigation = [
   { text: 'Nitric.io', href: 'https://nitric.io' },
 ]
 
+export type Version = 'v0' | 'v1'
+
 export interface DocNavGroup {
   title?: string
   showDividerAbove?: boolean
   disableAutoPrefix?: boolean
-  links: { title: string; href: string; icon?: any }[]
+  links: { title: string; href: string; icon?: any; versions?: Version[] }[]
 }
 
 interface FullNav {
@@ -46,8 +48,8 @@ const buildingBlockLinks = [
     icon: ServerIcon,
   },
   {
-    title: 'Collections',
-    href: '/collections',
+    title: 'Key Value Stores',
+    href: '/keyvalue',
     icon: ArchiveBoxIcon,
   },
   {
@@ -76,6 +78,11 @@ const buildingBlockLinks = [
     icon: ChatBubbleLeftRightIcon,
   },
 ]
+
+/**
+ * RULES:
+ * 1. put older version of reference docs higher in the array.
+ */
 
 const fullNav: FullNav = {
   docs: [
@@ -117,13 +124,15 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'Node.js',
-          href: '/reference/nodejs/v0',
+          href: '/reference/nodejs',
           icon: FaNodeJs,
+          versions: ['v1', 'v0'],
         },
         {
           title: 'Python',
-          href: '/reference/python/v0',
+          href: '/reference/python',
           icon: FaPython,
+          versions: ['v1', 'v0'],
         },
         {
           title: 'Go (Experimental 🧪)',
@@ -345,18 +354,18 @@ const fullNav: FullNav = {
       links: buildingBlockLinks.filter((link) => link.href !== '/http'),
     },
   ],
-  collections: [
+  keyvalue: [
     {
       links: [
         {
           title: 'Overview',
-          href: '/collections',
+          href: '/keyvalue',
         },
       ],
     },
     {
       title: 'More Building Blocks',
-      links: buildingBlockLinks.filter((link) => link.href !== '/collections'),
+      links: buildingBlockLinks.filter((link) => link.href !== '/keyvalue'),
     },
   ],
   schedules: [
@@ -514,7 +523,7 @@ const fullNav: FullNav = {
       ],
     },
   ],
-  ['reference/nodejs']: [
+  ['reference/nodejs/v0']: [
     {
       links: [
         {
@@ -780,7 +789,237 @@ const fullNav: FullNav = {
       ],
     },
   ],
-  ['reference/python']: [
+  ['reference/nodejs']: [
+    {
+      links: [
+        {
+          title: 'Getting Started',
+          href: '/reference/nodejs',
+        },
+      ],
+    },
+    {
+      title: 'APIs',
+      links: [
+        {
+          title: 'api()',
+          href: '/reference/nodejs/api/api',
+        },
+        {
+          title: 'api.get()',
+          href: '/reference/nodejs/api/api-get',
+        },
+        {
+          title: 'api.post()',
+          href: '/reference/nodejs/api/api-post',
+        },
+        {
+          title: 'api.put()',
+          href: '/reference/nodejs/api/api-put',
+        },
+        {
+          title: 'api.delete()',
+          href: '/reference/nodejs/api/api-delete',
+        },
+        {
+          title: 'api.patch()',
+          href: '/reference/nodejs/api/api-patch',
+        },
+        {
+          title: 'api.route()',
+          href: '/reference/nodejs/api/api-route',
+        },
+        {
+          title: 'api.route.all()',
+          href: '/reference/nodejs/api/api-route-all',
+        },
+        {
+          title: 'api.route.get()',
+          href: '/reference/nodejs/api/api-route-get',
+        },
+        {
+          title: 'api.route.post()',
+          href: '/reference/nodejs/api/api-route-post',
+        },
+        {
+          title: 'api.route.put()',
+          href: '/reference/nodejs/api/api-route-put',
+        },
+        {
+          title: 'api.route.delete()',
+          href: '/reference/nodejs/api/api-route-delete',
+        },
+        {
+          title: 'api.route.patch()',
+          href: '/reference/nodejs/api/api-route-patch',
+        },
+      ],
+    },
+    {
+      title: 'Key Value Stores',
+      links: [
+        {
+          title: 'kv()',
+          href: '/reference/nodejs/keyvalue/keyvalue',
+        },
+        {
+          title: 'kv.get()',
+          href: '/reference/nodejs/keyvalue/keyvalue-get',
+        },
+        {
+          title: 'kv.set()',
+          href: '/reference/nodejs/keyvalue/keyvalue-set',
+        },
+        {
+          title: 'kv.delete()',
+          href: '/reference/nodejs/keyvalue/keyvalue-delete',
+        },
+      ],
+    },
+    {
+      title: 'Topics',
+      links: [
+        {
+          title: 'topic()',
+          href: '/reference/nodejs/topic/topic',
+        },
+        {
+          title: 'topic.publish()',
+          href: '/reference/nodejs/topic/topic-publish',
+        },
+        {
+          title: 'topic.subscribe()',
+          href: '/reference/nodejs/topic/topic-subscribe',
+        },
+      ],
+    },
+    {
+      title: 'Queues',
+      links: [
+        {
+          title: 'queue()',
+          href: '/reference/nodejs/queues/queue',
+        },
+        {
+          title: 'queue.send()',
+          href: '/reference/nodejs/queues/queue-send',
+        },
+        {
+          title: 'queue.receive()',
+          href: '/reference/nodejs/queues/queue-receive',
+        },
+      ],
+    },
+    {
+      title: 'Secrets',
+      links: [
+        {
+          title: 'secret()',
+          href: '/reference/nodejs/secrets/secret',
+        },
+        {
+          title: 'secret.put()',
+          href: '/reference/nodejs/secrets/secret-put',
+        },
+        {
+          title: 'secret.version()',
+          href: '/reference/nodejs/secrets/secret-version',
+        },
+        {
+          title: 'secret.latest()',
+          href: '/reference/nodejs/secrets/secret-latest',
+        },
+        {
+          title: 'secret.version.access()',
+          href: '/reference/nodejs/secrets/secret-version-access',
+        },
+      ],
+    },
+    {
+      title: 'Storage',
+      links: [
+        {
+          title: 'bucket()',
+          href: '/reference/nodejs/storage/bucket',
+        },
+        {
+          title: 'bucket.on()',
+          href: '/reference/nodejs/storage/bucket-on',
+        },
+        {
+          title: 'bucket.file()',
+          href: '/reference/nodejs/storage/bucket-file',
+        },
+        {
+          title: 'bucket.files()',
+          href: '/reference/nodejs/storage/bucket-files',
+        },
+        {
+          title: 'file.exists()',
+          href: '/reference/nodejs/storage/bucket-file-exists',
+        },
+        {
+          title: 'file.read()',
+          href: '/reference/nodejs/storage/bucket-file-read',
+        },
+        {
+          title: 'file.write()',
+          href: '/reference/nodejs/storage/bucket-file-write',
+        },
+        {
+          title: 'file.delete()',
+          href: '/reference/nodejs/storage/bucket-file-delete',
+        },
+        {
+          title: 'file.getDownloadUrl()',
+          href: '/reference/nodejs/storage/bucket-file-downloadurl',
+        },
+        {
+          title: 'file.getUploadUrl()',
+          href: '/reference/nodejs/storage/bucket-file-uploadurl',
+        },
+      ],
+    },
+    {
+      title: 'Schedules',
+      links: [
+        {
+          title: 'schedule()',
+          href: '/reference/nodejs/schedule/schedule',
+        },
+        {
+          title: 'schedule.every()',
+          href: '/reference/nodejs/schedule/schedule-every',
+        },
+        {
+          title: 'schedule.cron()',
+          href: '/reference/nodejs/schedule/schedule-cron',
+        },
+      ],
+    },
+    {
+      title: 'Websockets',
+      links: [
+        {
+          title: 'websocket()',
+          href: '/reference/nodejs/websocket/websocket',
+        },
+        {
+          title: 'websocket.on()',
+          href: '/reference/nodejs/websocket/websocket-on',
+        },
+        {
+          title: 'websocket.send()',
+          href: '/reference/nodejs/websocket/websocket-send',
+        },
+        {
+          title: 'websocket.close()',
+          href: '/reference/nodejs/websocket/websocket-close',
+        },
+      ],
+    },
+  ],
+  ['reference/python/v0']: [
     {
       links: [
         {
@@ -850,7 +1089,7 @@ const fullNav: FullNav = {
           href: '/reference/python/v0/collection/collection-query-limit',
         },
         {
-          title: 'collection.query.page_from()',
+          title: 'collection.query.pagingFrom()',
           href: '/reference/python/v0/collection/collection-query-pagingfrom',
         },
         {
@@ -1006,6 +1245,200 @@ const fullNav: FullNav = {
         {
           title: 'websocket.send()',
           href: '/reference/python/v0/websocket/websocket-send',
+        },
+      ],
+    },
+  ],
+  ['reference/python']: [
+    {
+      links: [
+        {
+          title: 'Getting Started',
+          href: '/reference/python',
+        },
+      ],
+    },
+    {
+      title: 'APIs',
+      links: [
+        {
+          title: 'api()',
+          href: '/reference/python/api/api',
+        },
+        {
+          title: 'api.get()',
+          href: '/reference/python/api/api-get',
+        },
+        {
+          title: 'api.post()',
+          href: '/reference/python/api/api-post',
+        },
+        {
+          title: 'api.put()',
+          href: '/reference/python/api/api-put',
+        },
+        {
+          title: 'api.delete()',
+          href: '/reference/python/api/api-delete',
+        },
+        {
+          title: 'api.patch()',
+          href: '/reference/python/api/api-patch',
+        },
+        {
+          title: 'api.methods()',
+          href: '/reference/python/api/api-methods',
+        },
+        {
+          title: 'api.all()',
+          href: '/reference/python/api/api-all',
+        },
+      ],
+    },
+    {
+      title: 'Key Value Stores',
+      links: [
+        {
+          title: 'kv()',
+          href: '/reference/python/keyvalue/keyvalue',
+        },
+        {
+          title: 'kv.get()',
+          href: '/reference/python/keyvalue/keyvalue-get',
+        },
+        {
+          title: 'kv.set()',
+          href: '/reference/python/keyvalue/keyvalue-set',
+        },
+        {
+          title: 'kv.delete()',
+          href: '/reference/python/keyvalue/keyvalue-delete',
+        },
+      ],
+    },
+    {
+      title: 'Topics',
+      links: [
+        {
+          title: 'topic()',
+          href: '/reference/python/topic/topic',
+        },
+        {
+          title: 'topic.publish()',
+          href: '/reference/python/topic/topic-publish',
+        },
+        {
+          title: 'topic.subscribe()',
+          href: '/reference/python/topic/topic-subscribe',
+        },
+      ],
+    },
+    {
+      title: 'Queues',
+      links: [
+        {
+          title: 'queue()',
+          href: '/reference/python/queues/queue',
+        },
+        {
+          title: 'queue.send()',
+          href: '/reference/python/queues/queue-send',
+        },
+        {
+          title: 'queue.receive()',
+          href: '/reference/python/queues/queue-receive',
+        },
+      ],
+    },
+    {
+      title: 'Secrets',
+      links: [
+        {
+          title: 'secret()',
+          href: '/reference/python/secrets/secret',
+        },
+        {
+          title: 'secret.put()',
+          href: '/reference/python/secrets/secret-put',
+        },
+        {
+          title: 'secret.version()',
+          href: '/reference/python/secrets/secret-version',
+        },
+        {
+          title: 'secret.latest()',
+          href: '/reference/python/secrets/secret-latest',
+        },
+        {
+          title: 'secret.version.access()',
+          href: '/reference/python/secrets/secret-version-access',
+        },
+      ],
+    },
+    {
+      title: 'Storage',
+      links: [
+        {
+          title: 'bucket()',
+          href: '/reference/python/storage/bucket',
+        },
+        {
+          title: 'bucket.on()',
+          href: '/reference/python/storage/bucket-on',
+        },
+        {
+          title: 'bucket.file()',
+          href: '/reference/python/storage/bucket-file',
+        },
+        {
+          title: 'bucket.files()',
+          href: '/reference/python/storage/bucket-files',
+        },
+        {
+          title: 'file.read()',
+          href: '/reference/python/storage/bucket-file-read',
+        },
+        {
+          title: 'file.write()',
+          href: '/reference/python/storage/bucket-file-write',
+        },
+        {
+          title: 'file.delete()',
+          href: '/reference/python/storage/bucket-file-delete',
+        },
+        {
+          title: 'file.download_url()',
+          href: '/reference/python/storage/bucket-file-downloadurl',
+        },
+        {
+          title: 'file.upload_url()',
+          href: '/reference/python/storage/bucket-file-uploadurl',
+        },
+      ],
+    },
+    {
+      title: 'Schedules',
+      links: [
+        {
+          title: 'schedule()',
+          href: '/reference/python/schedules/schedule',
+        },
+      ],
+    },
+    {
+      title: 'Websockets',
+      links: [
+        {
+          title: 'websocket()',
+          href: '/reference/python/websocket/websocket',
+        },
+        {
+          title: 'websocket.on()',
+          href: '/reference/python/websocket/websocket-on',
+        },
+        {
+          title: 'websocket.send()',
+          href: '/reference/python/websocket/websocket-send',
         },
       ],
     },
@@ -1729,8 +2162,8 @@ const fullNav: FullNav = {
           href: '/reference/providers/aws/apis',
         },
         {
-          title: 'Collections',
-          href: '/reference/providers/aws/collections',
+          title: 'Key Value Store',
+          href: '/reference/providers/aws/keyvalue',
         },
         {
           title: 'Queues',
@@ -1770,8 +2203,8 @@ const fullNav: FullNav = {
           href: '/reference/providers/azure/apis',
         },
         {
-          title: 'Collections',
-          href: '/reference/providers/azure/collections',
+          title: 'Key Value Stores',
+          href: '/reference/providers/azure/keyvalue',
         },
         {
           title: 'Queues',
@@ -1811,8 +2244,8 @@ const fullNav: FullNav = {
           href: '/reference/providers/gcp/apis',
         },
         {
-          title: 'Collections',
-          href: '/reference/providers/gcp/collections',
+          title: 'Key Value Stores',
+          href: '/reference/providers/gcp/keyvalue',
         },
         {
           title: 'Queues',
@@ -1890,7 +2323,10 @@ export const useCurrentNav = () => {
   // find main menu item
   const parent = mainNav
     .flatMap((group) => group.links)
-    .find((link) => link.href.startsWith(`/${current}`))
+    .find((link) =>
+      // clean out any trailing versions /v0 etc
+      link.href.startsWith(`/${current}`.replace(/\/[v]\d+$/, ''))
+    )
 
   return {
     navigation: current && fullNav[current] ? fullNav[current] : mainNav,

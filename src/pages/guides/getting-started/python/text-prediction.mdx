@@ -11,7 +11,7 @@ We'll be making a simple text based prediction model based off of the book Pride
 
 - [Pipenv](https://pypi.org/project/pipenv/) - for simplified dependency management
 - The [Nitric CLI](/guides/getting-started/installation)
-- An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
+- _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account
 
 ## Getting started
 
@@ -272,7 +272,7 @@ def train_model(X_train, y_train, total_words, max_sequence_len):
   )
 ```
 
-With all the functions defined, we can train our model with the cleaned data.
+With all the services defined, we can train our model with the cleaned data.
 
 ```python
 data = open('clean_data.txt', 'r').read().split(' ')
@@ -357,7 +357,7 @@ Using the predictive text function, we can create our API. First we will make su
 ```python
 from nitric.resources import api
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 ```
 
 We will then define the API and our first route.
@@ -409,12 +409,6 @@ Thats all there is to it. To test the function locally, we will start the nitric
 nitric start
 ```
 
-We can then run our function either using the normal python interpreter `python3 functions/hello.py` or with `pipenv` for hot reloading.
-
-```bash
-pipenv run dev
-```
-
 You can then make a request to the API using any HTTP client.
 
 ```bash
@@ -431,15 +425,10 @@ Setup your credentials and any other cloud specific configuration:
 - [Azure](/reference/providers/azure)
 - [GCP](/reference/providers/gcp)
 
-Create a stack - a collection of resources identified in your project which will be deployed.
+Create your stack. This is an environment configuration file for the cloud provider for which your project will be deployed.
 
 ```bash
-nitric stack new dev gcp
-```
-
-```
-? Which region should the stack deploy to? us-west2
-? Provide the gcp project to use: gcp-project-123456
+nitric stack new
 ```
 
 This project will run perfectly fine with a default memory configuration of 512 MB. However, to get instant predictions we will amend the memory to be 1 GB. In the newly created stack file we want to add some config.

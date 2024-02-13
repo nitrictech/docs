@@ -2,9 +2,9 @@ export const description = 'Details on the cloud providers supported by Nitric'
 
 # Providers
 
-Nitric applications can declare and interact with cloud features in a cloud agnostic way. A provider is the abstraction layer that enables this.
+Nitric can declare and interact with cloud features in a cloud agnostic way. A provider is the abstraction layer that enables this.
 
-Providers are individual plugins composed of logic to deploy your application, as well as handling SDK calls at runtime. The code you write declares a number of resources, functions, and permissions. The deployment component of the provider takes this specification of what you want, and provisions that as actual infrastructure. The runtime component will take the abstract calls that you make to the SDK at runtime, like calling `.read()` on a file, and convert that into cloud-specific API calls.
+Providers are individual plugins composed of logic to deploy your services, as well as handling SDK calls at runtime. The code you write declares a number of resources, services, and permissions. The deployment component of the provider takes this specification of what you want, and provisions that as actual infrastructure. The runtime component will take the abstract calls that you make to the SDK at runtime, like calling `.read()` on a file, and convert that into cloud-specific API calls.
 
 Find out more about how the Nitric CLI and SDK interact with providers on our [concepts page](/guides/getting-started/concepts).
 
@@ -15,13 +15,13 @@ There are 3 standard providers which are built and maintained by Nitric. These p
 | **Resource**                           | **AWS**                                              | **Azure**                                   | **Google Cloud**                             | **Local**                                                                |
 | -------------------------------------- | ---------------------------------------------------- | ------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------ |
 | [APIs](/apis)                          | [API Gateway](./providers/aws/apis)                  | [API Management](./providers/azure/apis)    | [API Gateway](./providers/gcp/apis)          | [Custom](https://github.com/nitrictech/cli/blob/main/pkg/run/gateway.go) |
-| [Collections](/collections)            | [DynamoDB](./providers/aws/collections)              | [Cosmos DB](./providers/azure/collections)  | [FireStore](./providers/gcp/collections)     | BoltDB                                                                   |
+| [Key Value Stores ](/keyvalue)         | [DynamoDB](./providers/aws/keyvalue)                 | [Cosmos DB](./providers/azure/keyvalue)     | [FireStore](./providers/gcp/keyvalue)        | BoltDB                                                                   |
 | [Messaging: Topics](/messaging#topics) | [SNS](./providers/aws/topics)                        | [Event Grid](./providers/azure/topics)      | [PubSub](./providers/gcp/topics)             | Custom                                                                   |
 | [Messaging: Queues](/messaging#queues) | [SQS](./providers/aws/queues)                        | [Storage Queues](./providers/azure/queues)  | [PubSub](./providers/gcp/queues)             | Custom                                                                   |
 | [Schedules](/schedules)                | [CloudWatch Event Bridge](./providers/aws/schedules) | [Dapr Binding](./providers/azure/schedules) | [Cloud Scheduler](./providers/gcp/schedules) | _currently unavailable_                                                  |
 | [Secrets](/secrets)                    | [Secrets Manager](./providers/aws/secrets)           | [Key Vault](./providers/azure/secrets)      | [Secret Manager](./providers/gcp/secrets)    | Custom                                                                   |
 | [Storage](/storage#buckets)            | [S3](./providers/aws/storage)                        | [Blob Storage](./providers/azure/storage)   | [Cloud Storage](./providers/gcp/storage)     | SeaweedFS                                                                |
-| Compute _(Handlers)_                   | Lambda                                               | Container Apps                              | CloudRun                                     | Docker                                                                   |
+| Services                               | Lambda                                               | Container Apps                              | CloudRun                                     | Docker                                                                   |
 
 ### Deployment
 
@@ -56,4 +56,4 @@ response, err := s3.GetObject(ctx, &s3.GetObjectInput{
 
 Our code is completely open-source on our [GitHub](https://github.com/nitrictech/nitric), so you can know exactly how your resources are being deployed and handled at runtime.
 
-If you have any questions or are curious about building your own custom provider, you can read further documentation [here](./providers/custom/building-custom-provider) or ask our team any questions on [Discord](https://discord.gg/Webemece5C).
+If you have any questions or are curious about building your own custom provider, you can read further documentation [here](./providers/custom/building-custom-provider) or ask our team any questions on [Discord](https://nitric.io/chat).

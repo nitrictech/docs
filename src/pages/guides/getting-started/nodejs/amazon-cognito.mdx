@@ -25,11 +25,11 @@ nitric new
   alt="demo showing creation of a new project with the nitric cli."
 />
 
-In this new nitric project there will be an example API with a single `GET: /hello/:name` route. We'll start by securing this route.
+In this new Nitric project there will be an example API with a single `GET: /hello/:name` route. We'll start by securing this route.
 
 <CodeGroup>
 
-```typescript {{ tag: "functions/hello.ts" }}
+```typescript {{ tag: "services/hello.ts" }}
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -41,7 +41,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-```javascript {{ tag: "functions/hello.js" }}
+```javascript {{ tag: "services/hello.js" }}
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -63,7 +63,7 @@ To add this API Gateway authentication we need to create a `security definition`
 
 <CodeGroup>
 
-```typescript {{ tag: "functions/hello.ts" }}
+```typescript {{ tag: "services/hello.ts" }}
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main', {
@@ -85,7 +85,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-```javascript {{ tag: "functions/hello.js" }}
+```javascript {{ tag: "services/hello.js" }}
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main', {
@@ -120,7 +120,7 @@ In this example we'll apply the security at the API level, ensuring all routes r
 
 <CodeGroup>
 
-```typescript {{ tag: "functions/hello.ts" }}
+```typescript {{ tag: "services/hello.ts" }}
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main', {
@@ -146,7 +146,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-```javascript {{ tag: "functions/hello.js" }}
+```javascript {{ tag: "services/hello.js" }}
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main', {
@@ -176,8 +176,8 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 <Note>
   It's worth noting that these security definitions are *not* enforced when
-  testing nitric applications locally. Currently, they're only enforced when
-  applications are deployed to cloud environments.
+  testing your Nitric services locally. Currently, they're only enforced when
+  the services are deployed to cloud environments.
 </Note>
 
 ## Authorizing requests with middleware
@@ -194,8 +194,8 @@ In the example below we're simply checking whether the user is a member of a par
 
 <CodeGroup>
 
-```typescript {{ tag: "functions/hello.ts" }}
-import { api, faas } from '@nitric/sdk'
+```typescript {{ tag: "services/hello.ts" }}
+import { api, HttpContext, HttpMiddleware } from '@nitric/sdk'
 import * as jwt from 'jsonwebtoken'
 
 interface AccessToken {
@@ -204,7 +204,7 @@ interface AccessToken {
   'cognito:groups': string[]
 }
 
-type AuthContext = faas.HttpContext & { user: AccessToken }
+type AuthContext = HttpContext & { user: AccessToken }
 
 /**
  * Middleware function to authorize "authors".
@@ -212,7 +212,7 @@ type AuthContext = faas.HttpContext & { user: AccessToken }
  * This function verifies that the incoming request contains a JWT token in the
  * authorization header and checks if the user is a member of the "authors" Cognito group.
  */
-const authorizeAuthors: faas.HttpMiddleware = (ctx: AuthContext, next) => {
+const authorizeAuthors: HttpMiddleware = (ctx: AuthContext, next) => {
   const authHeader = Array.isArray(ctx.req.headers['authorization'])
     ? ctx.req.headers['authorization'][0]
     : ctx.req.headers['authorization']
@@ -224,7 +224,7 @@ const authorizeAuthors: faas.HttpMiddleware = (ctx: AuthContext, next) => {
     return ctx
   }
 
-  // It's valuable to check the token's shape, skipped here for brevity.
+  // It's valuable to validate the token's shape, skipped here for brevity.
   ctx.user = jwt.decode(token) as AccessToken
 
   // Ensure the user is a member of the "authors" cognito group
@@ -263,8 +263,8 @@ helloApi.get('/hello/:name', async (ctx: AuthContext) => {
 })
 ```
 
-```javascript {{ tag: "functions/hello.js" }}
-import { api, faas } from '@nitric/sdk'
+```javascript {{ tag: "services/hello.js" }}
+import { api, HttpContext } from '@nitric/sdk'
 import * as jwt from 'jsonwebtoken'
 
 /**

@@ -11,7 +11,7 @@ We'll be making a serverless application which can take information from a HTTP 
 
 - [Pipenv](https://pypi.org/project/pipenv/) - for simplified dependency management
 - The [Nitric CLI](/guides/getting-started/installation)
-- An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
+- _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account
 
 ## Getting started
 
@@ -33,18 +33,16 @@ Make sure all dependencies are resolved using Pipenv:
 pipenv install --dev
 ```
 
-Starting from scratch in the `hello.py` function file, lets start by importing and defining our api.
+Starting from scratch in the `hello.py` service file, lets start by importing and defining our api.
 
 ```python
 from nitric.resources import api
 from nitric.application import Nitric
-from nitric.faas import HttpContext
-
+from nitric.context import HttpContext
 
 main_api = api("main")
 
 Nitric.run()
-
 ```
 
 We can then define our api route which will accept the histogram data to then be returned as an image.
@@ -52,9 +50,8 @@ We can then define our api route which will accept the histogram data to then be
 ```python
 from nitric.resources import api
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 import matplotlib as plt
-
 
 main_api = api("main")
 
@@ -66,7 +63,7 @@ Nitric.run()
 
 ```
 
-The route will be registered for a GET method so that it is a link that can be embed. For example, once the api is complete, it will be able to be used in situations like:
+The route will be registered for a GET method so that it is a link that can be embed. For example, once the API is complete, it will be able to be used in image sources like:
 
 ```html
 <img
@@ -130,7 +127,7 @@ with io.BytesIO() as buffer:  # use buffer memory
     ctx.res.headers = { 'Content-Type': 'image/png' }
 ```
 
-This will save the plot as a png and store it in the buffer. We can then return it in the body of our response and set the header to the correct content type. At the end we want to reset the plot. The plot not being cleared will only effect local reruns, as once deployed the state is ephemeral.
+This will convert the plot to a png and store it in the buffer. We can then return it in the body of our response and set the header to the correct content type. At the end we want to reset the plot. The plot not being cleared will only effect local reruns, as once deployed the state is ephemeral.
 
 ```python
 with io.BytesIO() as buffer:  # use buffer memory
@@ -142,19 +139,13 @@ with io.BytesIO() as buffer:  # use buffer memory
 plt.close()
 ```
 
-We can now test it in our browser. First start the Nitric server:
+We can now test it in our browser. You can start the program by running:
 
 ```bash
 nitric start
 ```
 
-Then run our python application:
-
-```bash
-pipenv run dev
-```
-
-This will register our api and routes with the Nitric server ready for local testing. Open up a browser or HTTP client and use the URL:
+This will register our API and it's routes with the Nitric server ready for local testing. Open up a browser or HTTP client and use the URL:
 
 `http://localhost:4001/histogram?data=1,1,2,2,2,3,3,3,3,5,6,4,5,3,2,6,6,6,5,4&ylabel=Frequency&xlabel=Outcome&title=Outcome%20of%2020%20dice%20rolls`
 
@@ -170,16 +161,10 @@ Setup your credentials and any other cloud specific configuration:
 - [Azure](/reference/providers/azure)
 - [GCP](/reference/providers/gcp)
 
-Create a stack - a collection of resources identified in your project which will be deployed.
+Create your stack. This is an environment configuration file for the cloud provider for which your project will be deployed.
 
 ```bash
 nitric stack new
-```
-
-```
-? What should we name this stack? dev
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
 ```
 
 You can then deploy using the following command:

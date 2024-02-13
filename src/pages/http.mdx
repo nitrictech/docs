@@ -10,22 +10,13 @@ Nitric supports existing web app and API frameworks, including Express, Koa, Fas
   https://github.com/nitrictech/nitric/issues
 </Note>
 
-## Enabling HTTP framework support
-
-HTTP framework support is currently in Preview. To enable it in your project add the following to your `nitric.yaml` file
-
-```yaml
-preview-features:
-  - http
-```
-
 ## Connecting existing frameworks
 
 Here are some examples of how to connect your existing API frameworks with Nitric:
 
 <CodeGroup>
 
-```javascript {{ title: "Express.js (Node.js)" }}
+```javascript {{ title: "Express.js" }}
 import { http } from '@nitric/sdk'
 import express from 'express'
 
@@ -38,7 +29,7 @@ app.use('/hello', (req, res) => {
 http(app)
 ```
 
-```javascript {{ title: "NestJS (Node.js)", tag: "app.module.ts" }}
+```javascript {{ title: "NestJS", tag: "app.module.ts" }}
 import { http } from '@nitric/sdk'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
