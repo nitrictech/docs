@@ -127,7 +127,7 @@ type ProfileInput = Omit<Profile, 'pid'>
 
 ## Define a KV Store
 
-Lets define a kv resource for the resolvers get/set data from with some helper functions for serialization.
+Lets define a KV resource for the resolvers get/set data from with some helper functions for serialization.
 
 ```typescript
 import { kv } from '@nitric/sdk'
@@ -172,7 +172,7 @@ const resolvers = {
 
 These services don't exist, so we'll have to define them.
 
-We can then use the kv within these services. Each resolver will receive an `args` object which holds the graphql arguments from the query.
+We can then use the KV resource within these services. Each resolver will receive an `args` object which holds the graphql arguments from the query.
 
 ## Create a profile
 
