@@ -15,12 +15,6 @@ We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud o
 4. Run locally for testing
 5. Deploy to a cloud of your choice
 
-## Video
-
-Here's a video of this guide built with Node.js:
-
-[Serverless GraphQL on any Cloud](https://www.youtube.com/embed/K7T32ebYSLA)
-
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en/download/)
@@ -83,15 +77,15 @@ Let's first add the GraphQL and uuid module from NPM.
 
 ```bash
 npm install graphql
-npm install uuidv4
+npm install uuid
 ```
 
 Create a new file named 'graphql.ts' in the services folder.
 We can then import `buildSchema`, and write out the schema.
 
 ```typescript
-import { buildSchema } from 'graphql'
-import { uuid } from 'uuidv4'
+import { graphql, buildSchema } from 'graphql'
+import { v4 as uuid } from 'uuid'
 
 const schema = buildSchema(`
   type Profile {
@@ -108,13 +102,12 @@ const schema = buildSchema(`
   }
 
   type Query {
-    getProfiles: [Profile]
-    getProfile(pid: String!): Profile
+    fetchProfiles: [Profile]
+    fetchProfile(pid: String!): Profile
   }
 
   type Mutation {
     createProfile(profile: ProfileInput!): Profile
-    updateProfile(pid: String!, profile: ProfileInput!): Profile
   }
 `)
 ```
@@ -132,14 +125,37 @@ interface Profile {
 type ProfileInput = Omit<Profile, 'pid'>
 ```
 
-## Define a Collection
+## Define a KV Store
 
-Lets define a collections resource for the resolvers get/set data from.
+Lets define a KV resource for the resolvers get/set data from with some helper functions for serialization.
 
 ```typescript
-import { collection } from '@nitric/sdk'
+import { kv } from '@nitric/sdk'
 
-const profiles = collection<ProfileInput>('profiles').for('reading', 'writing')
+const profiles = kv('profiles').for('getting', 'setting')
+
+// Helper function to get current profiles
+async function getProfiles() {
+  try {
+    const serializedList = await profiles.get('profiles')
+    return serializedList && serializedList['ids']
+      ? JSON.parse(serializedList['ids'])
+      : []
+  } catch (error) {
+    await profiles.set('profiles', { ids: [] })
+    return []
+  }
+}
+
+// Helper function to update profiles list
+async function updateProfiles(profileList) {
+  try {
+    const updatedSerializedList = JSON.stringify(profileList)
+    await profiles.set('profiles', { ids: updatedSerializedList })
+  } catch (error) {
+    console.error('Error updating profiles:', error)
+  }
+}
 ```
 
 ## Create Resolvers
@@ -148,80 +164,43 @@ We can create a resolver object for use by the graphql handler.
 
 ```typescript
 const resolvers = {
-  getProfiles,
-  getProfile,
   createProfile,
-  updateProfile,
+  fetchProfiles,
+  fetchProfile,
 }
 ```
 
 These services don't exist, so we'll have to define them.
 
-We can then use the collection within these services. Each resolver will receive an `args` object which holds the graphql arguments from the query.
-
-An example of this is converting the GraphQL query function:
-
-```graphql
-updateProfile(id: String!, profile: ProfileInput!): Profile
-```
-
-Into typescript:
-
-```typescript
-const updateProfile = async ({ pid, profile }): Promise<Profile> => {}
-```
+We can then use the KV resource within these services. Each resolver will receive an `args` object which holds the graphql arguments from the query.
 
 ## Create a profile
 
 ```typescript
 const createProfile = async ({ profile }): Promise<Profile> => {
-  const pid = uuid()
-
-  await profiles.doc(pid).set(profile)
-
-  return {
-    pid,
-    ...profile,
-  }
-}
-```
-
-## Update a profile
-
-```typescript
-const updateProfile = async ({ pid, profile }) => {
-  await profiles.doc(pid).set(profile)
-
-  return {
-    pid,
-    ...profile,
-  }
+  const profileList = await getProfiles()
+  profile.pid = uuid()
+  profileList.push(profile)
+  await updateProfiles(profileList)
+  return profile
 }
 ```
 
 ## Get all profiles
 
 ```typescript
-const getProfiles = async (): Promise<Profile[]> => {
-  const result = await profiles.query().fetch()
-
-  return result.documents.map((doc) => ({
-    pid: doc.id,
-    ...doc.content,
-  }))
+const fetchProfiles = async (): Promise<Profile[]> => {
+  return await getProfiles()
 }
 ```
 
 ## Get a profile by its ID
 
 ```typescript
-const getProfile = async ({ pid }): Promise<Profile> => {
-  const profile = await profiles.doc(pid).get()
-
-  return {
-    pid,
-    ...profile,
-  }
+const fetchProfile = async ({ pid }): Promise<Profile> => {
+  const profileList = await getProfiles()
+  const profile = profileList.find((profile) => profile.pid === pid)
+  return profile
 }
 ```
 
@@ -232,7 +211,7 @@ We'll define an api to put our handler in. This api will only have one endpoint,
 Update the imports to include api and declare the api.
 
 ```typescript
-import { api, collection } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profileApi = api('public')
 ```
