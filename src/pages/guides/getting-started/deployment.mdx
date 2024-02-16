@@ -64,10 +64,10 @@ To apply these handler group configurations, we need to create the groups. That'
 name: my-project
 services:
   - match: services/*.ts
-    start: ts-node {{filename}}
+    start: ts-node $SERVICE_PATH
     type: default
   - match: custom/*.ts
-    start: ts-node {{filename}}
+    start: ts-node $SERVICE_PATH
     type: memory-optimized
 ```
 

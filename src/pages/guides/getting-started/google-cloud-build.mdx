@@ -37,7 +37,7 @@ steps:
       export PATH=$PATH:$HOME/.nitric/bin
 
       # Execute the nitric command
-      nitric up --ci -v2
+      nitric up --ci
     env:
       - 'HOST_DOCKER_INTERNAL_IFACE=eth0'
       - 'PULUMI_CONFIG_PASSPHRASE=${_PULUMI_CONFIG_PASSPHRASE}'
@@ -87,7 +87,7 @@ In the above configuration, both \_PULUMI_CONFIG_PASSPHRASE and \_PULUMI_ACCESS_
 
 Install Pulumi and Nitric, which are necessary for running nitric commands and set the relevant environment paths.
 
-Finally, in the script section of the job, you can utilize the `up` command to deploy your project. The initial argument `--ci` informs the CLI that it's operating within a CI pipeline, enabling raw output. The last argument, `-v2,` adjusts the Nitric CLI output to verbosity level 2, providing detailed logs for troubleshooting any potential problems in your workflow.
+Finally, in the script section of the job, you can utilize the `up` command to deploy your project. The initial argument `--ci` informs the CLI that it's operating within a CI pipeline, enabling raw output.
 
 ```yaml
 steps:
@@ -102,7 +102,7 @@ steps:
       export PATH=$PATH:$HOME/.nitric/bin
 
       # Execute the nitric command
-      nitric up --ci -v2
+      nitric up --ci
     env:
       - 'HOST_DOCKER_INTERNAL_IFACE=eth0'
       - 'PULUMI_CONFIG_PASSPHRASE=${_PULUMI_CONFIG_PASSPHRASE}'

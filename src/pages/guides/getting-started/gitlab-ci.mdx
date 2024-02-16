@@ -41,7 +41,7 @@ deploy:
     - curl -fsSL https://get.pulumi.com/ | bash
     - export PATH=$PATH:$HOME/.pulumi/bin
   script:
-    - nitric up --ci -v2
+    - nitric up --ci
 ```
 
 ## Breaking it down
@@ -132,9 +132,9 @@ before_script:
 
 ### Deploy the stack
 
-Finally, in the `script:` section of the job, the `up` command can be used to deploy your project. The first argument `--ci` tells the CLI that we are running in a ci pipeline and should have raw output. The final argument `-v2` sets the Nitric CLI output to verbosity level 2, so the workflow will log plenty of detail for us to use to debug any issues.
+Finally, in the `script:` section of the job, the `up` command can be used to deploy your project. The first argument `--ci` tells the CLI that we are running in a ci pipeline and should have raw output.
 
 ```yaml
 script:
-  - nitric up --ci -v2
+  - nitric up --ci
 ```

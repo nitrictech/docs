@@ -244,5 +244,5 @@ publicApi.post('/examples', async (ctx) => {
 name: examples
 services:
   - match: functions/*.ts
-    start: ts-node {{filename}}
+    start: ts-node $SERVICE_PATH
 ```
