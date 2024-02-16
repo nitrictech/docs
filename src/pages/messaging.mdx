@@ -3,56 +3,48 @@ export const description =
 
 # Messaging
 
-Nitric provides two common options for asynchronous messaging. Topics for publish/subscribe messaging, where new messages are immediately _pushed_ to subscribers, and Queues for _pull_ messaging where new messages are put on a queue and must be requested.
+Nitric provides two common options for scalable, decoupled, asynchronous messaging between services. Topics for publish/subscribe messaging, where new messages are immediately _pushed_ to subscribers, and Queues for _pull_ messaging where new messages are put on a queue and must be requested.
 
-Nitric provides unique names for specific message types. Messages sent to a _Topic_ are called _Events_, while messages sent to a _Queue_ are called _Tasks_. The structures of these messages are very similar, but the delivery and retry mechanisms are different. The unique naming removes ambiguity when working with these messages in code and makes their intention clear.
-
-## Topics & Events
-
-Topics and Events provide a scalable, decoupled, way to communicate between services.
+In some circumstances messages sent to a _Topic_ may also be called _Events_, while messages sent to a _Queue_ may be called _Tasks_. The structures of these messages are very similar, but the delivery and retry mechanisms are different. It can be helpful to refer to these messages differently to assist in understanding the context in which they are used.
 
 ### Topics
 
-A topic is a named target where events can be published. They can be thought of as a subject that your services can discuss with each other.
+A topic is a named resource where events can be published. They can be thought of as a subject that your services are communicating about.
 
-They're awesome for allowing serverless services to communicate in a stateless, scalable and highly decoupled way.
-
-### Events
-
-Events are messages that can be published on a topic. They can be thought of as a notification that is sent to say that something new has happened.
+Topics are often the first choice for communication between services, since they offer stateless, scalable and highly decoupled communication.
 
 ### Subscriptions
 
-A subscription is something that listens to a topic. You can think of it as a channel that notifies your services when something new arrives on the topic.
+A subscription is a binding between a topic and a service. You can think of it as a channel that notifies your services when something new arrives on the topic.
 
 ### Creating a Topic
 
-Nitric allows you to define named topics. When defining topics, you can give the function permissions for publishing. If permissions are not specified, subscribers can be created.
+Nitric allows you to define named topics. When defining topics, you can give the service permissions for publishing. If permissions are not specified, subscribers can be created.
 
-Here's an example of how to create a topic with permissions to publish events.
+Here's an example of how to create a topic with permissions to publish messages.
 
 <CodeGroup>
 
 ```javascript
 import { topic } from '@nitric/sdk'
 
-const userCreatedTopic = topic('user-created').for('publishing')
+const userCreatedTopic = topic('user-created').for('publish')
 ```
 
 ```python
 from nitric.resources import topic
 from nitric.application import Nitric
 
-user_created_topic = topic("user-created").allow("publishing")
+user_created_topic = topic("user-created").allow("publish")
 
 Nitric.run()
 ```
 
 </CodeGroup>
 
-### Publishing an event
+### Publishing a message
 
-To send an event to a topic and notify all subscribers, use the `publish()` method on the topic reference. The service must have permissions to `publish` to the topic.
+To send a message to a topic and notify all subscribers, use the `publish()` method on the topic reference. The service must have permissions to `publish` to the topic.
 
 The below example publishes a message to a topic called `user-created`.
 
@@ -61,7 +53,7 @@ The below example publishes a message to a topic called `user-created`.
 ```javascript
 import { topic } from '@nitric/sdk'
 
-const userCreatedTopic = topic('user-created').for('publishing')
+const userCreatedTopic = topic('user-created').for('publish')
 
 await userCreatedTopic.publish({
   email: 'new.user@example.com',
@@ -72,7 +64,7 @@ await userCreatedTopic.publish({
 from nitric.resources import topic
 from nitric.application import Nitric
 
-user_created_topic = topic("user-created").allow("publishing")
+user_created_topic = topic("user-created").allow("publish")
 
 await user_created_topic.publish({
   "email": "new.user@example.com"
@@ -85,9 +77,9 @@ Nitric.run()
 
 ### Subscribing to a topic
 
-To execute a function when new events are published you can set up subscribers. The delay between publishing an event and a subscriber being executed is usually only a few milliseconds. This makes subscribers perfect for responding to events as they happen.
+To execute a function when new messages are published you can create subscribers. The delay between publishing a message and a subscriber being executed is usually only a few milliseconds. This makes subscribers perfect for responding to messages as they happen.
 
-The below code shows a subscription that responds to events when new users are created.
+The below code shows a subscription that responds to messages when new users are created.
 
 <CodeGroup>
 
@@ -123,9 +115,9 @@ Nitric.run()
 
 ### Limitations on Publishing and Subscribing
 
-Nitric won't allow you to request publishing access and set up a subscriber in the same function.
+Nitric won't allow you to request publish permissions and create a subscriber in the same service.
 
-The limitation exists to protect you from infinite loops in deployed services where a service calls itself indirectly via a topic. These sorts of mistakes can lead to large unintentional cloud charges - something you probably want to avoid.
+This limitation exists to protect against infinite loops in deployed services where a service calls itself indirectly via a topic. These sorts of loops can lead to large unintentional cloud charges - something to avoid.
 
 <CodeGroup>
 
@@ -133,7 +125,7 @@ The limitation exists to protect you from infinite loops in deployed services wh
 // 🚫 this is invalid
 import { topic } from '@nitric/sdk'
 
-const loopTopic = topic('infinite').for('publishing')
+const loopTopic = topic('infinite').for('publish')
 
 loopTopic.subscribe(async (ctx) => {
   await loopTopic.publish({ payload: {} })
@@ -145,7 +137,7 @@ loopTopic.subscribe(async (ctx) => {
 from nitric.resources import topic
 from nitric.application import Nitric
 
-loop_topic = topic("infinite").allow("publishing")
+loop_topic = topic("infinite").allow("publish")
 
 @loop_topic.subscribe()
 async def danger(ctx):
@@ -156,15 +148,15 @@ Nitric.run()
 
 </CodeGroup>
 
-### Reliable event handling
+### Reliable subscribers
 
-If a subscriber encounters an error or is terminated before it finishes processing an event, what happens? Is the event lost?
+If a subscriber encounters an error or is terminated before it finishes processing a message, what happens? Is the event lost?
 
-Nitric deploys topics to cloud services that support "at-least-once delivery". Events are _usually_ delivered exactly once, in the same order that they're published. However, to prevent lost events, they're sometimes delivered more than once or out of order.
+Nitric deploys topics to cloud services that support "at-least-once delivery". Messages are _usually_ delivered exactly once, in the same order that they're published. However, to prevent lost messages, they're sometimes delivered more than once or out of order.
 
-Typically, retries occur when a subscriber doesn't respond successfully, like when unhandled exceptions occur. You'll want to make sure events aren't processed again by accident or partially processed, leaving your system in an unexpected state.
+Typically, retries occur when a subscriber doesn't respond successfully, like when unhandled exceptions occur. You'll typically want to ensure messages aren't processed again by accident or partially processed, leaving the system in an unexpected state.
 
-Luckily, building atomic publishers and idempotent subscribers is enough to solve this.
+Building atomic publishers and idempotent subscribers can solve this.
 
 #### Atomic publishers
 
@@ -174,7 +166,7 @@ One solution to this problem is the [Transactional Outbox Pattern](https://micro
 
 #### Idempotent subscribers
 
-Events can be delivered more than once, but they should only be _processed_ once. To do this your subscribers need to identify and disregard duplicate events.
+Messages from a topic can be delivered more than once, but they should typically only be _processed_ once. To do this your subscribers need to identify and disregard duplicate events.
 
 Usually checking for duplicate payloads or IDs is enough. When you receive an event you've seen before don't process it, skip straight to returning a `success` response from your subscriber.
 
@@ -216,53 +208,49 @@ Nitric.run()
 </CodeGroup>
 
 <Note>
-  If you're checking for duplicate IDs, make sure publishers can't resend failed
+  If you're checking for duplicate IDs, ensure publishers can't resend failed
   events with new IDs.
 </Note>
 
 You can read more about idempotent subscribers and patterns to handle it [here](https://microservices.io/post/microservices/patterns/2020/10/16/idempotent-consumer.html).
 
-## Queues
-
-Queues and Tasks provide a scalable, decoupled, way for services to communicate asynchronously.
-
 ### Queues
 
-Queues are named targets where tasks can be sent. They can be thought of as a group of related tasks. Unlike [topics](#topics), tasks sent to a queue won't automatically trigger services to process them. Instead, services receive tasks from the queue by requesting them.
+Queues are another option for asynchronous messaging. Unlike [topics](#topics), messages sent to a queue won't automatically trigger services to process them. Instead, services dequeue message by requesting them.
 
-This makes queues awesome for processing work asynchronously, often paired with [schedules](/schedules) to support batch workloads, like nightly processes.
+This makes queues ideal for batch workloads, often paired with [schedules](/schedules).
 
-### Tasks
-
-A task is a form of message that can be sent to a queue. They can be thought of as a collection of data that has been queued for processing some time in the future.
+<Note>
+Queue disambiguation: Some systems and cloud providers use the term "queue" to refer to a messaging broker with features akin to a topic (i.e. they can push messages to subscribers). In Nitric, a queue is a resource that messages are sent to and pulled from, while a topic is a resource that messages are sent to and pushed from.
+</Note>
 
 ### Creating a Queue
 
-Nitric allows you to define named queues. When defining queues, you can give the service permissions for receiving and sending.
+Nitric allows you to define named queues. When defining queues, you can give the service permissions for enqueueing and dequeueing messages.
 
-Here's an example of how to create a queue with permissions for sending and receiving.
+Here's an example of how to create a queue with permissions for enqueueing and dequeueing.
 
 <CodeGroup>
 
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const transactionQueue = queue('transactions').for('sending', 'receiving')
+const transactionQueue = queue('transactions').for('enqueue', 'dequeue')
 ```
 
 ```python
 from nitric.resources import queue
 
-transaction_queue = queue("transactions").allow("sending", "receiving")
+transaction_queue = queue("transactions").allow("enqueue", "dequeue")
 
 Nitric.run()
 ```
 
 </CodeGroup>
 
-### Sending Tasks
+### Enqueue Messages
 
-To send a task to a queue, use the `send()` method on the queue reference. The function must have permissions to `send` to the queue.
+To send a message to a queue, use the `enqueue()` method on the queue reference. The function must have permissions to `enqueue` to the queue.
 
 The below example sends a message to a queue called `transactions`.
 
@@ -271,7 +259,7 @@ The below example sends a message to a queue called `transactions`.
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const transactionQueue = queue('transactions').for('sending')
+const transactionQueue = queue('transactions').for('enqueue')
 
 await transactionQueue.send({
   message: 'hello world',
@@ -281,7 +269,7 @@ await transactionQueue.send({
 ```python
 from nitric.resources import queue
 
-transaction_queue = queue("transactions").allow("sending")
+transaction_queue = queue("transactions").allow("enqueue")
 
 await transaction_queue.send({
   "message": "hello world"
@@ -292,14 +280,14 @@ Nitric.run()
 
 </CodeGroup>
 
-Tasks can also be sent in batches by providing an array of tasks.
+Messages can also be sent in batches by providing an array.
 
 <CodeGroup>
 
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const transactionQueue = queue('transactions').for('sending')
+const transactionQueue = queue('transactions').for('enqueue')
 
 await transactionQueue.send([
   {
@@ -315,7 +303,7 @@ await transactionQueue.send([
 from nitric.resources import queue
 from nitric.application import Nitric
 
-transaction_queue = queue("transactions").allow("sending")
+transaction_queue = queue("transactions").allow("enqueue")
 
 await transaction_queue.send([
   {
@@ -330,30 +318,30 @@ Nitric.run()
 
 </CodeGroup>
 
-### Receiving and Acknowledging Tasks
+### Dequeueing and Acknowledging Messages
 
-When you pull tasks from a queue, they are not immediately deleted. Instead, they are leased, which means they are temporarily hidden from other services until the lease expires.
+When you dequeue messages they are not immediately deleted from the queue. Instead, they are leased, which means they are temporarily hidden from other services until the lease expires.
 
-To ensure proper handling, your code should mark a task as `complete` after successfully processing it. This action permanently removes the task from the queue.
+To ensure proper handling, your code should mark a dequeued message as `complete` after successfully processing it. This action permanently removes the message from the queue.
 
-If a lease expires before a task is marked as complete, the task will reappear in the queue and can be received again. This mechanism prevents tasks from getting lost in case of failures. If your service encounters an error or is terminated before completing a task, it will automatically reappear in the queue, ready to be processed again.
+If a lease expires before a dequeued message is marked as complete, the message will reappear in the queue and can be dequeued again. This mechanism prevents messages from getting lost in case of failures. If your service encounters an error or is terminated before completing processing of a dequeued message, it will automatically reappear in the queue, ready to be processed again.
 
-By following this approach, you can ensure reliable task processing and minimize the chances of losing tasks in failure scenarios.
+By following this approach, you can ensure reliable message processing and minimize the chances of losing data in failure scenarios.
 
-The below example receives 10 tasks using the `receive()` method, and then acknowledges the task as completed using the `complete()` method. You'll note that the service has permissions to receive messages.
+The below example dequeues 10 messages using the `dequeue()` method, then acknowledges them as complete using the `complete()` method. You'll note that the service has permissions to dequeue messages.
 
 <CodeGroup>
 
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const transactionQueue = queue('transactions').for('receiving')
+const transactionQueue = queue('transactions').for('dequeue')
 
-const tasks = await transactionQueue.receive(10)
+const tasks = await transactionQueue.dequeue(10)
 
 for (let task of tasks) {
   // process your task's data
-  console.log(task.payload)
+  console.log(task.message)
 
   // acknowledge when the task is complete
   await task.complete()
@@ -363,13 +351,13 @@ for (let task of tasks) {
 ```python
 from nitric.resources import queue
 
-transaction_queue = queue("transactions").allow("receiving")
+transaction_queue = queue("transactions").allow("dequeue")
 
-tasks = await transaction_queue.receive(10)
+tasks = await transaction_queue.dequeue(10)
 
 for task in tasks:
   # process your task's data
-  print(task.payload)
+  print(task.message)
 
   # acknowledge when the task is complete
   await task.complete()
@@ -379,6 +367,6 @@ for task in tasks:
 
 ## Choosing between queues and topics
 
-It's common to ask when to use a queue or a topic. From a publisher's point of view, both queues and topics are almost identical. The difference is primarily on the receiver/subscriber side. Topics push new messages to their subscribers, immediately spinning up workers to process the events, while queues rely on the receiver to ask for new messages to process.
+It's common to ask when to use a queue or a topic. From a publisher's point of view, both queues and topics are almost identical. The difference is primarily on the receiver/subscriber side. Topics push new messages to their subscribers, immediately spinning up workers to process them, while queues rely on the receiver to ask for new messages to process.
 
 For these reasons, we usually default to Topics. Queues are more suitable for batch workloads or situations where there are occasional surges of requests that can be processed at a later time.

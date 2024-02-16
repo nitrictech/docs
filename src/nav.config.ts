@@ -901,12 +901,12 @@ const fullNav: FullNav = {
           href: '/reference/nodejs/queues/queue',
         },
         {
-          title: 'queue.send()',
-          href: '/reference/nodejs/queues/queue-send',
+          title: 'queue.enqueue()',
+          href: '/reference/nodejs/queues/queue-enqueue',
         },
         {
-          title: 'queue.receive()',
-          href: '/reference/nodejs/queues/queue-receive',
+          title: 'queue.dequeue()',
+          href: '/reference/nodejs/queues/queue-dequeue',
         },
       ],
     },
@@ -1341,12 +1341,12 @@ const fullNav: FullNav = {
           href: '/reference/python/queues/queue',
         },
         {
-          title: 'queue.send()',
-          href: '/reference/python/queues/queue-send',
+          title: 'queue.enqueue()',
+          href: '/reference/python/queues/queue-enqueue',
         },
         {
-          title: 'queue.receive()',
-          href: '/reference/python/queues/queue-receive',
+          title: 'queue.dequeue()',
+          href: '/reference/python/queues/queue-dequeue',
         },
       ],
     },
