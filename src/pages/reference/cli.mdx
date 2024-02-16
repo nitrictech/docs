@@ -63,7 +63,7 @@ The command will also create a `nitric.yaml` file. This file contains the config
 name: my-project
 services:
   - match: services/*.ts
-    start: ts-node {{filename}}
+    start: ts-node $SERVICE_PATH
 ```
 
 If you want to specify a specific type of service that matches your stack config, you can use this syntax instead:
@@ -72,10 +72,10 @@ If you want to specify a specific type of service that matches your stack config
 name: my-project
 services:
   - match: services/*.ts
-    start: ts-node {{filename}}
+    start: ts-node $SERVICE_PATH
     type: default
   - match: custom/*.ts
-    start: ts-node {{filename}}
+    start: ts-node $SERVICE_PATH
     type: memory-optimized
 ```
 
