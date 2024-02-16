@@ -33,15 +33,15 @@ The Nitric CLI's `new` command provides prompts to scaffold new projects from te
 <CodeGroup>
 
 ```bash {{ title: "TypeScript" }}
-nitric new hello-world "official/TypeScript - Starter"
+nitric new hello-world ts-starter
 ```
 
 ```bash {{ title: "JavaScript" }}
-nitric new hello-world "official/JavaScript - Starter"
+nitric new hello-world js-starter
 ```
 
 ```bash {{ title: "Python" }}
-nitric new hello-world "official/Python - Starter"
+nitric new hello-world py-starter
 ```
 
 </CodeGroup>
@@ -115,26 +115,11 @@ Your project should now look like this:
 
 Nitric provides a local development server offering emulated versions of cloud services, suitable for local development/testing. You can use the Nitric CLI to start the local server using the `nitric start` command.
 
-Once the server has started, you can run your project like any other application. The starter templates, provide a recommended setup for each language.
-
-<CodeGroup>
-
-```bash {{ title: "TypeScript" }}
-npm run dev
-```
-
-```bash {{ title: "JavaScript" }}
-npm run dev
-```
-
-```bash {{ title: "Python" }}
-# start the nitric local development server
+```bash
 nitric start
-# in another terminal run the code:
-pipenv run dev
 ```
 
-</CodeGroup>
+Nitric will automatically run your application using the service start script, this is located in your `nitric.yaml`.
 
 After your service is running, it will register itself with the server. All the APIs are locally hosted on their own port, which will be displayed in the CLI output as `http://localhost:<port_number>`.
 
@@ -167,9 +152,14 @@ Watch this brief video to see the development dashboard in action. You'll get a 
   </div>
 </div>
 
+<Note>
+  The video currently showcases v0 of the local dashboard and will be updated
+  soon.
+</Note>
+
 ## Making updates
 
-Most of Nitric's language templates enable hot-reloading by default, so at this point, you can start making changes to services and see what happens.
+Nitric's language templates enable hot-reloading by default, so at this point, you can start making changes to services and see what happens.
 
 Start by opening the `hello` service in your editor and adding a new route to the API, then save, and execute the file:
 
@@ -269,7 +259,7 @@ The `stack new` command below will create a stack named `dev` that uses the `aws
 nitric stack new dev aws
 ```
 
-Continue by picking a region for your stack.
+Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region, such as `us-east-1`.
 
 Now you can deploy your `dev` stack with the `up` command.
 
