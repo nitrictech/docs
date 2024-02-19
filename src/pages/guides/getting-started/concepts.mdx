@@ -43,7 +43,7 @@ You'll notice in the example that there aren't any cloud-specific references, su
 
 Nothing about Nitric is magic, it's just composed from a few components that work together to help you build cloud apps. The main components of Nitric are the CLI, language SDKs, then a runtime server and deployment engine for each provider.
 
-How your application is deployed, configured, secured and interacts with cloud resources is all determined by the [provider](/reference/providers) you choose during deployment. Providers are deployment and runtime plugins that target a cloud (or other host) and the specific services of that host chosen to fulfill each of the resources Nitric provides, such as a container runtime, buckets, collections, API gateways, queues, etc.
+How your application is deployed, configured, secured and interacts with cloud resources is all determined by the [provider](/reference/providers) you choose during deployment. Providers are deployment and runtime plugins that target a cloud (or other host) and the specific services of that host chosen to fulfill each of the resources Nitric provides, such as a container runtime, buckets, key/value stores, API gateways, queues, etc.
 
 Nitric has provider implementations for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). You're also able to [build your own](/reference/providers/custom/building-custom-provider) with the infrastructure-as-code tools and cloud providers of your choice. There is also a local provider which can run your code on your own machine during development.
 

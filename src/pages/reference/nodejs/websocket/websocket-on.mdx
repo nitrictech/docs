@@ -46,7 +46,7 @@ Unlike the other websocket events the `connect` event has access to the query pa
 Additionally, the `connectionId` provided during this event will be used for all future communication with the client via this connection, it should be persisted in your application until the connection is terminated.
 
 ```javascript
-import { websocket, collection } from '@nitric/sdk'
+import { websocket, kv } from '@nitric/sdk'
 import { isValidConnection, registerConnection } from 'lib/connections'
 
 const socket = websocket('socket')
@@ -66,7 +66,7 @@ socket.on('connect', async (ctx) => {
 Websocket connections need to be managed. This can be done using any persistent data store you like. One approach is to use a Nitric [key value store](/keyvalue).
 
 ```javascript
-import { websocket, collection } from '@nitric/sdk'
+import { websocket, kv } from '@nitric/sdk'
 
 const socket = websocket('socket')
 const connections = kv('connections').for('getting', 'setting', 'deleting')

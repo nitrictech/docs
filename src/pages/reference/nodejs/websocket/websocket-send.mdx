@@ -46,37 +46,37 @@ const sendMessage = async (connectionId, message) => {
 </Note>
 
 ```javascript
-import { websocket, collection } from '@nitric/sdk'
+import { websocket, kv } from '@nitric/sdk'
 
 const socket = websocket('socket')
 const connections = kv('connections').for('getting', 'setting', 'deleting')
 
 socket.on('connect', async (ctx) => {
-  const connectionList = await connections.get('connections')
-  await connections.set([
-    ...connectionList,
-    {
-      // store any metadata related to the connection here
-      connectionId: ctx.req.connectionId,
-    },
-  ])
+  let conns = {}
+  try {
+    conns = await connections.get('connections')
+  } catch (e) {
+    console.log("creating new connections store")
+  }
+  await connections.set('connections', {
+    ...conns,
+    [ctx.req.connectionId]: new Date(),
+  })
 })
 
 socket.on('disconnect', async (ctx) => {
-  const connectionList = await connections.get('connections')
-  await connections.set(
-    'connections',
-    connectionList.filter((c) => c.connectionId === ctx.req.connectionId)
-  )
+  const conns = await connections.get('connections')
+  delete conns[ctx.req.connectionId]
+  await connections.set('connections', conns)
 })
 
 const broadcast = async (data) => {
-  const connectionList = await connections.get('connections')
+  const conns = await connections.get('connections')
 
   await Promise.all(
-    connectionList.map(async (connection) => {
+    Object.keys(conns).map(async (connectionId) => {
       // Send message to a connection
-      await socket.send(connection.connectionId, data)
+      await socket.send(connectionId, data)
     })
   )
 }

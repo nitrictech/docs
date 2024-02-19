@@ -39,7 +39,7 @@ This same behavior occurs for schedules, APIs and subscriptions across all suppo
 
 ### Requested Access
 
-When the access needed isn't obvious we assume no access to ensure safety. Instead, the access must be requested before it is granted. This applies to most resources your code interacts with (e.g. collections, buckets, queues, etc.).
+When the access needed isn't obvious we assume no access to ensure safety. Instead, the access must be requested before it is granted. This applies to most resources your code interacts with (e.g. topics, buckets, queues, etc.).
 
 Nitric resource objects provide the `for()` method to describe what the resource will be used for within the scope of the current source file. Nitric converts these definitions into the appropriate policies during deployment based on the targeted cloud provider.
 
