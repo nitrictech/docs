@@ -123,7 +123,7 @@ taskListApi.post('/', async (ctx) => {
     const id = uuid.generate()
     const now = new Date().getTime()
 
-    await taskLists.doc(id).set({
+    await taskLists.set(id, {
       id,
       name,
       createdAt: now,
