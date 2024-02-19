@@ -56,7 +56,7 @@ socket.on('connect', async (ctx) => {
   try {
     conns = await connections.get('connections')
   } catch (e) {
-    console.log("creating new connections store")
+    console.log('creating new connections store')
   }
   await connections.set('connections', {
     ...conns,
