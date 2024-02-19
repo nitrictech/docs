@@ -40,8 +40,8 @@ Instead, messages are hidden and requesters are granted a temporary lease for ea
 When processing is complete, the requester must tell the queue the message was completed successfully, which will remove it from the queue and stop it being reprocessed.
 
 <Note>
-  Failing to complete a dequeued message before the lease expires will result in it being
-  re-queued.
+  Failing to complete a dequeued message before the lease expires will result in
+  it being re-queued.
 </Note>
 
 To notify the queue that a dequeued message was completed call the `complete()` method on the message reference.
