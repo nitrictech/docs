@@ -118,7 +118,7 @@ We'll go over it section by section, but here is the full example:
         .resolves.toEqual({
           ...ctx,
           res: {
-            body: "Successfully added 'Test' to user collection"
+            body: "Successfully added 'Test'"
           }
         })
 
@@ -172,7 +172,7 @@ test('It should add a new image to the bucket', async () => {
   await expect(handleAddImage(ctx)).resolves.toEqual({
     ...ctx,
     res: {
-      body: "Successfully added 'Test' to user collection",
+      body: "Successfully added 'Test'",
     },
   })
 

@@ -10,8 +10,8 @@ Each Nitric Key Value Store will result in the creation of a DynamoDB Table.
 
 ## Deployment
 
-During deployment the Nitric CLI deploys your collections:
+During deployment the Nitric CLI deploys your key/value stores:
 
-- Declared collections are deployed as DynamoDB tables
+- Declared stores are deployed as DynamoDB tables
 - Appropriate partition and sort keys are set on the table to enable setting and retrieval features
 - IAM policies are setup enabling declared access by your Lambda Functions

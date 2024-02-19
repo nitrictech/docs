@@ -72,15 +72,13 @@ import { api } from '@nitric/sdk'
 export const taskListApi = api('taskList')
 ```
 
-We also want a collection to store task lists. We omit the tasks so that we can instead store them as sub-collections. This makes it easy to query individual tasks.
+We also want a key/value store to store task lists.
 
-```typescript {{ tag: "todo-api/resources/collections.ts" }
-import { collections } from '@nitric/sdk'
+```typescript {{ tag: "todo-api/resources/stores.ts" }
+import { kv } from '@nitric/sdk'
 import { TaskList } from 'types'
 
-type TaskCollection = Omit<TaskList, 'tasks'>
-
-export const taskListCol = collection<TaskCollection>('taskLists')
+export const taskLists = kv<TaskList>('taskLists')
 ```
 
 ## Define API routes
@@ -92,7 +90,6 @@ import { taskListApi } from '../resources/apis.ts';
 
 taskListApi.get("/:listid/:id", async (ctx) => {});      // Get task with [id]
 taskListApi.get("/:listid", async (ctx) => {);           // Get task list with [id]
-taskListApi.get("/", async (ctx) => {});                 // Get all task lists
 taskListApi.post("/:listid", async (ctx) => {});         // Post new task for task list
 taskListApi.post("/", async (ctx) => {});                // Post new task list
 taskListApi.patch("/:listid/:id", async (ctx) => {});    // Update task
@@ -100,15 +97,15 @@ taskListApi.delete("/:listid", async (ctx) => {});       // Delete task list
 taskListApi.delete("/:listid/:id", async (ctx) => {});   // Delete task
 ```
 
-Now we can import the task list collection and request permissions that allow this function to access it.
+Now we can import the task list key/value store and request permissions that allow this service to access it.
 
 ```typescript {{ tag: "todo-api/functions/tasks.ts" }}
-import { taskListCol } from '../resources/collections.ts'
+import { taskListCol } from '../resources/stores.ts'
 
-const taskLists = taskListCol.for('reading', 'writing', 'deleting')
+const taskLists = taskListCol.for('setting', 'getting', 'deleting')
 ```
 
-With access to the collection, we can start adding tasks and task lists. We use the collection to store task lists, and then a sub-collection on each task list to store tasks.
+With access to the key/value store, we can start adding tasks and task lists.
 
 ### Create a task list
 
@@ -124,28 +121,18 @@ taskListApi.post('/', async (ctx) => {
     }
 
     const id = uuid.generate()
+    const now = new Date().getTime()
 
-    await taskLists.doc(id).set({
+    await taskLists.set(id, {
       id,
       name,
-      createdAt: new Date().getTime(),
+      createdAt: now,
+      tasks: tasks.map(task => ({
+        ...task,
+        complete: false,
+        createdAt: now,
+      })
     })
-
-    // add any tasks if supplied
-    if (tasks) {
-      for (const task of tasks) {
-        const taskId = uuid.generate()
-        await taskLists
-          .doc(id)
-          .collection<Task>('tasks')
-          .doc(taskId)
-          .set({
-            ...task,
-            complete: false,
-            createdAt: new Date().getTime(),
-          })
-      }
-    }
 
     ctx.res.body = 'Successfully added task list!'
   } catch (err) {
@@ -160,7 +147,7 @@ taskListApi.post('/', async (ctx) => {
 
 ### Create a new task
 
-We can now accept task list ids and use them to add new tasks under the `listid -> tasks` sub collection.
+We can now accept task list ids and use them to add new tasks under that list.
 
 ```typescript {{ tag: "todo-api/functions/tasks.ts" }}
 taskListApi.post('/:listid', async (ctx) => {
@@ -182,15 +169,22 @@ taskListApi.post('/:listid', async (ctx) => {
 
     const taskId = uuid.generate()
 
-    await taskLists
-      .doc(listid)
-      .collection<Omit<Task, 'id'>>('tasks')
-      .doc(taskId)
-      .set({
-        ...task,
-        complete: false,
-        createdAt: new Date().getTime(),
-      })
+    const list = await taskLists.get(listid)
+
+    list = {
+      ...list,
+      tasks: [
+        ...list.tasks,
+        {
+          ...task,
+          id: taskId,
+          complete: false,
+          createdAt: new Date().getTime(),
+        },
+      ],
+    }
+
+    await taskLists.set(listid, list)
 
     ctx.res.body = 'Successfully added task!'
   } catch (err) {
@@ -203,54 +197,6 @@ taskListApi.post('/:listid', async (ctx) => {
 })
 ```
 
-### Retrieve all task lists
-
-```typescript {{ tag: "todo-api/functions/tasks.ts" }}
-import { sortByCreatedAt } from "../common/utils";
-...
-taskListApi.get("/", async (ctx) => {
-  try {
-    const taskList = await taskLists.query().fetch();
-
-    const taskListsWithTasks = await Promise.all(
-      taskList.documents.map(async (doc) => {
-        const { documents: tasks } = await taskLists
-          .doc(doc.id)
-          .collection<Task>("tasks")
-          .query()
-          .fetch();
-
-        return {
-          id: doc.id,
-          ...doc.content,
-          tasks: tasks
-            .map(({ id, content }) => ({ id, ...content }))
-            .sort(sortByCreatedAt),
-        };
-      })
-    );
-
-    ctx.res.json(taskListsWithTasks.sort(sortByCreatedAt));
-  } catch (err) {
-    console.log(err);
-    ctx.res.body = "Failed to retrieve taskList list";
-    ctx.res.status = 400;
-  }
-
-  return ctx;
-});
-```
-
-```typescript {{ tag: "todo-api/common/utils.ts" }}
-import { Task } from 'types'
-
-type CreatedAtData = Pick<Task, 'createdAt'>
-
-export const sortByCreatedAt = (a: CreatedAtData, b: CreatedAtData) => {
-  return a.createdAt < b.createdAt ? 1 : -1
-}
-```
-
 ### Retrieve a task with filters
 
 ```typescript {{ tag: "todo-api/functions/tasks.ts" }}
@@ -260,35 +206,27 @@ taskListApi.get('/:listid', async (ctx) => {
   const filters = ctx.req.query as Filters
 
   try {
-    const taskListRef = taskLists.doc(listid)
-    let query = taskListRef.collection<Task>('tasks').query()
+    const { tasks } = await taskLists.get(listid)
 
-    // Apply filters to query before executing query;
-    Object.entries(filters).forEach(([k, v]) => {
-      switch (k) {
-        case 'complete': {
-          query = query.where(k, '==', v === 'true')
-          break
+    const filteredTasks = tasks.filter((task) => {
+      return Object.entries(filters).every(([k, v]) => {
+        switch (k) {
+          case 'complete': {
+            return task[k] === v
+          }
+          case 'dueDate': {
+            return task[k] >= v
+          }
+          default: {
+            return task[k].startsWith(v)
+          }
         }
-        case 'dueDate': {
-          query = query.where(k, '>=', v)
-          break
-        }
-        default: {
-          query = query.where(k, 'startsWith', v as string)
-          break
-        }
-      }
+      })
     })
-
-    const taskList = await taskListRef.get()
-    const tasks = await query.fetch()
 
     ctx.res.json({
       ...taskList,
-      tasks: tasks.documents
-        .map((doc) => ({ id: doc.id, ...doc.content }))
-        .sort(sortByCreatedAt),
+      tasks: filteredTasks,
     })
   } catch (err) {
     console.log(err)
@@ -307,11 +245,8 @@ taskListApi.get('/:listid/:id', async (ctx) => {
   const { listid, id } = ctx.req.params
 
   try {
-    // Get our task list with id [listId]
-    const taskListRef = taskListCol.doc(listid)
-    // Get all tasks from the collection with id [id]
-    const task = await taskListRef.collection<Task>('tasks').doc(id).get()
-
+    const list = await taskLists.get(listid)
+    const task = list.tasks.find((task) => task.id === id)
     ctx.res.json(task)
   } catch (err) {
     console.log(err)
@@ -331,17 +266,10 @@ taskListApi.patch('/:listid/:id', async (ctx) => {
   const { completed } = ctx.req.json() as ToggleRequest
 
   try {
-    const taskListRef = taskLists.doc(listId)
-    const taskRef = taskListRef.collection<Task>('tasks').doc(id)
-    const originalTask = await taskRef.get()
-
-    await taskListRef
-      .collection<Task>('tasks')
-      .doc(id)
-      .set({
-        ...originalTask,
-        complete: completed,
-      })
+    const list = await taskLists.get(listId)
+    const task = list.tasks.find((task) => task.id === id)
+    task.complete = completed
+    await taskLists.set(listId, list)
 
     ctx.res.body = 'Successfully updated task'
   } catch (err) {
@@ -361,9 +289,9 @@ taskListApi.delete('/:listid/:id', async (ctx) => {
   const { listid: listId, id } = ctx.req.params
 
   try {
-    const taskListRef = taskLists.doc(listId)
-    await taskListRef.collection('tasks').doc(id).delete()
-    ctx.res.body = 'Successfully deleted task'
+    const list = await taskLists.get(listId)
+    list.tasks = list.tasks.filter((task) => task.id !== id)
+    await taskLists.set(listId, list
   } catch (err) {
     console.log(err)
     ctx.res.body = 'Failed to delete task'
@@ -381,7 +309,7 @@ taskListApi.delete('/:id', async (ctx) => {
   const { id } = ctx.req.params
 
   try {
-    await taskLists.doc(id).delete()
+    await taskLists.delete(id)
     ctx.res.body = 'Successfully deleted task list'
   } catch (err) {
     console.log(err)
@@ -463,7 +391,7 @@ Setup credentials and cloud specific configuration:
 - [Azure](/reference/providers/azure)
 - [GCP](/reference/providers/gcp)
 
-Create a stack, which is collection a deployment target for your application.
+Create a stack, which is a deployment target for your application.
 
 ```
 nitric stack new

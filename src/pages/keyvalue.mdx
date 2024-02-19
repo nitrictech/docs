@@ -1,18 +1,22 @@
 export const description = 'Key value stores'
 
-# Key Value Stores
+# Key/Value
 
-Nitric provides functionality for provisioning and interacting with collections in NoSQL databases.
+Nitric provides functionality for provisioning and interacting with persistent key/value stores.
 
 ## Definitions
 
 ### Key Value Store
 
-Key value stores act as a database which provides the functionality for efficient reading and writing. The data is fetched via a unique key, which is associated with a value. Due to the uniqueness of the key, accessing the data is incredibly efficient and will occur in constant time as there is no need for complex lookups.
+Key value stores act as a database which provides the functionality for efficient storage and retrieval of data. The data is fetched via a unique key, which is associated with a value. Due to the uniqueness of the key, accessing the data is incredibly efficient and will occur in constant time as there is no need for complex lookups.
 
-### Key Value Pair
+### Key
 
-A key value pair refers to the unique key that has a value that it references. The key must be a unique string. The value can be any JSON serializable object.
+A key is a unique string that acts as a references to a value. Anytime a value is updated or read from a key value store, it is done so by referencing the key.
+
+### Value
+
+Values are the data that is stored in the key value store. They are referenced by a key and can be any JSON serializable object.
 
 ## Creating Key Value Stores
 
@@ -27,9 +31,8 @@ const countries = kv('Countries').for('getting', 'setting', 'deleting')
 ```
 
 ```typescript
-// You can add typing by specifying the type of documents that are stored in the collection.
-// This won't do validation of the documents written to the collection.
-// However, it will give you type completion when interacting with the collection.
+// You can add typing by specifying the type of values that are stored in the key/value store.
+// This won't validate the values. However, it will provide type completion when interacting with the store.
 import { kv } from '@nitric/sdk'
 
 type Country = {
@@ -53,7 +56,7 @@ Nitric.run()
 
 ## Creating Key Value Pairs
 
-Key value pairs are created based on the `key` and the contents of the `value`. If a key already exists in the key value store, then the key and it's value will be overwritten.
+Key value pairs are created based on the `key` and the contents of the `value`. If a key already exists in the key value store, then its value will be overwritten.
 
 > Key value stores that are created using the Nitric SDK are compatible across cloud providers.
 
@@ -88,7 +91,7 @@ Nitric.run()
 
 </CodeGroup>
 
-If you then want to update the value, you will have to write over the existing value by referencing it by it's key.
+To update a value call `set` with the same key and a new value.
 
 <CodeGroup>
 
@@ -110,9 +113,7 @@ await countries.set('USA', {
 
 ## Accessing Values
 
-To access a specific value you can use the key that references it.
-
-The below is an example of accessing a value from a key value store.
+Values can be accessed from a store by calling the `get` method with the key of the value you want to retrieve.
 
 <CodeGroup>
 
