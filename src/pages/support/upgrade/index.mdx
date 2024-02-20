@@ -128,7 +128,7 @@ const helloApi = api('main', {
 })
 ```
 
-In v1.x security definitions, now called rules, are created as standalone objects and then applied to the API or route. This ensures unapplied security definitions are more obvious and less likely to be overlooked.
+In v1.x security definitions, now called rules, are created as standalone objects and then applied to the API or route. This ensures security definitions that have not been applied are more obvious and less likely to be overlooked.
 
 The new code for the above example would look like this for an OpenID Connect (OICD) Rule:
 
@@ -162,7 +162,7 @@ As with Queues, Nitric Topics have also been simplified in v1.x. The messages se
 
 ### Changing from Collections to Key/Value
 
-The most significant change in Nitric v1.x is the change from Collections to Key/Value. Collection resources are no longer supported or deployed by Nitric, instead they've been superseded by Key/Value resources. Nitric always strives to provide the most consistent experience across all supported cloud providers, and this change was made to better reflect the capabilities of the underlying cloud providers, while also greatly improving the breadth of options available to fullfil the underlying requirements.
+The most significant change in Nitric v1.x is the change from Collections to Key/Value. Collection resources are no longer supported or deployed by Nitric, instead they've been superseded by Key/Value resources. Nitric always strives to provide the most consistent experience across all supported cloud providers, and this change was made to better reflect the capabilities of the underlying cloud providers, while also greatly improving the breadth of options available to fulfill the underlying requirements.
 
 The primary differences between Collections and Key/Value are:
 

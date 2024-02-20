@@ -14,6 +14,7 @@ ECR
 GCP
 GCR
 IAM
+OpenID
 JSON
 MinIO
 SeaweedFS
