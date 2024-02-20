@@ -6,6 +6,7 @@ import logoPython from '@/images/logos/python.svg'
 import logoCsharp from '@/images/logos/csharp.svg'
 import logoGo from '@/images/logos/go.svg'
 import logoJava from '@/images/logos/java.svg'
+import logoDart from '@/images/logos/dart.svg'
 import Link from 'next/link'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
@@ -39,6 +40,12 @@ const libraries = [
     name: 'JVM',
     description: 'View full API for JVM',
     logo: logoJava,
+  },
+  {
+    href: '/reference/dart',
+    name: 'Dart',
+    description: 'Dart is coming soon 🚀',
+    logo: logoDart,
   },
 ]
 
