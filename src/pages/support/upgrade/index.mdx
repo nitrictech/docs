@@ -76,16 +76,20 @@ Where the `yarn dev:function` is a command capable of starting the function in d
 ```
 
 <Note>
-  Previous versions of Nitric relied on two terminal windows to run
-  applications locally. This is no longer the case, and the `nitric start`
-  command will start all services in a single terminal window. This also means
-  that the index file that was previously provided in the templates is no
-  longer required.
+  Previous versions of Nitric relied on two terminal windows to run applications
+  locally. This is no longer the case, and the `nitric start` command will start
+  all services in a single terminal window. This also means that the index file
+  that was previously provided in the templates is no longer required.
 </Note>
 
 ### Upgrading Stack Files
 
 There is one minor change to the inner format of stack files in v1.x, as well as a new naming convention for stack files. While v0.x stack files were named `nitric-mystack.yaml`, v1.x stack files are named `nitric.mystack.ts` (replacing the first dash with a dot). The only change to the inner format of the files is removal of the `name` key, which is no longer required or supported. The name of the stack will be now always be inferred from the filename, to avoid confusion and naming conflicts.
+
+<Note>
+  v0.x providers are not compatible with nitric v1.x. The provider version
+  referenced in the stack files will also need to be upgraded.
+</Note>
 
 ### Upgrading Nitric APIs
 
@@ -124,22 +128,22 @@ const helloApi = api('main', {
 })
 ```
 
-In v1.x security definitions, now called rules, are created as standalone objects and then applied to the API or route. This make the ensures unapplied security definitions are more obvious and less likely to be overlooked.
+In v1.x security definitions, now called rules, are created as standalone objects and then applied to the API or route. This ensures unapplied security definitions are more obvious and less likely to be overlooked.
 
 The new code for the above example would look like this for an OpenID Connect (OICD) Rule:
 
 ```typescript
-import { oidcRule, api } from '@nitric/sdk';
+import { oidcRule, api } from '@nitric/sdk'
 
-const userAccessRule = oidcRule({ 
-  name: 'user', 
-  audiences: ['https://test-security-definition/'], 
-  issuer: 'https://dev-abc123.my.issuer.com', 
-});
+const userAccessRule = oidcRule({
+  name: 'user',
+  audiences: ['https://test-security-definition/'],
+  issuer: 'https://dev-abc123.my.issuer.com',
+})
 
 const helloApi = api('main', {
-    security: [ userAccessRule('user.read') ]
-});
+  security: [userAccessRule('user.read')],
+})
 ```
 
 ### Upgrading Nitric Functions
