@@ -43,7 +43,7 @@ steps:
       az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CERTIFICATE_PATH) --tenant $(AZURE_TENANT_ID)
 
       # Execute the nitric command
-      nitric up --ci -v2
+      nitric up --ci
     displayName: 'Install Pulumi and Nitric CLI'
     env:
       PULUMI_CONFIG_PASSPHRASE: $(PULUMI_CONFIG_PASSPHRASE)
@@ -77,7 +77,7 @@ pool:
 
 Install Pulumi and Nitric, which are necessary for deployment and set the relevant environment paths:
 
-The `up` command can be used to deploy your project. The first argument `--ci` tells the CLI that we are running in a ci pipeline and should have raw output. The final argument `-v2` sets the Nitric CLI output to verbosity level 2, so the workflow will log plenty of detail for us to use to debug any issues.
+The `up` command can be used to deploy your project. The first argument `--ci` tells the CLI that we are running in a ci pipeline and should have raw output.
 
 ```yaml
 - steps
@@ -96,7 +96,7 @@ The `up` command can be used to deploy your project. The first argument `--ci` t
       az login --service-principal -u $(AZURE_CLIENT_ID) -p $(AZURE_CERTIFICATE_PATH) --tenant $(AZURE_TENANT_ID)
 
       # Execute the nitric command
-      nitric up --ci -v2
+      nitric up --ci
     displayName: 'Install Pulumi and Nitric CLI'
     env:
       PULUMI_CONFIG_PASSPHRASE: $(PULUMI_CONFIG_PASSPHRASE)

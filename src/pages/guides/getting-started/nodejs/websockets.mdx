@@ -16,19 +16,19 @@ To complete this guide you'll need the following:
 
 - [Node.js](https://nodejs.org/en/) installed locally
 - [Nitric CLI](/guides/getting-started/installation) installed
-- _(optional)_ An [AWS](https://aws.amazon.com) account
+- _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account
 
 ## Getting Started
 
 Let's start by setting up a Nitric project:
 
-```bash {{ label: 'terminal' }}
-nitric new websocket-example "official/TypeScript - Starter"
+```bash
+nitric new websocket-example ts-starter
 ```
 
 Install dependencies:
 
-```
+```bash
 cd websocket-example
 yarn install
 ```
@@ -36,12 +36,11 @@ yarn install
 You can go ahead and open this new project in your editor of choice. You should see a project structure similar to:
 
 ```txt
-├── functions
+├── services
 │   ├── hello.ts
 ├── node_modules
 │   ├── ...
 ├── .gitignore
-├── index.js
 ├── nitric.yaml
 ├── package.json
 ├── tsconfig.json
@@ -49,11 +48,11 @@ You can go ahead and open this new project in your editor of choice. You should 
 └── yarn.lock
 ```
 
-In this structure you'll notice the `functions` folder. By default, this is where Nitric expects the entrypoint code for your application. However, that's just a convention, we can change that to anything else that suits our needs.
+In this structure you'll notice the `services` folder. By default, this is where Nitric expects the entrypoint code for your application. However, that's just a convention, we can change that to anything else that suits our needs.
 
-Let's update out hello.ts file with some websocket code to get started.
+Let's update our `hello.ts` file with some websocket code to get started.
 
-```typescript {{ label: 'functions/hello.ts' }}
+```typescript {{ label: 'services/hello.ts' }}
 import { websocket } from '@nitric/sdk'
 const socket = websocket('example-websocket')
 
@@ -67,27 +66,14 @@ socket.on('disconnect', async (ctx) => {
 
 socket.on('message', async (ctx) => {
   const message = ctx.req.text()
-
   console.log(`got message from  ${ctx.req.connectionId}: ${message}`)
 })
 ```
 
-At this point, we're ready to start testing locally. The project comes with a `dev` script by default, let's run that now:
+At this point, we're ready to start testing locally. Let's start the local Nitric environment.
 
-```bash {{ label: 'terminal' }}
-yarn dev
-```
-
-If everything is working, part of the output will look like this:
-
-```txt
-SUCCESS  Started Local Services! (1s)
-Local running, use ctrl-C to stop
-
-Websocket          | Endpoint
-example-websocket  | ws://localhost:4001
-
-Dev Dashboard | http://localhost:49152
+```bash
+nitric start
 ```
 
 Your websocket will now be running with Nitric acting as a proxy, in this case it's available on port `4001`.
@@ -100,61 +86,77 @@ When you send messages you will start seeing your server log messages.
 
 ## Sending messages from server to clients
 
-Websockets only make sense when communication is bi-direcitional, now we've confirmed that the client can talk to our server lets get our server talking to the client.
+Websockets only make sense when communication is bi-directional, now we've confirmed that the client can talk to our server lets get our server talking to the client.
+
 To do this we'll need to add some connection management.
 
 You can update the `hello.ts` file like so:
 
-```typescript {{ label: 'functions/hello.ts' }}
-import { websocket, collection } from '@nitric/sdk'
+```typescript {{ label: 'services/hello.ts' }}
+import { websocket, kv } from '@nitric/sdk'
 
-const connections = collection('connections').for(
-  'reading',
-  'writing',
-  'deleting'
-)
+// Initialize KV store for connections and a WebSocket
+const kvStore = kv('connections').for('getting', 'setting', 'deleting')
 const socket = websocket('example-websocket')
 
+// Helper function to get current connections
+async function getCurrentConnections() {
+  try {
+    const serializedList = await kvStore.get('connections')
+    return serializedList && serializedList['ids']
+      ? JSON.parse(serializedList['ids'])
+      : []
+  } catch (error) {
+    console.error('Error getting current connections:', error)
+    return []
+  }
+}
+
+// Helper function to update connections list
+async function updateConnections(connections) {
+  try {
+    const updatedSerializedList = JSON.stringify(connections)
+    await kvStore.set('connections', { ids: updatedSerializedList })
+  } catch (error) {
+    console.error('Error updating connections:', error)
+  }
+}
+
+// Handle new connections
 socket.on('connect', async (ctx) => {
-  console.log(`connecting: ${ctx.req.connectionId}`)
-
-  // add a connection
-  await connections.doc(`connection:${ctx.req.connectionId}`).set({
-    // Can add metadata here later if we need to
-  })
+  const connections = await getCurrentConnections()
+  connections.push(ctx.req.connectionId)
+  await updateConnections(connections)
 })
 
-socket.on('disconnect', async (ctx) => {
-  console.log(`disconnecting: ${ctx.req.connectionId}`)
-
-  // remove connection
-  await connections.doc(`connection:${ctx.req.connectionId}`).delete()
-})
-
+// Handle messages
 socket.on('message', async (ctx) => {
   const message = ctx.req.text()
+  const connections = await getCurrentConnections()
 
-  // broadcast our message to all other clients
-  const allConnections = await connections.query().stream()
-
-  const streamPromise = new Promise<any>((res) => {
-    allConnections.on('end', res)
-  })
-
-  allConnections.on('data', async (connection) => {
-    const connectionId = connection.id.split(':')[1]
-
-    // send message to everyone but message sender
-    if (connectionId && connectionId != ctx.req.connectionId) {
-      await socket.send(connectionId, ctx.req.data)
+  // Send the message to each connection
+  connections.forEach(async (connectionId) => {
+    try {
+      if (connectionId !== ctx.req.connectionId) {
+        await socket.send(connectionId, message)
+      }
+    } catch (error) {
+      console.error(`Error sending message to ${connectionId}:`, error)
     }
   })
+})
 
-  await streamPromise
+// Handle disconnections
+socket.on('disconnect', async (ctx) => {
+  const connections = await getCurrentConnections()
+  const index = connections.indexOf(ctx.req.connectionId)
+
+  if (index > -1) {
+    connections.splice(index, 1)
+    await updateConnections(connections)
+  }
 })
 ```
-
-If nitric is still running and you've saved the new file, it should hot-reload the new code.
 
 If you connect multiple clients using your preferred client and send messages each client should receive messages from other clients:
 
@@ -164,22 +166,18 @@ If you connect multiple clients using your preferred client and send messages ea
 
 <Note>Nitric only supports AWS for websockets at this time</Note>
 
-To perform the deployment we'll create a `stack`, stacks give Nitric the config needed for a specific cloud instance of this project, such as the provider and region.
+To perform the deployment we'll create a `stack`, stacks give Nitric the configuration needed for a specific cloud instance of this project, such as the provider and region.
 
-The new stack command can help you create the stack by following prompts. In this case we'll use AWS as an example:
+The new stack command can help you create the stack by following prompts.
 
-```txt {{ label: 'terminal' }}
+```txt
 nitric stack new
-? What should we name this stack? dev
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
 ```
 
-This command will create a file named `nitric-dev.yaml`, with contents like this:
+This command will create a file named `nitric.dev.yaml`, with contents like this:
 
-```yaml {{ label: 'nitric-dev.yaml' }}
-name: dev
-provider: nitric/aws@0.31.0
+```yaml {{ label: 'nitric.dev.yaml' }}
+provider: nitric/aws@1.0.0
 region: us-east-1
 ```
 
@@ -187,12 +185,6 @@ With the stack file in place we can run the deployment:
 
 ```bash {{ label: 'terminal' }}
 nitric up
-SUCCESS  Images Built (37s)
-SUCCESS  Configuration gathered (6s)
-SUCCESS
-         API               | Endpoint
-         example-websocket | wss://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com
-Deployed Stack (1m14s)
 ```
 
 Go ahead and test your app in the cloud, you can start by connecting `wscat` to the websocket endpoint printed in the output for `up`.
@@ -209,7 +201,7 @@ Go ahead and test your app in the cloud, you can start by connecting `wscat` to 
 Now that you have the basics down, try exploring other Nitric resources available to enhance your app.
 
 - [HTTP](/http)
-- [Collections](/collections)
+- [Key Value Stores](/keyvalue)
 - [Schedules](/schedules)
 - [Storage](/storage)
 - [Messages](/messaging)

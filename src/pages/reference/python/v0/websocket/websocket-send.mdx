@@ -40,23 +40,26 @@ Nitric.run()
 ```python
 from nitric.resources import api, websocket, collection
 from nitric.application import Nitric
-from nitric.faas import WebsocketContext
+from nitric.context import WebsocketContext
 
 connections = collection("connections").allow("reading", "writing", "deleting")
 main_websocket = websocket("main")
 
 @main_websocket.on("connect")
 async def connect(ctx: WebsocketContext):
-    await connections.doc(ctx.req.connection_id).set({})
+  await connections.doc(ctx.req.connection_id).set({})
 
 @main_websocket.on("disconnect")
 async def disconnect(ctx: WebsocketContext):
-    await connections.doc(ctx.req.connection_id).delete()
+  await connections.doc(ctx.req.connection_id).delete()
 
 @main_websocket.on("message")
 async def message(ctx: WebsocketContext):
-    all = connections.query().stream()
+  all = connections.query().stream()
 
-    async for conn in all:
-        await main_websocket.send(conn.id, ctx.req.data)
+  async for conn in all:
+    await main_websocket.send(conn.id, ctx.req.data)
+
+
+Nitric.run()
 ```

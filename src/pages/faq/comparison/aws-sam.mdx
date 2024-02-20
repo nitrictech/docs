@@ -65,7 +65,7 @@ Resources:
 On the other hand, Nitric handles the implementation of least-privilege policies for you. All that is needed is to specify how you want to use a resource, and the function will be assigned the relevant policy.
 
 ```typescript
-const newQueue = queue('tester').for('receiving', 'sending')
+const newBucket = bucket('tester').for('reading', 'writing', 'deleting')
 ```
 
 ## Testing

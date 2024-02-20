@@ -6,7 +6,7 @@ export const description = 'Integrating Nitric with a Nest.js application'
 
 In this guide we will be creating a [Nest.js](https://nestjs.com/) application and deploying it to the cloud using the Nitric CLI.
 
-The Nest.js application will be able to perform CRUD operations on user profiles that will interact with collections using the Nitric SDK. The project is entirely extensible and is available in our [examples repo](https://github.com/nitrictech/example-apps).
+The Nest.js application will be able to perform CRUD operations on user profiles that will interact with a key value store using the Nitric SDK.
 
 ## Prerequisites
 
@@ -36,9 +36,7 @@ This will create a src directory with the Nest application code and a test file.
 
 Within our src directory we want to replace the base App controller code with a Profile controller.
 
-```typescript
-// profile/profile.controller.ts
-
+```typescript {{ label: 'profile/profile.controller.ts' }}
 import { Controller, Get } from '@nestjs/common'
 import { ProfileService } from './profile.service'
 
@@ -55,9 +53,7 @@ export class ProfileController {
 
 Then update the App service with the Profile service.
 
-```typescript
-// profile/profile.service.ts
-
+```typescript {{ label: 'profile/profile.service.ts' }}
 import { Injectable } from '@nestjs/common'
 
 @Injectable()
@@ -70,9 +66,7 @@ export class ProfileService {
 
 We will then need to update the imports for the base App module. We will keep this as the AppModule as its going to act as the entrypoint to our application.
 
-```typescript
-// app.module.ts
-
+```typescript {{ label: 'app.module.ts' }}
 import { Module } from '@nestjs/common'
 import { ProfileController } from './profile/profile.controller'
 import { ProfileService } from './profile/profile.service'
@@ -87,19 +81,17 @@ export class AppModule {}
 
 ## Creating the ProfileService
 
-With that done, we can start creating some routes for interacting with our user profiles. We will be storing the profiles in a NoSQL collection which is handled by the Nitric SDK.
+With that done, we can start creating some routes for interacting with our user profiles. We will be storing the profiles in a key value store which is handled by the Nitric SDK.
 
 ```bash
 yarn add @nitric/sdk
 ```
 
-Firstly, we will define our profiles [collection](/collections) and a Profile type at the top of our ProfileService file. The collection will have permissions for reading, writing, and deleting as we will be using all those functions for our Profile service.
+Firstly, we will define our profiles [key value store](/keyvalue) and a Profile type at the top of our `ProfileService` file. The key value store will have permissions for getting, setting, and deleting as we will be using all those features for our Profile service.
 
-```typescript
-// profile/profile.service.ts
-
+```typescript {{ label: 'profile/profile.service.ts' }}
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { collection } from '@nitric/sdk';
+import { kv } from '@nitric/sdk';
 
 export interface Profile {
   id: string;
@@ -107,9 +99,9 @@ export interface Profile {
   age: number;
 }
 
-const profiles = collection<Profile>('profiles').for(
-  'reading',
-  'writing',
+const profiles = kv<Profile>('profiles').for(
+  'getting',
+  'setting',
   'deleting',
 );
 
@@ -121,9 +113,7 @@ export class ProfileService {
 
 We can then create some handlers for creating profiles. This will accept a create profile request and return the newly created profile.
 
-```typescript
-// profile/profile.service.ts
-
+```typescript {{ label: 'profile/profile.service.ts' }}
 @Injectable()
 export class ProfileService {
   async createProfile(createProfileReq: Omit<Profile, 'id'>): Promise<Profile> {
@@ -131,7 +121,7 @@ export class ProfileService {
 
     const profile = { id, ...createProfileReq } as Profile
 
-    await profiles.doc(id).set(profile)
+    await profiles.set(id, profile)
 
     return profile
   }
@@ -140,15 +130,13 @@ export class ProfileService {
 
 Our next handler will be getting an individual profile by its `id`. This will accept an `id` and will return either the found profile or throw a not found exception.
 
-```typescript
-// profile/profile.service.ts
-
+```typescript {{ label: 'profile/profile.service.ts' }}
 @Injectable()
 export class ProfileService {
   ...
 
   async getProfile(id: string): Promise<Profile> {
-    const profile = await profiles.doc(id).get();
+    const profile = await profiles.get(id);
 
     if (!profile) {
       throw new NotFoundException();
@@ -159,34 +147,15 @@ export class ProfileService {
 }
 ```
 
-We will then write a handler for getting all the profiles in the collection. This will return a list of profiles, an empty list if there are no profiles.
-
-```typescript
-// profile/profile.service.ts
-
-@Injectable()
-export class ProfileService {
-  ...
-
-  async getProfiles(): Promise<Profile[]> {
-    const profileDocuments = await profiles.query().fetch();
-
-    return profileDocuments.documents.map((d) => d.content);
-  }
-}
-```
-
 The final handler we will write is for deleting an individual profile by its `id`.
 
-```typescript
-// profile.service.ts
-
+```typescript {{ label: 'profile/profile.service.ts' }}
 @Injectable()
 export class ProfileService {
   ...
 
   async deleteProfile(id: string): Promise<void> {
-    await profiles.doc(id).delete();
+    await profiles.delete(id);
   }
 }
 ```
@@ -197,8 +166,9 @@ To run the application locally using Nitric, and to eventually deploy the applic
 
 ```yaml
 name: nest-x-nitric
-handlers:
-  - src/main.ts
+services:
+  - match: src/main.ts
+    start: yarn dev
 ```
 
 We then want to add the `http` type to our main function, and pass in the Nest.js application. The `http` wrapper will use the `bootstrap` function when starting the application and pass it the port.
@@ -209,9 +179,7 @@ We then want to add the `http` type to our main function, and pass in the Nest.j
   set.
 </Note>
 
-```typescript
-// app.module.ts
-
+```typescript {{ label: 'app.module.ts' }}
 import { http } from '@nitric/sdk'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
@@ -226,11 +194,9 @@ http(bootstrap)
 
 ## Creating the ProfileController
 
-Now that the service is built, we can use the ProfileService with our ProfileController routing. This involves correctly extracting the parameters from the request object to then pass into the service functions.
+Now that the service is built, we can use the `ProfileService` with our `ProfileController` routing. This involves correctly extracting the parameters from the request object to then pass into the services.
 
-```typescript
-// profile/profile.controller.ts
-
+```typescript {{ label: 'profile/profile.controller.ts' }}
 import { Controller, Get, Post, Delete, Param, Req } from '@nestjs/common'
 import { Profile, ProfileService } from './profile.service'
 import { Request } from 'express'
@@ -238,11 +204,6 @@ import { Request } from 'express'
 @Controller()
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
-
-  @Get('/profiles')
-  async getProfiles() {
-    return await this.profileService.getProfiles()
-  }
 
   @Get('/profile/:id')
   async getProfile(@Param('id') id: string) {
@@ -263,18 +224,10 @@ export class ProfileController {
 
 ## Test locally
 
-We can test that this works by running `nitric start` in one terminal, followed by `yarn start` in another. This will register the application with Nitric so you can verify it is working locally.
+We can test that this works by running `nitric start`.
 
-```
+```bash
 nitric start
-
-SUCCESS  Started Local Services! (1s)
-Local running, use ctrl-C to stop
-
-Proxy | Endpoint
-8000  | http://localhost:4001
-
-Dev Dashboard | http://localhost:49152
 ```
 
 You can use any http client to test the application. The application will be running from a random port, but proxied on port 4001. It is important that http://localhost:4001 correctly wraps your application.
@@ -322,17 +275,14 @@ It should return:
 
 ## Deploy to the cloud
 
-If you're ready, you can deploy the application to AWS, Azure or Google Cloud. For this example, we'll show the steps for AWS, but they're essentially the same in all cases.
+If you're ready, you can deploy the application to AWS, Azure or Google Cloud.
 
-The application code is ready to deploy as is, however a stack first needs to be defined. Stacks are essentially named deployment targets, which represent instances of your application running in the cloud.
+The application code is ready to deploy as is, however a stack first needs to be defined. Stacks are essentially named deployment targets, which represent instances of your services running in the cloud.
 
-You can create a new stack by running `nitric stack new` and following the prompts. In this case, we'll call the stack `awsdev`, select `aws` as the target cloud and `us-east-1` as the target region:
+You can create a new stack by running `nitric stack new` and following the prompts.
 
-```txt
+```bash
 nitric stack new
-? What should we name this stack? awsdev
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
 ```
 
 Finally, run the `up` command to deploy the stack and push your code to the cloud:

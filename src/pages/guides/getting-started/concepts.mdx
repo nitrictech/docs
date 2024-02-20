@@ -11,56 +11,28 @@ Here's an example of using Nitric to create a secure bucket for file storage and
 <CodeGroup>
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const profiles = bucket('profiles').for('reading')
+const myApi = api('main')
 
-const image = await profiles.file('users/bruce-wayne.png').read()
+myApi.get('/profiles/:name', async (ctx) => {
+  const image = await profiles.file('users/bruce-wayne.png').read()
+})
 ```
 
 ```python
-from nitric.resources import bucket
+from nitric.resources import api, bucket
+from nitric.application import Nitric
 
+publicApi = api("main")
 profiles = bucket("profiles").allow("reading")
 
-image = await profile.file("users/bruce-wayne.png").read()
+@publicApi.get("/profiles/:name")
+async def customer_get(ctx):
+    image = await profiles.file("users/bruce-wayne.png").read()
 
-```
-
-```csharp {{ title: "C#" }}
-using Nitric.Sdk;
-using Nitric.Sdk.Storage;
-
-var assets = Nitric.Bucket('profiles').With(BucketPermission.Reading);
-
-var profileImg = assets.File('users/bruce-wayne.png');
-
-var imageData = logo.Read();
-```
-
-```go
-import (
-  "context"
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  bucket, err := nitric.NewBucket("profiles").With(nitric.BucketReading)
-  if err != nil {
-    return
-  }
-
-  contents, err := bucket.File("users/bruce-wayne.png").Read(context.TODO())
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
+Nitric.run()
 ```
 
 </CodeGroup>
@@ -71,7 +43,7 @@ You'll notice in the example that there aren't any cloud-specific references, su
 
 Nothing about Nitric is magic, it's just composed from a few components that work together to help you build cloud apps. The main components of Nitric are the CLI, language SDKs, then a runtime server and deployment engine for each provider.
 
-How your application is deployed, configured, secured and interacts with cloud resources is all determined by the [provider](/reference/providers) you choose during deployment. Providers are deployment and runtime plugins that target a cloud (or other host) and the specific services of that host chosen to fulfill each of the resources Nitric provides, such as a container runtime, buckets, collections, API gateways, queues, etc.
+How your application is deployed, configured, secured and interacts with cloud resources is all determined by the [provider](/reference/providers) you choose during deployment. Providers are deployment and runtime plugins that target a cloud (or other host) and the specific services of that host chosen to fulfill each of the resources Nitric provides, such as a container runtime, buckets, key/value stores, API gateways, queues, etc.
 
 Nitric has provider implementations for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). You're also able to [build your own](/reference/providers/custom/building-custom-provider) with the infrastructure-as-code tools and cloud providers of your choice. There is also a local provider which can run your code on your own machine during development.
 
@@ -90,7 +62,7 @@ The containers that are built during deployment include a copy of the runtime im
 Application's built with Nitric don't have a strict project structure. However, we do provide templates for each supported language, which can be a good place to start when learning how to build with Nitric. There are only two types of files required by Nitric projects:
 
 - Project file, e.g. `nitric.yaml`
-- Stack files, e.g. `nitric-develop.yaml`
+- Stack files, e.g. `nitric.develop.yaml`
 
 ## Project files
 
@@ -100,19 +72,19 @@ A typical `nitric.yaml` file looks like this:
 
 ```yaml {{ tag: 'nitric.yaml' }}
 name: my-project
-handlers:
-  - functions/*.ts
+services:
+  - match: ./services/*.ts
+    start: yarn dev:services $SERVICE_PATH
 ```
 
 ## Stack files
 
 Nitric projects can be deployed to multiple environments and cloud providers, stack files identify these deployment targets. These files can be created by running the `nitric stack new` command and allow you to name the stack, as well as configure the provider to use when deploying. They also contain other stack specific configuration, such as the region to deploy to or CPU and memory customization for container instances.
 
-The naming convention for stack files is `nitric-[stack ID].yaml`. Here is an example of a basic stack file created by the Nitric CLI:
+The naming convention for stack files is `nitric.[stack ID].yaml`. Here is an example of a basic stack file created by the Nitric CLI:
 
-```yaml {{ tag: 'nitric-aws.yaml' }}
-name: aws
-provider: nitric/aws@0.30.0
+```yaml {{ tag: 'nitric.aws.yaml' }}
+provider: nitric/aws@1.0.0
 region: us-east-1
 ```
 

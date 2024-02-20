@@ -8,8 +8,15 @@ import { useIsInsideMobileNavigation } from '@/components/MobileNavigation'
 import { useSectionStore } from '@/components/SectionProvider'
 import { Tag } from '@/components/Tag'
 import { remToPx } from '@/lib/remToPx'
-import { DocNavGroup, topLevelNavigation, useCurrentNav } from '@/nav.config'
+import {
+  DocNavGroup,
+  Version,
+  topLevelNavigation,
+  useCurrentNav,
+} from '@/nav.config'
 import { ArrowLeftIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
+import { VersionSelect } from './VersionSelect'
+import { useVersions } from '@/lib/hooks/use-versions'
 
 function useInitialValue(value, condition = true) {
   let initialValue = useRef(value).current
@@ -74,7 +81,9 @@ function NavLink({
       )}
     >
       {Icon && <Icon className={clsx('h-4 w-4', iconClassName)} />}
+
       <span className="truncate">{children}</span>
+
       {tag && (
         <Tag variant="small" color="zinc">
           {tag}
@@ -265,6 +274,7 @@ function HomeNavigationGroup({
 
 export function Navigation(props) {
   const { navigation, displayDocsMenu, parent, pathname } = useCurrentNav()
+  const { isReferenceDocs } = useVersions()
 
   useEffect(() => {
     const currentLink = document.querySelector(
@@ -295,15 +305,20 @@ export function Navigation(props) {
             Back to Home
           </Link>
           {parent && (
-            <NavLink
-              icon={parent.icon}
-              href={parent.href}
-              active={parent.href === pathname}
-              className="text-lg"
-              iconClassName="w-5 h-5"
-            >
-              {parent.title}
-            </NavLink>
+            <div className="flex items-center">
+              <NavLink
+                icon={parent.icon}
+                href={parent.href}
+                active={parent.href === pathname}
+                className="text-lg"
+                iconClassName="w-5 h-5"
+              >
+                {parent.title}
+              </NavLink>
+              {parent?.versions && isReferenceDocs && (
+                <VersionSelect versions={parent.versions} />
+              )}
+            </div>
           )}
         </div>
       )}

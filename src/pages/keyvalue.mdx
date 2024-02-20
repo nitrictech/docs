@@ -1,0 +1,178 @@
+export const description = 'Key value stores'
+
+# Key/Value
+
+Nitric provides functionality for provisioning and interacting with persistent key/value stores.
+
+## Definitions
+
+### Key Value Store
+
+Key value stores act as a database which provides the functionality for efficient storage and retrieval of data. The data is fetched via a unique key, which is associated with a value. Due to the uniqueness of the key, accessing the data is incredibly efficient and will occur in constant time as there is no need for complex lookups.
+
+### Key
+
+A key is a unique string that acts as a references to a value. Anytime a value is updated or read from a key value store, it is done so by referencing the key.
+
+### Value
+
+Values are the data that is stored in the key value store. They are referenced by a key and can be any JSON serializable object.
+
+## Creating Key Value Stores
+
+Here's an example of how to create a key value store, with permissions for getting, setting, and deleting:
+
+<CodeGroup>
+
+```javascript
+import { kv } from '@nitric/sdk'
+
+const countries = kv('Countries').for('getting', 'setting', 'deleting')
+```
+
+```typescript
+// You can add typing by specifying the type of values that are stored in the key/value store.
+// This won't validate the values. However, it will provide type completion when interacting with the store.
+import { kv } from '@nitric/sdk'
+
+type Country = {
+  name: string
+  population: number
+}
+
+const countries = kv<Country>('Countries').for('getting', 'setting', 'deleting')
+```
+
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
+
+countries = kv('Countries').allow('getting', 'setting', 'deleting')
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+## Creating Key Value Pairs
+
+Key value pairs are created based on the `key` and the contents of the `value`. If a key already exists in the key value store, then its value will be overwritten.
+
+> Key value stores that are created using the Nitric SDK are compatible across cloud providers.
+
+The below example first creates a key value store that has permissions for setting. It then adds a key to the store called `USA` and a value which describes the country.
+
+<CodeGroup>
+
+```javascript
+import { kv } from '@nitric/sdk'
+
+const countries = kv('Countries').for('setting')
+
+await countries.set('USA', {
+  name: 'United States of America',
+  population: 329500000,
+})
+```
+
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
+
+countries = kv('Countries').allow('setting')
+
+await countries.set('USA', {
+  "name": "United States of America",
+  "population": 329500000
+})
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+To update a value call `set` with the same key and a new value.
+
+<CodeGroup>
+
+```javascript
+await countries.set('USA', {
+  name: 'United States of America',
+  population: 330000000,
+})
+```
+
+```python
+await countries.set('USA', {
+  "name": "United States of America",
+  "population": 330000000,
+})
+```
+
+</CodeGroup>
+
+## Accessing Values
+
+Values can be accessed from a store by calling the `get` method with the key of the value you want to retrieve.
+
+<CodeGroup>
+
+```javascript
+import { kv } from '@nitric/sdk'
+
+const countries = kv('Countries').for('reading')
+
+const country = await country.get('USA')
+```
+
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
+
+countries = kv("Countries").allow("getting")
+
+country = await countries.get("USA")
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+## Deleting Values
+
+Values can be deleted from the key value store by referencing the key.
+
+The below example first creates a key value store that has permissions for deleting and setting. It then creates a value called `USA`, which is deleted using `delete` on the key.
+
+<CodeGroup>
+
+```javascript
+import { kv } from '@nitric/sdk'
+
+const countries = kv('Countries').for('deleting', 'setting')
+
+await countries.set('USA', {
+  name: 'United States of America',
+  population: 329500000,
+})
+
+await countries.delete('USA')
+```
+
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
+
+countries = kv('Countries').allow('writing')
+
+await countries.set('USA', {
+  "name": "United States of America",
+  "population": 329500000
+})
+
+await countries.delete('USA')
+
+Nitric.run()
+```
+
+</CodeGroup>

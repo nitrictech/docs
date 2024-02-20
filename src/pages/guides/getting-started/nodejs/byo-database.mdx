@@ -2,13 +2,17 @@ export const description = 'How to work with existing databases'
 
 # BYO Database
 
-Nitric does not have out of the box support for databases. This way you can use whatever tooling and ORMs you prefer for directly interfacing with your database. Our recommendation for local development is to set up a container that runs alongside your Nitric processes. For a production environment, you can use any of the database services for your preferred cloud:
+Nitric currently does not have out of the box support for databases. This way you can use whatever tooling and ORMs you prefer for directly interfacing with your database. Our recommendation for local development is to set up a container that runs alongside your Nitric processes. For a production environment, you can use any of the database services for your preferred cloud:
+
+<Note>
+  You can track the support for relational databases
+  [here](https://github.com/nitrictech/roadmap/issues/30).
+</Note>
 
 |            | AWS                                                                         | GCP                                                                                  | Azure                                                                                   |
 | ---------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
 | PostgreSQL | [Amazon RDS for PostgreSQL](https://aws.amazon.com/rds/postgresql/)         | [Cloud SQL for PostgreSQL](https://cloud.google.com/sql/docs/postgres)               | [Azure Database for PostgreSQL](https://azure.microsoft.com/en-us/products/postgresql/) |
 | MySQL      | [Amazon RDS for MySQL](https://aws.amazon.com/rds/mysql/)                   | [Cloud SQL for MySQL](https://cloud.google.com/sql/mysql)                            | [Azure Database for MySQL](https://azure.microsoft.com/en-us/products/mysql/)           |
-| Redis      | [Amazon ElastiCache for Redis](https://aws.amazon.com/elasticache/redis/)   | [Memorystore for Redis](https://cloud.google.com/memorystore/docs/redis)             | [Azure Cache for Redis](https://azure.microsoft.com/en-us/products/cache/)              |
 | MongoDB    | [MongoDB Atlas on AWS](https://www.mongodb.com/atlas/reference/amazon-aws/) | [MongoDB Atlas on Google Cloud](https://www.mongodb.com/atlas/reference/google-gcp/) | [MongoDB Atlas on Azure](https://www.mongodb.com/atlas/reference/microsoft-azure/)      |
 
 ## PostgreSQL
@@ -116,48 +120,6 @@ services:
 
     ports:
       - '5432:5432'
-```
-
-You can add a script to your `package.json` which will run the docker compose file.
-
-```json {{ label: "package.json" }}
-"scripts": {
-  "db": "docker compose up --wait"
-}
-```
-
-Then for any local development you can just run `yarn db`.
-
-## Redis
-
-### Image
-
-For a local Redis instance, we recommend the [official docker image](https://hub.docker.com/_/redis).
-
-### Connect
-
-The [node-redis](https://github.com/redis/node-redis) client is recommended and officially supported by Redis.
-
-```ts
-import { createClient } from 'redis'
-
-const client = createClient({
-  url: `redis://${USERNAME}:${PASSWORD}@${HOST}:${PORT}/${DATABASE}`,
-})
-
-await client.connect()
-```
-
-You can then create a docker compose file to simplify running your docker container each time.
-
-```yaml {{ label: "docker-compose.yml" }}
-version: '3.6'
-services:
-  redis:
-    image: redis
-    restart: always
-    ports:
-      - '6379:6379'
 ```
 
 You can add a script to your `package.json` which will run the docker compose file.

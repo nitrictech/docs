@@ -127,7 +127,6 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       },
-
       {
         source: '/docs/assets/comparison/:path*',
         destination: '/docs/faq/comparison/:path*',

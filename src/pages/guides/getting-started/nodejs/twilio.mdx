@@ -5,7 +5,7 @@ export const description =
 
 ## What we'll be doing
 
-In this guide we'll use the Nitric Framework with [Twilio](https://twilio.com) to build a serverless API that can send SMS to users. This won't include a frontend, however you can look at how to integrate a Nitric API in one of our other comprehensive [guides](./api-with-nextjs).
+In this guide we'll use the Nitric Framework with [Twilio](https://twilio.com) to build a serverless API that can send SMS to users.
 
 ## Getting Started
 
@@ -13,8 +13,8 @@ In this guide we'll use the Nitric Framework with [Twilio](https://twilio.com) t
 
 Create a new project using:
 
-```
-nitric new nitric-twilio "official/TypeScript - Starter"
+```bash
+nitric new nitric-twilio ts-starter
 ```
 
 This will scaffold the project ready for defining your API.
@@ -23,7 +23,7 @@ This will scaffold the project ready for defining your API.
 
 To integrate with Twilio, it's important to create a Twilio account. If you don't already have an account, there's an option to start a free trial [here](https://www.twilio.com/try-twilio). This trial doesn't ask for any payment details and provides a decent amount of free credits.
 
-Once you've gone through the account creation and verification, you'll arrive at the dashboard. There is a section which contains the important API credentials. These are used to connect to the API so keep them in mind.
+Once you've gone through the account creation and verification, you'll arrive at the dashboard. There is a section which contains the API credentials. These are used to connect to the Twilio API so keep them in mind.
 
 ![twilio dashboard credentials](/docs/images/guides/twilio/twilio-credentials.png)
 
@@ -31,7 +31,7 @@ Once you've gone through the account creation and verification, you'll arrive at
 
 The messenger class acts as a helper wrapper for sending text messages. It accepts the account SID and the auth token and creates a client. This client is then used in the single method `send` which accepts a text message object and creates it.
 
-```ts {{ label: "common/messenger.ts" }}
+```typescript {{ label: "common/messenger.ts" }}
 import twilio, { Twilio } from 'twilio'
 
 class Messenger {
@@ -56,7 +56,7 @@ export default Messenger
 
 You will need to add the twilio module using your preferred package manager.
 
-```
+```bash
 npm install twilio
 ```
 
@@ -64,7 +64,7 @@ npm install twilio
 
 For the API we will have a single POST route `send`. This done by creating an API resource using the Nitric SDK and defining a new route.
 
-```ts {{ label: "functions/text.ts" }}
+```typescript {{ label: "services/text.ts" }}
 import { api } from '@nitric/sdk'
 
 const textApi = api('text')
@@ -74,13 +74,13 @@ textApi.post('/send', async (ctx) => {})
 
 The next step is pulling the environment variables in and constructing our messenger. We will use the `dotenv` module.
 
-```
+```bash
 npm install dotenv
 ```
 
 We can create a `.env` file in root of the project with the twilio API information that's sitting on your Twilio dashboard.
 
-```
+```txt
 TWILIO_ACCOUNT_SID=14f7e9a0b95d11ec84220242ac120002
 TWILIO_AUTH_TOKEN=6f20cb2ae2764be8b615d6fad4accec4
 TWILIO_PHONE_NUMBER=+1234567890
@@ -88,7 +88,7 @@ TWILIO_PHONE_NUMBER=+1234567890
 
 The `dotenv.config` call will load the variables from the `.env` file into the `process.env` object. You can then use the variables to construct the messenger.
 
-```ts {{ label: "functions/text.ts" }}
+```typescript {{ label: "services/text.ts" }}
 import { api } from '@nitric/sdk'
 import Messenger from '../common/messenger'
 
@@ -115,13 +115,13 @@ We'll fill in the logic for the route. First, pull the data from the POST reques
 
 And can be extracted from the context like this:
 
-```ts
+```typescript
 const { to, message } = ctx.req.json()
 ```
 
 Secondly, convert this data to an SMS object:
 
-```ts
+```typescript
 {
   to,
   body: message ?? '',
@@ -131,7 +131,7 @@ Secondly, convert this data to an SMS object:
 
 Finally, putting all these components all together, we get a functional text messaging endpoint ready for testing:
 
-```ts {{ label: "functions/text.ts" }}
+```typescript {{ label: "services/text.ts" }}
 textApi.post('/send', async (ctx) => {
   const messenger = new Messenger(twilioAccountSID, twilioAuthToken)
 
@@ -153,18 +153,13 @@ textApi.post('/send', async (ctx) => {
 
 This API can easily be tested using the local Nitric dev environment. This is started with the following command:
 
+```bash
+nitric start
 ```
-npm run dev
-```
-
-<Note>
-  The `dev` script in the template starts the Nitric Server using `nitric start`
-  and runs your functions.
-</Note>
 
 We can then use a tool like `postman` or `curl` to test the endpoint.
 
-```
+```bash
 curl -X POST -d '{"to":"+16505130514", "message": "Test Message from Twilio!"}' http://localhost:4001/send
 ```
 
@@ -175,4 +170,4 @@ Sent from your Twilio trial account -
 Test Message from Twilio!
 ```
 
-Thats it! If you want to deploy the API you can using our [deployment](/guides/getting-started/quickstart#deploying-the-app) docs. If you want to attach a frontend to the application so its a bit more user friendly, you can use any framework you want or follow our [Next.js guide](./api-with-nextjs)
+Thats it! If you want to deploy the API you can use our [deployment](/guides/getting-started/quickstart#deploying-the-app) docs.

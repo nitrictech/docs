@@ -2,7 +2,7 @@ export const description = 'How to deploy Nitric applications'
 
 # Deployment
 
-Nitric can automatically deploy your application to a supported cloud provider. As discussed in the [concepts](/guides/getting-started/concepts) page, Nitric has three standard `providers`, one each for AWS, Microsoft Azure and Google Cloud. If none of those fit your needs you're also able to [build a custom provider](/reference/providers/custom/building-custom-provider) to target the host you prefer with your own tools and configuration.
+Nitric can automatically deploy your application to a supported cloud provider. As discussed in the [concepts](/guides/getting-started/concepts) page, Nitric has three standard `providers`, one each for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). If none of those fit your needs you're also able to [build a custom provider](/reference/providers/custom/building-custom-provider) to target the host you prefer with your own tools and configuration.
 
 The Nitric CLI command to perform deployments is `nitric up`. However, before your first deployment you'll need to create a `stack`, stacks represent deployment targets. If you haven't created a stack before we recommend reading the steps in our [quickstart guide](/guides/getting-started/quickstart#deploying-the-app). The `up` command will prompt you to create a <a href="concepts#stack-files" target="_blank">stack</a> if you haven't already created one for you project.
 
@@ -18,7 +18,7 @@ nitric down
 
 ## Providers
 
-Each of your project's stacks will target a specific hosting platform. The plugins that perform the deployments to these platforms are called `providers`. Nitric currently has 3 official providers, one each for AWS, Google Cloud and Azure. All of the official providers use [Pulumi](https://pulumi.com) under the hood for their deployments, so Pulumi will need to be configured to persist your stack state and to run the deployment to the cloud of your choice.
+Each of your project's stacks will target a specific hosting platform. The plugins that perform the deployments to these platforms are called `providers`. Nitric currently has 3 official providers, one each for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). All of the official providers use [Pulumi](https://pulumi.com) under the hood for their deployments, so Pulumi will need to be configured to persist your stack state and to run the deployment to the cloud of your choice.
 
 ### Configuring cloud credentials
 
@@ -39,13 +39,12 @@ To track the state of your stack between deployments you'll need to configure a 
 
 When using stacks to deploy to different environments such as a development, testing or production environment, you'll typically want to go beyond the default configuration Nitric uses when deploying cloud resources. This environment specific configuration is added to the stack files.
 
-When deploying the application, you can add extra configuration for specific handlers or globally for all handlers. This configuration is unique to each stack file, allowing you to deploy the same application to different environments with different configurations. Since the configuration options available are unique to the cloud platform and the services they offer these settings are typically different between provider implementations.
+When deploying the application, you can add extra configuration for specific services or globally for all services. This configuration is unique to each stack file, allowing you to deploy the same application to different environments with different configurations. Since the configuration options available are unique to the cloud platform and the services they offer these settings are typically different between provider implementations.
 
-Below is an example of configuration added to an AWS stack to augment the memory, timeout, and telemetry sampling percentage for deployed handlers.
+Below is an example of configuration added to an AWS stack to augment the memory, timeout, and telemetry sampling percentage for deployed services.
 
-```yaml {{ tag: "nitric-aws-deployment.yaml" }}
-name: project
-provider: nitric/aws@0.24.0
+```yaml {{ tag: "nitric.aws-deployment.yaml" }}
+provider: nitric/aws@1.0.0
 region: us-east-1
 telemetry: 10
 config:
@@ -57,16 +56,18 @@ config:
       memory: 4096
 ```
 
-Note that the configuration above creates two types of handlers with different configuration for each. The `default` configuration, which we'll apply to most handlers. There is also a `memory-optimized` handler group, which we've used to allocate more memory to those handlers specifically.
+Note that the configuration above creates two types of services with different configuration for each. The `default` configuration, which we'll apply to most services. There is also a `memory-optimized` handler group, which we've used to allocate more memory to those services specifically.
 
 To apply these handler group configurations, we need to create the groups. That's done by updating the project file to create groups and match them to different source code locations:
 
 ```yaml {{ tag: "nitric.yaml" }}
 name: my-project
-handlers:
-  - match: functions/*.ts
+services:
+  - match: services/*.ts
+    start: ts-node $SERVICE_PATH
     type: default
   - match: custom/*.ts
+    start: ts-node $SERVICE_PATH
     type: memory-optimized
 ```
 

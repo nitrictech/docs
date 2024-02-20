@@ -25,10 +25,10 @@ const buildingBlocks = [
     },
   },
   {
-    href: '/collections',
-    name: 'Collections',
+    href: '/keyvalue',
+    name: 'Key Value Stores',
     description:
-      'A built-in No-SQL store to quickly store and retrieve unstructured data.',
+      'A built-in key value store to quickly store and retrieve unstructured data.',
     icon: ArchiveBoxIcon,
     pattern: {
       y: -6,

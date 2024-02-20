@@ -7,12 +7,15 @@ Sends tasks to a queue.
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 from nitric.api import Task
 
 batch_queue = queue('batch').allow('sending')
 
 payload = {}
-await batch_queue.send(Task(payload=payload))
+await batch_queue.send(payload)
+
+Nitric.run()
 ```
 
 ## Parameters
@@ -29,37 +32,43 @@ await batch_queue.send(Task(payload=payload))
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 from nitric.api import Task
 
 batch_queue = queue('batch').allow('sending')
 
 payload = {}
-await batch_queue.send(Task(payload=payload))
+await batch_queue.send(payload)
+
+Nitric.run()
 ```
 
 ### Send multiple tasks to a queue
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 from nitric.api import Task
 
 batch_queue = queue('batch').allow('sending')
 
 tasks = [
-  Task(payload={
+  {
       'type': 'Email',
       'to': 'hello@example.com',
       'subject': 'Notification',
       'message': 'A notification from Nitric',
-  }),
-  Task(payload={
+  },
+  {
       'type': 'SMS',
       'to': '+17200000000',
       'message': 'A text message from Nitric',
-  })
+  }
 ]
 
 await batch_queue.send(tasks)
+
+Nitric.run()
 ```
 
 ### Dealing with failures

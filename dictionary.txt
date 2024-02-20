@@ -14,6 +14,7 @@ ECR
 GCP
 GCR
 IAM
+OpenID
 JSON
 MinIO
 SeaweedFS
@@ -169,6 +170,14 @@ CORs
 ci
 OSTYPE
 fastify
+lookups
+KV
+keyvalue
+observability
+deserialize
+enqueueing
+dequeueing
+requesters
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)

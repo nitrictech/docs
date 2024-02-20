@@ -22,7 +22,7 @@ Here is a quick introduction on Nitric storage if you'd prefer to learn via vide
 
 ### Files
 
-Files refer to binary files, such as documents (.doc, .pdf), images (.gif, .jpg), or videos (.mp4, .mkv). It is common for these files to be referred to as BLOBs, which stands for Binary Large Objects.Storing these types of files in buckets, as opposed to other data persistence systems like SQL or document databases, can improve performance.
+Files refer to binary files, such as documents (.doc, .pdf), images (.gif, .jpg), or videos (.mp4, .mkv). It is common for these files to be referred to as BLOBs, which stands for Binary Large Objects. Storing these types of files in buckets, as opposed to other data persistence systems like SQL or document databases, can improve performance.
 
 ### Buckets
 
@@ -34,7 +34,7 @@ Most cloud object/blob storage services function as key-value systems, where the
 
 ## Create Buckets
 
-Nitric enables you to define named buckets with customizable permissions. When defining a bucket, you can specify permissions for reading, writing, and deleting files within the bucket. In the example below, we declare a bucket named `profiles` and indicate that our function requires access to read, write, and delete files within that bucket:
+Nitric enables you to define named buckets with customizable permissions. When defining a bucket, you can specify permissions for reading, writing, and deleting files within the bucket. In the example below, we declare a bucket named `profiles` and indicate that our service requires access to read, write, and delete files within that bucket:
 
 <CodeGroup>
 
@@ -51,58 +51,6 @@ from nitric.application import Nitric
 profiles = bucket('profiles').allow('reading', 'writing', 'deleting')
 
 Nitric.run()
-```
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketWriting, nitric.BucketReading, nitric.BucketDeleting)
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-var profiles = Nitric.Bucket("profiles").With(BucketPermission.Writing, BucketPermission.Reading, BucketPermission.Deleting);
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.BucketPermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Write);
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.BucketPermission
-
-fun main() {
-	val profiles = Nitric.bucket("profiles").with(BucketPermission.Write)
-
-	Nitric.INSTANCE.run()
-}
 ```
 
 </CodeGroup>
@@ -136,66 +84,6 @@ profiles = bucket("profiles").allow("reading")
 profile_picture = profiles.file("users/bruce-wayne/profile.png")
 
 Nitric.run()
-```
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketReading)
-  if err != nil {
-    return
-  }
-
-  profilePicture := profiles.File("users/bruce-wayne/profile.png")
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-var profiles = Nitric.Bucket("profiles").With(BucketPermission.Reading);
-
-var profilePicture = profiles.File("users/bruce-wayne/profile.png");
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.BucketPermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Read);
-
-		var profilePicture = profiles.file("users/bruce-wayne/profile.png");
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.BucketPermission
-
-fun main() {
-	val profiles = Nitric.bucket("profiles").with(BucketPermission.Read)
-
-	val profilePicture = profiles.file("users/bruce-wayne/profile.png")
-
-	Nitric.run()
-}
 ```
 
 </CodeGroup>
@@ -232,86 +120,6 @@ for file in files:
 Nitric.run()
 ```
 
-```go
-import (
-  "context"
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketReading)
-  if err != nil {
-    return
-  }
-
-  files, err := profiles.Files(context.TODO())
-  if err != nil {
-    return
-  }
-
-  for _, file := range files {
-    fmt.Println(file.Name)
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-var profiles = Nitric.Bucket("profiles").With(BucketPermission.Reading);
-
-var files = profiles.Files();
-
-files.ForEach(file => {
-  Console.WriteLine(file.Name);
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.BucketPermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Read);
-
-		var files = profiles.files();
-
-		files.forEach((file) -> {
-			System.out.println(file.getName());
-		});
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.BucketPermission
-
-fun main() {
-	val profiles = Nitric.bucket("profiles").with(BucketPermission.Read)
-
-	val files = profiles.files()
-
-	files.forEach { file ->
-		println(file.name)
-	}
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
 ## Read files
@@ -342,70 +150,6 @@ profiles = bucket("profiles").allow("reading")
 image = await profile.file("users/bruce-wayne/profile.png").read()
 
 Nitric.run()
-```
-
-```go
-import (
-  "context"
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketReading)
-  if err != nil {
-    return
-  }
-
-  image, err := profiles.File("users/bruce-wayne/profile.png").Read(context.TODO())
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-var profiles = Nitric.Bucket("profiles").With(BucketPermission.Reading);
-
-var image = profiles.File("users/bruce-wayne/profile.png").Read();
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.BucketPermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Read);
-
-		var image = profiles.file("users/bruce-wayne/profile.png");
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.BucketPermission
-
-fun main() {
-	val profiles = Nitric.bucket("profiles").with(BucketPermission.Read)
-
-	val image = profiles.file("users/bruce-wayne/profile.png")
-
-	Nitric.run()
-}
 ```
 
 </CodeGroup>
@@ -444,79 +188,11 @@ await profiles.file("users/bruce-wayne/profile.png").write(profileImage)
 Nitric.run()
 ```
 
-```go
-import (
-  "context"
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketWriting)
-  if err != nil {
-    return
-  }
-
-  profileImage := []byte("image data")
-
-  err := profiles.File("users/bruce-wayne/profile.png").Write(context.TODO(), profileImage)
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-var profiles = Nitric.Bucket("profiles").With(BucketPermission.Writing);
-
-var profileImage = "image data";
-
-var image = profiles.File("users/bruce-wayne/profile.png").Write(profileImage);
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.BucketPermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Write);
-
-		profiles.file("users/bruce-wayne/profile.png").write("image data");
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.BucketPermission
-
-fun main() {
-	val profiles = Nitric.bucket("profiles").with(BucketPermission.Write)
-
-	profiles.file("users/bruce-wayne/profile.png").write("image data")
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
 ## Delete files
 
-You can delete a file directly from your application code using the `delete()` method on a file reference.
+You can delete a file directly from your service code using the `delete()` method on a file reference.
 
 <CodeGroup>
 
@@ -539,77 +215,13 @@ await profile.file("users/bruce-wayne/profile.png").delete()
 Nitric.run()
 ```
 
-```go
-import (
-  "context"
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketDeleting)
-  if err != nil {
-    return
-  }
-
-  err := profiles.File("users/bruce-wayne/profile.png").Delete(context.TODO())
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-var profiles = Nitric.Bucket("profiles").With(BucketPermission.Deleting);
-
-var image = profiles.File("users/bruce-wayne/profile.png").Delete();
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.BucketPermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Delete);
-
-		profiles.file("users/bruce-wayne/profile.png").delete();
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.BucketPermission
-
-fun main() {
-	val profiles = Nitric.bucket("profiles").with(BucketPermission.Delete)
-
-	profiles.file("users/bruce-wayne/profile.png").delete()
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
 ## Signed URLs
 
 The signed URL feature enables you to generate temporary URLs for downloading or uploading files. These URLs include authentication information in the query string, allowing users without credentials to access the file. They are particularly useful when you need to share temporary links for file downloads or uploads.
 
-You have the option to customize the expiration time of the URL by specifying a duration in seconds, ranging from 0 to 604,800 (a week). To obtain a download URL, the function needs to have `read` permissions on the bucket. For an upload URL, the function needs to have `write` permissions on the bucket.
+You have the option to customize the expiration time of the URL by specifying a duration in seconds, ranging from 0 to 604,800 (a week). To obtain a download URL, the service needs to have `read` permissions on the bucket. For an upload URL, the service needs to have `write` permissions on the bucket.
 
 <Note>
   It's important to note that anyone with the signed URL can access or modify
@@ -647,91 +259,13 @@ upload_url = await profiles.file('profile.png').upload_url(3600) # Expiry defaul
 Nitric.run()
 ```
 
-```go
-import (
-  "context"
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  profiles, err := nitric.NewBucket("profiles").With(nitric.BucketReading, nitric.BucketWriting)
-  if err != nil {
-    return
-  }
-
-  ctx := context.TODO()
-  expiry := 3600
-
-  downloadUrl, err := profiles.file("profile.png").DownloadUrl(ctx, expiry) // Expiry defaults to 600 (10 minutes)
-  if err != nil {
-    return
-  }
-
-  uploadUrl, err := profiles.File("profile.png").UploadUrl(ctx, expiry) // Expiry defaults to 600 (10 minutes)
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Resources;
-
-var profiles = Nitric.Bucket("profiles").With(BucketPermission.Deleting);
-
-var downloadUrl = profiles.File("profile.png").GetDownloadUrl(3600); // Expiry defaults to 600 (10 minutes)
-
-var uploadUrl = profiles.File("profile.png").GetUploadUrl(3600); // Expiry defaults to 600 (10 minutes)
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.BucketPermission;
-
-public class Application {
-	public static void main(String[] args) {
-		var profiles = Nitric.INSTANCE.bucket("profiles").with(BucketPermission.Read, BucketPermission.Write);
-
-		var downloadUrl = profiles.file("profile.png").getDownloadUrl();
-
-		var uploadUrl = profiles.file("profile.png").getUploadUrl();
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.BucketPermission
-
-fun main() {
-	val profiles = Nitric.bucket("profiles").with(BucketPermission.Read, BucketPermission.Write)
-
-	val downloadUrl = profiles.file("profile.png").getDownloadUrl()
-
-	val uploadUrl = profiles.file("profile.png").getUploadUrl()
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
 ## Bucket Notifications
 
-Bucket notifications are functions that subscribe to changes in your bucket's files. You can configure these notifications to trigger specifically when a file is written or deleted. Additionally, you can apply filters based on file prefixes to specify which files should trigger a notification. When the function is triggered, it receives event data that includes details about the changed file, such as whether it was written or deleted, and the file's name.
+Bucket notifications are services that subscribe to changes in your bucket's files. You can configure these notifications to trigger specifically when a file is written or deleted. Additionally, you can apply filters based on file prefixes to specify which files should trigger a notification. When the service is triggered, it receives event data that includes details about the changed file, such as whether it was written or deleted, and the file's name.
 
-To illustrate, suppose we want to trigger a function whenever a new profile image is uploaded to a bucket. In this case, we can use the following code snippet:
+To illustrate, suppose we want to trigger a service whenever a new profile image is uploaded to a bucket. In this case, we can use the following code snippet:
 
 <Note>
   Writing/Delete to a bucket from within a bucket notification will trigger the
@@ -766,84 +300,6 @@ async def image_written(ctx):
 Nitric.run()
 ```
 
-```go
-import (
-  "context"
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  assets := nitric.NewBucket("assets")
-
-  // Filter for 'write' events for files starting with '/users/images'
-  assets.On(faas.WriteNotification, "/users/images", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
-    fmt.Printf("new profile image for %s was written", ctx.Request.Key())
-
-    return ctx, nil
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Function;
-using Nitric.Sdk.Resources;
-
-var assets = Nitric.Bucket("assets");
-
-// Filter for 'write' events for files starting with '/users/images'
-assets.On(BucketNotificationType.Write, "/users/images", ctx =>
-{
-  Console.WriteLine($"new profile image for {ctx.Req.Key} was written");
-  return ctx;
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.BucketPermission;
-import io.nitric.faas.v0.BucketNotificationType;
-
-public class Application {
-	public static void main(String[] args) {
-		var assets = Nitric.INSTANCE.bucket("assets");
-
-		// Filter for 'write' events for files starting with '/users/images'
-		assets.on(BucketNotificationType.Write, "/users/images", (ctx) -> {
-			System.out.printf("new profile image for %s was written", ctx.getReq().getKey());
-		});
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.BucketPermission
-import io.nitric.faas.v0.BucketNotificationType
-
-fun main() {
-	val assets = Nitric.bucket("assets")
-
-	// Filter for 'write' events for files starting with '/users/images'
-	assets.on(BucketNotificationType.Write, "/users/images") { ctx ->
-		printf("new profile image for ${ctx.req.key} was written")
-	}
-
-	Nitric.run()
-}
-```
-
 </CodeGroup>
 
 If we instead wanted to trigger the function whenever any file was deleted from the bucket, we would use the following snippet:
@@ -873,84 +329,6 @@ async def file_deleted(ctx):
   print(f"{ctx.req.key} was deleted")
 
 Nitric.run()
-```
-
-```go
-import (
-  "context"
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  assets := nitric.NewBucket("assets")
-
-  // Filter for 'delete' events for any file
-  assets.On(faas.DeleteNotification, "*", func(ctx *faas.BucketNotificationContext, _ faas.BucketNotificationHandler) (*faas.BucketNotificationContext, error) {
-    fmt.Printf("%s was deleted", ctx.Request.Key())
-
-    return ctx, nil
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Function;
-using Nitric.Sdk.Resources;
-
-var assets = Nitric.Bucket("assets");
-
-// Filter for 'delete' events for any file
-assets.On(BucketNotificationType.Delete, "*", ctx =>
-{
-  Console.WriteLine($"{ctx.Req.Key} was deleted");
-  return ctx;
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-import io.nitric.resources.BucketPermission;
-import io.nitric.faas.v0.BucketNotificationType;
-
-public class Application {
-	public static void main(String[] args) {
-		var assets = Nitric.INSTANCE.bucket("assets");
-
-		// Filter for 'delete' events for any file
-		assets.on(BucketNotificationType.Delete, "*", (ctx) -> {
-			System.out.printf("%s was deleted", ctx.getReq().getKey());
-		});
-
-		Nitric.INSTANCE.run();
-	}
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-import io.nitric.resources.BucketPermission
-import io.nitric.faas.v0.BucketNotificationType
-
-fun main() {
-	val assets = Nitric.bucket("assets")
-
-	// Filter for 'delete' events for any file
-	assets.on(BucketNotificationType.Delete, "*") { ctx ->
-		print("${ctx.req.key} was deleted")
-	}
-
-	Nitric.run()
-}
 ```
 
 </CodeGroup>

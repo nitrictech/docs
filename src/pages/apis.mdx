@@ -37,84 +37,11 @@ async def get_moon(ctx):
 Nitric.run()
 ```
 
-```go
-import (
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  // each API needs a unique name
-  galaxyApi, err := nitric.NewApi("far-away-galaxy-api")
-  if err != nil {
-    return
-  }
-
-  galaxyApi.Get("/moon", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
-    ctx.Response.Body = []byte("that's no moon, it's a space station")
-
-    return ctx, nil
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-
-// Each API needs a unique name
-var galaxyApi = Nitric.Api("far-away-galaxy-api");
-
-galaxyApi.Get("/moon", context => {
-  context.Res.Text("that's no moon, it's a space station");
-
-  return context;
-});
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-
-class Application {
-  public static void main(String[] args) {
-    var galaxyApi = Nitric.INSTANCE.api("far-away-galaxy-api");
-
-    galaxyApi.get("/moon", (ctx) -> {
-      ctx.getResp().text("that's no moon, it's a space station");
-      return ctx;
-    });
-
-    Nitric.INSTANCE.run();
-  }
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-
-fun main() {
-  // each API needs a unique name
-  val galaxyApi = Nitric.api("far-away-galaxy-api")
-
-  galaxyApi.get("/moon") { ctx ->
-    ctx.resp.text("that's no moon, it's a space station")
-    ctx
-  }
-
-  Nitric.INSTANCE.run()
-}
-```
-
 </CodeGroup>
 
 ## Routing
 
-You can define routes and handler functions for incoming requests using methods on your API objects.
+You can define routes and handler services for incoming requests using methods on your API objects.
 
 For example, you can declare a route that handles `POST` requests using the `post()` method. When declaring routes you provide the path to match and a callback that will serve as the handler for matching requests.
 
@@ -149,73 +76,6 @@ async def list_planets(ctx):
 async def create_planet(ctx):
   create_planet(ctx.req.json())
   ctx.res.status = 201
-```
-
-```go
-import (
-  "planets"
-)
-
-galaxyApi.Get("/planets", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
-  ctx.Response.Body = planets.GetPlanetsList()
-  return ctx, nil
-})
-
-galaxyApi.Post("/planets", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
-  planets.CreatePlanet(ctx.Request.Data())
-  ctx.Response.Status = 201
-  return ctx, err
-})
-```
-
-```csharp
-using Nitric.Sdk;
-using Planets;
-
-galaxyApi.Get("/planets", context => {
-  context.Res.Body = Planets.GetPlanetsList();
-
-  return context;
-});
-
-galaxyApi.Post("/planets", context => {
-  Planets.CreatePlanet(ctx.Req.Body);
-  context.Res.Status = 201;
-
-  return context;
-});
-
-Nitric.Run();
-```
-
-```java
-import io.planets.Planets;
-
-galaxyApi.get("/planets", (ctx) -> {
-  ctx.getResp().json(Planets.getPlanetsList());
-  return ctx;
-});
-
-galaxyApi.post("/planets", (ctx) -> {
-  Planets.createPlanet(ctx.req.data);
-  ctx.getResp().setStatus(201);
-  return ctx;
-});
-```
-
-```kotlin
-import io.planets.Planets
-
-galaxyApi.get("/planets") { ctx ->
-  ctx.resp.json(Planets.getPlanetsList())
-  ctx
-}
-
-galaxyApi.post("/planets") { ctx ->
-  Planets.createPlanet(ctx.req.data)
-  ctx.resp.status = 201
-  ctx
-}
 ```
 
 </CodeGroup>
@@ -254,55 +114,6 @@ async def get_planet_route(ctx):
   ctx.res.body = get_planet(name)
 ```
 
-```go
-import (
-  "planets"
-)
-
-// create a dynamic route and extract the parameter `name`
-galaxyApi.Get("/planets/:name", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
-  name := ctx.Request.PathParams()["name"]
-  ctx.Response.Body = planets.GetPlanet(name)
-  return ctx, nil
-})
-```
-
-```csharp
-using Nitric.Sdk;
-using Planets;
-
-// create a dynamic route and extract the parameter `name`
-galaxyApi.Get("/planets/:name", context => {
-  var name = context.Req.PathParams.get("name");
-
-  context.Res.Body = Planets.GetPlanet(name);
-
-  return context;
-});
-
-Nitric.Run();
-```
-
-```java
-import io.planets.Planets;
-
-galaxyApi.get("/planets/:name", (ctx) -> {
-  var name = ctx.getReq().getParams()["name"];
-  ctx.getResp().json(Planets.getPlanet(name));
-  return ctx;
-});
-```
-
-```kotlin
-import io.planets.Planets
-
-galaxyApi.get("/planets/:name") { ctx ->
-  val name = ctx.req.params["name"]
-  ctx.resp.json(Planets.getPlanet(name))
-  ctx
-}
-```
-
 </CodeGroup>
 
 #### HTTP status and headers
@@ -325,39 +136,6 @@ galaxyApi.get('/planets/alderaan', async (ctx) => {
 async def find_alderaan(ctx):
   ctx.res.status = 301
   ctx.res.headers["Location"] = "https://example.org/debris/alderaan"
-```
-
-```go
-// return a redirect response using status 301
-galaxyApi.Get("/planets/alderaan", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
-  ctx.Response.Status = 301
-  ctx.Response.Headers["Location"] = []string{ "https://example.org/debris/alderaan" }
-  return ctx, nil
-})
-```
-
-```csharp
-galaxyApi.Get("/planets/alderaan", context => {
-  ctx.Res.Status = 301;
-  ctx.Res.Headers.Add("Location", new string[]{ "https://example.org/debris/alderaan" })
-  return context;
-});
-```
-
-```java
-galaxyApi.get("/planets/alderaan") { ctx ->
-  ctx.getResp().setStatus(301);
-  ctx.getResp().setHeaders(Map.of("Location", List.of("https://example.org/debris/alderaan")));
-  return ctx;
-}
-```
-
-```kotlin
-galaxyApi.get("/planets/alderaan") { ctx ->
-  ctx.resp.status = 301
-  ctx.resp.headers["Location"] = listOf("https://example.org/debris/alderaan")
-  ctx
-}
 ```
 
 </CodeGroup>
@@ -429,103 +207,6 @@ secureApi = api("main", opts=ApiOptions(
 Nitric.run()
 ```
 
-```go
-import (
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  secureApi, err := nitric.NewApi("main",
-    // define a security definition named 'default'
-    nitric.WithSecurityJwtRule("default", nitric.JwtSecurityRule{
-      Issuer: "https://dev-abc123.us.auth0.com",
-      Audiences: []string{ "https://test-security-definition/" },
-    }),
-    // apply the 'default' security definition to all routes in this API.
-    nitric.WithSecurity("default",  []string{}),
-  )
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-
-var secureApi = Nitric.Api("main", new ApiOptions(
-  // define a security definition named 'default'
-  SecurityDefinitions: new Dictionary<string, SecurityDefinition>
-  {
-    { "default",
-      new JwtSecurityDefinition(
-        'https://dev-abc123.us.auth0.com',
-        new string[] { "https://test-security-definition/" }
-      )
-    }
-  },
-  // apply the 'default' security definition to all routes in this API.
-  Security: new Dictionary<string, string[]>
-  {
-    {
-      "default",
-      new string[] {}
-    },
-  }
-));
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-
-public class Application {
-  public static void main(String[] args) {
-    var secureApi = Nitric.INSTANCE.api("main", new ApiOptions.Builder()
-      // define a security definition named 'default'
-      .securityDefinition(Map.of(
-        "default", new JwtSecurityDefinition(
-          "https://dev-abc123.us.auth0.com",
-          List.of("https://test-security-definition/")
-        )
-      // apply the 'default' security definition to all routes in this API.
-      )).security(Map.of(
-        "default", List.of()
-      )).build()
-    );
-
-    Nitric.INSTANCE.run();
-  }
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-
-fun main() {
-  val secureApi = Nitric.api("main", ApiOptions(
-    // define a security definition named 'default'
-    securityDefinitions = mapOf(
-      "default" to JwtSecurityDefinition(
-        issuer = "https://dev-abc123.us.auth0.com",
-        audiences = listOf("https://test-security-definition/"),
-      )
-    ),
-    // apply the 'default' security definition to all routes in this API.
-    security = mapOf(
-      "default" to listOf()
-    )
-  ))
-
-  Nitric.INSTANCE.run()
-}
-```
-
 </CodeGroup>
 
 ### Authorization
@@ -573,99 +254,6 @@ helloApi = api("main", opts=ApiOptions(
 Nitric.run()
 ```
 
-```go
-import (
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  secureApi, err := nitric.NewApi("main",
-    // only authorize requests with the 'user.read' scope
-    nitric.WithSecurity("user", []string{ "user.read" }),
-    nitric.WithSecurityJwtRule("user", nitric.JwtSecurityRule{
-      Issuer: "https://dev-abc123.us.auth0.com",
-      Audiences: []string{ "https://test-security-definition/" },
-    }),
-  )
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-
-var secureApi = Nitric.Api("main", new ApiOptions(
-  // only authorize requests with the 'user.read' scope
-  Security: new Dictionary<string, string[]>
-  {
-    {
-      "user",
-      new string[] { "user.read" }
-    },
-  },
-  SecurityDefinitions: new Dictionary<string, SecurityDefinition>
-  {
-    { "default",
-      new JwtSecurityDefinition(
-        'https://dev-abc123.us.auth0.com',
-        new string[] { "https://test-security-definition/" }
-      )
-    }
-  }
-));
-
-Nitric.Run();
-```
-
-```java
-import io.nitric.Nitric;
-
-public class Application {
-  public static void main(String[] args) {
-    var secureApi = Nitric.INSTANCE.api("main", new ApiOptions.Builder()
-      // only authorize requests with the 'user.read' scope
-      .security(Map.of(
-        "user", List.of("user.read")
-      )).securityDefinition(Map.of(
-        "user", new JwtSecurityDefinition(
-          "https://dev-abc123.us.auth0.com",
-          List.of("https://test-security-definition/")
-        )
-      )).build()
-    );
-
-    Nitric.INSTANCE.run();
-  }
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-
-fun main() {
-  val secureApi = Nitric.api("main", ApiOptions(
-    // only authorize requests with the 'user.read' scope
-    security = mapOf(
-      "default" to listOf()
-    ),
-    securityDefinitions = mapOf(
-      "default" to JwtSecurityDefinition(
-        issuer = "https://dev-abc123.us.auth0.com",
-        audiences = listOf("https://test-security-definition/"),
-      )
-    )
-  ))
-
-  Nitric.INSTANCE.run()
-}
-```
-
 </CodeGroup>
 
 For an in-depth tutorial look at the [Auth0 integration guide](/guides/getting-started/nodejs/secure-api-auth0)
@@ -704,49 +292,13 @@ async def get_planet(ctx):
     pass
 ```
 
-```go
-// override top level security to remove security from this route
-galaxyApi.Get("/planets/unsecured-planet", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-  return ctx, nil
-}, nitric.WithNoMethodSecurity())
-
-// override top level security to require user.write scope to access
-galaxyApi.Get("/planets/secured-planet", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-  return ctx, nil
-}, nitric.WithMethodSecurity("user", []string{ "user.write" }))
-```
-
-```java
-// override top level security to remove security from this route
-galaxyApi.get("/planets/unsecured-planet", (ctx) -> {
-  return ctx;
-}, new RouteOptions.Builder().security(Map.of()).build());
-
-// override top level security to require user.write scope to access
-galaxyApi.get("/planets/secured-planet", (ctx) -> {
-  return ctx;
-}, new RouteOptions.Builder().security(Map.of("user", List.of("user.write"))));
-```
-
-```kotlin
-// override top level security to remove security from this route
-galaxyApi.get("/planets/unsecured-planet", { ctx ->
-  ctx
-}, RouteOptions(security = mapOf()))
-
-// override top level security to require user.write scope to access
-galaxyApi.get("/planets/secured-planet", { ctx ->
-  ctx
-}, RouteOptions(security = mapOf("user" to listOf("user.write"))))
-```
-
 </CodeGroup>
 
 ## Defining Middleware
 
-Behavior that's common to several APIs or routes can be applied using middleware functions. Multiple middleware can also be composed to create a cascading set of steps to perform on incoming requests or outgoing responses.
+Behavior that's common to several APIs or routes can be applied using middleware services. Multiple middleware can also be composed to create a cascading set of steps to perform on incoming requests or outgoing responses.
 
-Middleware functions look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
+Middleware services look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
 
 <CodeGroup>
 
@@ -768,54 +320,6 @@ async def validate(ctx, nxt: HttpMiddleware):
     ctx.res.body = "header Content-Type is required"
     return ctx
   return await nxt(ctx)
-```
-
-```go
-func validate(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-  _, ok := ctx.Request.Headers()["content-type"]
-  if !ok {
-    ctx.Response.Status = 400
-    ctx.Response.Body = []byte("header 'Content-Type' is required")
-    return ctx, nil
-  }
-
-  return next(ctx)
-}
-```
-
-```csharp
-HttpContext Validate(HttpContext context, Func<HttpContext, HttpContext> next)
-{
-  if (context.Req.Headers.ContainsKey("content-type"))
-  {
-    context.Res.Status = 400;
-    context.Res.Text("Header Content-Type is required");
-    return context;
-  }
-  return next(context);
-}
-```
-
-```java
-HttpContext validate(HttpContext ctx, Handler<HttpContext> next) {
-  if (!ctx.getReq().getHeaders().containsKey("content-type")) {
-    ctx.getResp().setStatus(400);
-    ctx.getResp().text("header 'Content-Type' is required");
-    return ctx;
-  }
-  return next.invoke(ctx);
-}
-```
-
-```kotlin
-val validate = Middleware<HttpContext> { ctx, next ->
-  if (!ctx.req.headers.containsKey("content-type")) {
-    ctx.resp.status = 400
-    ctx.resp.text("header 'Content-Type' is required")
-    return@Middleware ctx
-  }
-  return@Middleware next(ctx)
-}
 ```
 
 </CodeGroup>
@@ -845,67 +349,6 @@ customers_api = api("customers", opts=ApiOptions(middleware=[log_request, valida
 Nitric.run()
 ```
 
-```go
-import (
-  "example.com/middleware"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  customersApi, err := nitric.NewApi("customers",
-    nitric.WithMiddleware(middleware.LogRequest, middleware.ValidateRequest)
-  )
-  if err != nil {
-    return nil, err
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Function;
-using Nitric.Sdk.Resource;
-
-var customersApi = Nitric.Api("customers",
-  new ApiOptions(Middleware: new Middleware<HttpContext>[] { ValidateRequest })
-)
-
-Nitric.Run();
-```
-
-```java
-import io.example.Middleware;
-import io.nitric.Nitric;
-
-public class Application {
-  public static void main(String[] args) {
-    var customersApi = Nitric.INSTANCE.api("customers", new ApiOptions.Builder()
-      .middleware(Middleware.logRequest, Middleware.validateRequest)
-      .build()
-    );
-
-    Nitric.INSTANCE.run();
-  }
-}
-```
-
-```kotlin
-import io.example.Middleware
-import io.nitric.Nitric
-
-fun main() {
-  val customersApi = Nitric.api("customers", ApiOptions(
-    middleware = listOf(Middleware.logRequest, Middleware.validateRequest)
-  ))
-
-  Nitric.INSTANCE.run()
-}
-```
-
 </CodeGroup>
 
 ### Route level middleware
@@ -933,84 +376,6 @@ customersApi.route('/customers').get([validate, getAllCustomers])
 Route level middleware currently not supported in python
 ```
 
-```go
-import (
-  "middleware"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  customersApi, err := nitric.NewApi("customers")
-  if err != nil {
-    return nil, err
-  }
-
-  // Inline using .Get()
-  customersApi.Get("/hello", faas.ComposeHttpMiddleware(middleware.ValidateRequest, middleware.LogRequest, handler))
-
-  // Using .NewRoute()
-  customersApi.NewRoute("/hello", middleware.ValidateRequest, middleware.LogRequest).Post(handler)
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-```csharp
-using Nitric.Sdk;
-using Nitric.Sdk.Function;
-using Nitric.Sdk.Resource;
-
-var customersApi = Nitric.Api("customers")
-
-customersApi.Get("/hello", new Middleware<HttpContext>[] { ValidateRequest, LogRequest });
-
-customersApi.Route("/hello", new RouteOptions {
-  Middlewares = new Middleware<HttpContext>[] { ValidateRequest, LogRequest }
-}).Post(Handler);
-
-Nitric.Run();
-```
-
-```java
-import io.example.Middleware;
-import io.nitric.Nitric;
-
-import java.util.List;
-
-public class Application {
-  public static void main(String[] args) {
-    var customersApi = Nitric.INSTANCE.api("customers");
-
-    // Inline using .get()
-    customersApi.get("/hello", List.of(Middleware.validateRequest, Middleware.logRequest));
-
-    // Using .route()
-    customerseApi.route("/hello"),get(List.of(Middleware.validateRequest, Middleware.logRequest));
-
-    Nitric.INSTANCE.run();
-  }
-}
-```
-
-```kotlin
-import io.example.Middleware
-import io.nitric.Nitric
-
-fun main() {
-  val customersApi = Nitric.api("customers")
-
-  // Inline using .get()
-  customersApi.get("/hello", listOf(Middleware.validateRequest, Middleware.logRequest))
-
-  // Using .route()
-  customersApi.route("/hello").get(listOf(Middleware.validateRequest, Middleware.logRequest))
-
-  Nitric.run()
-}
-```
-
 </CodeGroup>
 
 ## Custom Domains
@@ -1023,7 +388,7 @@ By default APIs deployed by Nitric will be assigned a domain by the target cloud
 
 ```yaml {{ title: "AWS", tag: "nitric-prod.yaml (stack file)" }}
 name: my-aws-stack
-provider: nitric/aws@0.30.0
+provider: nitric/aws@1.0.0
 region: ap-southeast-2
 
 # Add a key for configuring apis
@@ -1090,15 +455,15 @@ If you're more of a visual learner, below is a video that walks through how to s
 
 ## Serving from multiple files
 
-Nitric APIs are scoped to the project and can be referenced from multiple `handlers`. This allows you to choose the granularity of functions that suites your project. For small projects you might have a single handler that serves all routes, while in larger projects multiple handlers might combine to serve paths and methods for your API.
+Nitric APIs are scoped to the project and can be referenced from multiple `services`. This allows you to choose the granularity of services that suites your project. For small projects you might have a single service that serves all routes, while in larger projects multiple services might combine to serve paths and methods for your API.
 
 ### Using the same resource name
 
-Since resource names are unique across each Nitric project, you can access a resource in multiple locations by simply reusing it's name. Here's an example of handlers in different files serving different paths on the same API.
+Since resource names are unique across each Nitric project, you can access a resource in multiple locations by simply reusing it's name. Here's an example of services in different files serving different paths on the same API.
 
 <CodeGroup>
 
-```javascript {{ tag: 'functions/one.js' }}
+```javascript {{ tag: 'services/one.js' }}
 import { api } from '@nitric/sdk'
 
 const accountsApi = api('accounts')
@@ -1108,9 +473,9 @@ accountsApi.get('/users/:id', async () => {
 })
 ```
 
-```python {{ tag: 'functions/one.py' }}
+```python {{ tag: 'services/one.py' }}
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 from nitric.resources import api
 
 accounts_api = api('accounts')
@@ -1122,66 +487,11 @@ async def get_user(ctx: HttpContext):
 Nitric.run()
 ```
 
-```go {{ tag: 'functions/one.go'}}
-import (
-  "github.com/nitrictech/go-sdk/nitric"
-  "github.com/nitrictech/go-sdk/faas"
-)
-
-func main() {
-  accountsApi, err := nitric.NewApi("accounts")
-  if err != nil {
-    return nil, err
-  }
-
-  accountsApi.Get("/users/:id", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
-    // logic here
-    return next(ctx)
-  })
-
-  if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
-}
-```
-
-```java {{ tag: 'functions/One.java'}}
-import io.nitric.Nitric;
-
-public class One {
-  public static void main(String[] args) {
-    var accountsApi = Nitric.INSTANCE.api("accounts");
-
-    accountsApi.get("/users/:id", (ctx) -> {
-      // logic here
-      return ctx;
-    })
-
-    Nitric.INSTANCE.run();
-  }
-}
-```
-
-```kotlin {{ tag: 'functions/One.kt' }}
-import io.nitric.Nitric
-
-fun main() {
-  val accountsApi = Nitric.api("accounts")
-
-  accountsApi.get("/users/:id") { ctx ->
-    // logic here
-    ctx
-  }
-
-  Nitric.run()
-}
-```
-
 </CodeGroup>
 
 <CodeGroup>
 
-```javascript {{ tag: 'functions/two.js' }}
+```javascript {{ tag: 'services/two.js' }}
 import { api } from '@nitric/sdk'
 
 const accountsApi = api('accounts')
@@ -1191,9 +501,9 @@ accountsApi.get('/orgs/:id', async () => {
 })
 ```
 
-```python {{ tag: 'functions/two.py' }}
+```python {{ tag: 'services/two.py' }}
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 from nitric.resources import api
 
 accounts_api = api('accounts')
@@ -1205,71 +515,16 @@ async def get_org(ctx: HttpContext):
 Nitric.run()
 ```
 
-```go {{ tag: 'functions/two.go'}}
-import (
-  "github.com/nitrictech/go-sdk/nitric"
-  "github.com/nitrictech/go-sdk/faas"
-)
-
-func main() {
-  accountsApi, err := nitric.NewApi("accounts")
-  if err != nil {
-    return nil, err
-  }
-
-  accountsApi.Get("/orgs/:id", func(ctx *faas.HttpContext, _ faas.HttpHandler) (*faas.HttpContext, error) {
-    // logic here
-    return next(ctx)
-  })
-
-  if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
-}
-```
-
-```java {{ tag: 'functions/Two.java' }}
-import io.nitric.Nitric;
-
-public class Two {
-  public static void main(String[] args) {
-    var accountsApi = Nitric.INSTANCE.api("accounts");
-
-    accountsApi.get("/orgs/:id", (ctx) -> {
-      // logic here
-      return ctx;
-    })
-
-    Nitric.INSTANCE.run();
-  }
-}
-```
-
-```kotlin {{ tag: 'functions/Two.kt' }}
-import io.nitric.Nitric
-
-fun main() {
-  val accountsApi = Nitric.api("accounts")
-
-  accountsApi.get("/orgs/:id") { ctx ->
-    // logic here
-    ctx
-  }
-
-  Nitric.run()
-}
-```
-
 </CodeGroup>
 
 <Note>
   Calling `api()` multiple times with the same name returns the same API
-  resource each time, allowing it to be referenced in multiple handlers.
+  resource each time, allowing it to be referenced in multiple services.
 </Note>
 
 ### Importing an existing resource
 
-While reusing a name is useful, it can lead to errors due to typos or when the configuration of the resource is complex. For this reason it's often preferable to declare the resource in a shared location and import it into the handlers as needed.
+While reusing a name is useful, it can lead to errors due to typos or when the configuration of the resource is complex. For this reason it's often preferable to declare the resource in a shared location and import it into the services as needed.
 
 Here is the same example enhanced to import a common API resource.
 
@@ -1287,55 +542,11 @@ from nitric.resources import api
 accounts_api = api('accounts')
 ```
 
-```go {{ tag: 'resources.go' }}
-import (
-	"github.com/nitrictech/go-sdk/nitric"
-)
-
-type Resources struct {
-	AccountsApi nitric.Api
-}
-
-var Manager *Resources
-
-func NewManager() (*Resources, error) {
-	if Manager == nil {
-		api, err := nitric.NewApi("accounts")
-		if err != nil {
-			return nil, err
-		}
-
-		Manager = &Resources{
-			AccountsApi: api,
-		}
-	}
-
-	return Manager, nil
-}
-```
-
-```java {{ tag: 'Resources.java' }}
-import io.nitric.Nitric;
-import io.nitric.resources.ApiResource;
-
-public class Resources {
-  static ApiResource accountsApi = Nitric.INSTANCE.api("accounts");
-}
-```
-
-```kotlin
-import io.nitric.Nitric
-
-object Resources {
-    val accountsApi = Nitric.api("accounts")
-}
-```
-
 </CodeGroup>
 
 <CodeGroup>
 
-```javascript {{ tag: 'functions/one.js' }}
+```javascript {{ tag: 'services/one.js' }}
 import { accountsApi } from '../resources'
 
 accountsApi.get('/users/:id', async () => {
@@ -1343,9 +554,9 @@ accountsApi.get('/users/:id', async () => {
 })
 ```
 
-```python {{ tag: 'functions/one.py' }}
+```python {{ tag: 'services/one.py' }}
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 from common.resources import accounts_api
 
 
@@ -1356,56 +567,11 @@ async def get_user(ctx: HttpContext):
 Nitric.run()
 ```
 
-```go {{ tag: 'functions/one.go' }}
-import (
-  "github.com/nitrictech/go-sdk/faas"
-  "example.com/resources"
-)
-
-func main() {
-  manager, err := resources.NewManager()
-  if err != nil {
-    return
-  }
-
-  manager.AccountsApi.Get("/users/:id", func(ctx faas.HttpContext, next faas.HttpMiddleware) (faas.HttpContext, error) {
-    // your logic here
-    return next(ctx)
-  })
-}
-```
-
-```java {{ tag: 'functions/One.java' }}
-import io.nitric.Nitric;
-import io.example.Resources;
-
-class One {
-  public static void main(String[] args) {
-    Resources.accountsApi.get("/users/:id", (ctx) -> {
-      // logic here
-      return ctx;
-    });
-  }
-}
-```
-
-```kotlin {{ tag: 'functions/One.kt'}}
-import io.nitric.Nitric
-import io.example.Resources
-
-fun main() {
-  Resources.accountsApi.get("/users/:id") { ctx ->
-    // logic here
-    ctx
-  }
-}
-```
-
 </CodeGroup>
 
 <CodeGroup>
 
-```javascript {{ tag: 'functions/two.js' }}
+```javascript {{ tag: 'services/two.js' }}
 import { accountsApi } from '../resources'
 
 accountsApi.get('/orgs/:id', async () => {
@@ -1413,9 +579,9 @@ accountsApi.get('/orgs/:id', async () => {
 })
 ```
 
-```python {{ tag: 'functions/two.py' }}
+```python {{ tag: 'services/two.py' }}
 from nitric.application import Nitric
-from nitric.faas import HttpContext
+from nitric.context import HttpContext
 from common.resources import accounts_api
 
 
@@ -1424,48 +590,6 @@ async def get_org(ctx: HttpContext):
     pass # your logic here
 
 Nitric.run()
-```
-
-```go {{ tag: 'functions/two.go' }}
-import (
-  "github.com/nitrictech/go-sdk/faas"
-  "example.com/resources"
-)
-
-func main() {
-  manager, err := resources.NewManager()
-  if err != nil {
-    return
-  }
-
-  manager.AccountsApi.Get("/orgs/:id", func(ctx faas.HttpContext, next faas.HttpMiddleware) (faas.HttpContext, error) {
-    // your logic here
-    return next(ctx)
-  })
-}
-```
-
-```java {{ tag: 'functions/Two.java' }}
-import io.nitric.Nitric;
-import io.example.Resources;
-
-class Two {
-  public static void main(String[] args) {
-    Resources.accountsApi.get("/orgs/:id")
-  }
-}
-```
-
-```kotlin {{ tag: 'functions/Two.kt' }}
-import io.nitric.Nitric
-import io.example.Resources
-
-fun main() {
-  Resources.accountsApi.get("/orgs/:id") { ctx ->
-    // logic here
-    ctx
-  }
-}
 ```
 
 </CodeGroup>

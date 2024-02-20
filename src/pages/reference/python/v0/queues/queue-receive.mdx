@@ -7,6 +7,7 @@ Receive tasks from a queue.
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 from nitric.api import Task
 
 batch_queue = queue('batch').allow('receiving')
@@ -17,6 +18,8 @@ for t in tasks:
   # TODO work on the task
   # complete the task
   await t.complete()
+
+Nitric.run()
 ```
 
 ## Parameters
@@ -31,7 +34,7 @@ for t in tasks:
 
 ### Completing tasks
 
-Since the process is async, the queue doesn't know when a task has been completed. So failed function/containers don't result in lost tasks, tasks are not removed from a queue when they're received.
+Since the process is async, the queue doesn't know when a task has been completed. So failed services don't result in lost tasks, tasks are not removed from a queue when they're received.
 
 Instead, tasks are hidden and receivers are granted a temporary lease for each task they receive.
 
@@ -58,6 +61,7 @@ This means calls to receive will return between 0 and _limit_ tasks.
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 from nitric.api import Task
 
 batch_queue = queue('batch').allow('receiving')
@@ -68,4 +72,6 @@ for t in tasks:
   # TODO work on the task
   # complete the task
   await t.complete()
+
+Nitric.run()
 ```

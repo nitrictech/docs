@@ -6,18 +6,19 @@ import logoPython from '@/images/logos/python.svg'
 import logoCsharp from '@/images/logos/csharp.svg'
 import logoGo from '@/images/logos/go.svg'
 import logoJava from '@/images/logos/java.svg'
+import logoDart from '@/images/logos/dart.svg'
 import Link from 'next/link'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 const libraries = [
   {
-    href: '/reference/nodejs/v0',
+    href: '/reference/nodejs',
     name: 'Node.js',
     description: 'View full API for Node.js',
     logo: logoNode,
   },
   {
-    href: '/reference/python/v0',
+    href: '/reference/python',
     name: 'Python',
     description: 'View full API for Python',
     logo: logoPython,
@@ -40,6 +41,12 @@ const libraries = [
     description: 'View full API for JVM',
     logo: logoJava,
   },
+  {
+    href: '/reference/dart',
+    name: 'Dart',
+    description: 'Dart is coming soon 🚀',
+    logo: logoDart,
+  },
 ]
 
 export function Libraries() {
@@ -56,6 +63,7 @@ export function Libraries() {
             className="group relative flex items-center gap-4 rounded-2xl bg-zinc-50 p-4 transition-shadow hover:shadow-md hover:shadow-zinc-900/5 dark:bg-white/2.5 dark:hover:shadow-black/5"
           >
             <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-zinc-900/7.5 group-hover:ring-zinc-900/10 dark:ring-white/10 dark:group-hover:ring-white/20" />
+
             <Image
               src={library.logo}
               alt={library.name + ' Logo'}

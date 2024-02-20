@@ -50,37 +50,6 @@ async def get_file(ctx):
 Nitric.run()
 ```
 
-```go
-import (
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  publicApi, err := nitric.NewApi("public")
-  if err != nil {
-    return
-  }
-
-  // ✅ This declaration will work
-  files, err := nitric.NewBucket("files").With(nitric.BucketReading)
-  if err != nil {
-    return
-  }
-
-  profiles.Get("/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-    // ❌ This declaration will not work, as this is only called at runtime.
-    badBucket, err := nitric.NewBucket("wont-work").With(nitric.BucketWriting)
-
-    return ctx, err
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
 </CodeGroup>
 
 <Note>Always declare resources outside of runtime/callback code</Note>
@@ -89,7 +58,7 @@ func main() {
 
 ### ✅ Re-use declarations for shared resources
 
-When many functions share a resource it's helpful to re-use resource declaration like any other variable in your code.
+When many services share a resource it's helpful to re-use resource declaration like any other variable in your code.
 
 For example:
 
@@ -103,20 +72,16 @@ export const publicApi = api('public')
 
 export const updateTopic = topic('updates')
 
-// functions/api.ts
+// services/api.ts
 import { publicApi, updateTopic } from '../lib/resources'
 
 const publisher = updateTopic.for('publishing')
 
 publicApi.post('/update', (ctx) => {
-  publisher.publish({
-    payload: {
-      test: 'message',
-    },
-  })
+  publisher.publish({ test: 'message' })
 })
 
-// functions/updates.ts
+// services/updates.ts
 import { updateTopic } from '../lib/resources'
 
 updateTopic.subscribe((ctx) => {
@@ -132,7 +97,7 @@ public_api = api('public')
 update_topic = topic('updates')
 
 
-# functions/api.py
+# services/api.py
 from resources import public_api, update_topic
 
 publisher = update_topic.allow('publishing')
@@ -142,13 +107,12 @@ async def new_update(ctx):
   await publisher.publish({"test": "message"})
 
 
-# functions/updates.py
+# services/updates.py
 from resources import update_topic
 
 @update_topic.subscribe
 async def updates_sub(ctx):
-    print(ctx.req.payload)
-
+  print(ctx.req.payload)
 ```
 
 </CodeGroup>
@@ -173,14 +137,14 @@ export const publicApi = api('public')
 export const bucketOne = bucket('bucket-one').for('reading')
 export const bucketTwo = bucket('bucket-two').for('reading')
 
-// functions/function-one.ts
+// services/service-one.ts
 import { publicApi, bucketOne } from '../lib/resources'
 
 publicApi.get('bucket-one/file/:name', (ctx) => {
   // do something with the file
 })
 
-// functions/function-two.ts
+// services/service-two.ts
 import { publicApi, bucketTwo } from '../lib/resources'
 
 publicApi.get('bucket-two/file/:name', (ctx) => {
@@ -199,7 +163,7 @@ bucket_one = bucket('bucket-one').allow('reading')
 bucket_two = bucket('bucket-two').allow('reading')
 
 
-# functions/function-one.py
+# services/service-one.py
 from resources import public_api, bucket_one
 from nitric.application import Nitric
 
@@ -210,7 +174,7 @@ async def get_file(ctx):
 Nitric.run()
 
 
-# functions/function-two.py
+# services/service-two.py
 from resources import public_api, bucket_two
 from nitric.application import Nitric
 
@@ -221,110 +185,11 @@ async def get_file(ctx):
 Nitric.run()
 ```
 
-```go
-// resources.go
-package resources
-
-import (
-  "github.com/nitrictech/go-sdk/api/storage"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-type Resources struct {
-  PublicApi resources.Api
-  BucketOne storage.Bucket
-  BucketTwo storage.Bucket
-}
-
-var Manager *Resources
-
-func NewManager() (*Resources, error) {
-  if Manager == nil {
-    api, err := nitric.NewApi("public")
-    if err != nil {
-      return nil, err
-    }
-
-    bucketOne, err := nitric.NewBucket("bucket-one").With(nitric.BucketReading)
-    if err != nil {
-      return nil, err
-    }
-
-    bucketTwo, err := nitric.NewBucket("bucket-two").With(nitric.BucketReading)
-    if err != nil {
-      return nil, err
-    }
-
-    Manager = &Resources{
-      PublicApi: api,
-      BucketOne: bucketOne,
-      BucketTwo: bucketTwo,
-    }
-  }
-
-  return Manager, nil
-}
-
-
-// functions/functionone.go
-package main
-
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-
-  "example/resources"
-)
-
-func main() {
-  manager, err := resources.NewManager()
-
-  manager.PublicApi.Get("/bucket-one/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-    file := manager.BucketOne.File(ctx.Request.PathParams()["name"])
-
-    return ctx, err
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-
-
-// functions/functiontwo.go
-package main
-
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/faas"
-  "github.com/nitrictech/go-sdk/nitric"
-
-  "example/resources"
-)
-
-func main() {
-  manager, err := resources.NewManager()
-
-  manager.PublicApi.Get("/bucket-one/file/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-    file := manager.BucketTwo.File(ctx.Request.PathParams()["name"])
-
-    return ctx, err
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
 </CodeGroup>
 
-In this scenario, both `function-one` and `function-two` have read access to **both** buckets, even though each function is only using one of the buckets. This is because they are declared in the same context and evaluated at the same time in each of the functions.
+In this scenario, both `service-one` and `service-two` have read access to **both** buckets, even though each service is only using one of the buckets. This is because they are declared in the same context and evaluated at the same time in each of the services.
 
-Resource permissions should always be declared in the scope of a single function unless the permissions required by one or more functions are identical.
+Resource permissions should always be declared in the scope of a single service unless the permissions required by one or more services are identical.
 
 <Note>
   This practice can break principal of least privilege in infrastructure

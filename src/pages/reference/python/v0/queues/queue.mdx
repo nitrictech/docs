@@ -7,8 +7,11 @@ Creates a new Queue to send and receive asynchronous tasks.
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 
 batch_queue = queue('batch').allow('sending')
+
+Nitric.run()
 ```
 
 ## Parameters
@@ -22,7 +25,7 @@ batch_queue = queue('batch').allow('sending')
 
 ## Access
 
-All Nitric resources provide access permissions you can use to specify the level of access your code needs to the resource. See here for details [Access Control documentation](/assets/access-control).
+All Nitric resources provide access permissions you can use to specify the level of access your service needs to the resource. See here for details [Access Control documentation](/assets/access-control).
 
 ### Available permissions:
 
@@ -50,29 +53,38 @@ In most instances code should either send to or receive from a queue, usually no
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 
 batch_queue = queue('batch').allow('sending')
+
+Nitric.run()
 ```
 
 ### Send tasks to a queue
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 from nitric.api import Task
 
 batch_queue = queue('batch').allow('sending')
 
 payload = {}
-await batch_queue.send(Task(payload=payload))
+await batch_queue.send(payload)
+
+Nitric.run()
 ```
 
 ### Receive tasks from a queue
 
 ```python
 from nitric.resources import queue
+from nitric.application import Nitric
 
 payload = {}
 batch_queue = queue('batch').for('receiving')
 
 tasks = await batch_queue.receive(10)
+
+Nitric.run()
 ```

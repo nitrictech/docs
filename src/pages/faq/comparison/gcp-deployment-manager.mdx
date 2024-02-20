@@ -88,14 +88,14 @@ Google Cloud Deployment Manager templates have property keys for defining or ass
 On the other hand, Nitric handles the implementation of least-privilege policies for you. All that is needed is to specify how you want to use a resource, and the function will be assigned the relevant policy.
 
 ```typescript
-const newQueue = queue('tester').for('receiving', 'sending')
+const newQueue = queue('tester').for('dequeue', 'enqueue')
 ```
 
 ## Testing
 
-The decoupling of architecture and logic means testing for Google Cloud Deployment Manager is more about testing the function code then the templates themselves. This means the test process will be writing unit and integration tests using a test framework which works for your functions. The issue with this is your integration tests will be run against your deployed resources.
+The decoupling of architecture and logic means testing for Google Cloud Deployment Manager is more about testing the function code then the templates themselves. This means the test process will be writing unit and integration tests using a test framework which works for your services. The issue with this is your integration tests will be run against your deployed resources.
 
-GCP has a few ways of emulating the cloud locally, either through a visual code extension, their CLI, or docker. Nitric has a local test environment that will mock other resources like buckets, as well as containerizing and running your functions. This means you can easily write automated integration tests using any test framework you want, without worrying about side effects to production.
+GCP has a few ways of emulating the cloud locally, either through a visual code extension, their CLI, or docker. Nitric has a local test environment that will mock other resources like buckets, as well as containerizing and running your services. This means you can easily write automated integration tests using any test framework you want, without worrying about side effects to production.
 
 Nitric's unit testing can also be done using any test framework and any mocking library, as all the architecture and config is defined as code.
 

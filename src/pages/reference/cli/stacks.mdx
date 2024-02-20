@@ -43,19 +43,17 @@ Provide the gcp project ID to deploy to: project-id
 
 </CodeGroup>
 
-The stack definition will be created in the root of your project as a YAML file prefixed with `nitric-` e.g. `nitric-aws-stack.yaml`
+The stack definition will be created in the root of your project as a YAML file prefixed with `nitric-` e.g. `nitric.aws-stack.yaml`
 
 <CodeGroup>
 
-```yaml{{ title: "AWS" }}
-name: my-aws-stack
+```yaml {{ title: "AWS" }}
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/aws@latest
 region: us-east-1
 ```
 
-```yaml{{ title: "Azure" }}
-name: azure
+```yaml {{ title: "Azure" }}
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/azure@latest
 adminemail: admin@company.co
@@ -63,8 +61,7 @@ org: my-org
 region: eastus
 ```
 
-```yaml{{ title: "Google Cloud" }}
-name: my-aws-stack
+```yaml {{ title: "Google Cloud" }}
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/gcp@latest
 gcp-project-id: project-id
@@ -73,12 +70,11 @@ region: us-east1
 
 </CodeGroup>
 
-If you want to specify different configuration for your functions you can use the following syntax:
+If you want to specify different configuration for your services you can use the following syntax:
 
 <CodeGroup>
 
-```yaml{{ title: "AWS" }}
-name: my-aws-stack
+```yaml {{ title: "AWS" }}
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/aws@latest
 region: us-east-1
@@ -93,8 +89,7 @@ config:
       memory: 4096
 ```
 
-```yaml{{ title: "Azure" }}
-name: azure
+```yaml {{ title: "Azure" }}
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/azure@latest
 adminemail: admin@company.co
@@ -108,8 +103,7 @@ config:
       cpu: 0.25
 ```
 
-```yaml{{ title: "Google Cloud" }}
-name: my-aws-stack
+```yaml {{ title: "Google Cloud" }}
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/gcp@latest
 gcp-project-id: project-id
@@ -133,7 +127,7 @@ Once you have created a stack, you're ready to deploy and undeploy to your deplo
 
 ### Legacy Stacks
 
-Previously stacks were not tied to a specific runtime and did not version the providers. It had the following format:
+Previously, stacks were not tied to a specific runtime and did not version the providers. It had the following format:
 
 ```yaml
 name: my-aws-stack
@@ -158,39 +152,9 @@ config:
     memory: 1024
   memory-optimized:
     memory: 4096
-
-# New AWS Config
-config:
-  default:
-    lambda:
-      memory: 1024 # in MB
-    target: lambda
-  memory-optimized:
-    # A non-default configuration does not need to specify a target
-    # It picks up from which runtime config is provided
-    lambda:
-      memory: 4096
-
-# New GCP Config
-config:
-  default:
-    cloudrun:
-      memory: 1024 # in MB
-    target: cloudrun
-  memory-optimized:
-    cloudrun:
-      memory: 4096
-
-# New Azure Config
-config:
-  default:
-    containerapps:
-      memory: 1 # in GB
-    target: containerapps
-  memory-optimized:
-    containerapps:
-      memory: 4
 ```
+
+You can read the new configuration for each provider here, [AWS](/reference/providers/aws/configuration), [Google Cloud](/reference/providers/gcp/configuration), and [Azure](/reference/providers/azure/configuration).
 
 ## Updating a stack definition
 
