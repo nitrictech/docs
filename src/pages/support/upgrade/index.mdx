@@ -76,10 +76,10 @@ Where the `yarn dev:function` is a command capable of starting the function in d
 ```
 
 <Note>
-  Previous versions of Nitric replied on two terminal windows to run
+  Previous versions of Nitric relied on two terminal windows to run
   applications locally. This is no longer the case, and the `nitric start`
   command will start all services in a single terminal window. This also means
-  that any index file that was previously used to run the services locally is no
+  that the index file that was previously provided in the templates is no
   longer required.
 </Note>
 
@@ -93,13 +93,13 @@ There is one minor change to the inner format of stack files in v1.x, as well as
 
 ### Upgrading Nitric Functions
 
-Nitric Functions have been renamed to Nitric Services. While in practice this change is mostly cosmetic, it serves to disambiguate the different elements of a Nitric application. Each services is an entrypoint to a Nitric application, and typically represents a single deployed container image. These images could always include multiple functions, which is where confusion could arise.
+Nitric Functions have been renamed to Nitric Services. While in practice this change is mostly cosmetic, it serves to disambiguate the different elements of a Nitric application. Each service is an entrypoint to a Nitric application and typically represents a single deployed container image. These images could always include multiple functions, which is where confusion could arise.
 
 ### Upgrading Queues
 
 Nitric Queues have been simplified in v1.x. They also include some changes in nomenclature. The `send` method has been renamed to `enqueue` and the `receive` method has been renamed to `dequeue`. While the messages sent to queues were typically referred to as "tasks" in v0.x, they are now referred to as "messages" in v1.x.
 
-Lastly, messages sent to queues used to impose common properties such as `id` and `payloadType`. These properties are no longer imposed by the Nitric SDK, and you're free to reintroduce them as you see fit or leave them out entirely.
+Lastly, messages sent to queues used to require common properties such as `id` and `payloadType`. These properties are no longer used by the Nitric SDK, however, you're free to reintroduce them as you see fit or leave them out entirely.
 
 ### Upgrading Topics
 
