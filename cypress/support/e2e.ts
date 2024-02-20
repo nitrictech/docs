@@ -15,8 +15,8 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
-import "cypress-fail-fast";
-import 'cypress-axe';
+//import "cypress-fail-fast";
+import 'cypress-axe'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
