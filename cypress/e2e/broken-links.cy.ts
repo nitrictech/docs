@@ -22,6 +22,7 @@ const IGNORED_URLS = [
   'http://localhost:4000',
   'http://localhost:4001',
   'https://www.gutenberg.org/cache/epub/42671/pg42671.txt',
+  'https://stackoverflow.com/help/minimal-reproducible-example',
 ]
 
 const isExternalUrl = (url: string) => {
