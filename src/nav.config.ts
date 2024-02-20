@@ -18,6 +18,7 @@ import { FaNodeJs, FaPython, FaJava } from 'react-icons/fa'
 import { SiCsharp, SiPulumi } from 'react-icons/si'
 import { BiLogoGoLang } from 'react-icons/bi'
 import { useRouter } from 'next/router'
+import { RefreshCcw, RefreshCcwIcon } from 'lucide-react'
 
 export const topLevelNavigation = [
   { text: 'Nitric.io', href: 'https://nitric.io' },
@@ -108,7 +109,7 @@ const fullNav: FullNav = {
       showDividerAbove: true,
       links: [
         {
-          title: 'Assets',
+          title: 'More',
           href: '/assets',
           icon: FolderIcon,
         },
@@ -116,6 +117,11 @@ const fullNav: FullNav = {
           title: 'FAQ',
           href: '/faq',
           icon: QuestionMarkCircleIcon,
+        },
+        {
+          title: 'Upgrade from v0',
+          href: '/support/upgrade',
+          icon: RefreshCcwIcon,
         },
       ],
     },
