@@ -89,7 +89,58 @@ There is one minor change to the inner format of stack files in v1.x, as well as
 
 ### Upgrading Nitric APIs
 
-{/* Move security definitions */}
+While Nitric APIs remain largely unchanged in v1.x, there is a change to the way security definitions are created and applied to APIs and their routes. In v0.x, security definitions were created when defining an API, then separately applied either to the API, routes or both. The original code for this might have looked something like this:
+
+```typescript
+const helloApi = api('main', {
+  security: {
+    // only authorize requests with the 'user.read' scope
+    user: ['user.read'],
+  },
+  securityDefinitions: {
+    user: {
+      kind: 'jwt',
+      issuer: 'https://dev-abc123.my.issuer.com',
+      audiences: ['https://test-security-definition/'],
+    },
+  },
+})
+```
+
+The issue with this approach is that it was easy to create a security definition and not realize it needed to be applied to take effect.
+
+For example, this code would create a security definition but not apply, resulting in an API that was not secure:
+
+```typescript
+const helloApi = api('main', {
+  // Note: no security key
+  securityDefinitions: {
+    user: {
+      kind: 'jwt',
+      issuer: 'https://dev-abc123.my.issuer.com',
+      audiences: ['https://test-security-definition/'],
+    },
+  },
+})
+```
+
+In v1.x security definitions, now called rules, are created as standalone objects and then applied to the API or route. This make the ensures unapplied security definitions are more obvious and less likely to be overlooked.
+
+The new code for the above example would look like this for an OpenID Connect (OICD) Rule:
+
+```typescript
+import { oidcRule, api } from '@nitric/sdk';
+
+const userAccessRule = oidcRule({ 
+  name: 'user', 
+  audiences: ['https://test-security-definition/'], 
+  issuer: 'https://dev-abc123.my.issuer.com', 
+});
+
+const helloApi = api('main', {
+    security: [ userAccessRule('user.read') ]
+});
+```
 
 ### Upgrading Nitric Functions
 
