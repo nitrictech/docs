@@ -15,7 +15,7 @@ import {
   QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
 import { FaNodeJs, FaPython, FaJava } from 'react-icons/fa'
-import { SiCsharp, SiPulumi } from 'react-icons/si'
+import { SiCsharp, SiPulumi, SiDart } from 'react-icons/si'
 import { BiLogoGoLang } from 'react-icons/bi'
 import { useRouter } from 'next/router'
 
@@ -148,6 +148,11 @@ const fullNav: FullNav = {
           title: 'JVM (Experimental 🧪)',
           href: '/reference/jvm/v0',
           icon: FaJava,
+        },
+        {
+          title: 'Dart (Coming soon 🚀)',
+          href: '/reference/dart',
+          icon: SiDart,
         },
       ],
     },
@@ -2114,6 +2119,16 @@ const fullNav: FullNav = {
         {
           title: 'schedule.cron()',
           href: '/reference/jvm/v0/schedule/schedule-cron',
+        },
+      ],
+    },
+  ],
+  ['reference/dart']: [
+    {
+      links: [
+        {
+          title: "Coming soon: Nitric's Dart SDK",
+          href: '/reference/dart',
         },
       ],
     },
