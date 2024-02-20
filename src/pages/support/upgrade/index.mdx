@@ -170,6 +170,11 @@ The primary differences between Collections and Key/Value are:
 - Key/Value stores do not support sub-collections.
 - For Azure deployments Key/Value stores are backed by Azure Table Storage, instead of the MongoDB deployments used for Collections.
 
+<Note>
+  The switch from MongoDB to Azure Table Storage for Key/Value stores
+  significantly improves deployment times Azure and reduces runtime costs.
+</Note>
+
 To migrate from Collections to Key/Value, you will need to:
 
 - Use alternate mechanisms or persistence if querying is required.
