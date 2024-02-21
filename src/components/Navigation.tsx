@@ -17,6 +17,7 @@ import {
 import { ArrowLeftIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import { VersionSelect } from './VersionSelect'
 import { useVersions } from '@/lib/hooks/use-versions'
+import { Badge } from './ui/badge'
 
 function useInitialValue(value, condition = true) {
   let initialValue = useRef(value).current
@@ -43,6 +44,7 @@ function TopLevelNavItem({ href, children }) {
 interface NavLinkProps {
   href: string
   tag?: string
+  badge?: string
   active?: boolean
   isAnchorLink?: boolean
   children: React.ReactNode
@@ -65,6 +67,7 @@ function NavLink({
   iconClassName,
   isAnchorLink,
   icon: Icon,
+  badge,
 }: NavLinkProps) {
   return (
     <Link
@@ -83,6 +86,12 @@ function NavLink({
       {Icon && <Icon className={clsx('h-4 w-4', iconClassName)} />}
 
       <span className="truncate">{children}</span>
+
+      {badge && (
+        <Badge variant="outline" className="ml-1 px-2 py-0 text-[12px]">
+          {badge}
+        </Badge>
+      )}
 
       {tag && (
         <Tag variant="small" color="zinc">
@@ -260,6 +269,7 @@ function HomeNavigationGroup({
               <NavLink
                 icon={link.icon}
                 href={link.href}
+                badge={link.badge}
                 active={link.href === router.pathname}
               >
                 {link.title}
