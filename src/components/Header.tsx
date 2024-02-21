@@ -13,7 +13,6 @@ import { ModeToggle } from '@/components/ModeToggle'
 import { Search } from '@/components/Search'
 import { topLevelNavigation } from '@/nav.config'
 import { GitHubIcon } from './icons/GitHubIcon'
-import { Button } from './Button'
 import { FaDiscord } from 'react-icons/fa'
 import { StarIcon } from '@heroicons/react/24/outline'
 
