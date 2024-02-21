@@ -18,7 +18,7 @@ import { FaNodeJs, FaPython, FaJava } from 'react-icons/fa'
 import { SiCsharp, SiPulumi, SiDart } from 'react-icons/si'
 import { BiLogoGoLang } from 'react-icons/bi'
 import { useRouter } from 'next/router'
-import { RefreshCcw, RefreshCcwIcon } from 'lucide-react'
+import { RefreshCcwIcon } from 'lucide-react'
 
 export const topLevelNavigation = [
   { text: 'Nitric.io', href: 'https://nitric.io' },
@@ -30,7 +30,13 @@ export interface DocNavGroup {
   title?: string
   showDividerAbove?: boolean
   disableAutoPrefix?: boolean
-  links: { title: string; href: string; icon?: any; versions?: Version[] }[]
+  links: {
+    title: string
+    href: string
+    badge?: string
+    icon?: any
+    versions?: Version[]
+  }[]
 }
 
 interface FullNav {
@@ -141,22 +147,26 @@ const fullNav: FullNav = {
           versions: ['v1', 'v0'],
         },
         {
-          title: 'Go (Experimental 🧪)',
+          title: 'Go',
+          badge: 'Experimental 🧪',
           href: '/reference/go/v0',
           icon: BiLogoGoLang,
         },
         {
-          title: 'C# .NET (Experimental 🧪)',
+          title: 'C# .NET',
+          badge: 'Experimental 🧪',
           href: '/reference/csharp/v0',
           icon: SiCsharp,
         },
         {
-          title: 'JVM (Experimental 🧪)',
+          title: 'JVM',
+          badge: 'Experimental 🧪',
           href: '/reference/jvm/v0',
           icon: FaJava,
         },
         {
-          title: 'Dart (Coming soon 🚀)',
+          title: 'Dart',
+          badge: 'Coming soon 🚀',
           href: '/reference/dart',
           icon: SiDart,
         },

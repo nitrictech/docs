@@ -13,6 +13,8 @@ import { ModeToggle } from '@/components/ModeToggle'
 import { Search } from '@/components/Search'
 import { topLevelNavigation } from '@/nav.config'
 import { GitHubIcon } from './icons/GitHubIcon'
+import { FaDiscord } from 'react-icons/fa'
+import { StarIcon } from '@heroicons/react/24/outline'
 
 function TopLevelNavItem({ href, children }) {
   const external = href.startsWith('http')
@@ -23,7 +25,7 @@ function TopLevelNavItem({ href, children }) {
         href={href}
         target={external ? '_blank' : undefined}
         rel={external ? 'noreferrer noopener' : undefined}
-        className="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+        className="group flex text-sm font-semibold leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
       </Link>
@@ -83,6 +85,11 @@ export const Header = forwardRef<HTMLDivElement, { className?: string }>(
                   {text}
                 </TopLevelNavItem>
               ))}
+
+              <TopLevelNavItem href="https://github.com/nitrictech/nitric">
+                <StarIcon className="mr-1 h-5 w-5 text-zinc-600 group-hover:scale-105 dark:text-gray" />
+                Star on GitHub
+              </TopLevelNavItem>
             </ul>
           </nav>
           <div className="hidden md:block md:h-5 md:w-px md:bg-gray-800/10 md:dark:bg-white/15" />
@@ -92,6 +99,13 @@ export const Header = forwardRef<HTMLDivElement, { className?: string }>(
             </div>
             <Link
               className="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-gray-800/5 dark:hover:bg-white/5"
+              href="https://nitric.io/chat"
+              target="_blank"
+            >
+              <FaDiscord className="h-5 w-5 fill-zinc-600 dark:fill-gray" />
+            </Link>
+            <Link
+              className="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-gray-800/5 dark:hover:bg-white/5 md:hidden"
               href="https://github.com/nitrictech/nitric"
               target="_blank"
             >
