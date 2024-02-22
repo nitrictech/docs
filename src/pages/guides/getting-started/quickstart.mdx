@@ -41,7 +41,7 @@ nitric new hello-world js-starter
 ```
 
 ```bash {{ title: "Python" }}
-nitric new hello-world py-starter
+# python v1 coming soon
 ```
 
 </CodeGroup>
@@ -63,12 +63,7 @@ npm install
 ```
 
 ```bash {{ title: "Python" }}
-cd hello-world
-
-# We recommend using [Pipenv](https://pipenv.pypa.io/en/latest/) for dependency and virtual environments
-#   We have included it in our python templates.
-#   Installation instructions: https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv
-pipenv install --dev
+# python v1 coming soon
 ```
 
 </CodeGroup>
@@ -100,13 +95,7 @@ Your project should now look like this:
 ```
 
 ```txt {{ title: "Python" }}
-+--services/
-|  +-- hello.py
-+--index.py
-+--Pipfile
-+--Pipfile.lock
-+--nitric.yaml
-+--README.md
+python v1 coming soon
 ```
 
 </CodeGroup>
@@ -204,25 +193,7 @@ helloApi.get('/goodbye/:name', async (ctx) => {
 ```
 
 ```python {{ tag: "services/hello.py" }}
-from nitric.resources import api
-from nitric.application import Nitric
-
-helloApi = api("main")
-
-
-@helloApi.get("/hello/:name")
-async def hello_world(ctx):
-    name = ctx.req.params['name']
-
-    ctx.res.body = f"Hello {name}"
-
-@helloApi.get("/goodbye/:name")
-async def hello_world(ctx):
-    name = ctx.req.params['name']
-
-    ctx.res.body = f"Goodbye {name}"
-
-Nitric.run()
+# python v1 coming soon
 ```
 
 </CodeGroup>
