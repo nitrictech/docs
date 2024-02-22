@@ -142,9 +142,9 @@ const fullNav: FullNav = {
         },
         {
           title: 'Python',
-          href: '/reference/python',
+          href: '/reference/python/v0',
           icon: FaPython,
-          versions: ['v1', 'v0'],
+          // versions: ['v1', 'v0'],
         },
         {
           title: 'Go',
