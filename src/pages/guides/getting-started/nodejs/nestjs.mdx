@@ -186,7 +186,7 @@ import { AppModule } from './app.module'
 
 async function bootstrap(port: number) {
   const app = await NestFactory.create(AppModule)
-  await app.listen(port)
+  return await app.listen(port)
 }
 
 http(bootstrap)

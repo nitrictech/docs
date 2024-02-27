@@ -109,7 +109,15 @@ fastify.get('/', async (request, reply) => {
   reply.send('Hello World!')
 })
 
-http(fastify)
+async function bootstrap(port: number) {
+  await fastify.listen({ port })
+
+  return fastify.server
+}
+
+http(bootstrap, () => {
+  console.log(`Application started`)
+})
 ```
 
 We'll also add a new function to do the background work:
