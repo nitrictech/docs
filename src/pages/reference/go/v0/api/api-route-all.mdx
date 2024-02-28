@@ -159,7 +159,7 @@ func main() {
 
 ### Access the request body
 
-For methods that include a request body, such as `POST` and `PUT`, you can access the body from the `ctx.req` object.
+For methods that include a request body, such as `POST` and `PUT`, you can access the body from the `ctx.Request.Data()` object.
 
 ```go
 import (
