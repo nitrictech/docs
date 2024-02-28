@@ -175,7 +175,7 @@ func main() {
     return
   }
 
-  customersRoute.All("/hello", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  customersRoute.All(func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
     data := ctx.Request.Data()
 
     ctx.Response.Body = data
