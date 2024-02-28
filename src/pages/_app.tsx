@@ -47,7 +47,7 @@ export default function App({ Component, pageProps }) {
   const title =
     router.pathname === '/'
       ? 'Nitric Documentation'
-      : `${pageProps.title} - ${titleSuffix}`
+      : `${pageProps.title_meta || pageProps.title} - ${titleSuffix}`
   const description =
     pageProps.description ||
     'Documentation for the Nitric cloud application framework.'
