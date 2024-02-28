@@ -10,6 +10,7 @@ import { useMobileNavigationStore } from '@/components/MobileNavigation'
 import '@/styles/tailwind.css'
 import 'focus-visible'
 import { useEffect } from 'react'
+import { useVersions } from '@/lib/hooks/use-versions'
 
 function onRouteChange() {
   useMobileNavigationStore.getState().close()
@@ -36,10 +37,17 @@ export default function App({ Component, pageProps }) {
     })
   }, [])
 
+  const { isNotLatest, isReferenceDocs, currentVersion } = useVersions()
+
+  const titleSuffix =
+    isReferenceDocs && isNotLatest
+      ? `Nitric ${currentVersion} Documentation`
+      : 'Nitric Documentation'
+
   const title =
     router.pathname === '/'
       ? 'Nitric Documentation'
-      : `${pageProps.title} - Nitric Documentation`
+      : `${pageProps.title} - ${titleSuffix}`
   const description =
     pageProps.description ||
     'Documentation for the Nitric cloud application framework.'
