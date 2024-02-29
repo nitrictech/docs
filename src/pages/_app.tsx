@@ -84,12 +84,26 @@ export default function App({ Component, pageProps }) {
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:site" content="@nitric_io" />
         <meta property="twitter:creator" content="@nitric_io" />
+        <meta
+          name="robots"
+          content={
+            process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+              ? 'index,follow'
+              : 'noindex,nofollow'
+          }
+        />
         <link rel="icon" href={`${router.basePath}/favicon.ico`} />
         <link
           rel="canonical"
           href={
             baseUrl + (cleanedPath === '/' ? '/docs' : `/docs${cleanedPath}`)
           }
+        />
+        <link
+          rel="alternate"
+          title="RSS feed for blog posts"
+          type="application/rss+xml"
+          href={`${baseUrl}/rss.xml`}
         />
       </Head>
       <MDXProvider components={mdxComponents as any}>
