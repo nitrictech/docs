@@ -895,6 +895,10 @@ const fullNav: FullNav = {
           title: 'kv.delete()',
           href: '/reference/nodejs/keyvalue/keyvalue-delete',
         },
+        {
+          title: 'kv.keys()',
+          href: '/reference/nodejs/keyvalue/keyvalue-keys',
+        },
       ],
     },
     {

@@ -85,3 +85,17 @@ const profiles = kv('profiles').for('deleting')
 
 profiles.delete('profile-1a2b3c')
 ```
+
+### Get all keys from a key value store
+
+```javascript
+import { kv } from '@nitric/sdk'
+
+const profiles = kv('profiles').for('getting')
+
+const keys = profiles.keys()
+
+for await (const key of keys) {
+  // do something with the key
+}
+```
