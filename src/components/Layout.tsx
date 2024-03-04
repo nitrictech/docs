@@ -10,7 +10,7 @@ import { SectionProvider } from '@/components/SectionProvider'
 import { Note } from './mdx'
 import { useVersions } from '@/lib/hooks/use-versions'
 
-const experimentalRuntimes = ['go', 'csharp', 'jvm', 'python']
+const experimentalRuntimes = ['go', 'csharp', 'jvm']
 
 export function Layout({ children, sections = [], disableEditGithub = false }) {
   const {
