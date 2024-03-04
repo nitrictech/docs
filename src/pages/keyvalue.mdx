@@ -201,7 +201,7 @@ from nitric.application import Nitric
 
 countries = kv('Countries').allow('get')
 
-async for key in async_keys:
+async for key in countries.keys():
   print(key)
 
 Nitric.run()
