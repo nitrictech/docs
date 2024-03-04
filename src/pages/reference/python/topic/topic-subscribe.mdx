@@ -8,13 +8,13 @@ Subscribes to a topic.
 ```python
 from nitric.resources import topic
 from nitric.application import Nitric
-from nitric.context import EventContext
+from nitric.context import MessageContext
 
 updates = topic("updates")
 
 @updates.subscribe
-async def updates_sub(ctx: EventContext):
-  print(ctx.req.payload)
+async def updates_sub(ctx: MessageContext):
+  print(ctx.req.data)
 
 Nitric.run()
 ```
@@ -34,13 +34,13 @@ Nitric.run()
 ```python
 from nitric.resources import topic
 from nitric.application import Nitric
-from nitric.context import EventContext
+from nitric.context import MessageContext
 
 updates = topic("updates")
 
 @updates.subscribe
-async def updates_sub(ctx: EventContext):
-  print(ctx.req.payload)
+async def updates_sub(ctx: MessageContext):
+  print(ctx.req.data)
 
 Nitric.run()
 ```
