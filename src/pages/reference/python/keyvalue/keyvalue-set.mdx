@@ -9,7 +9,7 @@ Store a key value pair in a key value store.
 from nitric.resources import kv
 from nitric.application import Nitric
 
-profiles = kv('profiles').allow('setting')
+profiles = kv('profiles').allow('set')
 
 await profiles.set('profile-1a2b3c', { 'name': 'John Smith' })
 
@@ -35,7 +35,7 @@ Nitric.run()
 from nitric.resources import kv
 from nitric.application import Nitric
 
-profiles = kv('profiles').allow('setting')
+profiles = kv('profiles').allow('set')
 
 await profiles.set('profile-1a2b3c', { 'name': 'John Smith' })
 

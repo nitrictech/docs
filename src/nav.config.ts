@@ -1334,10 +1334,14 @@ const fullNav: FullNav = {
         {
           title: 'kv.set()',
           href: '/reference/python/keyvalue/keyvalue-set',
-        },
+        }, 
         {
           title: 'kv.delete()',
           href: '/reference/python/keyvalue/keyvalue-delete',
+        },
+        {
+          title: 'kv.keys()',
+          href: '/reference/python/keyvalue/keyvalue-keys',
         },
       ],
     },

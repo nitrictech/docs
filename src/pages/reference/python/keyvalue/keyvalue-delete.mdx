@@ -9,7 +9,7 @@ Delete key from a key value store.
 from nitric.resources import kv
 from nitric.application import Nitric
 
-profiles = kv('profiles').allow('deleting')
+profiles = kv('profiles').allow('delete')
 
 await profiles.delete('profile-1a2b3c')
 
@@ -32,7 +32,7 @@ Nitric.run()
 from nitric.resources import kv
 from nitric.application import Nitric
 
-profiles = kv('profiles').allow('deleting')
+profiles = kv('profiles').allow('delete')
 
 await profiles.delete('profile-1a2b3c')
 
