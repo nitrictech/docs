@@ -167,40 +167,33 @@ Once a security definition is available it can be applied to the entire API or s
 <CodeGroup>
 
 ```javascript
-import { api } from '@nitric/sdk'
+import { api, oidcRule } from '@nitric/sdk'
+
+const defaultSecurityRule = oidcRule({ 
+    name: "default", 
+    audiences: ['https://test-security-definition/'], 
+    issuer:  'https://dev-abc123.us.auth0.com'
+});
 
 const secureApi = api('main', {
-  // declare security definition named 'default'.
-  securityDefinitions: {
-    default: {
-      kind: 'jwt',
-      issuer: 'https://dev-abc123.us.auth0.com',
-      audiences: ['https://test-security-definition/'],
-    },
-  },
-  // apply the 'default' security definition to all routes in this API.
-  security: {
-    default: [],
-  },
+  // apply the security definition to all routes in this API.
+  security: [defaultSecurityRule()],
 })
 ```
 
 ```python
-from nitric.resources import api, ApiOptions, JwtSecurityDefinition
+from nitric.resources import api, ApiOptions, oidc_rule
 from nitric.application import Nitric
 
-secureApi = api("main", opts=ApiOptions(
-        # declare security definition named 'default'.
-        security_definitions={
-            "default": JwtSecurityDefinition(
-                issuer="https://dev-abc123.us.auth0.com",
-                audiences=["https://test-security-definition/"],
-            )
-        }
-        # apply the 'default' security definition to all routes in this API.
-        security={
-            "default": [],
-        },
+default_security_rule = oidc_rule(
+    name="default",
+    audiences=["https://test-security-definition/"],
+    issuer="https://dev-abc123.us.auth0.com",
+)
+
+secure_api = api("main", opts=ApiOptions(
+        # apply the security definition to all routes in this API.
+        security=[default_security_rule()],
     )
 )
 
@@ -218,36 +211,34 @@ Add the required scopes to the `security` object when applying a security defini
 <CodeGroup>
 
 ```javascript
-const helloApi = api('main', {
-  security: {
-    // only authorize requests with the 'user.read' scope
-    user: ['user.read'],
-  },
-  securityDefinitions: {
-    user: {
-      kind: 'jwt',
-      issuer: 'https://dev-abc123.us.auth0.com',
-      audiences: ['https://test-security-definition/'],
-    },
-  },
+import { api, oidcRule } from '@nitric/sdk'
+
+const defaultSecurityRule = oidcRule({ 
+    name: "default", 
+    audiences: ['https://test-security-definition/'], 
+    issuer:  'https://dev-abc123.us.auth0.com'
+});
+
+const secureApi = api('main', {
+  // apply the security definition to all routes in this API.
+  // add scopes to the rule to authorize
+  security: [defaultSecurityRule('user.read')],
 })
 ```
 
 ```python
-from nitric.resources import api, ApiOptions, JwtSecurityDefinition
+from nitric.resources import api, ApiOptions, oidc_rule
 from nitric.application import Nitric
 
-helloApi = api("main", opts=ApiOptions(
-        security={
-            # only authorize requests with the 'user.read' scope
-            "user": ["user.read"],
-        },
-        security_definitions={
-            "user": JwtSecurityDefinition(
-                issuer="https://dev-abc123.us.auth0.com",
-                audiences=["https://test-security-definition/"],
-            )
-        }
+default_security_rule = oidc_rule(
+    name="default",
+    audiences=["https://test-security-definition/"],
+    issuer="https://dev-abc123.us.auth0.com",
+)
+
+secure_api = api("main", opts=ApiOptions(
+        # apply the security definition to all routes in this API.
+        security=[default_security_rule("user.read")],
     )
 )
 
@@ -269,25 +260,23 @@ This allows you to selectively increase or decrease the security requirements fo
 ```javascript
 galaxyApi.get('planets/unsecured-planet', async (ctx) => {}, {
   // override top level security to remove security from this route
-  security: {},
+  security: [],
 })
 
 galaxyApi.post('planets/secured-planet', async (ctx) => {}, {
   // override top level security to require user.write scope to access
-  security: {
-    user: ['user.write'],
-  },
+  security: [customSecurityRule('user.write')],
 })
 ```
 
 ```python
 # override top level security to remove security from this route
-@galaxy_api.get("planets/unsecured-planet", opts=MethodOptions(security=dict()))
+@galaxy_api.get("planets/unsecured-planet", opts=MethodOptions(security=[]))
 async def get_planet(ctx):
     pass
 
 # override top level security to require user.write scope to access
-@galaxy_api.post("planets/secured-planet", opts=MethodOptions(security={ "user": ['user.write'] }))
+@galaxy_api.post("planets/secured-planet", opts=MethodOptions(security=[custom_rule("user.read")]))
 async def get_planet(ctx):
     pass
 ```
