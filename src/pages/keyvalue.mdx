@@ -47,7 +47,7 @@ const countries = kv<Country>('Countries').for('getting', 'setting', 'deleting')
 from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = kv('Countries').allow('getting', 'setting', 'deleting')
+countries = kv('Countries').allow('get', 'set', 'delete')
 
 Nitric.run()
 ```
@@ -79,7 +79,7 @@ await countries.set('USA', {
 from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = kv('Countries').allow('setting')
+countries = kv('Countries').allow('set')
 
 await countries.set('USA', {
   "name": "United States of America",
@@ -129,7 +129,7 @@ const country = await country.get('USA')
 from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = kv("Countries").allow("getting")
+countries = kv("Countries").allow("get")
 
 country = await countries.get("USA")
 
@@ -163,7 +163,7 @@ await countries.delete('USA')
 from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = kv('Countries').allow('writing')
+countries = kv('Countries').allow('set')
 
 await countries.set('USA', {
   "name": "United States of America",
