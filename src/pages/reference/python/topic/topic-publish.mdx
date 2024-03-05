@@ -8,9 +8,8 @@ Publishes a topic.
 ```python
 from nitric.resources import topic
 from nitric.application import Nitric
-from nitric.api import Event
 
-updates = topic('updates').allow('publishing')
+updates = topic('updates').allow('publish')
 
 await updates.publish({
   'something': 'amazing happened'
@@ -45,9 +44,8 @@ Nitric.run()
 ```python
 from nitric.resources import topic
 from nitric.application import Nitric
-from nitric.api import Event
 
-updates = topic('updates').allow('publishing')
+updates = topic('updates').allow('publish')
 
 await updates.publish({
   'something': 'amazing happened'

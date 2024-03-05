@@ -142,9 +142,9 @@ const fullNav: FullNav = {
         },
         {
           title: 'Python',
-          href: '/reference/python/v0',
+          href: '/reference/python',
           icon: FaPython,
-          // versions: ['v1', 'v0'],
+          versions: ['v1', 'v0'],
         },
         {
           title: 'Go',
@@ -895,6 +895,10 @@ const fullNav: FullNav = {
           title: 'kv.delete()',
           href: '/reference/nodejs/keyvalue/keyvalue-delete',
         },
+        {
+          title: 'kv.keys()',
+          href: '/reference/nodejs/keyvalue/keyvalue-keys',
+        },
       ],
     },
     {
@@ -1334,6 +1338,10 @@ const fullNav: FullNav = {
         {
           title: 'kv.delete()',
           href: '/reference/python/keyvalue/keyvalue-delete',
+        },
+        {
+          title: 'kv.keys()',
+          href: '/reference/python/keyvalue/keyvalue-keys',
         },
       ],
     },

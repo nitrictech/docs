@@ -18,7 +18,7 @@ const libraries = [
     logo: logoNode,
   },
   {
-    href: '/reference/python/v0',
+    href: '/reference/python',
     name: 'Python',
     description: 'View full API for Python',
     logo: logoPython,

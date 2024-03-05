@@ -99,61 +99,36 @@ import { websocket, kv } from '@nitric/sdk'
 const kvStore = kv('connections').for('getting', 'setting', 'deleting')
 const socket = websocket('example-websocket')
 
-// Helper function to get current connections
-async function getCurrentConnections() {
-  try {
-    const serializedList = await kvStore.get('connections')
-    return serializedList && serializedList['ids']
-      ? JSON.parse(serializedList['ids'])
-      : []
-  } catch (error) {
-    console.error('Error getting current connections:', error)
-    return []
-  }
-}
-
-// Helper function to update connections list
-async function updateConnections(connections) {
-  try {
-    const updatedSerializedList = JSON.stringify(connections)
-    await kvStore.set('connections', { ids: updatedSerializedList })
-  } catch (error) {
-    console.error('Error updating connections:', error)
-  }
-}
-
 // Handle new connections
 socket.on('connect', async (ctx) => {
-  const connections = await getCurrentConnections()
-  connections.push(ctx.req.connectionId)
-  await updateConnections(connections)
-})
+  console.log(`connecting: ${ctx.req.connectionId}`)
 
-// Handle messages
-socket.on('message', async (ctx) => {
-  const message = ctx.req.text()
-  const connections = await getCurrentConnections()
-
-  // Send the message to each connection
-  connections.forEach(async (connectionId) => {
-    try {
-      if (connectionId !== ctx.req.connectionId) {
-        await socket.send(connectionId, message)
-      }
-    } catch (error) {
-      console.error(`Error sending message to ${connectionId}:`, error)
-    }
+  await kvStore.set(ctx.req.connectionId, {
+    /* connection meta data here */
   })
 })
 
 // Handle disconnections
 socket.on('disconnect', async (ctx) => {
-  const connections = await getCurrentConnections()
-  const index = connections.indexOf(ctx.req.connectionId)
+  console.log(`disconnecting: ${ctx.req.connectionId}`)
 
-  if (index > -1) {
-    connections.splice(index, 1)
-    await updateConnections(connections)
+  await kvStore.delete(ctx.req.connectionId)
+})
+
+// Send messages
+socket.on('message', async (ctx) => {
+  const message = ctx.req.text()
+  const connections = kvStore.keys()
+
+  console.log(`got message from  ${ctx.req.connectionId}: ${message}`)
+
+  // Send the message to each connection
+  try {
+    for await (const connectionId of connections) {
+      await socket.send(connectionId, message)
+    }
+  } catch (error) {
+    console.error('Error during message broadcasting:', error)
   }
 })
 ```
@@ -177,7 +152,7 @@ nitric stack new
 This command will create a file named `nitric.dev.yaml`, with contents like this:
 
 ```yaml {{ label: 'nitric.dev.yaml' }}
-provider: nitric/aws@1.0.0
+provider: nitric/aws@1.1.0
 region: us-east-1
 ```
 

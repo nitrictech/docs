@@ -47,7 +47,7 @@ const countries = kv<Country>('Countries').for('getting', 'setting', 'deleting')
 from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = kv('Countries').allow('getting', 'setting', 'deleting')
+countries = kv('Countries').allow('get', 'set', 'delete')
 
 Nitric.run()
 ```
@@ -79,7 +79,7 @@ await countries.set('USA', {
 from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = kv('Countries').allow('setting')
+countries = kv('Countries').allow('set')
 
 await countries.set('USA', {
   "name": "United States of America",
@@ -120,7 +120,7 @@ Values can be accessed from a store by calling the `get` method with the key of 
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const countries = kv('Countries').for('reading')
+const countries = kv('Countries').for('getting')
 
 const country = await country.get('USA')
 ```
@@ -129,7 +129,7 @@ const country = await country.get('USA')
 from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = kv("Countries").allow("getting")
+countries = kv("Countries").allow("get")
 
 country = await countries.get("USA")
 
@@ -163,7 +163,7 @@ await countries.delete('USA')
 from nitric.resources import kv
 from nitric.application import Nitric
 
-countries = kv('Countries').allow('writing')
+countries = kv('Countries').allow('set', 'delete')
 
 await countries.set('USA', {
   "name": "United States of America",
@@ -171,6 +171,38 @@ await countries.set('USA', {
 })
 
 await countries.delete('USA')
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+## Listing Keys
+
+Keys can be listed and filtered by an optional prefix.
+
+The below example first creates a key value store that has permissions for listing. It then lists all keys in the store.
+
+<CodeGroup>
+
+```javascript
+import { kv } from '@nitric/sdk'
+
+const countries = kv('Countries').for('getting')
+
+for await (const key of countries.keys()) {
+  console.log(key)
+}
+```
+
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
+
+countries = kv('Countries').allow('get')
+
+async for key in countries.keys():
+  print(key)
 
 Nitric.run()
 ```

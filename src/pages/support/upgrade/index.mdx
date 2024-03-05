@@ -166,7 +166,7 @@ The most significant change in Nitric v1.x is the change from Collections to Key
 
 The primary differences between Collections and Key/Value are:
 
-- Key/Value stores do not support querying, and are instead designed to be used as a efficient key/value store.
+- Key/Value stores, designed for efficient key/value storage rather than complex querying, now feature a `keys` method to facilitate the retrieval of all available keys within the store, you can also filter them via a prefix.
 - Key/Value stores do not support sub-collections.
 - For Azure deployments Key/Value stores are backed by Azure Table Storage, instead of the MongoDB deployments used for Collections.
 
