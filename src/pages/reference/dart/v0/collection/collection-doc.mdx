@@ -1,0 +1,29 @@
+export const description =
+  "Reference for Nitric's v0 Dart library - Get a reference to a document in the collection."
+
+# Dart - collection.doc()
+
+Get a reference to a document in the collection.
+
+```dart
+import { collection } from '@nitric/sdk'
+
+const profiles = collection('profiles').for('reading', 'writing')
+
+const drakesProfile = profiles.doc('Drake Mallard')
+```
+
+## Parameters
+
+<Properties>
+  <Property name="key" required type="string">
+    The key of the document to reference.
+  </Property>
+</Properties>
+
+### See also
+
+- [doc.get()](./collection-doc-get)
+- [doc.set()](./collection-doc-set)
+- [doc.delete()](./collection-doc-delete)
+- [doc.collection()](./collection-doc-collection)
