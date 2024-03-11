@@ -1,19 +1,9 @@
 export const description =
-  "Reference for Nitric's Node.js library - Fetch paged results from a query."
+  "Reference for Nitric's JVM library - Fetch paged results from a query."
 
-# Node.js - collection.query.fetch()
+# JVM - collection.query.fetch()
 
 Retrieve a page of results for a query. This is an alternative to [collection.query.stream()](./collection-query-stream)
-
-```javascript
-import { collection } from '@nitric/sdk'
-
-const profiles = collection('profiles').for('reading')
-
-const profileQuery = profiles.query()
-
-const results = await profileQuery.fetch()
-```
 
 <CodeGroup>
 
