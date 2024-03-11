@@ -5,16 +5,6 @@ export const description =
 
 Retrieve a page of results for a query. This is an alternative to [collection.query.stream()](./collection-query-stream)
 
-```javascript
-import { collection } from '@nitric/sdk'
-
-const profiles = collection('profiles').for('reading')
-
-const profileQuery = profiles.query()
-
-const results = await profileQuery.fetch()
-```
-
 <CodeGroup>
 
 ```java
