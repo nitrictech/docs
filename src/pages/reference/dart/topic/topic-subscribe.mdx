@@ -6,24 +6,22 @@ export const description =
 Subscribe a handler to a topic and receive new events for processing.
 
 ```dart
-import { topic } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const updates = topic('updates')
+final updates = Nitric.topic("updates");
 
-updates.subscribe(async (ctx) => {
+updates.subscribe((ctx) async {
   // Log the provided message
-  console.log(ctx.req.json())
-})
+  print(ctx.req.json());
+
+  return ctx;
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property
-    name="middleware"
-    required
-    type="EventMiddleware or EventMiddleware[]"
-  >
+  <Property name="handler" required type="MessageHandler">
     The middleware (code) to be triggered by the topic.
   </Property>
 </Properties>
@@ -33,14 +31,16 @@ updates.subscribe(async (ctx) => {
 ### Subscribe to a topic
 
 ```dart
-import { topic } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const updates = topic('updates')
+final updates = Nitric.topic("updates");
 
-updates.subscribe(async (ctx) => {
+updates.subscribe((ctx) async {
   // Log the provided message
-  console.log(ctx.req.json())
-})
+  print(ctx.req.json());
+
+  return ctx;
+});
 ```
 
 ### Notes

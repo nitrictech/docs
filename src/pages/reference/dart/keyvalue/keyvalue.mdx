@@ -6,15 +6,19 @@ export const description =
 Creates a new key value store to get, set, and delete key value pairs.
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('getting', 'setting', 'deleting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.getting,
+  KeyValueStorePermission.setting,
+  KeyValueStorePermission.deleting,
+]);
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="name" required type="string">
+  <Property name="name" required type="String">
     The unique name of this key value store within the service. Subsequent calls
     to `kv` with the same name will return the same object.
   </Property>
@@ -28,19 +32,19 @@ All Nitric resources provide access permissions you can use to specify the level
 
 ---
 
-**getting**
+**KeyValueStorePermission.getting**
 
 This permission allows your service to get values from the key value store.
 
 ---
 
-**setting**
+**KeyValueStorePermission.setting**
 
 This permission allows your service to set key value pairs in the key value store.
 
 ---
 
-**deleting**
+**KeyValueStorePermission.deleting**
 
 This permission allows your service to delete key value pairs in the key value store.
 
@@ -51,51 +55,59 @@ This permission allows your service to delete key value pairs in the key value s
 ### Create a key value store
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles')
+final profiles = Nitric.store("profiles");
 ```
 
 ### Get value from a key value store
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('getting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.getting,
+]);
 
-const profile = await profiles.get('profile-1a2b3c')
+final profile = await profiles.get('profile-1a2b3c');
 ```
 
 ### Set a key in a key value store
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('setting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.setting,
+]);
 
-await profiles.set('profile-1a2b3c', { name: 'John Smith' })
+await profiles.set('profile-1a2b3c', { "name": "John Smith" });
 ```
 
 ### Delete a key from a key value store
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('deleting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.deleting,
+]);
 
-profiles.delete('profile-1a2b3c')
+await profiles.delete('profile-1a2b3c');
 ```
 
 ### Get all keys from a key value store
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('getting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.getting,
+]);
 
-const keys = profiles.keys()
+final keys = profiles.keys();
 
-for await (const key of keys) {
+keys.forEach((String key) {
   // do something with the key
-}
+});
 ```

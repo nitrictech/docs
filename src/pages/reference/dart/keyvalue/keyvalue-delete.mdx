@@ -6,17 +6,19 @@ export const description =
 Delete key from a key value store.
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('deleting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.deleting,
+]);
 
-await profiles.delete('profile-1a2b3c')
+await profiles.delete('profile-1a2b3c');
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="key" required type="string">
+  <Property name="key" required type="String">
     The key that references the key value pair that should be deleted.
   </Property>
 </Properties>
@@ -26,9 +28,11 @@ await profiles.delete('profile-1a2b3c')
 ### Delete a key
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('deleting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.deleting,
+]);
 
-await profiles.delete('profile-1a2b3c')
+await profiles.delete('profile-1a2b3c');
 ```

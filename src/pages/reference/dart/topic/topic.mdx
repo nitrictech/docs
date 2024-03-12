@@ -6,15 +6,15 @@ export const description =
 Creates a new Topic.
 
 ```dart
-import { topic } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const updates = topic('updates')
+final updates = Nitric.topic("updates");
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="name" required type="string">
+  <Property name="name" required type="String">
     The name of the topic to create.
   </Property>
 </Properties>
@@ -24,9 +24,9 @@ const updates = topic('updates')
 ### Create a new topic
 
 ```dart
-import { topic } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const updates = topic('updates')
+final updates = Nitric.topic("updates");
 ```
 
 ### See also

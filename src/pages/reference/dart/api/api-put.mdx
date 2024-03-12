@@ -11,38 +11,36 @@ Register an API route and set a specific HTTP PUT handler on that route.
 </Note>
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const PARAM_ID = 'customerId'
+// Create an API named 'public'
+final api = Nitric.api("public");
 
-api('public').put(`/customers/:${PARAM_ID}`, (ctx) => {
-  // construct response for the PUT: /customers request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-})
+api.put("/customers/:customerId", (ctx) async {
+  // Extract the path parameter
+  final id = ctx.req.pathParams["customerId"]!;
+
+  // Construct response for the PATCH: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="match" required type="string">
+  <Property name="match" required type="String">
     The path matcher to use for the route. Matchers accept path parameters in
     the form of a colon prefixed string. The string provided will be used as
-    that path parameter's name when calling middleware and handlers. See [create
-    a route with path params](#create-a-route-with-path-params)
+    that path parameter's name when calling handlers.
   </Property>
-  <Property name="middleware" required type="HttpMiddleware | HttpMiddleware[]">
-    One or more middleware services to use as the handler for HTTP requests.
-    Handlers can be sync or async
+  <Property name="handler" required type="HttpHandler">
+    The middleware service to use as the handler for HTTP requests.
   </Property>
-  <Property name="opts" type="object">
-    Additional options when creating method.
-    <Properties nested>
-      <Property name="security" type="map<string, string[]>">
-        Security rules to apply with scopes to the entire API. Keys must match a
-        `securityDefinition`.
-      </Property>
-    </Properties>
+  <Property name="security" type="List<OidcOptions>">
+    Security rules to apply with scopes to the entire API.
   </Property>
 </Properties>
 
@@ -51,36 +49,18 @@ api('public').put(`/customers/:${PARAM_ID}`, (ctx) => {
 ### Register a handler for PUT requests
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const PARAM_ID = 'customerId'
+// Create an API named 'public'
+final api = Nitric.api("public");
 
-api('public').put(`/customers/:${PARAM_ID}`, (ctx) => {
-  const id = ctx.req.params[PARAM_ID]
-  // handle the PUT request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-})
-```
+api.put("/customers", (ctx) async {
+  // Construct response for the PUT: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
 
-### Chain services as a single method handler
-
-When multiple services are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
-
-```dart
-import { api } from '@nitric/sdk'
-import { validate } from '../middleware'
-
-const PARAM_ID = 'customerId'
-
-const putCustomer = (ctx) => {
-  const id = ctx.req.params[PARAM_ID]
-  // handle the PUT request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-}
-
-api('public').put(`/customers/:${PARAM_ID}`, [validate, putCustomer])
+  return ctx;
+});
 ```
 
 ### Access the request body
@@ -88,10 +68,22 @@ api('public').put(`/customers/:${PARAM_ID}`, [validate, putCustomer])
 The PUT request body is accessible from the `ctx.req` object.
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-api('public').put(`/customers`, (ctx) => {
-  const customerData = ctx.req.data
-  // parse, validate and store the request payload...
-})
+// Create an API named 'public'
+final api = Nitric.api("public");
+
+api.put("/customers/:customerId", (ctx) async {
+  // Extract the path parameter
+  final id = ctx.req.pathParams["customerId"]!;
+
+  // Extract the request body
+  final customerData = ctx.req.json();
+
+  // Construct response for the PATCH: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
 ```

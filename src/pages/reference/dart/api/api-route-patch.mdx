@@ -6,34 +6,27 @@ export const description =
 Register a handler for HTTP PATCH requests to the route.
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const PARAM_ID = 'customerId'
+final customersRoute = Nitric.api("public").route("/customers");
 
-const customerRoute = api('public').route(`/customers/:${PARAM_ID}`)
+customersRoute.patch((ctx) async {
+  // construct response for the PATCH: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
 
-customerRoute.patch((ctx) => {
-  // construct response for the PATCH: /customers/:customerId request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-})
+  return ctx;
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="middleware" required type="HttpMiddleware | HttpMiddleware[]">
-    One or more middleware services to use as the handler for HTTP requests.
-    Handlers can be sync or async
+  <Property name="handler" required type="HttpHandler">
+    The middleware service to use as the handler for HTTP requests.
   </Property>
-  <Property name="opts" type="object">
-    Additional options when creating method.
-    <Properties nested>
-      <Property name="security" type="map<string, string[]>">
-        Security rules to apply with scopes to the entire API. Keys must match a
-        `securityDefinition`.
-      </Property>
-    </Properties>
+  <Property name="security" type="List<OidcOptions>">
+    Security rules to apply with scopes to the entire API.
   </Property>
 </Properties>
 
@@ -42,40 +35,17 @@ customerRoute.patch((ctx) => {
 ### Register a handler for PATCH requests
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const PARAM_ID = 'customerId'
+final customersRoute = Nitric.api("public").route("/customers");
 
-const customerRoute = api('public').route(`/customers/:${PARAM_ID}`)
+customersRoute.patch((ctx) async {
+  // construct response for the PATCH: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
 
-customerRoute.patch((ctx) => {
-  const id = ctx.req.params[PARAM_ID]
-  // handle the PATCH request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-})
-```
-
-### Chain services as a single method handler
-
-When multiple services are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
-
-```dart
-import { api } from '@nitric/sdk'
-import { validate } from '../middleware'
-
-const PARAM_ID = 'customerId'
-
-const patchCustomer = (ctx) => {
-  const id = ctx.req.params[PARAM_ID]
-  // handle the PATCH request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-}
-
-const customerRoute = api('public').route(`/customers/:${PARAM_ID}`)
-
-customerRoute.patch([validate, patchCustomer])
+  return ctx;
+});
 ```
 
 ### Access the request body
@@ -83,14 +53,14 @@ customerRoute.patch([validate, patchCustomer])
 The PATCH request body is accessible from the `ctx.req` object.
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const PARAM_ID = 'customerId'
+final customersRoute = Nitric.api("public").route("/customers");
 
-const customerRoute = api('public').route(`/customers/:${PARAM_ID}`)
+customersRoute.patch((ctx) async {
+  final customerData = ctx.req.json();
+  // parase, validate and store the request payload if it's available
 
-customerRoute.patch((ctx) => {
-  const customerData = ctx.req.data
-  // parse, validate and store the request payload...
-})
+  return ctx;
+});
 ```

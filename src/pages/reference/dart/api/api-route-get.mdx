@@ -6,32 +6,27 @@ export const description =
 Register a handler for HTTP GET requests to the route.
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const customerRoute = api('public').route(`/customers`)
+final customersRoute = Nitric.api("public").route("/customers");
 
-customerRoute.get((ctx) => {
+customersRoute.get((ctx) async {
   // construct response for the GET: /customers request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-})
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="middleware" required type="HttpMiddleware | HttpMiddleware[]">
-    One or more middleware services to use as the handler for HTTP requests.
-    Handlers can be sync or async
+  <Property name="handler" required type="HttpHandler">
+    The middleware service to use as the handler for HTTP requests.
   </Property>
-  <Property name="opts" type="object">
-    Additional options when creating method.
-    <Properties nested>
-      <Property name="security" type="map<string, string[]>">
-        Security rules to apply with scopes to the entire API. Keys must match a
-        `securityDefinition`.
-      </Property>
-    </Properties>
+  <Property name="security" type="List<OidcOptions>">
+    Security rules to apply with scopes to the entire API.
   </Property>
 </Properties>
 
@@ -40,32 +35,15 @@ customerRoute.get((ctx) => {
 ### Register a handler for GET requests
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const customerRoute = api('public').route(`/customers`)
+final customersRoute = Nitric.api("public").route("/customers");
 
-customerRoute.get((ctx) => {
-  // handle the GET request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-})
-```
+customersRoute.get((ctx) async {
+  // construct response for the GET: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
 
-### Chain services as a single method handler
-
-When multiple services are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
-
-```dart
-import { api } from '@nitric/sdk'
-import { validate } from '../middleware'
-
-const getCustomer = (ctx) => {
-  // handle the GET request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-}
-
-const customerRoute = api('public').route(`/customers`)
-
-customerRoute.get([validate, getCustomer])
+  return ctx;
+});
 ```

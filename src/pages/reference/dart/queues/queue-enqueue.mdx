@@ -6,36 +6,28 @@ export const description =
 Send messages to a queue.
 
 ```dart
-import { queue } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const batchQueue = queue('batch').for('enqueue')
+final batchQueue = Nitric.queue("batch").requires([
+  QueuePermission.enqueue,
+]);
 
-await batchQueue.enqueue({ example: 'value' })
+final messages = [{ "example": "value" }]
+
+await batchQueue.enqueue(messages);
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="messages" required type="Object or Object[]">
+  <Property name="messages" required type="List<Map<String, dynamic>>">
     A message or an array of messages to send to the queue.
   </Property>
 </Properties>
 
 ## Examples
 
-### Send a message to a queue
-
-```dart
-import { queue } from '@nitric/sdk'
-
-const batchQueue = queue('batch').for('enqueue')
-
-const item = { message: 'payloads can be any serializable object' }
-
-await batchQueue.enqueue(item)
-```
-
-### Send multiple messages to a queue
+### Send messages to a queue
 
 ```dart
 import { queue } from '@nitric/sdk'
@@ -59,14 +51,38 @@ const items = [
 await batchQueue.enqueue(items)
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final batchQueue = Nitric.queue("batch").requires([
+  QueuePermission.enqueue,
+]);
+
+final messages = [
+  {
+    "type": "email",
+    "to": "hello@example.com",
+    "subject": "Notification",
+    "message": "A notification from Nitric"
+  },
+  {
+    "type": "SMS",
+    "to": "+17200000000",
+    "message": "A text message from Nitric"
+  },
+]
+
+await batchQueue.enqueue(messages);
+```
+
 ### Dealing with failures
 
 In rare cases when enqueueing messages some might fail to be sent. The response from `enqueue()` will include an array of any messages that failed to send. You can process this array to retry or log the error.
 
 ```dart
-const failed = await batchQueue.enqueue(messages)
+final failed = await batchQueue.enqueue(messages);
 
-for (const message in failed) {
-  console.log(message)
-}
+messages.forEach((message) {
+  print(message);
+})
 ```

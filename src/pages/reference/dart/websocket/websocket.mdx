@@ -6,15 +6,15 @@ export const description =
 Creates a new Websocket.
 
 ```dart
-import { websocket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const socket = websocket('socket')
+final socket = Nitric.websocket("socket");
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="name" required type="string">
+  <Property name="name" required type="String">
     The unique name of this Websocket within the app. Subsequent calls to
     `websocket()` with the same name will return the same object.
   </Property>
@@ -25,7 +25,7 @@ const socket = websocket('socket')
 ### Create a Websocket
 
 ```dart
-import { websocket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const socket = websocket('socket')
+final socket = Nitric.websocket("socket");
 ```

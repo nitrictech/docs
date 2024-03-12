@@ -6,16 +6,20 @@ export const description =
 Create a new bucket for storing and retrieving files.
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-// Create a readable/writable reference to an 'assets' bucket
-const assets = bucket('assets').for('reading', 'writing', 'deleting')
+// Create a readable, writable, and deletable reference to an 'assets' bucket
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.reading,
+  BucketPermission.writing,
+  BucketPermission.deleting,
+]);
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="name" required type="string">
+  <Property name="name" required type="String">
     The unique name of this bucket within the service. Subsequent calls to
     `bucket` with the same name will return the same object.
   </Property>
@@ -29,19 +33,19 @@ All Nitric resources provide access permissions you can use to specify the level
 
 ---
 
-**reading**
+**BucketPermission.reading**
 
 This permission allows your service to read files from the bucket
 
 ---
 
-**writing**
+**BucketPermission.writing**
 
 This permission allows your service to write files to the bucket
 
 ---
 
-**deleting**
+**BucketPermission.deleting**
 
 This permission allows your service to delete files from the bucket
 

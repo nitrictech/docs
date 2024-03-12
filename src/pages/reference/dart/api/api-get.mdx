@@ -11,36 +11,36 @@ Register an API route and set a specific HTTP GET handler on that route.
 </Note>
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-api('public').get('/customers', (ctx) => {
-  // construct response for the GET: /customers request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-})
+// Create an API named 'public'
+final api = Nitric.api("public");
+
+api.get("/customers/:customerId", (ctx) async {
+  // Extract the path parameter
+  final id = ctx.req.pathParams["customerId"]!;
+
+  // Construct response for the GET: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="match" required type="string">
+  <Property name="match" required type="String">
     The path matcher to use for the route. Matchers accept path parameters in
     the form of a colon prefixed string. The string provided will be used as
-    that path parameter's name when calling middleware and handlers. See [create
-    a route with path params](#create-a-route-with-path-params)
+    that path parameter's name when calling handlers.
   </Property>
-  <Property name="middleware" required type="HttpMiddleware | HttpMiddleware[]">
-    One or more middleware services to use as the handler for HTTP requests.
-    Handlers can be sync or async
+  <Property name="handler" required type="HttpHandler">
+    The middleware service to use as the handler for HTTP requests.
   </Property>
-  <Property name="opts" type="object">
-    Additional options when creating method.
-    <Properties nested>
-      <Property name="security" type="map<string, string[]>">
-        Security rules to apply with scopes to the entire API. Keys must match a
-        `securityDefinition`.
-      </Property>
-    </Properties>
+  <Property name="security" type="List<OidcOptions>">
+    Security rules to apply with scopes to the entire API.
   </Property>
 </Properties>
 
@@ -49,28 +49,16 @@ api('public').get('/customers', (ctx) => {
 ### Register a handler for GET requests
 
 ```dart
-import { api } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-api('public').get('/customers', (ctx) => {
-  // construct response for the GET: /customers request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-})
-```
+// Create an API named 'public'
+final api = Nitric.api("public");
 
-### Chain services as a single method handler
+api.get("/customers", (ctx) async {
+  // Construct response for the GET: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
 
-When multiple services are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
-
-```dart
-import { api } from '@nitric/sdk'
-import { validate } from '../middleware'
-
-const getAllCustomers = (ctx) => {
-  // construct response for the GET: /customers request...
-  const responseBody = {}
-  ctx.res.json(responseBody)
-}
-
-api('public').get('/customers', [validate, getAllCustomers])
+  return ctx;
+});
 ```

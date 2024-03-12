@@ -6,18 +6,20 @@ export const description =
 Creates a new Schedule to run a service on a defined frequency.
 
 ```dart
-import { schedule } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
 // Create a schedule that runs every 3 hours
-schedule('aggregate-data').every('3 hours', async (ctx) => {
-  console.log('do something here')
-})
+Nitric.schedule("aggregate-data").every("3 hours", (ctx) async {
+  print("do something here");
+
+  return ctx;
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="description" required type="string">
+  <Property name="description" required type="String">
     The unique name of this Schedule within the app. Subsequent calls to
     `schedule` with the same name will return the same object.
   </Property>
@@ -34,13 +36,15 @@ schedule('aggregate-data').every('3 hours', async (ctx) => {
 ### Create a Schedule
 
 ```dart
-import { schedule } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-schedule('send-reminders').every('3 minutes', async (ctx) => {
+Nitric.schedule("send-reminders").every("3 minutes", (ctx) async {
   // add code to run here
-})
+  return ctx;
+});
 
-schedule('archive-orders').cron('0 1 1 * *', async (ctx) => {
+Nitric.schedule("archive-orders").cron("0 1 1 * *", (ctx) async {
   // add code to run here
-})
+  return ctx;
+});
 ```

@@ -6,44 +6,45 @@ export const description =
 Sets the cron expressions that determines when the schedule triggers and a callback to be triggered.
 
 ```dart
-import { schedule } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-schedule('send-reminder').cron('0 1 1 * *', async (ctx) => {
+Nitric.schedule("send-reminder").cron("0 1 1 * *", (ctx) async {
   // do some processing
-})
+  return ctx;
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="expression" required type="string">
+  <Property name="expression" required type="String">
     The expression that sets when the schedule will be triggered. This value
     should be a standard 5 value Unix cron expression, e.g., '0 1 1 * *'.
   </Property>
-  <Property
-    name="middleware"
-    required
-    type="EventMiddleware or EventMiddleware[]"
-  >
-    One or more callback services to use as the handler which will run on the
-    defined frequency.
+  <Property name="handler" required type="IntervalHandler">
+    Callback services to use as the handler which will run on the defined
+    frequency.
   </Property>
 </Properties>
 
 ## Examples
 
-### Create a Schedule
+### Create a Schedule to run on a cron
 
 ```dart
-import { schedule } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
 // every 15 minutes
-schedule('check for updates').cron('0/15 * * * *', async (ctx) => {
-  console.log('checking for updates')
-})
+Nitric.schedule("check for updates").cron("0/15 * * * *", (ctx) async {
+  print("checking for updates");
+
+  return ctx;
+});
 
 // at 1:00am on the 1st of every month
-schedule('delete stale data').cron('0 1 1 * *', async (ctx) => {
-  console.log('clearing data')
-})
+Nitric.schedule("delete stale data").cron("0 1 1 * *", (ctx) async {
+  print("clearing data");
+
+  return ctx;
+});
 ```

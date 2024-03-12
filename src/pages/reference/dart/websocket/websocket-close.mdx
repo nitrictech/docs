@@ -6,24 +6,17 @@ export const description =
 Closes a connection to a websocket
 
 ```dart
-import { websocket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const socket = websocket('socket')
+final socket = Nitric.websocket("socket");
 
-/**
- * Close a connection to a client.
- *
- * @param connectionId the client received when connecting to the websocket
- */
-const closeConnection = async (connectionId) => {
-  await socket.close(connectionId)
-}
+await socket.close(connectionId);
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="connectionId" required type="string">
+  <Property name="connectionId" required type="String">
     The ID of the connection to be closed.
   </Property>
 </Properties>
@@ -33,16 +26,9 @@ const closeConnection = async (connectionId) => {
 ### Close a connection to the websocket on message
 
 ```dart
-import { websocket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const socket = websocket('socket')
+final socket = Nitric.websocket("socket");
 
-/**
- * Close a connection to a client.
- *
- * @param connectionId the client received when connecting to the websocket
- */
-const closeConnection = async (connectionId) => {
-  await socket.close(connectionId)
-}
+await socket.close(connectionId);
 ```

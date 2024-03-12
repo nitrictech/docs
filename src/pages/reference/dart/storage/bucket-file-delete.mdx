@@ -6,13 +6,15 @@ export const description =
 Delete a file from a bucket.
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const assets = bucket('assets').for('deleting')
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.deleting,
+]);
 
-const logo = assets.file('images/logo.png')
+final logo = assets.file("images/logo.png");
 
-await logo.delete()
+await logo.delete();
 ```
 
 ## Examples
@@ -20,11 +22,13 @@ await logo.delete()
 ### Delete a file
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const assets = bucket('assets').for('deleting')
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.deleting,
+]);
 
-const logo = assets.file('images/logo.png')
+final logo = assets.file("images/logo.png");
 
-await logo.delete()
+await logo.delete();
 ```

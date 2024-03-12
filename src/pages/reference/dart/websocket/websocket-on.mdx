@@ -6,32 +6,28 @@ export const description =
 Register a handler for connections, disconnections, or messages for the websocket.
 
 ```dart
-import { websocket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const socket = websocket('socket')
+final socket = Nitric.websocket("socket");
 
-socket.on('connect', async (ctx) => {
+socket.onConnect((ctx) async {
   // handle connections
-})
+});
 
-socket.on('disconnect', async (ctx) => {
+socket.onDisconnect((ctx) async {
   // handle disconnections
-})
+});
 
-socket.on('message', async (ctx) => {
+socket.onMessage((ctx) async {
   // handle messages
-})
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="eventType" required type="string">
-    The type of websocket event to listen for. Can be `connect`, `disconnect`,
-    or `message`.
-  </Property>
-  <Property name="middleware" required type="WebsocketMiddleware<T>">
-    The middleware function(s) to use as handlers for the Websocket events.
+  <Property name="handler" required type="WebsocketHandler">
+    The middleware function to use as handlers for the Websocket events.
   </Property>
 </Properties>
 
@@ -46,19 +42,19 @@ Unlike the other websocket events the `connect` event has access to the query pa
 Additionally, the `connectionId` provided during this event will be used for all future communication with the client via this connection, it should be persisted in your application until the connection is terminated.
 
 ```dart
-import { websocket, kv } from '@nitric/sdk'
-import { isValidConnection, registerConnection } from 'lib/connections'
+import 'package:nitric_sdk/nitric.dart';
 
-const socket = websocket('socket')
+final socket = Nitric.websocket("socket");
 
-socket.on('connect', async (ctx) => {
+socket.onConnect((ctx) async {
   if (!isValidConnection(ctx.req.query)) {
     // deny the connection
-    ctx.res.success = false
-    return
+    ctx.resp.reject = true;
+    return ctx;
   }
-  registerConnection(ctx.req.connectionId)
-})
+
+  registerConnection(ctx.req.connectionId);
+});
 ```
 
 ### Managing websocket connections
@@ -66,36 +62,34 @@ socket.on('connect', async (ctx) => {
 Websocket connections need to be managed. This can be done using any persistent data store you like. One approach is to use a Nitric [key value store](/keyvalue).
 
 ```dart
-import { websocket, kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const socket = websocket('socket')
-const connections = kv('connections').for('getting', 'setting', 'deleting')
+final socket = Nitric.websocket("socket");
+final connections = Nitric.store("connections").requires([
+  KeyValueStorePermission.getting,
+  KeyValueStorePermission.setting,
+  KeyValueStorePermission.deleting,
+]);
 
-socket.on('connect', async (ctx) => {
-  const connectionList = await connections.get('connections')
-  await connections..set('connections', [
-    ...connectionList,
-    {
-      // store any metadata related to the connection here
-      connectionId: ctx.req.connectionId,
-    },
-  ])
-})
+socket.onConnect((ctx) async {
+  await connections.set(ctx.req.connectionId, {
+    // add metadata
+    "creation_time": DateTime.now(),
+  });
 
-socket.on('disconnect', async (ctx) => {
-  const connectionList = await connections.get('connections')
-  await connections.set(
-    'connections',
-    connectionList.filter((c) => c.connectionId === ctx.req.connectionId)
-  )
-})
+  return ctx;
+});
+
+socket.onDisconnect((ctx) async {
+  await connections.delete(ctx.req.connectionId);
+});
 ```
 
 ### Register a handler for message events
 
 ```dart
-socket.on('message', async (ctx) => {
+socket.onMessage((ctx) async {
   // handle messages
-  console.log(`new message from ${ctx.req.connectionId}: ${ctx.req.data}`)
-})
+  print("new message from ${ctx.req.connectionId} ${ctx.req.message}");
+});
 ```

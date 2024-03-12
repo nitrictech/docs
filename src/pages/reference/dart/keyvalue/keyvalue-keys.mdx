@@ -6,21 +6,23 @@ export const description =
 Return an async iterable of keys in the store.
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('getting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.getting,
+]);
 
-const keys = profiles.keys()
+final keys = profiles.keys();
 
-for await (const key of keys) {
+keys.forEach((String key) {
   // do something with the key
-}
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="prefix" type="string">
+  <Property name="prefix" type="String">
     The prefix to filter keys by, if not provided all keys will be returned.
   </Property>
 </Properties>
@@ -30,27 +32,31 @@ for await (const key of keys) {
 ### Get all keys from a key value store
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('getting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.getting,
+]);
 
-const keys = profiles.keys()
+final keys = profiles.keys();
 
-for await (const key of keys) {
+keys.forEach((String key) {
   // do something with the key
-}
+});
 ```
 
 ### Get keys filtered by prefix from a key value store
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('getting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.getting,
+]);
 
-const keys = profiles.keys('subprofile:')
+final keys = profiles.keys("subprofile:");
 
-for await (const key of keys) {
+keys.forEach((String key) {
   // do something with the key
-}
+});
 ```

@@ -6,32 +6,20 @@ export const description =
 Send a message to a connected websocket client.
 
 ```dart
-import { websocket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const socket = websocket('socket')
+final socket = Nitric.websocket("socket");
 
-/**
- * Send a message to a connected client.
- *
- * @param connectionId the client received when connecting to the websocket
- * @param message to send to the client
- */
-const sendMessage = async (connectionId, message) => {
-  await socket.send(connectionId, message)
-}
+await socket.send(connectionId, message);
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="connectionId" required type="string">
+  <Property name="connectionId" required type="String">
     The ID of the connection which should receive the message.
   </Property>
-  <Property
-    name="message"
-    required
-    type="string | Uint8Array | Record<string, any>"
-  >
+  <Property name="message" required type="Map<String, dynamic>">
     The message that should be sent to the connection.
   </Property>
 </Properties>
@@ -46,43 +34,37 @@ const sendMessage = async (connectionId, message) => {
 </Note>
 
 ```dart
-import { websocket, kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const socket = websocket('socket')
-const connections = kv('connections').for('getting', 'setting', 'deleting')
+final socket = Nitric.websocket("socket");
+final connections = Nitric.store("connections").requires([
+  KeyValueStorePermission.getting,
+  KeyValueStorePermission.setting,
+  KeyValueStorePermission.deleting,
+]);
 
-socket.on('connect', async (ctx) => {
-  let conns = {}
-  try {
-    conns = await connections.get('connections')
-  } catch (e) {
-    console.log('creating new connections store')
-  }
-  await connections.set('connections', {
-    ...conns,
-    [ctx.req.connectionId]: new Date(),
-  })
-})
+socket.onConnect((ctx) async {
+  await connections.set(ctx.req.connectionId, {
+    // add metadata
+    "creation_time": DateTime.now(),
+  });
 
-socket.on('disconnect', async (ctx) => {
-  const conns = await connections.get('connections')
-  delete conns[ctx.req.connectionId]
-  await connections.set('connections', conns)
-})
+  return ctx;
+});
 
-const broadcast = async (data) => {
-  const conns = await connections.get('connections')
+socket.onDisconnect((ctx) async {
+  await connections.delete(ctx.req.connectionId);
+});
 
-  await Promise.all(
-    Object.keys(conns).map(async (connectionId) => {
-      // Send message to a connection
-      await socket.send(connectionId, data)
-    })
-  )
-}
+// broadcast message to all clients (including the sender)
+socket.onMessage((ctx) async {
+  final conns = connections.keys();
 
-socket.on('message', async (ctx) => {
-  // broadcast message to all clients (including the sender)
-  await broadcast(ctx.req.data)
-})
+  await Future.wait(await conns.map((conn) async {
+    // Send a message to a connection
+    return socket.send(conn, ctx.req.message);
+  }).toList());
+
+  return ctx;
+});
 ```

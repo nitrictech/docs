@@ -6,26 +6,26 @@ export const description =
 Dequeue messages.
 
 ```dart
-import { queue } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const batchQueue = queue('batch').for('dequeue')
+final batchQueue = Nitric.queue("batch").requires([
+  QueuePermission.dequeue,
+]);
 
-const tasks = await batchQueue.dequeue()
+final messages = await batchQueue.dequeue(messages);
 
-await Promise.all(
-  tasks.map((task) => {
-    // Work on a task...
+await Future.wait(messages.map((task) async {
+  // Work on a task...
 
-    // Complete the task
-    return task.complete()
-  })
-)
+  // Complete the task
+  await task.complete();
+}));
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="depth" type="number">
+  <Property name="depth" type="int">
     The maximum number of messages to dequeue. Defaults to 1.
   </Property>
 </Properties>
@@ -60,18 +60,18 @@ This means calls to dequeue will return between 0 and _depth_ tasks.
 ### Dequeue and complete messages
 
 ```dart
-import { queue } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const batchQueue = queue('batch').for('dequeue')
+final batchQueue = Nitric.queue("batch").requires([
+  QueuePermission.dequeue,
+]);
 
-const tasks = await batchQueue.dequeue(10)
+final messages = await batchQueue.dequeue(messages);
 
-await Promise.all(
-  tasks.map((task) => {
-    // Work on a task...
+await Future.wait(messages.map((task) async {
+  // Work on a task...
 
-    // Complete the task
-    return task.complete()
-  })
-)
+  // Complete the task
+  await task.complete();
+}));
 ```

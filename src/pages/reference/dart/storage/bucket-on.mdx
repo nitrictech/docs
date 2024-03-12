@@ -6,46 +6,53 @@ export const description =
 Create a new bucket notification trigger when certain files are created or deleted.
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
+import 'package:nitric_sdk/resources.dart';
 
-const assets = bucket('assets')
-
-const accessibleAssets = bucket('assets').for('reading')
+// Create a readable, writable, and deletable reference to an 'assets' bucket
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.reading,
+]);
 
 // The request will contain the name of the file `key` and the type of event `type`
-assets.on('delete', '*', (ctx) => {
-  console.log(`A file named ${ctx.req.key} was deleted`)
-})
+assets.on(BlobEventType.delete, '*', (ctx) async {
+  print("A file named ${ctx.req.file.key} was deleted");
 
-assets.on('write', '/images/cat', (ctx) => {
-  console.log('A cat image was written')
-})
+  return ctx;
+});
 
-// If `on` is called with a permissioned bucket, a file will also be provided with the request
-accessibleAssets.on('write', '/images/dog', async (ctx) => {
-  const dogImage = await ctx.req.file.read()
+assets.on(BlobEventType.write, '/images/cat', (ctx) async {
+  print("A cat image was created");
 
-  console.log(dogImage)
-})
+  return ctx;
+});
+
+assets.on(BlobEventType.write, '/images/dog', (ctx) async {
+  final dogImage = await ctx.req.file.read();
+
+  print(dogImage)
+
+  return ctx;
+});
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="notificationType" required type="write or delete">
+  <Property
+    name="blobEventType"
+    required
+    type="BlobEventType.write or BlobEventType.delete"
+  >
     The notification type for a triggered event, either on a file write or a
     file delete.
   </Property>
-  <Property name="notificationPrefixFilter" required type="string">
+  <Property name="keyPrefixFilter" required type="String">
     The file prefix filter that must match for a triggered event. If multiple
     filters overlap across notifications, an error will be thrown when
     registering the resource.
   </Property>
-  <Property
-    name="middleware"
-    required
-    type="BucketNotificationMiddleware or BucketNotificationMiddleware[]"
-  >
+  <Property name="middleware" required type="BlobEventHandler">
     The middleware (code) to be triggered by the bucket notification being
     triggered.
   </Property>
@@ -53,17 +60,17 @@ accessibleAssets.on('write', '/images/dog', async (ctx) => {
 
 ## Available trigger types:
 
-**write**
+**BlobEventType.write**
 
 Run when a file in the bucket is created using: `file.write()`
 
-**delete**
+**BlobEventType.delete**
 
 Run when a file in the bucket is deleted using: `file.delete()`
 
 ### Trigger type cloud mapping
 
-| Permission | AWS                 | GCP             | Azure                         |
-| ---------- | ------------------- | --------------- | ----------------------------- |
-| write      | s3:ObjectCreated:\* | OBJECT_FINALIZE | Microsoft.Storage.BlobCreated |
-| delete     | s3:ObjectRemoved:\* | OBJECT_DELETE   | Microsoft.Storage.BlobDeleted |
+| Permission           | AWS                 | GCP             | Azure                         |
+| -------------------- | ------------------- | --------------- | ----------------------------- |
+| BlobEventType.write  | s3:ObjectCreated:\* | OBJECT_FINALIZE | Microsoft.Storage.BlobCreated |
+| BlobEventType.delete | s3:ObjectRemoved:\* | OBJECT_DELETE   | Microsoft.Storage.BlobDeleted |

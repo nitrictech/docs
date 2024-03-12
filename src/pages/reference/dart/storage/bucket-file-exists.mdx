@@ -6,11 +6,13 @@ export const description =
 Determine if a file exists in a bucket.
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const assets = bucket('assets').for('reading')
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.reading,
+]);
 
-const exists = await assets.file('images/logo.png').exists()
+final exists = await assets.file("images/logo.png").exists();
 ```
 
 ## Examples
@@ -18,9 +20,11 @@ const exists = await assets.file('images/logo.png').exists()
 ### Determine if a file exists
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const assets = bucket('assets').for('reading')
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.reading,
+]);
 
-const exists = await assets.file('images/logo.png').exists()
+final exists = await assets.file("images/logo.png").exists();
 ```

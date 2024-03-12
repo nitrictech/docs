@@ -6,27 +6,23 @@ export const description =
 Create an upload URL for a file within a bucket.
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const assets = bucket('assets').for('reading', 'writing')
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.writing,
+]);
 
-const logo = assets.file('images/logo.png')
+final photo = assets.file("images/logo.png");
 
-// Create a read-only signed url reference for uploading
-const uploadUrl = await logo.getUploadUrl()
+// Create a write-only url reference for uploading
+final uploadUrl = await logo.getUploadUrl(expiry: 300);
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="options" type="SignUrlOptions">
-    Additional options when creating a signed URL.
-    <Properties nested>
-      <Property name="expiry" optional type="number">
-        Seconds until link expiry. Defaults to `600`, Maximum of `604800` (7
-        days).
-      </Property>
-    </Properties>
+  <Property name="expiry" optional type="int">
+    Seconds until link expiry. Defaults to `600`, Maximum of `604800` (7 days).
   </Property>
 </Properties>
 
@@ -35,13 +31,14 @@ const uploadUrl = await logo.getUploadUrl()
 ### Create a temporary file upload link for a user
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const uploads = bucket('uploads').for('writing')
+final assets = Nitric.bucket("uploads").requires([
+  BucketPermission.writing,
+]);
 
-const photo = uploads.file('images/photo.png')
+final photo = assets.file("images/logo.png");
 
-const photoUrl = await photo.getUploadUrl({
-  expiry: 300,
-})
+// Create a write-only url reference for uploading
+final uploadUrl = await logo.getUploadUrl(expiry: 300);
 ```

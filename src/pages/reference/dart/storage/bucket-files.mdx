@@ -6,11 +6,14 @@ export const description =
 Get a list of file references for files that exist in the bucket.
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const assets = bucket('assets').for('reading')
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.reading,
+  BucketPermission.deleting,
+]);
 
-const files = await assets.files()
+final files = await assets.files();
 ```
 
 ## Examples
@@ -18,12 +21,18 @@ const files = await assets.files()
 Deleting all files in a bucket
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const assets = bucket('assets').for('deleting')
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.reading,
+  BucketPermission.deleting,
+]);
 
-const files = await assets.files()
-await Promise.all(files.map(async (file) => await file.delete()))
+final files = await assets.files();
+
+await Future.wait(files.map((file) async {
+  await file.delete();
+}));
 ```
 
 ## Notes

@@ -6,27 +6,23 @@ export const description =
 Create a download url for a file within a bucket.
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const assets = bucket('assets').for('reading', 'writing')
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.reading,
+]);
 
-const logo = assets.file('images/logo.png')
+final logo = assets.file("images/logo.png");
 
-// Create a read-only signed url reference for downloading
-const downloadUrl = await logo.getDownloadUrl()
+// Create a read-only url reference for downloading
+final downloadUrl = await logo.getDownloadUrl();
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="options" type="SignUrlOptions">
-    Additional options when creating a signed URL.
-    <Properties nested>
-      <Property name="expiry" optional type="number">
-        Seconds until link expiry. Defaults to `600`, Maximum of `604800` (7
-        days).
-      </Property>
-    </Properties>
+  <Property name="expiry" optional type="int">
+    Seconds until link expiry. Defaults to `600`, Maximum of `604800` (7 days).
   </Property>
 </Properties>
 
@@ -35,29 +31,36 @@ const downloadUrl = await logo.getDownloadUrl()
 ### Create a readable link that is valid for the next 5 minutes
 
 ```dart
-import { bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const assets = bucket('assets').for('reading')
+final assets = Nitric.bucket("assets").requires([
+  BucketPermission.reading,
+]);
 
-const logo = assets.file('images/logo.png')
+final logo = assets.file("images/logo.png");
 
-const logoUrl = await logo.getDownloadUrl({
-  expiry: 300,
-})
+// Create a read-only url reference for downloading
+final downloadUrl = await logo.getDownloadUrl(expiry: 300);
 ```
 
 ### Redirect response to an image URL
 
 ```dart
-import { api, bucket } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const mainApi = api('main')
-const images = bucket('images').for('reading')
+final mainApi = Nitric.api("main");
+final images = Nitric.bucket("assets").requires([
+  BucketPermission.reading,
+]);
 
-mainApi.get('/images/:id', async ({ req, res }) => {
-  const { id } = req.params
-  const signedUrl = await images.file(id).getDownloadUrl()
-  res.status = 303
-  res.headers['Location'] = [signedUrl]
-})
+mainApi.get("/images/:id", (ctx) async {
+  final id = ctx.req.pathParams["id"]!;
+
+  final signedUrl = await images.file(id).getDownloadUrl();
+
+  ctx.resp.status = 303;
+  ctx.resp.headers["Location"] = [signedUrl];
+
+  return ctx;
+});
 ```

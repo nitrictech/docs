@@ -6,17 +6,19 @@ export const description =
 Get a value from a key value store.
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('getting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.getting,
+]);
 
-const profile = await profiles.get('profile-1a2b3c')
+final profile = await profiles.get('profile-1a2b3c');
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="key" required type="string">
+  <Property name="key" required type="String">
     The key that references the key value pair that should be retrieved.
   </Property>
 </Properties>
@@ -26,9 +28,11 @@ const profile = await profiles.get('profile-1a2b3c')
 ### Get a key value pair
 
 ```dart
-import { kv } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const profiles = kv('profiles').for('getting')
+final profiles = Nitric.store("profiles").requires([
+  KeyValueStorePermission.getting,
+]);
 
-const profile = await profiles.get('profile-1a2b3c')
+final profile = await profiles.get('profile-1a2b3c');
 ```

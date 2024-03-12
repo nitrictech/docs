@@ -6,15 +6,18 @@ export const description =
 Creates a new Queue to process asynchronous messages.
 
 ```dart
-import { queue } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const batchQueue = queue('batch').for('enqueue')
+final batchQueue = Nitric.queue("batch").requires([
+  QueuePermission.enqueue,
+  QueuePermission.dequeue,
+]);
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="name" required type="string">
+  <Property name="name" required type="String">
     The unique name of this Queue within the service. Subsequent calls to
     `queue` with the same name will return the same object.
   </Property>
@@ -28,13 +31,13 @@ All Nitric resources provide access permissions you can use to specify the level
 
 ---
 
-**enqueue**
+**QueuePermission.enqueue**
 
 This permission allows your service to enqueue new messages.
 
 ---
 
-**dequeue**
+**QueuePermission.dequeue**
 
 This permission allows your service to dequeue messages and complete them.
 
@@ -49,18 +52,25 @@ In most instances, code should either enqueue or dequeue from a queue, usually n
 ### Create a Queue
 
 ```dart
-import { queue } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const batchQueue = queue('batch')
+final batchQueue = Nitric.queue("batch").requires([
+  QueuePermission.enqueue,
+  QueuePermission.dequeue,
+]);
 ```
 
 ### Enqueue messages
 
 ```dart
-import { queue } from '@nitric/sdk'
+import 'package:nitric_sdk/nitric.dart';
 
-const payload = {}
-const batchQueue = queue('batch').for('dequeue')
+final batchQueue = Nitric.queue("batch").requires([
+  QueuePermission.enqueue,
+  QueuePermission.dequeue,
+]);
 
-const messages = await batchQueue.enqueue()
+final messages = []
+
+await batchQueue.enqueue(messages);
 ```
