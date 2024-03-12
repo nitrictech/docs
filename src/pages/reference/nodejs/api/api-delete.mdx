@@ -38,9 +38,8 @@ api('public').delete(`/customers/:${PARAM_ID}`, (ctx) => {
   <Property name="opts" type="object">
     Additional options when creating method.
     <Properties nested>
-      <Property name="security" type="map<string, string[]>">
-        Security rules to apply with scopes to the entire API. Keys must match a
-        `securityDefinition`.
+      <Property name="security" type="OidcOptions[]">
+        Security rules to apply with scopes to the entire API.
       </Property>
     </Properties>
   </Property>
