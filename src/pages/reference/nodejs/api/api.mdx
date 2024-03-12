@@ -27,25 +27,18 @@ const publicApi = api('public')
       <Property name="middleware" type="HttpMiddleware or HttpMiddleware[]">
         Middleware to apply to all routes and methods of the API.
       </Property>
-      <Property
-        name="securityDefinitions"
-        type="map<string, SecurityDefinition>"
-      >
-        Security definitions defined by this API.
-      </Property>
-      <Property name="security" type="map<string, string[]>">
-        Security rules to apply with scopes to the entire API. Keys must match a
-        **securityDefinition**.
+      <Property name="security" type="OidcOptions[]">
+        Security rules to apply with scopes to the entire API.
       </Property>
     </Properties>
   </Property>
 </Properties>
 
-### SecurityDefinition Parameters
+### OidcOptions Parameters
 
 <Properties>
-  <Property name="kind" required type="string">
-    value must be <code>jwt</code>
+  <Property name="name" required type="string">
+    the name of the security definition
   </Property>
   <Property name="issuer" required type="string">
     the issuer for the JWT tokens e.g.{' '}
@@ -53,6 +46,9 @@ const publicApi = api('public')
   </Property>
   <Property name="audiences" required type="string[]">
     the <code>aud</code> that will be applied to JWT tokens from the issuer.
+  </Property>
+  <Property name="scopes" required type="string[]">
+    the scopes that will be required to authenticate.
   </Property>
 </Properties>
 
@@ -105,25 +101,16 @@ const apiV1 = api('private', { path: '/api/v1' })
 ### Apply JWT authentication to an API
 
 ```javascript
-import { api, jwt } from '@nitric/sdk'
+import { api, oidcRule } from '@nitric/sdk'
 
-const secureApi = api('secure', {
-  // security requirements for your API are defined here
-  securityDefinitions: {
-    // define a security definition called 'user'
-    user: jwt({
-      issuer: 'https://example-issuer.com',
-      audiences: ['YOUR-AUDIENCES'],
-    }),
-  },
-  // You can optionally apply security rules to the entire API
-  security: {
-    // apply the 'user security definition the whole API'
-    user: [
-      // Optionally apply required scopes to this api
-      // in this case users will require the products:read scope to access the API
-      'products:read',
-    ],
-  },
+const defaultSecurityRule = oidcRule({
+  name: 'default',
+  audiences: ['https://test-security-definition/'],
+  issuer: 'https://dev-abc123.us.auth0.com',
+})
+
+const secureApi = api('main', {
+  // apply the security definition to all routes in this API.
+  security: [defaultSecurityRule()],
 })
 ```
