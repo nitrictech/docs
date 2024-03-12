@@ -27,16 +27,8 @@ publicApi = api("public")
       <Property name="middleware" type="List[Middleware]" optional>
         Middleware to apply to all routes and methods of the API.
       </Property>
-      <Property
-        name="securityDefinitions"
-        type="dict[str, SecurityDefinition]"
-        optional
-      >
-        Security definitions defined by this API.
-      </Property>
-      <Property name="security" type="dict[str, List[str]]" optional>
-        Security rules to apply with scopes to the entire API. Keys must match a
-        `securityDefinition`.
+      <Property name="security" type="List[ScopedOidcOptions]">
+        Security rules to apply with scopes to the entire API.
       </Property>
     </Properties>
   </Property>
@@ -103,18 +95,20 @@ publicApi = api("public", ApiOptions(path="/api/v1/"))
 ### Apply JWT authentication to an API
 
 ```python
-from nitric.resources import api, ApiOptions
-from nitric.resources.apis import JwtSecurityDefinition
+from nitric.resources import api, ApiOptions, oidc_rule
+from nitric.application import Nitric
 
-publicApi = api("public", ApiOptions(
-    security_definitions={
-        "user": JwtSecurityDefinition(
-            issuer="https://example-issuer.com",
-            audiences=['YOUR-AUDIENCES']
-        )
-    },
-    security={
-        "user": []
-    }
-))
+default_security_rule = oidc_rule(
+    name="default",
+    audiences=["https://test-security-definition/"],
+    issuer="https://dev-abc123.us.auth0.com",
+)
+
+secure_api = api("main", opts=ApiOptions(
+        # apply the security definition to all routes in this API.
+        security=[default_security_rule("user.read")],
+    )
+)
+
+Nitric.run()
 ```
