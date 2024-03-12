@@ -25,8 +25,8 @@ const customersRoute = api('public').route('/customers')
   <Property name="options" type="object">
     Additional options when creating method.
     <Properties nested>
-      <Property name="middleware" type="HttpMiddleware or HttpMiddleware[]">
-        Middleware to apply to all methods on this route.
+      <Property name="security" type="OidcOptions[]">
+        Security rules to apply with scopes to the entire API.
       </Property>
     </Properties>
   </Property>
