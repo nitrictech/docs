@@ -1,0 +1,56 @@
+export const description =
+  "Reference for Nitric's .NET library - Publish new events to the topic."
+
+# .NET - Topic.Publish()
+
+Publish an event (push based message) to a topic.
+
+```csharp
+using Nitric.Sdk.Resource;
+
+class EventUpdate
+{
+  public string Message { get; set; }
+}
+
+var updates = Nitric.Sdk.Nitric.Topic<EventUpdate>("updates").With(TopicPermission.Publishing);
+
+updates.Publish(new EventUpdate { Message = "payload sent" });
+
+Nitric.Sdk.Nitric.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="message" required type="<T>">
+    The event to publish to the topic
+  </Property>
+</Properties>
+
+## Examples
+
+### Publish a topic
+
+```csharp
+using Nitric.Sdk.Event;
+
+class EventUpdate
+{
+  public string Message { get; set;}
+}
+
+var updates = Nitric.Sdk.Nitric.Topic<EventUpdate>("updates").With(TopicPermission.Publishing);
+
+updates.Publish(new EventUpdate()
+{
+    Message = "event has been updated"
+});
+
+Nitric.Sdk.Nitric.Run();
+```
+
+## Notes
+
+- If an id is not supplied with an event a UUID(v4) will be generated for you.
+- A function may subscribe to OR publish to a topic but not both.
