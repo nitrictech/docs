@@ -162,7 +162,7 @@ profileApi.post("/profiles", (ctx) async {
   await profiles.set(id, profile);
 
   // Send a success response.
-  ctx.resp.body = "Profile $id created.";
+  ctx.res.body = "Profile $id created.";
 
   return ctx;
 });
@@ -177,11 +177,11 @@ profileApi.get("/profiles/:id", (ctx) async {
   try {
     // Retrieve and return the profile data
     final profile = await profiles.get(id);
-    ctx.resp.json(profile.toJson());
+    ctx.res.json(profile.toJson());
   } on Exception catch (e) {
     print(e);
-    ctx.resp.status = 404;
-    ctx.resp.body = "Profile $id not found.";
+    ctx.res.status = 404;
+    ctx.res.body = "Profile $id not found.";
   }
 
   return ctx;
@@ -197,10 +197,10 @@ profileApi.delete("/profiles/:id", (ctx) async {
   // Delete the profile
   try {
     await profiles.delete(id);
-    ctx.resp.body = "Profile $id removed.";
+    ctx.res.body = "Profile $id removed.";
   } on Exception catch (e) {
-    ctx.resp.status = 404;
-    ctx.resp.body = "Profile $id not found. $e";
+    ctx.res.status = 404;
+    ctx.res.body = "Profile $id not found. $e";
   }
 
   return ctx;
@@ -347,8 +347,8 @@ profileApi.get("/profiles/:id/image/view", (ctx) async {
   // Redirect to a signed read-only file URL.
   final photoUrl = await profilesImg.file("images/$id/photo.png").getDownloadUrl();
 
-  ctx.resp.status = 303;
-  ctx.resp.headers["Location"] = [photoUrl];
+  ctx.res.status = 303;
+  ctx.res.headers["Location"] = [photoUrl];
 
   return ctx;
 });
