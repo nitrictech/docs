@@ -9,10 +9,10 @@ Create a new bucket for storing and retrieving files.
 import 'package:nitric_sdk/nitric.dart';
 
 // Create a readable, writable, and deletable reference to an 'assets' bucket
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
-  BucketPermission.writing,
-  BucketPermission.deleting,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.read,
+  BucketPermission.write,
+  BucketPermission.delete,
 ]);
 ```
 
@@ -33,19 +33,19 @@ All Nitric resources provide access permissions you can use to specify the level
 
 ---
 
-**BucketPermission.reading**
+**BucketPermission.read**
 
 This permission allows your service to read files from the bucket
 
 ---
 
-**BucketPermission.writing**
+**BucketPermission.write**
 
 This permission allows your service to write files to the bucket
 
 ---
 
-**BucketPermission.deleting**
+**BucketPermission.delete**
 
 This permission allows your service to delete files from the bucket
 

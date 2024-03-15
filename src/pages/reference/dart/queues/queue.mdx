@@ -8,7 +8,7 @@ Creates a new Queue to process asynchronous messages.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final batchQueue = Nitric.queue("batch").requires([
+final batchQueue = Nitric.queue("batch").allow([
   QueuePermission.enqueue,
   QueuePermission.dequeue,
 ]);
@@ -54,7 +54,7 @@ In most instances, code should either enqueue or dequeue from a queue, usually n
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final batchQueue = Nitric.queue("batch").requires([
+final batchQueue = Nitric.queue("batch").allow([
   QueuePermission.enqueue,
   QueuePermission.dequeue,
 ]);
@@ -65,7 +65,7 @@ final batchQueue = Nitric.queue("batch").requires([
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final batchQueue = Nitric.queue("batch").requires([
+final batchQueue = Nitric.queue("batch").allow([
   QueuePermission.enqueue,
   QueuePermission.dequeue,
 ]);

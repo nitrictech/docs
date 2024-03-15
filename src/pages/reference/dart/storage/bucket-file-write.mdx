@@ -8,8 +8,8 @@ Write a file to a bucket.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.writing,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.write,
 ]);
 
 final logo = assets.file("images/logo.png");
@@ -32,8 +32,8 @@ await logo.writ("someImageData");
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.writing,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.write,
 ]);
 
 final logo = assets.file("images/logo.png");

@@ -49,7 +49,7 @@ final socket = Nitric.websocket("socket");
 socket.onConnect((ctx) async {
   if (!isValidConnection(ctx.req.query)) {
     // deny the connection
-    ctx.resp.reject = true;
+    ctx.res.reject = true;
     return ctx;
   }
 
@@ -65,10 +65,10 @@ Websocket connections need to be managed. This can be done using any persistent 
 import 'package:nitric_sdk/nitric.dart';
 
 final socket = Nitric.websocket("socket");
-final connections = Nitric.store("connections").requires([
-  KeyValueStorePermission.getting,
-  KeyValueStorePermission.setting,
-  KeyValueStorePermission.deleting,
+final connections = Nitric.kv("connections").allow([
+  KeyValueStorePermission.get,
+  KeyValueStorePermission.set,
+  KeyValueStorePermission.delete,
 ]);
 
 socket.onConnect((ctx) async {

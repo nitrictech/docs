@@ -10,8 +10,8 @@ import 'package:nitric_sdk/nitric.dart';
 import 'package:nitric_sdk/resources.dart';
 
 // Create a readable, writable, and deletable reference to an 'assets' bucket
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.read,
 ]);
 
 // The request will contain the name of the file `key` and the type of event `type`

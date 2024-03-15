@@ -8,10 +8,10 @@ Creates a new key value store to get, set, and delete key value pairs.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.getting,
-  KeyValueStorePermission.setting,
-  KeyValueStorePermission.deleting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.get,
+  KeyValueStorePermission.set,
+  KeyValueStorePermission.delete,
 ]);
 ```
 
@@ -32,19 +32,19 @@ All Nitric resources provide access permissions you can use to specify the level
 
 ---
 
-**KeyValueStorePermission.getting**
+**KeyValueStorePermission.get**
 
 This permission allows your service to get values from the key value store.
 
 ---
 
-**KeyValueStorePermission.setting**
+**KeyValueStorePermission.set**
 
 This permission allows your service to set key value pairs in the key value store.
 
 ---
 
-**KeyValueStorePermission.deleting**
+**KeyValueStorePermission.delete**
 
 This permission allows your service to delete key value pairs in the key value store.
 
@@ -57,7 +57,7 @@ This permission allows your service to delete key value pairs in the key value s
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles");
+final profiles = Nitric.kv("profiles");
 ```
 
 ### Get value from a key value store
@@ -65,8 +65,8 @@ final profiles = Nitric.store("profiles");
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.getting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.get,
 ]);
 
 final profile = await profiles.get('profile-1a2b3c');
@@ -77,8 +77,8 @@ final profile = await profiles.get('profile-1a2b3c');
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.setting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.set,
 ]);
 
 await profiles.set('profile-1a2b3c', { "name": "John Smith" });
@@ -89,8 +89,8 @@ await profiles.set('profile-1a2b3c', { "name": "John Smith" });
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.deleting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.delete,
 ]);
 
 await profiles.delete('profile-1a2b3c');
@@ -101,8 +101,8 @@ await profiles.delete('profile-1a2b3c');
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.getting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.get,
 ]);
 
 final keys = profiles.keys();

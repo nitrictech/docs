@@ -8,8 +8,8 @@ Create a download url for a file within a bucket.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.read,
 ]);
 
 final logo = assets.file("images/logo.png");
@@ -33,8 +33,8 @@ final downloadUrl = await logo.getDownloadUrl();
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.read,
 ]);
 
 final logo = assets.file("images/logo.png");
@@ -49,8 +49,8 @@ final downloadUrl = await logo.getDownloadUrl(expiry: 300);
 import 'package:nitric_sdk/nitric.dart';
 
 final mainApi = Nitric.api("main");
-final images = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
+final images = Nitric.bucket("assets").allow([
+  BucketPermission.read,
 ]);
 
 mainApi.get("/images/:id", (ctx) async {
@@ -58,8 +58,8 @@ mainApi.get("/images/:id", (ctx) async {
 
   final signedUrl = await images.file(id).getDownloadUrl();
 
-  ctx.resp.status = 303;
-  ctx.resp.headers["Location"] = [signedUrl];
+  ctx.res.status = 303;
+  ctx.res.headers["Location"] = [signedUrl];
 
   return ctx;
 });

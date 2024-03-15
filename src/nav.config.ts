@@ -147,10 +147,10 @@ const fullNav: FullNav = {
           versions: ['v1', 'v0'],
         },
         {
-          title: 'Go',
+          title: 'Dart',
           badge: 'Experimental 🧪',
-          href: '/reference/go/v0',
-          icon: BiLogoGoLang,
+          href: '/reference/dart',
+          icon: SiDart,
         },
         {
           title: 'C# .NET',
@@ -159,16 +159,16 @@ const fullNav: FullNav = {
           icon: SiCsharp,
         },
         {
+          title: 'Go',
+          badge: 'Experimental 🧪',
+          href: '/reference/go/v0',
+          icon: BiLogoGoLang,
+        },
+        {
           title: 'JVM',
           badge: 'Experimental 🧪',
           href: '/reference/jvm/v0',
           icon: FaJava,
-        },
-        {
-          title: 'Dart',
-          badge: 'Coming soon 🚀',
-          href: '/reference/dart',
-          icon: SiDart,
         },
       ],
     },
@@ -325,6 +325,15 @@ const fullNav: FullNav = {
         {
           title: 'Predictive Text API using Tensorflow',
           href: '/guides/getting-started/python/text-prediction',
+        },
+      ],
+    },
+    {
+      title: 'Dart Guides',
+      links: [
+        {
+          title: 'REST API',
+          href: '/guides/getting-started/dart/serverless-rest-api-example',
         },
       ],
     },
@@ -1472,6 +1481,240 @@ const fullNav: FullNav = {
       ],
     },
   ],
+  ['reference/dart']: [
+    {
+      links: [
+        {
+          title: 'Getting Started',
+          href: '/reference/dart',
+        },
+      ],
+    },
+    {
+      title: 'APIs',
+      links: [
+        {
+          title: 'api()',
+          href: '/reference/dart/api/api',
+        },
+        {
+          title: 'api.get()',
+          href: '/reference/dart/api/api-get',
+        },
+        {
+          title: 'api.post()',
+          href: '/reference/dart/api/api-post',
+        },
+        {
+          title: 'api.put()',
+          href: '/reference/dart/api/api-put',
+        },
+        {
+          title: 'api.delete()',
+          href: '/reference/dart/api/api-delete',
+        },
+        {
+          title: 'api.patch()',
+          href: '/reference/dart/api/api-patch',
+        },
+        {
+          title: 'api.route()',
+          href: '/reference/dart/api/api-route',
+        },
+        {
+          title: 'api.route.all()',
+          href: '/reference/dart/api/api-route-all',
+        },
+        {
+          title: 'api.route.get()',
+          href: '/reference/dart/api/api-route-get',
+        },
+        {
+          title: 'api.route.post()',
+          href: '/reference/dart/api/api-route-post',
+        },
+        {
+          title: 'api.route.put()',
+          href: '/reference/dart/api/api-route-put',
+        },
+        {
+          title: 'api.route.delete()',
+          href: '/reference/dart/api/api-route-delete',
+        },
+        {
+          title: 'api.route.patch()',
+          href: '/reference/dart/api/api-route-patch',
+        },
+      ],
+    },
+    {
+      title: 'Key Value Stores',
+      links: [
+        {
+          title: 'kv()',
+          href: '/reference/dart/keyvalue/keyvalue',
+        },
+        {
+          title: 'kv.get()',
+          href: '/reference/dart/keyvalue/keyvalue-get',
+        },
+        {
+          title: 'kv.set()',
+          href: '/reference/dart/keyvalue/keyvalue-set',
+        },
+        {
+          title: 'kv.delete()',
+          href: '/reference/dart/keyvalue/keyvalue-delete',
+        },
+        {
+          title: 'kv.keys()',
+          href: '/reference/dart/keyvalue/keyvalue-keys',
+        },
+      ],
+    },
+    {
+      title: 'Topics',
+      links: [
+        {
+          title: 'topic()',
+          href: '/reference/dart/topic/topic',
+        },
+        {
+          title: 'topic.publish()',
+          href: '/reference/dart/topic/topic-publish',
+        },
+        {
+          title: 'topic.subscribe()',
+          href: '/reference/dart/topic/topic-subscribe',
+        },
+      ],
+    },
+    {
+      title: 'Queues',
+      links: [
+        {
+          title: 'queue()',
+          href: '/reference/dart/queues/queue',
+        },
+        {
+          title: 'queue.enqueue()',
+          href: '/reference/dart/queues/queue-enqueue',
+        },
+        {
+          title: 'queue.dequeue()',
+          href: '/reference/dart/queues/queue-dequeue',
+        },
+      ],
+    },
+    {
+      title: 'Secrets',
+      links: [
+        {
+          title: 'secret()',
+          href: '/reference/dart/secrets/secret',
+        },
+        {
+          title: 'secret.put()',
+          href: '/reference/dart/secrets/secret-put',
+        },
+        {
+          title: 'secret.version()',
+          href: '/reference/dart/secrets/secret-version',
+        },
+        {
+          title: 'secret.latest()',
+          href: '/reference/dart/secrets/secret-latest',
+        },
+        {
+          title: 'secret.version.access()',
+          href: '/reference/dart/secrets/secret-version-access',
+        },
+      ],
+    },
+    {
+      title: 'Storage',
+      links: [
+        {
+          title: 'bucket()',
+          href: '/reference/dart/storage/bucket',
+        },
+        {
+          title: 'bucket.on()',
+          href: '/reference/dart/storage/bucket-on',
+        },
+        {
+          title: 'bucket.file()',
+          href: '/reference/dart/storage/bucket-file',
+        },
+        {
+          title: 'bucket.files()',
+          href: '/reference/dart/storage/bucket-files',
+        },
+        {
+          title: 'file.exists()',
+          href: '/reference/dart/storage/bucket-file-exists',
+        },
+        {
+          title: 'file.read()',
+          href: '/reference/dart/storage/bucket-file-read',
+        },
+        {
+          title: 'file.write()',
+          href: '/reference/dart/storage/bucket-file-write',
+        },
+        {
+          title: 'file.delete()',
+          href: '/reference/dart/storage/bucket-file-delete',
+        },
+        {
+          title: 'file.getDownloadUrl()',
+          href: '/reference/dart/storage/bucket-file-downloadurl',
+        },
+        {
+          title: 'file.getUploadUrl()',
+          href: '/reference/dart/storage/bucket-file-uploadurl',
+        },
+      ],
+    },
+    {
+      title: 'Schedules',
+      links: [
+        {
+          title: 'schedule()',
+          href: '/reference/dart/schedule/schedule',
+        },
+        {
+          title: 'schedule.every()',
+          href: '/reference/dart/schedule/schedule-every',
+        },
+        {
+          title: 'schedule.cron()',
+          href: '/reference/dart/schedule/schedule-cron',
+        },
+      ],
+    },
+    {
+      title: 'Websockets',
+      links: [
+        {
+          title: 'websocket()',
+          href: '/reference/dart/websocket/websocket',
+        },
+        {
+          title: 'websocket.on()',
+          href: '/reference/dart/websocket/websocket-on',
+        },
+        {
+          title: 'websocket.send()',
+          href: '/reference/dart/websocket/websocket-send',
+        },
+        {
+          title: 'websocket.close()',
+          href: '/reference/dart/websocket/websocket-close',
+        },
+      ],
+    },
+  ],
   ['reference/csharp']: [
     {
       links: [
@@ -2143,16 +2386,6 @@ const fullNav: FullNav = {
         {
           title: 'schedule.cron()',
           href: '/reference/jvm/v0/schedule/schedule-cron',
-        },
-      ],
-    },
-  ],
-  ['reference/dart']: [
-    {
-      links: [
-        {
-          title: "Coming soon: Nitric's Dart SDK",
-          href: '/reference/dart',
         },
       ],
     },

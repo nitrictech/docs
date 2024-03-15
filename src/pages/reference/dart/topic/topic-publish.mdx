@@ -6,20 +6,10 @@ export const description =
 Publish an event (push based message) to a topic.
 
 ```dart
-import { topic } from '@nitric/sdk'
-
-const updates = topic('updates').for('publishing')
-
-await updates.publish({
-  something: 'amazing happened',
-});
-```
-
-```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final updates = Nitric.topic("updates").requires([
-  TopicPermission.publishing,
+final updates = Nitric.topic("updates").allow([
+  TopicPermission.publish,
 ]);
 ```
 
@@ -43,8 +33,8 @@ Publishing messages to a topic will push a copy of the message to each of the to
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final updates = Nitric.topic("updates").requires([
-  TopicPermission.publishing,
+final updates = Nitric.topic("updates").allow([
+  TopicPermission.publish,
 ]);
 
 await updates.publish({
@@ -59,8 +49,8 @@ You can delay the delivery of messages sent to a topic. The current maximum dela
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final updates = Nitric.topic("updates").requires([
-  TopicPermission.publishing,
+final updates = Nitric.topic("updates").allow([
+  TopicPermission.publish,
 ]);
 
 // 10 minute delay

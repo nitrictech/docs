@@ -71,7 +71,7 @@ final publicApi = Nitric.api("public", opts: ApiOptions(basePath: "/api/v1"));
 import 'package:nitric_sdk/nitric.dart';
 
 // define your security definition
-var oidc = Nitric.oidcRule(
+final oidc = Nitric.oidcRule(
     "user",
     "https://example-issuer.com/.well-known/openid-configuration",
     ["YOUR-AUDIENCES"]);

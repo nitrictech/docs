@@ -8,8 +8,8 @@ Create a reference to a file within a bucket.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.read,
 ]);
 
 final logo = assets.file("images/logo.png");

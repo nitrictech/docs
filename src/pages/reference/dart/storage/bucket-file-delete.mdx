@@ -8,8 +8,8 @@ Delete a file from a bucket.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.deleting,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.delete,
 ]);
 
 final logo = assets.file("images/logo.png");
@@ -24,8 +24,8 @@ await logo.delete();
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.deleting,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.delete,
 ]);
 
 final logo = assets.file("images/logo.png");

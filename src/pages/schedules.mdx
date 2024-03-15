@@ -64,6 +64,24 @@ async def send_reminder(ctx):
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+// run every 5 minutes
+Nitric.schedule("process-transactions").every("5 minutes", (ctx) async {
+  // add code to run here
+  print("processing transaction")
+  return ctx;
+});
+
+// Run at 22:00 Monday through Friday
+Nitric.schedule("send-reminder").cron("0 22 * * 1-5", (ctx) async {
+  // add code to run here
+  print("sending reminder");
+  return ctx;
+});
+```
+
 </CodeGroup>
 
 ## Using `every`
@@ -104,9 +122,27 @@ async def process_often(ctx):
 async def process_sometimes(ctx):
   pass
 
-@sprocessor.every("30 days")
+@processor.every("30 days")
 async def process_rarely(ctx):
   pass
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final processor = Nitric.schedule("processing");
+
+processor.every("5 minutes", (ctx) async {
+  return ctx;
+});
+
+processor.every("2 hours", (ctx) async {
+  return ctx;
+});
+
+processor.every("30 days", (ctx) async {
+  return ctx;
+});
 ```
 
 </CodeGroup>
@@ -157,6 +193,22 @@ async def check_for_updates(ctx):
 @updater.cron("0 1 1 * *")
 async def clear_data(ctx):
   print("clearing data")
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final updater = Nitric.schedule("updates");
+
+updater.cron("0/15 * * * *", (ctx) async {
+  print("checking for updates");
+  return ctx;
+});
+
+updater.cron("0 1 1 * *", (ctx) async {
+  print("clearing data");
+  return ctx;
+});
 ```
 
 </CodeGroup>

@@ -8,17 +8,17 @@ Dequeue messages.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final batchQueue = Nitric.queue("batch").requires([
+final batchQueue = Nitric.queue("batch").allow([
   QueuePermission.dequeue,
 ]);
 
-final messages = await batchQueue.dequeue(messages);
+final messages = await batchQueue.dequeue();
 
-await Future.wait(messages.map((task) async {
-  // Work on a task...
+await Future.wait(messages.map((message) async {
+  // Work on a message...
 
-  // Complete the task
-  await task.complete();
+  // Complete the message
+  await message.complete();
 }));
 ```
 
@@ -62,16 +62,16 @@ This means calls to dequeue will return between 0 and _depth_ tasks.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final batchQueue = Nitric.queue("batch").requires([
+final batchQueue = Nitric.queue("batch").allow([
   QueuePermission.dequeue,
 ]);
 
-final messages = await batchQueue.dequeue(messages);
+final messages = await batchQueue.dequeue();
 
-await Future.wait(messages.map((task) async {
-  // Work on a task...
+await Future.wait(messages.map((message) async {
+  // Work on a message...
 
-  // Complete the task
-  await task.complete();
+  // Complete the message
+  await message.complete();
 }));
 ```

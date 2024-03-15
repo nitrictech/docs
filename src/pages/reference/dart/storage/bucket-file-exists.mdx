@@ -8,8 +8,8 @@ Determine if a file exists in a bucket.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.read,
 ]);
 
 final exists = await assets.file("images/logo.png").exists();
@@ -22,8 +22,8 @@ final exists = await assets.file("images/logo.png").exists();
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.read,
 ]);
 
 final exists = await assets.file("images/logo.png").exists();

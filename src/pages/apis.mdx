@@ -37,6 +37,19 @@ async def get_moon(ctx):
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+// each API needs a unique name
+final galaxyApi = Nitric.api("far-away-galaxy-api");
+
+galaxyApi.get("/moon", (ctx) async {
+  ctx.res.body = "that's no moon, it's a space station.";
+
+  return ctx;
+});
+```
+
 </CodeGroup>
 
 ## Routing
@@ -78,6 +91,23 @@ async def create_planet(ctx):
   ctx.res.status = 201
 ```
 
+```dart
+import 'package:planets'
+
+galaxyApi.get("/planets", (ctx) async {
+  ctx.res.json(getPlanetList());
+
+  return ctx;
+});
+
+galaxyApi.post("/planets", (ctx) async {
+  createPlanet(ctx.req.json());
+  ctx.res.status = 201;
+
+  return ctx;
+});
+```
+
 </CodeGroup>
 
 ### Request Context
@@ -114,6 +144,19 @@ async def get_planet_route(ctx):
   ctx.res.body = get_planet(name)
 ```
 
+```dart
+import 'package:planets'
+
+// create a dynamic route and extract the parameter `name`
+galaxyApi.get("/planets/:name", (ctx) async {
+  final name = ctx.req.pathParams["name"]!;
+
+  ctx.res.json(getPlanet(name));
+
+  return ctx;
+});
+```
+
 </CodeGroup>
 
 #### HTTP status and headers
@@ -136,6 +179,16 @@ galaxyApi.get('/planets/alderaan', async (ctx) => {
 async def find_alderaan(ctx):
   ctx.res.status = 301
   ctx.res.headers["Location"] = "https://example.org/debris/alderaan"
+```
+
+```dart
+// return a redirect response using status 301
+galaxyApi.get("/planets/alderaan", (ctx) async {
+  ctx.res.status = 301;
+  ctx.res.headers["Location"] = ["https://example.org/debris/alderaan"];
+
+  return ctx;
+});
 ```
 
 </CodeGroup>
@@ -200,6 +253,27 @@ secure_api = api("main", opts=ApiOptions(
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+// define your security definition
+final defaultSecurityRule = Nitric.oidcRule(
+  "default",
+  "https://dev-abc123.us.auth0.com",
+  ["https://test-security-definition/"]
+);
+
+final secureApi = Nitric.api(
+  "main",
+  opts: ApiOptions(
+    security: [
+      // apply the security definition to all routes in this API.
+      defaultSecurityRule([])
+    ]
+  )
+);
+```
+
 </CodeGroup>
 
 ### Authorization
@@ -245,6 +319,27 @@ secure_api = api("main", opts=ApiOptions(
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+// define your security definition
+final defaultSecurityRule = Nitric.oidcRule(
+  "default",
+  "https://dev-abc123.us.auth0.com",
+  ["https://test-security-definition/"]
+);
+
+final secureApi = Nitric.api(
+  "main",
+  opts: ApiOptions(
+    security: [
+      // apply the security definition to all routes in this API.
+      defaultSecurityRule(["user.read"])
+    ]
+  )
+);
+```
+
 </CodeGroup>
 
 For an in-depth tutorial look at the [Auth0 integration guide](/guides/getting-started/nodejs/secure-api-auth0)
@@ -276,9 +371,21 @@ async def get_planet(ctx):
     pass
 
 # override top level security to require user.write scope to access
-@galaxy_api.post("planets/secured-planet", opts=MethodOptions(security=[custom_rule("user.read")]))
+@galaxy_api.post("planets/secured-planet", opts=MethodOptions(security=[custom_rule("user.write")]))
 async def get_planet(ctx):
     pass
+```
+
+```dart
+// override top level security to remove security from this route
+galaxyApi.get("/planets/unsecured-planet", (ctx) async {
+  return ctx;
+}, security: []);
+
+// override top level security to require user.write scope to access
+galaxyApi.post("/planets/unsecured-planet", (ctx) async {
+  return ctx;
+}, security: [customRule(["user.write"])]);
 ```
 
 </CodeGroup>
@@ -311,6 +418,10 @@ async def validate(ctx, nxt: HttpMiddleware):
   return await nxt(ctx)
 ```
 
+```txt {{ language: 'dart' }}
+Middleware currently not supported in dart
+```
+
 </CodeGroup>
 
 ### API level middleware
@@ -338,6 +449,10 @@ customers_api = api("customers", opts=ApiOptions(middleware=[log_request, valida
 Nitric.run()
 ```
 
+```txt {{ language: 'dart' }}
+API level middleware currently not supported in dart
+```
+
 </CodeGroup>
 
 ### Route level middleware
@@ -363,6 +478,10 @@ customersApi.route('/customers').get([validate, getAllCustomers])
 
 ```txt {{ language: 'python' }}
 Route level middleware currently not supported in python
+```
+
+```txt {{ language: 'dart' }}
+Route level middleware currently not supported in dart
 ```
 
 </CodeGroup>
@@ -476,6 +595,16 @@ async def get_user(ctx: HttpContext):
 Nitric.run()
 ```
 
+```dart {{ tag: 'services/one.dart' }}
+import 'package:nitric_sdk/nitric.dart';
+
+final accountsApi = Nitric.api("accounts");
+
+galaxyApi.get("/users/:id", (ctx) async {
+  // your logic here
+});
+```
+
 </CodeGroup>
 
 <CodeGroup>
@@ -502,6 +631,16 @@ async def get_org(ctx: HttpContext):
     pass # your logic here
 
 Nitric.run()
+```
+
+```dart {{ tag: 'services/two.dart' }}
+import 'package:nitric_sdk/nitric.dart';
+
+final accountsApi = Nitric.api("accounts");
+
+galaxyApi.get("/users/:id", (ctx) async {
+  // your logic here
+});
 ```
 
 </CodeGroup>
@@ -531,6 +670,12 @@ from nitric.resources import api
 accounts_api = api('accounts')
 ```
 
+```dart {{ tag: 'common/resources.dart' }}
+import 'package:nitric_sdk/nitric.dart';
+
+final accountsApi = Nitric.api("accounts");
+```
+
 </CodeGroup>
 
 <CodeGroup>
@@ -556,6 +701,14 @@ async def get_user(ctx: HttpContext):
 Nitric.run()
 ```
 
+```dart {{ tag: 'services/one.dart' }}
+import '../resources';
+
+accountsApi.get("/users/:id", (ctx) async {
+  // your logic here
+});
+```
+
 </CodeGroup>
 
 <CodeGroup>
@@ -579,6 +732,14 @@ async def get_org(ctx: HttpContext):
     pass # your logic here
 
 Nitric.run()
+```
+
+```dart {{ tag: 'services/two.dart' }}
+import '../resources';
+
+accountsApi.get("/orgs/:id", (ctx) async {
+  // your logic here
+});
 ```
 
 </CodeGroup>

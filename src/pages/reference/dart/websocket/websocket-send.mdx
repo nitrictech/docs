@@ -37,10 +37,10 @@ await socket.send(connectionId, message);
 import 'package:nitric_sdk/nitric.dart';
 
 final socket = Nitric.websocket("socket");
-final connections = Nitric.store("connections").requires([
-  KeyValueStorePermission.getting,
-  KeyValueStorePermission.setting,
-  KeyValueStorePermission.deleting,
+final connections = Nitric.kv("connections").allow([
+  KeyValueStorePermission.get,
+  KeyValueStorePermission.set,
+  KeyValueStorePermission.delete,
 ]);
 
 socket.onConnect((ctx) async {

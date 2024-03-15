@@ -8,9 +8,9 @@ Get a list of file references for files that exist in the bucket.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
-  BucketPermission.deleting,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.read,
+  BucketPermission.delete,
 ]);
 
 final files = await assets.files();
@@ -18,14 +18,14 @@ final files = await assets.files();
 
 ## Examples
 
-Deleting all files in a bucket
+delete all files in a bucket
 
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.reading,
-  BucketPermission.deleting,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.read,
+  BucketPermission.delete,
 ]);
 
 final files = await assets.files();

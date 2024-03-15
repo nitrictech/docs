@@ -8,8 +8,8 @@ Create an upload URL for a file within a bucket.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("assets").requires([
-  BucketPermission.writing,
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.write,
 ]);
 
 final photo = assets.file("images/logo.png");
@@ -33,8 +33,8 @@ final uploadUrl = await logo.getUploadUrl(expiry: 300);
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final assets = Nitric.bucket("uploads").requires([
-  BucketPermission.writing,
+final assets = Nitric.bucket("uploads").allow([
+  BucketPermission.write,
 ]);
 
 final photo = assets.file("images/logo.png");

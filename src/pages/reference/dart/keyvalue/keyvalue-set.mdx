@@ -8,8 +8,8 @@ Store a key value pair in a key value store.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.setting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.set,
 ]);
 
 await profiles.set('profile-1a2b3c', { "name": "John Smith" });
@@ -33,8 +33,8 @@ await profiles.set('profile-1a2b3c', { "name": "John Smith" });
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.setting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.set,
 ]);
 
 await profiles.set('profile-1a2b3c', { "name": "John Smith" });

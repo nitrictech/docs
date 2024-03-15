@@ -53,6 +53,16 @@ profiles = bucket('profiles').allow('reading', 'writing', 'deleting')
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.bucket("profiles").allow([
+  BucketPermission.read,
+  BucketPermission.write,
+  BucketPermission.delete,
+]);
+```
+
 </CodeGroup>
 
 ## File references
@@ -84,6 +94,16 @@ profiles = bucket("profiles").allow("reading")
 profile_picture = profiles.file("users/bruce-wayne/profile.png")
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.bucket("profiles").allow([
+  BucketPermission.read,
+]);
+
+final profilePicture = profiles.file("users/bruce-wayne/profile.png");
 ```
 
 </CodeGroup>
@@ -120,6 +140,20 @@ for file in files:
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.bucket("profiles").allow([
+  BucketPermission.read,
+]);
+
+final files = await profiles.files();
+
+await Future.wait(files.map((file) async {
+  print(file.key);
+}));
+```
+
 </CodeGroup>
 
 ## Read files
@@ -150,6 +184,16 @@ profiles = bucket("profiles").allow("reading")
 image = await profile.file("users/bruce-wayne/profile.png").read()
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.bucket("profiles").allow([
+  BucketPermission.read,
+]);
+
+final image = await profiles.file("users/bruce-wayne/profile.png").read();
 ```
 
 </CodeGroup>
@@ -188,6 +232,18 @@ await profiles.file("users/bruce-wayne/profile.png").write(profileImage)
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.bucket("profiles").allow([
+  BucketPermission.write,
+]);
+
+final profileImage = "image data";
+
+await profiles.file("users/bruce-wayne/profile.png").write(profileImage);
+```
+
 </CodeGroup>
 
 ## Delete files
@@ -213,6 +269,16 @@ profiles = bucket("profiles").allow("deleting")
 await profile.file("users/bruce-wayne/profile.png").delete()
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.bucket("profiles").allow([
+  BucketPermission.delete,
+]);
+
+await profiles.file("users/bruce-wayne/profile.png").delete();
 ```
 
 </CodeGroup>
@@ -259,6 +325,23 @@ upload_url = await profiles.file('profile.png').upload_url(3600) # Expiry defaul
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.bucket("profiles").allow([
+  BucketPermission.read,
+  BucketPermission.write
+]);
+
+final downloadUrl = await profiles.file("profile.png").getDownloadUrl(
+  expiry: 3600 // Expiry defaults to 600 (10 minutes)
+);
+
+final uploadUrl = await profiles.file("profile.png").getUploadUrl(
+  expiry: 3600 // Expiry defaults to 600 (10 minutes)
+);
+```
+
 </CodeGroup>
 
 ## Bucket Notifications
@@ -300,6 +383,19 @@ async def image_written(ctx):
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.bucket("profiles");
+
+// Filter for 'write' events for files starting with '/users/images'
+profiles.on(BlobEventType.write, "/users/images", (ctx) async {
+  print("new profile image for ${ctx.req.key} was written");
+
+  return ctx;
+});
+```
+
 </CodeGroup>
 
 If we instead wanted to trigger the function whenever any file was deleted from the bucket, we would use the following snippet:
@@ -329,6 +425,19 @@ async def file_deleted(ctx):
   print(f"{ctx.req.key} was deleted")
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.bucket("profiles");
+
+// Filter for 'delete' events for any file
+profiles.on(BlobEventType.delete, "*", (ctx) async {
+  print("${ctx.req.key} was deleted");
+
+  return ctx;
+});
 ```
 
 </CodeGroup>

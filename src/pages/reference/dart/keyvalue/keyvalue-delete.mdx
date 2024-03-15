@@ -8,8 +8,8 @@ Delete key from a key value store.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.deleting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.delete,
 ]);
 
 await profiles.delete('profile-1a2b3c');
@@ -30,8 +30,8 @@ await profiles.delete('profile-1a2b3c');
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.deleting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.delete,
 ]);
 
 await profiles.delete('profile-1a2b3c');

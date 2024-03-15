@@ -8,8 +8,8 @@ Return an async iterable of keys in the store.
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.getting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.get,
 ]);
 
 final keys = profiles.keys();
@@ -34,8 +34,8 @@ keys.forEach((String key) {
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.getting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.get,
 ]);
 
 final keys = profiles.keys();
@@ -50,8 +50,8 @@ keys.forEach((String key) {
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.store("profiles").requires([
-  KeyValueStorePermission.getting,
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.get,
 ]);
 
 final keys = profiles.keys("subprofile:");
