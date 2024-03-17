@@ -134,7 +134,7 @@ Lets define a KV resource for the resolvers get/set data from with some helper f
 ```typescript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('getting', 'setting')
+const profiles = kv('profiles').allow('get', 'set')
 
 // Helper function to get current profiles
 async function getProfiles() {

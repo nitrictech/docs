@@ -8,7 +8,7 @@ Write a file to a bucket.
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const assets = bucket('assets').for('writing')
+const assets = bucket('assets').allow('write')
 
 const logo = assets.file('images/logo.png')
 
@@ -30,7 +30,7 @@ await logo.write(someImageData)
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const assets = bucket('assets').for('writing')
+const assets = bucket('assets').allow('write')
 
 const txt = assets.file('my-text-file.txt')
 const buffer = Buffer.from('My Test File...')

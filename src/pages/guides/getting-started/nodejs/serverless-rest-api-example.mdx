@@ -88,7 +88,7 @@ import { v4 as uuid } from 'uuid'
 const profileApi = api('public')
 
 // Define a key value store named 'profiles', then request getting and setting permissions.
-const profiles = kv('profiles').for('getting', 'setting')
+const profiles = kv('profiles').allow('get', 'set')
 ```
 
 Here we're creating an API named `public` and key value store named `profiles`, then requesting get and set permissions which allows our function to access the key value store.
@@ -281,7 +281,7 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 Define a bucket named `profilesImg` with reading/writing permissions.
 
 ```javascript
-const profilesImg = bucket('profilesImg').for('reading', 'writing')
+const profilesImg = bucket('profilesImg').allow('read', 'write')
 ```
 
 ### Get a URL to upload a profile image

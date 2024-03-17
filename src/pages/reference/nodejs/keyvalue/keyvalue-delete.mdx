@@ -8,7 +8,7 @@ Delete key from a key value store.
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('deleting')
+const profiles = kv('profiles').allow('delete')
 
 await profiles.delete('profile-1a2b3c')
 ```
@@ -28,7 +28,7 @@ await profiles.delete('profile-1a2b3c')
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('deleting')
+const profiles = kv('profiles').allow('delete')
 
 await profiles.delete('profile-1a2b3c')
 ```

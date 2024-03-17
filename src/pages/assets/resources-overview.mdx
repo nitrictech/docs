@@ -25,11 +25,11 @@ A working example:
 import { api, bucket } from '@nitric/sdk'
 
 // ✅ This declaration will work
-const files = bucket('files').for('reading')
+const files = bucket('files').allow('read')
 
 api('public').get('/files/:name', (ctx) => {
   // ❌ This declaration will not work, as this is only called at runtime.
-  const badBucket = bucket('wont-work').for('writing')
+  const badBucket = bucket('wont-work').allow('read')
 })
 ```
 
@@ -75,7 +75,7 @@ export const updateTopic = topic('updates')
 // services/api.ts
 import { publicApi, updateTopic } from '../lib/resources'
 
-const publisher = updateTopic.for('publishing')
+const publisher = updateTopic.allow('publish')
 
 publicApi.post('/update', (ctx) => {
   publisher.publish({ test: 'message' })
@@ -134,8 +134,8 @@ import { api, bucket } from '@nitric/sdk'
 
 export const publicApi = api('public')
 
-export const bucketOne = bucket('bucket-one').for('reading')
-export const bucketTwo = bucket('bucket-two').for('reading')
+export const bucketOne = bucket('bucket-one').allow('read')
+export const bucketTwo = bucket('bucket-two').allow('read')
 
 // services/service-one.ts
 import { publicApi, bucketOne } from '../lib/resources'

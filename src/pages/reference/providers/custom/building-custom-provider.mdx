@@ -24,7 +24,7 @@ import { api, bucket, HttpContext } from '@nitric/sdk'
 
 const helloApi = api('main')
 
-const buck = bucket('images').for('writing')
+const buck = bucket('images').allow('write')
 
 helloApi.get('/hello/:name', async (ctx: HttpContext) => {
   const { name } = ctx.req.params
@@ -226,7 +226,7 @@ The runtime provider is there to map the Nitric SDKs to the relevant cloud API. 
 In the following case, a bucket is written to with some image data.
 
 ```ts
-const images = bucket("images").for("writing");
+const images = bucket("images").allow("write");
 
 ...
 

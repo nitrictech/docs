@@ -99,7 +99,7 @@ You can update the `app.js` file like so:
 import Fastify from 'fastify'
 import { http, topic } from '@nitric/sdk'
 
-const workRequests = topic('work-requests').for('publishing')
+const workRequests = topic('work-requests').allow('publish')
 const fastify = Fastify({
   logger: true,
 })

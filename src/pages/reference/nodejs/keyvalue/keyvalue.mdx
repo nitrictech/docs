@@ -8,7 +8,7 @@ Creates a new key value store to get, set, and delete key value pairs.
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('getting', 'setting', 'deleting')
+const profiles = kv('profiles').allow('get', 'set', 'delete')
 ```
 
 ## Parameters
@@ -61,7 +61,7 @@ const profiles = kv('profiles')
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('getting')
+const profiles = kv('profiles').allow('get')
 
 const profile = await profiles.get('profile-1a2b3c')
 ```
@@ -71,7 +71,7 @@ const profile = await profiles.get('profile-1a2b3c')
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('setting')
+const profiles = kv('profiles').allow('set')
 
 await profiles.set('profile-1a2b3c', { name: 'John Smith' })
 ```
@@ -81,7 +81,7 @@ await profiles.set('profile-1a2b3c', { name: 'John Smith' })
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('deleting')
+const profiles = kv('profiles').allow('delete')
 
 profiles.delete('profile-1a2b3c')
 ```
@@ -91,7 +91,7 @@ profiles.delete('profile-1a2b3c')
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('getting')
+const profiles = kv('profiles').allow('get')
 
 const keys = profiles.keys()
 

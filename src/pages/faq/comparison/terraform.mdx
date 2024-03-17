@@ -29,7 +29,7 @@ To showcase the power of the abstraction provided by Nitric here is a showcase o
 ```javascript {{title: 'Nitric', label: 'handle.ts' }}
 import * as nitric from '@nitric/sdk'
 
-const bucket = nitric.bucket('my-bucket').for('reading', 'writing')
+const bucket = nitric.bucket('my-bucket').allow('read', 'write')
 
 bucket.on('create', '*', async (ctx) => {
   console.log(ctx.file.key, 'was created')

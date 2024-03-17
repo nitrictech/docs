@@ -27,7 +27,7 @@ Here's an example of how to create a key value store, with permissions for getti
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const countries = kv('Countries').for('getting', 'setting', 'deleting')
+const countries = kv('Countries').allow('get', 'set', 'delete')
 ```
 
 ```typescript
@@ -40,7 +40,7 @@ type Country = {
   population: number
 }
 
-const countries = kv<Country>('Countries').for('getting', 'setting', 'deleting')
+const countries = kv<Country>('Countries').allow('get', 'set', 'delete')
 ```
 
 ```python
@@ -67,7 +67,7 @@ The below example first creates a key value store that has permissions for setti
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const countries = kv('Countries').for('setting')
+const countries = kv('Countries').allow('set')
 
 await countries.set('USA', {
   name: 'United States of America',
@@ -120,7 +120,7 @@ Values can be accessed from a store by calling the `get` method with the key of 
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const countries = kv('Countries').for('getting')
+const countries = kv('Countries').allow('get')
 
 const country = await country.get('USA')
 ```
@@ -149,7 +149,7 @@ The below example first creates a key value store that has permissions for delet
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const countries = kv('Countries').for('deleting', 'setting')
+const countries = kv('Countries').allow('delete', 'set')
 
 await countries.set('USA', {
   name: 'United States of America',
@@ -188,7 +188,7 @@ The below example first creates a key value store that has permissions for listi
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const countries = kv('Countries').for('getting')
+const countries = kv('Countries').allow('get')
 
 for await (const key of countries.keys()) {
   console.log(key)

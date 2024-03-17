@@ -28,7 +28,7 @@ There are 3 standard providers which are built and maintained by Nitric. These p
 The deployment component of the Nitric standard providers are built using [Pulumi](https://www.pulumi.com/). So when you declare your bucket in Nitric code like this:
 
 ```javascript
-const images = bucket('image').for('reading')
+const images = bucket('image').allow('read')
 ```
 
 the AWS provider is just taking that request for a bucket and deploying it with Pulumi:

@@ -41,7 +41,7 @@ Nitric enables you to define named buckets with customizable permissions. When d
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const profiles = bucket('profiles').for('reading', 'writing', 'deleting')
+const profiles = bucket('profiles').allow('read', 'write', 'delete')
 ```
 
 ```python
@@ -70,7 +70,7 @@ To get a reference to a specific file in a bucket, use the `file()` method on th
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const profiles = bucket('profiles').for('reading')
+const profiles = bucket('profiles').allow('read')
 
 const profilePicture = profiles.file('users/bruce-wayne/profile.png')
 ```
@@ -97,7 +97,7 @@ To list all files in a bucket, use the `files()` method on the bucket reference.
 ```typescript
 import { bucket } from '@nitric/sdk'
 
-const profiles = bucket('profiles').for('reading')
+const profiles = bucket('profiles').allow('read')
 
 const files = await profiles.files()
 
@@ -136,7 +136,7 @@ You can read the contents of a file directly from your application code using th
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const profiles = bucket('profiles').for('reading')
+const profiles = bucket('profiles').allow('read')
 
 const image = await profiles.file('users/bruce-wayne/profile.png').read()
 ```
@@ -168,7 +168,7 @@ You can write the contents of a file directly from your application code using t
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const profiles = bucket('profiles').for('writing')
+const profiles = bucket('profiles').allow('write')
 
 const profileImage = 'image data'
 
@@ -199,7 +199,7 @@ You can delete a file directly from your service code using the `delete()` metho
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const profiles = bucket('profiles').for('deleting')
+const profiles = bucket('profiles').allow('delete')
 
 await profiles.file('users/bruce-wayne/profile.png').delete()
 ```
@@ -234,7 +234,7 @@ You have the option to customize the expiration time of the URL by specifying a 
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const profiles = bucket('profiles').for('reading', 'writing')
+const profiles = bucket('profiles').allow('read', 'write')
 
 // Get pre-signed URLs for downloading or uploading
 const downloadUrl = await profiles.file('profile.png').getDownloadUrl({

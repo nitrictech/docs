@@ -8,7 +8,7 @@ Dequeue messages.
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const batchQueue = queue('batch').for('dequeue')
+const batchQueue = queue('batch').allow('dequeue')
 
 const tasks = await batchQueue.dequeue()
 
@@ -62,7 +62,7 @@ This means calls to dequeue will return between 0 and _depth_ tasks.
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const batchQueue = queue('batch').for('dequeue')
+const batchQueue = queue('batch').allow('dequeue')
 
 const tasks = await batchQueue.dequeue(10)
 

@@ -8,7 +8,7 @@ Create an upload URL for a file within a bucket.
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const assets = bucket('assets').for('reading', 'writing')
+const assets = bucket('assets').allow('read', 'write')
 
 const logo = assets.file('images/logo.png')
 
@@ -37,7 +37,7 @@ const uploadUrl = await logo.getUploadUrl()
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const uploads = bucket('uploads').for('writing')
+const uploads = bucket('uploads').allow('write')
 
 const photo = uploads.file('images/photo.png')
 

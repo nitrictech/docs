@@ -49,7 +49,7 @@ const sendMessage = async (connectionId, message) => {
 import { websocket, kv } from '@nitric/sdk'
 
 const socket = websocket('socket')
-const connections = kv('connections').for('getting', 'setting', 'deleting')
+const connections = kv('connections').allow('get', 'set', 'delete')
 
 socket.on('connect', async (ctx) => {
   let conns = {}

@@ -8,7 +8,7 @@ Publish an event (push based message) to a topic.
 ```javascript
 import { topic } from '@nitric/sdk'
 
-const updates = topic('updates').for('publishing')
+const updates = topic('updates').allow('publish')
 
 await updates.publish({
   something: 'amazing happened',
@@ -40,7 +40,7 @@ Publishing messages to a topic will push a copy of the message to each of the to
 ```javascript
 import { topic } from '@nitric/sdk'
 
-const updates = topic('updates').for('publishing')
+const updates = topic('updates').allow('publish')
 
 await updates.publish({
   something: 'amazing happened',
@@ -54,7 +54,7 @@ You can delay the delivery of messages sent to a topic. The current maximum dela
 ```javascript
 import { topic } from '@nitric/sdk'
 
-const updates = topic('updates').for('publishing')
+const updates = topic('updates').allow('publish')
 
 const event = { example: 'delayed' }
 

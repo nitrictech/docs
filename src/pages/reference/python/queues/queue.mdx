@@ -81,7 +81,7 @@ from nitric.resources import queue
 from nitric.application import Nitric
 
 payload = {}
-batch_queue = queue('batch').for('dequeue')
+batch_queue = queue('batch').allow('dequeue')
 
 messages = await batch_queue.dequeue(10)
 

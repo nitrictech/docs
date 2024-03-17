@@ -29,7 +29,7 @@ We want to be able to test individual API route handler callbacks without runnin
 ```javascript {{ label: "handlers/hello.js" }}
 import { imageBucket } from '../resources/buckets'
 
-const imageWriter = imageBucket.for('writing')
+const imageWriter = imageBucket.allow('write')
 
 export const handleHello = async (ctx) => {
   const { name } = ctx.req.params
@@ -245,7 +245,7 @@ Next, let's create an API by defining our routes and their callback functions:
 import { imageBucket } from '../resources/buckets'
 import { helloApi } from '../resources/apis'
 
-const imageWriter = imageBucket.for('writing')
+const imageWriter = imageBucket.allow('write')
 
 export const handleHello = async (ctx) => {
   const { name } = ctx.req.params
@@ -330,7 +330,7 @@ describe('Testing Hello Api', () => {
         .catch(err => done(err))
 
       imageBucket
-        .for('reading')
+        .allow('read')
         .file('name')
         .read()
         .then(val => {

@@ -77,7 +77,7 @@ out of the box that can be used to do this or you can use any other store or dat
 import { websocket, kv } from '@nitric/sdk'
 
 // Initialize KV store for connections and a WebSocket
-const kvStore = kv('connections').for('getting', 'setting', 'deleting')
+const kvStore = kv('connections').allow('get', 'set', 'delete')
 const socket = websocket('example-websocket')
 
 // Handle new connections
@@ -99,7 +99,7 @@ from nitric.resources import websocket
 from nitric.application import Nitric
 
 socket = websocket("socket")
-connections = kv("connections").for("getting", "setting", "deleting")
+connections = kv("connections").allow("getting", "setting", "deleting")
 
 @socket.on("connect")
 async def on_connect(ctx):
@@ -133,7 +133,7 @@ Nitric.run()
 import { websocket, kv } from '@nitric/sdk'
 
 // Initialize KV store for connections and a WebSocket
-const kvStore = kv('connections').for('getting', 'setting', 'deleting')
+const kvStore = kv('connections').allow('get', 'set', 'delete')
 const socket = websocket('example-websocket')
 
 // Handle new connections
@@ -170,7 +170,7 @@ from nitric.resources import websocket
 from nitric.application import Nitric
 
 socket = websocket("socket")
-connections = kv("connections").for("getting", "setting", "deleting")
+connections = kv("connections").allow("get", "set", "delete")
 
 @socket.on("connect")
 async def on_connect(ctx):

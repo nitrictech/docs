@@ -82,7 +82,7 @@ from nitric.resources import queue
 from nitric.application import Nitric
 
 payload = {}
-batch_queue = queue('batch').for('receiving')
+batch_queue = queue('batch').allow('receiving')
 
 tasks = await batch_queue.receive(10)
 

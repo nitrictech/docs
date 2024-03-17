@@ -13,7 +13,7 @@ Here's an example of using Nitric to create a secure bucket for file storage and
 ```javascript
 import { api, bucket } from '@nitric/sdk'
 
-const profiles = bucket('profiles').for('reading')
+const profiles = bucket('profiles').allow('read')
 const myApi = api('main')
 
 myApi.get('/profiles/:name', async (ctx) => {
