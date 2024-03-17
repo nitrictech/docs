@@ -40,12 +40,12 @@ from nitric.application import Nitric
 public_api = api('public')
 
 # ✅ This declaration will work
-files = bucket('files').allow('reading')
+files = bucket('files').allow('read')
 
 @public_api.get("/files/:name")
 async def get_file(ctx):
   # ❌ This declaration will not work, as this is only called at runtime.
-  bad_bucket = bucket('wont-work').allow('writing')
+  bad_bucket = bucket('wont-work').allow('write')
 
 Nitric.run()
 ```
@@ -100,7 +100,7 @@ update_topic = topic('updates')
 # services/api.py
 from resources import public_api, update_topic
 
-publisher = update_topic.allow('publishing')
+publisher = update_topic.allow('publish')
 
 @public_api.post("/update")
 async def new_update(ctx):
@@ -159,8 +159,8 @@ from nitric.application import Nitric
 
 public_api = api('public')
 
-bucket_one = bucket('bucket-one').allow('reading')
-bucket_two = bucket('bucket-two').allow('reading')
+bucket_one = bucket('bucket-one').allow('read')
+bucket_two = bucket('bucket-two').allow('read')
 
 
 # services/service-one.py

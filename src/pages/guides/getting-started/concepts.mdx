@@ -26,7 +26,7 @@ from nitric.resources import api, bucket
 from nitric.application import Nitric
 
 publicApi = api("main")
-profiles = bucket("profiles").allow("reading")
+profiles = bucket("profiles").allow("read")
 
 @publicApi.get("/profiles/:name")
 async def customer_get(ctx):

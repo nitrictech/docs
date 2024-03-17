@@ -131,7 +131,7 @@ Lets define a key value store resource for the resolvers get/set data from.
 from nitric.resources import api, kv
 from nitric.application import Nitric
 
-profiles = kv('profiles').allow('getting','setting')
+profiles = kv('profiles').allow('get','set')
 ```
 
 ## Create Resolvers

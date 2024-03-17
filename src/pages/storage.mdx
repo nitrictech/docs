@@ -48,7 +48,7 @@ const profiles = bucket('profiles').allow('read', 'write', 'delete')
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-profiles = bucket('profiles').allow('reading', 'writing', 'deleting')
+profiles = bucket('profiles').allow('read', 'write', 'delete')
 
 Nitric.run()
 ```
@@ -79,7 +79,7 @@ const profilePicture = profiles.file('users/bruce-wayne/profile.png')
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-profiles = bucket("profiles").allow("reading")
+profiles = bucket("profiles").allow("read")
 
 profile_picture = profiles.file("users/bruce-wayne/profile.png")
 
@@ -110,7 +110,7 @@ files.forEach((file) => {
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-profiles = bucket("profiles").allow("reading")
+profiles = bucket("profiles").allow("read")
 
 files = await profiles.files()
 
@@ -145,7 +145,7 @@ const image = await profiles.file('users/bruce-wayne/profile.png').read()
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-profiles = bucket("profiles").allow("reading")
+profiles = bucket("profiles").allow("read")
 
 image = await profile.file("users/bruce-wayne/profile.png").read()
 
@@ -179,7 +179,7 @@ await profiles.file('users/bruce-wayne/profile.png').write(profileImage)
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-profiles = bucket("profiles").allow("writing")
+profiles = bucket("profiles").allow("write")
 
 profileImage = b"image data"
 
@@ -208,7 +208,7 @@ await profiles.file('users/bruce-wayne/profile.png').delete()
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-profiles = bucket("profiles").allow("deleting")
+profiles = bucket("profiles").allow("delete")
 
 await profile.file("users/bruce-wayne/profile.png").delete()
 
@@ -250,7 +250,7 @@ const uploadUrl = await profiles.file('profile.png').getUploadUrl({
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-profiles = bucket('profiles').allow('reading', 'writing')
+profiles = bucket('profiles').allow('read', 'write')
 
 download_url = await profiles.file('profile.png').download_url(3600) # Expiry defaults to 600 (10 minutes)
 

@@ -99,7 +99,7 @@ from nitric.resources import websocket
 from nitric.application import Nitric
 
 socket = websocket("socket")
-connections = kv("connections").allow("getting", "setting", "deleting")
+connections = kv("connections").allow("get", "set", "delete")
 
 @socket.on("connect")
 async def on_connect(ctx):
