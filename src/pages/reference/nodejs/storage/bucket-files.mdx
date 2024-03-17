@@ -8,7 +8,7 @@ Get a list of file references for files that exist in the bucket.
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const assets = bucket('assets').for('reading')
+const assets = bucket('assets').allow('read')
 
 const files = await assets.files()
 ```
@@ -20,7 +20,7 @@ Deleting all files in a bucket
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const assets = bucket('assets').for('deleting')
+const assets = bucket('assets').allow('delete')
 
 const files = await assets.files()
 await Promise.all(files.map(async (file) => await file.delete()))

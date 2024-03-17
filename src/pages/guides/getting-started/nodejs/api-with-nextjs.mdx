@@ -102,7 +102,7 @@ Now we can import the task list key/value store and request permissions that all
 ```typescript {{ tag: "todo-api/functions/tasks.ts" }}
 import { taskListCol } from '../resources/stores.ts'
 
-const taskLists = taskListCol.for('setting', 'getting', 'deleting')
+const taskLists = taskListCol.allow('set', 'get', 'delete')
 ```
 
 With access to the key/value store, we can start adding tasks and task lists.

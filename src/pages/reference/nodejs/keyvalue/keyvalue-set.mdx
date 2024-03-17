@@ -8,7 +8,7 @@ Store a key value pair in a key value store.
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('setting')
+const profiles = kv('profiles').allow('set')
 
 await profiles.set('profile-1a2b3c', { name: 'John Smith' })
 ```
@@ -31,7 +31,7 @@ await profiles.set('profile-1a2b3c', { name: 'John Smith' })
 ```javascript
 import { kv } from '@nitric/sdk'
 
-const profiles = kv('profiles').for('setting')
+const profiles = kv('profiles').allow('set')
 
 await profiles.set('profile-1a2b3c', { name: 'John Smith' })
 ```

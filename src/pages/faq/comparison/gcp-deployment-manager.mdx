@@ -88,7 +88,7 @@ Google Cloud Deployment Manager templates have property keys for defining or ass
 On the other hand, Nitric handles the implementation of least-privilege policies for you. All that is needed is to specify how you want to use a resource, and the function will be assigned the relevant policy.
 
 ```typescript
-const newQueue = queue('tester').for('dequeue', 'enqueue')
+const newQueue = queue('tester').allow('dequeue', 'enqueue')
 ```
 
 ## Testing

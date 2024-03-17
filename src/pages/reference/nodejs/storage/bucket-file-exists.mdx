@@ -8,7 +8,7 @@ Determine if a file exists in a bucket.
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const assets = bucket('assets').for('reading')
+const assets = bucket('assets').allow('read')
 
 const exists = await assets.file('images/logo.png').exists()
 ```
@@ -20,7 +20,7 @@ const exists = await assets.file('images/logo.png').exists()
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const assets = bucket('assets').for('reading')
+const assets = bucket('assets').allow('read')
 
 const exists = await assets.file('images/logo.png').exists()
 ```

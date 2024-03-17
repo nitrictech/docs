@@ -92,7 +92,7 @@ from nitric.context import HttpContext
 profile_api = api("public")
 
 # Access profile key value store with permissions
-profiles = kv('profiles').allow('getting', 'setting')
+profiles = kv('profiles').allow('get', 'set')
 
 Nitric.run()
 ```
@@ -236,7 +236,7 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 Define a bucket named `profilesImg` with reading/writing permissions
 
 ```python
-photos = bucket("photos").allow('reading','writing')
+photos = bucket("photos").allow('read','write')
 ```
 
 Add imports for time and date so that we can set up caching/expiry headers

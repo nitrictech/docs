@@ -8,7 +8,7 @@ Delete a file from a bucket.
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const assets = bucket('assets').for('deleting')
+const assets = bucket('assets').allow('delete')
 
 const logo = assets.file('images/logo.png')
 
@@ -22,7 +22,7 @@ await logo.delete()
 ```javascript
 import { bucket } from '@nitric/sdk'
 
-const assets = bucket('assets').for('deleting')
+const assets = bucket('assets').allow('delete')
 
 const logo = assets.file('images/logo.png')
 

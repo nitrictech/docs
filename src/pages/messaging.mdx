@@ -28,7 +28,7 @@ Here's an example of how to create a topic with permissions to publish messages.
 ```javascript
 import { topic } from '@nitric/sdk'
 
-const userCreatedTopic = topic('user-created').for('publish')
+const userCreatedTopic = topic('user-created').allow('publish')
 ```
 
 ```python
@@ -53,7 +53,7 @@ The below example publishes a message to a topic called `user-created`.
 ```javascript
 import { topic } from '@nitric/sdk'
 
-const userCreatedTopic = topic('user-created').for('publish')
+const userCreatedTopic = topic('user-created').allow('publish')
 
 await userCreatedTopic.publish({
   email: 'new.user@example.com',
@@ -125,7 +125,7 @@ This limitation exists to protect against infinite loops in deployed services wh
 // 🚫 this is invalid
 import { topic } from '@nitric/sdk'
 
-const loopTopic = topic('infinite').for('publish')
+const loopTopic = topic('infinite').allow('publish')
 
 loopTopic.subscribe(async (ctx) => {
   await loopTopic.publish({ payload: {} })
@@ -239,7 +239,7 @@ Here's an example of how to create a queue with permissions for enqueueing and d
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const transactionQueue = queue('transactions').for('enqueue', 'dequeue')
+const transactionQueue = queue('transactions').allow('enqueue', 'dequeue')
 ```
 
 ```python
@@ -263,7 +263,7 @@ The below example sends a message to a queue called `transactions`.
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const transactionQueue = queue('transactions').for('enqueue')
+const transactionQueue = queue('transactions').allow('enqueue')
 
 await transactionQueue.send({
   message: 'hello world',
@@ -291,7 +291,7 @@ Messages can also be sent in batches by providing an array.
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const transactionQueue = queue('transactions').for('enqueue')
+const transactionQueue = queue('transactions').allow('enqueue')
 
 await transactionQueue.send([
   {
@@ -339,7 +339,7 @@ The below example dequeues 10 messages using the `dequeue()` method, then acknow
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const transactionQueue = queue('transactions').for('dequeue')
+const transactionQueue = queue('transactions').allow('dequeue')
 
 const tasks = await transactionQueue.dequeue(10)
 

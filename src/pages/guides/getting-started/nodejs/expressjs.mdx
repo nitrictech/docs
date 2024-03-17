@@ -97,7 +97,7 @@ import express from 'express'
 import { http, topic } from '@nitric/sdk'
 
 const app = express()
-const workRequests = topic('work-requests').for('publishing')
+const workRequests = topic('work-requests').allow('publish')
 
 app.get('/', async (req, res) => {
   await workRequests.publish()

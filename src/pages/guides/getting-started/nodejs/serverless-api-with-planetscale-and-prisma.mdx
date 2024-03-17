@@ -245,7 +245,7 @@ export interface CreateTemplateRequest
   textPositions: Omit<TextPosition, 'id' | 'memeId'>[]
 }
 
-const templateImgs = templates.for('writing')
+const templateImgs = templates.allow('write')
 
 export const normalizeName = (name: string) => {
   return name.replace(' ', '-').replace(/[^\w-]*/g, '')
@@ -322,8 +322,8 @@ interface MemeCreationRequest extends Omit<Meme, 'id' | 'templateId'> {
   }[]
 }
 
-const templateImgs = templates.for('reading')
-const memesImgs = memes.for('reading', 'writing')
+const templateImgs = templates.allow('read')
+const memesImgs = memes.allow('read', 'write')
 
 // POST: /memes - Create new meme images
 memeApi.post('/memes', async ({ req, res }) => {

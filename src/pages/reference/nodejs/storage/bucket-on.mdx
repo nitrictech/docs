@@ -10,7 +10,7 @@ import { bucket } from '@nitric/sdk'
 
 const assets = bucket('assets')
 
-const accessibleAssets = bucket('assets').for('reading')
+const accessibleAssets = bucket('assets').allow('read')
 
 // The request will contain the name of the file `key` and the type of event `type`
 assets.on('delete', '*', (ctx) => {

@@ -9,7 +9,7 @@ Create a reference to a file within a bucket.
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-assets = bucket('assets').allow('reading')
+assets = bucket('assets').allow('read')
 
 logo = assets.file('images/logo.png')
 

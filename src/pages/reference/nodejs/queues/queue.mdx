@@ -8,7 +8,7 @@ Creates a new Queue to process asynchronous messages.
 ```javascript
 import { queue } from '@nitric/sdk'
 
-const batchQueue = queue('batch').for('enqueue')
+const batchQueue = queue('batch').allow('enqueue')
 ```
 
 ## Parameters
@@ -60,7 +60,7 @@ const batchQueue = queue('batch')
 import { queue } from '@nitric/sdk'
 
 const payload = {}
-const batchQueue = queue('batch').for('dequeue')
+const batchQueue = queue('batch').allow('dequeue')
 
 const messages = await batchQueue.enqueue()
 ```

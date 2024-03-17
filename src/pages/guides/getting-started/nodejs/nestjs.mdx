@@ -99,10 +99,10 @@ export interface Profile {
   age: number;
 }
 
-const profiles = kv<Profile>('profiles').for(
-  'getting',
-  'setting',
-  'deleting',
+const profiles = kv<Profile>('profiles').allow(
+  'get',
+  'set',
+  'delete',
 );
 
 @Injectable()

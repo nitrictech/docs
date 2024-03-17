@@ -49,7 +49,7 @@ For example, read, write and delete access on a bucket can be requested like so:
 import { bucket } from '@nitric/sdk'
 
 // Create a readable/writable reference to an 'assets' bucket
-const assets = bucket('assets').for('reading', 'writing', 'deleting')
+const assets = bucket('assets').allow('read', 'write', 'delete')
 ```
 
 <Note>

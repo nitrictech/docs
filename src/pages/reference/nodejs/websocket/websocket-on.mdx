@@ -69,7 +69,7 @@ Websocket connections need to be managed. This can be done using any persistent 
 import { websocket, kv } from '@nitric/sdk'
 
 const socket = websocket('socket')
-const connections = kv('connections').for('getting', 'setting', 'deleting')
+const connections = kv('connections').allow('get', 'set', 'delete')
 
 socket.on('connect', async (ctx) => {
   const connectionList = await connections.get('connections')
