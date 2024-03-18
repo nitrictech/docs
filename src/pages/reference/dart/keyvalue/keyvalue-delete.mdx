@@ -1,0 +1,38 @@
+export const description =
+  "Reference for Nitric's Dart library - Delete key from a key value store."
+
+# Dart - kv.delete()
+
+Delete key from a key value store.
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.delete,
+]);
+
+await profiles.delete('profile-1a2b3c');
+```
+
+## Parameters
+
+<Properties>
+  <Property name="key" required type="String">
+    The key that references the key value pair that should be deleted.
+  </Property>
+</Properties>
+
+## Examples
+
+### Delete a key
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final profiles = Nitric.kv("profiles").allow([
+  KeyValueStorePermission.delete,
+]);
+
+await profiles.delete('profile-1a2b3c');
+```

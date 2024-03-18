@@ -1,0 +1,31 @@
+export const description =
+  "Reference for Nitric's Dart library - Create Websockets with the Nitric Dart SDK"
+
+# Dart - websocket()
+
+Creates a new Websocket.
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final socket = Nitric.websocket("socket");
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="String">
+    The unique name of this Websocket within the app. Subsequent calls to
+    `websocket()` with the same name will return the same object.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a Websocket
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final socket = Nitric.websocket("socket");
+```

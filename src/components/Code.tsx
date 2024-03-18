@@ -26,6 +26,7 @@ const languageNames = {
   java: 'Java',
   csharp: 'C#',
   kotlin: 'Kotlin',
+  dart: 'Dart',
 }
 
 const copyToClipboard = (str: string, callback = () => {}) => {

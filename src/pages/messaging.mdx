@@ -40,6 +40,14 @@ user_created_topic = topic("user-created").allow("publish")
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final userCreatedTopic = Nitric.topic("user-created").allow([
+  TopicPermission.publish,
+]);
+```
+
 </CodeGroup>
 
 ### Publishing a message
@@ -73,6 +81,18 @@ await user_created_topic.publish({
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final userCreatedTopic = Nitric.topic("user-created").allow([
+  TopicPermission.publish,
+]);
+
+await userCreatedTopic.publish({
+  "email": "new.user@example.com",
+});
+```
+
 </CodeGroup>
 
 ### Subscribing to a topic
@@ -85,6 +105,7 @@ The below code shows a subscription that responds to messages when new users are
 
 ```javascript
 import { topic } from '@nitric/sdk'
+import { sendWelcomeEmail } from 'common'
 
 const userCreatedTopic = topic('user-created')
 
@@ -99,6 +120,7 @@ userCreatedTopic.subscribe(async (ctx) => {
 ```python
 from nitric.resources import topic
 from nitric.application import Nitric
+from common import send_welcome_email
 
 user_created_topic = topic("user-created")
 
@@ -109,6 +131,21 @@ async def updates_sub(ctx):
   send_welcome_email(email)
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+import 'package:common';
+
+final userCreatedTopic = Nitric.topic("user-created");
+
+userCreatedTopic.subscribe((ctx) async {
+  final email = ctx.req.message["email"];
+
+  sendWelcomeEmail(email);
+
+  return ctx;
+});
 ```
 
 </CodeGroup>
@@ -144,6 +181,21 @@ async def danger(ctx):
   await loop_topic.publish(dict())
 
 Nitric.run()
+```
+
+```dart
+// 🚫 this is invalid
+import 'package:nitric_sdk/nitric.dart';
+
+final loopTopic = Nitric.topic("infinite").allow([
+  TopicPermission.publish,
+]);
+
+loopTopic.subscribe((ctx) async {
+  await loopTopic.publish({});
+
+  return ctx;
+});
 ```
 
 </CodeGroup>
@@ -205,6 +257,24 @@ async def process_update(ctx):
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+import 'package:common';
+
+final updates = Nitric.topic("updates");
+
+updates.subscribe((ctx) async {
+  if isDuplicate(ctx.req) {
+    return ctx;
+  }
+
+  // Not a duplicate, process the event
+  // ...
+
+  return ctx;
+});
+```
+
 </CodeGroup>
 
 <Note>
@@ -250,6 +320,15 @@ transaction_queue = queue("transactions").allow("enqueue", "dequeue")
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final transactionQueue = Nitric.queue("transactions").allow([
+  QueuePermission.enqueue,
+  QueuePermission.dequeue,
+]);
+```
+
 </CodeGroup>
 
 ### Enqueue Messages
@@ -280,6 +359,18 @@ await transaction_queue.send({
 })
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final transactionQueue = Nitric.queue("transactions").allow([
+  QueuePermission.enqueue,
+]);
+
+final messages = [{ "message": "hello world" }];
+
+await transactionQueue.enqueue(messages);
 ```
 
 </CodeGroup>
@@ -318,6 +409,22 @@ await transaction_queue.send([
 ])
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final transactionQueue = Nitric.queue("transactions").allow([
+  QueuePermission.enqueue,
+]);
+
+await transactionQueue.enqueue([
+  {
+    "message": "batch task 1"
+  }, {
+    "message": "batch task 2"
+  }
+]);
 ```
 
 </CodeGroup>
@@ -365,6 +472,24 @@ for task in tasks:
 
   # acknowledge when the task is complete
   await task.complete()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final batchQueue = Nitric.queue("batch").allow([
+  QueuePermission.dequeue,
+]);
+
+final messages = await batchQueue.dequeue(10);
+
+await Future.wait(messages.map((message) async {
+  // process your message's data
+  print(message.message);
+
+  // acknowledge when the message is complete
+  await message.complete();
+}));
 ```
 
 </CodeGroup>

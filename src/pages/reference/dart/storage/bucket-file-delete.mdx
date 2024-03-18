@@ -1,0 +1,34 @@
+export const description =
+  "Reference for Nitric's Dart library - Delete a file from a bucket."
+
+# Dart - bucket.file.delete()
+
+Delete a file from a bucket.
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.delete,
+]);
+
+final logo = assets.file("images/logo.png");
+
+await logo.delete();
+```
+
+## Examples
+
+### Delete a file
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final assets = Nitric.bucket("assets").allow([
+  BucketPermission.delete,
+]);
+
+final logo = assets.file("images/logo.png");
+
+await logo.delete();
+```

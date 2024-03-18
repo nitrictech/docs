@@ -52,6 +52,16 @@ countries = kv('Countries').allow('get', 'set', 'delete')
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final countries = Nitric.kv("Countries").allow([
+  KeyValueStorePermission.get,
+  KeyValueStorePermission.set,
+  KeyValueStorePermission.delete,
+]);
+```
+
 </CodeGroup>
 
 ## Creating Key Value Pairs
@@ -89,6 +99,19 @@ await countries.set('USA', {
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final countries = Nitric.kv("Countries").allow([
+  KeyValueStorePermission.set,
+]);
+
+await countries.set("USA", {
+  "name": "United States of America",
+  "population": 329500000
+});
+```
+
 </CodeGroup>
 
 To update a value call `set` with the same key and a new value.
@@ -107,6 +130,13 @@ await countries.set('USA', {
   "name": "United States of America",
   "population": 330000000,
 })
+```
+
+```dart
+await countries.set("USA", {
+  "name": "United States of America",
+  "population": 330000000
+});
 ```
 
 </CodeGroup>
@@ -134,6 +164,16 @@ countries = kv("Countries").allow("get")
 country = await countries.get("USA")
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final countries = Nitric.kv("Countries").allow([
+  KeyValueStorePermission.get,
+]);
+
+final country = await countries.get('USA');
 ```
 
 </CodeGroup>
@@ -175,6 +215,22 @@ await countries.delete('USA')
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final countries = Nitric.kv("Countries").allow([
+  KeyValueStorePermission.set,
+  KeyValueStorePermission.delete,
+]);
+
+await countries.set("USA", {
+  "name": "United States of America",
+  "population": 329500000
+});
+
+await countries.delete("USA")
+```
+
 </CodeGroup>
 
 ## Listing Keys
@@ -205,6 +261,20 @@ async for key in countries.keys():
   print(key)
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final countries = Nitric.kv("Countries").allow([
+  KeyValueStorePermission.get,
+]);
+
+final keys = countries.keys();
+
+keys.forEach((String key) {
+  print(key);
+});
 ```
 
 </CodeGroup>
