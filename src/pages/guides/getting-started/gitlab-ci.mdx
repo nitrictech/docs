@@ -36,7 +36,7 @@ deploy:
   before_script:
     - apk update
     - apk add --no-cache curl bash
-    - curl https://nitric.io/install | bash
+    - curl -L https://nitric.io/install?version=latest | bash
     - export PATH=$PATH:$HOME/.nitric/bin
     - curl -fsSL https://get.pulumi.com/ | bash
     - export PATH=$PATH:$HOME/.pulumi/bin
@@ -124,7 +124,7 @@ These steps install the Nitric CLI and Pulumi, allowing the use of commands such
 before_script:
   - apk update
   - apk add --no-cache curl bash
-  - curl https://nitric.io/install | bash
+  - curl -L https://nitric.io/install?version=latest | bash
   - export PATH=$PATH:$HOME/.nitric/bin
   - curl -fsSL https://get.pulumi.com/ | bash
   - export PATH=$PATH:$HOME/.pulumi/bin

@@ -36,7 +36,7 @@ steps:
       pulumi version
 
       # Install Nitric
-      curl https://nitric.io/install | bash
+      curl -L https://nitric.io/install?version=latest | bash
       export PATH=$PATH:$HOME/.nitric/bin
 
       # Login to Azure (assuming using Service Principal and Certificate)
@@ -89,7 +89,7 @@ The `up` command can be used to deploy your project. The first argument `--ci` t
       pulumi version
 
       # Install Nitric
-      curl https://nitric.io/install | bash
+      curl -L https://nitric.io/install?version=latest | bash
       export PATH=$PATH:$HOME/.nitric/bin
 
       # Login to Azure (assuming using Service Principal and Certificate)
