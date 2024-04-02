@@ -8,12 +8,12 @@ Creates a new Schedule to run a function on a defined frequency.
 ```python
 from nitric.resources import schedule
 from nitric.application import Nitric
-from nitric.context import EventContext
+from nitric.context import IntervalContext
 
 report_schedule = schedule('run-a-report')
 
 @report_schedule.every('1 days')
-async def process_transactions(ctx: EventContext):
+async def process_transactions(ctx: IntervalContext):
   # do some processing
   pass
 
@@ -66,27 +66,27 @@ backup = schedule("backup")
 ```python
 from nitric.resources import schedule
 from nitric.application import Nitric
-from nitric.context import EventContext
+from nitric.context import IntervalContext
 
 processor = schedule("processor")
 
 @processor.every('5 minutes')
-async def process_transactions(ctx: EventContext):
+async def process_transactions(ctx: IntervalContext):
   # do some processing
   pass
 
 @processor.every('3 hours')
-async def process_transactions(ctx: EventContext):
+async def process_transactions(ctx: IntervalContext):
   # do some processing
   pass
 
 @processor.every('1 days')
-async def process_transactions(ctx: EventContext):
+async def process_transactions(ctx: IntervalContext):
   # do some processing
   pass
 
 @processor.cron('0 0 * * *')
-async def process_transactions(ctx: EventContext)
+async def process_transactions(ctx: IntervalContext)
   # do some processing
   pass
 
