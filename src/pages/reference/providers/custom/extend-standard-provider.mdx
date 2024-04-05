@@ -99,9 +99,9 @@ We will then scaffold our project structure. This isn't necessary if you are bui
 ├── go.sum
 ```
 
-### Provider Interface
+### Deployment Interface
 
-We can start by creating the provider interface. This will be an interface that embeds the Nitric AWS provider, that way we only have to build the services that we want to replace.
+We can start by creating the deployment interface. This will be an interface that embeds the Nitric AWS provider, that way we only have to build the services that we want to replace.
 
 ```go {{ label: "deploy/deploy.go" }}
 package deploy
@@ -323,7 +323,6 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// Replace the key value store configuration
 func (a *AwsExtensionProvider) Bucket(ctx *pulumi.Context, parent pulumi.Resource, name string, config *deploymentspb.Bucket) error {
 	bucket, err := digitalocean.NewSpacesBucket(ctx, name, &digitalocean.SpacesBucketArgs{
 		Name:   pulumi.String(name),
@@ -599,9 +598,9 @@ func (s *SpacesStorageService) PreSignUrl(ctx context.Context, req *storagepb.St
 }
 ```
 
-### Executable
+### Packaging your provider
 
-Final steps are to write the entrypoint functions for the provider and a script to package it for use in Nitric projects.
+The final steps are to write the entrypoint functions for the provider and a script to package it for use in Nitric projects.
 
 The first step is creating the runtime entrypoint file. This sets up which plugins will be used for the runtime implementation of our provider. Here we will use all the standard AWS provider plugins but use our Storage implementation.
 
@@ -730,6 +729,8 @@ func main() {
   you can find the complete implementation on our
   [GitHub](https://github.com/nitrictech/nitric/blob/main/cloud/common/deploy/provider/pulumi.go).
 </Note>
+
+### Makefile
 
 We then need a way use our provider with Nitric projects. The following makefile has default scripts to build our runtime binary and our deployment binary, as well as a script `make install` to put in the provider directory. The `go build` output files match the binaries we were embedding into our `cmd` files earlier.
 
