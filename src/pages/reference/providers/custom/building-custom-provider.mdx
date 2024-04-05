@@ -504,7 +504,7 @@ await bucket.file('cat.png').read()
 
 This would send a gRPC request to the provider's runtime implementation. This is defined in the nitric core [protocol buffer contracts](https://github.com/nitrictech/nitric/tree/main/nitric/proto). For a storage read request, it corresponds to this:
 
-```proto
+```js
 // Request to retrieve a storage item
 message StorageReadRequest {
   // Nitric name of the bucket to retrieve from
