@@ -136,7 +136,7 @@ func NewNitricCustomPulumiProvider() *NitricCustomPulumiProvider {
 
 ### Init
 
-The `Init` method is used to initialize the provider with the required attributes. This method is called before any of the resource creation and is not a part of the Pulumi context. This is where you will validate stack files attributes and add them into the provider. Below is some boilerplate code for the `Init` method and a helper method for converting stack attributes to a configuration struct.
+The `Init` method is used to initialize the provider with the required attributes. This method is called before any of the resource creation and is not a part of the Pulumi context. This is where you will validate stack files attributes and add them into the provider. Below is some boilerplate code for the `Init` method and a helper method for converting stack attributes to a configuration object.
 
 ```go {{ label: "deploy/deploy.go" }}
 import (
@@ -309,7 +309,7 @@ func (a *NitricCustomPulumiProvider) Post(ctx *pulumi.Context) error {
 
 ### Result
 
-The `Result` method is the last to be called. This is where you can get any output information from the resources (like generated API endpoints) and return them as stdout.
+The `Result` method is the last to be called. This is where you can get any output information from the resources (like generated API endpoints) and return them as `stdout`.
 
 ```go {{ label: "deploy/deploy.go" }}
 func (a *NitricCustomPulumiProvider) Result(ctx *pulumi.Context) (pulumi.StringOutput, error) {
@@ -603,7 +603,7 @@ func New(provider *resource.ResourceServer) (*StorageServer, error) {
 }
 ```
 
-Nitric's cloud provider implementations are completely open source so there are a lot of really good examples for how you can adapt a standard implementatino to your custom runtime depending on what you're using as your backend service.
+Nitric's cloud provider implementations are completely open source so there are a lot of really good examples for how you can adapt a standard implementation to your custom runtime depending on what you're using as your backend service.
 
 - [AWS implementation](https://github.com/nitrictech/nitric/tree/main/cloud/aws)
 - [Azure implementation](https://github.com/nitrictech/nitric/tree/main/cloud/azure)
@@ -720,7 +720,7 @@ func main() {
 
 ### Makefile
 
-We then need a way use our provider with Nitric projects. The following makefile has default scripts to build our runtime binary and our deployment binary, as well as a script `make install` to put in the provider directory. The `go build` output files match the binaries we were embedding into our `cmd` files earlier.
+We then need a way use our provider with Nitric projects. The following `makefile` has default scripts to build our runtime binary and our deployment binary, as well as a script `make install` to put in the provider directory. The `go build` output files match the binaries we were embedding into our `cmd` files earlier.
 
 ```makefile {{ label: "makefile" }}
 binaries: deploybin

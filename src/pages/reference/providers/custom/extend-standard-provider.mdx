@@ -8,7 +8,7 @@ You can use the [AWS extension skeleton](https://github.com/nitrictech/nitric-pr
 
 ## What can be extended?
 
-Extending a provider can replace any individual resource, or add pre or post configuration to your deployment.
+Extending a provider can replace any individual resource, or add `pre` or `post` configuration to your deployment.
 
 Below is the Nitric deployment provider interface. To extend the provider you can replace any of the definitions of the resource or configuration that you require.
 
@@ -216,7 +216,7 @@ func (a *AwsExtensionProvider) Init(attributes map[string]interface{}) error {
 }
 ```
 
-We can then replace the `Config` function to add our digital ocean token and spaces access key. The `Config` function is used to provide pulumi with configuration variables. These are standardised based on the provider. You can find the Digital Ocean Pulumi config [here](https://www.pulumi.com/registry/packages/digitalocean/installation-configuration/#configuring-credentials)
+We can then replace the `Config` function to add our digital ocean token and spaces access key. The `Config` function is used to provide pulumi with configuration variables. These are standardized based on the provider. You can find the Digital Ocean Pulumi config [here](https://www.pulumi.com/registry/packages/digitalocean/installation-configuration/#configuring-credentials)
 
 ```go {{ label: "deploy/deploy.go" }}
 import (
@@ -245,7 +245,7 @@ func (a *AwsExtensionProvider) Config() (auto.ConfigMap, error) {
 
 ### Deployment Code
 
-Now that we have our provider initialised with all the configuration we require, we can start writing our deployment code. Although we are just replacing the Bucket resource, we will need to augment the Service and Policy resources.
+Now that we have our provider initialized with all the configuration we require, we can start writing our deployment code. Although we are just replacing the Bucket resource, we will need to augment the Service and Policy resources.
 
 The service resource will need to be changed slightly to add our spaces credentials as environment variables. This will allow our Lambda's to interact with our Spaces bucket at runtime.
 
@@ -504,7 +504,7 @@ func (s *SpacesStorageService) Delete(ctx context.Context, req *storagepb.Storag
 }
 ```
 
-`Exists` checks the existence of a single blob, returning true if it exists, false if it doesn't.
+`Exists` checks the existence of a single blob, returning true if it exists, false if it does not.
 
 ```go {{ label: "runtime/storage/spaces.go" }}
 func (s *SpacesStorageService) Exists(ctx context.Context, req *storagepb.StorageExistsRequest) (*storagepb.StorageExistsResponse, error) {
@@ -559,7 +559,7 @@ func (s *SpacesStorageService) ListBlobs(ctx context.Context, req *storagepb.Sto
 }
 ```
 
-`PreSignUrl` generates a signed URL which can be used to perform direct operations on a file. It is useful for large file uploads/downloads so they can bypass application code and work directly with S3. A presigned url request can either be for a download URL or an upload URL. An expiry time can also be specified.
+`PreSignUrl` generates a signed URL which can be used to perform direct operations on a file. It is useful for large file uploads/downloads so they can bypass application code and work directly with S3. A pre-signed url request can either be for a download URL or an upload URL. An expiry time can also be specified.
 
 ```go {{ label: "runtime/storage/spaces.go" }}
 func (s *SpacesStorageService) PreSignUrl(ctx context.Context, req *storagepb.StoragePreSignUrlRequest) (*storagepb.StoragePreSignUrlResponse, error) {
@@ -732,7 +732,7 @@ func main() {
 
 ### Makefile
 
-We then need a way use our provider with Nitric projects. The following makefile has default scripts to build our runtime binary and our deployment binary, as well as a script `make install` to put in the provider directory. The `go build` output files match the binaries we were embedding into our `cmd` files earlier.
+We then need a way use our provider with Nitric projects. The following `makefile` has default scripts to build our runtime binary and our deployment binary, as well as a script `make install` to put in the provider directory. The `go build` output files match the binaries we were embedding into our `cmd` files earlier.
 
 ```makefile {{ label: "makefile" }}
 .PHONY: install
