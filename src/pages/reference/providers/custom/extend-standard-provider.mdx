@@ -158,7 +158,7 @@ type SpacesConfig struct {
 }
 ```
 
-The attributes from the stack file are sent to the provider as a `map[string]interface{}`. We'll write a helper function to convert and validate the config.
+The attributes from the stack file are sent to the provider as a `map[string]interface{}`. We'll write a helper function to convert and validate the `config`.
 
 ```go {{ label: "deploy/config.go" }}
 func ConfigFromAttributes(attributes map[string]interface{}) (*ExtensionConfig, error) {
@@ -216,7 +216,7 @@ func (a *AwsExtensionProvider) Init(attributes map[string]interface{}) error {
 }
 ```
 
-We can then replace the `Config` function to add our digital ocean token and spaces access key. The `Config` function is used to provide pulumi with configuration variables. These are standardized based on the provider. You can find the Digital Ocean Pulumi config [here](https://www.pulumi.com/registry/packages/digitalocean/installation-configuration/#configuring-credentials)
+We can then replace the `Config` function to add our digital ocean token and spaces access key. The `Config` function is used to provide pulumi with configuration variables. These are standardized based on the provider. You can find the Digital Ocean Pulumi config [here](https://www.pulumi.com/registry/packages/digitalocean/installation-configuration/#configuring-credentials).
 
 ```go {{ label: "deploy/deploy.go" }}
 import (

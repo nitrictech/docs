@@ -200,7 +200,6 @@ func ConfigFromAttributes(attributes map[string]interface{}) (*CustomConfig, err
 ### Pre
 
 The `Pre` method is called before any resources are created, but after the pulumi context has been established. This is where global pulumi resources that must be created before all other resources can be created. This is where a unique stack id can be created, as well as global resources like resource groups or service accounts.
-// Pre - Called prior to any resource creation, after the Pulumi Context has been established
 
 ```go {{ label: "deploy/deploy.go"}}
 import (
