@@ -276,7 +276,7 @@ async def get_planet(ctx):
     pass
 
 # override top level security to require user.write scope to access
-@galaxy_api.post("planets/secured-planet", opts=MethodOptions(security=[custom_rule("user.read")]))
+@galaxy_api.post("planets/secured-planet", opts=MethodOptions(security=[custom_rule("user.write")]))
 async def get_planet(ctx):
     pass
 ```
