@@ -10,7 +10,7 @@ from nitric.resources import bucket
 from nitric.application import Nitric
 
 # Create a reference to an 'assets' bucket with permissions to read
-assets = bucket('assets').allow('read')
+assets = bucket('assets').allow('reading')
 
 logo = assets.file('images/logo.png')
 
@@ -27,7 +27,7 @@ Nitric.run()
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-assets = bucket('assets').allow('read')
+assets = bucket('assets').allow('reading')
 
 logo = assets.file('images/logo.png')
 

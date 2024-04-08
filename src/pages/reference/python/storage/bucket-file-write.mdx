@@ -9,7 +9,7 @@ Write a file to a bucket.
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-assets = bucket('assets').allow('read')
+assets = bucket('assets').allow('reading')
 
 logo = assets.file('images/logo.png')
 
@@ -35,7 +35,7 @@ from nitric.resources import bucket
 from nitric.application import Nitric
 
 # Create a reference to an 'assets' bucket with write permissions
-assets = bucket('assets').allow('write')
+assets = bucket('assets').allow('writing')
 
 logo = assets.file('images/logo.png')
 
