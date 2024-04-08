@@ -53,7 +53,7 @@ const providers = [
     logo: logoGCP,
   },
   {
-    href: '/reference/provdiers/azure',
+    href: '/reference/providers/azure',
     name: 'Azure',
     description: 'View full reference for Azure',
     logo: logoAzure,
