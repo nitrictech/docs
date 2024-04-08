@@ -6,49 +6,57 @@ This guide is for those that are interested in building their own custom provide
 
 This guide assumes you understand the basis of the Nitric [providers](/reference/providers). If you are looking to just replace one or two resources from a standard provider, consider looking at the documentation [here](./extend-standard-provider).
 
+<Note>
+  Our providers and helpers are written in Go, however our provider's are based
+  on protocol buffer contracts which can be compiled to [any
+  language](https://github.com/protocolbuffers/protobuf/blob/main/docs/third_party.md).
+  You can find our `.proto` files in the core [Nitric
+  repo](https://github.com/nitrictech/nitric/tree/main/nitric/proto/).
+</Note>
+
 ## Project structure
 
-Below is the project structure that we will be using for this guide. It's _highly_ recommended that you start your custom provider by using the [custom provider skeleton](https://github.com/nitrictech/nitric-provider-template-poc/tree/main/custom-provider) to making each file manually.
+Below is the project structure that we will be using for this guide. It's _highly_ recommended that you start your custom provider by using the [custom provider skeleton](https://github.com/nitrictech/nitric-provider-template-poc/tree/main/custom-provider) rather than making each file manually.
 
 ```txt
 ├── cmd
-│   ├── deploy
-│   │	├── main.go
-│   ├── runtime
-│   │	├── main.go
+│	 ├── deploy
+│	 │	├── main.go
+│	 ├── runtime
+│	 │	├── main.go
 ├── deploy
-│   ├── api.go
-│   ├── bucket.go
-│   ├── config.go
-│   ├── deploy.go
-│   ├── http.go
-│   ├── keyvalue.go
-│   ├── policy.go
-│   ├── queue.go
-│   ├── schedule.go
-│   ├── secret.go
-│   ├── service.go
-│   ├── topic.go
-│   ├── websocket.go
+│	 ├── api.go
+│	 ├── bucket.go
+│	 ├── config.go
+│	 ├── deploy.go
+│	 ├── http.go
+│	 ├── keyvalue.go
+│	 ├── policy.go
+│	 ├── queue.go
+│	 ├── schedule.go
+│	 ├── secret.go
+│	 ├── service.go
+│	 ├── topic.go
+│	 ├── websocket.go
 ├── runtime
-│   ├── api
-│   │	├── api.go
-│   ├── http
-│   │	├── http.go
-│   ├── keyvalue
-│   │	├── keyvalue.go
-│   ├── queue
-│   │	├── queue.go
-│   ├── resource
-│   │	├── resource.go
-│   ├── secret
-│   │	├── secret.go
-│   ├── storage
-│   │	├── storage.go
-│   ├── topic
-│   │	├── topic.go
-│   ├── websocket
-│   │	├── websocket.go
+│	 ├── api
+│	 │	├── api.go
+│	 ├── http
+│	 │	├── http.go
+│	 ├── keyvalue
+│	 │	├── keyvalue.go
+│	 ├── queue
+│	 │	├── queue.go
+│	 ├── resource
+│	 │	├── resource.go
+│	 ├── secret
+│	 │	├── secret.go
+│	 ├── storage
+│	 │	├── storage.go
+│	 ├── topic
+│	 │	├── topic.go
+│	 ├── websocket
+│	 │	├── websocket.go
 ├── go.mod
 ├── go.sum
 ├── .gitignore
@@ -57,7 +65,7 @@ Below is the project structure that we will be using for this guide. It's _highl
 
 ## Deployment Interface
 
-We have written helper packages to make writing your own custom provider as seamless as possible. With this, we have supplied an interface that your provider should conform to, however, not every feature needs to be implemented.
+We have written [helper packages](https://github.com/nitrictech/nitric/tree/main/cloud/common) to make writing your own custom provider as seamless as possible. With this, we have supplied an interface that your provider should conform to, however, not every feature needs to be implemented.
 
 We will go over each function of the deployment interface individually, however you can see the use of each function below.
 
@@ -112,7 +120,7 @@ Before you override any of the methods, you'll need to create a provider interfa
 
 ```go {{ label: "deploy/deploy.go" }}
 import (
-  "github.com/nitrictech/nitric/cloud/common/deploy"
+	"github.com/nitrictech/nitric/cloud/common/deploy"
 	"github.com/nitrictech/nitric/cloud/common/deploy/provider"
 )
 
@@ -140,9 +148,9 @@ The `Init` method is used to initialize the provider with the required attribute
 
 ```go {{ label: "deploy/deploy.go" }}
 import (
-  ...
+	...
 
-  "google.golang.org/grpc/codes"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
@@ -151,13 +159,13 @@ import (
 func (a *NitricCustomPulumiProvider) Init(attributes map[string]interface{}) error {
 	var err error
 
-  // Get StackName, ProjectName, and Region from attribute map
+	// Get StackName, ProjectName, and Region from attribute map
 	a.CommonStackDetails, err = deploy.CommonStackDetailsFromAttributes(attributes)
 	if err != nil {
 		return status.Errorf(codes.InvalidArgument, err.Error())
 	}
 
-  // Get provider specific attributes
+	// Get provider specific attributes
 	a.config, err = ConfigFromAttributes(attributes)
 	if err != nil {
 		return status.Errorf(codes.InvalidArgument, "Bad stack configuration: %s", err)
@@ -183,7 +191,7 @@ func ConfigFromAttributes(attributes map[string]interface{}) (*CustomConfig, err
 		return nil, err
 	}
 
-  // validate the config...
+	// validate the config...
 
 	return config, nil
 }
@@ -196,7 +204,7 @@ The `Pre` method is called before any resources are created, but after the pulum
 
 ```go {{ label: "deploy/deploy.go"}}
 import (
-  ...
+	...
 	"github.com/nitrictech/nitric/cloud/common/deploy/pulumix"
 	"github.com/pulumi/pulumi-random/sdk/v4/go/random"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -208,7 +216,7 @@ func (a *NitricCustomPulumiProvider) Pre(ctx *pulumi.Context, resources []*pulum
 	// make our random stackId
 	stackRandId, err := random.NewRandomString(ctx, fmt.Sprintf("%s-stack-name", ctx.Stack()), &random.RandomStringArgs{
 		Special: pulumi.Bool(false),
-		Length:  pulumi.Int(8),
+		Length:	pulumi.Int(8),
 		Keepers: pulumi.ToStringMap(map[string]string{
 			"stack-name": ctx.Stack(),
 		}),
@@ -217,7 +225,7 @@ func (a *NitricCustomPulumiProvider) Pre(ctx *pulumi.Context, resources []*pulum
 		return err
 	}
 
-  // Get the stack id as a string for use in dependent resource names
+	// Get the stack id as a string for use in dependent resource names
 	stackIdChan := make(chan string)
 	pulumi.Sprintf("%s-%s", ctx.Stack(), stackRandId.Result).ApplyT(func(id string) string {
 		stackIdChan <- id
@@ -226,7 +234,7 @@ func (a *NitricCustomPulumiProvider) Pre(ctx *pulumi.Context, resources []*pulum
 
 	a.StackId = <-stackIdChan
 
-  // Create other global resources...
+	// Create other global resources...
 
 	return nil
 }
@@ -238,8 +246,8 @@ The `Config` method is where you can create the Pulumi ConfigMap with provider s
 
 ```go {{ label: "deploy/deploy.go" }}
 import (
-  ...
-  "github.com/pulumi/pulumi/sdk/v3/go/auto"
+	...
+	"github.com/pulumi/pulumi/sdk/v3/go/auto"
 )
 
 ...
@@ -247,7 +255,7 @@ import (
 func (a *NitricCustomPulumiProvider) Config() (auto.ConfigMap, error) {
 	return auto.ConfigMap{
 		"docker:version": auto.ConfigValue{Value: deploy.PulumiDockerVersion},
-    "pulumi:access_key": auto.ConfigValue{Value: "access_key", Secret: true} // demonstrating how you can make a config value encrypted
+		"pulumi:access_key": auto.ConfigValue{Value: "access_key", Secret: true} // demonstrating how you can make a config value encrypted
 	}, nil
 }
 ```
@@ -271,7 +279,7 @@ func just(all []*deploymentspb.Resource, only resourcespb.ResourceType) []*deplo
 // By default deploy services (services) first, other resources typically depend on them
 // e.g. topics may need to know about services in order to setup subscriptions.
 func (*NitricDefaultOrder) Order(resources []*deploymentspb.Resource) []*deploymentspb.Resource {
-  // Adjust the ordering of this to get a custom resource order.
+	// Adjust the ordering of this to get a custom resource order.
 	typeOrder := []resourcespb.ResourceType{
 		resourcespb.ResourceType_Service,
 		resourcespb.ResourceType_Secret,
@@ -286,7 +294,7 @@ func (*NitricDefaultOrder) Order(resources []*deploymentspb.Resource) []*deploym
 		resourcespb.ResourceType_Policy,
 	}
 
-  // Sorts the resources by the `typeOrder`
+	// Sorts the resources by the `typeOrder`
 	sorted := []*deploymentspb.Resource{}
 	for _, resourceType := range typeOrder {
 		sorted = append(sorted, just(resources, resourceType)...)
@@ -294,7 +302,6 @@ func (*NitricDefaultOrder) Order(resources []*deploymentspb.Resource) []*deploym
 
 	return sorted
 }
-
 ```
 
 ### Post
@@ -340,7 +347,7 @@ Each of the resource methods are where you can implement the custom deployment c
 
 <Note>
   The configuration for each resource is based on the protocol buffers defined
-  in the core [nitric
+  in the core [Nitric
   repo](https://github.com/nitrictech/nitric/tree/main/nitric/proto/deployments/v1).
 </Note>
 
@@ -353,7 +360,7 @@ import (
 )
 
 func (n *NitricCustomPulumiProvider) Bucket(ctx *pulumi.Context, parent pulumi.Resource, name string, config *deploymentspb.Bucket) error {
-  return nil
+	return nil
 }
 ```
 
@@ -368,15 +375,15 @@ import (
 
 func (a *NitricDOPulumiProvider) Bucket(ctx *pulumi.Context, parent pulumi.Resource, name string, config *deploymentspb.Bucket) error {
 	bucket, err := digitalocean.NewSpacesBucket(ctx, name, &digitalocean.SpacesBucketArgs{
-		Name:   pulumi.String(name),
+		Name: pulumi.String(name),
 		Region: pulumi.String(a.Region),
-		Acl:    pulumi.String("private"),
+		Acl: pulumi.String("private"),
 	})
 	if err != nil {
 		return err
 	}
 
-  // Adding the buckets to the deployment provider to be potentially referenced by other resources
+	// Adding the buckets to the deployment provider to be potentially referenced by other resources
 	a.Buckets[name] = bucket
 
 	return nil
@@ -387,7 +394,7 @@ Below is how we would change the provider interface to add references to the Buc
 
 ```go {{ label: "deploy/deploy.go" }}
 import (
-  "github.com/nitrictech/nitric/cloud/common/deploy"
+	"github.com/nitrictech/nitric/cloud/common/deploy"
 	"github.com/nitrictech/nitric/cloud/common/deploy/provider"
 )
 
@@ -397,15 +404,15 @@ type NitricDOPulumiProvider struct {
 	config *CustomConfig
 	provider.NitricDefaultOrder
 
-  Buckets map[string]*digitalocean.SpacesBucket
+	Buckets map[string]*digitalocean.SpacesBucket
 }
 
 var _ provider.NitricPulumiProvider = (*NitricDOPulumiProvider)(nil)
 
 func NewNitricDOPulumiProvider() *NitricDOPulumiProvider {
 	return &NitricDOPulumiProvider{
-    Buckets: make(map[string]*digitalocean.SpacesBucket),
-  }
+		Buckets: make(map[string]*digitalocean.SpacesBucket),
+	}
 }
 ```
 
@@ -439,7 +446,7 @@ func createEcrRepository(ctx *pulumi.Context, parent pulumi.Resource, stackId st
 }
 
 func createImage(ctx *pulumi.Context, parent pulumi.Resource, name string, authToken *ecr.GetAuthorizationTokenResult, repo *ecr.Repository, config *pulumix.NitricPulumiServiceConfig, runtime provider.RuntimeProvider) (*image.Image, error) {
-  // ensure valid image configuriation
+	// ensure valid image configuriation
 	if config.GetImage() == nil {
 		return nil, fmt.Errorf("aws provider can only deploy service with an image source")
 	}
@@ -452,14 +459,14 @@ func createImage(ctx *pulumi.Context, parent pulumi.Resource, name string, authT
 		config.Type = "default"
 	}
 
-  // create the image
+	// create the image
 	return image.NewImage(ctx, name, &image.ImageArgs{
-		SourceImage:   config.GetImage().GetUri(),
+		SourceImage: config.GetImage().GetUri(),
 		RepositoryUrl: repo.RepositoryUrl,
-		Server:        pulumi.String(authToken.ProxyEndpoint),
-		Username:      pulumi.String(authToken.UserName),
-		Password:      pulumi.String(authToken.Password),
-		Runtime:       runtime(),
+		Server: pulumi.String(authToken.ProxyEndpoint),
+		Username: pulumi.String(authToken.UserName),
+		Password: pulumi.String(authToken.Password),
+		Runtime: runtime(),
 	}, pulumi.Parent(parent), pulumi.DependsOn([]pulumi.Resource{repo}))
 }
 
@@ -472,15 +479,15 @@ func (a *NitricAwsPulumiProvider) Service(ctx *pulumi.Context, parent pulumi.Res
 		return err
 	}
 
-  // Create the image
+	// Create the image
 	image, err := createImage(ctx, parent, name, a.EcrAuthToken, repo, config, runtime)
 	if err != nil {
 		return err
 	}
 
-  // Create the Lambda Function
+	// Create the Lambda Function
 	a.Lambdas[name], err = awslambda.NewFunction(ctx, name, &awslambda.FunctionArgs{
-		ImageUri:    image.URI(),
+		ImageUri: image.URI(),
 		PackageType: pulumi.String("Image"),
 		Environment: awslambda.FunctionEnvironmentArgs{Variables: envVars},
 	}, append([]pulumi.ResourceOption{pulumi.DependsOn([]pulumi.Resource{image})}, opts...)...)
@@ -502,22 +509,22 @@ const bucket = bucket('images').allow('read')
 await bucket.file('cat.png').read()
 ```
 
-This would send a gRPC request to the provider's runtime implementation. This is defined in the nitric core [protocol buffer contracts](https://github.com/nitrictech/nitric/tree/main/nitric/proto). For a storage read request, it corresponds to this:
+This would send a gRPC request to the provider's runtime implementation. This is defined in the Nitric core [protocol buffer contracts](https://github.com/nitrictech/nitric/tree/main/nitric/proto). For a storage read request, it corresponds to this:
 
 ```js
 // Request to retrieve a storage item
 message StorageReadRequest {
-  // Nitric name of the bucket to retrieve from
-  // this will be automatically resolved to the provider specific bucket identifier.
-  string bucket_name = 1;
-  // Key of item to retrieve
-  string key = 2;
+	// Nitric name of the bucket to retrieve from
+	// this will be automatically resolved to the provider specific bucket identifier.
+	string bucket_name = 1;
+	// Key of item to retrieve
+	string key = 2;
 }
 
 // Returned storage item
 message StorageReadResponse {
-  // The body bytes of the retrieved storage item
-  bytes body = 1;
+	// The body bytes of the retrieved storage item
+	bytes body = 1;
 }
 ```
 
@@ -540,9 +547,9 @@ import (
 	"context"
 	"fmt"
 	"io"
-  "os"
+	"os"
 
-  "github.com/nitrictech/nitric-provider-template/custom-provider/runtime/resource"
+	"github.com/nitrictech/nitric-provider-template/custom-provider/runtime/resource"
 	storagepb "github.com/nitrictech/nitric/core/pkg/proto/storage/v1"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -554,8 +561,8 @@ import (
 )
 
 type StorageServer struct {
-  s3Client      s3iface.S3API
-	provider      *resource.ResourceServer
+	s3Client			s3iface.S3API
+	provider			*resource.ResourceServer
 }
 
 // Make sure it adheres to the Storage Server implementation
@@ -568,7 +575,7 @@ func (s *StorageService) Read(ctx context.Context, req *storagepb.StorageReadReq
 	// Get object from s3 client
 	resp, err := s.s3Client.GetObject(ctx, &s3.GetObjectInput{
 		Bucket: bucketName,
-		Key:    aws.String(req.Key),
+		Key:		aws.String(req.Key),
 	})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "error occurred reading file: %v", err)
@@ -597,8 +604,8 @@ func New(provider *resource.ResourceServer) (*StorageServer, error) {
 	s3Client := s3.NewFromConfig(cfg)
 
 	return &StorageService{
-		s3Client:      s3Client,
-		provider:      provider,
+		s3Client:			s3Client,
+		provider:			provider,
 	}, nil
 }
 ```

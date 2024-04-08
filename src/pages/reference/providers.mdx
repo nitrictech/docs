@@ -17,7 +17,7 @@ const images = bucket('images').allow('read', 'write')
 const mainApi = api('main')
 ```
 
-The Nitric CLI would take these code declarations and send it to the provider for deployment. The provider will then convert this declaration to actual cloud infrastructure. The specific cloud service that the provider will use for each Nitric resource is listed in the table below.
+The Nitric CLI would take these code declarations and send it to the provider for deployment. The provider will then convert this declaration to actual cloud infrastructure. The specific cloud service that the provider will use for each Nitric resource is listed in the [table below](#standard-providers).
 
 ```js
 mainApi.get('/', async (ctx) => {
@@ -45,7 +45,7 @@ The providers for AWS, GCP, and Azure are built and maintained by Nitric in our 
 | [Key Value Stores ](/keyvalue)         | [DynamoDB](./providers/aws/keyvalue)                 | [Table Storage](./providers/azure/keyvalue) | [FireStore](./providers/gcp/keyvalue)        | BoltDB                                                                             |
 | [Messaging: Topics](/messaging#topics) | [SNS](./providers/aws/topics)                        | [Event Grid](./providers/azure/topics)      | [PubSub](./providers/gcp/topics)             | Custom                                                                             |
 | [Messaging: Queues](/messaging#queues) | [SQS](./providers/aws/queues)                        | [Storage Queues](./providers/azure/queues)  | [PubSub](./providers/gcp/queues)             | Custom                                                                             |
-| [Schedules](/schedules)                | [CloudWatch Event Bridge](./providers/aws/schedules) | [Dapr Binding](./providers/azure/schedules) | [Cloud Scheduler](./providers/gcp/schedules) | _currently unavailable_                                                            |
+| [Schedules](/schedules)                | [CloudWatch Event Bridge](./providers/aws/schedules) | [Dapr Binding](./providers/azure/schedules) | [Cloud Scheduler](./providers/gcp/schedules) | Custom                                                                             |
 | [Secrets](/secrets)                    | [Secrets Manager](./providers/aws/secrets)           | [Key Vault](./providers/azure/secrets)      | [Secret Manager](./providers/gcp/secrets)    | Custom                                                                             |
 | [Storage](/storage#buckets)            | [S3](./providers/aws/storage)                        | [Blob Storage](./providers/azure/storage)   | [Cloud Storage](./providers/gcp/storage)     | SeaweedFS                                                                          |
 | Services                               | Lambda                                               | Container Apps                              | CloudRun                                     | Docker                                                                             |
