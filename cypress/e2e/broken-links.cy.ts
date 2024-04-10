@@ -21,8 +21,10 @@ const IGNORED_URLS = [
   'https://vercel.com/new/clone?repository-url=https://github.com/nitrictech/nitric-todo&env=API_BASE_URL',
   'http://localhost:4000',
   'http://localhost:4001',
+  'http://localhost:4321',
   'https://www.gutenberg.org/cache/epub/42671/pg42671.txt',
   'https://stackoverflow.com/help/minimal-reproducible-example',
+  'https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks',
 ]
 
 const isExternalUrl = (url: string) => {

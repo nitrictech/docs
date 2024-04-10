@@ -179,6 +179,7 @@ enqueueing
 dequeueing
 requesters
 iterable
+uptime
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)

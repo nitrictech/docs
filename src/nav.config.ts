@@ -302,6 +302,10 @@ const fullNav: FullNav = {
           href: '/guides/getting-started/nodejs/byo-database',
         },
         {
+          title: 'Uptime Monitor',
+          href: '/guides/getting-started/nodejs/uptime',
+        },
+        {
           title: 'Websockets',
           href: '/guides/getting-started/nodejs/websockets',
         },
