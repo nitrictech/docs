@@ -9,7 +9,7 @@ Create a new bucket for storing and retrieving files.
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-assets = bucket('assets').allow('read', 'write', 'delete')
+assets = bucket('assets').allow('reading', 'writing', 'deleting')
 
 Nitric.run()
 ```
@@ -58,5 +58,5 @@ See the following for examples on working with files in a bucket:
 - [file.read()](./bucket-file-read)
 - [file.write()](./bucket-file-write)
 - [file.delete()](./bucket-file-delete)
-- [file.getDownloadUrl()](./bucket-file-downloadurl)
-- [file.getUploadUrl()](./bucket-file-uploadurl)
+- [file.download_url()](./bucket-file-downloadurl)
+- [file.upload_url()](./bucket-file-uploadurl)

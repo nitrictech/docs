@@ -231,13 +231,13 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 Define a bucket named `profilesImg` with reading/writing permissions
 
 ```python
-photos = bucket("photos").allow('read','write')
+photos = bucket("photos").allow('reading','writing')
 ```
 
 Add imports for time and date so that we can set up caching/expiry headers
 
 ```python
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 ```
 
 ### Get a URL to upload a profile image
@@ -248,9 +248,9 @@ async def upload_profile_image(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
 
   photo =  photos.file(f'images/{pid}/photo.png')
-  photo_url = await photo.upload_url(expiry=3600)
+  photo_url = await photo.upload_url(expiry=timedelta(seconds=3600))
 
-  expires = datetime.utcnow() + timedelta(seconds=(3600))
+  expires = datetime.now(UTC) + timedelta(seconds=(3600))
   expires = expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
   ctx.res.headers['Expires'] = expires
 
@@ -265,9 +265,9 @@ async def download_profile_image(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
 
   photo =  photos.file(f'images/{pid}/photo.png')
-  photo_url = await photo.download_url(expiry=3600)
+  photo_url = await photo.download_url(expiry=timedelta(seconds=3600))
 
-  expires = datetime.utcnow() + timedelta(seconds=(3600))
+  expires = datetime.now(UTC) + timedelta(seconds=(3600))
   expires = expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
   ctx.res.headers['Expires'] = expires
 
@@ -282,9 +282,9 @@ async def download_profile_image(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
 
   photo =  photos.file(f'images/{pid}/photo.png')
-  photo_url = await photo.download_url(expiry=3600)
+  photo_url = await photo.download_url(expiry=timedelta(seconds=3600))
 
-  expires = datetime.utcnow() + timedelta(seconds=(3600))
+  expires = datetime.now(UTC) + timedelta(seconds=(3600))
   expires = expires.strftime("%a, %d %b %Y %H:%M:%S GMT")
   ctx.res.headers['Expires'] = expires
   ctx.res.headers['Location'] = [photo_url]
