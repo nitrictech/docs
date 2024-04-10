@@ -10,7 +10,7 @@ from nitric.resources import bucket
 from nitric.application import Nitric
 
 # Create a reference to an 'assets' bucket with permissions to delete
-assets = bucket('assets').allow('deleting')
+assets = bucket('assets').allow('delete')
 
 logo = assets.file('images/logo.png')
 
@@ -18,6 +18,8 @@ await logo.delete()
 
 Nitric.run()
 ```
+
+> Earlier versions of the Nitric SDK used 'deleting'. The latest version uses 'delete'.
 
 ## Examples
 
@@ -27,7 +29,7 @@ Nitric.run()
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-assets = bucket('assets').allow('deleting')
+assets = bucket('assets').allow('delete')
 
 logo = assets.file('images/logo.png')
 
