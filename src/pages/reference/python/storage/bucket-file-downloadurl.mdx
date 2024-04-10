@@ -9,7 +9,7 @@ Create a signed url for read access to a file.
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-assets = bucket('assets').allow('reading')
+assets = bucket('assets').allow('read')
 
 logo = assets.file('images/logo.png')
 
@@ -17,6 +17,8 @@ download_url = await logo.download_url()
 
 Nitric.run()
 ```
+
+> Earlier versions of the Nitric SDK used 'reading'. The latest version uses 'read'.
 
 ## Parameters
 
@@ -34,7 +36,7 @@ Nitric.run()
 from nitric.resources import bucket
 from nitric.application import Nitric
 
-assets = bucket('assets').allow('reading')
+assets = bucket('assets').allow('read')
 
 logo = assets.file('images/logo.png')
 
@@ -51,7 +53,7 @@ from nitric.application import Nitric
 from nitric.context import HttpContext
 
 main_api = api('main')
-images = bucket('images').allow('reading')
+images = bucket('images').allow('read')
 
 @main_api.get('/images/:id')
 async def get_image(ctx: HttpContext):

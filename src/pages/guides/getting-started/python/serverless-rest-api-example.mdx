@@ -231,8 +231,10 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 Define a bucket named `profilesImg` with reading/writing permissions
 
 ```python
-photos = bucket("photos").allow('reading','writing')
+photos = bucket("photos").allow('read','write')
 ```
+
+> Earlier versions of the Nitric SDK used 'reading', 'writing', etc. permissions. The latest version uses 'read', 'write', etc.
 
 Add imports for time and date so that we can set up caching/expiry headers
 
