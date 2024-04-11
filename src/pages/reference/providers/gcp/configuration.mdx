@@ -34,6 +34,7 @@ schedule-timezone: Australia/Sydney # Available since v0.27.0
 import:
   # A map of nitric names to GCP Secret Manager names
   secrets: # Available since v1.4.0
+    # NOTE: Imported secrets must exist in the same project as specified by gcp-project-id 
     # In typescript this would import the provided secret reference for a secret declared as
     # const mySecret = secret('my-secret');
     my-secret: existing-secret
