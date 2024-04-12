@@ -151,6 +151,11 @@ APIs can include security definitions for OIDC-compatible providers such as [Aut
   limiting application load from unwanted or malicious requests.
 </Note>
 
+<Note>
+  Security rules are currently **not enforced** when using nitric for **local**
+  development.
+</Note>
+
 ### Authentication
 
 APIs can be configured to automatically authenticate and allow or reject incoming requests. A `securityDefinitions` object can be provided, which _defines_ the authentication requirements that can later be enforced by the API.
