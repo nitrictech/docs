@@ -330,6 +330,10 @@ const fullNav: FullNav = {
           title: 'Predictive Text API using Tensorflow',
           href: '/guides/getting-started/python/text-prediction',
         },
+        {
+          title: 'Scheduled reports with Google Sheets and Google Drive',
+          href: '/guides/getting-started/python/scheduled-report',
+        },
       ],
     },
     {
