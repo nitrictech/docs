@@ -48,7 +48,7 @@ def service_login():
     if credentials_path:
         creds, _ = google.auth.load_credentials_from_file(credentials_path, SCOPES)
     else:
-        raise Exception("Missing/Invalid credentials.")
+        raise ValueError("GOOGLE_APPLICATION_CREDENTIALS is not set, failed to load credentials")
 
     return build('sheets', 'v4', credentials=creds), build('drive', 'v3', credentials=creds)
 ```
