@@ -59,8 +59,8 @@ def service_login():
 
 ```python  {{ tag: 'services\helpers\google.py' }}
 def create_spreadsheet(title, sheets_service):
-    spreadsheet = {'properties': {'title': title}}
-    spreadsheet = sheets_service.spreadsheets().create(body=spreadsheet, fields='spreadsheetId').execute()
+    body = {'properties': {'title': title}}
+    spreadsheet = sheets_service.spreadsheets().create(body=body, fields='spreadsheetId').execute()
     return spreadsheet.get('spreadsheetId')
 ```
 
