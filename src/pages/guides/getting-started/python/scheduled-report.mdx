@@ -33,7 +33,7 @@ Start by creating a new folder inside 'service' named 'helpers' and creating a b
 
 We'll begin coding in a new file `services\helpers\google.py`, creating a function that can authenticate with Google's API and ensure our application has the necessary permissions.
 
-```python  {{ tag: 'services\helpers\google.py' }}
+```python {{ tag: 'services\helpers\google.py' }}
 import google.auth
 from googleapiclient.discovery import build
 import os
@@ -53,11 +53,11 @@ def service_login():
     return build('sheets', 'v4', credentials=creds), build('drive', 'v3', credentials=creds)
 ```
 
-## Create, populate and share a speadsheet
+## Create, populate and share a spreadsheet
 
 ### Create a new sheet
 
-```python  {{ tag: 'services\helpers\google.py' }}
+```python {{ tag: 'services\helpers\google.py' }}
 def create_spreadsheet(title, sheets_service):
     body = {'properties': {'title': title}}
     spreadsheet = sheets_service.spreadsheets().create(body=body, fields='spreadsheetId').execute()
