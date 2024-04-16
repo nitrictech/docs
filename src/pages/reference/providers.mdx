@@ -2,13 +2,13 @@ export const description = 'Details on the cloud providers supported by Nitric'
 
 # Providers
 
-Nitric can declare and interact with cloud features in a way that doesn't couple with the cloud. Nitric providers are the abstraction layer that enables this.
+Nitric can declare and interact with cloud features in a way that is decoupled from any particular cloud provider. Nitric providers are the abstraction layer that enables this.
 
-Providers are individual plugins comprised of two components, the logic which deploys your services and the logic to handle SDK calls at runtime.
+Providers are separate plugins comprised of two components—a Deployment Engine, which automatically deploys your cloud resources and a Runtime Adapter, which handles requests from the SDKs forwarding them to appropriate cloud service APIs.
 
 ## How it works
 
-The code you write declares a number of resources, services, and permissions. The following code defines an API named `main` and a bucket named `images`, with permissions to `read` and `write`.
+Applications built with nitric declare resources, services, and permissions directly in the application code. The following example defines an API named `main`, a bucket named `images`, and permissions for the service to `read` and `write` from the bucket.
 
 ```js
 import { api, bucket } from '@nitric/sdk'
