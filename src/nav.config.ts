@@ -2323,6 +2323,10 @@ const fullNav: FullNav = {
           title: 'Building a Custom Provider',
           href: '/reference/providers/custom/building-custom-provider',
         },
+        {
+          title: 'Extending a Base Provider',
+          href: '/reference/providers/custom/extend-standard-provider',
+        },
       ],
     },
   ],
