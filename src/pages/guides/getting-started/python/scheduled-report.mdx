@@ -123,7 +123,7 @@ from helpers import create_spreadsheet, generate_dummy_data, insert_data_into_sp
 report_schedule = schedule('run-a-report')
 
 @report_schedule.every('1 days')
-async def process_transactions(ctx):
+async def daily_report(ctx):
     sheets_service, drive_service = service_login()
     spreadsheet_id = create_spreadsheet("Daily Report", sheets_service)
     dummy_data = generate_dummy_data(rows=20)
