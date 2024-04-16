@@ -10,14 +10,16 @@ Providers are separate plugins comprised of two components—a Deployment Engine
 
 Applications built with nitric declare resources, services, and permissions directly in the application code. The following example defines an API named `main`, a bucket named `images`, and permissions for the service to `read` and `write` from the bucket.
 
-```js
+```js {{ tag: 'services/example.js' }}
 import { api, bucket } from '@nitric/sdk'
 
 const images = bucket('images').allow('read', 'write')
 const mainApi = api('main')
 ```
 
-The Nitric CLI would take these code declarations and send it to the provider for deployment. The provider will then convert this declaration to actual cloud infrastructure. The specific cloud service that the provider will use for each Nitric resource is listed in the [table below](#standard-providers).
+The chosen language SDKs forward these resource requests to the Nitric CLI, which compiles a graph of the required resources and their connections. The graph of cloud resources is then sent the chosen provider for deployment. The provider convert this declaration graph into any cloud resources it wishes that fulfill the developers intentions, typically using Infrastructure as Code tools like Pulumi or Terraform.
+
+The specific cloud services that Nitric's out-of-the-box providers use for each resource is listed in the [table below](#standard-providers).
 
 ```js
 mainApi.get('/', async (ctx) => {
