@@ -8,7 +8,7 @@ Providers are separate plugins comprised of two components—a Deployment Engine
 
 ## How it works
 
-Applications built with nitric declare resources, services, and permissions directly in the application code. The following example defines an API named `main`, a bucket named `images`, and permissions for the service to `read` and `write` from the bucket.
+Applications built with Nitric declare resources, services, and permissions directly in the application code. The following example defines an API named `main`, a bucket named `images`, and permissions for the service to `read` and `write` from the bucket.
 
 ```js {{ tag: 'services/example.js' }}
 import { api, bucket } from '@nitric/sdk'
@@ -31,7 +31,7 @@ mainApi.get('/', async (ctx) => {
 })
 ```
 
-The runtime adapter acts as a nitric protocol compliant server, accepting runtime calls made by a nitric client (such as one of the nitric language SDKs), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specfic SDK.
+The runtime adapter acts as a Nitric protocol compliant server, accepting runtime calls made by a Nitric client (such as one of the Nitric language SDKs), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specfic SDK.
 
 This allows your functions to be built, testing and run independent of any underlying cloud service. The end result is code that's faster to write, easier to test and remains portable between cloud services and cloud providers.
 
@@ -60,9 +60,9 @@ Our code is completely open-source on our [GitHub](https://github.com/nitrictech
 
 ## Custom Providers
 
-Because nitric providers are plugins you're able to create or extend them to meet your specific deployment requirements. Common reasons for custom provider development include:
+Because Nitric providers are plugins you're able to create or extend them to meet your specific deployment requirements. Common reasons for custom provider development include:
 
-- Using a language other than Go to develop a provider (nitric providers can be written in many other languages).
+- Using a language other than Go to develop a provider (Nitric providers can be written in many other languages).
 - Using a specific Infrastructure as Code engine, e.g. using Terraform or AWS CDK instead of Pulumi.
 - Changing the way resources are deployed to use a preferred service or meet regulatory or policy requirements within your organization.
 - Reusing existing work on infrastructure automation, such using existing Terraform Modules for deployment with Nitric.
