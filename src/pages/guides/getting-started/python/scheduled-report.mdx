@@ -85,7 +85,7 @@ def generate_dummy_data(rows=10):
 
 ### Insert the generated data into the spreadsheet
 
-```python
+```python {{ tag: 'services\helpers\google.py' }}
 def insert_data_into_spreadsheet(spreadsheet_id, data, sheets_service):
     range_name = 'A1'
     body = {'values': data}
@@ -97,7 +97,7 @@ def insert_data_into_spreadsheet(spreadsheet_id, data, sheets_service):
 
 ### Share the generated spreadsheet with another account
 
-```python
+```python {{ tag: 'services\helpers\google.py' }}
 def share_spreadsheet(spreadsheet_id, email_address, drive_service):
     drive_service.permissions().create(
         fileId=spreadsheet_id,
@@ -106,15 +106,15 @@ def share_spreadsheet(spreadsheet_id, email_address, drive_service):
     ).execute()
 ```
 
-## Daily Report Schedule
+## Daily report schedule
 
 Next we'll pull it all together in our scheduled service, which will run daily and send an invitation to the specified user.
 
-Create a file named `report.py`, where you'll implement your scheduled task service.
+Create a file named `report.py` in the `services` directory, where you'll implement your scheduled task service.
 
 > Note: Nitric allows you to set schedules using simple expressions e.g. `7 days`, you can also use [cron expressions](/schedules#using-cron) for more complicated requirements.
 
-```python
+```python {{ tag: 'services\report.py' }}
 import os
 from nitric.resources import schedule
 from nitric.application import Nitric
