@@ -31,7 +31,7 @@ mainApi.get('/', async (ctx) => {
 })
 ```
 
-The runtime adapter acts as a nitric protocol compliant server, accepting runtime calls made by a nitric client (such as one of the nitric language SDKs), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specfic SDK. 
+The runtime adapter acts as a nitric protocol compliant server, accepting runtime calls made by a nitric client (such as one of the nitric language SDKs), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specfic SDK.
 
 This allows your functions to be built, testing and run independent of any underlying cloud service. The end result is code that's faster to write, easier to test and remains portable between cloud services and cloud providers.
 
@@ -56,6 +56,22 @@ Nitric publishes standard providers for AWS, GCP, and Azure, which are available
 | [Storage](/storage#buckets)            | [S3](./providers/aws/storage)                        | [Blob Storage](./providers/azure/storage)   | [Cloud Storage](./providers/gcp/storage)     | SeaweedFS                                                                          |
 | Services                               | Lambda                                               | Container Apps                              | CloudRun                                     | Docker                                                                             |
 
-Nitric is open-source and available on [GitHub](https://github.com/nitrictech/nitric), so you can know exactly how your resources are being deployed and handled at runtime.
+Our code is completely open-source on our [GitHub](https://github.com/nitrictech/nitric), so you can know exactly how your resources are being deployed and handled at runtime.
 
-If you have any questions or are curious about building your own custom provider, you can read further documentation [here](./providers/custom/building-custom-provider) or ask our team any questions on [Discord](https://nitric.io/chat).
+## Custom Providers
+
+Because nitric providers are plugins you're able to create or extend them to meet your specific deployment requirements. Common reasons for custom provider development include:
+
+- Using a language other than Go to develop a provider (nitric providers can be written in many other languages).
+- Using a specific Infrastructure as Code engine, e.g. using Terraform or AWS CDK instead of Pulumi.
+- Changing the way resources are deployed to use a preferred service or meet regulatory or policy requirements within your organization.
+- Reusing existing work on infrastructure automation, such using existing Terraform Modules for deployment with Nitric.
+- Deployments to another cloud provider or on-premises deployments.
+  You can read more about building custom providers [here](/reference/providers/custom).
+  <Note>
+    Improving the ease and flexibility of custom provider development is
+    currently a priority for the Nitric team, if you need help or want to
+    request a feature get in touch on
+    [GitHub](https://github.com/nitrictech/nitric) or
+    [Discord](https://nitric.io/chat).
+  </Note>
