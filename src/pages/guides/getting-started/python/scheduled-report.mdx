@@ -31,9 +31,9 @@ You can now delete all files in the `services/` folder, we'll create new service
 
 Start by creating a new folder inside 'service' named 'helpers' and creating a blank `__init__.py` to identify it as a python package.
 
-We'll begin coding in a new file `services\helpers\google.py`, creating a function that can authenticate with Google's API and ensure our application has the necessary permissions.
+We'll begin coding in a new file `services/helpers/google.py`, creating a function that can authenticate with Google's API and ensure our application has the necessary permissions.
 
-```python {{ tag: 'services\helpers\google.py' }}
+```python {{ tag: 'services/helpers/google.py' }}
 import google.auth
 from googleapiclient.discovery import build
 import os
@@ -57,7 +57,7 @@ def service_login():
 
 ### Create a new sheet
 
-```python {{ tag: 'services\helpers\google.py' }}
+```python {{ tag: 'services/helpers/google.py' }}
 def create_spreadsheet(title, sheets_service):
     body = {'properties': {'title': title}}
     spreadsheet = sheets_service.spreadsheets().create(body=body, fields='spreadsheetId').execute()
@@ -66,7 +66,7 @@ def create_spreadsheet(title, sheets_service):
 
 ### Generate sample data for the report
 
-```python {{ tag: 'services\helpers\google.py' }}
+```python {{ tag: 'services/helpers/google.py' }}
 import random
 import datetime
 
@@ -85,7 +85,7 @@ def generate_dummy_data(rows=10):
 
 ### Insert the generated data into the spreadsheet
 
-```python {{ tag: 'services\helpers\google.py' }}
+```python {{ tag: 'services/helpers/google.py' }}
 def insert_data_into_spreadsheet(spreadsheet_id, data, sheets_service):
     range_name = 'A1'
     body = {'values': data}
@@ -97,7 +97,7 @@ def insert_data_into_spreadsheet(spreadsheet_id, data, sheets_service):
 
 ### Share the generated spreadsheet with another account
 
-```python {{ tag: 'services\helpers\google.py' }}
+```python {{ tag: 'services/helpers/google.py' }}
 def share_spreadsheet(spreadsheet_id, email_address, drive_service):
     drive_service.permissions().create(
         fileId=spreadsheet_id,
@@ -114,7 +114,7 @@ Create a file named `report.py` in the `services` directory, where you'll implem
 
 > Note: Nitric allows you to set schedules using simple expressions e.g. `7 days`, you can also use [cron expressions](/schedules#using-cron) for more complicated requirements.
 
-```python {{ tag: 'services\report.py' }}
+```python {{ tag: 'services/report.py' }}
 import os
 from nitric.resources import schedule
 from nitric.application import Nitric
