@@ -18,7 +18,7 @@ import { FaNodeJs, FaPython, FaJava } from 'react-icons/fa'
 import { SiCsharp, SiPulumi, SiDart } from 'react-icons/si'
 import { BiLogoGoLang } from 'react-icons/bi'
 import { useRouter } from 'next/router'
-import { RefreshCcwIcon } from 'lucide-react'
+import { RefreshCcwIcon, ToggleLeftIcon } from 'lucide-react'
 
 export const topLevelNavigation = [
   { text: 'Nitric.io', href: 'https://nitric.io' },
@@ -128,6 +128,11 @@ const fullNav: FullNav = {
           title: 'Upgrade from v0',
           href: '/support/upgrade',
           icon: RefreshCcwIcon,
+        },
+        {
+          title: 'Preview Features',
+          href: '/reference/preview-features',
+          icon: ToggleLeftIcon,
         },
       ],
     },
@@ -2317,7 +2322,7 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'Custom Provider',
+      title: 'Custom Providers',
       links: [
         {
           title: 'Building a Custom Provider',
@@ -2326,6 +2331,10 @@ const fullNav: FullNav = {
         {
           title: 'Extending a Base Provider',
           href: '/reference/providers/custom/extend-standard-provider',
+        },
+        {
+          title: 'Docker Providers',
+          href: '/reference/providers/install/docker',
         },
       ],
     },
