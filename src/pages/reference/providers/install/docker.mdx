@@ -24,11 +24,13 @@ provider: docker://my-provider
 ```
 
 <Note>
-The `docker://` prefix is required to indicate that the provider is a Docker container image.
+  The `docker://` prefix is required to indicate that the provider is a Docker
+  container image.
 </Note>
 
 <Note>
-If the given image is found locally it will be used without pulling from a registry. Otherwise, the image will be pulled from the default registry.
+  If the given image is found locally it will be used without pulling from a
+  registry. Otherwise, the image will be pulled from the default registry.
 </Note>
 
 Tags are also suppported and recommended to ensure the correct version of the provider is used. For example, to use a custom provider in a container image named `my-provider` with the tag `latest`, update the stack file as follows :
