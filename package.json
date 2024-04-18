@@ -2,7 +2,7 @@
   "name": "nitric-docs",
   "version": "0.1.0",
   "scripts": {
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && node scripts/collect-assets",
     "dev": "next dev",
     "build": "next build",
     "postbuild": "next-sitemap",
@@ -50,6 +50,7 @@
     "recma-nextjs-static-props": "^1.0.0",
     "rehype-mdx-title": "^2.0.0",
     "remark": "^14.0.2",
+    "remark-code-import": "^1.2.0",
     "remark-gfm": "^3.0.1",
     "remark-mdx": "^2.3.0",
     "shiki": "^0.11.1",
