@@ -502,6 +502,39 @@ const fullNav: FullNav = {
       ],
     },
   ],
+  support: [
+    {
+      links: [
+        {
+          title: 'Support',
+          href: '/support',
+        },
+        {
+          title: 'Upgrade from v0',
+          href: '/support/upgrade',
+        },
+      ],
+    },
+  ],
+  ['reference/preview-features']: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/preview-features',
+        },
+      ],
+    },
+    {
+      title: 'Current Preview Features',
+      links: [
+        {
+          title: 'Docker Providers',
+          href: '/reference/providers/install/docker',
+        },
+      ],
+    },
+  ],
   faq: [
     {
       links: [
