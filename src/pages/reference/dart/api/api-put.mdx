@@ -1,0 +1,89 @@
+export const description =
+  "Reference for Nitric's Dart library - Register an API route and set a specific HTTP PUT handler on that route."
+
+# Dart - api.put()
+
+Register an API route and set a specific HTTP PUT handler on that route.
+
+<Note>
+  This method is a convenient short version of
+  [api().route().put()](./api-route-put)
+</Note>
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+// Create an API named 'public'
+final api = Nitric.api("public");
+
+api.put("/customers/:customerId", (ctx) async {
+  // Extract the path parameter
+  final id = ctx.req.pathParams["customerId"]!;
+
+  // Construct response for the PATCH: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
+```
+
+## Parameters
+
+<Properties>
+  <Property name="match" required type="String">
+    The path matcher to use for the route. Matchers accept path parameters in
+    the form of a colon prefixed string. The string provided will be used as
+    that path parameter's name when calling handlers.
+  </Property>
+  <Property name="handler" required type="HttpHandler">
+    The middleware service to use as the handler for HTTP requests.
+  </Property>
+  <Property name="security" type="List<OidcOptions>">
+    Security rules to apply with scopes to the entire API.
+  </Property>
+</Properties>
+
+## Examples
+
+### Register a handler for PUT requests
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+// Create an API named 'public'
+final api = Nitric.api("public");
+
+api.put("/customers", (ctx) async {
+  // Construct response for the PUT: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
+```
+
+### Access the request body
+
+The PUT request body is accessible from the `ctx.req` object.
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+// Create an API named 'public'
+final api = Nitric.api("public");
+
+api.put("/customers/:customerId", (ctx) async {
+  // Extract the path parameter
+  final id = ctx.req.pathParams["customerId"]!;
+
+  // Extract the request body
+  final customerData = ctx.req.json();
+
+  // Construct response for the PATCH: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
+```

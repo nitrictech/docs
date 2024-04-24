@@ -1,0 +1,66 @@
+export const description =
+  "Reference for Nitric's Dart library - Register a handler for HTTP PATCH requests to the route."
+
+# Dart - api.route.patch()
+
+Register a handler for HTTP PATCH requests to the route.
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final customersRoute = Nitric.api("public").route("/customers");
+
+customersRoute.patch((ctx) async {
+  // construct response for the PATCH: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
+```
+
+## Parameters
+
+<Properties>
+  <Property name="handler" required type="HttpHandler">
+    The middleware service to use as the handler for HTTP requests.
+  </Property>
+  <Property name="security" type="List<OidcOptions>">
+    Security rules to apply with scopes to the entire API.
+  </Property>
+</Properties>
+
+## Examples
+
+### Register a handler for PATCH requests
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final customersRoute = Nitric.api("public").route("/customers");
+
+customersRoute.patch((ctx) async {
+  // construct response for the PATCH: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
+```
+
+### Access the request body
+
+The PATCH request body is accessible from the `ctx.req` object.
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final customersRoute = Nitric.api("public").route("/customers");
+
+customersRoute.patch((ctx) async {
+  final customerData = ctx.req.json();
+  // parase, validate and store the request payload if it's available
+
+  return ctx;
+});
+```

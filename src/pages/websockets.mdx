@@ -64,6 +64,24 @@ async def on_message(ctx):
 Nitric.run()
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final socket = Nitric.websocket("socket");
+
+socket.onConnect((ctx) async {
+  // handle connections
+});
+
+socket.onDisconnect((ctx) async {
+  // handle disconnections
+});
+
+socket.onMessage((ctx) async {
+  // handle messages
+});
+```
+
 </CodeGroup>
 
 ## Managing connections
@@ -121,6 +139,30 @@ async def on_disconnect(ctx):
   )
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final socket = Nitric.websocket("socket");
+final connections = Nitric.store("connections").allow([
+  KeyValueStorePermission.get,
+  KeyValueStorePermission.set,
+  KeyValueStorePermission.delete,
+]);
+
+socket.onConnect((ctx) async {
+  await connections.set(ctx.req.connectionId, {
+    // Store any metadata related to the connection here
+    "creation_time": DateTime.now(),
+  });
+
+  return ctx;
+});
+
+socket.onDisconnect((ctx) async {
+  await connections.delete(ctx.req.connectionId);
+});
 ```
 
 </CodeGroup>
@@ -205,6 +247,42 @@ async def on_message(ctx):
   await broadcast(ctx.req.data)
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final socket = Nitric.websocket("socket");
+final connections = Nitric.store("connections").allow([
+  KeyValueStorePermission.get,
+  KeyValueStorePermission.set,
+  KeyValueStorePermission.delete,
+]);
+
+socket.onConnect((ctx) async {
+  await connections.set(ctx.req.connectionId, {
+    // add metadata
+    "creation_time": DateTime.now(),
+  });
+
+  return ctx;
+});
+
+socket.onDisconnect((ctx) async {
+  await connections.delete(ctx.req.connectionId);
+});
+
+// broadcast message to all clients (including the sender)
+socket.onMessage((ctx) async {
+  final conns = connections.keys();
+
+  await Future.wait(await conns.map((conn) async {
+    // Send a message to a connection
+    return socket.send(conn, ctx.req.message);
+  }).toList());
+
+  return ctx;
+});
 ```
 
 </CodeGroup>

@@ -9,6 +9,7 @@ const SDK_LABEL_MAP = {
   nodejs: 'Node.js',
   python: 'Python',
   csharp: 'C# .NET',
+  dart: 'Dart',
 }
 
 export const useVersions = (versions?: Version[]) => {
