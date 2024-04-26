@@ -26,7 +26,7 @@ http(app, () => {
   <Property
     name="app"
     required
-    type="NodeApplication | (port: number, callback?: () => void)"
+    type="NodeApplication | ((port: number, callback?: () => void) => ServerType | Promise<ServerType>)"
   >
     Accepts an object that has a listen function on it, or pass the listener
     function itself. A listener function is a function that accepts a port and
@@ -44,8 +44,9 @@ Before testing or deploying these services you'll need to make sure you have a `
 
 ```yaml
 name: project-name
-handlers:
-  - services/*.ts
+services:
+  - match: services/*.ts
+    start: npm run dev:services $SERVICE_PATH
 ```
 
 ### Wrap a Nest.js application
@@ -54,8 +55,9 @@ For a Nest application, point your handler at the `main.ts` file.
 
 ```yaml
 name: project-name
-handlers:
-  - src/main.ts
+services:
+  - match: src/main.ts
+    start: nest start
 ```
 
 ```javascript
@@ -65,7 +67,7 @@ import { AppModule } from './app.module'
 
 async function bootstrap(port: number) {
   const app = await NestFactory.create(AppModule)
-  await app.listen(port)
+  return await app.listen(port)
 }
 
 http(bootstrap)
