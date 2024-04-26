@@ -666,6 +666,15 @@ const fullNav: FullNav = {
       ],
     },
     {
+      title: 'HTTP',
+      links: [
+        {
+          title: 'http()',
+          href: '/reference/nodejs/v0/http/http',
+        },
+      ],
+    },
+    {
       title: 'Collections',
       links: [
         {
@@ -928,6 +937,15 @@ const fullNav: FullNav = {
         {
           title: 'api.route.patch()',
           href: '/reference/nodejs/api/api-route-patch',
+        },
+      ],
+    },
+    {
+      title: 'HTTP',
+      links: [
+        {
+          title: 'http()',
+          href: '/reference/nodejs/http/http',
         },
       ],
     },
