@@ -17,7 +17,7 @@ const providers = [
   {
     href: '/reference/providers',
     name: 'Overview',
-    description: 'Learn about are Nitric providers',
+    description: 'Learn about our Nitric providers',
     icon: CloudIcon,
   },
   {
