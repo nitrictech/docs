@@ -6,9 +6,6 @@ To start with nitric, run the 'nitric new' command:
 
 This will guide you through project creation, including selecting from available templates.
 
-Common commands in the CLI that you’ll be using:
-
-
 For further details visit our docs https://nitric.io/docs
 
 Usage:
@@ -31,5 +28,3 @@ Flags:
   -h, --help   help for nitric
 
 Use "nitric [command] --help" for more information about a command.
- warning  A new version of Nitric is available. To upgrade from version '1.37.6' to '1.38.2', visit https://nitric.io/docs/installation for instructions and release notes.
-
