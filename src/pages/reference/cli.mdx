@@ -8,31 +8,8 @@ To verify your [installation](/guides/getting-started/installation) run `nitric 
 
 To get a list of the available commands, run the following command:
 
-```
-nitric help
+```text file=<rootDir>/src/assets/cli-usage.txt
 
-Usage:
-  nitric [command]
-
-Available Commands:
-  completion  Generate the autocompletion script for the specified shell
-  down        Undeploy a previously deployed stack, deleting resources
-  feedback    Provide feedback on your experience with nitric
-  help        Help about any command
-  info        Gather information about Nitric and the environment
-  list        List all project stacks and their status
-  new         Create a new project
-  run         Run your project locally for development and testing
-  stack       Manage stacks (the deployed app containing multiple resources e.g. services, buckets and topics)
-  up          Create or update a deployed stack
-  version     Print the version number of this CLI
-
-Flags:
-  -h, --help                   help for nitric
-  -o, --output stringEnumVar   output format (default table)
-  -v, --verbose int            set the verbosity of output (larger is more verbose) (default 1)
-
-Use "nitric [command] --help" for more information about a command.
 ```
 
 ## Common Commands
@@ -126,7 +103,7 @@ When you are done developing your application and you want to run and test it lo
 nitric start
 ```
 
-This will run the Nitric server for local testing. This will output a local endpoint so that you can test your apis.
+This will run the Nitric server for local testing. This will output local endpoints for your apis and open the [local dashboard](/guides/getting-started/local-dashboard) for testing.
 
 ## Deployment
 
@@ -156,7 +133,7 @@ nitric down
 
 ### Listing Stacks
 
-To get information about your stacks, use the `nitric list` command.
+To get information about your stacks, use the `nitric stack list` command.
 
 This will provide give information about its name, its deployment status, when it was last updated, the resource count, and a url to view the deployment on the pulumi console (will require a pulumi account).
 
@@ -168,24 +145,8 @@ To get information about the CLI version you are using, you can use:
 nitric version
 ```
 
-To get more detailed information about the Nitric runtime, you can use:
-
-```
-nitric info
-```
-
 For information regarding individual commands, use the `--help` argument on any of the CLI commands. Alternatively you can run:
 
 ```
 nitric help
-```
-
-For more verbose input, specify a verbosity level with `--verbose`. The larger the number, the more verbose.
-
-## Feedback
-
-If you want to provide feedback on the CLI or the framework in general, you can use the `nitric feedback` command. This will template a github issue for you to submit. Alternatively, you can open an issue manually [here](https://github.com/nitrictech/cli/issues/new/choose).
-
-```
-nitric feedback
 ```

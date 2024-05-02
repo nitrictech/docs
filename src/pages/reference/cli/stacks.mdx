@@ -16,34 +16,9 @@ To create a stack use the new command from your project root. Each stack name mu
 nitric stack new
 ```
 
-Follow the prompts to create a stack for your provider.
+Continue by selecting your preferred cloud, this will create your stack definition file. The stack definition will be created in the root of your project as a YAML file prefixed with `nitric.` e.g. `nitric.aws-stack.yaml`.
 
-<CodeGroup>
-
-```{{ title: "AWS" }}
-What should we name this stack? aws-stack
-Which provider do you want to deploy with? aws
-Which region should the stack deploy to? us-east-1
-```
-
-```{{ title: "Azure" }}
-What should we name this stack? azure-stack
-Which provider do you want to deploy with? azure
-Which region should the stack deploy to? eastus
-Provide the organisation to associate with the API: my-org
-Provide the Admin email to associate with the API: admin@company.co
-```
-
-```{{ title: "Google Cloud" }}
-What should we name this stack? gcp-stack
-Which provider do you want to deploy with? gcp
-Which region should the stack deploy to? us-east1
-Provide the gcp project ID to deploy to: project-id
-```
-
-</CodeGroup>
-
-The stack definition will be created in the root of your project as a YAML file prefixed with `nitric-` e.g. `nitric.aws-stack.yaml`
+Now you can enter the required fields for your chosen cloud:
 
 <CodeGroup>
 
