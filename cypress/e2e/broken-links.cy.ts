@@ -1,4 +1,6 @@
 import * as pages from '../fixtures/pages.json'
+import { XMLParser } from 'fast-xml-parser'
+const parser = new XMLParser()
 
 const CORRECT_CODES = [200]
 // site should not return internal redirects
@@ -109,6 +111,33 @@ describe('Broken links test suite', () => {
             })
           }
         })
+    })
+  })
+})
+
+describe('Current links test suite', () => {
+  let paths: string[]
+
+  beforeEach(() => {
+    const PROD_BASE_URL = 'https://nitric.io/docs'
+
+    cy.request(`${PROD_BASE_URL}/sitemap-0.xml`).then((response) => {
+      const jsonObj = parser.parse(response.body, false)
+
+      paths = jsonObj.urlset.url.map((p) =>
+        p.loc === PROD_BASE_URL
+          ? '/'
+          : p.loc
+              .substring(PROD_BASE_URL.length, p.loc.length)
+              .replace('/_index', '')
+      )
+    })
+  })
+
+  it(`should visit all pages in the current prod sitemap`, function () {
+    paths.forEach((path) => {
+      cy.log(`visiting page: ${path}`)
+      cy.visit(path)
     })
   })
 })
