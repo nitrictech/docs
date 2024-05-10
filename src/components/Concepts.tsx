@@ -1,14 +1,44 @@
 import Link from 'next/link'
 import { useMotionValue } from 'framer-motion'
 
-import clsx from 'clsx'
-import { cn } from '@/lib/utils'
+import { Heading } from '@/components/Heading'
 import {
-  InformationCircleIcon,
-  RocketLaunchIcon,
-  WrenchScrewdriverIcon,
+  MagnifyingGlassIcon,
+  Square3Stack3DIcon,
 } from '@heroicons/react/24/outline'
+
+import { cn } from '@/lib/utils'
 import { ResourcePattern } from './ResourcePattern'
+
+const items = [
+  {
+    href: '/concepts/how-nitric-works',
+    name: 'How Nitric works',
+    description:
+      'The help forum is a great place to get help with any questions about Nitric.',
+    icon: Square3Stack3DIcon,
+    pattern: {
+      y: 16,
+      squares: [
+        [0, 1],
+        [1, 3],
+      ],
+    },
+  },
+  {
+    href: '/concepts/comparison',
+    name: 'Comparison with other tools',
+    description: 'How Nitric differs from alternative solutions.',
+    icon: MagnifyingGlassIcon,
+    pattern: {
+      y: -6,
+      squares: [
+        [-1, 2],
+        [1, 3],
+      ],
+    },
+  },
+]
 
 function Block({ block }) {
   let mouseX = useMotionValue(0)
@@ -32,7 +62,7 @@ function Block({ block }) {
       <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-zinc-900/7.5 group-hover:ring-zinc-900/10 dark:ring-white/10 dark:group-hover:ring-white/20" />
       <div className="relative w-full rounded-2xl p-8">
         <div
-          className={clsx(
+          className={cn(
             'flex items-center gap-2.5',
             block.description && 'mb-4'
           )}
@@ -59,34 +89,15 @@ function Block({ block }) {
   )
 }
 
-const gettingStartedBlocks = [
-  {
-    href: '/concepts/introduction',
-    name: 'What is Nitric',
-    icon: InformationCircleIcon,
-    description:
-      'Learn about the Nitric architecture and how it works under the hood.',
-  },
-  {
-    href: '/getting-started/quickstart',
-    name: 'Get started with Nitric',
-    icon: RocketLaunchIcon,
-    description: 'Start deploying in 15-minutes with our Quick Start guide.',
-  },
-  {
-    href: '/concepts/extending-nitric',
-    name: 'Customize and extend Nitric',
-    icon: WrenchScrewdriverIcon,
-    description: 'Build your own cloud providers or extend ours.',
-  },
-]
-
-export function GettingStarted() {
+export function Concepts() {
   return (
     <div className="my-16 xl:max-w-none">
-      <div className="not-prose mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3">
-        {gettingStartedBlocks.map((box) => (
-          <Block key={box.href} block={box} />
+      <Heading level={2} id="concepts">
+        Concepts
+      </Heading>
+      <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 dark:border-white/5 sm:grid-cols-2">
+        {items.map((block) => (
+          <Block key={block.href} block={block} />
         ))}
       </div>
     </div>

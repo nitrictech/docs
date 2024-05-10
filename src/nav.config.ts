@@ -4,18 +4,31 @@ import {
   ClockIcon,
   CloudIcon,
   CommandLineIcon,
-  FolderIcon,
   GlobeAltIcon,
   HomeIcon,
   LockClosedIcon,
   MegaphoneIcon,
-  PlayIcon,
   ServerIcon,
   ChatBubbleLeftRightIcon,
   QuestionMarkCircleIcon,
+  Square3Stack3DIcon,
+  BookOpenIcon,
+  WrenchScrewdriverIcon,
+  LifebuoyIcon,
+  CloudArrowUpIcon,
+  RocketLaunchIcon,
+  CubeIcon,
+  Cog6ToothIcon,
+  BoltIcon,
 } from '@heroicons/react/24/outline'
-import { FaNodeJs, FaPython, FaJava } from 'react-icons/fa'
-import { SiCsharp, SiPulumi, SiDart } from 'react-icons/si'
+import { FaNodeJs, FaPython, FaJava, FaAws, FaGithub } from 'react-icons/fa'
+import {
+  SiCsharp,
+  SiPulumi,
+  SiDart,
+  SiGooglecloud,
+  SiMicrosoftazure,
+} from 'react-icons/si'
 import { BiLogoGoLang } from 'react-icons/bi'
 import { useRouter } from 'next/router'
 import { RefreshCcwIcon, ToggleLeftIcon } from 'lucide-react'
@@ -101,9 +114,29 @@ const fullNav: FullNav = {
           icon: HomeIcon,
         },
         {
-          title: 'Getting Started',
-          href: '/guides/getting-started',
-          icon: PlayIcon,
+          title: 'Concepts',
+          href: '/concepts/introduction',
+          icon: Square3Stack3DIcon,
+        },
+        {
+          title: 'Get Started',
+          href: '/getting-started/quickstart',
+          icon: RocketLaunchIcon,
+        },
+        {
+          title: 'Guides',
+          href: '/guides',
+          icon: BookOpenIcon,
+        },
+      ],
+    },
+    {
+      title: 'Using Nitric',
+      links: [
+        {
+          title: 'Nitric CLI',
+          href: '/reference/cli',
+          icon: CommandLineIcon,
         },
       ],
     },
@@ -115,19 +148,14 @@ const fullNav: FullNav = {
       showDividerAbove: true,
       links: [
         {
-          title: 'More',
-          href: '/assets',
-          icon: FolderIcon,
+          title: 'Custom Container Builds',
+          href: '/reference/custom-containers',
+          icon: CubeIcon,
         },
         {
-          title: 'FAQ',
-          href: '/faq',
-          icon: QuestionMarkCircleIcon,
-        },
-        {
-          title: 'Upgrade from v0',
-          href: '/support/upgrade',
-          icon: RefreshCcwIcon,
+          title: 'Environment Variables',
+          href: '/reference/env',
+          icon: Cog6ToothIcon,
         },
         {
           title: 'Preview Features',
@@ -178,18 +206,38 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'Tools Reference',
+      title: 'Cloud Providers',
       links: [
         {
-          title: 'Nitric CLI',
-          href: '/reference/cli',
-          icon: CommandLineIcon,
-        },
-        {
-          title: 'Cloud Providers',
+          title: 'Overview',
           href: '/reference/providers',
           icon: CloudIcon,
         },
+        {
+          title: 'AWS',
+          href: '/reference/providers/aws',
+          icon: FaAws,
+        },
+        {
+          title: 'GCP',
+          href: '/reference/providers/gcp',
+          icon: SiGooglecloud,
+        },
+        {
+          title: 'Azure',
+          href: '/reference/providers/azure',
+          icon: SiMicrosoftazure,
+        },
+        {
+          title: 'Custom Providers',
+          href: '/reference/providers/custom/building-custom-provider',
+          icon: WrenchScrewdriverIcon,
+        },
+      ],
+    },
+    {
+      title: 'Integrations',
+      links: [
         {
           title: 'Pulumi',
           href: '/reference/pulumi',
@@ -197,174 +245,349 @@ const fullNav: FullNav = {
         },
       ],
     },
+    {
+      title: 'Additional Resources',
+      links: [
+        {
+          title: 'FAQs',
+          href: '/faq',
+          icon: QuestionMarkCircleIcon,
+        },
+        {
+          title: 'Support',
+          href: '/support',
+          icon: LifebuoyIcon,
+        },
+        {
+          title: 'Contributions',
+          href: '/contributions',
+          icon: CloudArrowUpIcon,
+        },
+        {
+          title: 'Upgrade from v0',
+          href: '/support/upgrade',
+          icon: RefreshCcwIcon,
+        },
+      ],
+    },
   ],
-  ['guides/getting-started']: [
+  concepts: [
     {
       links: [
         {
-          title: 'Quickstart',
-          href: '/guides/getting-started/quickstart',
+          title: 'What is Nitric?',
+          href: '/concepts/introduction',
         },
         {
-          title: 'Concepts',
-          href: '/guides/getting-started/concepts',
+          title: 'How Nitric works',
+          href: '/concepts/how-nitric-works',
+        },
+        {
+          title: 'IaC vs. IfC',
+          href: '/concepts/iac-vs-ifc',
+        },
+        {
+          title: 'Extending Nitric',
+          href: '/concepts/extending-nitric',
+        },
+        {
+          title: 'IAM and Access Control',
+          href: '/concepts/access-control',
         },
         {
           title: 'Languages',
-          href: '/guides/getting-started/language-support',
+          href: '/concepts/language-support',
         },
         {
+          title: 'Flexibility with the Nitric Framework',
+          href: '/concepts/eject',
+        },
+      ],
+    },
+    {
+      title: 'Comparisons',
+      links: [
+        {
+          title: 'AWS CDK',
+          href: '/concepts/comparison/aws-cdk',
+        },
+        {
+          title: 'AWS SAM',
+          href: '/concepts/comparison/aws-sam',
+        },
+        {
+          title: 'GCP Deployment Manager',
+          href: '/concepts/comparison/gcp-deployment-manager',
+        },
+        {
+          title: 'Azure Resource Manager',
+          href: '/concepts/comparison/bicep',
+        },
+        {
+          title: 'Pulumi',
+          href: '/concepts/comparison/pulumi',
+        },
+        {
+          title: 'Terraform',
+          href: '/concepts/comparison/terraform',
+        },
+        {
+          title: 'SST',
+          href: '/concepts/comparison/sst',
+        },
+        {
+          title: 'Encore',
+          href: '/concepts/comparison/encore',
+        },
+        {
+          title: 'Wing',
+          href: '/concepts/comparison/winglang',
+        },
+        {
+          title: 'Ampt',
+          href: '/concepts/comparison/ampt',
+        },
+      ],
+    },
+    {
+      title: 'Next steps',
+      links: [
+        {
+          title: 'Getting started with Nitric',
+          href: '/guides',
+        },
+      ],
+    },
+  ],
+  ['getting-started']: [
+    {
+      links: [
+        {
           title: 'Installation',
-          href: '/guides/getting-started/installation',
+          href: '/getting-started/installation',
+        },
+        {
+          title: 'Quickstart',
+          href: '/getting-started/quickstart',
         },
         {
           title: 'Local Dashboard',
-          href: '/guides/getting-started/local-dashboard',
+          href: '/getting-started/local-dashboard',
+        },
+        {
+          title: 'Resource Best Practices',
+          href: '/getting-started/resources-overview',
         },
         {
           title: 'Deployment',
-          href: '/guides/getting-started/deployment',
-        },
-        {
-          title: 'Using GitHub Actions',
-          href: '/guides/getting-started/github-actions',
-        },
-        {
-          title: 'Using GitLab CI',
-          href: '/guides/getting-started/gitlab-ci',
-        },
-        {
-          title: 'Using Azure Pipelines',
-          href: '/guides/getting-started/azure-pipelines',
-        },
-        {
-          title: 'Using Google Cloud Build',
-          href: '/guides/getting-started/google-cloud-build',
+          href: '/getting-started/deployment',
         },
       ],
     },
     {
-      title: 'Node.js Guides',
+      title: 'Next Steps',
+      links: [
+        {
+          title: 'Check out our Guides',
+          href: '/guides',
+        },
+      ],
+    },
+  ],
+  ['guides/nodejs']: [
+    {
       links: [
         {
           title: 'Debugging',
-          href: '/guides/getting-started/nodejs/debugging',
+          href: '/guides/nodejs/debugging',
         },
         {
           title: 'Testing',
-          href: '/guides/getting-started/nodejs/testing',
+          href: '/guides/nodejs/testing',
         },
         {
           title: 'REST API',
-          href: '/guides/getting-started/nodejs/serverless-rest-api-example',
+          href: '/guides/nodejs/serverless-rest-api-example',
         },
         {
           title: 'GraphQL',
-          href: '/guides/getting-started/nodejs/graphql',
+          href: '/guides/nodejs/graphql',
         },
         {
           title: 'Express.js',
-          href: '/guides/getting-started/nodejs/expressjs',
+          href: '/guides/nodejs/expressjs',
         },
         {
           title: 'Fastify',
-          href: '/guides/getting-started/nodejs/fastify',
+          href: '/guides/nodejs/fastify',
         },
         {
           title: 'Nest.js',
-          href: '/guides/getting-started/nodejs/nestjs',
+          href: '/guides/nodejs/nestjs',
         },
         {
           title: 'Next.js',
-          href: '/guides/getting-started/nodejs/api-with-nextjs',
+          href: '/guides/nodejs/api-with-nextjs',
         },
         {
           title: 'Supabase',
-          href: '/guides/getting-started/nodejs/nitric-and-supabase',
+          href: '/guides/nodejs/nitric-and-supabase',
         },
         {
           title: 'PlanetScale and Prisma',
-          href: '/guides/getting-started/nodejs/serverless-api-with-planetscale-and-prisma',
+          href: '/guides/nodejs/serverless-api-with-planetscale-and-prisma',
         },
         {
           title: 'Stripe',
-          href: '/guides/getting-started/nodejs/stripe',
+          href: '/guides/nodejs/stripe',
         },
         {
           title: 'Twilio',
-          href: '/guides/getting-started/nodejs/twilio',
+          href: '/guides/nodejs/twilio',
         },
         {
           title: 'Secure API with Auth0',
-          href: '/guides/getting-started/nodejs/secure-api-auth0',
+          href: '/guides/nodejs/secure-api-auth0',
         },
         {
           title: 'Secure APIs with AWS Cognito',
-          href: '/guides/getting-started/nodejs/amazon-cognito',
+          href: '/guides/nodejs/amazon-cognito',
         },
         {
           title: 'Using a Database',
-          href: '/guides/getting-started/nodejs/byo-database',
+          href: '/guides/nodejs/byo-database',
         },
         {
           title: 'Uptime Monitor',
-          href: '/guides/getting-started/nodejs/uptime',
+          href: '/guides/nodejs/uptime',
         },
         {
           title: 'Websockets',
-          href: '/guides/getting-started/nodejs/websockets',
+          href: '/guides/nodejs/websockets',
         },
       ],
     },
+  ],
+  ['guides/python']: [
     {
-      title: 'Python Guides',
       links: [
         {
           title: 'REST API',
-          href: '/guides/getting-started/python/serverless-rest-api-example',
+          href: '/guides/python/serverless-rest-api-example',
         },
         {
           title: 'GraphQL',
-          href: '/guides/getting-started/python/graphql',
+          href: '/guides/python/graphql',
         },
         {
           title: 'Visualising Data',
-          href: '/guides/getting-started/python/create-histogram',
+          href: '/guides/python/create-histogram',
         },
         {
           title: 'Predictive Text API using Tensorflow',
-          href: '/guides/getting-started/python/text-prediction',
+          href: '/guides/python/text-prediction',
         },
         {
           title: 'Scheduled reports with Google Sheets and Google Drive',
-          href: '/guides/getting-started/python/scheduled-report',
+          href: '/guides/python/scheduled-report',
         },
       ],
     },
+  ],
+  ['guides/dart']: [
     {
-      title: 'Dart Guides',
       links: [
         {
           title: 'REST API',
-          href: '/guides/getting-started/dart/serverless-rest-api-example',
+          href: '/guides/dart/serverless-rest-api-example',
         },
       ],
     },
+  ],
+  ['guides/jvm']: [
     {
-      title: 'Go Guides',
       links: [
         {
           title: 'REST API',
-          href: '/guides/getting-started/go/serverless-rest-api-example',
+          href: '/guides/jvm/serverless-rest-api-example',
         },
       ],
     },
+  ],
+  ['guides/go']: [
     {
-      title: 'JVM Guides',
       links: [
         {
           title: 'REST API',
-          href: '/guides/getting-started/jvm/serverless-rest-api-example',
+          href: '/guides/go/serverless-rest-api-example',
+        },
+      ],
+    },
+  ],
+  ['guides/deploying']: [
+    {
+      links: [
+        {
+          title: 'Using GitHub Actions',
+          href: '/guides/deploying/github-actions',
+        },
+        {
+          title: 'Using GitLab CI',
+          href: '/guides/deploying/gitlab-ci',
+        },
+        {
+          title: 'Using Azure Pipelines',
+          href: '/guides/deploying/azure-pipelines',
+        },
+        {
+          title: 'Using Google Cloud Build',
+          href: '/guides/deploying/google-cloud-build',
+        },
+      ],
+    },
+  ],
+  guides: [
+    {
+      links: [
+        {
+          title: 'Node.js Guides',
+          href: '/guides/nodejs',
+          icon: FaNodeJs,
+        },
+        {
+          title: 'Python Guides',
+          href: '/guides/python',
+          icon: FaPython,
+        },
+        {
+          title: 'Dart Guides',
+          href: '/guides/dart',
+          icon: SiDart,
+        },
+        // {
+        //   title: 'C# .NET Guides',
+        //   href: '/guides/csharp',
+        //   icon: SiCsharp,
+        // },
+        {
+          title: 'Go Guides',
+          href: '/guides/go',
+          icon: BiLogoGoLang,
+        },
+        {
+          title: 'JVM Guides',
+          href: '/guides/jvm',
+          icon: FaJava,
+        },
+        {
+          title: 'CI/CD Guides',
+          href: '/guides/deploying',
+          icon: BoltIcon,
+        },
+        {
+          title: 'Examples',
+          href: '/guides/examples',
+          icon: FaGithub,
         },
       ],
     },
@@ -481,36 +704,6 @@ const fullNav: FullNav = {
       links: buildingBlockLinks.filter((link) => link.href !== '/websockets'),
     },
   ],
-  assets: [
-    {
-      links: [
-        {
-          title: 'Examples',
-          href: '/assets/examples',
-        },
-        {
-          title: 'Custom Container Builds',
-          href: '/assets/custom-containers',
-        },
-        {
-          title: 'Environment Variables',
-          href: '/assets/env',
-        },
-        {
-          title: 'Resource Best Practices',
-          href: '/assets/resources-overview',
-        },
-        {
-          title: 'IAM and Access Control',
-          href: '/assets/access-control',
-        },
-        {
-          title: 'Flexibility with the Nitric Framework',
-          href: '/assets/eject',
-        },
-      ],
-    },
-  ],
   support: [
     {
       links: [
@@ -540,61 +733,6 @@ const fullNav: FullNav = {
         {
           title: 'Docker Providers',
           href: '/reference/providers/install/docker',
-        },
-      ],
-    },
-  ],
-  faq: [
-    {
-      links: [
-        {
-          title: 'Common Questions',
-          href: '/faq/common-questions',
-        },
-      ],
-    },
-    {
-      title: 'Differences From Other Solutions',
-      links: [
-        {
-          title: 'AWS CDK',
-          href: '/faq/comparison/aws-cdk',
-        },
-        {
-          title: 'AWS SAM',
-          href: '/faq/comparison/aws-sam',
-        },
-        {
-          title: 'GCP Deployment Manager',
-          href: '/faq/comparison/gcp-deployment-manager',
-        },
-        {
-          title: 'Azure Resource Manager',
-          href: '/faq/comparison/bicep',
-        },
-        {
-          title: 'Pulumi',
-          href: '/faq/comparison/pulumi',
-        },
-        {
-          title: 'Terraform',
-          href: '/faq/comparison/terraform',
-        },
-        {
-          title: 'SST',
-          href: '/faq/comparison/sst',
-        },
-        {
-          title: 'Encore',
-          href: '/faq/comparison/encore',
-        },
-        {
-          title: 'Wing',
-          href: '/faq/comparison/winglang',
-        },
-        {
-          title: 'Ampt',
-          href: '/faq/comparison/ampt',
         },
       ],
     },
@@ -2643,13 +2781,21 @@ const fullNav: FullNav = {
   ],
 }
 
+const SHOW_HOME_NAV_PAGES = [
+  '/',
+  '/support',
+  '/support/upgrade',
+  '/contributions',
+  '/faq',
+  '/reference/env',
+  '/reference/custom-containers',
+]
+
 export const useCurrentNav = () => {
   const router = useRouter()
 
   // put any paths that should show the main docs menu
-  const displayDocsMenu = ['/', '/support', '/contributions'].includes(
-    router.pathname
-  )
+  const displayDocsMenu = SHOW_HOME_NAV_PAGES.includes(router.pathname)
 
   const mainNav = fullNav['docs']
 
@@ -2664,18 +2810,42 @@ export const useCurrentNav = () => {
     router.pathname.startsWith(`/${navKey}`)
   )
 
+  const navigation = current && fullNav[current] ? fullNav[current] : mainNav
+
+  const cleanedCurrent = `/${current}`.replace(/\/[v]\d+$/, '')
+
   // find main menu item
   const parent = mainNav
     .flatMap((group) => group.links)
     .find((link) =>
       // clean out any trailing versions /v0 etc
-      link.href.startsWith(`/${current}`.replace(/\/[v]\d+$/, ''))
+      link.href.startsWith(cleanedCurrent)
     )
 
+  let secondLevelParent: DocNavGroup['links'][0] | undefined
+
+  // check if there is a 2nd level nav parent
+  if (!parent) {
+    const nav = fullNav[cleanedCurrent.split('/')[1]]
+
+    if (nav) {
+      for (const group of nav) {
+        secondLevelParent = group.links.find(
+          (link) => link.href === cleanedCurrent
+        )
+
+        if (secondLevelParent) {
+          break
+        }
+      }
+    }
+  }
+
   return {
-    navigation: current && fullNav[current] ? fullNav[current] : mainNav,
+    navigation,
     isHome: displayDocsMenu,
     parent,
+    secondLevelParent,
     pathname: router.pathname,
   }
 }

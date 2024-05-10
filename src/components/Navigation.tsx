@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import clsx from 'clsx'
 import { AnimatePresence, motion, useIsPresent } from 'framer-motion'
+import { capitalize } from 'radash'
 
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation'
 import { useSectionStore } from '@/components/SectionProvider'
@@ -48,6 +49,7 @@ interface NavLinkProps {
   active?: boolean
   isAnchorLink?: boolean
   children: React.ReactNode
+  iconPosition?: 'start' | 'end'
   className?: string
   iconClassName?: string
   icon?: React.ForwardRefExoticComponent<
@@ -67,6 +69,7 @@ function NavLink({
   iconClassName,
   isAnchorLink,
   icon: Icon,
+  iconPosition = 'start',
   badge,
 }: NavLinkProps) {
   return (
@@ -75,7 +78,7 @@ function NavLink({
       aria-current={active ? 'page' : undefined}
       className={clsx(
         'flex gap-2 py-1 pr-3 text-sm transition',
-        isAnchorLink ? 'pl-7' : Icon ? '' : 'pl-4',
+        isAnchorLink ? 'pl-7' : Icon && iconPosition === 'start' ? '' : 'pl-4',
         active
           ? 'text-zinc-900 dark:text-white'
           : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
@@ -83,7 +86,9 @@ function NavLink({
         className
       )}
     >
-      {Icon && <Icon className={clsx('h-4 w-4', iconClassName)} />}
+      {Icon && iconPosition === 'start' && (
+        <Icon className={clsx('h-4 w-4', iconClassName)} />
+      )}
 
       <span className="truncate">{children}</span>
 
@@ -97,6 +102,10 @@ function NavLink({
         <Tag variant="small" color="zinc">
           {tag}
         </Tag>
+      )}
+
+      {Icon && iconPosition === 'end' && (
+        <Icon className={clsx('h-4 w-4', iconClassName)} />
       )}
     </Link>
   )
@@ -195,7 +204,12 @@ function NavigationGroup({ group, className }) {
         <ul role="list" className="border-l border-transparent">
           {group.links.map((link) => (
             <motion.li key={link.href} layout="position" className="relative">
-              <NavLink href={link.href} active={link.href === router.pathname}>
+              <NavLink
+                icon={link.icon}
+                iconPosition={'end'}
+                href={link.href}
+                active={link.href === router.pathname}
+              >
                 {link.title}
               </NavLink>
               <AnimatePresence mode="popLayout" initial={false}>
@@ -283,8 +297,16 @@ function HomeNavigationGroup({
 }
 
 export function Navigation(props) {
-  const { navigation, displayDocsMenu, parent, pathname } = useCurrentNav()
+  const {
+    navigation,
+    displayDocsMenu,
+    parent: firstParent,
+    secondLevelParent,
+    pathname,
+  } = useCurrentNav()
   const { isReferenceDocs } = useVersions()
+
+  const parent = firstParent || secondLevelParent
 
   useEffect(() => {
     const currentLink = document.querySelector(
@@ -308,11 +330,18 @@ export function Navigation(props) {
       {!displayDocsMenu && (
         <div className="mb-4 flex flex-col gap-4">
           <Link
-            href="/"
+            href={
+              secondLevelParent
+                ? `/${secondLevelParent.href.split('/')[1]}`
+                : '/'
+            }
             className="group flex items-center text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400"
           >
             <ChevronLeftIcon className="mr-0.5 h-5 w-5 transition-transform group-hover:-translate-x-1" />
-            Back to Home
+
+            {secondLevelParent
+              ? `Back to ${capitalize(secondLevelParent.href.split('/')[1])}`
+              : 'Back to Home'}
           </Link>
           {parent && (
             <div className="flex items-center">

@@ -10,8 +10,8 @@ import {
   ArrowRightIcon,
   Cog8ToothIcon,
   WrenchScrewdriverIcon,
+  CloudIcon,
 } from '@heroicons/react/24/outline'
-import { CloudIcon } from '@heroicons/react/24/outline'
 
 const providers = [
   {

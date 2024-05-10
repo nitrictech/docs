@@ -30,12 +30,6 @@ const nextConfig = {
         permanent: false,
       },
       {
-        source: '/docs/guides',
-        destination: '/docs',
-        basePath: false,
-        permanent: true,
-      },
-      {
         source: '/docs/reference',
         destination: '/docs#libraries',
         basePath: false,
@@ -56,7 +50,7 @@ const nextConfig = {
         '/docs/guides/byo-database',
       ].map((source) => ({
         source: source,
-        destination: `/docs/guides/getting-started/nodejs${source.replace(
+        destination: `/docs/guides/nodejs${source.replace(
           /^(\/docs\/guides\/|\/docs\/)/,
           '/'
         )}`,
@@ -73,7 +67,7 @@ const nextConfig = {
         '/docs/guides/github-actions',
       ].map((source) => ({
         source: source,
-        destination: `/docs/guides/getting-started${source.replace(
+        destination: `/docs/getting-started${source.replace(
           /^(\/docs\/guides\/|\/docs\/)/,
           '/'
         )}`,
@@ -83,7 +77,7 @@ const nextConfig = {
       ...['/docs/guides/text-prediction', '/docs/guides/create-histogram'].map(
         (source) => ({
           source: source,
-          destination: `/docs/guides/getting-started/python${source.replace(
+          destination: `/docs/guides/python${source.replace(
             /^(\/docs\/guides\/|\/docs\/)/,
             '/'
           )}`,
@@ -122,17 +116,71 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/docs/getting-started',
-        destination: '/docs/guides/getting-started',
-        basePath: false,
-        permanent: true,
-      },
-      {
         source: '/docs/assets/comparison/:path*',
         destination: '/docs/faq/comparison/:path*',
         basePath: false,
         permanent: true,
       },
+      {
+        source: '/docs/getting-started',
+        destination: '/docs/getting-started/introduction',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/getting-started',
+        destination: '/docs/getting-started/introduction',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/getting-started/concepts',
+        destination: '/docs/concepts/how-nitric-works',
+        basePath: false,
+        permanent: true,
+      },
+      ...[
+        '/docs/guides/getting-started/quickstart',
+        '/docs/guides/getting-started/language-support',
+        '/docs/guides/getting-started/installation',
+        '/docs/guides/getting-started/local-dashboard',
+        '/docs/guides/getting-started/deployment',
+        '/docs/guides/getting-started/github-actions',
+        '/docs/guides/getting-started/gitlab-ci',
+        '/docs/guides/getting-started/azure-pipelines',
+        '/docs/guides/getting-started/google-cloud-build',
+      ].map((source) => ({
+        source: source,
+        destination: `/docs/${source.replace(
+          /^(\/docs\/guides\/|\/docs\/)/,
+          ''
+        )}`,
+        basePath: false,
+        permanent: true,
+      })),
+      {
+        source: '/docs/faq/common-questions',
+        destination: '/docs/faq',
+        basePath: false,
+        permanent: true,
+      },
+      ...[
+        'aws-cdk',
+        'aws-sam',
+        'gcp-deployment-manager',
+        'bicep',
+        'pulumi',
+        'terraform',
+        'sst',
+        'encore',
+        'winglang',
+        'ampt',
+      ].map((page) => ({
+        source: `/docs/faq/comparison/${page}`,
+        destination: `/docs/concepts/comparison/${page}`,
+        basePath: false,
+        permanent: true,
+      })),
     ]
   },
   async headers() {
