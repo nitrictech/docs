@@ -2,9 +2,9 @@ export const description = 'How to deploy Nitric applications'
 
 # Deployment
 
-Nitric can automatically deploy your application to a supported cloud provider. As discussed in the [concepts](/guides/getting-started/concepts) page, Nitric has three standard `providers`, one each for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). If none of those fit your needs you're also able to [build a custom provider](/reference/providers/custom/building-custom-provider) to target the host you prefer with your own tools and configuration.
+Nitric can automatically deploy your application to a supported cloud provider. As discussed in the [concepts](/concepts/how-nitric-works) page, Nitric has three standard `providers`, one each for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). If none of those fit your needs you're also able to [build a custom provider](/reference/providers/custom/building-custom-provider) to target the host you prefer with your own tools and configuration.
 
-The Nitric CLI command to perform deployments is `nitric up`. However, before your first deployment you'll need to create a `stack`, stacks represent deployment targets. If you haven't created a stack before we recommend reading the steps in our [quickstart guide](/guides/getting-started/quickstart#deploying-the-app). The `up` command will prompt you to create a <a href="concepts#stack-files" target="_blank">stack</a> if you haven't already created one for you project.
+The Nitric CLI command to perform deployments is `nitric up`. However, before your first deployment you'll need to create a `stack`, stacks represent deployment targets. If you haven't created a stack before we recommend reading the steps in our [quickstart guide](/getting-started/quickstart#deploying-the-app). The `up` command will prompt you to create a <a href="concepts#stack-files" target="_blank">stack</a> if you haven't already created one for you project.
 
 ```bash
 nitric up

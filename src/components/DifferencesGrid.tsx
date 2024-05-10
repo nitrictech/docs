@@ -3,7 +3,7 @@ import { Heading } from './Heading'
 
 const assets = [
   {
-    href: '/faq/comparison/aws-cdk',
+    href: '/concepts/comparison/aws-cdk',
     name: 'AWS CDK',
     pattern: {
       y: 16,
@@ -14,7 +14,7 @@ const assets = [
     },
   },
   {
-    href: '/faq/comparison/aws-sam',
+    href: '/concepts/comparison/aws-sam',
     name: 'AWS SAM',
     pattern: {
       y: 16,
@@ -25,7 +25,7 @@ const assets = [
     },
   },
   {
-    href: '/faq/comparison/gcp-deployment-manager',
+    href: '/concepts/comparison/gcp-deployment-manager',
     name: 'Google Cloud Deployment Manager',
     pattern: {
       y: 16,
@@ -36,7 +36,7 @@ const assets = [
     },
   },
   {
-    href: '/faq/comparison/bicep',
+    href: '/concepts/comparison/bicep',
     name: 'Azure Resource Manager',
     pattern: {
       y: 16,
@@ -47,7 +47,7 @@ const assets = [
     },
   },
   {
-    href: '/faq/comparison/pulumi',
+    href: '/concepts/comparison/pulumi',
     name: 'Pulumi',
     pattern: {
       y: 16,
@@ -58,7 +58,7 @@ const assets = [
     },
   },
   {
-    href: '/faq/comparison/terraform',
+    href: '/concepts/comparison/terraform',
     name: 'Terraform',
     pattern: {
       y: 16,
@@ -69,7 +69,7 @@ const assets = [
     },
   },
   {
-    href: '/faq/comparison/sst',
+    href: '/concepts/comparison/sst',
     name: 'SST',
     pattern: {
       y: 16,
@@ -80,7 +80,7 @@ const assets = [
     },
   },
   {
-    href: '/faq/comparison/encore',
+    href: '/concepts/comparison/encore',
     name: 'Encore',
     pattern: {
       y: 16,
@@ -91,7 +91,7 @@ const assets = [
     },
   },
   {
-    href: '/faq/comparison/winglang',
+    href: '/concepts/comparison/winglang',
     name: 'Wing',
     pattern: {
       y: 16,
@@ -102,7 +102,7 @@ const assets = [
     },
   },
   {
-    href: '/faq/comparison/ampt',
+    href: '/concepts/comparison/ampt',
     name: 'Ampt',
     pattern: {
       y: 16,

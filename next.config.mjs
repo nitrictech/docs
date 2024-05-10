@@ -59,7 +59,6 @@ const nextConfig = {
       })),
       ...[
         '/docs/local-dashboard',
-        '/docs/concepts',
         '/docs/installation',
         '/docs/deployment',
         '/docs/language-support',
@@ -87,7 +86,7 @@ const nextConfig = {
       ),
       {
         source: '/docs/comparison/:slug',
-        destination: '/docs/assets/comparison/:slug',
+        destination: '/docs/concepts/comparison/:slug',
         basePath: false,
         permanent: true,
       },
@@ -98,20 +97,32 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/docs/assets',
+        destination: '/docs/concepts/introduction',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts',
+        destination: '/docs/concepts/introduction',
+        basePath: false,
+        permanent: true,
+      },
+      {
         source: '/docs/env',
-        destination: '/docs/assets/env',
+        destination: '/docs/reference/env',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/support/eject',
-        destination: '/docs/assets/eject',
+        destination: '/docs/concepts/eject',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/access-control',
-        destination: '/docs/assets/access-control',
+        destination: '/docs/concepts/access-control',
         basePath: false,
         permanent: true,
       },
@@ -129,13 +140,13 @@ const nextConfig = {
       },
       {
         source: '/docs/guides/getting-started',
-        destination: '/docs/getting-started/introduction',
+        destination: '/docs/getting-started/quickstart',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/guides/getting-started/concepts',
-        destination: '/docs/concepts/how-nitric-works',
+        destination: '/docs/concepts/introduction',
         basePath: false,
         permanent: true,
       },

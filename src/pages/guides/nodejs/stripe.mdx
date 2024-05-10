@@ -16,7 +16,7 @@ Creating a Stripe checkout backed by a Nitric API. This API will be completely c
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en/download/)
-- The [Nitric CLI](/guides/getting-started/installation)
+- The [Nitric CLI](/getting-started/installation)
 - An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
 - A [Stripe](https://dashboard.stripe.com/login) account
 
@@ -234,8 +234,8 @@ Once we know its a checkout completed event, the session data is passed to the `
 function handleOrder() {
   // Fulfill the order however you want. Some ideas are:
   // 1. Send data down your shipping pipeline.
-  // 2. Send the user a notification. https://nitric.io/docs/guides/getting-started/nodejs/twilio
-  // 3. Connect your own database and store the order details. https://nitric.io/docs/guides/getting-started/nodejs/byo-database
+  // 2. Send the user a notification. https://nitric.io/docs/guides/nodejs/twilio
+  // 3. Connect your own database and store the order details. https://nitric.io/docs/guides/nodejs/byo-database
 }
 ```
 
