@@ -65,16 +65,16 @@ const gettingStartedBlocks = [
     name: 'What is Nitric',
     icon: InformationCircleIcon,
     description:
-      'Learn about the Nitric architecture and how it works under the hood.',
+      'Learn about the Nitric architecture and how the framework works under the hood.',
   },
   {
     href: '/getting-started/quickstart',
     name: 'Get started with Nitric',
     icon: RocketLaunchIcon,
-    description: 'Start deploying in 15-minutes with our Quick Start guide.',
+    description: 'Start building and deploy in minutes with our Quick Start guide.',
   },
   {
-    href: '/concepts/extending-nitric',
+    href: '/reference/providers/custom/building-custom-provider',
     name: 'Customize and extend Nitric',
     icon: WrenchScrewdriverIcon,
     description: 'Build your own cloud providers or extend ours.',

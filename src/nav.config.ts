@@ -283,14 +283,6 @@ const fullNav: FullNav = {
           href: '/concepts/how-nitric-works',
         },
         {
-          title: 'IaC vs. IfC',
-          href: '/concepts/iac-vs-ifc',
-        },
-        {
-          title: 'Extending Nitric',
-          href: '/concepts/extending-nitric',
-        },
-        {
           title: 'IAM and Access Control',
           href: '/concepts/access-control',
         },
@@ -307,6 +299,10 @@ const fullNav: FullNav = {
     {
       title: 'Comparisons',
       links: [
+        {
+          title: 'Overview',
+          href: '/concepts/comparison',
+        },
         {
           title: 'AWS CDK',
           href: '/concepts/comparison/aws-cdk',
@@ -353,8 +349,8 @@ const fullNav: FullNav = {
       title: 'Next steps',
       links: [
         {
-          title: 'Getting started with Nitric',
-          href: '/guides',
+          title: 'Get started with Nitric',
+          href: '/getting-started/quickstart',
         },
       ],
     },

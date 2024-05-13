@@ -15,7 +15,7 @@ const items = [
     href: '/concepts/how-nitric-works',
     name: 'How Nitric works',
     description:
-      'The help forum is a great place to get help with any questions about Nitric.',
+      'Learn about the components of Nitric and how it works for development and deployment.',
     icon: Square3Stack3DIcon,
     pattern: {
       y: 16,
@@ -28,7 +28,7 @@ const items = [
   {
     href: '/concepts/comparison',
     name: 'Comparison with other tools',
-    description: 'How Nitric differs from alternative solutions.',
+    description: 'See how Nitric differs and fits alongside other solutions.',
     icon: MagnifyingGlassIcon,
     pattern: {
       y: -6,
