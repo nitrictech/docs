@@ -126,10 +126,10 @@ describe('Current links test suite', () => {
 
       paths = jsonObj.urlset.url.map((p) =>
         p.loc === PROD_BASE_URL
-          ? '/'
-          : p.loc
+          ? '/docs'
+          : `/docs${p.loc
               .substring(PROD_BASE_URL.length, p.loc.length)
-              .replace('/_index', '')
+              .replace('/_index', '')}`
       )
     })
   })
