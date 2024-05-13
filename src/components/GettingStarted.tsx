@@ -71,7 +71,8 @@ const gettingStartedBlocks = [
     href: '/getting-started/quickstart',
     name: 'Get started with Nitric',
     icon: RocketLaunchIcon,
-    description: 'Start building and deploy in minutes with our Quick Start guide.',
+    description:
+      'Start building and deploy in minutes with our Quick Start guide.',
   },
   {
     href: '/reference/providers/custom/building-custom-provider',
