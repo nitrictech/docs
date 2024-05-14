@@ -80,7 +80,7 @@ function Block({ block }) {
           </h3>
         </div>
         {block.description && (
-          <p className="mt-1 text-base text-zinc-600 dark:text-zinc-400">
+          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
             {block.description}
           </p>
         )}
