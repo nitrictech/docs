@@ -2607,17 +2607,8 @@ const fullNav: FullNav = {
       ],
     },
   ],
-  ['reference/providers']: [
+  ['reference/providers/aws']: [
     {
-      links: [
-        {
-          title: 'Overview',
-          href: '/reference/providers',
-        },
-      ],
-    },
-    {
-      title: 'AWS',
       links: [
         {
           title: 'AWS Provider Overview',
@@ -2658,7 +2649,114 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'Azure',
+      title: 'More Providers',
+      links: [
+        {
+          title: 'GCP',
+          href: '/reference/providers/gcp',
+          icon: SiGooglecloud,
+        },
+        {
+          title: 'Azure',
+          href: '/reference/providers/azure',
+          icon: SiMicrosoftazure,
+        },
+      ],
+    },
+    {
+      title: 'Custom Providers',
+      links: [
+        {
+          title: 'Building a Custom Provider',
+          href: '/reference/providers/custom/building-custom-provider',
+        },
+        {
+          title: 'Extending a Base Provider',
+          href: '/reference/providers/custom/extend-standard-provider',
+        },
+        {
+          title: 'Docker Providers',
+          href: '/reference/providers/install/docker',
+        },
+      ],
+    },
+  ],
+  ['reference/providers/gcp']: [
+    {
+      links: [
+        {
+          title: 'GCP Provider Overview',
+          href: '/reference/providers/gcp',
+        },
+        {
+          title: 'Configuration',
+          href: '/reference/providers/gcp/configuration',
+        },
+        {
+          title: 'APIs',
+          href: '/reference/providers/gcp/apis',
+        },
+        {
+          title: 'Key Value Stores',
+          href: '/reference/providers/gcp/keyvalue',
+        },
+        {
+          title: 'Queues',
+          href: '/reference/providers/gcp/queues',
+        },
+        {
+          title: 'Schedules',
+          href: '/reference/providers/gcp/schedules',
+        },
+        {
+          title: 'Secrets',
+          href: '/reference/providers/gcp/secrets',
+        },
+        {
+          title: 'Storage',
+          href: '/reference/providers/gcp/storage',
+        },
+        {
+          title: 'Topics',
+          href: '/reference/providers/gcp/topics',
+        },
+      ],
+    },
+    {
+      title: 'More Providers',
+      links: [
+        {
+          title: 'AWS',
+          href: '/reference/providers/aws',
+          icon: FaAws,
+        },
+        {
+          title: 'Azure',
+          href: '/reference/providers/azure',
+          icon: SiMicrosoftazure,
+        },
+      ],
+    },
+    {
+      title: 'Custom Providers',
+      links: [
+        {
+          title: 'Building a Custom Provider',
+          href: '/reference/providers/custom/building-custom-provider',
+        },
+        {
+          title: 'Extending a Base Provider',
+          href: '/reference/providers/custom/extend-standard-provider',
+        },
+        {
+          title: 'Docker Providers',
+          href: '/reference/providers/install/docker',
+        },
+      ],
+    },
+  ],
+  ['reference/providers/azure']: [
+    {
       links: [
         {
           title: 'Azure Provider Overview',
@@ -2699,43 +2797,56 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'Google Cloud',
+      title: 'More Providers',
       links: [
         {
-          title: 'GCP Provider Overview',
+          title: 'AWS',
+          href: '/reference/providers/aws',
+          icon: FaAws,
+        },
+        {
+          title: 'GCP',
           href: '/reference/providers/gcp',
+          icon: SiGooglecloud,
+        },
+      ],
+    },
+    {
+      title: 'Custom Providers',
+      links: [
+        {
+          title: 'Building a Custom Provider',
+          href: '/reference/providers/custom/building-custom-provider',
         },
         {
-          title: 'Configuration',
-          href: '/reference/providers/gcp/configuration',
+          title: 'Extending a Base Provider',
+          href: '/reference/providers/custom/extend-standard-provider',
         },
         {
-          title: 'APIs',
-          href: '/reference/providers/gcp/apis',
+          title: 'Docker Providers',
+          href: '/reference/providers/install/docker',
+        },
+      ],
+    },
+  ],
+  ['reference/providers']: [
+    {
+      title: 'Standard Providers',
+      links: [
+        {
+          title: 'AWS',
+          href: '/reference/providers/aws',
+          icon: FaAws,
         },
         {
-          title: 'Key Value Stores',
-          href: '/reference/providers/gcp/keyvalue',
+          title: 'GCP',
+          href: '/reference/providers/gcp',
+          icon: SiGooglecloud,
         },
         {
-          title: 'Queues',
-          href: '/reference/providers/gcp/queues',
-        },
-        {
-          title: 'Schedules',
-          href: '/reference/providers/gcp/schedules',
-        },
-        {
-          title: 'Secrets',
-          href: '/reference/providers/gcp/secrets',
-        },
-        {
-          title: 'Storage',
-          href: '/reference/providers/gcp/storage',
-        },
-        {
-          title: 'Topics',
-          href: '/reference/providers/gcp/topics',
+          title: 'Azure',
+          href: '/reference/providers/azure',
+          icon: SiMicrosoftazure,
         },
       ],
     },
