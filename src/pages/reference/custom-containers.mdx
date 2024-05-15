@@ -4,9 +4,9 @@ export const description = 'Customize how services are built into containers'
 
 Nitric builds applications by identifying its entrypoints, which are typically defined in the `nitric.yaml` file as `services`. Each entrypoint in a Nitric app is built into its own container using Docker, then deployed to a cloud container runtime such as AWS Lambda, Google CloudRun or Azure Container Apps.
 
-The Nitric CLI decides how to build those containers based on the programming language used by the entrypoint, for example if the entrypoint is a python file it will be built using Nitric's python dockerfile template. These dockerfile templates are designed with compatibility and ease of use in mind, this makes building applications convenient but may not provide additional dependencies your code relies on the ideal optimization for your application.
+The Nitric CLI decides how to build those containers based on the programming language used by the entrypoint, for example if the entrypoint is a python file it will be built using Nitric's python dockerfile template. These dockerfile templates are designed with compatibility and ease of use in mind, this makes building applications convenient but may not provide additional dependencies your code relies or the ideal optimization for your application.
 
-If you need to customize the docker container build process to add dependencies, optimize container size or some other reason, you can create a custom dockerfile template to be used by some or all of the entrypoints (services) in your application.
+If you need to customize the docker container build process to add dependencies, optimize container size, support a new language or any other reason, you can create a custom dockerfile template to be used by some or all of the entrypoints (services) in your application.
 
 ## Add a new custom runtime
 
