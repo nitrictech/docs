@@ -1,0 +1,408 @@
+export const description =
+  'Use the Nitric framework to easily build and deploy Go REST APIs for AWS, Azure or GCP'
+
+export const title_meta = 'Building your first API with Go and Nitric'
+
+<Note>
+  This guide is for v0, v1 is in development. Interested in contributing or
+  chatting with us? [Get in touch!](https://nitric.io/chat)
+</Note>
+
+# Building your first API with Nitric
+
+## What we'll be doing
+
+1. Use Nitric to create an API to create and update profiles
+2. Create handlers for the following API operations
+
+| **Method** | **Route**      | **Description**                  |
+| ---------- | -------------- | -------------------------------- |
+| `GET`      | /profiles/[id] | Get a specific profile by its Id |
+| `GET`      | /profiles      | List all profiles                |
+| `POST`     | /profiles      | Create a new profile             |
+| `DELETE`   | /profiles/[id] | Delete a profile                 |
+| `PUT`      | /profiles/[id] | Update a profile                 |
+
+3. Run locally for testing
+4. Deploy to a cloud of your choice
+5. (Optional) Add handlers for the following API operations
+
+| **Method** | **Route**                    | **Description**                   |
+| ---------- | ---------------------------- | --------------------------------- |
+| `GET`      | /profiles/[id]/image/upload  | Get a profile image upload URL    |
+| `GET`      | profiles/[id]/image/download | Get a profile image download URL  |
+| `GET`      | profiles/[id]/image/view     | View the image that is downloaded |
+
+## Prerequisites
+
+- [Go](https://go.dev/dl/)
+- The [Nitric CLI](/getting-started/installation)
+- An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
+
+## Getting started
+
+We'll start by creating a new project for our API.
+
+```bash
+nitric new my-profile-api "official/Go - Starter (experimental)"
+```
+
+Next, open the project in your editor of choice.
+
+```bash
+cd my-profile-api
+```
+
+Make sure all dependencies are resolved:
+
+```bash
+go mod tidy
+```
+
+The scaffolded project should have the following structure:
+
+```text
++--functions/
+|  +-- hello/
+|      +-- main.go
+|  ...
++--nitric.yaml
++--go.mod
++--go.sum
++--.gitignore
++--README.md
+```
+
+You can test the project to verify everything is working as expected:
+
+```bash
+nitric start
+```
+
+and in a separate terminal:
+
+```bash
+go run functions/hello
+```
+
+<Note>
+  The first command starts the Nitric Server using `nitric start`, which
+  provides local interfaces to emulate cloud resources. Then `go run
+  functions/hello` runs your functions and allows them to connect.
+</Note>
+
+If everything is working as expected you can now delete all files in the `functions/` folder, we'll create new functions in this guide.
+
+## Building the Profile API
+
+Let's start building the profiles API. Create a file named `main.go` in the functions directory and add the following:
+
+```go
+package main
+
+import (
+  "fmt"
+
+  "github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+  profilesApi, err := nitric.NewApi("public")
+  if err != nil {
+    return
+  }
+
+  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting)
+  if err != nil {
+    return
+  }
+
+  if err := nitric.Run(); err != nil {
+    fmt.Println(err)
+  }
+}
+```
+
+Here we're creating:
+
+- An API named `public`,
+- A collection named `profiles` and giving our function permission to read and write to that collection.
+
+From here, let's add some features to that function that allow us to work with profiles.
+
+<Note>
+  You could separate some or all of these request handlers into their own
+  functions if you prefer. For simplicity we'll group them together in this
+  guide.
+</Note>
+
+### Create profiles with POST
+
+```go
+profilesApi.Post("/profiles", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := uuid.New().String()
+
+  var profileRequest map[string]interface{}
+  err := json.Unmarshal(ctx.Request.Data(), &profileRequest)
+  if err != nil {
+    return ctx, err
+  }
+
+  err = profiles.Doc(id).Set(ctx.Request.Context(), profileRequest)
+  if err != nil {
+    return ctx, err
+  }
+
+  ctx.Response.Body = []byte(id)
+
+  return ctx, nil
+})
+```
+
+### Retrieve a profile with GET
+
+```go
+profilesApi.Get("/profiles/:id", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
+
+  profile, err := profiles.Doc(id).Get(ctx.Request.Context())
+  if err != nil {
+    ctx.Response.Status = 404
+    ctx.Response.Body = []byte(fmt.Sprintf("profile with id '%s' not found", id))
+
+    return ctx, nil
+  }
+
+  ctx.Response.Body, err = json.Marshal(profile.Content())
+
+  return ctx, err
+})
+```
+
+### List all profiles with GET
+
+```go
+profilesApi.Get("/profiles", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  profiles, err := profiles.Query().Fetch(ctx.Request.Context())
+  if err != nil {
+    return ctx, err
+  }
+
+  var profileContent []map[string]interface{}
+  for _, doc := range profiles.Documents {
+    profileContent = append(profileContent, doc.Content())
+  }
+
+  ctx.Response.Body, err = json.Marshal(profileContent)
+
+  return ctx, err
+})
+```
+
+### Remove a profile with DELETE
+
+```go
+profilesApi.Delete("/profile/:id", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
+
+  err := profiles.Doc(id).Delete(ctx.Request.Context())
+  if err != nil {
+    ctx.Response.Status = 404
+    ctx.Response.Body = []byte(fmt.Sprintf("profile with id '%s' not found", id))
+
+    return ctx, nil
+  }
+
+  return ctx, nil
+})
+```
+
+## Ok, let's run this thing!
+
+Now that you have an API defined with handlers for each of its methods, it's time to test it locally.
+
+```bash
+nitric start
+```
+
+and in a separate terminal:
+
+```bash
+go run functions/hello
+```
+
+Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
+
+We will keep it running for our tests. If you want to update your functions, just save them, they'll be reloaded automatically.
+
+## Test your API
+
+Update all values in brackets `[]` and change the URL to your deployed URL if you're testing on the cloud.
+
+### Create Profile
+
+```bash
+curl --location --request POST 'http://localhost:4001/profiles' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+    "name": "Peter Parker",
+    "age": "21",
+    "homeTown" : "Queens"
+}'
+```
+
+### Fetch Profile
+
+```bash
+curl --location --request GET 'http://localhost:4001/profiles/[id]'
+```
+
+### Fetch All Profiles
+
+```bash
+curl --location --request GET 'http://localhost:4001/profiles'
+```
+
+### Delete Profile
+
+```bash
+curl --location --request DELETE 'http://localhost:4001/profiles/[id]'
+```
+
+## Deploy to the cloud
+
+At this point, you can deploy what you've built to any of the supported cloud providers. To do this start by setting up your credentials and any configuration for the cloud you prefer:
+
+- [AWS](/reference/providers/aws)
+- [Azure](/reference/providers/azure)
+- [GCP](/reference/providers/gcp)
+
+Next, we'll need to create a `stack`. A stack represents a deployed instance of an application, which is a collection of resources defined in your project. You might want separate stacks for each environment, such as stacks for `dev`, `test` and `prod`. For now, let's start by creating a `dev` stack.
+
+```bash
+nitric stack new
+```
+
+```
+? What should we name this stack? dev
+? Which provider do you want to deploy with? aws
+? Which region should the stack deploy to? us-east-1
+```
+
+### AWS
+
+Note: You are responsible for staying within the limits of the free tier or any costs associated with deployment.
+
+We called our stack `dev`, let's try deploying it with the `up` command
+
+```bash
+nitric up
+┌───────────────────────────────────────────────────────────────┐
+| API  | Endpoint                                               |
+| main | https://XXXXXXXX.execute-api.us-east-1.amazonaws.com   |
+└───────────────────────────────────────────────────────────────┘
+```
+
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
+
+To tear down your application from the cloud, use the `down` command:
+
+```bash
+nitric down
+```
+
+## Optional - Add profile image upload/download support
+
+If you want to go a bit deeper and create some other resources with Nitric, why not add images to your profiles API.
+
+### Access profile buckets with permissions
+
+Define a bucket named `profilesImg` with reading/writing permissions
+
+```go
+profileImages, err := nitric.NewBucket("profileImages").With(nitric.BucketReading, nitric.BucketWriting)
+if err != nil {
+  fmt.Println(err)
+  return
+}
+```
+
+### Get a URL to upload a profile image
+
+```go
+profilesApi.Get("/profiles/:id/image/upload", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
+  photoId := fmt.Sprintf("images/%s/photo.png", id)
+
+  photoUrl, err := profileImages.File(photoId).UploadUrl(ctx.Request.Context(), 600)
+  if err != nil {
+    return ctx, err
+  }
+
+  ctx.Response.Body = []byte(photoUrl)
+
+  return ctx, nil
+})
+```
+
+### Get a URL to download a profile image
+
+```go
+profilesApi.Get("/profiles/:id/image/download", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
+  photoId := fmt.Sprintf("images/%s/photo.png", id)
+
+  photoUrl, err := profileImages.File(photoId).DownloadUrl(ctx.Request.Context(), 600)
+  if err != nil {
+    return ctx, err
+  }
+
+  ctx.Response.Body = []byte(photoUrl)
+
+  return ctx, nil
+})
+```
+
+You can also directly redirect to the photo URL.
+
+```go
+profilesApi.Get("/profiles/:id/image/view", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+  id := ctx.Request.PathParams()["id"]
+  photoId := fmt.Sprintf("images/%s/photo.png", id)
+
+  photoUrl, err := profileImages.File(photoId).DownloadUrl(ctx.Request.Context(), 600)
+  if err != nil {
+    return ctx, err
+  }
+
+  ctx.Response.Status = 303
+  ctx.Response.Headers["Location"] = []string{photoUrl}
+
+  return ctx, nil
+})
+```
+
+#### Time to test the updated API
+
+Update all values in brackets `[]` and change the URL to your deployed URL if you're testing on the cloud.
+
+#### Get an image upload URL
+
+```bash
+curl --location --request GET 'http://localhost:4001/profiles/[id]/image/upload'
+```
+
+#### Using the upload URL with curl
+
+```bash
+curl --location --request PUT '[url]' \
+--header 'content-type: image/png' \
+--data-binary '@/home/user/Pictures/photo.png'
+
+```
+
+#### Get an image download URL
+
+```bash
+curl --location --request GET 'http://localhost:4001/profiles/[id]/image/download'
+```

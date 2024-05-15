@@ -1,0 +1,46 @@
+export const description = 'Initial concepts of the Nitric framework'
+
+# What is Nitric
+
+Nitric is a multi-language framework for rapidly building cloud applications that run on many different cloud providers such as AWS, Google Cloud or Microsoft Azure, with reduced boilerplate and infrastructure automation. This is often called **Infrastructure-_from_-Code** (IfC), since the core of your application becomes the source of truth for both the application logic and deployment architecture.
+
+Nitric achieves this by adding lightweight resource declarations to your application, as close as possible to where they're used. This also removes the often brittle relationship between IfC projects that deploy resources and the application code that depends on them.
+
+Here's an example of using Nitric to create a secure bucket for file storage and granting read access to that bucket.
+
+<CodeGroup>
+
+```javascript
+import { api, bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read')
+const myApi = api('main')
+
+myApi.get('/profiles/:name', async (ctx) => {
+  const image = await profiles.file('users/bruce-wayne.png').read()
+})
+```
+
+```python
+from nitric.resources import api, bucket
+from nitric.application import Nitric
+
+publicApi = api("main")
+profiles = bucket("profiles").allow("read")
+
+@publicApi.get("/profiles/:name")
+async def customer_get(ctx):
+    image = await profiles.file("users/bruce-wayne.png").read()
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+You'll notice in the example that there aren't any cloud-specific references, such as a call to AWS S3 or Google Cloud Storage. All of the deployment automation, identity/access management and runtime access are handled by Nitric through [provider](/reference/providers) plugins, which you choose at deployment. This ensures applications built with Nitric maintain portability and allows you to focus on your product first and a cloud provider second. Apps built with Nitric can even be deployed to multiple cloud providers at once to improve reliability or to maximize availability of free-tier resources.
+
+<Note>
+  To understand the differences between Infrastructure from Code (IfC) and
+  Infrastructure as Code (IaC), explore our
+  [article](https://nitric.io/blog/iac-vs-ifc).
+</Note>

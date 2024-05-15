@@ -1,0 +1,77 @@
+import { FaNodeJs, FaPython, FaJava } from 'react-icons/fa'
+import { SiDart } from 'react-icons/si'
+import { BiLogoGoLang } from 'react-icons/bi'
+
+# Nitric Guides
+
+<GuidesGrid title="Choose your Language">
+  <Guide
+    href="/guides/nodejs"
+    name="Node.js Guides"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={FaNodeJs}
+    description="Learn about the goals and structure of the Nitric framework."
+    pattern={2}
+  />
+  <Guide
+    href="/guides/python"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={FaPython}
+    name="Python Guides"
+    description="Learn about the goals and structure of the Nitric framework."
+    pattern={2}
+  />
+  <Guide
+    href="/guides/dart"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={SiDart}
+    name="Dart Guides"
+    description="Learn about the goals and structure of the Nitric framework."
+    pattern={2}
+  />
+  <Guide
+    href="/guides/go"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={BiLogoGoLang}
+    name="Go Guides"
+    description="Learn about the goals and structure of the Nitric framework."
+    pattern={2}
+  />
+  <Guide
+    href="/guides/jvm"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={FaJava}
+    name="JVM Guides"
+    description="Learn about the goals and structure of the Nitric framework."
+    pattern={2}
+  />
+</GuidesGrid>
+
+<GuidesGrid title="Resources">
+  <Guide
+    href="/guides/examples"
+    name="Examples"
+    description="Official GitHub examples, curated content from the Nitric community, and more."
+  />
+  <Guide
+    href="/getting-started/quickstart"
+    name="Quickstart Guide"
+    description="A quickstart guide to build your first Nitric application in any supported language."
+  />
+  <Guide
+    href="/guides/deploying"
+    name="CI/CD Guides"
+    description="Learn how to deploy your Nitric application using CI/CD services."
+    pattern={2}
+  />
+</GuidesGrid>

@@ -10,8 +10,8 @@ import {
   ArrowRightIcon,
   Cog8ToothIcon,
   WrenchScrewdriverIcon,
+  CloudIcon,
 } from '@heroicons/react/24/outline'
-import { CloudIcon } from '@heroicons/react/24/outline'
 
 const providers = [
   {
@@ -85,7 +85,7 @@ export function Providers() {
               />
             )}
             <div className="flex-auto">
-              <h3 className="text-sm font-semibold text-zinc-900 dark:text-white">
+              <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">
                 {provider.name}
               </h3>
               <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
