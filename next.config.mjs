@@ -146,7 +146,7 @@ const nextConfig = {
       },
       {
         source: '/docs/getting-started',
-        destination: '/docs/getting-started/introduction',
+        destination: '/docs/getting-started/quickstart',
         basePath: false,
         permanent: true,
       },
