@@ -291,6 +291,10 @@ const fullNav: FullNav = {
           href: '/concepts/language-support',
         },
         {
+          title: 'CI/CD Pipeline',
+          href: '/concepts/cicd',
+        },
+        {
           title: 'Flexibility with the Nitric Framework',
           href: '/concepts/eject',
         },
