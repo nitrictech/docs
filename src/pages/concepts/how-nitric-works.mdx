@@ -1,64 +1,32 @@
 # How Nitric works
 
-## Components of the Nitric Framework
+Nitric streamlines the development and deployment of cloud applications by automating the provisioning of necessary infrastructure. It allows you to focus on writing code without worrying about the underlying cloud resources, and was designed with portability and flexibility in mind to fit a wide range of projects.
 
-Nothing about Nitric is magic, it's just composed from a few components that work together to help you build cloud apps. The main components of Nitric are the CLI, language SDKs, then a runtime server and deployment engine for each provider.
+## Key Components of Nitric
 
-How your application is deployed, configured, secured and interacts with cloud resources is all determined by the [provider](/reference/providers) you choose during deployment. Providers are deployment and runtime plugins that target a cloud (or other host) and the specific services of that host chosen to fulfill each of the resources Nitric provides, such as a container runtime, buckets, key/value stores, API gateways, queues, etc.
+![diagram](/docs/images/concepts/how-it-works.svg)
 
-Nitric has provider implementations for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). You're also able to [build your own](/reference/providers/custom/building-custom-provider) with the infrastructure-as-code tools and cloud providers of your choice. There is also a local provider which can run your code on your own machine during development.
+### CLI
 
-## How it works during deployment
+The Nitric Command Line Interface (CLI) is your primary tool for interacting with Nitric. It allows you to scaffold new projects, run local development environments, deploy your applications to the cloud or generate IaC for later deployment. The CLI simplifies complex tasks into straightforward commands, ensuring a smooth development experience.
+For local development, the CLI also launches a developer dashboard which provides real time visualization of the resources that are utilized in the application and the ability to trigger and test API routes, Scheduled Events and Websockets and more.
 
-Using the `nitric up` command in the Nitric CLI will initiate a deployment. This command will build your code into containers, then run those containers and connect them to the Nitric CLI's deployment API. That API gathers the requirements of your project (resources, security and other configuration) and communicates them to your chosen provider. The provider takes care of translating those requirements into cloud-specific infrastructure and performing the deployment.
+### Server
 
-![diagram](/docs/images/concepts/how-it-works-build.svg)
+The Nitric Server acts as the interface between your applications and the Deploy or Runtime Plugins. During deployment the Nitric Server is run by the CLI and generates a detailed resource specification outlining all the necessary resources, how the application intends to use the resources and their hierarchy. The Server also creates container images for the application code and a lightweight adapter that translates runtime requests such as a read/write/delete, from a Nitric language SDK to cloud-specific APIs.
 
-The containers that are built during deployment include a copy of the runtime implementation for the provider. The runtime server is a lightweight adapter that translates requests from the Nitric SDK to the cloud-specific APIs in your provider. It also listens for events/requests from the cloud provider, such as HTTP requests or messages on a topic, and forwards them to your application code in a common format.
+The Nitric Server orchestrates, then offloads the deployment process to the selected deployment plugin (provider), ensuring that all necessary resources defined in the specification are provisioned and configured correctly. It does this by creating a mapping between the resource specification and the deployment and runtime plugins for the target cloud.
 
-![diagram](/docs/images/concepts/how-it-works-runtime.svg)
+### Deployment Plugins
 
-## Project structure
+Deployment plugins are responsible for provisioning and configuring the cloud resources defined by your application. These plugins translate the resource specifications generated during development into actionable deployment instructions (built with popular IaC tools like Terraform and Pulumi) for your chosen cloud provider. Nitric supports deployment plugins for AWS, Google Cloud, and Azure, ensuring compatibility with major cloud platforms.
+These plugins can directly deploy your resources or act like an Infrastructure-as-Code compiler, outputting an IaC project for later deployment.
 
-Application's built with Nitric don't have a strict project structure. However, we do provide templates for each supported language, which can be a good place to start when learning how to build with Nitric. There are only two types of files required by Nitric projects:
+### Runtime Plugins
 
-- Project file, e.g. `nitric.yaml`
-- Stack files, e.g. `nitric.develop.yaml`
+Runtime plugins are lightweight adapters that translate requests from a Nitric SDK to the cloud-specific APIs of your provider. They listen for events/requests from the cloud provider, such as HTTP requests or messages from a topic, and forward them to your application code in a common format. A resource that has a deployment plugin will often have a runtime plugin equivalent to allow developers to interact with the resource, e.g. writing to a bucket.
+A combination of a Runtime and Deployment Plugin in Nitric is called a “provider”, Nitric has providers for several clouds, these are a good place to start, but custom providers can also be built.
 
-## Project files
+### Language SDKs
 
-The existence of this file, typically `nitric.yaml`, indicates that the directory contains a project built with Nitric. The file defines the project's name and how to locate code entrypoint (services). This allows Nitric to find and build the code that serves your APIs, subscribers and schedules.
-
-A typical `nitric.yaml` file looks like this:
-
-```yaml {{ tag: 'nitric.yaml' }}
-name: my-project
-services:
-  - match: ./services/*.ts
-    start: yarn dev:services $SERVICE_PATH
-```
-
-## Stack files
-
-Nitric projects can be deployed to multiple environments and cloud providers, stack files identify these deployment targets. These files can be created by running the `nitric stack new` command and allow you to name the stack, as well as configure the provider to use when deploying. They also contain other stack specific configuration, such as the region to deploy to or CPU and memory customization for container instances.
-
-The naming convention for stack files is `nitric.[stack ID].yaml`. Here is an example of a basic stack file created by the Nitric CLI:
-
-```yaml {{ tag: 'nitric.aws.yaml' }}
-provider: nitric/aws@1.1.0
-region: us-east-1
-```
-
-<Note>
-  Provider specific stack configuration can be viewed in the reference docs for
-  each [provider](/reference/providers).
-</Note>
-
-## Extending Nitric
-
-In Nitric, you've got choices! You can extend our standard providers or create your own custom ones. Whether you're tweaking what's already there or inventing something new, Nitric's here to support you. Check out these guides to learn more:
-
-- [Building Custom Providers](/reference/providers/custom/building-custom-provider): Dive into crafting your own custom providers to fit your needs.
-- [Extending Standard Providers](/reference/providers/custom/extend-standard-provider): Extend our standard providers to use the cloud services you prefer.
-
-If you have any questions, feel free to reach out on our [Discord](https://nitric.io/chat).
+Language SDKs enable Nitric to support various programming languages and execution environments. Language support is idiomatic, designed to feel familiar to developers of each language and make the best use of unique language features. Community support is offered for the [following languages](/concepts/language-support).

@@ -33,17 +33,6 @@ Deciding which IaC tool will suit your needs is a difficult decision, and one wh
 
 Our framework and CLI are written in Go, and use the Pulumi Go Providers, so you may be able to avoid rewriting all of the provisioning code by lifting the provisioning code which we've already built.
 
-## CI Pipelines
-
-If you have used the CLI in your pipelines, then you will need to rebuild your CI pipelines to leverage the new IaC tooling that you have chosen.
-
-<Note>
-  If you decided to use Nitric Deploy over the CLI, then you will have to create
-  your own CI pipelines to implement this component of your deployment. Nitric
-  Deploy watches your pipeline for commits, and automatically triggers the
-  infrastructure provisioning.
-</Note>
-
 ## Data Migration
 
 The Nitric Framework does not have access to your data - db, storage, or otherwise. These are all deployed to your cloud instances.

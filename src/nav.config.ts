@@ -283,6 +283,14 @@ const fullNav: FullNav = {
           href: '/concepts/how-nitric-works',
         },
         {
+          title: 'How Devs Use Nitric',
+          href: '/concepts/dev-workflow',
+        },
+        {
+          title: 'How Ops Use Nitric',
+          href: '/concepts/ops-workflow',
+        },
+        {
           title: 'IAM and Access Control',
           href: '/concepts/access-control',
         },
@@ -295,8 +303,8 @@ const fullNav: FullNav = {
           href: '/concepts/cicd',
         },
         {
-          title: 'Flexibility with the Nitric Framework',
-          href: '/concepts/eject',
+          title: 'Project Structure',
+          href: '/concepts/project-structure',
         },
       ],
     },

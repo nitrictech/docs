@@ -104,7 +104,7 @@ const nextConfig = {
       },
       {
         source: '/docs/assets/eject',
-        destination: '/docs/concepts/eject',
+        destination: '/docs/faq',
         basePath: false,
         permanent: true,
       },
@@ -183,6 +183,12 @@ const nextConfig = {
       {
         source: '/docs/assets/access-control',
         destination: '/docs/concepts/access-control',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/eject',
+        destination: '/docs/concepts/flexibility',
         basePath: false,
         permanent: true,
       },
