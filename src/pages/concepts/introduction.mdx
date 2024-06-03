@@ -45,7 +45,7 @@ Nitric.run()
 
 You'll notice in the example that there aren't cloud-specific references, such as a call to AWS S3 or Google Cloud Storage. The deployment automation, identity/access management and runtime access are handled by Nitric through [provider](/reference/providers) plugins, which you choose at deployment. This ensures applications built with Nitric maintain portability and allows you to focus on your product first and a cloud provider second. Apps built with Nitric can even be deployed to multiple cloud providers at once to improve reliability or to maximize availability of free-tier resources.
 
-## Infrastructure from Code (IfC) vs. Infrastructure as Code (IaC)
+### Infrastructure from Code (IfC) vs. Infrastructure as Code (IaC)
 
 IaC is a way of programmatically provisioning infrastructure, including detailed configuration of all resources. IaC tools like Pulumi, Terraform, AWS CDK, Ansible and others bring repeatability to infrastructure by giving you scripts that you can use across different environments or projects to provision infrastructure. This code/config is in addition to your application code, typically with a tight brittle coupling between the two.
 
