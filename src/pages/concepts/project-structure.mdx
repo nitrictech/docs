@@ -1,6 +1,6 @@
 # Project structure
 
-Application's built with Nitric don't have a strict project structure. Templates for each supported language, which can be a good place to start when learning how to build with Nitric. There are only two types of files required by Nitric projects:
+Applications built with Nitric don't have a strict project structure. Templates for each supported language can be a good place to start when learning how to build with Nitric. There are only two types of files required by Nitric projects:
 
 - Project file, e.g. `nitric.yaml`
 - Stack files, e.g. `nitric.develop.yaml`
@@ -20,7 +20,7 @@ services:
 
 ## Stack files
 
-Nitric projects can be deployed to multiple environments and cloud providers, stack files identify these deployment targets. These files can be created by running the `nitric stack new` command and allow you to name the stack, as well as configure the provider to use when deploying. They also contain other stack specific configuration, such as the region to deploy to or CPU and memory customization for container instances.
+Nitric projects can be deployed to multiple environments and cloud providers; stack files identify these deployment targets. These files can be created by running the `nitric stack new` command, then you can name the stack as well as configure the provider to use when deploying. Stack files also contain other stack specific configuration, such as the region to deploy to or CPU and memory customization for container instances.
 
 The naming convention for stack files is `nitric.[stack ID].yaml`. Here is an example of a basic stack file created by the Nitric CLI:
 

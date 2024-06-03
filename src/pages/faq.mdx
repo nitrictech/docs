@@ -32,10 +32,10 @@ Add the environment variable to your `~/.zshrc` or `~/.bashrc` as:
 ```
 PULUMI_ACCESS_TOKEN=access_token
 ```
+
 ## Will I be locked-in to Nitric?
+
 Nitric is designed with flexibility to avoid lock-in, including to Nitric. If the framework no longer serves you, you'll simply need to choose a new IaC and migrate your provisioning code. The Nitric framework and CLI are written in Go, and use the Pulumi Go Providers, so you may be able to avoid rewriting all of the provisioning code by lifting the provisioning code which Nitric has already built for you. If relevant, you'll also need to rebuild your CI pipelines to leverage the new IaC tooling you've chosen. Nitric doesn't have access to your data, so no data migration is needed.
-
-
 
 <DifferencesGrid />
 

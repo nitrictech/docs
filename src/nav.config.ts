@@ -284,11 +284,11 @@ const fullNav: FullNav = {
         },
         {
           title: 'How Devs Use Nitric',
-          href: '/concepts/dev-workflow',
+          href: '/concepts/how-devs-use-nitric',
         },
         {
           title: 'How Ops Use Nitric',
-          href: '/concepts/ops-workflow',
+          href: '/concepts/how-ops-use-nitric',
         },
         {
           title: 'IAM and Access Control',

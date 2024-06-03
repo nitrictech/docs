@@ -188,7 +188,7 @@ const nextConfig = {
       },
       {
         source: '/docs/concepts/eject',
-        destination: '/docs/concepts/flexibility',
+        destination: '/docs/faq',
         basePath: false,
         permanent: true,
       },
