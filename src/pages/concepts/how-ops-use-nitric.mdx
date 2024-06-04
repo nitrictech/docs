@@ -1,0 +1,29 @@
+# How Ops use Nitric
+
+![diagram](/docs/images/concepts/ops-workflow.svg)
+
+## Nitric CLI and Server
+
+Deploying with Nitric is as simple as running the `nitric up` command. The Nitric CLI then initiates the deployment process by generating the resource specification detailing the current runtime requirements of the application.
+
+Next, the Nitric Server orchestrates the deployment process, ensuring that all necessary resources defined in the resource specification are provisioned and configured correctly. It does this by creating a mapping between the resource specification and IaC Providers, based on a lightweight configuration file that contains details of the target cloud, region and any overrides to default services like timeouts or memory.
+
+## Nitric Providers
+
+Providers are deployment and runtime plugins that target a cloud (or other host) and the specific services of that host that are chosen to fulfill each of the resources defined in the resource specification (such as a container runtime, buckets, key/value stores, API gateways, queues, etc.)
+
+Providers consist of a Deployment Engine, which automatically deploys your cloud resources, and a Runtime Adapter, which handles requests from the SDKs and forwards them to appropriate cloud service APIs.
+
+Nitric has [fully supported Provider implementations](/reference/providers#standard-providers) for AWS, Google Cloud and Azure, as well as capabilities to extend or customize them by building [custom providers](/reference/providers/custom/building-custom-provider). Custom providers can utilize any IaC tools to target these or other clouds such as Digital Ocean or Oracle.
+
+<Note>
+  The local runtime emulation feature described in the development section is
+  also a provider which allows you to run your code on your own machine during
+  development.
+</Note>
+
+## Container Images
+
+The Nitric CLI uses Docker to build container images of the application. The containers that are built during deployment include a copy of the runtime implementation for the provider. As with most of the components in the Nitric framework, the containerization process can be [customized](/reference/custom-containers).
+
+The runtime server is a lightweight adapter that translates requests from the Nitric SDK to the cloud-specific APIs in your provider. It also listens for events/requests from the cloud provider, such as HTTP requests or messages on a topic, and forwards them to your application code in a common format.

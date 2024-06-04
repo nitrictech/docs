@@ -283,6 +283,14 @@ const fullNav: FullNav = {
           href: '/concepts/how-nitric-works',
         },
         {
+          title: 'How Devs Use Nitric',
+          href: '/concepts/how-devs-use-nitric',
+        },
+        {
+          title: 'How Ops Use Nitric',
+          href: '/concepts/how-ops-use-nitric',
+        },
+        {
           title: 'IAM and Access Control',
           href: '/concepts/access-control',
         },
@@ -291,8 +299,12 @@ const fullNav: FullNav = {
           href: '/concepts/language-support',
         },
         {
-          title: 'Flexibility with the Nitric Framework',
-          href: '/concepts/eject',
+          title: 'CI/CD Pipeline',
+          href: '/concepts/cicd',
+        },
+        {
+          title: 'Project Structure',
+          href: '/concepts/project-structure',
         },
       ],
     },

@@ -1,0 +1,35 @@
+# Project structure
+
+Applications built with Nitric don't have a strict project structure. Templates for each supported language can be a good place to start when learning how to build with Nitric. There are only two types of files required by Nitric projects:
+
+- Project file, e.g. `nitric.yaml`
+- Stack files, e.g. `nitric.develop.yaml`
+
+## Project files
+
+The existence of this file, typically `nitric.yaml`, indicates that the directory contains a project built with Nitric. The file defines the project's name and how to locate code entrypoint (services). This allows Nitric to find and build the code that serves your APIs, subscribers and schedules.
+
+A typical `nitric.yaml` file looks like this:
+
+```yaml {{ tag: 'nitric.yaml' }}
+name: my-project
+services:
+  - match: ./services/*.ts
+    start: yarn dev:services $SERVICE_PATH
+```
+
+## Stack files
+
+Nitric projects can be deployed to multiple environments and cloud providers; stack files identify these deployment targets. These files can be created by running the `nitric stack new` command, then you can name the stack as well as configure the provider to use when deploying. Stack files also contain other stack specific configuration, such as the region to deploy to or CPU and memory customization for container instances.
+
+The naming convention for stack files is `nitric.[stack ID].yaml`. Here is an example of a basic stack file created by the Nitric CLI:
+
+```yaml {{ tag: 'nitric.aws.yaml' }}
+provider: nitric/aws@1.1.0
+region: us-east-1
+```
+
+<Note>
+  Provider specific stack configuration can be viewed in the reference docs for
+  each [provider](/reference/providers).
+</Note>
