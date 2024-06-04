@@ -40,6 +40,22 @@ An API named ‘milkyway’ with:
   - A storage bucket named planets_images.
     - This service intends to read and write content to the bucket.
 
+<CodeGroup>
+
+```javascript
+import { api, kv, bucket } from '@nitric/sdk'
+
+const milkyWayApi = api('milkyway')
+const planets = kv('planets_store').allow('get', 'set')
+const images = bucket('planets_bucket').allow('read', 'write')
+
+milkyWayApi.get('/planets/:id', async (ctx) => {
+  const { id: pid } = ctx.req.params
+  const d = await planets.get(pid)
+  ctx.res.body = d.content
+})
+```
+
 ```python
 from nitric.resources import api, kv, bucket
 from nitric.application import Nitric
@@ -58,6 +74,8 @@ async def get_planet(ctx: HttpContext) -> None:
 Nitric.run()
 ```
 
+</CodeGroup>
+
 The resource specification is used to generate real-time visualizations of the application and will also be used during the deployment phase to automatically communicate the application’s runtime requirements to the deployment engine that provisions the resources.
 
 ![visualization](/docs/images/concepts/visualization.png)
@@ -68,4 +86,7 @@ Without Nitric this detailed information would normally be communicated manually
 
 As with standard application development, your Nitric project application code can be committed to version control systems like Git. This step ensures that all code changes are tracked, facilitating collaboration and maintaining a history of modifications.
 
-Note: The resource specification is generated in real-time and does not require version control.
+<Note>
+  Note: The resource specification is generated in real-time and does not
+  require version control.
+</Note>
