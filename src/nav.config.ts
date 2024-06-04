@@ -291,6 +291,10 @@ const fullNav: FullNav = {
           href: '/concepts/how-ops-use-nitric',
         },
         {
+          title: 'What You Can Build with Nitric',
+          href: '/concepts/build-with-nitric',
+        },
+        {
           title: 'IAM and Access Control',
           href: '/concepts/access-control',
         },
