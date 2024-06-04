@@ -1,6 +1,4 @@
-<p align="center">
-    <img src="./assets/img/nitric-logo.svg">
-</p>
+<p align="center"><a href="https://nitric.io" target="_blank"><img src="https://raw.githubusercontent.com/nitrictech/nitric/main/docs/assets/nitric-logo.svg" height="120"></a></p>
 
 ## The official Nitric documentation repo
 
@@ -8,6 +6,6 @@ Documentation for the [Nitric framework](https://github.com/nitrictech/nitric).
 
 Updates to the documentation will be included in the Nitric doc website located [here](https://nitric.io/docs).
 
-## Generate CLI Command Docs
+## Generated CLI Command Docs
 
-You can run the `yarn generate:cli-commands` script to generate the CLI command documentation.
+Output for the CLI commands are automatically generated into `/src/assets` via the [collect-assets.js script](./scripts/collect-assets.js) and can be referenced in the mdx pages as seen [here](./src/pages/reference/cli.mdx).
