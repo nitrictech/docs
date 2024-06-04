@@ -163,14 +163,19 @@ interface GuideGridProps {
 
 export function GuidesGrid({ title, children }: GuideGridProps) {
   return (
-    <div className="my-16 xl:max-w-none">
+    <div className={cn('xl:max-w-none', title ? 'my-16' : 'my-8')}>
       {title && (
         <Heading level={2} id="resources">
           {title}
         </Heading>
       )}
 
-      <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 dark:border-white/5 sm:grid-cols-2 xl:grid-cols-4">
+      <div
+        className={cn(
+          'not-prose mt-4 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4',
+          title && 'border-t border-zinc-900/5 pt-10 dark:border-white/5'
+        )}
+      >
         {children}
       </div>
     </div>

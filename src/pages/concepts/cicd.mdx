@@ -1,3 +1,6 @@
+import { FaGithub, FaGitlab } from 'react-icons/fa'
+import { SiAzurepipelines, SiGooglecloud } from 'react-icons/si'
+
 # Your CI/CD Pipeline with Nitric
 
 Nitric integrates seamlessly into CI/CD pipelines to abstract and automate infrastructure management. It’s an action that can slot into your workflow much like any other CLI.
@@ -33,3 +36,46 @@ This workflow ensures consistent resource provisioning across all environments a
 Nitric allows you to deploy to the cloud of your choice without any changes to your codebase. The [Nitric Providers](/concepts/how-ops-use-nitric#nitric-providers) you select will provision the right cloud resources according to the application's requirements, ensuring optimal performance, least privilege permissions and cost efficiency.
 
 Providers have already been written for a variety of foundational services such as APIs, storage buckets, key value store, queues etc. You can learn more about building your own providers or extending existing ones [here](/reference/providers/custom/building-custom-provider).
+
+## CI/CD Guides
+
+Nitric has several guides for integrating with popular CI/CD pipelines.
+
+<GuidesGrid>
+  <Guide
+    href="/guides/deploying/github-actions"
+    name="GitHub Actions"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={FaGithub}
+    description="Use GitHub Actions to deploy your Nitric application."
+  />
+  <Guide
+    href="/guides/deploying/gitlab-ci"
+    name="GitLab Actions"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={FaGitlab}
+    description="Use GitLab CI to deploy your Nitric application."
+  />
+  <Guide
+    href="/guides/deploying/azure-pipelines"
+    name="Azure Pipelines"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={SiAzurepipelines}
+    description="Use Azure Pipelines to deploy your Nitric application."
+  />
+  <Guide
+    href="/guides/deploying/google-cloud-build"
+    name="Google Cloud Build"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={SiGooglecloud}
+    description="Use Google Cloud Build to deploy your Nitric application."
+  />
+</GuidesGrid>
