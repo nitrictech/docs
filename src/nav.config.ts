@@ -283,6 +283,10 @@ const fullNav: FullNav = {
           href: '/concepts/how-nitric-works',
         },
         {
+          title: 'What You Can Build with Nitric',
+          href: '/concepts/build-with-nitric',
+        },
+        {
           title: 'How Devs Use Nitric',
           href: '/concepts/how-devs-use-nitric',
         },

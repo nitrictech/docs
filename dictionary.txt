@@ -185,6 +185,13 @@ namespace
 si
 pre
 CLIs
+CDNs
+gameboy
+biometric
+IDV
+chatbot
+chatbots
+VOD
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
