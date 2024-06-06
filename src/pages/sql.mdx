@@ -159,12 +159,13 @@ const db = sql('my-database', {
 
 <Note>
   The `dockerfile://` prefix is required to indicate that the migrations are run
-  in a Docker container, which will be built and pushed to a registry by your chosen provider.
+  in a Docker container, which will be built and pushed to a registry by your
+  chosen provider.
 </Note>
 
 The Dockerfile can operate as you see fit, but it must contain an entrypoint that runs your migrations and terminates when it's done. Here's an example of a Dockerfile that runs a migration script using Prisma and Node:
 
-```
+```docker
 FROM node
 
 ENV DB_URL=""
