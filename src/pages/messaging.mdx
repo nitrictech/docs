@@ -150,56 +150,6 @@ userCreatedTopic.subscribe((ctx) async {
 
 </CodeGroup>
 
-### Limitations on Publishing and Subscribing
-
-Nitric won't allow you to request publish permissions and create a subscriber in the same service.
-
-This limitation exists to protect against infinite loops in deployed services where a service calls itself indirectly via a topic. These sorts of loops can lead to large unintentional cloud charges - something to avoid.
-
-<CodeGroup>
-
-```javascript
-// 🚫 this is invalid
-import { topic } from '@nitric/sdk'
-
-const loopTopic = topic('infinite').allow('publish')
-
-loopTopic.subscribe(async (ctx) => {
-  await loopTopic.publish({ payload: {} })
-})
-```
-
-```python
-# 🚫 this is invalid
-from nitric.resources import topic
-from nitric.application import Nitric
-
-loop_topic = topic("infinite").allow("publish")
-
-@loop_topic.subscribe()
-async def danger(ctx):
-  await loop_topic.publish(dict())
-
-Nitric.run()
-```
-
-```dart
-// 🚫 this is invalid
-import 'package:nitric_sdk/nitric.dart';
-
-final loopTopic = Nitric.topic("infinite").allow([
-  TopicPermission.publish,
-]);
-
-loopTopic.subscribe((ctx) async {
-  await loopTopic.publish({});
-
-  return ctx;
-});
-```
-
-</CodeGroup>
-
 ### Reliable subscribers
 
 If a subscriber encounters an error or is terminated before it finishes processing a message, what happens? Is the event lost?
