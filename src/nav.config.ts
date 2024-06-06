@@ -28,6 +28,7 @@ import {
   SiDart,
   SiGooglecloud,
   SiMicrosoftazure,
+  SiTerraform,
 } from 'react-icons/si'
 import { BiLogoGoLang } from 'react-icons/bi'
 import { useRouter } from 'next/router'
@@ -247,6 +248,11 @@ const fullNav: FullNav = {
           title: 'Pulumi',
           href: '/reference/pulumi',
           icon: SiPulumi,
+        },
+        {
+          title: 'Terraform',
+          href: '/reference/terraform',
+          icon: SiTerraform,
         },
       ],
     },
@@ -2957,6 +2963,24 @@ const fullNav: FullNav = {
         {
           title: 'Building Nitric providers using Pulumi',
           href: '/reference/pulumi/custom-providers',
+        },
+      ],
+    },
+  ],
+  ['reference/terraform']: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/terraform',
+        },
+        {
+          title: 'Using HCP Terraform as a Backend',
+          href: '/reference/terraform/hcp-terraform',
+        },
+        {
+          title: 'Building Nitric providers using Terraform',
+          href: '/reference/terraform/custom-providers',
         },
       ],
     },
