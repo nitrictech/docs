@@ -365,11 +365,13 @@ export function Navigation(props) {
       <ul role="list">
         {!displayDocsMenu ? (
           <>
-            {topLevelNavigation.map(({ text, href }) => (
-              <TopLevelNavItem key={href} href={href}>
-                {text}
-              </TopLevelNavItem>
-            ))}
+            <div className="hidden lg:block">
+              {topLevelNavigation.map(({ text, href }) => (
+                <TopLevelNavItem key={href} href={href}>
+                  {text}
+                </TopLevelNavItem>
+              ))}
+            </div>
             {navigation.map((group, groupIndex) => (
               <NavigationGroup
                 key={groupIndex}

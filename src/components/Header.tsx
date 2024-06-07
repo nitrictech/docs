@@ -98,14 +98,14 @@ export const Header = forwardRef<HTMLDivElement, { className?: string }>(
               <Search />
             </div>
             <Link
-              className="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-gray-800/5 dark:hover:bg-white/5"
+              className="hidden h-6 w-6 items-center justify-center rounded-md transition hover:bg-gray-800/5 dark:hover:bg-white/5 lg:flex"
               href="https://nitric.io/chat"
               target="_blank"
             >
               <FaDiscord className="h-5 w-5 fill-zinc-600 dark:fill-gray" />
             </Link>
             <Link
-              className="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-gray-800/5 dark:hover:bg-white/5 md:hidden"
+              className="hidden h-6 w-6 items-center justify-center rounded-md transition hover:bg-gray-800/5 dark:hover:bg-white/5 md:hidden lg:flex"
               href="https://github.com/nitrictech/nitric"
               target="_blank"
             >

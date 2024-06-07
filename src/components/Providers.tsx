@@ -37,14 +37,7 @@ const providers = [
     name: 'AWS',
     description: 'View full reference for AWS',
     logo: logoAws,
-    style: 'hidden dark:flex',
-  },
-  {
-    href: '/reference/providers/aws',
-    name: 'AWS',
-    description: 'View full reference for AWS',
-    logo: logoAwsLight,
-    style: 'flex dark:hidden',
+    lightLogo: logoAwsLight,
   },
   {
     href: '/reference/providers/gcp',
@@ -71,16 +64,33 @@ export function Providers() {
           <Link
             href={provider.href}
             key={provider.name}
-            className={`group relative flex items-center gap-4 rounded-2xl bg-zinc-50 p-4 transition-shadow hover:shadow-md hover:shadow-zinc-900/5 dark:bg-white/2.5 dark:hover:shadow-black/5 ${provider.style}`}
+            className={
+              'group relative flex items-center gap-4 rounded-2xl bg-zinc-50 p-4 transition-shadow hover:shadow-md hover:shadow-zinc-900/5 dark:bg-white/2.5 dark:hover:shadow-black/5'
+            }
           >
             <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-zinc-900/7.5 group-hover:ring-zinc-900/10 dark:ring-white/10 dark:group-hover:ring-white/20" />
             {provider.icon ? (
               <provider.icon className="h-10 w-10" />
+            ) : provider.lightLogo ? (
+              <>
+                <Image
+                  src={provider.logo}
+                  alt={provider.name + ' Logo'}
+                  className={'hidden h-10 w-10 dark:flex'}
+                  unoptimized
+                />
+                <Image
+                  src={provider.lightLogo}
+                  alt={provider.name + ' Logo'}
+                  className={'h-10 w-10 dark:hidden'}
+                  unoptimized
+                />
+              </>
             ) : (
               <Image
                 src={provider.logo}
                 alt={provider.name + ' Logo'}
-                className={`h-10 w-10`}
+                className={'h-10 w-10'}
                 unoptimized
               />
             )}
