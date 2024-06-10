@@ -163,6 +163,12 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/docs/getting-started/concepts',
+        destination: '/docs/concepts/introduction',
+        basePath: false,
+        permanent: true,
+      },
+      {
         source: '/docs/assets/env',
         destination: '/docs/reference/env',
         basePath: false,
