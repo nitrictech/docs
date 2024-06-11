@@ -765,6 +765,10 @@ const fullNav: FullNav = {
           title: 'Docker Providers',
           href: '/reference/providers/install/docker',
         },
+        {
+          title: 'SQL Databases',
+          href: '/sql',
+        },
       ],
     },
   ],
