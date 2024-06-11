@@ -73,6 +73,11 @@ const buildingBlockLinks = [
     icon: ArchiveBoxIcon,
   },
   {
+    title: 'SQL Databases',
+    href: '/sql',
+    icon: CircleStackIcon,
+  },
+  {
     title: 'Schedules',
     href: '/schedules',
     icon: ClockIcon,
@@ -674,6 +679,20 @@ const fullNav: FullNav = {
       links: buildingBlockLinks.filter((link) => link.href !== '/storage'),
     },
   ],
+  sql: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/sql',
+        },
+      ],
+    },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/sql'),
+    },
+  ],
   messaging: [
     {
       links: [
@@ -1225,6 +1244,19 @@ const fullNav: FullNav = {
         {
           title: 'file.getUploadUrl()',
           href: '/reference/nodejs/storage/bucket-file-uploadurl',
+        },
+      ],
+    },
+    {
+      title: 'SQL',
+      links: [
+        {
+          title: 'sql()',
+          href: '/reference/nodejs/sql/sql',
+        },
+        {
+          title: 'sql.connectionString()',
+          href: '/reference/nodejs/sql/sql-connection-string',
         },
       ],
     },

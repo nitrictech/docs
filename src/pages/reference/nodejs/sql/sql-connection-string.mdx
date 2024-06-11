@@ -1,0 +1,40 @@
+export const description =
+  "Reference for Nitric's Node.js library - Returns the connection string for a SQL database at runtime."
+
+# Node.js - sql.connectionString()
+
+Returns the connection string for a SQL database at runtime.
+
+```javascript
+import { sql } from '@nitric/sdk'
+
+const db = sql('my-data')
+
+// Should be called at runtime, such as in a service handler
+const connStr = await db.connectionString()
+```
+
+## Examples
+
+### Return a connection string
+
+```javascript
+import { sql } from '@nitric/sdk'
+
+const db = sql('my-data')
+
+// Should be called at runtime, such as in a service handler
+const connStr = await db.connectionString()
+```
+
+### Connect with Prisma
+
+```javascript file=<rootDir>/src/assets/snippets/sql-prisma-snippet.js
+
+```
+
+### Connect with Drizzle
+
+```javascript file=<rootDir>/src/assets/snippets/sql-drizzle-snippet.js
+
+```
