@@ -2975,10 +2975,6 @@ const fullNav: FullNav = {
           href: '/reference/terraform',
         },
         {
-          title: 'Using HCP Terraform as a Backend',
-          href: '/reference/terraform/hcp-terraform',
-        },
-        {
           title: 'Building Nitric providers using Terraform',
           href: '/reference/terraform/custom-providers',
         },
