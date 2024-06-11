@@ -17,9 +17,27 @@ The main benefits of using the Nitric Terraform provider are:
 You're also able to [create your own Terraform provider](/reference/terraform/custom-providers) for Nitric, this is a great option when you have existing Terraform Modules and expertise.
 
 <Note>
+  Terraform providers are currently in preview, they're not recommended for production deployments. We recommend using the standard Nitric providers for production deployments until the Terraform providers are stable.
+</Note>
+
+<Note>
   If you're new to Terraform and/or Nitric, we recommend starting with a
   [standard Nitric provider](/reference/provider). The Terraform provider is
   more advanced and requires a foundational understanding of Terraform.
+</Note>
+
+## Enabling Nitric Terraform Providers
+
+The Nitric Terraform providers are currently in preview, to enable them you'll need to enable `beta-providers` in your Nitric project. You can do this by adding the following to your project's `nitric.yaml` file:
+
+```yaml
+preview:
+  - beta-providers
+```
+
+<Note>
+  The `beta-providers` flag enables all non-stable providers, including the
+  Terraform providers.
 </Note>
 
 ## Getting Started
