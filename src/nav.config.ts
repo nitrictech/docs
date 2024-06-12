@@ -447,14 +447,6 @@ const fullNav: FullNav = {
           href: '/guides/nodejs/api-with-nextjs',
         },
         {
-          title: 'Supabase',
-          href: '/guides/nodejs/nitric-and-supabase',
-        },
-        {
-          title: 'PlanetScale and Prisma',
-          href: '/guides/nodejs/serverless-api-with-planetscale-and-prisma',
-        },
-        {
           title: 'Stripe',
           href: '/guides/nodejs/stripe',
         },
@@ -462,6 +454,20 @@ const fullNav: FullNav = {
           title: 'Twilio',
           href: '/guides/nodejs/twilio',
         },
+
+        {
+          title: 'Uptime Monitor',
+          href: '/guides/nodejs/uptime',
+        },
+        {
+          title: 'Websockets',
+          href: '/guides/nodejs/websockets',
+        },
+      ],
+    },
+    {
+      title: 'Auth',
+      links: [
         {
           title: 'Secure API with Auth0',
           href: '/guides/nodejs/secure-api-auth0',
@@ -470,17 +476,26 @@ const fullNav: FullNav = {
           title: 'Secure APIs with AWS Cognito',
           href: '/guides/nodejs/amazon-cognito',
         },
+      ],
+    },
+    {
+      title: 'Databases',
+      links: [
         {
-          title: 'Using a Database',
+          title: 'Nitric SQL with Drizzle',
+          href: '/guides/nodejs/nitric-and-drizzle',
+        },
+        {
+          title: 'Using an external Database',
           href: '/guides/nodejs/byo-database',
         },
         {
-          title: 'Uptime Monitor',
-          href: '/guides/nodejs/uptime',
+          title: 'Supabase',
+          href: '/guides/nodejs/nitric-and-supabase',
         },
         {
-          title: 'Websockets',
-          href: '/guides/nodejs/websockets',
+          title: 'PlanetScale and Prisma',
+          href: '/guides/nodejs/serverless-api-with-planetscale-and-prisma',
         },
       ],
     },
