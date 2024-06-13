@@ -231,21 +231,21 @@ Open the local dashboard at <a target="_blank" href="http://localhost:49152">loc
 
 ![Add id param for creating a todo](/docs/images/guides/nitric-and-drizzle/step-1.png)
 
-Then add some content to the body of the request, stating the `text` key and value of the todo task.
+Then add some content to the body of the request, stating the `text` key and value of the todo task and click send.
 
 ![Add text content for the todo](/docs/images/guides/nitric-and-drizzle/step-2.png)
 
 Let's check our todo got created by calling the `GET /todos` endpoint, which will list all todos.
 
-![Add text content for the todo](/docs/images/guides/nitric-and-drizzle/step-3.png)
+![Check that our todo get created](/docs/images/guides/nitric-and-drizzle/step-3.png)
 
 Let's toggle our todo as done, navigate to the `PATCH /todos/{id}/toggle` and enter the correct `id` to toggle.
 
-![Add text content for the todo](/docs/images/guides/nitric-and-drizzle/step-4.png)
+![oggle our todo as done](/docs/images/guides/nitric-and-drizzle/step-4.png)
 
 Finally, let's check our todo got toggled to done by calling the `GET /todos` endpoint.
 
-![Add text content for the todo](/docs/images/guides/nitric-and-drizzle/step-5.png)
+![View the todo change](/docs/images/guides/nitric-and-drizzle/step-5.png)
 
 Feel free to test the other endpoints to update or delete the todo items.
 
