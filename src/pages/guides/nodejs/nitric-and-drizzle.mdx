@@ -68,8 +68,6 @@ export default getClient
 
 In this snippet, we declare a new database called `todos` with the `sql` resource from `@nitric/sdk`, then we import functionality from `postgres` and `drizzle-orm`, connect to the database using Nitric's connection string, and initialize Drizzle.
 
-Note that we are also defining a custom migrations dockerfile, this will be used during deployments to apply migrations.
-
 ## Add the migrations dockerfile for cloud deployments
 
 ```docker {{title: 'migrate.dockerfile'}}
@@ -97,7 +95,7 @@ RUN npm run drizzle-kit generate
 ENTRYPOINT ["sh", "-c", "npm run drizzle-kit migrate"]
 ```
 
-This will be used during deployment to apply migrations before any code changes are applied, ensuring no breakages in code due to a schema change.
+This will be used during deployment to apply migrations using drizzle-kit before any code changes are applied, ensuring no breakages in code due to a schema change.
 
 ## Setup Drizzle config file
 
