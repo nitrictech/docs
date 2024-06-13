@@ -4,9 +4,13 @@ export const description = 'How Nitric integrates with Terraform'
 
 Nitric's cloud portability is enabled through a plugin interface known as [providers](/reference/providers). Providers allow applications built with Nitric to be deployed using a variety of Infrastructure Automation technologies, including [Terraform](https://www.terraform.io/).
 
+<Note>
+  Terraform providers are currently in preview, they're not recommended for production deployments. We recommend using the [Standard Provider](/reference/providers) for production deployments until the Terraform providers are stable.
+</Note>
+
 ## Terraform Providers
 
-The Nitric Terraform providers allow you to deploy Nitric applications using Terraform. Currently, a Terraform provider is in Preview for AWS, with support for other cloud providers coming soon. While the standard Nitric Providers directly deploy your application to the cloud, the Terraform providers act more like a Transpiler for the cloud infrastructure requirements, allowing Nitric to generate a Terraform stack using [CDKTF](https://developer.hashicorp.com/terraform/cdktf).
+The Nitric Terraform providers allow you to deploy Nitric applications using Terraform. Currently, a Terraform provider is in Preview for AWS, with support for other cloud providers coming soon. While the standard Nitric Providers deploy your application directly to the cloud, the Terraform providers act more like a Transpiler for the cloud infrastructure requirements, allowing Nitric to generate a Terraform stack using [CDKTF](https://developer.hashicorp.com/terraform/cdktf).
 
 The main benefits of using the Nitric Terraform provider are:
 
@@ -14,11 +18,7 @@ The main benefits of using the Nitric Terraform provider are:
 - **Terraform Ecosystem**: Leverage the existing Terraform ecosystem for managing your cloud infrastructure.
 - **Customization**: Customize your cloud infrastructure using Terraform modules and resources.
 
-You're also able to [create your own Terraform provider](/reference/terraform/custom-providers) for Nitric, this is a great option when you have existing Terraform Modules and expertise.
-
-<Note>
-  Terraform providers are currently in preview, they're not recommended for production deployments. We recommend using the standard Nitric providers for production deployments until the Terraform providers are stable.
-</Note>
+You're also able to [create your own Terraform provider](/reference/terraform/custom-providers) for Nitric, this is the best option when you have existing Terraform Modules and expertise you want to reuse to deploy Nitric app.
 
 <Note>
   If you're new to Terraform and/or Nitric, we recommend starting with a

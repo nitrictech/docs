@@ -235,6 +235,11 @@ const fullNav: FullNav = {
           icon: SiMicrosoftazure,
         },
         {
+          title: 'Terraform',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
+        },
+        {
           title: 'Custom Providers',
           href: '/reference/providers/custom/building-custom-provider',
           icon: WrenchScrewdriverIcon,
@@ -251,7 +256,7 @@ const fullNav: FullNav = {
         },
         {
           title: 'Terraform',
-          href: '/reference/terraform',
+          href: '/reference/providers/terraform',
           icon: SiTerraform,
         },
       ],
@@ -2730,7 +2735,7 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'More Providers',
+      title: 'More Standard Providers',
       links: [
         {
           title: 'GCP',
@@ -2741,6 +2746,21 @@ const fullNav: FullNav = {
           title: 'Azure',
           href: '/reference/providers/azure',
           icon: SiMicrosoftazure,
+        },
+      ],
+    },
+    {
+      title: 'Terraform Providers',
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
+        },
+        {
+          title: 'AWS',
+          href: '/reference/providers/terraform-aws',
+          icon: FaAws,
         },
       ],
     },
@@ -2804,7 +2824,7 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'More Providers',
+      title: 'More Standard Providers',
       links: [
         {
           title: 'AWS',
@@ -2815,6 +2835,21 @@ const fullNav: FullNav = {
           title: 'Azure',
           href: '/reference/providers/azure',
           icon: SiMicrosoftazure,
+        },
+      ],
+    },
+    {
+      title: 'Terraform Providers',
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
+        },
+        {
+          title: 'AWS',
+          href: '/reference/providers/terraform-aws',
+          icon: FaAws,
         },
       ],
     },
@@ -2878,7 +2913,7 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'More Providers',
+      title: 'More Standard Providers',
       links: [
         {
           title: 'AWS',
@@ -2889,6 +2924,21 @@ const fullNav: FullNav = {
           title: 'GCP',
           href: '/reference/providers/gcp',
           icon: SiGooglecloud,
+        },
+      ],
+    },
+    {
+      title: 'Terraform Providers',
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
+        },
+        {
+          title: 'AWS',
+          href: '/reference/providers/terraform-aws',
+          icon: FaAws,
         },
       ],
     },
@@ -2912,7 +2962,7 @@ const fullNav: FullNav = {
   ],
   ['reference/providers']: [
     {
-      title: 'Standard Providers',
+      title: 'Standard Providers (Pulumi)',
       links: [
         {
           title: 'AWS',
@@ -2928,6 +2978,21 @@ const fullNav: FullNav = {
           title: 'Azure',
           href: '/reference/providers/azure',
           icon: SiMicrosoftazure,
+        },
+      ],
+    },
+    {
+      title: 'Terraform Providers',
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
+        },
+        {
+          title: 'AWS',
+          href: '/reference/providers/terraform-aws',
+          icon: FaAws,
         },
       ],
     },
@@ -2963,20 +3028,6 @@ const fullNav: FullNav = {
         {
           title: 'Building Nitric providers using Pulumi',
           href: '/reference/pulumi/custom-providers',
-        },
-      ],
-    },
-  ],
-  ['reference/terraform']: [
-    {
-      links: [
-        {
-          title: 'Overview',
-          href: '/reference/terraform',
-        },
-        {
-          title: 'Building Nitric providers using Terraform',
-          href: '/reference/terraform/custom-providers',
         },
       ],
     },
