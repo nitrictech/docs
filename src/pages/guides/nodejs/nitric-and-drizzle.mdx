@@ -219,10 +219,11 @@ Run nitric start to start your local database and apis.
 nitric start
 ```
 
-Now that your local database is running, push your schema changes directly to the database without generating any migrations files using `drizzle-kit push` command:
+With your local database now running, create and run your first migration using the `drizzle-kit generate` and `drizzle-kit migrate` commands:
 
 ```bash
-npx drizzle-kit push
+npx drizzle-kit generate --name init
+npx drizzle-kit migrate
 ```
 
 ### Add some todos using the Nitric dashboard
