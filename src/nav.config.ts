@@ -490,6 +490,10 @@ const fullNav: FullNav = {
           href: '/guides/nodejs/nitric-and-drizzle',
         },
         {
+          title: 'Nitric SQL with Prisma',
+          href: '/guides/nodejs/nitric-and-prisma',
+        },
+        {
           title: 'Using an external Database',
           href: '/guides/nodejs/byo-database',
         },
