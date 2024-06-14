@@ -1,0 +1,18 @@
+# Extensibility of the Nitric Framework
+
+The Nitric framework is designed with modularity and customization at its core, ensuring developers can tailor their cloud infrastructure to meet specific requirements. This architecture empowers developers to efficiently extend and adapt the framework, aligning with various project needs and evolving technologies.
+
+## Community Edition Choices
+
+The community edition of Nitric was built with several strategic decisions to provide developers with a portable and streamlined path to cloud deployment.
+By focusing on [essential components](/reference/providers#standard-providers) like compute, storage, API gateways, secrets and messaging resources such as queues, events and websockets, Nitric provides a comprehensive toolkit that accelerates development and deployment.
+
+## Customization and Flexibility
+
+Nitric can be customized in the following areas:
+
+- **Cloud Resources:** Customize resources to use different cloud services from those chosen for the community edition.
+- **Custom Cloud Providers:** Create Cloud provider to support your cloud.
+  - Community edition providers have been built with both Pulumi and Terraform.
+- **Language SDKs:** Create your own Language SDK to support your favorite programming language.
+- **Containerization:** Customize the containerization process, for example, by using Podman rather than Docker.

@@ -300,6 +300,10 @@ const fullNav: FullNav = {
           href: '/concepts/how-ops-use-nitric',
         },
         {
+          title: 'Extensibility',
+          href: '/concepts/extensibility',
+        },
+        {
           title: 'IAM and Access Control',
           href: '/concepts/access-control',
         },
