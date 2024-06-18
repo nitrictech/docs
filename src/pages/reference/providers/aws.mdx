@@ -4,6 +4,15 @@ export const description = 'Amazon Web Service (AWS) provider for Nitric'
 
 The officially supported Nitric AWS Provider.
 
+## Variants
+
+The Nitric AWS provider is available in two variants, while these variants are functionally similar, deploying the same underlying cloud resources, they are implemented using different Infrastructure-as-Code tools:
+
+- [Pulumi (Standard)](/reference/providers/aws)
+- [Terraform](/reference/providers/terraform/aws)
+
+The Pulumi provider is recommended for most users, as it provides the most streamlined experience with Nitric. The Terraform provider is recommended for users already familiar with Terraform, particularly if you have existing Terraform tools or workflows you'd like to integrate with Nitric.
+
 ## Usage
 
 The AWS provider is supported by the Nitric SDKs and CLI by default. However, credentials for an AWS account will be required when using the [up command](/reference/cli) from the CLI.
