@@ -235,11 +235,6 @@ const fullNav: FullNav = {
           icon: SiMicrosoftazure,
         },
         {
-          title: 'Terraform',
-          href: '/reference/providers/terraform',
-          icon: SiTerraform,
-        },
-        {
           title: 'Custom Providers',
           href: '/reference/providers/custom/building-custom-provider',
           icon: WrenchScrewdriverIcon,
@@ -2759,7 +2754,7 @@ const fullNav: FullNav = {
         },
         {
           title: 'AWS',
-          href: '/reference/providers/terraform-aws',
+          href: '/reference/providers/terraform/aws',
           icon: FaAws,
         },
       ],
@@ -2848,7 +2843,7 @@ const fullNav: FullNav = {
         },
         {
           title: 'AWS',
-          href: '/reference/providers/terraform-aws',
+          href: '/reference/providers/terraform/aws',
           icon: FaAws,
         },
       ],
@@ -2937,7 +2932,7 @@ const fullNav: FullNav = {
         },
         {
           title: 'AWS',
-          href: '/reference/providers/terraform-aws',
+          href: '/reference/providers/terraform/aws',
           icon: FaAws,
         },
       ],
@@ -2965,6 +2960,11 @@ const fullNav: FullNav = {
       title: 'Standard Providers (Pulumi)',
       links: [
         {
+          title: 'Overview',
+          href: '/reference/providers/pulumi',
+          icon: SiPulumi,
+        },
+        {
           title: 'AWS',
           href: '/reference/providers/aws',
           icon: FaAws,
@@ -2979,6 +2979,11 @@ const fullNav: FullNav = {
           href: '/reference/providers/azure',
           icon: SiMicrosoftazure,
         },
+        {
+          title: 'Custom',
+          href: '/reference/providers/pulumi/custom',
+          icon: WrenchScrewdriverIcon,
+        },
       ],
     },
     {
@@ -2991,7 +2996,7 @@ const fullNav: FullNav = {
         },
         {
           title: 'AWS',
-          href: '/reference/providers/terraform-aws',
+          href: '/reference/providers/terraform/aws',
           icon: FaAws,
         },
       ],
