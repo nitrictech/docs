@@ -246,7 +246,7 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'Pulumi',
-          href: '/reference/pulumi',
+          href: '/reference/providers/pulumi',
           icon: SiPulumi,
         },
         {
@@ -3024,7 +3024,7 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'Overview',
-          href: '/reference/pulumi',
+          href: '/reference/providers/pulumi',
         },
         {
           title: 'Using Pulumi Cloud as a Backend',
