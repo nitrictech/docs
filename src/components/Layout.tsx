@@ -51,11 +51,18 @@ export function Layout({ children, sections = [], disableEditGithub = false }) {
                   </Note>
                 ) : (
                   <Note>
-                    {currentSdkLabel} is in development for v1. Interested in
-                    contributing or chatting with us?
+                    The {currentSdkLabel} SDK currently only supports legacy
+                    versions of Nitric prior to v1. This version is maintained
+                    for compatibility with existing projects and not recommended
+                    for new projects. New projects should be started using a{' '}
+                    <Link className="ml-1" href="/#libraries">
+                      supported SDK
+                    </Link>{' '}
+                    (presented automatically using the `nitric new` command) or
                     <Link className="ml-1" href="https://nitric.io/chat">
-                      Get in touch!
-                    </Link>
+                      get in touch
+                    </Link>{' '}
+                    to request an update to the latest version.
                   </Note>
                 ))}
 
