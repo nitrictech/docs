@@ -10,6 +10,17 @@ Nitric provides functionality for provisioning and interacting with SQL database
   `nitric/aws` provider.
 </Note>
 
+<Note>
+  Managed SQL database services are often priced differently by cloud providers
+  than other resources Nitric can deploy. While most resources have true
+  serverless pricing (i.e. they're free if they go unused) databases are
+  typically charged hourly. Be sure to check the pricing for the database
+  service you choose. [AWS RDS Pricing](https://aws.amazon.com/rds/pricing/),
+  [Google Cloud SQL Pricing](https://cloud.google.com/sql/pricing), and [Azure
+  Database for PostgreSQL
+  Pricing](https://azure.microsoft.com/en-us/pricing/details/postgresql/flexible-server/).
+</Note>
+
 ## Enabling SQL databases
 
 SQL databases are currently in Preview. To enable this feature in your project add the following to your `nitric.yaml` file
@@ -184,3 +195,15 @@ RUN npx prisma generate
 # in the various clouds (e.g. AWS Codebuild does not respect ENTRYPOINT and CMD)
 ENTRYPOINT ["sh", "-c", "npx prisma migrate deploy"]
 ```
+
+## Alternatives
+
+While Nitric's SQL database support is a great option if you prefer to host your database alongside your other Nitric resources, there are many other great serverless or managed options available for data persistence, some of which offer unique features or true serverless pricing.
+
+Here are a few alternatives that work well with Nitric:
+
+- [Supabase](https://supabase.com/) (PostgreSQL)
+- [Neon](https://neon.tech/) (PostgreSQL)
+- [PlanetScale](https://planetscale.com/) (MySQL)
+
+Guides are available for some of these alternatives in the [guides section](/guides).
