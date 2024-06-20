@@ -191,20 +191,20 @@ const fullNav: FullNav = {
           icon: SiDart,
         },
         {
-          title: 'C# .NET',
-          badge: 'Experimental 🧪',
-          href: '/reference/csharp/v0',
-          icon: SiCsharp,
-        },
-        {
           title: 'Go',
-          badge: 'Experimental 🧪',
+          badge: 'Coming soon 🚀',
           href: '/reference/go/v0',
           icon: BiLogoGoLang,
         },
         {
+          title: 'C# .NET',
+          badge: 'Coming soon 🚀',
+          href: '/reference/csharp/v0',
+          icon: SiCsharp,
+        },
+        {
           title: 'JVM',
-          badge: 'Experimental 🧪',
+          badge: 'Coming soon 🚀',
           href: '/reference/jvm/v0',
           icon: FaJava,
         },
