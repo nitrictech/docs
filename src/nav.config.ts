@@ -28,6 +28,7 @@ import {
   SiDart,
   SiGooglecloud,
   SiMicrosoftazure,
+  SiTerraform,
 } from 'react-icons/si'
 import { BiLogoGoLang } from 'react-icons/bi'
 import { useRouter } from 'next/router'
@@ -245,8 +246,13 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'Pulumi',
-          href: '/reference/pulumi',
+          href: '/reference/providers/pulumi',
           icon: SiPulumi,
+        },
+        {
+          title: 'Terraform',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
         },
       ],
     },
@@ -2724,7 +2730,7 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'More Providers',
+      title: 'More Standard Providers',
       links: [
         {
           title: 'GCP',
@@ -2735,6 +2741,21 @@ const fullNav: FullNav = {
           title: 'Azure',
           href: '/reference/providers/azure',
           icon: SiMicrosoftazure,
+        },
+      ],
+    },
+    {
+      title: 'Terraform Providers',
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
+        },
+        {
+          title: 'AWS',
+          href: '/reference/providers/terraform/aws',
+          icon: FaAws,
         },
       ],
     },
@@ -2798,7 +2819,7 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'More Providers',
+      title: 'More Standard Providers',
       links: [
         {
           title: 'AWS',
@@ -2809,6 +2830,21 @@ const fullNav: FullNav = {
           title: 'Azure',
           href: '/reference/providers/azure',
           icon: SiMicrosoftazure,
+        },
+      ],
+    },
+    {
+      title: 'Terraform Providers',
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
+        },
+        {
+          title: 'AWS',
+          href: '/reference/providers/terraform/aws',
+          icon: FaAws,
         },
       ],
     },
@@ -2872,7 +2908,7 @@ const fullNav: FullNav = {
       ],
     },
     {
-      title: 'More Providers',
+      title: 'More Standard Providers',
       links: [
         {
           title: 'AWS',
@@ -2883,6 +2919,21 @@ const fullNav: FullNav = {
           title: 'GCP',
           href: '/reference/providers/gcp',
           icon: SiGooglecloud,
+        },
+      ],
+    },
+    {
+      title: 'Terraform Providers',
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
+        },
+        {
+          title: 'AWS',
+          href: '/reference/providers/terraform/aws',
+          icon: FaAws,
         },
       ],
     },
@@ -2906,8 +2957,13 @@ const fullNav: FullNav = {
   ],
   ['reference/providers']: [
     {
-      title: 'Standard Providers',
+      title: 'Standard Providers (Pulumi)',
       links: [
+        {
+          title: 'Overview',
+          href: '/reference/providers/pulumi',
+          icon: SiPulumi,
+        },
         {
           title: 'AWS',
           href: '/reference/providers/aws',
@@ -2922,6 +2978,26 @@ const fullNav: FullNav = {
           title: 'Azure',
           href: '/reference/providers/azure',
           icon: SiMicrosoftazure,
+        },
+        {
+          title: 'Custom',
+          href: '/reference/providers/pulumi/custom',
+          icon: WrenchScrewdriverIcon,
+        },
+      ],
+    },
+    {
+      title: 'Terraform Providers',
+      links: [
+        {
+          title: 'Overview',
+          href: '/reference/providers/terraform',
+          icon: SiTerraform,
+        },
+        {
+          title: 'AWS',
+          href: '/reference/providers/terraform/aws',
+          icon: FaAws,
         },
       ],
     },
@@ -2948,7 +3024,7 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'Overview',
-          href: '/reference/pulumi',
+          href: '/reference/providers/pulumi',
         },
         {
           title: 'Using Pulumi Cloud as a Backend',

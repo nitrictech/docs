@@ -288,6 +288,24 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       })),
+      {
+        source: '/docs/reference/pulumi',
+        destination: '/docs/reference/providers/pulumi',
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: '/docs/reference/pulumi/custom-providers',
+        destination: '/docs/reference/providers/pulumi/custom',
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: '/docs/reference/pulumi/pulumi-cloud',
+        destination: '/docs/reference/providers/pulumi#pulumi-cloud',
+        basePath: false,
+        permanent: false,
+      },
     ]
   },
   async headers() {
