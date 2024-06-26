@@ -95,22 +95,23 @@ There are two primary ways to run migrations:
 
 ### SQL files
 
-Nitric supports running SQL files as migrations. To do this, create a directory in your project, usually `migrations/[database_name]` by convention, and add your SQL files to it. These files should follow the naming convention `[version]_[name].sql`, where `[version]` indicates the order in which the migrations should be run and `[name]` is a descriptive name for the migration. Here's an example of a directory structure:
+"
+Nitric supports running SQL files as migrations. To do this, create a directory in your project, usually `migrations/[database_name]` by convention, and add your SQL files to it. These files should follow the naming convention `[version]_[name].[up/down].sql`, where `[version]` indicates the order in which the migrations should be run, `[name]` is a descriptive name for the migration and `[up/down]` indicates whether to run the migration on deployment (up) or whether it's for rollbacks (down). Here's an example of a directory structure:
 
 ```
 migrations/
   my-database/
-    1_create_table.sql
-    2_add_column.sql
-    3_create_index.sql
+    1_create_table.up.sql
+    2_add_column.up.sql
+    3_create_index.up.sql
 ```
-
-Other file name elements are also supported, such as `.up.sql` and `.down.sql` to separate the up and down migrations, respectively. This is useful when you need the ability to rollback a migration. Here's an example of a directory structure using this convention:
 
 <Note>
   Nitric doesn't currently support rolling back migrations, files ending in
-  `.down.sql` are ignored.
+  `.down.sql` are ignored and can be omitted.
 </Note>
+
+Here is another example of a directory structure with both up and down migrations:
 
 ```
 migrations/
