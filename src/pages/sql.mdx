@@ -95,7 +95,6 @@ There are two primary ways to run migrations:
 
 ### SQL files
 
-"
 Nitric supports running SQL files as migrations. To do this, create a directory in your project, usually `migrations/[database_name]` by convention, and add your SQL files to it. These files should follow the naming convention `[version]_[name].[up/down].sql`, where `[version]` indicates the order in which the migrations should be run, `[name]` is a descriptive name for the migration and `[up/down]` indicates whether to run the migration on deployment (up) or whether it's for rollbacks (down). Here's an example of a directory structure:
 
 ```
