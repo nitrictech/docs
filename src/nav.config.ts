@@ -2434,7 +2434,7 @@ const fullNav: FullNav = {
       links: [
         {
           title: 'Getting Started',
-          href: '/reference/go/v0',
+          href: '/reference/go',
         },
       ],
     },
