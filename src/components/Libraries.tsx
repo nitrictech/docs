@@ -24,6 +24,12 @@ const libraries = [
     logo: logoPython,
   },
   {
+    href: '/reference/go',
+    name: 'Go',
+    description: 'View full API for Go',
+    logo: logoGo,
+  },
+  {
     href: '/reference/dart',
     name: 'Dart',
     description: 'View full API for Dart',
@@ -34,12 +40,6 @@ const libraries = [
     name: 'C# .NET',
     description: 'View full API for C# .NET',
     logo: logoCsharp,
-  },
-  {
-    href: '/reference/go/v0',
-    name: 'Go',
-    description: 'View full API for Go',
-    logo: logoGo,
   },
   {
     href: '/reference/jvm/v0',

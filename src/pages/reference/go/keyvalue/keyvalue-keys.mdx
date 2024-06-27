@@ -1,0 +1,128 @@
+export const description =
+  "Reference for Nitric's Go library - Retrieve all or some of the keys from a value store."
+
+# Go - Kv.Keys()
+
+Return an async iterable of keys in the store.
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	// Initialize the KV service
+	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
+	if err != nil {
+		return
+	}
+
+	keys, err := profiles.Keys(context.TODO())
+	if err != nil {
+		fmt.Println("Error getting keys: ", err)
+		return
+	}
+
+	// Get all keys from a key value store
+	for {
+		key, err := keys.Recv()
+		if err != nil {
+			// check if the stream has ended
+			break
+		}
+		// do something with the key
+		fmt.Printf("Key: %s\n", key)
+	}
+
+}
+```
+
+## Parameters
+
+<Properties>
+  <Property name="prefix" type="string">
+    The prefix to filter keys by, if not provided all keys will be returned.
+  </Property>
+</Properties>
+
+## Examples
+
+### Get all keys from a key value store
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	// Initialize the KV service
+	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
+	if err != nil {
+		return
+	}
+
+	keys, err := profiles.Keys(context.TODO())
+	if err != nil {
+		fmt.Println("Error getting keys: ", err)
+		return
+	}
+
+	// Get all keys from a key value store
+	for {
+		key, err := keys.Recv()
+		if err != nil {
+			// check if the stream has ended
+			break
+		}
+		// do something with the key
+		fmt.Printf("Key: %s\n", key)
+	}
+
+}
+```
+
+### Get keys filtered by prefix from a key value store
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/api/keyvalue"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	// Initialize the KV service
+	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
+	if err != nil {
+		return
+	}
+
+	// make function with keyvalue.ScanKeysOption type
+	keys, err := profiles.Keys(context.TODO(), keyvalue.WithPrefix("profile:"))
+	if err != nil {
+		fmt.Println("Error getting keys: ", err)
+		return
+	}
+
+	// Get all keys from a key value store
+	for {
+		key, err := keys.Recv()
+		if err != nil {
+			// check if the stream has ended
+			break
+		}
+		// do something with the key
+		fmt.Printf("Key: %s\n", key)
+	}
+
+}
+
+```

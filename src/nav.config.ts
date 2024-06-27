@@ -186,16 +186,16 @@ const fullNav: FullNav = {
           versions: ['v1', 'v0'],
         },
         {
+          title: 'Go',
+          href: '/reference/go',
+          icon: BiLogoGoLang,
+          versions: ['v1', 'v0'],
+        },
+        {
           title: 'Dart',
           badge: 'Experimental 🧪',
           href: '/reference/dart',
           icon: SiDart,
-        },
-        {
-          title: 'Go',
-          badge: 'Coming soon 🚀',
-          href: '/reference/go/v0',
-          icon: BiLogoGoLang,
         },
         {
           title: 'C# .NET',
@@ -2153,7 +2153,7 @@ const fullNav: FullNav = {
       ],
     },
   ],
-  ['reference/go']: [
+  ['reference/go/v0']: [
     {
       links: [
         {
@@ -2424,6 +2424,245 @@ const fullNav: FullNav = {
         {
           title: 'Websocket.Details()',
           href: '/reference/go/v0/websocket/websocket-details',
+        },
+      ],
+    },
+  ],
+  ['reference/go']: [
+    {
+      links: [
+        {
+          title: 'Getting Started',
+          href: '/reference/go/v0',
+        },
+      ],
+    },
+    {
+      title: 'Resources',
+      links: [
+        {
+          title: 'NewApi()',
+          href: '/reference/go/api/api',
+        },
+        {
+          title: 'NewKv()',
+          href: '/reference/go/keyvalue/keyvalue',
+        },
+        {
+          title: 'NewQueue()',
+          href: '/reference/go/queues/queue',
+        },
+        {
+          title: 'NewSecret()',
+          href: '/reference/go/secrets/secret',
+        },
+        {
+          title: 'NewBucket()',
+          href: '/reference/go/storage/bucket',
+        },
+        {
+          title: 'NewTopic()',
+          href: '/reference/go/topic/topic',
+        },
+        {
+          title: 'NewSchedule()',
+          href: '/reference/go/schedule/schedule',
+        },
+        {
+          title: 'NewWebsocket()',
+          href: '/reference/go/websocket/websocket',
+        },
+      ],
+    },
+    {
+      title: 'APIs',
+      links: [
+        {
+          title: 'Api.Get()',
+          href: '/reference/go/api/api-get',
+        },
+        {
+          title: 'Api.Post()',
+          href: '/reference/go/api/api-post',
+        },
+        {
+          title: 'Api.Put()',
+          href: '/reference/go/api/api-put',
+        },
+        {
+          title: 'Api.Delete()',
+          href: '/reference/go/api/api-delete',
+        },
+        {
+          title: 'Api.Patch()',
+          href: '/reference/go/api/api-patch',
+        },
+        {
+          title: 'Api.NewRoute()',
+          href: '/reference/go/api/api-route',
+        },
+        {
+          title: 'Api.Route.All()',
+          href: '/reference/go/api/api-route-all',
+        },
+        {
+          title: 'Api.Route.Get()',
+          href: '/reference/go/api/api-route-get',
+        },
+        {
+          title: 'Api.Route.Post()',
+          href: '/reference/go/api/api-route-post',
+        },
+        {
+          title: 'Api.Route.Put()',
+          href: '/reference/go/api/api-route-put',
+        },
+        {
+          title: 'Api.Route.Delete()',
+          href: '/reference/go/api/api-route-delete',
+        },
+        {
+          title: 'Api.Route.Patch()',
+          href: '/reference/go/api/api-route-patch',
+        },
+        {
+          title: 'Api.Details()',
+          href: '/reference/go/api/api-details',
+        },
+      ],
+    },
+    {
+      title: 'Key Value Stores',
+      links: [
+        {
+          title: 'Kv.Get()',
+          href: '/reference/go/keyvalue/keyvalue-get',
+        },
+        {
+          title: 'Kv.Set()',
+          href: '/reference/go/keyvalue/keyvalue-set',
+        },
+        {
+          title: 'Kv.Delete()',
+          href: '/reference/go/keyvalue/keyvalue-delete',
+        },
+        {
+          title: 'Kv.Keys()',
+          href: '/reference/go/keyvalue/keyvalue-keys',
+        },
+      ],
+    },
+    {
+      title: 'Topics',
+      links: [
+        {
+          title: 'Topic.Publish()',
+          href: '/reference/go/topic/topic-publish',
+        },
+        {
+          title: 'Topic.Subscribe()',
+          href: '/reference/go/topic/topic-subscribe',
+        },
+      ],
+    },
+    {
+      title: 'Queues',
+      links: [
+        {
+          title: 'Queue.Enqueue()',
+          href: '/reference/go/queues/queue-enqueue',
+        },
+        {
+          title: 'Queue.Dequeue()',
+          href: '/reference/go/queues/queue-dequeue',
+        },
+      ],
+    },
+    {
+      title: 'Secrets',
+      links: [
+        {
+          title: 'Secret.Put()',
+          href: '/reference/go/secrets/secret-put',
+        },
+        {
+          title: 'Secret.Version()',
+          href: '/reference/go/secrets/secret-version',
+        },
+        {
+          title: 'Secret.Latest()',
+          href: '/reference/go/secrets/secret-latest',
+        },
+        {
+          title: 'Secret.Version.Access()',
+          href: '/reference/go/secrets/secret-version-access',
+        },
+      ],
+    },
+    {
+      title: 'Storage',
+      links: [
+        {
+          title: 'Bucket.On()',
+          href: '/reference/go/storage/bucket-on',
+        },
+        {
+          title: 'Bucket.File()',
+          href: '/reference/go/storage/bucket-file',
+        },
+        {
+          title: 'Bucket.Files()',
+          href: '/reference/go/storage/bucket-files',
+        },
+        {
+          title: 'File.Read()',
+          href: '/reference/go/storage/bucket-file-read',
+        },
+        {
+          title: 'File.Write()',
+          href: '/reference/go/storage/bucket-file-write',
+        },
+        {
+          title: 'File.Delete()',
+          href: '/reference/go/storage/bucket-file-delete',
+        },
+        {
+          title: 'File.DownloadUrl()',
+          href: '/reference/go/storage/bucket-file-downloadurl',
+        },
+        {
+          title: 'File.UploadUrl()',
+          href: '/reference/go/storage/bucket-file-uploadurl',
+        },
+      ],
+    },
+    {
+      title: 'Schedules',
+      links: [
+        {
+          title: 'Schedule.Every()',
+          href: '/reference/go/schedule/schedule-every',
+        },
+        {
+          title: 'Schedule.Cron()',
+          href: '/reference/go/schedule/schedule-cron',
+        },
+      ],
+    },
+    {
+      title: 'Websockets',
+      links: [
+        {
+          title: 'Websocket.On()',
+          href: '/reference/go/websocket/websocket-on',
+        },
+        {
+          title: 'Websocket.Send()',
+          href: '/reference/go/websocket/websocket-send',
+        },
+        {
+          title: 'Websocket.Close()',
+          href: '/reference/go/websocket/websocket-close',
         },
       ],
     },
