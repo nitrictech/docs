@@ -10,7 +10,9 @@ import { SectionProvider } from '@/components/SectionProvider'
 import { Note } from './mdx'
 import { useVersions } from '@/lib/hooks/use-versions'
 
-const experimentalRuntimes = ['csharp', 'jvm']
+const experimentalRuntimes = ['go', 'dart']
+
+const v0Runtimes = ['csharp', 'jvm']
 
 export function Layout({ children, sections = [], disableEditGithub = false }) {
   const {
@@ -41,9 +43,25 @@ export function Layout({ children, sections = [], disableEditGithub = false }) {
         <div className="relative px-4 pt-14 sm:px-6 lg:px-8">
           <main className="py-16">
             <Prose as="article">
+              {experimentalRuntimes.includes(currentSdk) && (
+                <Note>
+                  The {currentSdkLabel} SDK is currently in experimental status.
+                  If you would like to provide feedback, please reach out to us
+                  with your suggestions and comments on our{' '}
+                  <Link
+                    className="ml-1"
+                    href="https://nitric.io/chat"
+                    target="_blank"
+                  >
+                    Discord
+                  </Link>
+                  .
+                </Note>
+              )}
+
               {isNotLatest &&
                 latestLink &&
-                (!experimentalRuntimes.includes(currentSdk) ? (
+                (!v0Runtimes.includes(currentSdk) ? (
                   <Note>
                     Note: You are viewing documentation for version{' '}
                     {currentVersion} of {currentSdkLabel}.{' '}
@@ -59,7 +77,11 @@ export function Layout({ children, sections = [], disableEditGithub = false }) {
                       supported SDK
                     </Link>{' '}
                     (presented automatically using the `nitric new` command) or
-                    <Link className="ml-1" href="https://nitric.io/chat">
+                    <Link
+                      className="ml-1"
+                      href="https://nitric.io/chat"
+                      target="_blank"
+                    >
                       get in touch
                     </Link>{' '}
                     to request an update to the latest version.
