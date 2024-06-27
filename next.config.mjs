@@ -306,6 +306,12 @@ const nextConfig = {
         basePath: false,
         permanent: false,
       },
+      {
+        source: '/docs/reference/dart/v1',
+        destination: '/docs/reference/dart',
+        basePath: false,
+        permanent: true,
+      },
     ]
   },
   async headers() {
