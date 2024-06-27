@@ -188,6 +188,7 @@ const fullNav: FullNav = {
         {
           title: 'Go',
           href: '/reference/go',
+          badge: 'Experimental 🧪',
           icon: BiLogoGoLang,
           versions: ['v1', 'v0'],
         },
