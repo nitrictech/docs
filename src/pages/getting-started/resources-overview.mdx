@@ -21,7 +21,7 @@ A working example:
 
 <CodeGroup>
 
-```javascript
+```typescript
 import { api, bucket } from '@nitric/sdk'
 
 // ✅ This declaration will work
@@ -48,6 +48,60 @@ async def get_file(ctx):
   bad_bucket = bucket('wont-work').allow('write')
 
 Nitric.run()
+```
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	api, err := nitric.NewApi("public")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// ✅ This declaration will work
+	bucket, err := nitric.NewBucket("files").Allow(nitric.BucketRead)
+
+	api.Get("/files/:name", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+		// ❌ This declaration will not work, as this is only called at runtime.
+		badBucket, err := nitric.NewBucket("wont-work").Allow(nitric.BucketRead)
+
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Service has started")
+}
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+void main() {
+  final helloApi = Nitric.api("public");
+
+  // ✅ This declaration will work
+  final files = Nitric.bucket("files").allow([BucketPermission.read]);
+
+  helloApi.get("/files/:name", (ctx) async {
+    // ❌ This declaration will not work, as this is only called at runtime.
+    final backBucket =
+        Nitric.bucket("wont-work").allow([BucketPermission.read]);
+
+    return ctx;
+  });
+}
 ```
 
 </CodeGroup>
@@ -113,6 +167,122 @@ from resources import update_topic
 @update_topic.subscribe
 async def updates_sub(ctx):
   print(ctx.req.payload)
+```
+
+```go
+// resources/main.go
+package resources
+
+import "github.com/nitrictech/go-sdk/nitric"
+
+var PublicApi nitric.Api
+
+var UpdateTopic nitric.SubscribableTopic
+
+func init() {
+	publicApi, err := nitric.NewApi("public")
+	if err != nil {
+		panic(err)
+	}
+
+	PublicApi = publicApi
+
+	UpdateTopic = nitric.NewTopic("updates")
+}
+
+// services/api/main.go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/your-org/your-repo/resources"
+)
+
+func main() {
+	publisher, err := resources.UpdateTopic.Allow(nitric.TopicPublish)
+	if err != nil {
+		panic(err)
+	}
+
+	resources.PublicApi.Post("/update", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+		publisher.Publish(context.TODO(), map[string]interface{}{
+			"test": "message",
+		})
+
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Api service has started")
+}
+
+
+// services/updates/main.go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/your-org/your-repo/resources"
+)
+
+func main() {
+	resources.UpdateTopic.Subscribe(func(mc *handler.MessageContext, mh handler.MessageHandler) (*handler.MessageContext, error) {
+		println("got the message")
+
+		return mc, nil
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Updates service has started")
+}
+```
+
+```dart
+// lib/resources.dart
+import 'package:nitric_sdk/nitric.dart';
+
+final publicApi = Nitric.api("public");
+
+final updateTopic = Nitric.topic("updates");
+
+// services/api.dart
+import 'package:your-project/resources.dart' as resources;
+import 'package:nitric_sdk/nitric.dart';
+
+void main() {
+  final subscriber = resources.updateTopic.allow([TopicPermission.publish]);
+
+  resources.publicApi.post("/update", (ctx) async {
+    subscriber.publish({"test": "message"});
+
+    return ctx;
+  });
+}
+
+
+// services/updates.dart
+import 'package:your-project/resources.dart' as resources;
+
+void main() {
+  resources.updateTopic.subscribe((ctx) async {
+    print("got the message");
+
+    return ctx;
+  });
+}
 ```
 
 </CodeGroup>
@@ -183,6 +353,107 @@ async def get_file(ctx):
   pass # do something with the file
 
 Nitric.run()
+```
+
+```go
+// resources/main.go
+package resources
+
+import (
+	"github.com/nitrictech/go-sdk/api/storage"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+var PublicApi nitric.Api
+var BucketOne storage.Bucket
+var BucketTwo storage.Bucket
+
+func init() {
+	publicApi, _ := nitric.NewApi("public")
+	bucketOne, _ := nitric.NewBucket("bucket-one").Allow(nitric.BucketRead)
+	bucketTwo, _ := nitric.NewBucket("bucket-two").Allow(nitric.BucketRead)
+
+	PublicApi = publicApi
+	BucketOne = bucketOne
+	BucketTwo = bucketTwo
+}
+
+// services/service-one/main.go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/your-org/your-repo/resources"
+)
+
+func main() {
+	resources.PublicApi.Get("/bucket-one/file/:name", func(hc *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+		// do something with the file
+		return next(hc)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Service has started")
+}
+
+// services/service-two/main.go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/your-org/your-repo/resources"
+)
+
+func main() {
+	resources.PublicApi.Get("/bucket-two/file/:name", func(hc *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+		// do something with the file
+		return next(hc)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Service has started")
+}
+```
+
+```dart
+// lib/resources.dart
+import 'package:nitric_sdk/nitric.dart';
+
+final publicApi = Nitric.api("public");
+final bucketOne = Nitric.bucket("bucket-one").allow([BucketPermission.read]);
+final bucketTwo = Nitric.bucket("bucket-two").allow([BucketPermission.read]);;
+
+// services/service-one.dart
+import 'package:your_project/resources.dart' as resources;
+
+void main() {
+  resources.publicApi.get("/bucket-one/file/:name", (ctx) async {
+    // do something with the file
+    return ctx;
+  });
+}
+
+// services/service-two.dart
+import 'package:your_project/resources.dart' as resources;
+
+void main() {
+  resources.publicApi.get("/bucket-two/file/:name", (ctx) async {
+    // do something with the file
+    return ctx;
+  });
+}
 ```
 
 </CodeGroup>
