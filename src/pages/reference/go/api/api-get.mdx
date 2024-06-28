@@ -97,33 +97,31 @@ api.Get("/hello/:name", func(ctx *handler.HttpContext, next handler.HttpHandler)
 
 ```go
 import (
-  "fmt"
+	"fmt"
 
-  "github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  secureApi, err := nitric.NewApi(
-    "secure",
-    nitric.WithSecurityJwtRule("user", nitric.JwtSecurityRule{
-      Issuer: "https://example-issuer.com",
-      Audiences: []string{ "YOUR-AUDIENCES" },
-    }),
-    nitric.WithSecurity("user", []string{"products:read"}),
-  )
-  if err != nil {
-    return
-  }
+	defaultOidcRule := nitric.OidcRule("user", "https://example-issuer.com", []string{"YOUR-AUDIENCES"})
 
-  // Override the APIs security requirements with `WithNoMethodSecurity()`
-  api.Get("/public", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-    // Handle request
-    return next(ctx)
-  }, nitric.WithNoMethodSecurity())
+	secureApi, err := nitric.NewApi(
+		"secure",
+		nitric.WithSecurity(defaultOidcRule([]string{"products:read"})))
+	if err != nil {
+		return
+	}
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+	// Override the APIs security requirements with `WithNoMethodSecurity()`
+	secureApi.Get("/public", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+		// Handle request
+		return next(ctx)
+	}, nitric.WithNoMethodSecurity())
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
 }
 ```
 

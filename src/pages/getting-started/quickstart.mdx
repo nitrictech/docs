@@ -44,6 +44,14 @@ nitric new hello-world js-starter
 nitric new hello-world py-starter
 ```
 
+```bash {{ title: "Go" }}
+nitric new hello-world go-starter
+```
+
+```bash {{ title: "Dart" }}
+nitric new hello-world dart-starter
+```
+
 </CodeGroup>
 
 Navigate to the new project directory and install the dependencies:
@@ -69,6 +77,18 @@ cd hello-world
 #   We have included it in our python templates.
 #   Installation instructions: https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv
 pipenv install --dev
+```
+
+```bash {{ title: "Go" }}
+cd hello-world
+
+go mod tidy
+```
+
+```bash {{ title: "Dart" }}
+cd hello-world
+
+dart pub get
 ```
 
 </CodeGroup>
@@ -102,9 +122,28 @@ Your project should now look like this:
 ```txt {{ title: "Python" }}
 +--services/
 |  +-- hello.py
-+--index.py
 +--Pipfile
 +--Pipfile.lock
++--nitric.yaml
++--README.md
+```
+
+```txt {{ title: "Go" }}
++--services/hello/
+|  +-- main.go
++--go.mod
++--go.sum
++--golang.dockerfile
++--nitric.yaml
++--README.md
+```
+
+```txt {{ title: "Dart" }}
++--services/
+|  +-- hello.dart
++--analysis_options.yaml
++--pubspec.lock
++--pubspec.yaml
 +--nitric.yaml
 +--README.md
 ```
@@ -223,6 +262,67 @@ async def hello_world(ctx):
     ctx.res.body = f"Goodbye {name}"
 
 Nitric.run()
+```
+
+```go {{ tag: "services/hello/main.go" }}
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	api, err := nitric.NewApi("main")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	api.Get("/hello/:name", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+		name := ctx.Request.PathParams()["name"]
+		ctx.Response.Body = []byte(fmt.Sprintf("Hello %s", name))
+
+		return next(ctx)
+	})
+
+	api.Get("/goodbye/:name", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+		name := ctx.Request.PathParams()["name"]
+		ctx.Response.Body = []byte(fmt.Sprintf("Goodbye %s", name))
+
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Service has started")
+}
+```
+
+```dart {{ tag: "services/hello.dart" }}
+import 'package:nitric_sdk/nitric.dart';
+
+void main() {
+  final helloApi = Nitric.api("main");
+
+  helloApi.get("/hello/:name", (ctx) async {
+    final name = ctx.req.pathParams["name"]!;
+    ctx.res.body = "Hello $name";
+
+    return ctx;
+  });
+
+  helloApi.get("/goodbye/:name", (ctx) async {
+    final name = ctx.req.pathParams["name"]!;
+    ctx.res.body = "Goodbye $name";
+
+    return ctx;
+  });
+}
 ```
 
 </CodeGroup>

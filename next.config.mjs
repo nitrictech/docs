@@ -312,6 +312,12 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       },
+      {
+        source: '/docs/reference/go/api/api-details',
+        destination: '/docs/reference/go',
+        basePath: false,
+        permanent: true,
+      },
     ]
   },
   async headers() {

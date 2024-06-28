@@ -2526,10 +2526,6 @@ const fullNav: FullNav = {
           title: 'Api.Route.Patch()',
           href: '/reference/go/api/api-route-patch',
         },
-        {
-          title: 'Api.Details()',
-          href: '/reference/go/api/api-details',
-        },
       ],
     },
     {
