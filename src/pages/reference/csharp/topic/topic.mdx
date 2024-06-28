@@ -1,0 +1,35 @@
+export const description =
+  "Reference for Nitric's .NET library - Creates a new Topic."
+
+# .NET - Topic()
+
+Creates a new Topic.
+
+```csharp
+var updates = Nitric.Sdk.Nitric.Topic("updates");
+
+Nitric.Sdk.Nitric.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The name of the topic to create.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a new topic
+
+```csharp
+var updates = Nitric.Sdk.Nitric.Topic("updates");
+
+Nitric.Sdk.Nitric.Run();
+```
+
+## See also
+
+- [topic.Subscribe()](./topic-subscribe)
+- [topic.Publish()](./topic-publish)
