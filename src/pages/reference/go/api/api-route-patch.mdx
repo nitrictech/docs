@@ -92,17 +92,14 @@ import (
 )
 
 func main() {
-  secureApi, err := nitric.NewApi(
-    "secure",
-    nitric.WithSecurityJwtRule("user", nitric.JwtSecurityRule{
-      Issuer: "https://example-issuer.com",
-      Audiences: []string{ "YOUR-AUDIENCES" },
-    }),
-    nitric.WithSecurity("user", []string{"products:read"}),
-  )
-  if err != nil {
-    return
-  }
+  defaultOidcRule := nitric.OidcRule("user", "https://example-issuer.com", []string{"YOUR-AUDIENCES"})
+
+	secureApi, err := nitric.NewApi(
+		"secure",
+		nitric.WithSecurity(defaultOidcRule([]string{"products:read"})))
+	if err != nil {
+		return
+	}
 
   // Override the APIs security requirements with `WithNoMethodSecurity()`
   api.NewRoute("/public").Patch(func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {

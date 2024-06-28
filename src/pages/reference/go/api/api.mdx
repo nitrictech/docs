@@ -169,20 +169,18 @@ func main() {
 
 ```go
 import (
-  "fmt"
+	"fmt"
 
-  "github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
+	defaultSecurityRule := nitric.OidcRule("default", "https://example-issuer.com", []string{"YOUR-AUDIENCES"})
+
 	secureApi, err := nitric.NewApi(
 		"secure",
 		// apply the security definition to all routes in this API.
-		nitric.WithSecurity(nitric.OidcOptions{
-			Name:      "default",
-			Issuer:    "https://example-issuer.com",
-			Audiences: []string{"YOUR-AUDIENCES"},
-		}),
+		nitric.WithSecurity(defaultSecurityRule([]string{})),
 	)
 	if err != nil {
 		return
