@@ -55,6 +55,38 @@ async def on_message(ctx):
 Nitric.run()
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	socket, _ := nitric.NewWebsocket("socket")
+
+	socket.On(handler.WebsocketConnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+		// handle connections
+		return next(ctx)
+	})
+
+	socket.On(handler.WebsocketDisconnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+		// handle disconnections
+		return next(ctx)
+	})
+
+	socket.On(handler.WebsocketMessage, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+		// handle messages
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -130,6 +162,42 @@ async def on_disconnect(ctx):
   )
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	socket, _ := nitric.NewWebsocket("socket")
+	connections, _ := nitric.NewKv("connections").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
+
+	// Register a new connection on connect
+	socket.On(handler.WebsocketConnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+		_ = connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
+			// Store any metadata related to the connection here
+			"connectionId": ctx.Request.ConnectionID(),
+		})
+
+		return next(ctx)
+	})
+
+	// Remove a registered connection on disconnect
+	socket.On(handler.WebsocketDisconnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+		_ = connections.Delete(context.TODO(), ctx.Request.ConnectionID())
+
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -238,6 +306,59 @@ async def on_message(ctx):
   await broadcast(ctx.req.data)
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	socket, _ := nitric.NewWebsocket("socket")
+	connections, _ := nitric.NewKv("connections").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
+
+	// Register a new connection on connect
+	socket.On(handler.WebsocketConnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+		_ = connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
+			// Store any metadata related to the connection here
+			"connectionId": ctx.Request.ConnectionID(),
+		})
+
+		return next(ctx)
+	})
+
+	// Remove a registered connection on disconnect
+	socket.On(handler.WebsocketDisconnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+		_ = connections.Delete(context.TODO(), ctx.Request.ConnectionID())
+
+		return next(ctx)
+	})
+
+	// Broadcast message to all the registered websocket connections
+	socket.On(handler.WebsocketMessage, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+		connectionStream, _ := connections.Keys(context.TODO())
+
+		for {
+			connectionId, err := connectionStream.Recv()
+			if err != nil {
+				break // reached the end of the documents
+			}
+
+			// Send a message to a connection
+			_ = socket.Send(context.TODO(), connectionId, []byte(ctx.Request.Message()))
+		}
+
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart

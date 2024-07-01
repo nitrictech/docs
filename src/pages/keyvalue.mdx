@@ -52,6 +52,26 @@ countries = kv('Countries').allow('get', 'set', 'delete')
 Nitric.run()
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	countries, err := nitric.NewKv("Countries").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -99,6 +119,26 @@ await countries.set('USA', {
 Nitric.run()
 ```
 
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+countries, _ := nitric.NewKv("Countries").Allow(nitric.KvStoreSet)
+
+_ = countries.Set(context.TODO(), "USA", map[string]interface{}{
+	"name":      "United States of America",
+	"population": 329500000,
+})
+
+if err := nitric.Run(); err != nil {
+	fmt.Println(err)
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -129,6 +169,13 @@ await countries.set('USA', {
 await countries.set('USA', {
   "name": "United States of America",
   "population": 330000000,
+})
+```
+
+```go
+_ = countries.Set(context.TODO(), "USA", map[string]interface{}{
+	"name":       "United States of America",
+	"population": 329500000,
 })
 ```
 
@@ -164,6 +211,23 @@ countries = kv("Countries").allow("get")
 country = await countries.get("USA")
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+countries, _ := nitric.NewKv("Countries").Allow(nitric.KvStoreGet)
+
+country, _ := countries.Get(context.TODO(), "USA")
+
+if err := nitric.Run(); err != nil {
+	fmt.Println(err)
+}
 ```
 
 ```dart
@@ -215,6 +279,28 @@ await countries.delete('USA')
 Nitric.run()
 ```
 
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+countries, _ := nitric.NewKv("Countries").Allow(nitric.KvStoreSet, nitric.KvStoreDelete)
+
+_ = countries.Set(context.TODO(), "USA", map[string]interface{}{
+	"name":       "United States of America",
+	"population": 329500000,
+})
+
+_ = countries.Delete(context.TODO(), "USA")
+
+if err := nitric.Run(); err != nil {
+	fmt.Println(err)
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -261,6 +347,33 @@ async for key in countries.keys():
   print(key)
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+countries, _ := nitric.NewKv("Countries").Allow(nitric.KvStoreGet)
+
+keys, _ := profiles.Keys(context.TODO())
+
+for {
+	key, err := keys.Recv()
+	if err != nil {
+		// check if the stream has ended
+		break
+	}
+
+	fmt.Println(key)
+}
+
+if err := nitric.Run(); err != nil {
+	fmt.Println(err)
+}
 ```
 
 ```dart
