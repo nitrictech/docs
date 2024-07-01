@@ -40,6 +40,22 @@ user_created_topic = topic("user-created").allow("publish")
 Nitric.run()
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	userCreatedTopic, _ := nitric.NewTopic("user-created").Allow(nitric.TopicPublish)
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -79,6 +95,27 @@ await user_created_topic.publish({
 })
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	userCreatedTopic, _ := nitric.NewTopic("user-created").Allow(nitric.TopicPublish)
+
+	_ = userCreatedTopic.Publish(context.TODO(), map[string]interface{}{
+		"email": "new.user@example.com",
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -131,6 +168,32 @@ async def updates_sub(ctx):
   send_welcome_email(email)
 
 Nitric.run()
+```
+
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/your-org/your-project/common"
+)
+
+func main() {
+	userCreatedTopic := nitric.NewTopic("user-created")
+
+	userCreatedTopic.Subscribe(func(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
+		email := ctx.Request.Message()["email"].(string)
+
+		sendWelcomeEmail(email)
+
+		return ctx, nil
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -207,6 +270,35 @@ async def process_update(ctx):
 Nitric.run()
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/your-org/your-project/common"
+)
+
+func main() {
+	userCreatedTopic := nitric.NewTopic("updates")
+
+	userCreatedTopic.Subscribe(func(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
+		if common.isDuplicate(ctx.Request) {
+			return ctx, nil
+		}
+
+		// not a duplicate, process the event
+  		// ...
+
+		return ctx, nil
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 import 'package:common';
@@ -270,6 +362,22 @@ transaction_queue = queue("transactions").allow("enqueue", "dequeue")
 Nitric.run()
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	transactionQueue, _ := nitric.NewQueue("transactions").Allow(nitric.QueueEnqueue, nitric.QueueDequeue)
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -309,6 +417,29 @@ await transaction_queue.send({
 })
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	transactionQueue, _ := nitric.NewQueue("transactions").Allow(nitric.QueueEnqueue)
+
+	messages := []map[string]interface{}{
+		{"message": "hello world"},
+	}
+
+	transactionQueue.Enqueue(context.TODO(), messages)
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -359,6 +490,30 @@ await transaction_queue.send([
 ])
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	transactionQueue, _ := nitric.NewQueue("transactions").Allow(nitric.QueueEnqueue)
+
+	messages := []map[string]interface{}{
+		{"message": "batch task 1"},
+		{"message": "batch task 2"},
+	}
+
+	transactionQueue.Enqueue(context.TODO(), messages)
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -422,6 +577,33 @@ for task in tasks:
 
   # acknowledge when the task is complete
   await task.complete()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	transactionQueue, _ := nitric.NewQueue("transactions").Allow(nitric.QueueDequeue)
+
+	messages, _ := transactionQueue.Dequeue(context.TODO(), 10)
+
+	for _, message := range messages {
+		// process your message's data
+		fmt.Println(message.Message())
+
+		// acknowledge when the message is complete
+		message.Complete(context.TODO())
+	}
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart

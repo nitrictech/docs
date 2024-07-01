@@ -64,6 +64,33 @@ async def send_reminder(ctx):
 Nitric.run()
 ```
 
+```go
+import (
+	"fmt"
+	"time"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	// Run every 5 minutes
+	nitric.NewSchedule("process-transactions").Every("5 minutues", func(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
+		fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
+		return ctx, nil
+	})
+	// Run at 22:00 Monday through Friday.
+	nitric.NewSchedule("send-reminder").Cron("0 22 * * 1-5", func(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
+		fmt.Printf("reminder  at %s\n", time.Now().Format(time.RFC3339))
+		return ctx, nil
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -125,6 +152,40 @@ async def process_sometimes(ctx):
 @processor.every("30 days")
 async def process_rarely(ctx):
   pass
+```
+
+```go
+import (
+	"fmt"
+	"time"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	// Run every 5 minutes
+	nitric.NewSchedule("process-often").Every("5 minutes", func(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
+		fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
+		return ctx, nil
+	})
+
+	// Run every 2 hours
+	nitric.NewSchedule("process-sometimes").Every("2 hours", func(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
+		fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
+		return ctx, nil
+	})
+
+	// Run every 30 days
+	nitric.NewSchedule("process-rarely").Every("30 days", func(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
+		fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
+		return ctx, nil
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -193,6 +254,35 @@ async def check_for_updates(ctx):
 @updater.cron("0 1 1 * *")
 async def clear_data(ctx):
   print("clearing data")
+```
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	// every 15 minutes
+	nitric.NewSchedule("check-for-updates").Cron("0/15 * * * *", func(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
+		fmt.Println("checking for updates")
+		return ctx, nil
+	})
+
+	// at 1:00am on the 1st of every month
+	nitric.NewSchedule("delete-stale-data").Cron("0 1 1 * *", func(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
+		fmt.Println("clearing data")
+		return ctx, nil
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart

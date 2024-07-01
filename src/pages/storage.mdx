@@ -53,6 +53,22 @@ profiles = bucket('profiles').allow('read', 'write', 'delete')
 Nitric.run()
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite, nitric.BucketDelete)
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -94,6 +110,24 @@ profiles = bucket("profiles").allow("read")
 profile_picture = profiles.file("users/bruce-wayne/profile.png")
 
 Nitric.run()
+```
+
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite, nitric.BucketDelete)
+
+	profilePicture := profiles.File("users/bruce-wayne/profile.png")
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -138,6 +172,29 @@ for file in files:
   print(file.name)
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite, nitric.BucketDelete)
+
+	files, _ := profiles.Files(context.TODO())
+
+	for _, file := range files {
+		fmt.Println(file.Name())
+	}
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -186,6 +243,25 @@ image = await profile.file("users/bruce-wayne/profile.png").read()
 Nitric.run()
 ```
 
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite, nitric.BucketDelete)
+
+	image, _ := profiles.File("users/bruce-wayne/profile.png").Read(context.TODO())
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -232,6 +308,27 @@ await profiles.file("users/bruce-wayne/profile.png").write(profileImage)
 Nitric.run()
 ```
 
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketWrite)
+
+	profileImage := []byte("image data")
+
+	_ = profiles.File("users/bruce-wayne/profile.png").Write(context.TODO(), profileImage)
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -269,6 +366,25 @@ profiles = bucket("profiles").allow("delete")
 await profile.file("users/bruce-wayne/profile.png").delete()
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketDelete)
+
+	_ = profiles.File("users/bruce-wayne/profile.png").Delete(context.TODO())
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -323,6 +439,30 @@ download_url = await profiles.file('profile.png').download_url(3600) # Expiry de
 upload_url = await profiles.file('profile.png').upload_url(3600) # Expiry defaults to 600 (10 minutes)
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite)
+
+	// Expiry defaults to 600 (10 minutes)
+	downloadUrl, _ := profiles.File("profile.png").DownloadUrl(context.TODO(), time.Millisecond*3600)
+
+	// Expiry defaults to 600 (10 minutes)
+	uploadUrl, _ := profiles.File("profile.png").UploadUrl(context.TODO(), time.Millisecond*3600)
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
@@ -383,6 +523,29 @@ async def image_written(ctx):
 Nitric.run()
 ```
 
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles := nitric.NewBucket("profiles")
+
+	// Filter for 'write' events for files starting with '/users/images'
+	profiles.On(handler.WriteNotification, "/users/images", func(ctx *handler.BlobEventContext, next handler.BlobEventHandler) (*handler.BlobEventContext, error) {
+		fmt.Printf("new profile image for %s was written", ctx.Request.Key())
+		return ctx, nil
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -425,6 +588,29 @@ async def file_deleted(ctx):
   print(f"{ctx.req.key} was deleted")
 
 Nitric.run()
+```
+
+```go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles := nitric.NewBucket("profiles")
+
+	// Filter for 'delete' events for any file
+	profiles.On(handler.DeleteNotification, "*", func(ctx *handler.BlobEventContext, next handler.BlobEventHandler) (*handler.BlobEventContext, error) {
+		fmt.Printf("%s was deleted", ctx.Request.Key())
+		return ctx, nil
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
 ```
 
 ```dart
