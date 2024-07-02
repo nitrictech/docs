@@ -1,3 +1,5 @@
+import { InstallNitric } from '@/components/InstallNitric'
+
 export const description =
   'Basic installation instructions for the Nitric Framework'
 
@@ -16,7 +18,7 @@ Please follow these links to the official installation steps for each.
 
 ## Installing the Nitric CLI
 
-<CodeGroup>
+<InstallNitric>
 
 ```bash {{ title: 'macOS' }}
 brew install nitrictech/tap/nitric
@@ -28,10 +30,10 @@ scoop install nitric
 ```
 
 ```bash {{ title: 'Linux' }}
-curl -L https://nitric.io/install?version=latest | bash
+curl -L "https://nitric.io/install?version=latest" | bash
 ```
 
-</CodeGroup>
+</InstallNitric>
 
 ### Manual Install
 
@@ -39,7 +41,7 @@ Alternatively, you can download pre-compiled binaries from the [releases](https:
 
 ## Update to the latest version
 
-<CodeGroup>
+<InstallNitric>
 
 ```bash {{ title: 'macOS' }}
 brew upgrade nitric
@@ -50,10 +52,10 @@ scoop update nitric
 ```
 
 ```bash {{ title: 'Linux' }}
-curl -L https://nitric.io/install?version=latest | bash
+curl -L "https://nitric.io/install?version=latest" | bash
 ```
 
-</CodeGroup>
+</InstallNitric>
 
 You can easily check which version you're on by running `nitric version`.
 
