@@ -245,16 +245,29 @@ const usePreferredLanguageStore = create((set) => ({
         language,
       ],
     })),
+  defaultInitialized: false,
+  setDefaultInitialized: (value) =>
+    set((state) => ({ ...state, defaultInitialized: value })),
 }))
 
-function useTabGroupProps(availableLanguages) {
-  let { preferredLanguages, addPreferredLanguage } = usePreferredLanguageStore()
+function useTabGroupProps(availableLanguages, defaultIndex) {
+  let {
+    preferredLanguages,
+    addPreferredLanguage,
+    defaultInitialized,
+    setDefaultInitialized,
+  } = usePreferredLanguageStore()
   let [selectedIndex, setSelectedIndex] = useState(0)
-  let activeLanguage = [...availableLanguages].sort(
-    (a, z) => preferredLanguages.indexOf(z) - preferredLanguages.indexOf(a)
-  )[0]
+  let activeLanguage =
+    typeof defaultIndex !== 'undefined' && !defaultInitialized
+      ? availableLanguages[defaultIndex]
+      : [...availableLanguages].sort(
+          (a, z) =>
+            preferredLanguages.indexOf(z) - preferredLanguages.indexOf(a)
+        )[0]
   let languageIndex = availableLanguages.indexOf(activeLanguage)
   let newSelectedIndex = languageIndex === -1 ? selectedIndex : languageIndex
+
   if (newSelectedIndex !== selectedIndex) {
     setSelectedIndex(newSelectedIndex)
   }
@@ -266,6 +279,10 @@ function useTabGroupProps(availableLanguages) {
     ref: positionRef,
     selectedIndex,
     onChange: (newSelectedIndex) => {
+      if (typeof defaultIndex !== 'undefined' && !defaultInitialized) {
+        setDefaultInitialized(true)
+      }
+
       preventLayoutShift(() =>
         addPreferredLanguage(availableLanguages[newSelectedIndex])
       )
@@ -275,9 +292,15 @@ function useTabGroupProps(availableLanguages) {
 
 export const CodeGroupContext = createContext(false)
 
-export function CodeGroup({ children, title, compare, ...props }) {
+export function CodeGroup({
+  children,
+  title,
+  compare,
+  defaultIndex,
+  ...props
+}) {
   let languages = Children.map(children, (child) => getPanelTitle(child.props))
-  let tabGroupProps = useTabGroupProps(languages)
+  let tabGroupProps = useTabGroupProps(languages, defaultIndex)
   let hasTabs = Children.count(children) > 1
   let Container = hasTabs ? Tab.Group : 'div'
   let containerProps = hasTabs ? tabGroupProps : {}

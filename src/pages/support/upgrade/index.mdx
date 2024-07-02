@@ -1,3 +1,5 @@
+import { InstallNitric } from '@/components/InstallNitric'
+
 export const description = 'How to upgrade from v0 to v1 of Nitric'
 
 # Upgrading Nitric projects from v0.x to v1.x
@@ -10,7 +12,7 @@ Nitric v1.x introduces a number of breaking changes from v0.x. However, in most 
 
 The first step in upgrading your project is to upgrade the Nitric CLI. You can do this by running the following command:
 
-<CodeGroup>
+<InstallNitric>
 
 ```bash {{ title: 'macOS' }}
 brew upgrade nitric
@@ -24,7 +26,7 @@ scoop update nitric
 curl -L "https://nitric.io/install?version=latest" | bash
 ```
 
-</CodeGroup>
+</InstallNitric>
 
 ## Upgrading Nitric Projects
 
