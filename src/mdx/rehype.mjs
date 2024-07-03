@@ -1,7 +1,11 @@
 import { mdxAnnotations } from 'mdx-annotations'
 import { visit } from 'unist-util-visit'
 import rehypeMdxTitle from 'rehype-mdx-title'
-import { createHighlighter, createCssVariablesTheme } from 'shiki'
+import {
+  createHighlighter,
+  createCssVariablesTheme,
+  getSingletonHighlighter,
+} from 'shiki'
 import { toString } from 'mdast-util-to-string'
 import * as acorn from 'acorn'
 import { slugifyWithCounter } from '@sindresorhus/slugify'
@@ -19,8 +23,6 @@ function rehypeParseCodeBlocks() {
   }
 }
 
-let highlighter
-
 function rehypeShiki() {
   return async (tree) => {
     const cssTheme = createCssVariablesTheme({
@@ -30,36 +32,33 @@ function rehypeShiki() {
       fontStyle: true,
     })
 
-    highlighter =
-      highlighter ??
-      (await createHighlighter({
-        themes: [cssTheme],
-        langs: [
-          'js',
-          'ts',
-          'javascript',
-          'typescript',
-          'php',
-          'python',
-          'ruby',
-          'bash',
-          'csharp',
-          'c#',
-          'cs',
-          'text',
-          'java',
-          'kotlin',
-          'terraform',
-          'hcl',
-          'dart',
-          'go',
-          'yaml',
-          'yml',
-          'bicep',
-          'dockerfile',
-          'json',
-        ],
-      }))
+    const highlighter = await getSingletonHighlighter({
+      themes: [cssTheme],
+      langs: [
+        'javascript',
+        'typescript',
+        'php',
+        'python',
+        'ruby',
+        'shellscript',
+        'csharp',
+        'text',
+        'java',
+        'kotlin',
+        'terraform',
+        'make',
+        'hcl',
+        'dart',
+        'go',
+        'yaml',
+        'bicep',
+        'dockerfile',
+        'json',
+        'prisma',
+        'toml',
+        'graphql',
+      ],
+    })
 
     visit(tree, 'element', (node) => {
       if (node.tagName === 'pre' && node.children[0]?.tagName === 'code') {
