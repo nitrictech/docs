@@ -2963,6 +2963,10 @@ const fullNav: FullNav = {
           title: 'Topics',
           href: '/reference/providers/aws/topics',
         },
+        {
+          title: 'Import Existing Resources',
+          href: '/reference/providers/aws/imports',
+        },
       ],
     },
     {
