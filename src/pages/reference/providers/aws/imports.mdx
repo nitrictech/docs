@@ -27,13 +27,15 @@ The tags added to the resources during deployment may not be removed during the 
 ## Importable Resources
 
 The Nitric team is working to expand the list of resources that can be imported. Currently, only the following resources are supported:
-  - [Secrets](/secrets)
-  - [Buckets](/storage)
+
+- [Secrets](/secrets)
+- [Buckets](/storage)
 
 ### Buckets
 
 <Note>
-  Bucket imports are only supported for S3 buckets in the same AWS account and region as the Nitric project.
+  Bucket imports are only supported for S3 buckets in the same AWS account and
+  region as the Nitric project.
 </Note>
 
 To import an S3 bucket, you will need to know the bucket's name or ARN. You can find the ARN of an S3 bucket in the AWS console or by using the AWS CLI.
@@ -41,9 +43,9 @@ To import an S3 bucket, you will need to know the bucket's name or ARN. You can 
 First add the bucket to your project as you usually would if it wasn't imported. Then add the bucket to the `import` section of your stack file. Here's an example of how to import an S3 bucket:
 
 ```javascript
-import { bucket } from "@nitric/sdk";
+import { bucket } from '@nitric/sdk'
 
-const images = bucket("images").allow("read", "write", "delete");
+const images = bucket('images').allow('read', 'write', 'delete')
 ```
 
 ```yaml
@@ -53,7 +55,8 @@ import:
 ```
 
 <Note>
-  Either the bucket's name or ARN can be used to import the bucket. The ARN is recommended as it is more specific.
+  Either the bucket's name or ARN can be used to import the bucket. The ARN is
+  recommended as it is more specific.
 </Note>
 
 ### Secrets
