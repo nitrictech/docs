@@ -1,7 +1,11 @@
 import { mdxAnnotations } from 'mdx-annotations'
 import { visit } from 'unist-util-visit'
 import rehypeMdxTitle from 'rehype-mdx-title'
-import shiki from 'shiki'
+import {
+  createHighlighter,
+  createCssVariablesTheme,
+  getSingletonHighlighter,
+} from 'shiki'
 import { toString } from 'mdast-util-to-string'
 import * as acorn from 'acorn'
 import { slugifyWithCounter } from '@sindresorhus/slugify'
@@ -19,12 +23,42 @@ function rehypeParseCodeBlocks() {
   }
 }
 
-let highlighter
-
 function rehypeShiki() {
   return async (tree) => {
-    highlighter =
-      highlighter ?? (await shiki.getHighlighter({ theme: 'css-variables' }))
+    const cssTheme = createCssVariablesTheme({
+      name: 'css-variables',
+      variablePrefix: '--shiki-',
+      variableDefaults: {},
+      fontStyle: true,
+    })
+
+    const highlighter = await getSingletonHighlighter({
+      themes: [cssTheme],
+      langs: [
+        'javascript',
+        'typescript',
+        'php',
+        'python',
+        'ruby',
+        'shellscript',
+        'csharp',
+        'text',
+        'java',
+        'kotlin',
+        'terraform',
+        'make',
+        'hcl',
+        'dart',
+        'go',
+        'yaml',
+        'bicep',
+        'dockerfile',
+        'json',
+        'prisma',
+        'toml',
+        'graphql',
+      ],
+    })
 
     visit(tree, 'element', (node) => {
       if (node.tagName === 'pre' && node.children[0]?.tagName === 'code') {
@@ -34,17 +68,9 @@ function rehypeShiki() {
         node.properties.code = textNode.value
 
         if (node.properties.language) {
-          let tokens = highlighter.codeToThemedTokens(
-            textNode.value,
-            node.properties.language
-          )
-
-          textNode.value = shiki.renderToHtml(tokens, {
-            elements: {
-              pre: ({ children }) => children,
-              code: ({ children }) => children,
-              line: ({ children }) => `<span>${children}</span>`,
-            },
+          textNode.value = highlighter.codeToHtml(textNode.value, {
+            lang: node.properties.language,
+            theme: 'css-variables',
           })
         }
       }
