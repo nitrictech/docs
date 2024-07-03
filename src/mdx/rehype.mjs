@@ -1,7 +1,7 @@
 import { mdxAnnotations } from 'mdx-annotations'
 import { visit } from 'unist-util-visit'
 import rehypeMdxTitle from 'rehype-mdx-title'
-import shiki from 'shiki'
+import { createHighlighter, createCssVariablesTheme } from 'shiki'
 import { toString } from 'mdast-util-to-string'
 import * as acorn from 'acorn'
 import { slugifyWithCounter } from '@sindresorhus/slugify'
@@ -23,8 +23,43 @@ let highlighter
 
 function rehypeShiki() {
   return async (tree) => {
+    const cssTheme = createCssVariablesTheme({
+      name: 'css-variables',
+      variablePrefix: '--shiki-',
+      variableDefaults: {},
+      fontStyle: true,
+    })
+
     highlighter =
-      highlighter ?? (await shiki.getHighlighter({ theme: 'css-variables' }))
+      highlighter ??
+      (await createHighlighter({
+        themes: [cssTheme],
+        langs: [
+          'js',
+          'ts',
+          'javascript',
+          'typescript',
+          'php',
+          'python',
+          'ruby',
+          'bash',
+          'csharp',
+          'c#',
+          'cs',
+          'text',
+          'java',
+          'kotlin',
+          'terraform',
+          'hcl',
+          'dart',
+          'go',
+          'yaml',
+          'yml',
+          'bicep',
+          'dockerfile',
+          'json',
+        ],
+      }))
 
     visit(tree, 'element', (node) => {
       if (node.tagName === 'pre' && node.children[0]?.tagName === 'code') {
@@ -34,17 +69,9 @@ function rehypeShiki() {
         node.properties.code = textNode.value
 
         if (node.properties.language) {
-          let tokens = highlighter.codeToThemedTokens(
-            textNode.value,
-            node.properties.language
-          )
-
-          textNode.value = shiki.renderToHtml(tokens, {
-            elements: {
-              pre: ({ children }) => children,
-              code: ({ children }) => children,
-              line: ({ children }) => `<span>${children}</span>`,
-            },
+          textNode.value = highlighter.codeToHtml(textNode.value, {
+            lang: node.properties.language,
+            theme: 'css-variables',
           })
         }
       }

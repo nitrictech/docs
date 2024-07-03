@@ -34,7 +34,7 @@ newApi.get('/hello', (ctx) => {
 
 Implementing least-privilege with bicep requires defining role definitions and/or role assignments in the bicep file.
 
-```
+```bicep
 resource symbolicname 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
   name: 'string'
   scope: resourceSymbolicName or tenant()
