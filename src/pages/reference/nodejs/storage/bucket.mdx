@@ -9,7 +9,7 @@ Create a new bucket for storing and retrieving files.
 import { bucket } from '@nitric/sdk'
 
 // Create a readable/writable reference to an 'assets' bucket
-const assets = bucket('assets').for('reading', 'writing', 'deleting')
+const assets = bucket('assets').allow('read', 'write', 'delete')
 ```
 
 ## Parameters
