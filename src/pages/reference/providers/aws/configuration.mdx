@@ -2,7 +2,7 @@ export const description = 'Configuring your AWS stacks'
 
 # AWS Configuration
 
-# Complete Example with comments
+## Complete Example with comments
 
 <CodeGroup>
 
@@ -29,6 +29,10 @@ schedule-timezone: Australia/Sydney # Available since v0.27.0
 # Currently only secrets are supported
 # Available since v0.28.0
 import:
+  # A name ARN map of buckets, where the name matches the nitric name of the bucket you would like to import
+  buckets: # Available since v1.10.0
+    # NOTE: Imported S3 buckets must exist in the same AWS account and region as the Nitric project
+    my-bucket: arn:...
   # A name ARN map of secrets, where the name matches the nitric name of the secret you would like to import
   secrets: # Available since v0.28.0
     # In typescript this would import the provided secret reference for a secret declared as
