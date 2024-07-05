@@ -131,8 +131,8 @@ import { publicApi, updateTopic } from '../lib/resources'
 
 const publisher = updateTopic.allow('publish')
 
-publicApi.post('/update', (ctx) => {
-  publisher.publish({ test: 'message' })
+publicApi.post('/update', async (ctx) => {
+  await publisher.publish({ test: 'message' })
 })
 
 // services/updates.ts
