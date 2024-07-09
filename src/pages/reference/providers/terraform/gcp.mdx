@@ -1,0 +1,35 @@
+export const description =
+  'Terraform - Google Cloud Platform (GCP) provider for Nitric'
+
+# Terraform GCP Provider Overview
+
+The officially supported Nitric Terraform GCP Provider.
+
+<Note>
+  The Nitric Terraform GCP Provider is currently in preview, it's not
+  recommended for production deployments. We recommend using the [Standard
+  Providers](/reference/providers) for production deployments until the
+  Terraform providers are stable.
+</Note>
+
+## Usage
+
+The Terraform GCP provider is supported by the Nitric SDKs and CLI by default. However, the Terraform CLI or equivalent will be required to deploy the resulting Terraform Stack that Nitric generates.
+
+### GCP Credentials
+
+The Terraform CLI typically uses standard GCP credential settings to authenticate with GCP. If you've used the GCP CLI to login or another standard method previously, these settings should work without modification.
+
+If you're setting your credentials for the first time we recommend the using the gcloud CLI auth command.
+
+### Google Cloud Credentials
+
+Authorize `gcloud` to access the Cloud Platform with Google user credentials:
+
+```bash
+gcloud auth application-default login
+```
+
+## Configuration
+
+See the original [GCP Configuration](/reference/providers/gcp/configuration) guide and select the Terraform tab for more information on configuring your GCP stacks with Terraform.

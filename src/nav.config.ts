@@ -2997,6 +2997,11 @@ const fullNav: FullNav = {
           href: '/reference/providers/terraform/aws',
           icon: FaAws,
         },
+        {
+          title: 'GCP',
+          href: '/reference/providers/terraform/gcp',
+          icon: SiGooglecloud,
+        },
       ],
     },
     {
@@ -3085,6 +3090,11 @@ const fullNav: FullNav = {
           title: 'AWS',
           href: '/reference/providers/terraform/aws',
           icon: FaAws,
+        },
+        {
+          title: 'GCP',
+          href: '/reference/providers/terraform/gcp',
+          icon: SiGooglecloud,
         },
       ],
     },
@@ -3175,6 +3185,11 @@ const fullNav: FullNav = {
           href: '/reference/providers/terraform/aws',
           icon: FaAws,
         },
+        {
+          title: 'GCP',
+          href: '/reference/providers/terraform/gcp',
+          icon: SiGooglecloud,
+        },
       ],
     },
     {
@@ -3238,6 +3253,11 @@ const fullNav: FullNav = {
           title: 'AWS',
           href: '/reference/providers/terraform/aws',
           icon: FaAws,
+        },
+        {
+          title: 'GCP',
+          href: '/reference/providers/terraform/gcp',
+          icon: SiGooglecloud,
         },
       ],
     },

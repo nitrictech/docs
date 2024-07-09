@@ -4,14 +4,16 @@ export const description = 'Configuring your Google Cloud stacks'
 
 # Complete Example with comments
 
-```yaml
+<CodeGroup>
+
+```yaml {{ title: "Pulumi" }}
 # The name of your GCP stack
 name: my-gcp-stack-name
 
 # The provider to use and it's published version
 # See releases:
 # https://github.com/nitrictech/nitric/tags
-provider: nitric/gcp@1.1.0
+provider: nitric/gcp@1.10.0
 
 # The target GCP region to deploy to
 # See available regions:
@@ -26,7 +28,7 @@ gcp-project-id: my-gcp-project-id
 # The timezone that deployed schedules will run with
 # Format is in tz identifiers:
 # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-schedule-timezone: Australia/Sydney # Available since v0.27.0
+schedule-timezone: Australia/Sydney
 
 # Import existing GCP Resources
 # Currently only secrets are supported
@@ -43,10 +45,8 @@ import:
 config:
   # How services without a type will be deployed
   default:
-    # configure a sample rate for telemetry (between 0 and 1) e.g. 0.5 is 50%
-    telemetry: 0
     # configure services to deploy to Google Cloud Run
-    cloudrun: # Available since v0.26.0
+    cloudrun:
       # set 512MB of RAM
       # See cloudrun configuration docs here:
       # https://cloud.google.com/run/docs/configuring/memory-limits
@@ -66,7 +66,6 @@ config:
   # Additional deployment types
   # You can target these types by setting a `type` in your project configuration
   big-service:
-    telemetry: 0
     cloudrun:
       memory: 1024
       timeout: 60
@@ -74,6 +73,53 @@ config:
       max-instances: 100
       concurrency: 1000
 ```
+
+```yaml {{ title: "Terraform (Preview)" }}
+# The name of your GCP stack
+name: my-gcp-stack-name
+
+# The provider to use and it's published version
+# See releases:
+# https://github.com/nitrictech/nitric/tags
+provider: nitric/gcptf@1.10.0
+
+# The target GCP region to deploy to
+# See available regions:
+# https://cloud.google.com/run/docs/locations
+region: my-gcp-stack-region
+
+# ID of the google cloud project to deploy into
+gcp-project-id: my-gcp-project-id
+
+# All configuration below is optional
+
+# The timezone that deployed schedules will run with
+# Format is in tz identifiers:
+# https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+schedule-timezone: Australia/Sydney
+
+# Configure your deployed services
+config:
+  # How services without a type will be deployed
+  default:
+    # configure services to deploy to Google Cloud Run
+    cloudrun:
+      # set 512MB of RAM
+      # See cloudrun configuration docs here:
+      # https://cloud.google.com/run/docs/configuring/memory-limits
+      memory: 512
+      # set a timeout of 15 seconds
+      # https://cloud.google.com/run/docs/configuring/request-timeout
+      timeout: 15
+  # Additional deployment types
+  # You can target these types by setting a `type` in your project configuration
+  big-service:
+    cloudrun:
+      memory: 1024
+      timeout: 60
+```
+
+</CodeGroup>
 
 ## Document Reference Links:
 
