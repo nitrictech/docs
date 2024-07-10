@@ -99,7 +99,7 @@ db = sql("my-database")
 
 @example.get("/hello")
 async def hello(ctx: HttpContext):
-    conn_str = await db.connectionString()
+    conn_str = await db.connection_string()
     # TODO: Interact with the database using the connection string
     return ctx
 
