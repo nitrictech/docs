@@ -48,6 +48,12 @@ import { sql } from '@nitric/sdk'
 const db = sql('my-database')
 ```
 
+```python
+from nitric.resources import sql
+
+db = sql("my-database")
+```
+
 </CodeGroup>
 
 ## Accessing a SQL database
@@ -80,6 +86,24 @@ api('example').get('/hello', async (ctx) => {
   // TODO: Interact with the database using the connection string
   return ctx
 })
+```
+
+```python
+from nitric.resources import api, sql
+from nitric.application import Nitric
+from nitric.context import HttpContext
+
+example = api("example")
+
+db = sql("my-database")
+
+@example.get("/hello")
+async def hello(ctx: HttpContext):
+    conn_str = await db.connectionString()
+    # TODO: Interact with the database using the connection string
+    return ctx
+
+Nitric.run()
 ```
 
 </CodeGroup>
@@ -139,8 +163,14 @@ const db = sql('my-database', {
 import { sql } from '@nitric/sdk'
 
 const db = sql('my-database', {
-  migrations: 'file://migrations/my-database',
+  migrations: ''file://migrations/my-database'',
 })
+```
+
+```python
+from nitric.resources import sql
+
+db = sql("my-database", migrations="file://migrations/my-database")
 ```
 
 </CodeGroup>
@@ -167,6 +197,12 @@ import { sql } from '@nitric/sdk'
 const db = sql('my-database', {
   migrations: 'dockerfile://migrations.dockerfile',
 })
+```
+
+```python
+from nitric.resources import sql
+
+db = sql("my-database", migrations="dockerfile://migrations.dockerfile")
 ```
 
 </CodeGroup>
