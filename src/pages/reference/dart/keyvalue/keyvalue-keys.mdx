@@ -12,7 +12,7 @@ final profiles = Nitric.kv("profiles").allow([
   KeyValueStorePermission.get,
 ]);
 
-final keys = profiles.keys();
+final keys = await profiles.keys();
 
 keys.forEach((String key) {
   // do something with the key
@@ -38,7 +38,7 @@ final profiles = Nitric.kv("profiles").allow([
   KeyValueStorePermission.get,
 ]);
 
-final keys = profiles.keys();
+final keys = await profiles.keys();
 
 keys.forEach((String key) {
   // do something with the key
@@ -54,7 +54,7 @@ final profiles = Nitric.kv("profiles").allow([
   KeyValueStorePermission.get,
 ]);
 
-final keys = profiles.keys("subprofile:");
+final keys = await profiles.keys("subprofile:");
 
 keys.forEach((String key) {
   // do something with the key

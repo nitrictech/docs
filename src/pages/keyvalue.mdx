@@ -383,7 +383,7 @@ final countries = Nitric.kv("Countries").allow([
   KeyValueStorePermission.get,
 ]);
 
-final keys = countries.keys();
+final keys = await countries.keys();
 
 keys.forEach((String key) {
   print(key);

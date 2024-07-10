@@ -386,7 +386,7 @@ socket.onDisconnect((ctx) async {
 
 // broadcast message to all clients (including the sender)
 socket.onMessage((ctx) async {
-  final conns = connections.keys();
+  final conns = await connections.keys();
 
   await Future.wait(await conns.map((conn) async {
     // Send a message to a connection
