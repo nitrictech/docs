@@ -70,7 +70,9 @@ nitric up
   generate the Terraform code.
 </Note>
 
-This will generate the Terraform code for your Nitric application. To deploy the application using Terraform, you can navigate into your Terraform stack directory and use the standard Terraform commands:
+This will generate the Terraform code for your Nitric application into a folder named `cdktf.out` by default. You can change this via the `outdir` property and inspect the code before deploying.
+
+To deploy the application using Terraform, you can navigate into your Terraform stack directory and use the standard Terraform commands:
 
 ```bash
 terraform init
