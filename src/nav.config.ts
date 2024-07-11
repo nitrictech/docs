@@ -1970,6 +1970,19 @@ const fullNav: FullNav = {
       ],
     },
     {
+      title: 'SQL',
+      links: [
+        {
+          title: 'sql()',
+          href: '/reference/dart/sql/sql',
+        },
+        {
+          title: 'sql.connectionString()',
+          href: '/reference/dart/sql/sql-connection-string',
+        },
+      ],
+    },
+    {
       title: 'Schedules',
       links: [
         {

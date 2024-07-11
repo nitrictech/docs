@@ -1,0 +1,28 @@
+export const description =
+  "Reference for Nitric's Dart library - Returns the connection string for a SQL database at runtime."
+
+# Dart - sql.connectionString()
+
+Returns the connection string for a SQL database at runtime.
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final db = Nitric.sql("my-database");
+
+// Should be called at runtime, such as in a service handler
+final connStr = await db.connectionString();
+```
+
+## Examples
+
+### Return a connection string
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final db = Nitric.sql("my-database");
+
+// Should be called at runtime, such as in a service handler
+final connStr = await db.connectionString();
+```
