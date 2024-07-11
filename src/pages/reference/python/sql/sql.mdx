@@ -18,7 +18,8 @@ database = sql("database")
     The unique name of this database within the project.
   </Property>
   <Property name="migrations" type="string">
-    A reference to migrations to run against the database.
+    Points to the location of migration files, prefixed with `file://`, or a
+    migration dockerfile, prefixed with `dockerfile://`.
   </Property>
 </Properties>
 
