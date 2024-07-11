@@ -176,3 +176,73 @@ ENTRYPOINT ["/bin/main"]
 ### Create an ignore file
 
 Custom dockerfile templates also support co-located dockerignore files. If your custom docker template is at path `./docker/node.dockerfile` you can create an ignore file at `./docker/node.dockerfile.dockerignore`.
+
+## Create a monorepo with custom runtimes
+
+Nitric supports monorepos via the custom runtime feature, this allows you to change the build context of your docker build. To use a custom runtime in a monorepo, you can specify the runtime key per service as shown below.
+
+<Note>Available in Nitric CLI version 1.45.0 and above</Note>
+
+### Example for Turborepo
+
+[Turborepo](https://turbo.build/) is a monorepo tool that allows you to manage multiple packages in a single repository. In this example, we will use a custom runtime to build a service in a monorepo using a custom dockerfile.
+
+```yaml {{ tag: "root/backends/guestbook-app/nitric.yaml" }}
+name: guestbook-app
+services:
+  - match: services/*.ts
+    runtime: turbo
+    type: ''
+    start: npm run dev:services $SERVICE_PATH
+runtimes:
+  turbo:
+    dockerfile: ./turbo.dockerfile # the custom dockerfile
+    context: ../../ # the context of the docker build
+    args:
+      TURBO_SCOPE: 'guestbook-api'
+```
+
+```docker {{ tag: "root/backends/guestbook-app/turbo.dockerfile"  }}
+FROM node:alpine AS builder
+ARG TURBO_SCOPE
+
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+RUN apk update
+# Set working directory
+WORKDIR /app
+RUN yarn global add turbo
+
+# copy from root of the mono-repo
+COPY . .
+RUN turbo prune --scope=${TURBO_SCOPE} --docker
+
+# Add lockfile and package.json's of isolated subworkspace
+FROM node:alpine AS installer
+ARG TURBO_SCOPE
+ARG HANDLER
+RUN apk add --no-cache libc6-compat
+RUN apk update
+WORKDIR /app
+RUN yarn global add typescript @vercel/ncc turbo
+
+# First install dependencies (as they change less often)
+COPY .gitignore .gitignore
+COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/yarn.lock ./yarn.lock
+RUN yarn install --frozen-lockfile --production
+
+# Build the project and its dependencies
+COPY --from=builder /app/out/full/ .
+COPY turbo.json turbo.json
+
+RUN turbo run build --filter=${TURBO_SCOPE} -- ./${HANDLER}  -m --v8-cache -o lib/
+
+FROM node:alpine AS runner
+ARG TURBO_SCOPE
+WORKDIR /app
+
+COPY --from=installer /app/backends/${TURBO_SCOPE}/lib .
+
+ENTRYPOINT ["node", "index.js"]
+```
