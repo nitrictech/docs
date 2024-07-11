@@ -1,0 +1,30 @@
+export const description =
+  "Reference for Nitric's Python library - Returns the connection string for a SQL database at runtime."
+
+# Python - sql.connection_string()
+
+Returns the connection string for a SQL database at runtime.
+
+```python
+from nitric.resources import sql
+
+main = api("main")
+
+database = sql("database")
+
+await database.connection_string()
+```
+
+## Examples
+
+### Return a connection string
+
+```python
+from nitric.resources import sql
+
+main = api("main")
+
+database = sql("database")
+
+await database.connection_string()
+```

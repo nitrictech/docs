@@ -1,0 +1,54 @@
+export const description =
+  "Reference for Nitric's Python library - Creates a reference to a SQL database."
+
+# Python - sql()
+
+Creates a reference to a SQL database.
+
+```python
+from nitric.resources import sql
+
+database = sql("database")
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The unique name of this database within the project.
+  </Property>
+  <Property name="migrations" type="string">
+    Points to the location of migration files, prefixed with `file://`, or a
+    migration dockerfile, prefixed with `dockerfile://`.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a reference to a database
+
+```javascript
+from nitric.resources import sql
+
+database = sql("database")
+```
+
+### With a migrations directory
+
+```python
+from nitric.resources import sql
+
+database = sql("database", migrations="file://migrations")
+```
+
+### With a migrations dockerfile
+
+```python
+from nitric.resources import sql
+
+database = sql("database", migrations="dockerfile://migrations.dockerfile")
+```
+
+### See also
+
+- [sql().connection_string()](./sql-connection-string)

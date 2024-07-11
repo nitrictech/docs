@@ -1635,6 +1635,19 @@ const fullNav: FullNav = {
       ],
     },
     {
+      title: 'Sql',
+      links: [
+        {
+          title: 'sql()',
+          href: '/reference/python/sql/sql',
+        },
+        {
+          title: 'sql.connection_string()',
+          href: '/reference/python/sql/sql-connection-string',
+        },
+      ],
+    },
+    {
       title: 'Topics',
       links: [
         {
