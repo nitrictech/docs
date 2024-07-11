@@ -17,6 +17,10 @@ const db = sql('my-data')
   <Property name="name" required type="string">
     The unique name of this database within the project.
   </Property>
+  <Property name="migrations" type="string">
+    Points to the location of migration files, prefixed with `file://`, or a
+    migration dockerfile, prefixed with `dockerfile://`.
+  </Property>
 </Properties>
 
 ## Examples
@@ -27,6 +31,26 @@ const db = sql('my-data')
 import { sql } from '@nitric/sdk'
 
 const db = sql('my-data')
+```
+
+### With a migrations directory
+
+```javascript
+import { sql } from '@nitric/sdk'
+
+const db = sql('my-data', {
+  migrations: 'file://migrations/my-data',
+})
+```
+
+### With a migrations dockerfile
+
+```javascript
+import { sql } from '@nitric/sdk'
+
+const db = sql('my-data', {
+  migrations: 'dockerfile://migrations.dockerfile',
+})
 ```
 
 ### Connect with Prisma
