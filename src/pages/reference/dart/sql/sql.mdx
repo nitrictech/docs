@@ -33,7 +33,7 @@ import 'package:nitric_sdk/nitric.dart';
 final db = Nitric.sql("my-database");
 ```
 
-### Create a reference to a database with a migration file
+### With a migrations directory
 
 ```dart
 import 'package:nitric_sdk/nitric.dart';
@@ -41,7 +41,7 @@ import 'package:nitric_sdk/nitric.dart';
 final db = Nitric.sql("my-database", migrations: "file://migrations/my-database");
 ```
 
-### Create a reference to a database with a migration dockerfile
+### With a migrations dockerfile
 
 ```dart
 import 'package:nitric_sdk/nitric.dart';
