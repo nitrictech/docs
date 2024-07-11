@@ -54,6 +54,12 @@ from nitric.resources import sql
 db = sql("my-database")
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final db = Nitric.sql("my-database");
+```
+
 </CodeGroup>
 
 ## Accessing a SQL database
@@ -104,6 +110,18 @@ async def hello(ctx: HttpContext):
     return ctx
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final db = Nitric.sql("my-database");
+
+Nitric.api("example").get("/hello", (ctx) async {
+  final connStr = await db.connectionString();
+  // TODO: Interact with the database using the connection string
+  return ctx;
+});
 ```
 
 </CodeGroup>
@@ -173,6 +191,14 @@ from nitric.resources import sql
 db = sql("my-database", migrations="file://migrations/my-database")
 ```
 
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final db = Nitric.sql("my-database",
+  migrations: "file://migrations/my-database"
+);
+```
+
 </CodeGroup>
 
 When new migration files are added Nitric will automatically apply them when you redeploy your project.
@@ -203,6 +229,14 @@ const db = sql('my-database', {
 from nitric.resources import sql
 
 db = sql("my-database", migrations="dockerfile://migrations.dockerfile")
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final db = Nitric.sql("my-database",
+  migrations: "dockerfile://migrations.dockerfile"
+);
 ```
 
 </CodeGroup>
