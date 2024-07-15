@@ -1,0 +1,71 @@
+export const description =
+  "Reference for Nitric's .NET library - Sets the frequency and one or many handlers to be triggered."
+
+# .NET - Schedule.Every()
+
+Sets the frequency and one or many handlers to be triggered.
+
+```csharp
+Nitric.Sdk.Nitric.Schedule("send-reminder").Every("3 hours", ctx =>
+{
+    // do some processing
+
+    return ctx;
+});
+
+Nitric.Sdk.Nitric.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="rate" type="string" required>
+    The rate to run the schedule, e.g. '7 days'. All rates accept a number and a
+    frequency. Valid frequencies are 'days', 'hours' or 'minutes'.
+  </Property>
+  <Property
+    name="middleware"
+    type="Func<IntervalContext, IntervalContext> or List<Middleware<IntervalContext>"
+    required
+  >
+    One or more middleware functions to use as the handler which will run on
+    defined frequency.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a Schedule to run every 3 minutes
+
+```csharp
+Nitric.Sdk.Nitric.Schedule("send-reminder").Every("3 minutes", ctx =>
+{
+    // do some processing
+    return ctx;
+});
+
+Nitric.Sdk.Nitric.Run();
+```
+
+### Create a Schedule with multiple middleware/handlers
+
+```csharp
+// Create a middleware to handle report generation
+private static IntervalContext GenerateReport(IntervalContext ctx, Func<IntervalContext, IntervalContext> next)
+{
+    // Code to generate a report
+    return next(ctx);
+}
+
+// Create a middleware to handle notifications
+private static IntervalContext SendNotification(IntervalContext ctx, Func<IntervalContext, IntervalContext> next)
+{
+    // Code to send a notification
+    return next(ctx);
+}
+
+// Create a schedule that runs every 7 days
+Nitric.Sdk.Nitric.Schedule("send-reminder").Every("7 days", SendNotification, GenerateReport);
+
+Nitric.Sdk.Nitric.Run();
+```

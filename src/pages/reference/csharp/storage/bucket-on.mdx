@@ -1,0 +1,85 @@
+export const description =
+  "Reference for Nitric's .NET library - Create a new bucket notification trigger"
+
+# .NET - Bucket.On()
+
+Create a new bucket notification trigger when certain files are created or deleted.
+
+```csharp
+using System;
+using Nitric.Sdk.Resource;
+using Nitric.Sdk.Service;
+
+var assets = Nitric.Sdk.Nitric.Bucket("assets");
+
+var accessibleAssets = Nitric.Bucket("assets").With(BucketPermission.Reading);
+
+// The request will contain the name of the file `Key` and the type of event `NotificationType`
+assets.On(BlobEventType.Delete, "*", ctx => {
+  Console.WriteLine("A file named " + ctx.Req.Key + "was deleted");
+
+  return ctx;
+});
+
+assets.On(BlobEventType.Write, "/images/cat", ctx => {
+  Console.WriteLine("A cat image was written");
+
+  return ctx;
+});
+
+// If `.On()` is called with a permissioned bucket, a file reference will also be provided with the request
+accessibleAssets.On(BlobEventType.Write, "/images/dog", ctx => {
+  var dogImage = ctx.Req.File.Read();
+
+  Console.WriteLine(dogImage.ToString());
+
+  return ctx;
+});
+
+Nitric.Sdk.Nitric.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The unique name/reference to the file.
+  </Property>
+  <Property
+    name="notificationType"
+    required
+    type="BucketNotificationType.Write | BucketNotificationType.Delete"
+  >
+    The notification type for a triggered event, either on a file write or a
+    file delete.
+  </Property>
+  <Property name="notificationPrefixFilter" required type="string">
+    The file prefix filter that must match for a triggered event. If multiple
+    filters overlap across notifications then an error will be thrown when
+    registering the resource.
+  </Property>
+  <Property
+    name="middleware"
+    required
+    type="Func<BlobEventContext, BlobEventContext> or Middleware<BlobEventContext>[]"
+  >
+    The middleware (code) to be triggered when a bucket event is triggered.
+  </Property>
+</Properties>
+
+## Available Trigger Types
+
+`BlobEventType.Write`
+
+Triggered when a file in the bucket is created using: `file.Write()`
+
+`BlobEventType.Delete`
+
+Triggered when a file in the bucket is deleted using: `file.Delete()`
+
+## Cloud Trigger Types
+
+| Permission                    | AWS                 | GCP             | Azure                         |
+| ----------------------------- | ------------------- | --------------- | ----------------------------- |
+| BucketNotificationType.Write  | s3:ObjectCreated:\* | OBJECT_FINALIZE | Microsoft.Storage.BlobCreated |
+| BucketNotificationType.Delete | s3:ObjectRemoved:\* | OBJECT_DELETE   | Microsoft.Storage.BlobDeleted |
