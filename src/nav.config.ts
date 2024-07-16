@@ -571,6 +571,24 @@ const fullNav: FullNav = {
       ],
     },
   ],
+  ['guides/terraform']: [
+    {
+      links: [
+        {
+          title: 'AWS S3 Server-side Encryption',
+          href: '/guides/terraform/s3-encryption',
+        },
+        {
+          title: 'AWS S3 Replication',
+          href: '/guides/terraform/s3-replicate',
+        },
+        {
+          title: 'AWS API Gateway Throttle',
+          href: '/guides/terraform/api-gateway-throttle',
+        },
+      ],
+    },
+  ],
   ['guides/deploying']: [
     {
       links: [
@@ -630,6 +648,11 @@ const fullNav: FullNav = {
           title: 'CI/CD Guides',
           href: '/guides/deploying',
           icon: BoltIcon,
+        },
+        {
+          title: 'Terraform Guides',
+          href: '/guides/terraform',
+          icon: SiTerraform,
         },
         {
           title: 'Examples',
