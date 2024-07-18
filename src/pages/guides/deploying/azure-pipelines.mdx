@@ -108,7 +108,11 @@ The `up` command can be used to deploy your project. The first argument `--ci` t
 
 To set up these secrets, navigate to the Azure Pipelines dashboard, select your pipeline, and add new secrets under the 'Variables' section.
 
-> Note: Environment variables like api keys should be stored securely in Azure Pipelines secrets. These secrets are encrypted and can only be accessed by pipelines running in the same Azure DevOps project.
+<Note>
+  Environment variables like api keys should be stored securely in Azure
+  Pipelines secrets. These secrets are encrypted and can only be accessed by
+  pipelines running in the same Azure DevOps project.
+</Note>
 
 With the pipeline established, each commit to the main branch will trigger an automated deployment using Nitric.
 

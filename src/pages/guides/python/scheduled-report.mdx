@@ -112,7 +112,11 @@ Next we'll pull it all together in our scheduled service, which will run daily a
 
 Create a file named `report.py` in the `services` directory, where you'll implement your scheduled task service.
 
-> Note: Nitric allows you to set schedules using simple expressions e.g. `7 days`, you can also use [cron expressions](/schedules#using-cron) for more complicated requirements.
+<Note>
+  Nitric allows you to set schedules using simple expressions e.g. `7 days`, you
+  can also use [cron expressions](/schedules#using-cron) for more complicated
+  requirements.
+</Note>
 
 ```python {{ tag: 'services/report.py' }}
 import os
