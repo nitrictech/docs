@@ -1,20 +1,20 @@
 export const description =
-  'Extend the Nitric API Gateway Terraform provider to set throttling limits'
+  'Extend the Nitric AWS Terraform provider to set API Gateway throttling limits'
 
 # Add Throttle Limits to API Gateway
 
-Throttling helps in preventing your backend services from being overwhelmed by too many requests at once. This is particularly important if your backend services have limited capacity and can only handle a certain number of requests per second.
+Throttling helps prevent your backend services from being overwhelmed by too many requests at once. This is particularly important if your backend services have limited capacity and can only handle a certain number of requests per second.
 
 Without throttling, a single client could potentially consume all available resources, leaving others with degraded service or no service at all.
 
 ## What we'll be doing
 
-1. Review our existing module
+1. Review the existing module
 2. Configure throttle limits
 
-## Review our existing module
+## Review the existing module
 
-The first step is clone the [Nitric repository](https://github.com/nitrictech/nitric) and examine how the [Nitric Terrraform provider provisions an API Gateway](https://github.com/nitrictech/nitric/tree/main/cloud/aws/deploytf/.nitric/modules/api).
+Start by cloning the [Nitric repository](https://github.com/nitrictech/nitric, then examine how the Terrraform provider [provisions an API Gateway](https://github.com/nitrictech/nitric/tree/main/cloud/aws/deploytf/.nitric/modules/api).
 
 ```bash
 git clone https://github.com/nitrictech/nitric
@@ -26,16 +26,16 @@ The AWS API module in the default Terraform provider performs the following task
 1. Defines an HTTP API Gateway with specified name, protocol, and API specification.
 2. Sets up a "$default" deployment stage with automatic deployment enabled.
 3. Allows the API Gateway to invoke specified Lambda functions.
-4. Looks up existing SSL certificates for specified domains.
-5. Configures custom domain names for the API Gateway using the retrieved SSL certificates.
+4. Looks up existing certificates for specified domains.
+5. Configures custom domain names for the API Gateway using the retrieved certificates.
 
-To begin our customization, we will start adding configuration to this module.
+To begin our customization, we will start adding configuration to the existing module.
 
 ## Configure throttle limits
 
-Update the `aws_apigatewayv2_stage.stage" in aws/deploytf/.nitric/modules/bucket/main.tf to add default_route_settings:
+Update `aws_apigatewayv2_stage.stage` in `aws/deploytf/.nitric/modules/bucket/main.tf` to add `default_route_settings` which include throttling limits:
 
-```hcl
+```hcl {{ tag: 'aws/deploytf/.nitric/modules/bucket/main.tf' }}
 resource "aws_apigatewayv2_stage" "stage" {
   api_id      = aws_apigatewayv2_api.api_gateway.id
   name        = "$default"
@@ -55,9 +55,14 @@ resource "aws_apigatewayv2_stage" "stage" {
 
 ## Building and using your updated provider
 
-The Nitric project includes a make file that will build and install your provider as nitric/awstf@0.0.1 by default.
+The Nitric project includes a make file that will build and install your provider as `nitric/awstf@0.0.1` by default.
 
-Run `make install` from the provider's root directory - `nitric/cloud/aws`
+Navigate to `nitric/cloud/aws` and run `make install` to build and install the modified provider binary.
+
+```bash
+cd nitric/cloud/aws
+
+make install
 
 The provider can then be used directly in your project's stack file as follows.
 
@@ -75,7 +80,7 @@ region: us-east-2
 
 You'll also need to enable `beta-providers` in your Nitric project by adding the following to your project's nitric.yaml file:
 
-```
+```yaml {{ tag: 'nitric.yaml' }}
 preview:
   - beta-providers
 ```

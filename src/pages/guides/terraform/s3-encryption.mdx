@@ -6,20 +6,19 @@ export const description =
 Server-side encryption (SSE) in Amazon S3 automatically encrypts data when it is written to the storage service and decrypts it when accessed, providing robust data protection, compliance with regulatory requirements, and ease of management.
 
 <Note>
-  Server-side encryption with Amazon S3 managed keys (SSE-S3) is free, however,
-  advanced encryption options in Amazon S3 may incur costs. Amazon S3 offers
-  pricing details on their [official pricing
+  Server-side encryption with Amazon S3 managed keys (SSE-S3) is free. Other encryption options may incur costs. Amazon offers
+  pricing details on their [pricing
   page](https://aws.amazon.com/s3/pricing/).
 </Note>
 
 ## What we'll be doing
 
-1. Review our existing module
-2. Configure Server-side encryption (SSE)
+1. Review the existing module
+2. Configure server-side encryption (SSE)
 
-## Review our existing module
+## Review the existing module
 
-The first step is clone the [Nitric repository](https://github.com/nitrictech/nitric) and examine how the [Nitric Terrraform provider provisions an S3](https://github.com/nitrictech/nitric/tree/main/cloud/aws/deploytf/.nitric/modules/bucket) bucket.
+Start by cloning the [Nitric repository](https://github.com/nitrictech/nitric), then examine how the Terrraform provider [provisions an S3 bucket](https://github.com/nitrictech/nitric/tree/main/cloud/aws/deploytf/.nitric/modules/bucket).
 
 ```bash
 git clone https://github.com/nitrictech/nitric
