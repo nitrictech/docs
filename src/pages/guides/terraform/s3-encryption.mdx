@@ -6,9 +6,9 @@ export const description =
 Server-side encryption (SSE) in Amazon S3 automatically encrypts data when it is written to the storage service and decrypts it when accessed, providing robust data protection, compliance with regulatory requirements, and ease of management.
 
 <Note>
-  Server-side encryption with Amazon S3 managed keys (SSE-S3) is free. Other encryption options may incur costs. Amazon offers
-  pricing details on their [pricing
-  page](https://aws.amazon.com/s3/pricing/).
+  Server-side encryption with Amazon S3 managed keys (SSE-S3) is free. Other
+  encryption options may incur costs. Amazon offers pricing details on their
+  [pricing page](https://aws.amazon.com/s3/pricing/).
 </Note>
 
 ## What we'll be doing
@@ -37,9 +37,9 @@ To begin our customization, we will start adding configuration to this module.
 
 ## Add Server Side Encryption (SSE)
 
-Introduce the following configuration into the aws/deploytf/.nitric/modules/bucket/main.tf:
+Add the following at the end of `aws/deploytf/.nitric/modules/bucket/main.tf`:
 
-```hcl
+```hcl {{ tag: 'aws/deploytf/.nitric/modules/bucket/main.tf' }}
 # AWS S3 bucket server-side encryption configuration
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption" {
   bucket = aws_s3_bucket.bucket.bucket
@@ -57,11 +57,17 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption
   registry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration).
 </Note>
 
-## Building and using your updated provider
+## Build and use your modified provider
 
-The Nitric project includes a make file that will build and install your provider as nitric/awstf@0.0.1 by default.
+The Nitric project includes a make file that will build and install your provider as `nitric/awstf@0.0.1` by default.
 
-Run `make install` from the provider's root directory - `nitric/cloud/aws`
+Navigate to `nitric/cloud/aws` and run `make install` to build and install the modified provider binary.
+
+```bash
+cd nitric/cloud/aws
+
+make install
+```
 
 The provider can then be used directly in your project's stack file as follows.
 
@@ -79,12 +85,12 @@ region: us-east-2
 
 You'll also need to enable `beta-providers` in your Nitric project by adding the following to your project's nitric.yaml file:
 
-```
+```yaml {{ tag: 'nitric.yaml' }}
 preview:
   - beta-providers
 ```
 
-You can generate the Terraform code by running the following command:
+You can generate the Terraform project as usual by running the `nitric up` command:
 
 ```bash
 nitric up
@@ -98,7 +104,7 @@ terraform plan
 terraform apply
 ```
 
-You can examine your configuration by logging into the AWS console.
+Finally, log into the [AWS console](https://us-east-1.console.aws.amazon.com/s3/buckets?region=us-east-2) to verify the encryption configuration was applied.
 
 <img
   src="/docs/images/guides/s3-encryption/encrypt.png"

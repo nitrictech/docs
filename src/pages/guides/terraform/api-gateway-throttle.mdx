@@ -63,6 +63,7 @@ Navigate to `nitric/cloud/aws` and run `make install` to build and install the m
 cd nitric/cloud/aws
 
 make install
+```
 
 The provider can then be used directly in your project's stack file as follows.
 
@@ -85,7 +86,7 @@ preview:
   - beta-providers
 ```
 
-You can generate the Terraform code by running the following command:
+You can generate the Terraform project as usual by running the `nitric up` command:
 
 ```bash
 nitric up
@@ -99,7 +100,7 @@ terraform plan
 terraform apply
 ```
 
-You can examine your configuration by logging into the AWS console.
+Finally, log into the [AWS console](https://us-east-1.console.aws.amazon.com/apigateway/main/apis?region=us-east-2) to verify the configuration was applied.
 
 <img
   src="/docs/images/guides/api-gateway-throttle/throttle.png"

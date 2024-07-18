@@ -9,21 +9,21 @@ When you replicate your S3 buckets, you continue to interact with your source bu
 
 <Note>
   Replication in Amazon S3 does incur costs. Amazon S3 offers pricing details on
-  their [official pricing page](https://aws.amazon.com/s3/pricing/).
+  their [pricing page](https://aws.amazon.com/s3/pricing/).
 </Note>
 
 ## What we'll be doing
 
-By following this guide, you will achieve multi-region replication of your S3 bucket, enhancing data availability, durability, and disaster recovery capabilities.
+By following this guide you will achieve multi-region replication for all S3 buckets in your stack, enhancing data availability, durability, and disaster recovery capabilities.
 
-1. Review our existing module
-2. Create a Destination Bucket
-3. Create IAM Role and Policies for Replication
-4. Set Up Replication Configuration for S3 Bucket
+1. Review the existing module
+2. Add a destination bucket to the module
+3. Configure IAM to allow replication
+4. Set up replication to the destination bucket
 
-## Review our existing module
+## Review the existing module
 
-The first step is clone the [Nitric repository](https://github.com/nitrictech/nitric) and examine how the [Nitric Terrraform provider provisions an S3](https://github.com/nitrictech/nitric/tree/main/cloud/aws/deploytf/.nitric/modules/bucket) bucket.
+Start by cloning the [Nitric repository](https://github.com/nitrictech/nitric), then examine how the Terrraform provider [provisions an S3 bucket](https://github.com/nitrictech/nitric/tree/main/cloud/aws/deploytf/.nitric/modules/bucket).
 
 ```bash
 git clone https://github.com/nitrictech/nitric
@@ -32,19 +32,19 @@ cd nitric
 
 The AWS S3 module in the default Terraform provider performs the following tasks:
 
-1. Creates a unique ID for the S3 bucket to ensure unique naming.
-2. Provisions an S3 bucket with a unique name using the generated ID.
-3. Tags the bucket for identification.
+1. Creates a unique ID for each S3 bucket to ensure unique naming.
+2. Provisions each bucket with a unique name using the generated ID.
+3. Tags buckets for identification.
 4. Grants S3 permission to invoke specified Lambda functions.
 5. Configures S3 bucket notifications to trigger Lambda functions based on specified events using dynamic blocks.
 
 To begin our customization, we will start adding configuration to this module.
 
-## Create a Destination Bucket
+## Add a destination bucket to the module
 
-Introduce a new variable into the aws/deploytf/.nitric/modules/bucket/variables.tf:
+Introduce a new variable into aws/deploytf/.nitric/modules/bucket/variables.tf:
 
-```hcl
+```hcl {{ tag:'aws/deploytf/.nitric/modules/bucket/variables.tf' }}
 variable "replication_region" {
   description = "The AWS region for the replication bucket"
   type        = string
@@ -52,9 +52,9 @@ variable "replication_region" {
 }
 ```
 
-Now we can edit our bucket/main.tf file and introduce a provider for the replication region:
+Now we can edit `bucket/main.tf` and introduce a provider for the replication region:
 
-```hcl
+```hcl {{ tag:'aws/deploytf/.nitric/modules/bucket/main.tf' }}
 provider "aws" {
   alias  = "replication"
   region = var.replication_region
@@ -67,7 +67,7 @@ provider "aws" {
 
 Then we can create our new destination bucket:
 
-```hcl
+```hcl {{ tag:'aws/deploytf/.nitric/modules/bucket/main.tf' }}
 resource "random_id" "destination_bucket_id" {
   byte_length = 8
 }
@@ -84,7 +84,7 @@ resource "aws_s3_bucket" "destination" {
 
 And enable versioning for both source and destination:
 
-```hcl
+```hcl {{ tag:'aws/deploytf/.nitric/modules/bucket/main.tf' }}
 resource "aws_s3_bucket_versioning" "destination" {
   bucket = aws_s3_bucket.destination.id
   versioning_configuration {
@@ -101,7 +101,7 @@ resource "aws_s3_bucket_versioning" "source" {
 }
 ```
 
-## Create IAM Role and Policies for Replication
+## Configure IAM to allow replication
 
 First, we need to set up an IAM policy document detailing permissions needed for S3 replication.
 
@@ -110,7 +110,7 @@ First, we need to set up an IAM policy document detailing permissions needed for
   registry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_replication_configuration).
 </Note>
 
-```hcl
+```hcl {{ tag:'aws/deploytf/.nitric/modules/bucket/main.tf' }}
 data "aws_iam_policy_document" "assume_role" {
   statement {
     effect = "Allow"
@@ -182,16 +182,16 @@ resource "aws_iam_role_policy_attachment" "replication" {
 }
 ```
 
-## Set Up Replication Configuration for S3 Bucket
+## Set up replication to the destination bucket
 
-Next, we set up the replication configuration for our bucket.
+Next, we set up the replication configuration for the original bucket in the module.
 
 <Note>
   As per the documentation, this config includes a filter so that only objects
   prefixed with "foo" will be replicated.
 </Note>
 
-```hcl
+```hcl {{ tag:'aws/deploytf/.nitric/modules/bucket/main.tf' }}
 resource "aws_s3_bucket_replication_configuration" "replication" {
   depends_on = [
     aws_s3_bucket_versioning.destination,
@@ -224,9 +224,15 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
 
 ## Building and using your updated provider
 
-The Nitric project includes a make file that will build and install your provider as nitric/awstf@0.0.1 by default.
+The Nitric project includes a make file that will build and install your provider as `nitric/awstf@0.0.1` by default.
 
-Run `make install` from the provider's root directory - `nitric/cloud/aws`
+Navigate to `nitric/cloud/aws` and run `make install` to build and install the modified provider binary.
+
+```bash
+cd nitric/cloud/aws
+
+make install
+```
 
 The provider can then be used directly in your project's stack file as follows.
 
@@ -244,12 +250,12 @@ region: us-east-2
 
 You'll also need to enable `beta-providers` in your Nitric project by adding the following to your project's nitric.yaml file:
 
-```
+```yaml {{ tag: 'nitric.yaml' }}
 preview:
   - beta-providers
 ```
 
-You can generate the Terraform code by running the following command:
+You can generate the Terraform project as usual by running the `nitric up` command:
 
 ```bash
 nitric up
@@ -263,7 +269,7 @@ terraform plan
 terraform apply
 ```
 
-You can examine your configuration by logging into the AWS console.
+Finally, log into the [AWS console](https://us-east-1.console.aws.amazon.com/s3/buckets?region=us-east-2) to verify the replication configuration was applied.
 
 <img
   src="/docs/images/guides/s3-replicate/replication.png"
