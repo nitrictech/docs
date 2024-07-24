@@ -196,6 +196,7 @@ todo
 todos
 transpiling
 ARN
+HTTPS
 monorepos
 
 ^.+[-:_]\w+$

@@ -2944,6 +2944,10 @@ const fullNav: FullNav = {
           href: '/reference/cli/installation',
         },
         {
+          title: 'Local Development',
+          href: '/reference/cli/local-development',
+        },
+        {
           title: 'Stacks',
           href: '/reference/cli/stacks',
         },
