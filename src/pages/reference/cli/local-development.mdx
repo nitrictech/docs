@@ -38,12 +38,12 @@ In either case you can stop your application by pressing `Esc` or `Ctrl+C` in th
 
 ## Enabling Https for local development
 
-By default, Nitric will run your application's APIs and HTTP Proxies over HTTP to avoid common issues with self-signed certificates. In most cases, this is sufficient for local development. However, if you need to test your application over HTTPS, the `nitric start` command supports enabling HTTPS using the `--https-experimental` flag.
+By default, Nitric will run your application's APIs and HTTP Proxies over HTTP to avoid common issues with self-signed certificates. In most cases, this is sufficient for local development. However, if you need to test your application over HTTPS, the `nitric start` command supports enabling HTTPS using the `--https-preview` flag.
 
 This command will generate a self-signed certificate and key for your application and use them to serve your application over HTTPS. This is useful if you need to test your application over HTTPS locally, but keep in mind that self-signed certificates are not trusted by browsers and may cause security warnings.
 
 ```bash
-nitric start --https-experimental
+nitric start --https-preview
 ```
 
 If you need use a custom certificate and key, you can place them in the `.nitric/tls` directory in your project and Nitric will use them to serve your application over HTTPS. The files must be named `cert.pem` and `key.pem` respectively.
