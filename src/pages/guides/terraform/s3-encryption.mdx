@@ -1,7 +1,7 @@
 export const description =
-  'Extend the Nitric S3 Terraform provider to replicate your S3 bucket into multiple regions'
+  'Extend the Nitric AWS S3 Terraform provider to add server-side encryption'
 
-# Replicate S3 buckets into another region
+# Add server-side encryption
 
 Server-side encryption (SSE) in Amazon S3 automatically encrypts data when it is written to the storage service and decrypts it when accessed, providing robust data protection, compliance with regulatory requirements, and ease of management.
 
@@ -35,7 +35,7 @@ The AWS S3 module in the default Terraform provider performs the following tasks
 
 To begin our customization, we will start adding configuration to this module.
 
-## Add Server Side Encryption (SSE)
+## Add server-side encryption (SSE)
 
 Add the following at the end of `aws/deploytf/.nitric/modules/bucket/main.tf`:
 
@@ -80,10 +80,10 @@ region: us-east-2
 ```
 
 <Note>
-  If you don't have a stack file use the `nitric stack new` to create one.
+  If you don't have a stack file use `nitric stack new` to create one.
 </Note>
 
-You'll also need to enable `beta-providers` in your Nitric project by adding the following to your project's nitric.yaml file:
+Because the [Terraform providers](https://nitric.io/docs/reference/providers/terraform) are in preview, you'll also need to enable `beta-providers` in your Nitric project by adding the following to your project's nitric.yaml file:
 
 ```yaml {{ tag: 'nitric.yaml' }}
 preview:

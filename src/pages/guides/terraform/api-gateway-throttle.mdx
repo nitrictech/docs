@@ -14,7 +14,7 @@ Without throttling, a single client could potentially consume all available reso
 
 ## Review the existing module
 
-Start by cloning the [Nitric repository](https://github.com/nitrictech/nitric, then examine how the Terrraform provider [provisions an API Gateway](https://github.com/nitrictech/nitric/tree/main/cloud/aws/deploytf/.nitric/modules/api).
+Start by cloning the [Nitric repository](https://github.com/nitrictech/nitric), then examine how the Terrraform provider [provisions an API Gateway](https://github.com/nitrictech/nitric/tree/main/cloud/aws/deploytf/.nitric/modules/api).
 
 ```bash
 git clone https://github.com/nitrictech/nitric
@@ -53,7 +53,7 @@ resource "aws_apigatewayv2_stage" "stage" {
   registry](https://registry.terraform.io/providers/hashicorp/aws/2.70.2/docs/resources/apigatewayv2_stage#throttling_burst_limit).
 </Note>
 
-## Building and using your updated provider
+## Build and use your updated provider
 
 The Nitric project includes a make file that will build and install your provider as `nitric/awstf@0.0.1` by default.
 
@@ -76,10 +76,10 @@ region: us-east-2
 ```
 
 <Note>
-  If you don't have a stack file use the `nitric stack new` to create one.
+  If you don't have a stack file use `nitric stack new` to create one.
 </Note>
 
-You'll also need to enable `beta-providers` in your Nitric project by adding the following to your project's nitric.yaml file:
+Because the [Terraform providers](https://nitric.io/docs/reference/providers/terraform) are in preview, you'll also need to enable `beta-providers` in your Nitric project by adding the following to your project's nitric.yaml file:
 
 ```yaml {{ tag: 'nitric.yaml' }}
 preview:
