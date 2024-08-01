@@ -221,8 +221,10 @@ import { api, bucket } from '@nitric/sdk'
 
 const files = bucket('files').allow('read')
 
+// 👀 Singleton value
 let fileContents: string
 
+// Lazy access method
 const getFileContents = async () => {
   if (!fileContents) {
     fileContents = await files.file('example.txt').read()
@@ -232,8 +234,7 @@ const getFileContents = async () => {
 }
 
 api('public').get('/files/:name', (ctx) => {
-  // ✅ This access will work.
-  const fileContents = await getFileContents()
+  const fileContents = await getFileContents();
 })
 ```
 
