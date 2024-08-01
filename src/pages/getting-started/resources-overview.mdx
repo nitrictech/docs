@@ -200,7 +200,7 @@ void main() {
 
   helloApi.get("/files/:name", (ctx) async {
     // ✅ This access will work
-    final fileContents = files.file("example.txt").read();
+    final fileContents = await files.file("example.txt").read();
 
     return ctx;
   });
