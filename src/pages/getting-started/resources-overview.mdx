@@ -108,6 +108,132 @@ void main() {
 
 <Note>Always declare resources outside of runtime/callback code</Note>
 
+### Don't use runtime methods in top level code
+
+Calling runtime methods in top-level code can lead to unintended side effects. Nitric resources should be accessed in a deterministic way to avoid unintentional side-effects.
+
+A working example:
+
+<CodeGroup>
+
+```typescript
+import { api, bucket } from '@nitric/sdk'
+
+const files = bucket('files').allow('read');
+
+// ❌ This access will not work.
+const fileContents = files.file('example.txt').read();
+
+api('public').get('/files/:name', (ctx) => {
+  // ✅ This access will work.
+  const fileContents = files.file('example.txt').read();
+});
+```
+
+```python
+from nitric.resources import api, bucket
+from nitric.application import Nitric
+
+public_api = api('public')
+
+files = bucket('files').allow('read')
+
+# ❌ This access will not work.
+file_contents = files.file('example.txt').read()
+
+@public_api.get("/files/:name")
+async def get_file(ctx):
+  # ✅ This access will work.
+  file_contents = files.file('example.txt').read()
+
+Nitric.run()
+```
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	api, err := nitric.NewApi("public")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	
+	bucket, err := nitric.NewBucket("files").Allow(nitric.BucketRead)
+
+	// ❌ This access will not work
+	fileContents, _ := bucket.File("example.txt").Read()
+
+	api.Get("/files/:name", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+		// ✅ This access will work
+		fileContents, _ := bucket.File("example.txt").Read()
+
+		return next(ctx)
+	})
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Service has started")
+}
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+void main() {
+  final helloApi = Nitric.api("public");
+
+  final files = Nitric.bucket("files").allow([BucketPermission.read]);
+
+  // ❌ This access will not work
+  final fileContents = files.file("example.txt").read();
+
+  helloApi.get("/files/:name", (ctx) async {
+    // ✅ This access will work
+    final fileContents = files.file("example.txt").read();
+
+    return ctx;
+  });
+}
+```
+
+</CodeGroup>
+
+<Note>If you want to limit resource access to a single instance/access consider implementing a lazy singleton</Note>
+
+<CodeGroup>
+```typescript
+import { api, bucket } from '@nitric/sdk'
+
+const files = bucket('files').allow('read');
+
+let fileContents: string;
+
+const getFileContents = async () => {
+  if (!fileContents) {
+	fileContents = await files.file('example.txt').read();
+  }
+
+  return fileContents;
+}
+
+api('public').get('/files/:name', (ctx) => {
+  // ✅ This access will work.
+  const fileContents = getFileContents();
+});
+```
+</CodeGroup>
+
 ## Best Practices
 
 ### ✅ Re-use declarations for shared resources
@@ -465,4 +591,5 @@ Resource permissions should always be declared in the scope of a single service 
 <Note>
   This practice can break principal of least privilege in infrastructure
   deployments
-</Note>
+</Note>import { fileURLToPath } from "url"
+
