@@ -234,7 +234,7 @@ const getFileContents = async () => {
 }
 
 api('public').get('/files/:name', (ctx) => {
-  const fileContents = await getFileContents();
+  const fileContents = await getFileContents()
 })
 ```
 
