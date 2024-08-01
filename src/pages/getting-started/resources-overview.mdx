@@ -211,31 +211,32 @@ void main() {
 
 <Note>
   If you want to limit resource access to a single instance/access consider
-  implementing a lazy singleton
+  implementing a lazy singleton.
 </Note>
 
 <CodeGroup>
+
 ```typescript
 import { api, bucket } from '@nitric/sdk'
 
-const files = bucket('files').allow('read');
+const files = bucket('files').allow('read')
 
-let fileContents: string;
+let fileContents: string
 
 const getFileContents = async () => {
-if (!fileContents) {
-fileContents = await files.file('example.txt').read();
-}
+  if (!fileContents) {
+    fileContents = await files.file('example.txt').read()
+  }
 
-return fileContents;
+  return fileContents
 }
 
 api('public').get('/files/:name', (ctx) => {
-// ✅ This access will work.
-const fileContents = getFileContents();
-});
+  // ✅ This access will work.
+  const fileContents = getFileContents()
+})
+```
 
-````
 </CodeGroup>
 
 ## Best Practices
@@ -271,7 +272,7 @@ import { updateTopic } from '../lib/resources'
 updateTopic.subscribe((ctx) => {
   console.log('got the message')
 })
-````
+```
 
 ```python
 # resources.py
