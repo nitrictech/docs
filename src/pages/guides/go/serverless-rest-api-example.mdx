@@ -3,11 +3,6 @@ export const description =
 
 export const title_meta = 'Building your first API with Go and Nitric'
 
-<Note>
-  This guide is for v0, v1 is in development. Interested in contributing or
-  chatting with us? [Get in touch!](https://nitric.io/chat)
-</Note>
-
 # Building your first API with Nitric
 
 ## What we'll be doing
@@ -44,7 +39,7 @@ export const title_meta = 'Building your first API with Go and Nitric'
 We'll start by creating a new project for our API.
 
 ```bash
-nitric new my-profile-api "official/Go - Starter (experimental)"
+nitric new my-profile-api go-starter
 ```
 
 Next, open the project in your editor of choice.
@@ -62,13 +57,14 @@ go mod tidy
 The scaffolded project should have the following structure:
 
 ```text
-+--functions/
++--services/
 |  +-- hello/
 |      +-- main.go
 |  ...
 +--nitric.yaml
 +--go.mod
 +--go.sum
++--golang.dockerfile
 +--.gitignore
 +--README.md
 ```
@@ -79,31 +75,23 @@ You can test the project to verify everything is working as expected:
 nitric start
 ```
 
-and in a separate terminal:
-
-```bash
-go run functions/hello
-```
-
-<Note>
-  The first command starts the Nitric Server using `nitric start`, which
-  provides local interfaces to emulate cloud resources. Then `go run
-  functions/hello` runs your functions and allows them to connect.
-</Note>
-
-If everything is working as expected you can now delete all files in the `functions/` folder, we'll create new functions in this guide.
+If everything is working as expected you can now delete all files/folders in the `services/` folder, we'll create new services in this guide.
 
 ## Building the Profile API
 
-Let's start building the profiles API. Create a file named `main.go` in the functions directory and add the following:
+Let's begin by setting up the Profiles API. First, create a new folder called `profiles` within the services directory. Inside this folder, add a file named `main.go`, and include the following code:
 
 ```go
 package main
 
 import (
-  "fmt"
+	"context"
+	"encoding/json"
+	"fmt"
 
-  "github.com/nitrictech/go-sdk/nitric"
+	"github.com/google/uuid"
+	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
@@ -112,7 +100,7 @@ func main() {
     return
   }
 
-  profiles, err := nitric.NewCollection("profiles").With(nitric.CollectionReading, nitric.CollectionWriting)
+  profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreGet, nitric.KvStoreSet)
   if err != nil {
     return
   }
@@ -126,20 +114,20 @@ func main() {
 Here we're creating:
 
 - An API named `public`,
-- A collection named `profiles` and giving our function permission to read and write to that collection.
+- A key value store named `profiles` and giving our function permission to read and write to that key value store.
 
 From here, let's add some features to that function that allow us to work with profiles.
 
 <Note>
   You could separate some or all of these request handlers into their own
-  functions if you prefer. For simplicity we'll group them together in this
+  services if you prefer. For simplicity we'll group them together in this
   guide.
 </Note>
 
 ### Create profiles with POST
 
 ```go
-profilesApi.Post("/profiles", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+profilesApi.Post("/profiles", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
   id := uuid.New().String()
 
   var profileRequest map[string]interface{}
@@ -148,7 +136,7 @@ profilesApi.Post("/profiles", func(ctx *faas.HttpContext, next faas.HttpHandler)
     return ctx, err
   }
 
-  err = profiles.Doc(id).Set(ctx.Request.Context(), profileRequest)
+  err = profiles.Set(context.Background(), id, profileRequest)
   if err != nil {
     return ctx, err
   }
@@ -162,10 +150,10 @@ profilesApi.Post("/profiles", func(ctx *faas.HttpContext, next faas.HttpHandler)
 ### Retrieve a profile with GET
 
 ```go
-profilesApi.Get("/profiles/:id", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+profilesApi.Get("/profiles/:id", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
   id := ctx.Request.PathParams()["id"]
 
-  profile, err := profiles.Doc(id).Get(ctx.Request.Context())
+  profile, err := profiles.Get(context.Background(), id)
   if err != nil {
     ctx.Response.Status = 404
     ctx.Response.Body = []byte(fmt.Sprintf("profile with id '%s' not found", id))
@@ -173,7 +161,7 @@ profilesApi.Get("/profiles/:id", func(ctx *faas.HttpContext, next faas.HttpHandl
     return ctx, nil
   }
 
-  ctx.Response.Body, err = json.Marshal(profile.Content())
+  ctx.Response.Body, err = json.Marshal(profile)
 
   return ctx, err
 })
@@ -182,15 +170,20 @@ profilesApi.Get("/profiles/:id", func(ctx *faas.HttpContext, next faas.HttpHandl
 ### List all profiles with GET
 
 ```go
-profilesApi.Get("/profiles", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
-  profiles, err := profiles.Query().Fetch(ctx.Request.Context())
+profilesApi.Get("/profiles", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+  keys, err := profiles.Keys(context.TODO())
   if err != nil {
     return ctx, err
   }
 
   var profileContent []map[string]interface{}
-  for _, doc := range profiles.Documents {
-    profileContent = append(profileContent, doc.Content())
+  for {
+    key, err := keys.Recv()
+    if err != nil {
+      break
+    }
+    content, _ := profiles.Get(context.Background(), key)
+    profileContent = append(profileContent, content)
   }
 
   ctx.Response.Body, err = json.Marshal(profileContent)
@@ -202,10 +195,10 @@ profilesApi.Get("/profiles", func(ctx *faas.HttpContext, next faas.HttpHandler) 
 ### Remove a profile with DELETE
 
 ```go
-profilesApi.Delete("/profile/:id", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+profilesApi.Delete("/profiles/:id", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
   id := ctx.Request.PathParams()["id"]
 
-  err := profiles.Doc(id).Delete(ctx.Request.Context())
+  err := profiles.Delete(context.Background(), id)
   if err != nil {
     ctx.Response.Status = 404
     ctx.Response.Body = []byte(fmt.Sprintf("profile with id '%s' not found", id))
@@ -217,6 +210,8 @@ profilesApi.Delete("/profile/:id", func(ctx *faas.HttpContext, next faas.HttpHan
 })
 ```
 
+Do a quick `go mod tidy` to make sure all new dependencies are resolved.
+
 ## Ok, let's run this thing!
 
 Now that you have an API defined with handlers for each of its methods, it's time to test it locally.
@@ -225,15 +220,9 @@ Now that you have an API defined with handlers for each of its methods, it's tim
 nitric start
 ```
 
-and in a separate terminal:
-
-```bash
-go run functions/hello
-```
-
 Once it starts, the application will receive requests via the API port. You can use cURL, Postman or any other HTTP client to test the API.
 
-We will keep it running for our tests. If you want to update your functions, just save them, they'll be reloaded automatically.
+We will keep it running for our tests. If you want to update your services, just save them, they'll be reloaded automatically.
 
 ## Test your API
 
@@ -277,17 +266,15 @@ At this point, you can deploy what you've built to any of the supported cloud pr
 - [Azure](/reference/providers/azure)
 - [GCP](/reference/providers/gcp)
 
-Next, we'll need to create a `stack`. A stack represents a deployed instance of an application, which is a collection of resources defined in your project. You might want separate stacks for each environment, such as stacks for `dev`, `test` and `prod`. For now, let's start by creating a `dev` stack.
+Next, we'll need to create a `stack`. A stack represents a deployed instance of an application, which is a key value store of resources defined in your project. You might want separate stacks for each environment, such as stacks for `dev`, `test` and `prod`. For now, let's start by creating a `dev` stack.
+
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
 ```bash
-nitric stack new
+nitric stack new dev aws
 ```
 
-```
-? What should we name this stack? dev
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
-```
+Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region, let's use `us-east-1`.
 
 ### AWS
 
@@ -297,10 +284,6 @@ We called our stack `dev`, let's try deploying it with the `up` command
 
 ```bash
 nitric up
-┌───────────────────────────────────────────────────────────────┐
-| API  | Endpoint                                               |
-| main | https://XXXXXXXX.execute-api.us-east-1.amazonaws.com   |
-└───────────────────────────────────────────────────────────────┘
 ```
 
 When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
@@ -317,10 +300,10 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 
 ### Access profile buckets with permissions
 
-Define a bucket named `profilesImg` with reading/writing permissions
+Define a bucket named `profileImages` with read/write permissions
 
 ```go
-profileImages, err := nitric.NewBucket("profileImages").With(nitric.BucketReading, nitric.BucketWriting)
+profileImages, err := nitric.NewBucket("profileImages").Allow(nitric.BucketRead, nitric.BucketWrite)
 if err != nil {
   fmt.Println(err)
   return
@@ -330,11 +313,11 @@ if err != nil {
 ### Get a URL to upload a profile image
 
 ```go
-profilesApi.Get("/profiles/:id/image/upload", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+profilesApi.Get("/profiles/:id/image/upload", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
 
-  photoUrl, err := profileImages.File(photoId).UploadUrl(ctx.Request.Context(), 600)
+  photoUrl, err := profileImages.File(photoId).UploadUrl(context.TODO(), 600)
   if err != nil {
     return ctx, err
   }
@@ -348,11 +331,11 @@ profilesApi.Get("/profiles/:id/image/upload", func(ctx *faas.HttpContext, next f
 ### Get a URL to download a profile image
 
 ```go
-profilesApi.Get("/profiles/:id/image/download", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+profilesApi.Get("/profiles/:id/image/download", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
 
-  photoUrl, err := profileImages.File(photoId).DownloadUrl(ctx.Request.Context(), 600)
+  photoUrl, err := profileImages.File(photoId).DownloadUrl(context.TODO(), 600)
   if err != nil {
     return ctx, err
   }
