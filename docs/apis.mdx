@@ -673,8 +673,17 @@ func validate(next apis.Handler) apis.Handler {
 }
 ```
 
-```dart !!
-// Middleware currently not supported in dart
+```dart
+Future<HttpContext> validate(HttpContext ctx) async {
+  if (ctx.req.headers.containsKey("content-type")) {
+    ctx.res.status = 400;
+    ctx.res.body = "header Content-Type is required";
+
+    return ctx;
+  }
+
+  return ctx.next();
+}
 ```
 
 </CodeSwitcher>
@@ -741,8 +750,16 @@ func main() {
 }
 ```
 
-```dart !!
-// API level middleware currently not supported in dart
+```dart
+import 'package:nitric_sdk/nitric.dart';
+import '../middlewares';
+
+final customersApi = Nitric.api(
+  "customers",
+  opts: ApiOptions(
+    middlewares: [logRequest, validate],
+  )
+);
 ```
 
 </CodeSwitcher>
@@ -807,7 +824,7 @@ func validate(next apis.Handler) apis.Handler {
 }
 
 func main() {
-  customersApi := nitric.NewApi("customers")
+	customersApi, err := nitric.NewApi("customers")
 
   customersApi.Get("/customers", validate(func(ctx *apis.Ctx) error {
     // handle request
@@ -818,8 +835,22 @@ func main() {
 }
 ```
 
-```dart !!
-// Route level middleware currently not supported in dart
+```dart
+import 'package:nitric_sdk/nitric.dart';
+import '../middlewares';
+
+Future<HttpContext> getAllCustomers(HttpContext ctx) async {
+	// gets the customers
+	return ctx.next();
+}
+
+final customersApi = Nitric.api("customers");
+
+// Inline using .get()
+customersApi.get("/customers", getAllCustomers, middlewares: [logRequest, validate]);
+
+// Inline using .route()
+customersApi.route("/customers").get(getAllCustomers, middlewares: [logRequest, validate]);
 ```
 
 </CodeSwitcher>
