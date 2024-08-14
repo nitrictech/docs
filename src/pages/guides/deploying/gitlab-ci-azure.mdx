@@ -1,0 +1,189 @@
+export const description =
+  'Deploy to Microsoft Azure using GitLab CI and the Nitric CLI'
+
+# Deployment Automation with GitLab CI and Nitric
+
+This guide will demonstrate how Nitric can be used, along with [GitLab CI](https://docs.gitlab.com/ee/ci/), to create a continuous deployment pipeline. The actions in the example below target Microsoft Azure, but can be modified to target AWS or Google Cloud.
+
+<Note>
+  This guide assumes basic knowledge about GitLab CI. If you're new to the
+  feature, you could start by reviewing [GitLab's
+  docs](https://docs.gitlab.com/ee/ci/).
+</Note>
+
+## Workflow setup
+
+To begin, you'll need a Nitric project ready to be deployed. If you haven't created a project yet, take a look at the [quickstart guide](/getting-started/quickstart).
+
+Next, we'll add a GitLab CI workflow file to the project. This is where you'll configure the deployment automation steps. Create a YAML file `.gitlab-ci.yml` at the root of your project. The file can be named however you like, but `.gitlab-ci.yml` is most common.
+
+Here is example content you can copy into your workflow file. In the next sections, we'll break down what's happening in this file, so you can modify it as you see fit.
+
+```yaml
+deploy:
+  image: docker:27
+  services:
+    - docker:27-dind
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  variables:
+    PULUMI_CONFIG_PASSPHRASE: $PULUMI_ACCESS_TOKEN
+    PULUMI_ACCESS_TOKEN: $PULUMI_ACCESS_TOKEN
+    ARM_TENANT_ID: $ARM_TENANT_ID
+    ARM_CLIENT_ID: $ARM_CLIENT_ID
+    ARM_CLIENT_SECRET: $ARM_CLIENT_SECRET
+    ARM_SUBSCRIPTION_ID: $ARM_SUBSCRIPTION_ID
+  before_script:
+    - apk update && apk add --no-cache curl bash py3-pip jq gcc python3-dev musl-dev linux-headers libffi-dev openssl-dev cargo make
+
+    # Retrieve the IP address of the docker host, required for docker in docker
+    - export NITRIC_DOCKER_HOST=$(ip -4 addr show eth0 | grep -o 'inet [0-9\.]*' | awk '{print $2}')
+
+    # Set up a Python virtual environment and install the Azure CLI
+    - python3 -m venv myenv
+    - source myenv/bin/activate
+    - pip install --upgrade pip
+    - pip install azure-cli
+
+    # Authenticate with Azure using the service principal
+    - az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+
+    # Install Nitric
+    - curl -fsSL https://nitric.io/install?version=latest | bash
+    - export PATH=$PATH:$HOME/.nitric/bin
+
+    # Install Pulumi
+    - curl -fsSL https://get.pulumi.com/ | bash
+    - export PATH=$PATH:$HOME/.pulumi/bin
+  script:
+    - nitric up --ci
+```
+
+## Breaking it down
+
+### Defining the Job and Base Image
+
+Start by defining a new job using a Docker image as the base, with Docker-in-Docker (dind) as the underlying service.
+
+```yaml
+image: docker:27
+services:
+  - docker:27-dind
+```
+
+### Setup the Workflow Rules
+
+Rules tell GitLab when to run this job. In this case, we want it to run when there is a merge request on the main branch.
+
+`$CI_PIPELINE_SOURCE == 'merge_request_event'`: run on a merge request.
+
+`$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH`: run when the target is the default branch (main).
+
+```yaml
+rules:
+  - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+```
+
+### Workflow Variables
+
+Configure the environment variables required by Nitric, Pulumi and the Azure environment. In this example, the required values are stored in GitLab CI variables. You can manage these variables under `https://gitlab.com/{user}/{project}/-/settings/ci_cd`.
+
+#### Pulumi
+
+- PULUMI_ACCESS_TOKEN
+
+  - You can get a pulumi access token by logging into Pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
+
+- PULUMI_CONFIG_PASSPHRASE
+  - For interaction free experiences, Pulumi also requires a passphrase to be configured. Your passphrase is used to generate a unique key which encrypts configuration and state values.
+
+#### Azure Login
+
+To create a Service Principal you can use the following command which will give you values for the Azure variables that you need to setup. You can also do this from the Azure console.
+
+```bash
+az ad sp create-for-rbac --name "pulumi-sp" --role Owner --scopes /subscriptions/{ARM_SUBSCRIPTION_ID}
+```
+
+<Note>
+  Your Service Principal needs to be able to assign API permissions to an
+  application or itself, the Application Administrator role is often required to
+  make these changes.
+</Note>
+
+- ARM_TENANT_ID:
+  - Your Azure Active Directory (AAD) tenant ID.
+- ARM_CLIENT_ID
+  - The client ID of your Azure service principal.
+- ARM_CLIENT_SECRET
+  - The client secret for the Azure service principal.
+- ARM_SUBSCRIPTION_ID
+  - Your Azure subscription ID.
+
+```yaml
+variables:
+  PULUMI_CONFIG_PASSPHRASE: $PULUMI_ACCESS_TOKEN
+  PULUMI_ACCESS_TOKEN: $PULUMI_ACCESS_TOKEN
+  ARM_TENANT_ID: $ARM_TENANT_ID
+  ARM_CLIENT_ID: $ARM_CLIENT_ID
+  ARM_CLIENT_SECRET: $ARM_CLIENT_SECRET
+  ARM_SUBSCRIPTION_ID: $ARM_SUBSCRIPTION_ID
+```
+
+### Adding Base Dependencies
+
+Within the `before_script`, dependencies like `curl`, `bash`, and other necessary tools are added. This setup also includes the installation of the Azure CLI.
+
+```yaml
+before_script:
+  - apk update && apk add --no-cache curl bash py3-pip jq gcc python3-dev musl-dev linux-headers libffi-dev openssl-dev cargo make
+```
+
+### Set the Docker Host IP
+
+The `NITRIC_DOCKER_HOST` environment variable stores the IP address of the Docker internal host, required for Docker-in-Docker.
+
+```yaml
+# Retrieve the IP address of the docker host, required for docker in docker
+- export NITRIC_DOCKER_HOST=$(ip -4 addr show eth0 | grep -o 'inet [0-9\.]*' | awk '{print $2}')
+```
+
+### Install Azure CLI and Authenticate
+
+Set up a Python virtual environment, install the Azure CLI, and authenticate using a service principal.
+
+```yaml
+# Set up a Python virtual environment and install the Azure CLI
+- python3 -m venv myenv
+- source myenv/bin/activate
+- pip install --upgrade pip
+- pip install azure-cli
+
+# Authenticate with Azure using the service principal
+- az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+```
+
+### Install Nitric and Pulumi
+
+Install the Nitric CLI and it's dependencies to enable commands such as `nitric up`.
+
+```yaml
+# Install Nitric
+- curl -fsSL https://nitric.io/install?version=latest | bash
+- export PATH=$PATH:$HOME/.nitric/bin
+
+# Install Pulumi
+- curl -fsSL https://get.pulumi.com/ | bash
+- export PATH=$PATH:$HOME/.pulumi/bin
+```
+
+### Deploy the Stack
+
+Finally, use the `script:` section of the job to deploy your project using the `nitric up --ci` command, which outputs raw logs suited for CI environments.
+
+```yaml
+script:
+  - nitric up --ci
+```

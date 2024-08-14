@@ -601,6 +601,10 @@ const fullNav: FullNav = {
           href: '/guides/deploying/gitlab-ci',
         },
         {
+          title: 'Using GitLab CI with Azure',
+          href: '/guides/deploying/gitlab-ci-azure',
+        },
+        {
           title: 'Using Azure Pipelines',
           href: '/guides/deploying/azure-pipelines',
         },
