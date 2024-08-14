@@ -22,17 +22,16 @@ Here is example content you can copy into your workflow file. In the next sectio
 ```yaml
 deploy:
   image: docker:27
+  services:
+    - docker:27-dind
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-  services:
-    - docker:27-dind
   variables:
     PULUMI_CONFIG_PASSPHRASE: $PULUMI_ACCESS_TOKEN
     PULUMI_ACCESS_TOKEN: $PULUMI_ACCESS_TOKEN
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-
   before_script:
     - apk update && apk add --no-cache curl bash
 
@@ -46,7 +45,6 @@ deploy:
     # Install Nitric
     - curl -L https://nitric.io/install?version=latest | bash
     - export PATH=$PATH:$HOME/.nitric/bin
-
   script:
     - nitric up --ci
 ```
