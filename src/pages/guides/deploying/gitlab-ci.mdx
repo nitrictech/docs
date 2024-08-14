@@ -21,9 +21,9 @@ Here is example content you can copy into your workflow file. In the next sectio
 
 ```yaml
 deploy:
-  image: docker:24.0.5
+  image: docker:27
   services:
-    - docker:24.0.5-dind
+    - docker:27-dind
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -32,14 +32,19 @@ deploy:
     PULUMI_ACCESS_TOKEN: $PULUMI_ACCESS_TOKEN
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-    HOST_DOCKER_INTERNAL_IFACE: 'eth0'
   before_script:
-    - apk update
-    - apk add --no-cache curl bash
-    - curl -L https://nitric.io/install?version=latest | bash
-    - export PATH=$PATH:$HOME/.nitric/bin
+    - apk update && apk add --no-cache curl bash
+
+    # retrieve the IP address of the docker host, required for docker in docker
+    - export NITRIC_DOCKER_HOST=$(ip -4 addr show eth0 | grep -o 'inet [0-9\.]*' | awk '{print $2}')
+
+    # Install Pulumi
     - curl -fsSL https://get.pulumi.com/ | bash
     - export PATH=$PATH:$HOME/.pulumi/bin
+
+    # Install Nitric
+    - curl -L https://nitric.io/install?version=latest | bash
+    - export PATH=$PATH:$HOME/.nitric/bin
   script:
     - nitric up --ci
 ```
@@ -49,10 +54,9 @@ deploy:
 Edit the config file and start by defining a new job which uses a docker image as the base, and docker-in-docker (dind) as the underlying service.
 
 ```yaml
-deploy:
-  image: docker:24.0.5
-  services:
-    - docker:24.0.5-dind
+image: docker:27
+services:
+  - docker:27-dind
 ```
 
 ### Setup the workflow rules
@@ -91,19 +95,12 @@ Configure the environment variables required by Nitric and Nitric's dependency P
 - AWS_SECRET_ACCESS_KEY
   - You can obtain a key, including its ID and value, from the amazon console.
 
-#### Nitric
-
-- HOST_DOCKER_INTERNAL_IFACE
-
-  - The network interface that the Nitric CLI will temporarily run the containers on. Without this, the containers can't communicate with the Nitric server whilst gathering the resource definitions.
-
 ```yaml
 variables:
   PULUMI_CONFIG_PASSPHRASE: $PULUMI_CONFIG_PASSPHRASE
   PULUMI_ACCESS_TOKEN: $PULUMI_ACCESS_TOKEN
   AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
   AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-  HOST_DOCKER_INTERNAL_IFACE: 'eth0'
 ```
 
 ### Adding base dependencies
@@ -112,8 +109,19 @@ Within the before script, all the dependencies are added. Start by adding `curl`
 
 ```yaml
 before_script:
-  - apk update
-  - apk add --no-cache curl bash
+  - apk update && apk add --no-cache curl bash
+```
+
+### Set the Docker host IP
+
+The `NITRIC_DOCKER_HOST` environment variable is used to store the IP address of the docker internal host. This is required for docker in docker. Here we are getting the first IP address of the `eth0` interface.
+
+```yaml
+before_script:
+  - apk update && apk add --no-cache curl bash
+
+  # Retrieve the IP address of the docker host, required for docker in docker
+  - export NITRIC_DOCKER_HOST=$(ip -4 addr show eth0 | grep -o 'inet [0-9\.]*' | awk '{print $2}')
 ```
 
 ### Install Nitric and dependencies
@@ -122,12 +130,18 @@ These steps install the Nitric CLI and Pulumi, allowing the use of commands such
 
 ```yaml
 before_script:
-  - apk update
-  - apk add --no-cache curl bash
-  - curl -L https://nitric.io/install?version=latest | bash
-  - export PATH=$PATH:$HOME/.nitric/bin
+  - apk update && apk add --no-cache curl bash
+
+  # Retrieve the IP address of the docker host, required for docker in docker
+  - export NITRIC_DOCKER_HOST=$(ip -4 addr show eth0 | grep -o 'inet [0-9\.]*' | awk '{print $2}')
+
+  # Install Pulumi
   - curl -fsSL https://get.pulumi.com/ | bash
   - export PATH=$PATH:$HOME/.pulumi/bin
+
+  # Install Nitric
+  - curl -L https://nitric.io/install?version=latest | bash
+  - export PATH=$PATH:$HOME/.nitric/bin
 ```
 
 ### Deploy the stack
