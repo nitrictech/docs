@@ -23,6 +23,7 @@ A Job is an instance of a Job Definition that is running within a `Batch`, these
 Jobs are designed to be long running HPC workloads and can take some time to spin up. They are not designed with reactivity in mind and are not suitable for responding to events from cloud resources.
 
 Jobs are unable to run the following:
+
 - Topic Subscriptions
 - Bucket Notifications
 - API & HTTP resources
@@ -38,8 +39,8 @@ Jobs can be use to read and write to/from all nitric resources.
 import { jobDefinition, JobContext } from '@nitric/sdk'
 
 const myJob = jobDefinition('analyse').define((ctx: JobContext) => {
-    // Do some work
-});
+  // Do some work
+})
 ```
 
 ```python
@@ -67,14 +68,14 @@ Jobs may be submitted from Nitric `services`.
 ```javascript
 import * as nitric from '@nitric/sdk'
 
-const api = nitric.api('public');
-const analyseJob = nitric.jobDefintion('analyse');
+const api = nitric.api('public')
+const analyseJob = nitric.jobDefintion('analyse')
 
 api.post('/submit-job', async (ctx) => {
-    await analyseJob.submit({
-        someKey: 'someValue'
-    });
-});
+  await analyseJob.submit({
+    someKey: 'someValue',
+  })
+})
 ```
 
 ```python
