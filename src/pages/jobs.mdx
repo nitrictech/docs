@@ -18,7 +18,7 @@ Job definitions are defined as a part of batches and represent a single unit of 
 
 A Job is an instance of a Job Definition that is running within a `Batch`, these can be created from Nitric services or other Nitric batches.
 
-## Limitations of Jobs
+## Limitations of Batches
 
 Jobs are designed to be long running HPC workloads and can take some time to spin up. They are not designed with reactivity in mind and are not suitable for responding to events from cloud resources.
 
@@ -31,7 +31,21 @@ Jobs are unable to run the following:
 
 Jobs can be used to read and write to/from all nitric resources.
 
+## Defining Batches
+
+Batches are defined in a similar way to services, within the `nitric.yaml` file. As an example
+
+```yaml
+batches:
+  - match: ./batches/*.ts
+    start: yarn dev:batches $BATCH_PATH
+```
+
+> A Batch can contain any number of Job Definitions.
+
 ## Defining a Job
+
+Within a Batch we define Job Definitions, which describes the code we will execute in each job.
 
 <CodeGroup>
 
