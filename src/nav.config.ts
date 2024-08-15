@@ -4,6 +4,7 @@ import {
   ClockIcon,
   CloudIcon,
   CommandLineIcon,
+  CpuChipIcon,
   GlobeAltIcon,
   HomeIcon,
   LockClosedIcon,
@@ -67,6 +68,11 @@ const buildingBlockLinks = [
     title: 'HTTP',
     href: '/http',
     icon: ServerIcon,
+  },
+  {
+    title: 'Jobs',
+    href: '/jobs',
+    icon: CpuChipIcon,
   },
   {
     title: 'Key Value Stores',
@@ -692,6 +698,20 @@ const fullNav: FullNav = {
     {
       title: 'More Building Blocks',
       links: buildingBlockLinks.filter((link) => link.href !== '/http'),
+    },
+  ],
+  jobs: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/jobs',
+        },
+      ],
+    },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/jobs'),
     },
   ],
   keyvalue: [
