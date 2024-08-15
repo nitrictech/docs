@@ -1,0 +1,94 @@
+export const description = 'Jobs'
+
+# Jobs
+
+Nitric provides functionality for provisioning long running batch workloads and High Performance Computing (HPC).
+
+## Definitions
+
+### Batch
+
+A Batch is like a Nitric service, but is designed to be run as a single unit of work with a start and a finish.
+
+### Job Definitions
+
+Job defintions are defined as a part of batches and represent a single unit of work that work that can be run within a Nitric `Batch`
+
+### Job
+
+A Job is an instance of a Job Definition that is running within a `Batch`, these can be created from Nitric services or other Nitric batches.
+
+## Limitations of Jobs
+
+Jobs are designed to be long running HPC workloads and can take some time to spin up. They are not designed with reactivity in mind and are not suitable for responding to events from cloud resources.
+
+Jobs are unable to run the following:
+- Topic Subscriptions
+- Bucket Notifications
+- API & HTTP resources
+- Websocket message handlers
+
+Jobs can be use to read and write to/from all nitric resources.
+
+## Defining a Job
+
+<CodeGroup>
+
+```typescript
+import { jobDefinition, JobContext } from '@nitric/sdk'
+
+const myJob = jobDefinition('analyse').define((ctx: JobContext) => {
+    // Do some work
+});
+```
+
+```python
+from nitric.resources import job_definition
+from nitric.application import Nitric
+from nitric.context import JobContext
+
+# Define will allow the developer to fine-tune the job option, such as adding resource dependencies (e.g. CPU, Memory, GPUs) etc.
+@job_definition("analyse").define()
+async def generate_image(ctx: None):
+    # Do some work
+
+
+Nitric.run()
+```
+
+</CodeGroup>
+
+## Submitting Jobs for Execution
+
+Jobs may be submitted from Nitric `services`.
+
+<CodeGroup>
+
+```javascript
+import * as nitric from '@nitric/sdk'
+
+const api = nitric.api('public');
+const analyseJob = nitric.jobDefintion('analyse');
+
+api.post('/submit-job', async (ctx) => {
+    await analyseJob.submit({
+        someKey: 'someValue'
+    });
+});
+```
+
+```python
+from nitric.resources import api, job_definition
+from nitric.application import Nitric
+
+analyse_job = job_definition("analyse")
+public_api = api("public")
+
+@public_api.post("/submit-job")
+async def submit_job(ctx):
+    await analyse_job.submit({
+        "someKey": "someValue"
+    })
+
+Nitric.run()
+```
