@@ -568,6 +568,10 @@ const fullNav: FullNav = {
           title: 'REST API',
           href: '/guides/go/serverless-rest-api-example',
         },
+        {
+          title: 'Realtime Messaging',
+          href: '/guides/go/realtime-messaging',
+        },
       ],
     },
   ],
