@@ -11,7 +11,7 @@ This guide will demonstrate how Nitric can be used, along with [Google Cloud Bui
   docs](https://cloud.google.com/build/docs) first.
 </Note>
 
-## Configuration setup
+## Configuration
 
 To begin you'll need a Nitric project ready to be deployed. If you haven't created a project yet, take a look at the [quickstart guide](/getting-started/quickstart).
 
@@ -24,7 +24,7 @@ The Cloud Build configuration file below is a sample, to show you how to install
   token, but you should consider using encrypted variables.
 </Note>
 
-```yaml
+```yaml {{tag: 'cloudbuild.yaml'}}
 steps:
   - name: 'docker:27'
     script: |
@@ -33,7 +33,7 @@ steps:
 
       # Start Docker daemon with TCP socket on port 2375 and without TLS
       # This makes Docker accessible over TCP for other commands to interact with
-      dockerd --host tcp://0.0.0.0:2375 --tls=false &
+      dockerd --host tcp://0.0.0.0:2375 --tls=false --log-level=error &
 
       # Wait until Docker daemon is fully started and responsive
       # This loop checks if Docker is up by querying its version endpoint
@@ -45,12 +45,10 @@ steps:
       # Install Pulumi by downloading and executing the installation script
       # Pulumi is a tool for managing infrastructure as code
       curl -fsSL https://get.pulumi.com | sh
-      # Add Pulumi binary directory to PATH for subsequent commands
       export PATH=$PATH:$HOME/.pulumi/bin
 
       # Install Nitric by downloading and executing the installation script
       curl -L https://nitric.io/install?version=latest | bash
-      # Add Nitric binary directory to PATH for subsequent commands
       export PATH=$PATH:$HOME/.nitric/bin
 
       # Execute the Nitric command to deploy infrastructure
