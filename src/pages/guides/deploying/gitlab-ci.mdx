@@ -11,7 +11,7 @@ This guide will demonstrate how Nitric can be used, along with [GitLab CI](https
   docs](https://docs.gitlab.com/ee/ci/)
 </Note>
 
-## Workflow setup
+## Configuration
 
 To begin you'll need a Nitric project ready to be deployed. If you haven't created a project yet, take a look at the [quickstart guide](/getting-started/quickstart).
 
@@ -19,136 +19,46 @@ Next, we'll add a GitLab CI workflow file to the project. This is where you'll c
 
 Here is example content you can copy into your workflow file. In the next sections we'll breakdown what's happening in this file, so you can modify it as you see fit.
 
-```yaml
+```yaml {{tag: '.gitlab-ci.yml'}}
 deploy:
   image: docker:27
+
+  # Enable Docker-in-Docker (DinD) to allow running Docker commands within the CI environment
   services:
     - docker:27-dind
+
+  # Define rules for when this job should run
   rules:
+    # Run this job only if the pipeline is triggered by a merge request event
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    # Run this job if the commit branch matches the default branch
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+  # Set environment variables for Pulumi and AWS credentials
   variables:
     PULUMI_CONFIG_PASSPHRASE: $PULUMI_ACCESS_TOKEN
     PULUMI_ACCESS_TOKEN: $PULUMI_ACCESS_TOKEN
     AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+
   before_script:
+    # Update package list and install required packages
     - apk update && apk add --no-cache curl bash
 
-    # retrieve the IP address of the docker host, required for docker in docker
+    # Retrieve the IP address of the Docker host, necessary for Docker-in-Docker communication
     - export NITRIC_DOCKER_HOST=$(ip -4 addr show eth0 | grep -o 'inet [0-9\.]*' | awk '{print $2}')
 
-    # Install Pulumi
-    - curl -fsSL https://get.pulumi.com/ | bash
+    # Install Pulumi by downloading and executing the installation script
+    # Pulumi is a tool for managing infrastructure as code
+    - curl -fsSL https://get.pulumi.com | sh
     - export PATH=$PATH:$HOME/.pulumi/bin
 
-    # Install Nitric
+    # Install Nitric by downloading and executing the installation script
     - curl -L https://nitric.io/install?version=latest | bash
     - export PATH=$PATH:$HOME/.nitric/bin
+
   script:
+    # Execute the Nitric command to deploy infrastructure
+    # --ci flag is used for continuous integration environments
     - nitric up --ci
-```
-
-## Breaking it down
-
-Edit the config file and start by defining a new job which uses a docker image as the base, and docker-in-docker (dind) as the underlying service.
-
-```yaml
-image: docker:27
-services:
-  - docker:27-dind
-```
-
-### Setup the workflow rules
-
-Rules tell Gitlab when to run this job. In this case we want it to run when there is a merge request on the main branch.
-
-`$CI_PIPELINE_SOURCE == 'merge_request_event'`: run on a merge request.
-
-`$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH`: run when the target is the default branch (main).
-
-```yaml
-rules:
-  - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-```
-
-### Workflow variables
-
-Configure the environment variables required by Nitric and Nitric's dependency Pulumi. In this example we store the required values in Gitlab CI variables. Variables can be found by navigating to `https://gitlab.com/{user}/{project}/-/settings/ci_cd`.
-
-#### Pulumi
-
-- PULUMI_ACCESS_TOKEN
-
-  - You can get a pulumi access token by logging into Pulumi on the browser and going to your profile settings. Under the 'Access Tokens' tab click 'Create token'.
-
-- PULUMI_CONFIG_PASSPHRASE
-  - For interaction free experiences, Pulumi also requires a passphrase to be configured. Your passphrase is used to generate a unique key which encrypts configuration and state values.
-
-#### AWS Login
-
-- AWS_ACCESS_KEY_ID
-
-  - You can obtain a key, including its ID and value, from the amazon console.
-
-- AWS_SECRET_ACCESS_KEY
-  - You can obtain a key, including its ID and value, from the amazon console.
-
-```yaml
-variables:
-  PULUMI_CONFIG_PASSPHRASE: $PULUMI_CONFIG_PASSPHRASE
-  PULUMI_ACCESS_TOKEN: $PULUMI_ACCESS_TOKEN
-  AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-  AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-```
-
-### Adding base dependencies
-
-Within the before script, all the dependencies are added. Start by adding `curl` and `bash`, which are used when installing `pulumi` and `nitric` in the next steps.
-
-```yaml
-before_script:
-  - apk update && apk add --no-cache curl bash
-```
-
-### Set the Docker host IP
-
-The `NITRIC_DOCKER_HOST` environment variable is used to store the IP address of the docker internal host. This is required for docker in docker. Here we are getting the first IP address of the `eth0` interface.
-
-```yaml
-before_script:
-  - apk update && apk add --no-cache curl bash
-
-  # Retrieve the IP address of the docker host, required for docker in docker
-  - export NITRIC_DOCKER_HOST=$(ip -4 addr show eth0 | grep -o 'inet [0-9\.]*' | awk '{print $2}')
-```
-
-### Install Nitric and dependencies
-
-These steps install the Nitric CLI and Pulumi, allowing the use of commands such as `nitric up`.
-
-```yaml
-before_script:
-  - apk update && apk add --no-cache curl bash
-
-  # Retrieve the IP address of the docker host, required for docker in docker
-  - export NITRIC_DOCKER_HOST=$(ip -4 addr show eth0 | grep -o 'inet [0-9\.]*' | awk '{print $2}')
-
-  # Install Pulumi
-  - curl -fsSL https://get.pulumi.com/ | bash
-  - export PATH=$PATH:$HOME/.pulumi/bin
-
-  # Install Nitric
-  - curl -L https://nitric.io/install?version=latest | bash
-  - export PATH=$PATH:$HOME/.nitric/bin
-```
-
-### Deploy the stack
-
-Finally, in the `script:` section of the job, the `up` command can be used to deploy your project. The first argument `--ci` tells the CLI that we are running in a ci pipeline and should have raw output.
-
-```yaml
-script:
-  - nitric up --ci
 ```
