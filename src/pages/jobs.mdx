@@ -62,7 +62,6 @@ from nitric.resources import job_definition
 from nitric.application import Nitric
 from nitric.context import JobContext
 
-# Define will allow the developer to fine-tune the job option, such as adding resource dependencies (e.g. CPU, Memory, GPUs) etc.
 @job_definition("analyse").define(cpus=1, memory=1024, gpus=0)
 async def generate_image(ctx: None):
     # Do some work
@@ -86,9 +85,13 @@ const api = nitric.api('public')
 const analyseJob = nitric.jobDefintion('analyse')
 
 api.post('/submit-job', async (ctx) => {
-  await analyseJob.submit({
-    someKey: 'someValue',
-  })
+  await analyseJob.submit(
+    {
+      someKey: 'someValue',
+    }, 
+    // optional job resource overrides
+    { cpus: 1, memory: 1024, gpus: 0 }
+  )
 })
 ```
 
@@ -101,9 +104,13 @@ public_api = api("public")
 
 @public_api.post("/submit-job")
 async def submit_job(ctx):
-    await analyse_job.submit({
+    await analyse_job.submit(
+      {
         "someKey": "someValue"
-    })
+      },
+      # optional job resource overrides
+      { cpus: 1, memory: 1024, gpus: 0 }
+    )
 
 Nitric.run()
 ```
