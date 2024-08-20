@@ -52,9 +52,12 @@ Within a Batch we define Job Definitions, which describes the code we will execu
 ```typescript
 import { jobDefinition, JobContext } from '@nitric/sdk'
 
-const myJob = jobDefinition('analyse').define((ctx: JobContext) => {
-  // Do some work
-}, {cpus: 1, memory: 1024, gpus: 0})
+const myJob = jobDefinition('analyse').define(
+  (ctx: JobContext) => {
+    // Do some work
+  },
+  { cpus: 1, memory: 1024, gpus: 0 }
+)
 ```
 
 ```python
@@ -88,7 +91,7 @@ api.post('/submit-job', async (ctx) => {
   await analyseJob.submit(
     {
       someKey: 'someValue',
-    }, 
+    },
     // optional job resource overrides
     { cpus: 1, memory: 1024, gpus: 0 }
   )
