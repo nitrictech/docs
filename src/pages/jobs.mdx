@@ -54,7 +54,7 @@ import { jobDefinition, JobContext } from '@nitric/sdk'
 
 const myJob = jobDefinition('analyse').define((ctx: JobContext) => {
   // Do some work
-})
+}, {cpus: 1, memory: 1024, gpus: 0})
 ```
 
 ```python
@@ -63,7 +63,7 @@ from nitric.application import Nitric
 from nitric.context import JobContext
 
 # Define will allow the developer to fine-tune the job option, such as adding resource dependencies (e.g. CPU, Memory, GPUs) etc.
-@job_definition("analyse").define()
+@job_definition("analyse").define(cpus=1, memory=1024, gpus=0)
 async def generate_image(ctx: None):
     # Do some work
 
