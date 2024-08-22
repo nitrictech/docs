@@ -47,10 +47,18 @@ config:
   default:
     # configure services to deploy to Google Cloud Run
     cloudrun:
+      # set 1 CPU
+      # See cloudrun configuration docs here:
+      # https://cloud.google.com/run/docs/configuring
+      cpus: 1
       # set 512MB of RAM
       # See cloudrun configuration docs here:
       # https://cloud.google.com/run/docs/configuring/memory-limits
       memory: 512
+      # set 0 GPUs
+      # See cloudrun configuration docs here:
+      # https://cloud.google.com/run/docs/configuring
+      gpus: 0
       # set a timeout of 15 seconds
       # https://cloud.google.com/run/docs/configuring/request-timeout
       timeout: 15
