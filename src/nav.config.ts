@@ -70,8 +70,8 @@ const buildingBlockLinks = [
     icon: ServerIcon,
   },
   {
-    title: 'Jobs',
-    href: '/jobs',
+    title: 'AI & Batch',
+    href: '/batch',
     icon: CpuChipIcon,
   },
   {
@@ -700,18 +700,18 @@ const fullNav: FullNav = {
       links: buildingBlockLinks.filter((link) => link.href !== '/http'),
     },
   ],
-  jobs: [
+  batch: [
     {
       links: [
         {
           title: 'Overview',
-          href: '/jobs',
+          href: '/batch',
         },
       ],
     },
     {
       title: 'More Building Blocks',
-      links: buildingBlockLinks.filter((link) => link.href !== '/jobs'),
+      links: buildingBlockLinks.filter((link) => link.href !== '/batch'),
     },
   ],
   keyvalue: [
