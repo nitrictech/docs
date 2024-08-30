@@ -3,30 +3,30 @@ export const description =
 
 # Testing AWS resources with Terratest
 
-This guide will walk you through adding Terratest to a Nitric project.
+This guide will walk you through adding [Terratest](https://terratest.gruntwork.io/) to a Nitric project.
 
 ## How Terratest works
 
 Terratest is designed to automate the entire process of testing your Terraform code with the following steps:
 
-- Initialize: Terratest will automatically run terraform init to initialize the Terraform working directory.
-- Apply: It will then run terraform apply to deploy the infrastructure as defined in your Terraform code.
-- Assert: The test script will then run assertions to check that the infrastructure was created as expected.
-- Teardown: Finally, it will run terraform destroy to tear down the infrastructure after the test completes.
+- **Initialize**: Terratest will automatically run terraform init to initialize the Terraform working directory.
+- **Apply**: It will then run terraform apply to deploy the infrastructure as defined in your Terraform code.
+- **Assert**: The test script will then run assertions to check that the infrastructure was created as expected.
+- **Teardown**: Finally, it will run terraform destroy to tear down the infrastructure after the test completes.
 
 ## What we'll be doing
 
 1. Create and set up your application.
 2. Deploying to AWS with a Terraform provider.
-3. Add and execute Terratest
+3. Add and execute Terratest.
 
 ## Create and set up your application.
 
-Our sample project creates a real-time communication service using websockets and a key-value store for connections.
+Our sample project creates a real-time communication service using [websockets](/websockets) and a [key-value store](/keyvalue) for connections.
 
 We intend to deploy to AWS and will use Terratest to ensure that the following:
 
-- **API Gateway WebSocket**: Confirm that the webSocket endpoint is correctly configured for real-time communication.
+- **API Gateway WebSocket**: Confirm that the websocket endpoint is correctly configured for real-time communication.
 - **DynamoDB Table**: Verify that the key-value store for connections is created and operational.
 - **IAM Roles**: Ensure that permissions for interacting with AWS services are correctly set up.
 
@@ -142,7 +142,7 @@ provider: nitric/awstf@1.11.6
 region: us-east-2
 ```
 
-The Nitric Terraform providers are currently in preview, to enable them you'll need to enable beta-providers in your Nitric project. You can do this by adding the following to your project's nitric.yaml file:
+The Nitric Terraform providers are currently in preview, to enable them you'll need to enable beta-providers in your Nitric project. You can do this by adding the following to your project's `nitric.yaml` file:
 
 ```
 preview:
@@ -155,7 +155,7 @@ Once you've created your Nitric stack, you can generate the Terraform code by ru
 nitric up
 ```
 
-This will generate the Terraform code for your Nitric application into a folder named cdktf.out by default.
+This will generate the Terraform code for your Nitric application into a folder named `cdktf.out` by default.
 
 ## Add and execute Terratest
 
