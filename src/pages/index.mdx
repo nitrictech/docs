@@ -1,5 +1,6 @@
 import { HomeHeader } from '@/components/HomeHeader'
 import { InstallNitric } from '@/components/InstallNitric'
+import { Libraries } from '@/components/Libraries'
 
 export const description =
   'Documentation for the Nitric cloud application framework.'
@@ -18,6 +19,10 @@ However, Nitric is unique - it doesn't just deploy the resources, it helps you i
 It's what's missing between applications and infrastructure automation.
 
 Oh, and it supports basically any language, like JavaScript, TypeScript, Python, Go, you name it.
+
+<div className="">
+<Libraries minimal />
+</div>
 
 ## Services
 
@@ -131,7 +136,7 @@ provider: custom/on-prem@1.0.0
 
 </CodeGroup>
 
-We have a few providers built-in with IaC from Pulumi or Terraform, but you can build your own with any tools you prefer and to anywhere you want. You can even deploy to multiple clouds at once.
+We have a few providers built-in with IaC from Pulumi or Terraform, but you can build your own with any tools you prefer and to anywhere you want.
 
 ## Projects
 
@@ -256,13 +261,17 @@ nitric down
 
 ## Dashboard
 
-Nitric has a local Dashboard UI (hosted by the CLI) to help you interact with your resources. You can typically access it at [http://localhost:49152](http://localhost:49152/).
+Nitric has a local Dashboard UI (hosted by the CLI) to help you interact with your resources. You can typically access it at [http://localhost:49152](http://localhost:49152/) after running `nitric start` or `nitric run`.
 
 <img
   src="/docs/images/docs/dashboard-architecture.png"
   style={{ maxWidth: 800, width: '100%' }}
   alt="screen shot of the local development dashboard"
 />
+
+## Extension
+
+TODO
 
 ## What now?
 

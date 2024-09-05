@@ -49,7 +49,33 @@ const libraries = [
   },
 ]
 
-export function Libraries() {
+export interface LibrariesProps {
+  minimal?: boolean
+}
+
+export function Libraries({ minimal = false }: LibrariesProps) {
+  if (minimal) {
+    return (
+      <div className="flex items-center w-fit h-fit">
+        {libraries.map((library) => (
+          <Link
+            href={library.href}
+            key={library.name}
+            className="grayscale opacity-90 transition-opacity hover:opacity-100 hover:grayscale-0"
+            target='_blank'
+          >
+            <Image
+              src={library.logo}
+              alt={library.name + ' Logo'}
+              className="h-12 w-12"
+              unoptimized
+            />
+          </Link>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="my-16 xl:max-w-none">
       <Heading level={2} id="libraries">
