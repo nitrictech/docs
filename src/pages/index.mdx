@@ -12,6 +12,8 @@ export const disableEditGithub = true
   description="Build cloud backends that run anywhere, fast."
 />
 
+---
+
 Nitric is a cloud framework with common resources like APIs, websockets, databases, queues, topics, buckets, and more.
 
 However, Nitric is unique - it doesn't just deploy the resources, it helps you interact with them. It also makes them pluggable, so you can swap services or even whole clouds without changing your code.
@@ -23,6 +25,8 @@ Oh, and it supports basically any language, like JavaScript, TypeScript, Python,
 <div className="">
 <Libraries minimal />
 </div>
+
+---
 
 ## Services
 
@@ -36,6 +40,8 @@ services:
 ```
 
 You might have one service that handles everything, or a service for each route. It's up to you.
+
+---
 
 ## Resources
 
@@ -94,6 +100,8 @@ Nitric collects everything your services request. When you deploy, the deploymen
   That probably sounds like magic, but it's more like a compiler for Infrastructure-as-Code - you can read about it in the [Concepts](/docs/concepts) section.
 </Note>
 
+---
+
 ## Providers
 
 Nitric is designed to be independent of any platform, so you can run your apps anywhere. You can deploy to AWS, Azure, GCP, or even your own Kubernetes cluster. You can even deploy to multiple clouds at once.
@@ -137,6 +145,8 @@ provider: custom/on-prem@1.0.0
 </CodeGroup>
 
 We have a few providers built-in with IaC from Pulumi or Terraform, but you can build your own with any tools you prefer and to anywhere you want.
+
+---
 
 ## Projects
 
@@ -195,6 +205,8 @@ example/
 ```
 
 </CodeGroup>
+
+---
 
 ## CLI
 
@@ -259,9 +271,15 @@ You can tear down your project with the `down` command.
 nitric down
 ```
 
-## Dashboard
+---
 
-Nitric has a local Dashboard UI (hosted by the CLI) to help you interact with your resources. You can typically access it at [http://localhost:49152](http://localhost:49152/) after running `nitric start` or `nitric run`.
+## Local development
+
+Sometimes you just want to run your app locally and we let you do just that. And we don't mean "binds to a cloud environment and syncs your code, but doesn't work without Wifi" local, we mean "runs on your machine, on a desert island" local.
+
+`nitric start` hosts entrypoints like APIs, websockets, and schedules, as well as resources like databases, topics, queues, key/value stores and buckets.
+
+It also provides a Dashboard to interact with your resources, so you can trigger schedules without waiting, or topics without a publisher, or upload test files to a bucket. It even produces a real-time architecture diagram of your services and resources.
 
 <img
   src="/docs/images/docs/dashboard-architecture.png"
@@ -269,9 +287,81 @@ Nitric has a local Dashboard UI (hosted by the CLI) to help you interact with yo
   alt="screen shot of the local development dashboard"
 />
 
-## Extension
+---
 
-TODO
+## Extension & Escape Hatches
+
+The services of cloud providers are vast, we can't cover everything and we shouldn't. Many services are unique enough that abstraction would be a disservice. Nitric aims to make common "table stakes" services easy to use, but we never want to limit you.
+
+### Runtime
+
+If you need to access a service in a way Nitric doesn't support, you can always use the provider's SDK directly. Code like this will always work:
+
+<CodeGroup>
+
+```javascript
+import { S3Client } from '@aws-sdk/client-s3'
+
+const s3 = new S3Client({ region: 'us-east-1' })
+
+const { Contents } = await s3.listObjectsV2({ Bucket: 'my-bucket' })
+```
+
+```python
+from boto3 import client
+
+s3 = client('s3', region_name='us-east-1')
+
+response = s3.list_objects_v2(Bucket='my-bucket')
+```
+
+```go
+import (
+  "context"
+
+  "github.com/aws/aws-sdk-go-v2/config"
+  "github.com/aws/aws-sdk-go-v2/service/s3"
+)
+
+cfg, _ := config.LoadDefaultConfig(context.TODO())
+client := s3.NewFromConfig(cfg)
+
+output, _ := client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
+  Bucket: aws.String("my-bucket"),
+})
+```
+
+```dart
+import 'package:aws_s3/aws_s3.dart';
+
+final s3 = S3(region: 'us-east-1');
+
+final response = await s3.listObjectsV2(Bucket: 'my-bucket');
+
+print(response.contents);
+```
+
+</CodeGroup>
+
+### Overriding
+
+If you need to change how Nitric deploys a resources or how it interacts with a service at runtime, you can [extend or modify a provider](/reference/providers/custom/extend-standard-provider).
+
+<Note>
+  For example, here's a [project that swaps SNS for EventBridge](https://github.com/jyecusch/iac-ifc-comparison) on AWS.
+</Note>
+
+### Full Customization
+
+If you need to deploy to a cloud or new set of services that Nitric doesn't support, you can [build your own provider](/reference/providers/custom/building-custom-provider). This is a bit more advanced, but it's the ultimate escape hatch.
+
+The included providers are written in Go and built using Terraform or Pulumi, but you can use any language or tool you like.
+
+### Additional Resources
+
+If you need to use a service that Nitric doesn't support, you just do that like you always would. Nitric doesn't get in the way of you using the cloud, it just makes it easier.
+
+---
 
 ## What now?
 
