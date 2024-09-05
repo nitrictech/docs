@@ -11,9 +11,9 @@ export const disableEditGithub = true
   description="Build cloud backends that run anywhere, fast."
 />
 
-Nitric is a cloud framework with common resources like APIs, webhooks, databases, queues, topics, buckets, and more.
+Nitric is a cloud framework with common resources like APIs, websockets, databases, queues, topics, buckets, and more.
 
-However, Nitric is unique - it doesn't just deploy the resources, it helps you interact with them. It also makes them plugable, so you can swap services or even whole clouds without changing your code.
+However, Nitric is unique - it doesn't just deploy the resources, it helps you interact with them. It also makes them pluggable, so you can swap services or even whole clouds without changing your code.
 
 It's what's missing between applications and infrastructure automation.
 
@@ -21,7 +21,7 @@ Oh, and it supports basically any language, like JavaScript, TypeScript, Python,
 
 ## Services
 
-Services are the heart of nitric apps, they're the entrypoints to your code. They can serve as APIs, webhooks, schedule handlers, subscribers and a lot more. You create services by telling Nitric where to look for your code and how to run it.
+Services are the heart of Nitric apps, they're the entrypoints to your code. They can serve as APIs, websockets, schedule handlers, subscribers and a lot more. You create services by telling Nitric where to look for your code and how to run it.
 
 ```yaml {{ label:"nitric.yaml" }}
 name: example
@@ -72,11 +72,13 @@ func main() {
 ```dart {{ label:"services/example.dart" }}
 import 'package:nitric_sdk/nitric.dart';
 
-final profiles = Nitric.bucket("profiles").allow([
-  BucketPermission.read,
-  BucketPermission.write,
-  BucketPermission.delete,
-]);
+void main() {
+  final profiles = Nitric.bucket("profiles").allow([
+    BucketPermission.read,
+    BucketPermission.write,
+    BucketPermission.delete,
+  ]);
+}
 ```
 
 </CodeGroup>
@@ -91,7 +93,7 @@ Nitric collects everything your services request. When you deploy, the deploymen
 
 Nitric is designed to be independent of any platform, so you can run your apps anywhere. You can deploy to AWS, Azure, GCP, or even your own Kubernetes cluster. You can even deploy to multiple clouds at once.
 
-Seriously, is there really a difference between a bucket on AWS and a bucket on Azure? We doesn't think so. So why is the code different?
+Seriously, is there really a difference between a bucket on AWS and a bucket on Azure? We don't think so. So why should the code be different?
 
 Nitric abstracts away the differences, so you can focus on your app. The part that makes that possible is a plugin, we call a **Provider**.
 
