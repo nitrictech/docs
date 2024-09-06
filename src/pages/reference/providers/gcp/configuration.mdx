@@ -7,13 +7,10 @@ export const description = 'Configuring your Google Cloud stacks'
 <CodeGroup>
 
 ```yaml {{ title: "Pulumi" }}
-# The name of your GCP stack
-name: my-gcp-stack-name
-
 # The provider to use and it's published version
 # See releases:
 # https://github.com/nitrictech/nitric/tags
-provider: nitric/gcp@1.10.0
+provider: nitric/gcp@1.12.4
 
 # The target GCP region to deploy to
 # See available regions:
@@ -40,6 +37,13 @@ import:
     # In typescript this would import the provided secret reference for a secret declared as
     # const mySecret = secret('my-secret');
     my-secret: existing-secret
+
+# Apply configuration to nitric APIs
+apis:
+  # Target an API by its nitric name
+  my-api:
+    # provide domains to be used for the api
+    description: An Azure API
 
 # Configure your deployed services
 config:
