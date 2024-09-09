@@ -40,9 +40,9 @@ Jobs can be used to read and write to/from all nitric resources, for example the
 Batches are defined similarly to services in a project's `nitric.yaml` file. For example:
 
 ```yaml
-batches:
+batch-services:
   - match: ./batches/*.ts
-    start: yarn dev:batches $BATCH_PATH
+    start: yarn dev:batches $SERVICE_PATH
 ```
 
 <Note>Batches can contain any number of Job Definitions.</Note>
@@ -81,6 +81,20 @@ async def generate_image(ctx: None):
 
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+void main() {
+  final job = Nitric.job("batch-jobs");
+
+  job.handler((ctx) async {
+    print("New job submitted for ${ctx.req.jobName}: ${ctx.req.message}");
+
+    return ctx;
+  }, opts: JobResourceRequirements(cpus: 1, memory: 1024, gpus: 0));
+}
 ```
 
 </CodeGroup>
@@ -131,6 +145,23 @@ async def submit_job(ctx):
     )
 
 Nitric.run()
+```
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+void main() {
+  final api = Nitric.api("public");
+  final analyze = Nitric.job("analyze").allow([JobPermission.submit]);
+
+  api.get("/submit-job", (ctx) async {
+    analyze.submit({
+      "someKey": "someValue"
+    });
+
+    return ctx;
+  });
+}
 ```
 
 </CodeGroup>
