@@ -59,12 +59,9 @@ import { job, JobContext } from '@nitric/sdk'
 const myJob = job('analyse')
 
 // Use `handler` to register the callback function that will run when a job is submitted
-myJob.handler(
-  { cpus: 1, memory: 1024, gpus: 0 },
-  async (ctx: JobContext) => {
-    // Do some work
-  },
-)
+myJob.handler({ cpus: 1, memory: 1024, gpus: 0 }, async (ctx: JobContext) => {
+  // Do some work
+})
 ```
 
 ```python
@@ -117,11 +114,9 @@ const api = nitric.api('public')
 const analyze = nitric.job('analyze').allow('submit')
 
 api.post('/submit-job', async (ctx) => {
-  await analyze.submit(
-    {
-      someKey: 'someValue',
-    }
-  )
+  await analyze.submit({
+    someKey: 'someValue',
+  })
 })
 ```
 
