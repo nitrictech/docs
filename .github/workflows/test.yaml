@@ -65,7 +65,7 @@ jobs:
           start: yarn start
           wait-on: 'http://localhost:3000'
       - name: Upload screenshots
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
@@ -96,39 +96,39 @@ jobs:
           start: yarn start
           wait-on: 'http://localhost:3000'
       - name: Upload screenshots
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
 
   test-seo:
-      runs-on: ubuntu-latest
-      needs: [tests]
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Restore Build
-          uses: actions/cache@v2
-          id: restore-build
-          with:
-            path: |
-              .next
-              public
-            key: ci-docs-test-${{ github.sha }}
-        - name: Cypress tests 🧪
-          uses: cypress-io/github-action@v5
-          with:
-            headless: true
-            config: video=false
-            browser: chrome
-            spec: cypress/e2e/seo.cy.ts
-            build: node scripts/build-pages-fixture.js
-            start: yarn start
-            wait-on: 'http://localhost:3000'
-        - name: Upload screenshots
-          uses: actions/upload-artifact@v2
-          if: failure()
-          with:
-            name: cypress-screenshots
-            path: cypress/screenshots
+    runs-on: ubuntu-latest
+    needs: [tests]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Restore Build
+        uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: |
+            .next
+            public
+          key: ci-docs-test-${{ github.sha }}
+      - name: Cypress tests 🧪
+        uses: cypress-io/github-action@v5
+        with:
+          headless: true
+          config: video=false
+          browser: chrome
+          spec: cypress/e2e/seo.cy.ts
+          build: node scripts/build-pages-fixture.js
+          start: yarn start
+          wait-on: 'http://localhost:3000'
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
