@@ -766,8 +766,7 @@ By default APIs deployed by Nitric will be assigned a domain by the target cloud
 
 <CodeGroup>
 
-```yaml {{ title: "AWS", tag: "nitric-prod.yaml (stack file)" }}
-name: my-aws-stack
+```yaml {{ title: "AWS", tag: "nitric.prod.yaml" }}
 provider: nitric/aws@1.1.0
 region: ap-southeast-2
 
@@ -780,12 +779,57 @@ apis:
       - test.example.com
 ```
 
-```yaml {{ title: "Azure", tag: "nitric-prod.yaml (stack file)" }}
+```yaml {{ title: "Azure", tag: "nitric.prod.yaml" }}
 # currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
 ```
 
-```yaml {{ title: "Google Cloud", tag: "nitric-prod.yaml (stack file)" }}
+```yaml {{ title: "Google Cloud", tag: "nitric.prod.yaml" }}
 # currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
+```
+
+</CodeGroup>
+
+## Custom Descriptions
+
+By default, APIs will not be deployed with a description. You can add a description using the following configuration in your stack file.
+
+<CodeGroup>
+
+```yaml {{ title: "AWS", tag: "nitric.prod.yaml" }}
+provider: nitric/aws@1.12.4
+region: ap-southeast-2
+
+# Add a key for configuring apis
+apis:
+  # Target an API by its nitric name
+  my-api-name:
+    # provide domains to be used for the api
+    description: An AWS API
+```
+
+```yaml {{ title: "Azure", tag: "nitric.prod.yaml" }}
+provider: nitric/azure@1.12.4
+region: Australia East
+org: example-org
+adminemail: test@example.com
+
+apis:
+  # Target an API by its nitric name
+  my-api-name:
+    # provide domains to be used for the api
+    description: An Azure API
+```
+
+```yaml {{ title: "Google Cloud", tag: "nitric.prod.yaml" }}
+provider: nitric/gcp@1.12.4
+region: australia-southeast1
+
+# Add a key for configuring apis
+apis:
+  # Target an API by its nitric name
+  my-api-name:
+    # provide domains to be used for the api
+    description: A GCP API
 ```
 
 </CodeGroup>

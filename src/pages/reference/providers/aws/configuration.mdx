@@ -7,13 +7,10 @@ export const description = 'Configuring your AWS stacks'
 <CodeGroup>
 
 ```yaml {{ title: "Pulumi" }}
-# The name of your AWS stack
-name: my-aws-stack-name
-
 # The provider to use and it's published version
 # See releases:
 # https://github.com/nitrictech/nitric/tags
-provider: nitric/aws@1.1.0
+provider: nitric/aws@1.12.4
 
 # The target aws region to deploy to
 # See available regions:
@@ -47,6 +44,7 @@ apis:
     # The domain or parent domain must have a hosted zone already in Route53
     domains:
       - api.example.com
+    description: An AWS API
 
 # Configure your deployed services
 config:
