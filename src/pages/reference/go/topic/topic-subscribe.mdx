@@ -9,15 +9,12 @@ Subscribe a handler to a topic and receive new events for processing.
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  nitric.NewTopic("updates").Subscribe(func(ctx *handler.MessageContext, _ handler.MessageHandler) (*handler.MessageContext, error) {
+  nitric.NewTopic("updates").Subscribe(func() {
     fmt.Println("received update")
-
-    return ctx, nil
   })
 
   if err := nitric.Run(); err != nil {
@@ -29,7 +26,7 @@ func main() {
 ## Parameters
 
 <Properties>
-  <Property name="middleware" required type="EventMiddleware">
+  <Property name="middleware" required type="interface{}">
     The middleware (code) to be triggered by the topic.
   </Property>
 </Properties>
@@ -42,15 +39,13 @@ func main() {
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
+  "github.com/nitrictech/go-sdk/nitric/topics"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  nitric.NewTopic("updates").Subscribe(func(ctx *handler.MessageContext, _ handler.MessageHandler) (*handler.MessageContext, error) {
-    fmt.Println("received update")
-
-    return ctx, nil
+  nitric.NewTopic("updates").Subscribe(func(ctx *topics.Ctx) {
+    fmt.Printf("received update %+v", ctx.Request.Message())
   })
 
   if err := nitric.Run(); err != nil {
@@ -65,24 +60,24 @@ func main() {
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
+  "github.com/nitrictech/go-sdk/nitric/topcs"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
-func validateUpdate(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
+func validateUpdate(ctx *topic.Ctx, next nitric.Handler[topics.Ctx]) (*topics.Ctx, error) {
   // validate update
 
   return next(ctx)
 }
 
-func handleUpdate(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
+func handleUpdate(ctx *topic.Ctx, next nitric.Handler[topics.Ctx]) (*topics.Ctx, error) {
   // handle update
 
   return next(ctx)
 }
 
 func main() {
-  nitric.NewTopic("updates").Subscribe(handler.ComposeMessageMiddleware(validateUpdate, handleUpdate))
+  nitric.NewTopic("updates").Subscribe(validateUpdate, handleUpdate)
 
   if err := nitric.Run(); err != nil {
     fmt.Println(err)

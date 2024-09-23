@@ -38,7 +38,7 @@ func main() {
     middleware and handlers. See [create a route with path
     params](#create-a-route-with-path-params)
   </Property>
-  <Property name="middleware" type="...HttpMiddleware">
+  <Property name="middleware" type="...interface{}">
     The middleware (code) that should be run on all requests to this route.
     Useful for applying universal middleware such as CORS headers or Auth,
     across an entire route from a single place.

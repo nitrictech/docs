@@ -1,7 +1,7 @@
 export const description =
   "Reference for Nitric's Go library - Get a download url for a file from a bucket."
 
-# Go - Bucket.File.DownloadUrl()
+# Go - Bucket.DownloadUrl()
 
 Create a download url for a file within a bucket.
 
@@ -19,7 +19,7 @@ func main() {
     return
   }
 
-  uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), 3600)
+  downloadUrl, err := bucket.File().DownloadUrl(context.TODO(), "cat.png")
   if err != nil {
     return
   }
@@ -36,8 +36,11 @@ func main() {
   <Property name="ctx" required type="context">
     The context of the call, used for tracing.
   </Property>
-  <Property name="expiry" required type="int">
-    Seconds until link expiry. Maximum of `604800` (7 days).
+  <Property name="key" required type="string">
+    The key of the file to create a download url for.
+  </Property>
+  <Property name="...opts" required type="storage.PresignUrlOption">
+    Options to configure the download url.
   </Property>
 </Properties>
 
@@ -51,6 +54,7 @@ import (
   "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
@@ -59,7 +63,7 @@ func main() {
     return
   }
 
-  uploadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), 300)
+  downloadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), "cat.png", storage.WithPresignUrlExpiry(time.Minute*5))
   if err != nil {
     return
   }
@@ -77,7 +81,7 @@ import (
   "context"
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
+  "github.com/nitrictech/go-sdk/nitric/apis"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -92,18 +96,16 @@ func main() {
     return
   }
 
-  api.Get("/images/:id", func(ctx *handler.HttpContext, _ handler.HttpHandler) (*handler.HttpContext, error) {
+  api.Get("/images/:id", func(ctx *apis.Ctx) {
     id := ctx.Request.PathParams()["id"]
 
-    downloadUrl, err := bucket.File(id).DownloadUrl(context.TODO(), 600)
+    downloadUrl, err := bucket.DownloadUrl(context.TODO(), id)
     if err != nil {
       return ctx, err
     }
 
     ctx.Response.Headers["Location"] = []string{downloadUrl}
     ctx.Response.Status = 303
-
-    return ctx, nil
   })
 
   if err := nitric.Run(); err != nil {

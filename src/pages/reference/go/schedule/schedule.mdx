@@ -49,21 +49,17 @@ func main() {
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
+  "github.com/nitrictech/go-sdk/nitric/schedules"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  nitric.NewSchedule("send-reminder").Every("1 day", func(ctx *handler.IntervalContext, _ handler.IntervalHandler) (*handler.IntervalContext, error) {
+  nitric.NewSchedule("send-reminder").Every("1 day", func()  {
     fmt.Println("sending data")
-
-    return ctx, nil
   })
 
-  nitric.NewSchedule("archive-data").Cron("0 1 1 * *", func (ctx *handler.IntervalContext, _ handler.IntervalHandler) (*handler.IntervalContext, error) {
+  nitric.NewSchedule("archive-data").Cron("0 1 1 * *", func (){
     fmt.Println("archiving data")
-
-    return ctx, nil
   })
 
   if err := nitric.Run(); err != nil {

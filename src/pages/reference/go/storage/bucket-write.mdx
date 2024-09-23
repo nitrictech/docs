@@ -1,9 +1,9 @@
 export const description =
-  "Reference for Nitric's Go library - Get a list of file references for files that exist in the bucket."
+  "Reference for Nitric's Go library - Write a file to a bucket."
 
-# Go - Bucket.Files()
+# Go - Bucket.File.Write()
 
-Get a list of file references for files that exist in the bucket.
+Write a file to a bucket.
 
 ```go
 import (
@@ -14,12 +14,12 @@ import (
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
+  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketWrite)
   if err != nil {
     return
   }
 
-  files, err := bucket.Files(context.TODO())
+  err = bucket.Write(context.TODO(), "cat.png" []byte("contents"))
   if err != nil {
     return
   }
@@ -36,11 +36,17 @@ func main() {
   <Property name="ctx" required type="context">
     The context of the call, used for tracing.
   </Property>
+  <Property name="key" required type="string">
+    The key of the file to write.
+  </Property>
+  <Property name="data" required type="[]byte">
+    The data to write to the file.
+  </Property>
 </Properties>
 
 ## Examples
 
-Deleting all files in a bucket
+### Write a file
 
 ```go
 import (
@@ -51,21 +57,14 @@ import (
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
+  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketWrite)
   if err != nil {
     return
   }
 
-  ctx := context.TODO()
-
-  files, err := bucket.Files(ctx)
+  err = bucket.Write(context.TODO(), "cat.png", []byte("contents"))
   if err != nil {
-    fmt.Println(err)
     return
-  }
-
-  for _, file := range files {
-    file.Delete(ctx)
   }
 
   if err := nitric.Run(); err != nil {
@@ -73,7 +72,3 @@ func main() {
   }
 }
 ```
-
-## Notes
-
-This method returns a list of [File](./bucket-file) references that exist on the bucket.

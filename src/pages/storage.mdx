@@ -113,21 +113,7 @@ Nitric.run()
 ```
 
 ```go
-import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite, nitric.BucketDelete)
-
-	profilePicture := profiles.File("users/bruce-wayne/profile.png")
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
-}
+// Go does not have File references use methods on the Bucket reference
 ```
 
 ```dart
@@ -185,7 +171,7 @@ import (
 func main() {
 	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite, nitric.BucketDelete)
 
-	files, _ := profiles.Files(context.TODO())
+	files, _ := profiles.ListFiles(context.TODO())
 
 	for _, file := range files {
 		fmt.Println(file.Name())
@@ -254,7 +240,7 @@ import (
 func main() {
 	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite, nitric.BucketDelete)
 
-	image, _ := profiles.File("users/bruce-wayne/profile.png").Read(context.TODO())
+	image, _ := profiles.Read(context.TODO(), "users/bruce-wayne/profile.png")
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
@@ -321,7 +307,7 @@ func main() {
 
 	profileImage := []byte("image data")
 
-	_ = profiles.File("users/bruce-wayne/profile.png").Write(context.TODO(), profileImage)
+	_ = profiles.Write(context.TODO(), "users/bruce-wayne/profile.png", profileImage)
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
@@ -379,7 +365,7 @@ import (
 func main() {
 	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketDelete)
 
-	_ = profiles.File("users/bruce-wayne/profile.png").Delete(context.TODO())
+	_ = profiles.Delete(context.TODO(), "users/bruce-wayne/profile.png")
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
@@ -448,16 +434,17 @@ import (
 	"time"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
 	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite)
 
 	// Expiry defaults to 600 (10 minutes)
-	downloadUrl, _ := profiles.File("profile.png").DownloadUrl(context.TODO(), time.Millisecond*3600)
+	downloadUrl, _ := profiles.DownloadUrl(context.TODO(), "profile.png", storage.WithPresignUrlExpiry(time.Millisecond*3600))
 
 	// Expiry defaults to 600 (10 minutes)
-	uploadUrl, _ := profiles.File("profile.png").UploadUrl(context.TODO(), time.Millisecond*3600)
+	uploadUrl, _ := profiles.UploadUrl(context.TODO(), "profile.png", storage.WithPresignUrlExpiry(time.Millisecond*3600))
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
@@ -527,7 +514,7 @@ Nitric.run()
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/storage"
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -535,9 +522,8 @@ func main() {
 	profiles := nitric.NewBucket("profiles")
 
 	// Filter for 'write' events for files starting with '/users/images'
-	profiles.On(handler.WriteNotification, "/users/images", func(ctx *handler.BlobEventContext, next handler.BlobEventHandler) (*handler.BlobEventContext, error) {
+	profiles.On(handler.WriteNotification, "/users/images", func(ctx *storage.Ctx) {
 		fmt.Printf("new profile image for %s was written", ctx.Request.Key())
-		return ctx, nil
 	})
 
 	if err := nitric.Run(); err != nil {
@@ -594,7 +580,7 @@ Nitric.run()
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/storage"
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -602,9 +588,8 @@ func main() {
 	profiles := nitric.NewBucket("profiles")
 
 	// Filter for 'delete' events for any file
-	profiles.On(handler.DeleteNotification, "*", func(ctx *handler.BlobEventContext, next handler.BlobEventHandler) (*handler.BlobEventContext, error) {
+	profiles.On(handler.DeleteNotification, "*", func(ctx *storage.Ctx) {
 		fmt.Printf("%s was deleted", ctx.Request.Key())
-		return ctx, nil
 	})
 
 	if err := nitric.Run(); err != nil {

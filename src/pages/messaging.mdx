@@ -174,7 +174,7 @@ Nitric.run()
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/topics"
 	"github.com/nitrictech/go-sdk/nitric"
 	"github.com/your-org/your-project/common"
 )
@@ -182,12 +182,10 @@ import (
 func main() {
 	userCreatedTopic := nitric.NewTopic("user-created")
 
-	userCreatedTopic.Subscribe(func(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
+	userCreatedTopic.Subscribe(func(ctx *topics.Ctx) {
 		email := ctx.Request.Message()["email"].(string)
 
 		sendWelcomeEmail(email)
-
-		return ctx, nil
 	})
 
 	if err := nitric.Run(); err != nil {
@@ -274,7 +272,7 @@ Nitric.run()
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/topics"
 	"github.com/nitrictech/go-sdk/nitric"
 	"github.com/your-org/your-project/common"
 )
@@ -282,15 +280,13 @@ import (
 func main() {
 	userCreatedTopic := nitric.NewTopic("updates")
 
-	userCreatedTopic.Subscribe(func(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
+	userCreatedTopic.Subscribe(func(ctx *topics.Ctx) {
 		if common.isDuplicate(ctx.Request) {
-			return ctx, nil
+			return
 		}
 
 		// not a duplicate, process the event
   		// ...
-
-		return ctx, nil
 	})
 
 	if err := nitric.Run(); err != nil {

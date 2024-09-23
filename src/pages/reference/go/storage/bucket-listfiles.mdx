@@ -1,9 +1,9 @@
 export const description =
-  "Reference for Nitric's Go library - Delete a file from a bucket."
+  "Reference for Nitric's Go library - Get a list of file references for files that exist in the bucket."
 
-# Go - Bucket.File.Delete()
+# Go - Bucket.ListFiles()
 
-Delete a file from a bucket.
+Get a list of file keys for files that exist in the bucket.
 
 ```go
 import (
@@ -14,12 +14,12 @@ import (
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketDelete)
+  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
   if err != nil {
     return
   }
 
-  err = bucket.File("cat.png").Delete(context.TODO())
+  files, err := bucket.ListFiles(context.TODO())
   if err != nil {
     return
   }
@@ -40,7 +40,7 @@ func main() {
 
 ## Examples
 
-### Delete a file
+Deleting all files in a bucket
 
 ```go
 import (
@@ -51,14 +51,21 @@ import (
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketDelete)
+  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
   if err != nil {
     return
   }
 
-  err = bucket.File("cat.png").Delete(context.TODO())
+  ctx := context.TODO()
+
+  files, err := bucket.Files(ctx)
   if err != nil {
+    fmt.Println(err)
     return
+  }
+
+  for _, file := range files {
+    bucket.Delete(ctx, file)
   }
 
   if err := nitric.Run(); err != nil {
@@ -66,3 +73,4 @@ func main() {
   }
 }
 ```
+

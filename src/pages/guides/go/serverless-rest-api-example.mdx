@@ -90,7 +90,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/apis"
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -127,30 +127,28 @@ From here, let's add some features to that function that allow us to work with p
 ### Create profiles with POST
 
 ```go
-profilesApi.Post("/profiles", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+profilesApi.Post("/profiles", func(ctx *apis.Ctx) error {
   id := uuid.New().String()
 
   var profileRequest map[string]interface{}
   err := json.Unmarshal(ctx.Request.Data(), &profileRequest)
   if err != nil {
-    return ctx, err
+    return err
   }
 
   err = profiles.Set(context.Background(), id, profileRequest)
   if err != nil {
-    return ctx, err
+    return err
   }
 
   ctx.Response.Body = []byte(id)
-
-  return ctx, nil
 })
 ```
 
 ### Retrieve a profile with GET
 
 ```go
-profilesApi.Get("/profiles/:id", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+profilesApi.Get("/profiles/:id", func(ctx *apis.Ctx) {
   id := ctx.Request.PathParams()["id"]
 
   profile, err := profiles.Get(context.Background(), id)
@@ -158,29 +156,27 @@ profilesApi.Get("/profiles/:id", func(ctx *handler.HttpContext, next handler.Htt
     ctx.Response.Status = 404
     ctx.Response.Body = []byte(fmt.Sprintf("profile with id '%s' not found", id))
 
-    return ctx, nil
+    return
   }
 
   ctx.Response.Body, err = json.Marshal(profile)
-
-  return ctx, err
 })
 ```
 
 ### List all profiles with GET
 
 ```go
-profilesApi.Get("/profiles", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+profilesApi.Get("/profiles", func(ctx *apis.Ctx) error {
   keys, err := profiles.Keys(context.TODO())
   if err != nil {
-    return ctx, err
+    return err
   }
 
   var profileContent []map[string]interface{}
   for {
     key, err := keys.Recv()
     if err != nil {
-      break
+      return err
     }
     content, _ := profiles.Get(context.Background(), key)
     profileContent = append(profileContent, content)
@@ -188,14 +184,14 @@ profilesApi.Get("/profiles", func(ctx *handler.HttpContext, next handler.HttpHan
 
   ctx.Response.Body, err = json.Marshal(profileContent)
 
-  return ctx, err
+  return err
 })
 ```
 
 ### Remove a profile with DELETE
 
 ```go
-profilesApi.Delete("/profiles/:id", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+profilesApi.Delete("/profiles/:id", func(ctx *apis.Ctx) {
   id := ctx.Request.PathParams()["id"]
 
   err := profiles.Delete(context.Background(), id)
@@ -203,10 +199,8 @@ profilesApi.Delete("/profiles/:id", func(ctx *handler.HttpContext, next handler.
     ctx.Response.Status = 404
     ctx.Response.Body = []byte(fmt.Sprintf("profile with id '%s' not found", id))
 
-    return ctx, nil
+    return
   }
-
-  return ctx, nil
 })
 ```
 
@@ -313,55 +307,55 @@ if err != nil {
 ### Get a URL to upload a profile image
 
 ```go
-profilesApi.Get("/profiles/:id/image/upload", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+profilesApi.Get("/profiles/:id/image/upload", func(ctx *apis.Ctx) error {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
 
   photoUrl, err := profileImages.File(photoId).UploadUrl(context.TODO(), 600)
   if err != nil {
-    return ctx, err
+    return err
   }
 
   ctx.Response.Body = []byte(photoUrl)
 
-  return ctx, nil
+  return nil
 })
 ```
 
 ### Get a URL to download a profile image
 
 ```go
-profilesApi.Get("/profiles/:id/image/download", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+profilesApi.Get("/profiles/:id/image/download", func(ctx *apis.Ctx) error {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
 
   photoUrl, err := profileImages.File(photoId).DownloadUrl(context.TODO(), 600)
   if err != nil {
-    return ctx, err
+    return err
   }
 
   ctx.Response.Body = []byte(photoUrl)
 
-  return ctx, nil
+  return nil
 })
 ```
 
 You can also directly redirect to the photo URL.
 
 ```go
-profilesApi.Get("/profiles/:id/image/view", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+profilesApi.Get("/profiles/:id/image/view", func(ctx *apis.Ctx) error {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
 
   photoUrl, err := profileImages.File(photoId).DownloadUrl(ctx.Request.Context(), 600)
   if err != nil {
-    return ctx, err
+    return err
   }
 
   ctx.Response.Status = 303
   ctx.Response.Headers["Location"] = []string{photoUrl}
 
-  return ctx, nil
+  return nil
 })
 ```
 
