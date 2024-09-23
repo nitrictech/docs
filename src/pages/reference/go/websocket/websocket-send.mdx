@@ -55,7 +55,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/websockets"
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -71,32 +71,22 @@ func main() {
 	}
 
 	// Register a new connection on connect
-	ws.On(handler.WebsocketConnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
-		err := connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
+	ws.On(handler.WebsocketConnect, func(ctx *websockets.Ctx) error {
+		return connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
 			"connectionId": ctx.Request.ConnectionID(),
 		})
-		if err != nil {
-			return ctx, err
-		}
-
-		return next(ctx)
 	})
 
 	// Remove a registered connection on disconnect
-	ws.On(handler.WebsocketDisconnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
-		err := connections.Delete(context.TODO(), ctx.Request.ConnectionID())
-		if err != nil {
-			return ctx, err
-		}
-
-		return next(ctx)
+	ws.On(handler.WebsocketDisconnect, func(ctx *websockets.Ctx) error {
+		return connections.Delete(context.TODO(), ctx.Request.ConnectionID())
 	})
 
 	// Broadcast message to all the registered websocket connections
-	ws.On(handler.WebsocketMessage, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+	ws.On(handler.WebsocketMessage, func(ctx *websockets.Ctx) error {
 		connectionStream, err := connections.Keys(context.TODO())
 		if err != nil {
-			return ctx, err
+			return err
 		}
 
 		for {
@@ -107,11 +97,11 @@ func main() {
 
 			err = ws.Send(context.TODO(), connectionId, []byte(ctx.Request.Message()))
 			if err != nil {
-				return ctx, err
+				return err
 			}
 		}
 
-		return next(ctx)
+		return nil
 	})
 
 	if err := nitric.Run(); err != nil {

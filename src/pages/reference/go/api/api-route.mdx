@@ -9,7 +9,6 @@ Creates a new route (path) within an API.
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -53,7 +52,6 @@ func main() {
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -81,7 +79,6 @@ For example, if you have a customers path and you want to include a `customerId`
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -106,11 +103,11 @@ func main() {
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
+  "github.com/nitrictech/go-sdk/nitric/apis"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
-func authMiddleware(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+func authMiddleware(ctx *apis.Ctx, next nitric.Handler[apis.Ctx]) (*apis.Ctx, error) {
   // Perform auth validation
   return next(ctx)
 }

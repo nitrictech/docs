@@ -10,7 +10,7 @@ import (
   "context"
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
+  "github.com/nitrictech/go-sdk/nitric/storage"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -22,15 +22,15 @@ func main() {
     return
   }
 
-  assets.On(handler.DeleteNotification, "*", func(ctx *handler.BlobEventContext) {
+  assets.On(handler.DeleteNotification, "*", func(ctx *storage.Ctx) {
     fmt.Printf("a file named %s was deleted\n", ctx.Request.Key())
   })
 
-  assets.On(handler.WriteNotification, "/images/cat", func(ctx *handler.BlobEventContext) {
+  assets.On(handler.WriteNotification, "/images/cat", func(ctx *storage.Ctx) {
     fmt.Printf("a cat image was written")
   })
 
-  assets.On(handler.WriteNotification, "/images/dog", func(ctx *handler.BlobEventContext) error {
+  assets.On(handler.WriteNotification, "/images/dog", func(ctx *storage.Ctx) error {
     dogImage, err := readableAssets.Read(context.TODO(), ctx.Request.Key())
     if err != nil {
       return err

@@ -9,15 +9,12 @@ Creates a new Schedule to run a function on a defined frequency.
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  nitric.NewSchedule("aggregate-data").Every("3 days", func(ctx *handler.IntervalContext, _ handler.IntervalHandler) (*handler.IntervalContext, error) {
+  nitric.NewSchedule("aggregate-data").Every("3 days", func() {
     fmt.Println("aggregating data")
-
-    return ctx, nil
   })
 
   if err := nitric.Run(); err != nil {

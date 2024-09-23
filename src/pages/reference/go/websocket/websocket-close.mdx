@@ -47,7 +47,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/websockets"
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -58,7 +58,7 @@ func main() {
 	}
 
 	// Broadcast message to all the registered websocket connections
-	ws.On(handler.WebsocketMessage, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+	ws.On(handler.WebsocketMessage, func(ctx *websockets.Ctx) (*websockets.Ctx, error) {
 		if ctx.Request.Message() == "close" {
 			err := ws.Close(context.Background(), ctx.Request.ConnectionID())
 			return ctx, err

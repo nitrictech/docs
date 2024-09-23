@@ -9,7 +9,6 @@ Sets the frequency and one or many handlers to be triggered.
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -46,16 +45,13 @@ func main() {
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
   // Create a schedule that runs every 3 minutes
-  nitric.NewSchedule("send reminder").Every("3 minutes", func(ctx *handler.IntervalContext, _ handler.IntervalHandler) (*handler.IntervalContext, error) {
+  nitric.NewSchedule("send reminder").Every("3 minutes", func() {
     // code which sends a reminder
-
-    return ctx, nil
   })
 
   if err := nitric.Run(); err != nil {
