@@ -2636,17 +2636,26 @@ const fullNav: FullNav = {
           href: '/reference/go/secrets/secret-put',
         },
         {
-          title: 'Secret.Version()',
-          href: '/reference/go/secrets/secret-version',
+          title: 'Secret.AccessVersion()',
+          href: '/reference/go/secrets/secret-access-version',
         },
         {
-          title: 'Secret.Latest()',
-          href: '/reference/go/secrets/secret-latest',
+          title: 'Secret.Access()',
+          href: '/reference/go/secrets/secret-access',
         },
-        {
-          title: 'Secret.Version.Access()',
-          href: '/reference/go/secrets/secret-version-access',
-        },
+        // TODO: Add redirects for these
+        // {
+        //   title: 'Secret.Version()',
+        //   href: '/reference/go/secrets/secret-version',
+        // },
+        // {
+        //   title: 'Secret.Latest()',
+        //   href: '/reference/go/secrets/secret-latest',
+        // },
+        // {
+        //   title: 'Secret.Version.Access()',
+        //   href: '/reference/go/secrets/secret-version-access',
+        // },
       ],
     },
     {
@@ -2656,33 +2665,35 @@ const fullNav: FullNav = {
           title: 'Bucket.On()',
           href: '/reference/go/storage/bucket-on',
         },
+        // Add redirect
+        // {
+        //   title: 'Bucket.File()',
+        //   href: '/reference/go/storage/bucket-file',
+        // },
         {
-          title: 'Bucket.File()',
-          href: '/reference/go/storage/bucket-file',
+          title: 'Bucket.ListFiles()',
+          href: '/reference/go/storage/bucket-listfiles',
+        },
+        // TODO: Add redirects for these for their old file equivalents
+        {
+          title: 'Bucket.Read()',
+          href: '/reference/go/storage/bucket-read',
         },
         {
-          title: 'Bucket.Files()',
-          href: '/reference/go/storage/bucket-files',
+          title: 'Bucket.Write()',
+          href: '/reference/go/storage/bucket-write',
         },
         {
-          title: 'File.Read()',
-          href: '/reference/go/storage/bucket-file-read',
+          title: 'Bucket.Delete()',
+          href: '/reference/go/storage/bucket-delete',
         },
         {
-          title: 'File.Write()',
-          href: '/reference/go/storage/bucket-file-write',
+          title: 'Bucket.DownloadUrl()',
+          href: '/reference/go/storage/bucket-downloadurl',
         },
         {
-          title: 'File.Delete()',
-          href: '/reference/go/storage/bucket-file-delete',
-        },
-        {
-          title: 'File.DownloadUrl()',
-          href: '/reference/go/storage/bucket-file-downloadurl',
-        },
-        {
-          title: 'File.UploadUrl()',
-          href: '/reference/go/storage/bucket-file-uploadurl',
+          title: 'Bucket.UploadUrl()',
+          href: '/reference/go/storage/bucket-uploadurl',
         },
       ],
     },
