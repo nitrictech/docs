@@ -56,13 +56,13 @@ export interface LibrariesProps {
 export function Libraries({ minimal = false }: LibrariesProps) {
   if (minimal) {
     return (
-      <div className="flex items-center w-fit h-fit">
+      <div className="flex h-fit w-fit items-center">
         {libraries.map((library) => (
           <Link
             href={library.href}
             key={library.name}
-            className="grayscale opacity-90 transition-opacity hover:opacity-100 hover:grayscale-0"
-            target='_blank'
+            className="opacity-90 grayscale transition-opacity hover:opacity-100 hover:grayscale-0"
+            target="_blank"
           >
             <Image
               src={library.logo}
