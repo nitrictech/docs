@@ -41,7 +41,7 @@ services:
     start: npm run dev:services $SERVICE_PATH
 ```
 
-You might have one service that handles everything, or a service for each route. It's up to you. Every matched services becomes a container, so you can scale them independently.
+You might have one service that handles everything, or a service for each route. It's up to you. Every matched service becomes a container, allowing them run and scale independently.
 
 ---
 
@@ -173,8 +173,8 @@ So, a project structure might look something like this:
 example/
 ├── nitric.yaml
 ├── services/
-│   └── orders.ts
-│   └── users.ts
+│   └── orders.js
+│   └── users.js
 └── package.json
 ```
 
