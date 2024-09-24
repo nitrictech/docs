@@ -291,6 +291,10 @@ const fullNav: FullNav = {
           href: '/concepts/introduction',
         },
         {
+          title: 'Infrastructure from Code (IfC)',
+          href: '/concepts/infrastructure-from-code',
+        },
+        {
           title: 'How Nitric works',
           href: '/concepts/how-nitric-works',
         },
