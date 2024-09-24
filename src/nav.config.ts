@@ -2067,6 +2067,23 @@ const fullNav: FullNav = {
         },
       ],
     },
+    {
+      title: 'Batch Jobs',
+      links: [
+        {
+          title: 'job()',
+          href: '/reference/dart/batch/job',
+        },
+        {
+          title: 'job.handler()',
+          href: '/reference/dart/batch/job-handler',
+        },
+        {
+          title: 'job.send()',
+          href: '/reference/dart/batch/job-submit',
+        },
+      ],
+    },
   ],
   ['reference/csharp']: [
     {
