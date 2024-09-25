@@ -1,0 +1,39 @@
+export const description =
+  "Reference for Nitric's Python library - Create Batch Jobs with the Nitric Python SDK"
+
+# Python - job()
+
+Creates a new Batch Job.
+
+```python
+from nitric.resources import job
+
+analyse = job("analyse")
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The unique name of this Batch Job within the app. Subsequent calls to `job`
+    with the same name will return the same object.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a Job
+
+```python
+from nitric.resources import job
+
+analyse = job("analyse")
+```
+
+### Create a Job with permissions to submit jobs
+
+```python
+from nitric.resources import job
+
+analyse = job("analyse").allow("submit")
+```

@@ -32,13 +32,13 @@ batch-services:
     The middleware service to use as the handler for Job requests.
   </Property>
   <Property name="opts" type="JobResourceRequirements" nested>
-    <Property name="cpus">
+    <Property name="cpus" type="int">
       The number of CPUs to allocate to the handler
     </Property>
-    <Property name="gpus">
+    <Property name="gpus" type="int">
       The number of GPUs to allocate to the handler
     </Property>
-    <Property name="memory">
+    <Property name="memory" type="int">
       The amount of memory (MB) to allocate to the handler
     </Property>
   </Property>
@@ -55,7 +55,7 @@ final analyse = Nitric.job("analyse").allow([JobPermission.submit]);
 
 analyse.handler((ctx) async {
   return ctx;
-}, opts: JobResourceRequirements(cpus: 1, memory: 2048, gpus: 0));
+});
 ```
 
 ### Create a job handler with custom resource requirements
@@ -67,5 +67,5 @@ final analyse = Nitric.job("analyse").allow([JobPermission.submit]);
 
 analyse.handler((ctx) async {
   return ctx;
-}, opts: JobResourceRequirements(cpus: 1, memory: 2048, gpus: 0));
+}, opts: JobResourceRequirements(cpus: 1, memory: 2048, gpus: 1));
 ```
