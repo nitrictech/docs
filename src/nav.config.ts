@@ -2643,19 +2643,6 @@ const fullNav: FullNav = {
           title: 'Secret.Access()',
           href: '/reference/go/secrets/secret-access',
         },
-        // TODO: Add redirects for these
-        // {
-        //   title: 'Secret.Version()',
-        //   href: '/reference/go/secrets/secret-version',
-        // },
-        // {
-        //   title: 'Secret.Latest()',
-        //   href: '/reference/go/secrets/secret-latest',
-        // },
-        // {
-        //   title: 'Secret.Version.Access()',
-        //   href: '/reference/go/secrets/secret-version-access',
-        // },
       ],
     },
     {
@@ -2665,16 +2652,10 @@ const fullNav: FullNav = {
           title: 'Bucket.On()',
           href: '/reference/go/storage/bucket-on',
         },
-        // Add redirect
-        // {
-        //   title: 'Bucket.File()',
-        //   href: '/reference/go/storage/bucket-file',
-        // },
         {
           title: 'Bucket.ListFiles()',
           href: '/reference/go/storage/bucket-listfiles',
         },
-        // TODO: Add redirects for these for their old file equivalents
         {
           title: 'Bucket.Read()',
           href: '/reference/go/storage/bucket-read',

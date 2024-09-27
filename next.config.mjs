@@ -37,6 +37,9 @@ const nextConfig = {
       },
       // redirects from old docs
       ...[
+        '/docs/reference/go/secrets/secret-version',
+        '/docs/reference/go/secrets/secret-latest',
+        '/docs/reference/go/secrets/secret-version-access',
         '/docs/reference/go/storage/bucket-file',
         '/docs/reference/go/storage/bucket-files',
         '/docs/reference/go/storage/bucket-file-read',
