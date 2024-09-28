@@ -402,7 +402,7 @@ import { queue } from '@nitric/sdk'
 
 const transactionQueue = queue('transactions').allow('enqueue')
 
-await transactionQueue.send({
+await transactionQueue.enqueue({
   message: 'hello world',
 })
 ```
@@ -412,7 +412,7 @@ from nitric.resources import queue
 
 transaction_queue = queue("transactions").allow("enqueue")
 
-await transaction_queue.send({
+await transaction_queue.enqueue({
   "message": "hello world"
 })
 
@@ -465,7 +465,7 @@ import { queue } from '@nitric/sdk'
 
 const transactionQueue = queue('transactions').allow('enqueue')
 
-await transactionQueue.send([
+await transactionQueue.enqueue([
   {
     message: 'batch task 1',
   },
@@ -481,7 +481,7 @@ from nitric.application import Nitric
 
 transaction_queue = queue("transactions").allow("enqueue")
 
-await transaction_queue.send([
+await transaction_queue.enqueue([
   {
     "message": "batch task 1"
   }, {
