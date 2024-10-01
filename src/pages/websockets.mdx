@@ -66,15 +66,15 @@ import (
 func main() {
 	socket, _ := nitric.NewWebsocket("socket")
 
-	socket.On(handler.WebsocketConnect, func(ctx *websockets.Ctx) {
+	socket.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
 		// handle connections
 	})
 
-	socket.On(handler.WebsocketDisconnect,  func(ctx *websockets.Ctx) {
+	socket.On(websockets.EventType_Disconnect,  func(ctx *websockets.Ctx) {
 		// handle disconnections
 	})
 
-	socket.On(handler.WebsocketMessage,  func(ctx *websockets.Ctx) {
+	socket.On(websockets.EventType_Message,  func(ctx *websockets.Ctx) {
 		// handle messages
 	})
 
@@ -175,7 +175,7 @@ func main() {
 	connections, _ := nitric.NewKv("connections").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
 
 	// Register a new connection on connect
-	socket.On(handler.WebsocketConnect, func(ctx *websockets.Ctx) {
+	socket.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
 		_ = connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
 			// Store any metadata related to the connection here
 			"connectionId": ctx.Request.ConnectionID(),
@@ -183,7 +183,7 @@ func main() {
 	})
 
 	// Remove a registered connection on disconnect
-	socket.On(handler.WebsocketDisconnect, func(ctx *websockets.Ctx) {
+	socket.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) {
 		_ = connections.Delete(context.TODO(), ctx.Request.ConnectionID())
 	})
 
@@ -315,7 +315,7 @@ func main() {
 	connections, _ := nitric.NewKv("connections").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
 
 	// Register a new connection on connect
-	socket.On(handler.WebsocketConnect, func(ctx *websockets.Ctx) {
+	socket.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
 		_ = connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
 			// Store any metadata related to the connection here
 			"connectionId": ctx.Request.ConnectionID(),
@@ -323,12 +323,12 @@ func main() {
 	})
 
 	// Remove a registered connection on disconnect
-	socket.On(handler.WebsocketDisconnect, func(ctx *websockets.Ctx) {
+	socket.On(websockets.EventType_Disconnnect, func(ctx *websockets.Ctx) {
 		_ = connections.Delete(context.TODO(), ctx.Request.ConnectionID())
 	})
 
 	// Broadcast message to all the registered websocket connections
-	socket.On(handler.WebsocketMessage, func(ctx *websockets.Ctx) {
+	socket.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
 		connectionStream, _ := connections.Keys(context.TODO())
 
 		for {

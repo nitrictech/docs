@@ -522,7 +522,7 @@ func main() {
 	profiles := nitric.NewBucket("profiles")
 
 	// Filter for 'write' events for files starting with '/users/images'
-	profiles.On(handler.WriteNotification, "/users/images", func(ctx *storage.Ctx) {
+	profiles.On(storage.WriteNotification, "/users/images", func(ctx *storage.Ctx) {
 		fmt.Printf("new profile image for %s was written", ctx.Request.Key())
 	})
 
@@ -588,7 +588,7 @@ func main() {
 	profiles := nitric.NewBucket("profiles")
 
 	// Filter for 'delete' events for any file
-	profiles.On(handler.DeleteNotification, "*", func(ctx *storage.Ctx) {
+	profiles.On(storage.DeleteNotification, "*", func(ctx *storage.Ctx) {
 		fmt.Printf("%s was deleted", ctx.Request.Key())
 	})
 

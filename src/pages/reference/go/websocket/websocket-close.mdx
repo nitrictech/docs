@@ -58,7 +58,7 @@ func main() {
 	}
 
 	// Broadcast message to all the registered websocket connections
-	ws.On(handler.WebsocketMessage, func(ctx *websockets.Ctx) (*websockets.Ctx, error) {
+	ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) (*websockets.Ctx, error) {
 		if ctx.Request.Message() == "close" {
 			err := ws.Close(context.Background(), ctx.Request.ConnectionID())
 			return ctx, err

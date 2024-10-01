@@ -71,19 +71,19 @@ func main() {
 	}
 
 	// Register a new connection on connect
-	ws.On(handler.WebsocketConnect, func(ctx *websockets.Ctx) error {
+	ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) error {
 		return connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
 			"connectionId": ctx.Request.ConnectionID(),
 		})
 	})
 
 	// Remove a registered connection on disconnect
-	ws.On(handler.WebsocketDisconnect, func(ctx *websockets.Ctx) error {
+	ws.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) error {
 		return connections.Delete(context.TODO(), ctx.Request.ConnectionID())
 	})
 
 	// Broadcast message to all the registered websocket connections
-	ws.On(handler.WebsocketMessage, func(ctx *websockets.Ctx) error {
+	ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) error {
 		connectionStream, err := connections.Keys(context.TODO())
 		if err != nil {
 			return err

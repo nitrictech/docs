@@ -582,14 +582,14 @@ async function validate(ctx, next) {
 ```python
 async def validate(ctx, nxt: HttpMiddleware):
   if ctx.req.headers['content-type'] is None:
-    ctx.res.status = 400;
+    ctx.res.status = 400
     ctx.res.body = "header Content-Type is required"
     return ctx
   return await nxt(ctx)
 ```
 
 ```go
-func validate(ctx *apis.Ctx, next nitric.Handler[apis.Ctx]) (*handler.HttpContext, error) {
+func validate(ctx *apis.Ctx, next nitric.Handler[apis.Ctx]) (*apis.Ctx, error) {
 	if ctx.Request.Headers()["content-type"] != nil {
 		ctx.Response.Status = 400
 		ctx.Response.Body = []byte("header Content-Type is required")
