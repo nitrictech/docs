@@ -90,11 +90,11 @@ import (
 )
 
 func main() {
-  defaultOidcRule := nitric.OidcRule("user", "https://example-issuer.com", []string{"YOUR-AUDIENCES"})
+  defaultOidcRule := apis.OidcRule("user", "https://example-issuer.com/.well-known/openid-configuration", []string{"YOUR-AUDIENCES"})
 
 	secureApi, err := nitric.NewApi(
 		"secure",
-		nitric.WithSecurity(defaultOidcRule([]string{"products:read"})))
+		apis.WithSecurity(defaultOidcRule([]string{"products:read"})))
 	if err != nil {
 		return
 	}

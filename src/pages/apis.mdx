@@ -366,14 +366,19 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	defaultSecurityRule := nitric.OidcRule("default", "https://dev-abc123.us.auth0.com", []string{"https://test-security-definition/"})
+	defaultSecurityRule := apis.OidcRule(
+		"default",
+		"https://dev-abc123.us.auth0.com",
+		[]string{"https://test-security-definition/.well-known/openid-configuration"}
+	)
 
 	secureApi, err := nitric.NewApi(
 		"main",
-		nitric.WithSecurity(defaultSecurityRule([]string{})),
+		apis.WithSecurity(defaultSecurityRule([]string{})),
 	)
 	if err != nil {
 		return
@@ -458,10 +463,15 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	defaultSecurityRule := nitric.OidcRule("default", "https://dev-abc123.us.auth0.com", []string{"https://test-security-definition/"})
+	defaultSecurityRule := nitric.OidcRule(
+		"default",
+		"https://dev-abc123.us.auth0.com/.well-known/openid-configuration",
+		[]string{"https://test-security-definition/"}
+	)
 
 	secureApi, err := nitric.NewApi(
 		"main",
