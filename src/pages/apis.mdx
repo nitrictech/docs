@@ -372,8 +372,8 @@ import (
 func main() {
 	defaultSecurityRule := apis.OidcRule(
 		"default",
-		"https://dev-abc123.us.auth0.com",
-		[]string{"https://test-security-definition/.well-known/openid-configuration"}
+		"https://dev-abc123.us.auth0.com/.well-known/openid-configuration",
+		[]string{"https://test-security-definition"}
 	)
 
 	secureApi, err := nitric.NewApi(
