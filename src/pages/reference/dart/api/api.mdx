@@ -27,6 +27,12 @@ final publicApi = Nitric.api("public");
       <Property name="security" type="List<OidcOptions>">
         Security rules to apply with scopes to the entire API.
       </Property>
+      <Property name="middlewares" type="List<HttpHandler>">
+        The list of middleware that will run before the handler is called. To
+        call the next middleware in the chain use `ctx.next()`, to finish early
+        return `ctx` by itself. The ordering of middleware goes: API -> Route ->
+        Method.
+      </Property>
     </Properties>
   </Property>
 </Properties>
