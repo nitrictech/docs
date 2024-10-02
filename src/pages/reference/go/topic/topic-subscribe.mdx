@@ -17,17 +17,15 @@ func main() {
     fmt.Println("received update")
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="middleware" required type="interface{}">
-    The middleware (code) to be triggered by the topic.
+  <Property name="handler" required type="interface{}">
+    The callback to be triggered when new messages are sent to the topic.
   </Property>
 </Properties>
 
@@ -39,8 +37,8 @@ func main() {
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/nitric/topics"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
@@ -48,40 +46,7 @@ func main() {
     fmt.Printf("received update %+v", ctx.Request.Message())
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-### Subscribe to a topic with multiple middleware
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric/topcs"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func validateUpdate(ctx *topic.Ctx, next nitric.Handler[topics.Ctx]) (*topics.Ctx, error) {
-  // validate update
-
-  return next(ctx)
-}
-
-func handleUpdate(ctx *topic.Ctx, next nitric.Handler[topics.Ctx]) (*topics.Ctx, error) {
-  // handle update
-
-  return next(ctx)
-}
-
-func main() {
-  nitric.NewTopic("updates").Subscribe(validateUpdate, handleUpdate)
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

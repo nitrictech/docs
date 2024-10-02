@@ -66,26 +66,24 @@ Nitric.run()
 
 ```go
 import (
-	"fmt"
-	"time"
+  "fmt"
+  "time"
 
-	"github.com/nitrictech/go-sdk/nitric/schedules"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/schedules"
 )
 
 func main() {
-	// Run every 5 minutes
-	nitric.NewSchedule("process-transactions").Every("5 minutues", func(ctx *schedules.Ctx) {
-		fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
-	})
-	// Run at 22:00 Monday through Friday.
-	nitric.NewSchedule("send-reminder").Cron("0 22 * * 1-5", func(ctx *schedules.Ctx) {
-		fmt.Printf("reminder  at %s\n", time.Now().Format(time.RFC3339))
-	})
+  // Run every 5 minutes
+  nitric.NewSchedule("process-transactions").Every("5 minutues", func(ctx *schedules.Ctx) {
+    fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
+  })
+  // Run at 22:00 Monday through Friday.
+  nitric.NewSchedule("send-reminder").Cron("0 22 * * 1-5", func(ctx *schedules.Ctx) {
+    fmt.Printf("reminder  at %s\n", time.Now().Format(time.RFC3339))
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -154,32 +152,30 @@ async def process_rarely(ctx):
 
 ```go
 import (
-	"fmt"
-	"time"
+  "fmt"
+  "time"
 
-	"github.com/nitrictech/go-sdk/nitric/schedules"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/schedules"
 )
 
 func main() {
-	// Run every 5 minutes
-	nitric.NewSchedule("process-often").Every("5 minutes", func(ctx *schedules.Ctx) {
-		fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
-	})
+  // Run every 5 minutes
+  nitric.NewSchedule("process-often").Every("5 minutes", func(ctx *schedules.Ctx) {
+    fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
+  })
 
-	// Run every 2 hours
-	nitric.NewSchedule("process-sometimes").Every("2 hours", func(ctx *schedules.Ctx) {
-		fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
-	})
+  // Run every 2 hours
+  nitric.NewSchedule("process-sometimes").Every("2 hours", func(ctx *schedules.Ctx) {
+    fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
+  })
 
-	// Run every 30 days
-	nitric.NewSchedule("process-rarely").Every("30 days", func(ctx *schedules.Ctx) {
-		fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
-	})
+  // Run every 30 days
+  nitric.NewSchedule("process-rarely").Every("30 days", func(ctx *schedules.Ctx) {
+    fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -255,26 +251,24 @@ async def clear_data(ctx):
 package main
 
 import (
-	"fmt"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric/schedules"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/schedules"
 )
 
 func main() {
-	// every 15 minutes
-	nitric.NewSchedule("check-for-updates").Cron("0/15 * * * *", func(ctx *schedules.Ctx) {
-		fmt.Println("checking for updates")
-	})
+  // every 15 minutes
+  nitric.NewSchedule("check-for-updates").Cron("0/15 * * * *", func(ctx *schedules.Ctx) {
+    fmt.Println("checking for updates")
+  })
 
-	// at 1:00am on the 1st of every month
-	nitric.NewSchedule("delete-stale-data").Cron("0 1 1 * *", func(ctx *schedules.Ctx) {
-		fmt.Println("clearing data")
-	})
+  // at 1:00am on the 1st of every month
+  nitric.NewSchedule("delete-stale-data").Cron("0 1 1 * *", func(ctx *schedules.Ctx) {
+    fmt.Println("clearing data")
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 

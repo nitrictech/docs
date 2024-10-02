@@ -24,9 +24,7 @@ func main() {
     return
   }
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -71,9 +69,7 @@ func main() {
     fmt.Println(res.Content())
   }
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

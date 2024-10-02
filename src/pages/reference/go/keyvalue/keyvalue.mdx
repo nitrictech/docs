@@ -7,21 +7,14 @@ Creates a new key value store to get, set, and delete key value pairs.
 
 ```go
 import (
-	"fmt"
-
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
+	profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
-	if err != nil {
-		return
-	}
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -42,19 +35,19 @@ All Nitric resources provide access permissions you can use to specify the level
 
 ---
 
-**nitric.KvStoreGet**
+**keyvalue.KvStoreGet**
 
 This permission allows your service to get values from the key value store.
 
 ---
 
-**nitric.KvStoreSet**
+**keyvalue.KvStoreSet**
 
 This permission allows your service to set key value pairs in the key value store.
 
 ---
 
-**nitric.KvStoreDelete**
+**keyvalue.KvStoreDelete**
 
 This permission allows your service to delete key value pairs in the key value store.
 
@@ -66,21 +59,14 @@ This permission allows your service to delete key value pairs in the key value s
 
 ```go
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
+  profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
-	if err != nil {
-		return
-	}
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -89,24 +75,22 @@ func main() {
 ```go
 import (
 	"context"
-	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
 	// Initialize the KV service
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreGet)
-	if err != nil {
-		return
-	}
+	profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreGet)
 
 	profile, err := profiles.Get(context.Background(), "profile-1a2b3c")
+	if err != nil {
+		// handle error
+	}
 	// do something with the profile
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -118,25 +102,21 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
 	// Initialize the KV service
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreSet)
-	if err != nil {
-		return
-	}
+	profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreSet)
 
-	err = profiles.Set(context.Background(), "profile-1a2b3c", map[string]interface{}{
+	err := profiles.Set(context.Background(), "profile-1a2b3c", map[string]interface{}{
 		"name": "John Smith",
 	})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -148,57 +128,54 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
 	// Initialize the KV service
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreDelete)
-	if err != nil {
-		return
-	}
+	profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreDelete)
 
-	err = profiles.Delete(context.Background(), "profile-1a2b3c")
+	err := profiles.Delete(context.Background(), "profile-1a2b3c")
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
-
 ```
 
 ### Get all keys from a key value store
 
 ```go
 import (
-	"context"
-	"fmt"
-	"io"
-	"github.com/nitrictech/go-sdk"
+  "context"
+  "fmt"
+
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
-	// Initialize the KV service
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
-	if err != nil {
-		return
-	}
+  // Initialize the KV service
+  profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
-	// Get all keys from a key value store
-	for {
-		key, err := keys.Recv()
-		if err != nil {
-			// check if the stream has ended
-			if err == io.EOF {
-				break
-			}
-			return nil, err
-		}
-		// do something with the key
-		fmt.Printf("Key: %s\n", key)
-	}
+  keys, err := profiles.Keys(context.TODO())
+  if err != nil {
+    fmt.Println("Error getting keys: ", err)
+    return
+  }
 
+  // Get all keys from a key value store
+  for {
+    key, err := keys.Recv()
+    if err != nil {
+      // check if the stream has ended
+      break
+    }
+    // do something with the key
+    fmt.Printf("Key: %s\n", key)
+  }
+
+  nitric.Run()
 }
 ```

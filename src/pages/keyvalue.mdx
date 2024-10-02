@@ -54,21 +54,14 @@ Nitric.run()
 
 ```go
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
-	countries, err := nitric.NewKv("Countries").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+  countries := nitric.NewKv("Countries").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -121,21 +114,21 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
-countries, _ := nitric.NewKv("Countries").Allow(nitric.KvStoreSet)
+func main() {
+  countries := nitric.NewKv("Countries").Allow(keyvalue.KvStoreSet)
 
-_ = countries.Set(context.TODO(), "USA", map[string]interface{}{
-	"name":      "United States of America",
-	"population": 329500000,
-})
+  _ = countries.Set(context.TODO(), "USA", map[string]interface{}{
+    "name":       "United States of America",
+    "population": 329500000,
+  })
 
-if err := nitric.Run(); err != nil {
-	fmt.Println(err)
+  nitric.Run()
 }
 ```
 
@@ -215,18 +208,18 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
-countries, _ := nitric.NewKv("Countries").Allow(nitric.KvStoreGet)
+func main() {
+  countries := nitric.NewKv("Countries").Allow(keyvalue.KvStoreGet)
 
-country, _ := countries.Get(context.TODO(), "USA")
+  country, _ := countries.Get(context.TODO(), "USA")
 
-if err := nitric.Run(); err != nil {
-	fmt.Println(err)
+  nitric.Run()
 }
 ```
 
@@ -281,23 +274,23 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
-countries, _ := nitric.NewKv("Countries").Allow(nitric.KvStoreSet, nitric.KvStoreDelete)
+func main() {
+  countries := nitric.NewKv("Countries").Allow(keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
-_ = countries.Set(context.TODO(), "USA", map[string]interface{}{
-	"name":       "United States of America",
-	"population": 329500000,
-})
+  _ = countries.Set(context.TODO(), "USA", map[string]interface{}{
+    "name":       "United States of America",
+    "population": 329500000,
+  })
 
-_ = countries.Delete(context.TODO(), "USA")
+  _ = countries.Delete(context.TODO(), "USA")
 
-if err := nitric.Run(); err != nil {
-	fmt.Println(err)
+  nitric.Run()
 }
 ```
 
@@ -351,28 +344,30 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
-countries, _ := nitric.NewKv("Countries").Allow(nitric.KvStoreGet)
+func main() {
 
-keys, _ := profiles.Keys(context.TODO())
+  countries := nitric.NewKv("Countries").Allow(keyvalue.KvStoreGet)
 
-for {
-	key, err := keys.Recv()
-	if err != nil {
-		// check if the stream has ended
-		break
-	}
+  keys, _ := countries.Keys(context.TODO())
 
-	fmt.Println(key)
-}
+  for {
+    key, err := keys.Recv()
+    if err != nil {
+      // check if the stream has ended
+      break
+    }
 
-if err := nitric.Run(); err != nil {
-	fmt.Println(err)
+    fmt.Println(key)
+  }
+
+  nitric.Run()
 }
 ```
 

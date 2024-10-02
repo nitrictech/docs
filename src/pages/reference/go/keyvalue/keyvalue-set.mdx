@@ -7,29 +7,25 @@ Store a key value pair in a key value store.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
-	// Initialize the KV service
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreSet)
-	if err != nil {
-		return
-	}
+  // Initialize the KV service
+  profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreSet)
 
-	err = profiles.Set(context.Background(), "profile-1a2b3c", map[string]interface{}{
-		"name": "John Smith",
-	})
-	if err != nil {
-		fmt.Println(err)
-	}
+  err := profiles.Set(context.Background(), "profile-1a2b3c", map[string]interface{}{
+    "name": "John Smith",
+  })
+  if err != nil {
+    fmt.Println(err)
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -57,24 +53,20 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
 	// Initialize the KV service
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreSet)
-	if err != nil {
-		return
-	}
+	profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreSet)
 
-	err = profiles.Set(context.Background(), "profile-1a2b3c", map[string]interface{}{
+	err := profiles.Set(context.Background(), "profile-1a2b3c", map[string]interface{}{
 		"name": "John Smith",
 	})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```

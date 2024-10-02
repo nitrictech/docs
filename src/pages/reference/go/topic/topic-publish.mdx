@@ -8,19 +8,13 @@ Publish an event (push based message) to a topic.
 ```go
 import (
   "context"
-  "fmt"
 
-  "github.com/nitrictech/go-sdk/nitric/topics"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-  updates, err := nitric.NewTopic("updates").Allow(nitric.TopicPublishing)
-  if err != nil {
-    fmt.Println(err)
-
-    return
-  }
+  updates := nitric.NewTopic("updates").Allow(topics.TopicPublish)
 
   updates.Publish(context.TODO(),
     map[string]interface{}{
@@ -28,9 +22,7 @@ func main() {
     },
   )
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -57,28 +49,21 @@ Publishing messages to a topic will push a copy of the message to each of the to
 ```go
 import (
   "context"
-  "fmt"
 
-  "github.com/nitrictech/go-sdk/api/events"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-  updates, err := nitric.NewTopic("updates").Allow(nitric.TopicPublishing)
-  if err != nil {
-    fmt.Println(err)
+  updates := nitric.NewTopic("updates").Allow(topics.TopicPublish)
 
-    return
-  }
-
-  err := updates.Publish(context.TODO(),
+  updates.Publish(context.TODO(),
     map[string]interface{}{
       "something": "amazing happened",
     },
   )
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+
+  nitric.Run()
 }
 ```
 
@@ -89,27 +74,19 @@ You can delay the delivery of messages sent to a topic. The current maximum dela
 ```go
 import (
   "context"
-  "fmt"
   "time"
 
-  "github.com/nitrictech/go-sdk/api/events"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-  updates, err := nitric.NewTopic("updates").Allow(nitric.TopicPublishing)
-  if err != nil {
-    fmt.Println(err)
-
-    return
-  }
+  updates := nitric.NewTopic("updates").Allow(topics.TopicPublish)
 
   updates.Publish(context.TODO(), map[string]interface{}{
-      "something": "amazing happened",
-    }, events.WithDelay(time.Hour))
+    "something": "amazing happened",
+  }, topics.WithDelay(time.Hour))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

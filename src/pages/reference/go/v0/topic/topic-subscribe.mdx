@@ -20,9 +20,7 @@ func main() {
     return ctx, nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -53,9 +51,7 @@ func main() {
     return ctx, nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -84,9 +80,7 @@ func handleUpdate(ctx *faas.EventContext, next faas.EventHandler) (*faas.EventCo
 func main() {
   nitric.NewTopic("updates").Subscribe(faas.ComposeEventMiddleware(validateUpdate, handleUpdate))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

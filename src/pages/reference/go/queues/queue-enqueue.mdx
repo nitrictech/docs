@@ -11,14 +11,11 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/queues"
 )
 
 func main() {
-	queue, err := nitric.NewQueue("queue-name").Allow(nitric.QueueEnqueue, nitric.QueueDequeue)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	queue := nitric.NewQueue("queue-name").Allow(queues.QueueEnqueue, queues.QueueDequeue)
 
 	messages := []map[string]interface{}{
 		{
@@ -32,9 +29,7 @@ func main() {
 		return
 	}
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -55,42 +50,37 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
 )
 
 func main() {
-	queue, err := nitric.NewQueue("queue-name").Allow(nitric.QueueEnqueue)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+  queue := nitric.NewQueue("queue-name").Allow(queues.QueueEnqueue)
 
-	messages := []map[string]interface{}{
-		{
-			"type":    "email",
-			"to":      "hello@example.com",
-			"subject": "Notification",
-			"message": "A notification from Nitric",
-		},
-		{
-			"type":    "SMS",
-			"to":      "+17200000000",
-			"message": "A text message from Nitric",
-		},
-	}
+  messages := []map[string]interface{}{
+    {
+      "type":    "email",
+      "to":      "hello@example.com",
+      "subject": "Notification",
+      "message": "A notification from Nitric",
+    },
+    {
+      "type":    "SMS",
+      "to":      "+17200000000",
+      "message": "A text message from Nitric",
+    },
+  }
 
-	failedMessages, err := queue.Enqueue(context.TODO(), messages)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+  failedMessages, err := queue.Enqueue(context.TODO(), messages)
+  if err != nil {
+    fmt.Println(err)
+    return
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 

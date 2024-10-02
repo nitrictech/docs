@@ -20,9 +20,7 @@ func main() {
 
   profilesQuery := profiles.Query().Limit(10)
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

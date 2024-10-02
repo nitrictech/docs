@@ -20,9 +20,7 @@ func main() {
 
   enemies := profiles.Collection("enemies")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -55,9 +53,7 @@ func main() {
 
   enemiesQuery := enemies.Query()
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

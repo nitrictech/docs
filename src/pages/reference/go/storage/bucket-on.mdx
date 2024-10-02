@@ -10,17 +10,14 @@ import (
   "context"
   "fmt"
 
-  "github.com/nitrictech/go-sdk/nitric/storage"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
   assets := nitric.NewBucket("assets")
 
-  readableAssets, err := nitric.NewBucket("assets").Allow(nitric.BucketRead)
-  if err != nil {
-    return
-  }
+  readableAssets := nitric.NewBucket("assets").Allow(storage.BucketRead)
 
   assets.On(storage.DeleteNotification, "*", func(ctx *storage.Ctx) {
     fmt.Printf("a file named %s was deleted\n", ctx.Request.Key())
@@ -41,9 +38,7 @@ func main() {
     return nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -63,9 +58,8 @@ func main() {
     filters overlap across notifications, an error will be thrown when
     registering the resource.
   </Property>
-  <Property name="middleware" required type="interface{}">
-    The middleware (code) to be triggered by the bucket notification being
-    triggered.
+  <Property name="handler" required type="interface{}">
+    The callback function to be triggered when bucket events occur.
   </Property>
 </Properties>
 

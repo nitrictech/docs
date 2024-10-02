@@ -8,25 +8,20 @@ Create a download url for a file within a bucket.
 ```go
 import (
   "context"
-  "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
+  bucket := nitric.NewBucket("bucket-name").Allow(storage.BucketRead)
+
+  downloadUrl, err := bucket.DownloadUrl(context.TODO(), "cat.png")
   if err != nil {
     return
   }
 
-  downloadUrl, err := bucket.File().DownloadUrl(context.TODO(), "cat.png")
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -68,9 +63,7 @@ func main() {
     return
   }
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -108,8 +101,6 @@ func main() {
     ctx.Response.Status = 303
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

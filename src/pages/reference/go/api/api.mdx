@@ -7,20 +7,13 @@ Creates a new HTTP API.
 
 ```go
 import (
-  "fmt"
-
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  api, err := nitric.NewApi("public")
-  if err != nil {
-    return
-  }
+  api := nitric.NewApi("public")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -85,20 +78,13 @@ func main() {
 
 ```go
 import (
-  "fmt"
-
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  api, err := nitric.NewApi("public")
-  if err != nil {
-    return
-  }
+  api := nitric.NewApi("public")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -106,41 +92,46 @@ func main() {
 
 ```go
 import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric/apis"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
-func authMiddleware(ctx *apis.Ctx, next nitric.Handler[apis.Ctx]) (*apis.Ctx, error) {
-  // Perform auth validation
-  return next(ctx)
+func authMiddleware(next apis.Handler) apis.Handler {
+  return func(ctx *apis.Ctx) error {
+    if ctx.Request.Headers().Get("Authorization") == "" {
+      ctx.Response.Status = 401
+      ctx.Response.Body = []byte("Unauthorized")
+      return nil
+    }
+    // perform additional auth checks
+
+    return next(ctx)
+  }
 }
 
 func main() {
-  api, err := nitric.NewApi("private", nitric.WithMiddleware(authMiddleware))
-  if err != nil {
-    return
-  }
+  api := nitric.NewApi("private", apis.WithMiddleware(authMiddleware))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
 ### Define middleware
 
 ```go
-func authMiddleware(ctx *apis.Ctx, next nitric.Handler[apis.Ctx]) (*apis.Ctx, error) {
-  // Perform auth validation
-  return next(ctx)
+func yourMiddleware(next apis.Handler) apis.Handler {
+  return func(ctx *apis.Ctx) error {
+    // Perform checks/actions prior to the route handler
+    err := next(ctx)
+    // Perform checks/actions after the route handler
+    return err
+  }
 }
 ```
 
 ### Notes
 
-Middleware functions are supplied an `apis.Ctx` object and a `next()` function which calls the next middleware in the chain.
+Middleware are higher-order functions that take a handler and return a handler. They can be used to perform actions before and after the route handler. Middleware can be used to perform actions such as logging, authentication, and error handling.
 
 ### Create an API with a base path
 
@@ -148,20 +139,14 @@ If you need to put all the routes in your api below a shared base path, you can 
 
 ```go
 import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-  v1Api, err := nitric.NewApi("public", nitric.WithPath("/api/v1/"))
-  if err != nil {
-    return
-  }
+	v1Api := nitric.NewApi("public", apis.WithPath("/api/v1/"))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+	nitric.Run()
 }
 ```
 
@@ -169,9 +154,7 @@ func main() {
 
 ```go
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
@@ -182,17 +165,12 @@ func main() {
     []string{"YOUR-AUDIENCES"},
   )
 
-	secureApi, err := nitric.NewApi(
-		"secure",
-		// apply the security definition to all routes in this API.
-		apis.WithSecurity(defaultSecurityRule([]string{})),
-	)
-	if err != nil {
-		return
-	}
+  secureApi := nitric.NewApi(
+    "secure",
+    // apply the security definition to all routes in this API.
+    apis.WithSecurity(defaultOidcRule([]string{})),
+  )
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```

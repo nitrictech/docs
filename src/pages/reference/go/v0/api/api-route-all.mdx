@@ -24,9 +24,7 @@ func main() {
     return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -85,9 +83,7 @@ func main() {
      /* this handler won't work */
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -114,9 +110,7 @@ func main() {
     return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -151,9 +145,7 @@ func main() {
 
   customersRoute.All(faas.ComposeHttpMiddleware(authMiddleware, handleRequest))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -183,8 +175,6 @@ func main() {
     return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

@@ -7,20 +7,13 @@ Creates a new Websocket.
 
 ```go
 import (
-  "fmt"
-
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  ws, err := nitric.NewWebsocket("public")
-  if err != nil {
-    return
-  }
+  ws := nitric.NewWebsocket("public")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -39,19 +32,12 @@ func main() {
 
 ```go
 import (
-  "fmt"
-
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  ws, err := nitric.NewWebsocket("public")
-  if err != nil {
-    return
-  }
+  ws := nitric.NewWebsocket("public")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

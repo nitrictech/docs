@@ -11,13 +11,11 @@ import (
   "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
-  if err != nil {
-    return
-  }
+  bucket := nitric.NewBucket("bucket-name").Allow(storage.BucketRead)
 
   contents, err := bucket.Read(context.TODO(), "cat.png")
   if err != nil {
@@ -26,9 +24,7 @@ func main() {
 
   fmt.Println(contents)
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -53,13 +49,11 @@ import (
   "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
-  if err != nil {
-    return
-  }
+  bucket := nitric.NewBucket("bucket-name").Allow(storage.BucketRead)
 
   contents, err := bucket.Read(context.TODO(), "cat.png")
   if err != nil {
@@ -68,8 +62,6 @@ func main() {
 
   fmt.Println(contents)
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

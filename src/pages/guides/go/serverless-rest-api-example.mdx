@@ -82,32 +82,17 @@ If everything is working as expected you can now delete all files/folders in the
 Let's begin by setting up the Profiles API. First, create a new folder called `profiles` within the services directory. Inside this folder, add a file named `main.go`, and include the following code:
 
 ```go
-package main
-
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-
-	"github.com/google/uuid"
-	"github.com/nitrictech/go-sdk/nitric/apis"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
-  profilesApi, err := nitric.NewApi("public")
-  if err != nil {
-    return
-  }
+  profilesApi := nitric.NewApi("public")
 
-  profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreGet, nitric.KvStoreSet)
-  if err != nil {
-    return
-  }
+  profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet)
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -142,6 +127,7 @@ profilesApi.Post("/profiles", func(ctx *apis.Ctx) error {
   }
 
   ctx.Response.Body = []byte(id)
+  return nil
 })
 ```
 
@@ -176,7 +162,7 @@ profilesApi.Get("/profiles", func(ctx *apis.Ctx) error {
   for {
     key, err := keys.Recv()
     if err != nil {
-      return err
+      break
     }
     content, _ := profiles.Get(context.Background(), key)
     profileContent = append(profileContent, content)
@@ -297,11 +283,7 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 Define a bucket named `profileImages` with read/write permissions
 
 ```go
-profileImages, err := nitric.NewBucket("profileImages").Allow(nitric.BucketRead, nitric.BucketWrite)
-if err != nil {
-  fmt.Println(err)
-  return
-}
+profileImages := nitric.NewBucket("profileImages").Allow(storage.BucketRead, storage.BucketWrite)
 ```
 
 ### Get a URL to upload a profile image
@@ -311,7 +293,7 @@ profilesApi.Get("/profiles/:id/image/upload", func(ctx *apis.Ctx) error {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
 
-  photoUrl, err := profileImages.File(photoId).UploadUrl(context.TODO(), 600)
+  photoUrl, err := profileImages.UploadUrl(context.TODO(), photoId, storage.WithPresignUrlExpiry(600))
   if err != nil {
     return err
   }
@@ -329,7 +311,7 @@ profilesApi.Get("/profiles/:id/image/download", func(ctx *apis.Ctx) error {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
 
-  photoUrl, err := profileImages.File(photoId).DownloadUrl(context.TODO(), 600)
+  photoUrl, err := profileImages.DownloadUrl(context.TODO(), photoId, storage.WithPresignUrlExpiry(600))
   if err != nil {
     return err
   }
@@ -347,7 +329,7 @@ profilesApi.Get("/profiles/:id/image/view", func(ctx *apis.Ctx) error {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
 
-  photoUrl, err := profileImages.File(photoId).DownloadUrl(ctx.Request.Context(), 600)
+  photoUrl, err := profileImages.DownloadUrl(context.TODO(), photoId, storage.WithPresignUrlExpiry(600))
   if err != nil {
     return err
   }

@@ -33,9 +33,7 @@ func main() {
     t.Complete(ctx)
   }
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -107,8 +105,6 @@ func main() {
     t.Complete(ctx)
   }
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

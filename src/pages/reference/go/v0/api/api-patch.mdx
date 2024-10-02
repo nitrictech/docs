@@ -29,9 +29,7 @@ func main() {
     return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -121,9 +119,7 @@ func main() {
     return next(ctx)
   }, nitric.WithNoMethodSecurity())
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -158,9 +154,7 @@ func main() {
 
   api.Patch("/hello/:name", faas.ComposeHttpMiddleware(authMiddleware, handleRequest))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -190,8 +184,6 @@ func main() {
     return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

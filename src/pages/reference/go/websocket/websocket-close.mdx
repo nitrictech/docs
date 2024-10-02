@@ -8,22 +8,16 @@ Closes a connection to a websocket
 ```go
 import (
   "context"
-  "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  ws, err := nitric.NewWebsocket("public")
-  if err != nil {
-    return
-  }
+  ws := nitric.NewWebsocket("public")
 
   ws.Close(context.TODO(), "D28BA458-BFF4-404A")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -44,31 +38,25 @@ func main() {
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric/websockets"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/websockets"
 )
 
 func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
+  ws := nitric.NewWebsocket("public")
 
-	// Broadcast message to all the registered websocket connections
-	ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) (*websockets.Ctx, error) {
-		if ctx.Request.Message() == "close" {
-			err := ws.Close(context.Background(), ctx.Request.ConnectionID())
-			return ctx, err
-		}
+  // Broadcast message to all the registered websocket connections
+  ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) error {
+    if ctx.Request.Message() == "close" {
+      err := ws.Close(context.Background(), ctx.Request.ConnectionID())
+      return err
+    }
 
-		return next(ctx)
-	})
+    return nil
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
