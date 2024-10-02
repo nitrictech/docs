@@ -572,9 +572,9 @@ galaxyApi.post("/planets/unsecured-planet", (ctx) async {
 
 ## Defining Middleware
 
-Behavior that's common to several APIs or routes can be applied using middleware services. Multiple middleware can also be composed to create a cascading set of steps to perform on incoming requests or outgoing responses.
+Behavior that's common to several APIs or routes can be applied using middleware. Multiple middleware can also be composed to create a cascading set of steps to perform on incoming requests or outgoing responses.
 
-Middleware services look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
+In most of Nitric's supported languages middleware functions look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
 
 <CodeGroup>
 
@@ -599,15 +599,18 @@ async def validate(ctx, nxt: HttpMiddleware):
 ```
 
 ```go
-func validate(ctx *apis.Ctx, next nitric.Handler[apis.Ctx]) (*apis.Ctx, error) {
-	if ctx.Request.Headers()["content-type"] != nil {
-		ctx.Response.Status = 400
-		ctx.Response.Body = []byte("header Content-Type is required")
+// Using the Go SDK we recommend using higher-order functions to define middleware
+func validate(next nitric.Handler[apis.Ctx]) nitric.Handler[apis.Ctx] {
+  return func (ctx *apis.Ctx) error {
+    if ctx.Request.Headers()["content-type"] != nil {
+      ctx.Response.Status = 400
+      ctx.Response.Body = []byte("header Content-Type is required")
 
-		return ctx, nil
-	}
+      return nil
+    }
 
-	return next(ctx)
+    return next(ctx)
+  }
 }
 ```
 
@@ -650,21 +653,23 @@ import (
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
-func validate(ctx *apis.Ctx, next nitric.Handler[apis.Ctx]) (*apis.Ctx, error) {
-	if ctx.Request.Headers()["content-type"] != nil {
-		ctx.Response.Status = 400
-		ctx.Response.Body = []byte("header Content-Type is required")
+func validate(next nitric.Handler[apis.Ctx]) nitric.Handler[apis.Ctx] {
+  return func (ctx *apis.Ctx) error {
+    if ctx.Request.Headers()["content-type"] != nil {
+      ctx.Response.Status = 400
+      ctx.Response.Body = []byte("header Content-Type is required")
 
-		return ctx, nil
-	}
+      return nil
+    }
 
-	return next(ctx)
+    return next(ctx)
+  }
 }
 
 func main() {
 	customersApi, err := nitric.NewApi(
 		"customers",
-		nitric.WithMiddleware(validate))
+		apis.WithMiddleware(validate))
 
 	if err != nil {
 		return
@@ -715,26 +720,27 @@ import (
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
-func validate(ctx *apis.Ctx, next nitric.Handler[apis.Ctx]) (*apis.Ctx, error) {
-	if ctx.Request.Headers()["content-type"] != nil {
-		ctx.Response.Status = 400
-		ctx.Response.Body = []byte("header Content-Type is required")
+func validate(next nitric.Handler[apis.Ctx]) nitric.Handler[apis.Ctx] {
+  return func (ctx *apis.Ctx) error {
+    if ctx.Request.Headers()["content-type"] != nil {
+      ctx.Response.Status = 400
+      ctx.Response.Body = []byte("header Content-Type is required")
 
-		return ctx, nil
-	}
+      return nil
+    }
 
-	return next(ctx)
+    return next(ctx)
+  }
 }
 
 func main() {
-	customersApi, err := nitric.NewApi(
-		"customers")
+	customersApi, err := nitric.NewApi("customers")
 
 	if err != nil {
 		return
 	}
 
-	customersApi.Get("/customers", nitric.Compose(validate, func(ctx *apis.Ctx) {
+	customersApi.Get("/customers", validate(func(ctx *apis.Ctx) {
 		// handle request
 	}))
 
