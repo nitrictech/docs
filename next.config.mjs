@@ -1,25 +1,36 @@
 import nextMDX from '@next/mdx'
-import withSearch from './src/mdx/search.mjs'
-import { remarkPlugins } from './src/mdx/remark.mjs'
-import { rehypePlugins } from './src/mdx/rehype.mjs'
-import { recmaPlugins } from './src/mdx/recma.mjs'
+import { createContentlayerPlugin } from 'next-contentlayer2'
+import { mdxOptions } from './src/mdx/mdx-options.mjs'
+import path from 'path'
 
 const withMDX = nextMDX({
-  options: {
-    remarkPlugins,
-    rehypePlugins,
-    recmaPlugins,
-    providerImportSource: '@mdx-js/react',
-  },
+  options: mdxOptions,
 })
+
+const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: '/docs',
-  reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
+  experimental: {
+    outputFileTracingIncludes: {
+      '/**/*': ['./src/app/**/*.mdx'],
+    },
+  },
   images: {
-    domains: ['github.com', 'raw.githubusercontent.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'github.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        port: '',
+      },
+    ],
   },
   async redirects() {
     return [
@@ -69,7 +80,7 @@ const nextConfig = {
         source: source,
         destination: `/docs/guides/nodejs${source.replace(
           /^(\/docs\/guides\/|\/docs\/)/,
-          '/'
+          '/',
         )}`,
         basePath: false,
         permanent: true,
@@ -85,7 +96,7 @@ const nextConfig = {
         source: source,
         destination: `/docs/getting-started${source.replace(
           /^(\/docs\/guides\/|\/docs\/)/,
-          '/'
+          '/',
         )}`,
         basePath: false,
         permanent: true,
@@ -95,11 +106,11 @@ const nextConfig = {
           source: source,
           destination: `/docs/guides/python${source.replace(
             /^(\/docs\/guides\/|\/docs\/)/,
-            '/'
+            '/',
           )}`,
           basePath: false,
           permanent: true,
-        })
+        }),
       ),
       {
         source: '/docs/comparison/:slug',
@@ -277,7 +288,7 @@ const nextConfig = {
         source: source,
         destination: `/docs/${source.replace(
           /^(\/docs\/guides\/|\/docs\/)/,
-          ''
+          '',
         )}`,
         basePath: false,
         permanent: true,
@@ -363,4 +374,8 @@ const nextConfig = {
   },
 }
 
-export default withSearch(withMDX(nextConfig))
+const withContentlayer = createContentlayerPlugin({
+  configPath: path.resolve(process.cwd(), './contentlayer.config.ts'),
+})
+
+export default withContentlayer(withMDX(nextConfig))

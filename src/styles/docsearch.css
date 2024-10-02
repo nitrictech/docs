@@ -2,49 +2,49 @@
 :root {
   --docsearch-primary-color: red;
   --docsearch-highlight-color: var(--docsearch-primary-color);
-  --docsearch-muted-color: theme('colors.slate.500');
-  --docsearch-emphasis-color: theme('colors.slate.900');
+  --docsearch-muted-color: theme('colors.zinc.500');
+  --docsearch-emphasis-color: theme('colors.zinc.900');
   --docsearch-logo-color: #5468ff;
   --docsearch-modal-width: 35rem;
   --docsearch-modal-background: theme('colors.white');
   --docsearch-modal-shadow: theme('boxShadow.xl');
   --docsearch-searchbox-height: 3rem;
-  --docsearch-hit-color: theme('colors.slate.700');
+  --docsearch-hit-color: theme('colors.zinc.700');
   --docsearch-hit-active-color: theme('colors.primary.500');
-  --docsearch-hit-active-background: theme('colors.slate.100');
+  --docsearch-hit-active-background: theme('colors.zinc.100');
   --docsearch-footer-height: 3rem;
-  --docsearch-border-color: theme('colors.slate.200');
-  --docsearch-input-color: theme('colors.slate.900');
-  --docsearch-heading-color: theme('colors.slate.900');
-  --docsearch-key-background: theme('colors.slate.100');
-  --docsearch-key-hover-background: theme('colors.slate.200');
-  --docsearch-key-color: theme('colors.slate.500');
-  --docsearch-action-color: theme('colors.slate.400');
-  --docsearch-action-active-background: theme('colors.slate.200');
-  --docsearch-loading-background: theme('colors.slate.400');
-  --docsearch-loading-foreground: theme('colors.slate.900');
+  --docsearch-border-color: theme('colors.zinc.200');
+  --docsearch-input-color: theme('colors.zinc.900');
+  --docsearch-heading-color: theme('colors.zinc.900');
+  --docsearch-key-background: theme('colors.zinc.100');
+  --docsearch-key-hover-background: theme('colors.zinc.200');
+  --docsearch-key-color: theme('colors.zinc.500');
+  --docsearch-action-color: theme('colors.zinc.400');
+  --docsearch-action-active-background: theme('colors.zinc.200');
+  --docsearch-loading-background: theme('colors.zinc.400');
+  --docsearch-loading-foreground: theme('colors.zinc.900');
 }
 
 .dark {
   --docsearch-highlight-color: var(--docsearch-primary-color);
-  --docsearch-muted-color: theme('colors.slate.400');
+  --docsearch-muted-color: theme('colors.zinc.400');
   --docsearch-emphasis-color: theme('colors.white');
-  --docsearch-logo-color: theme('colors.slate.300');
+  --docsearch-logo-color: theme('colors.zinc.300');
   --docsearch-modal-background: theme('colors.gray.800');
-  --docsearch-modal-shadow: 0 0 0 1px theme('colors.slate.700'),
+  --docsearch-modal-shadow: 0 0 0 1px theme('colors.zinc.700'),
     theme('boxShadow.xl');
-  --docsearch-hit-color: theme('colors.slate.300');
+  --docsearch-hit-color: theme('colors.zinc.300');
   --docsearch-hit-active-color: theme('colors.primary.300');
   --docsearch-hit-active-background: rgb(51 65 85 / 0.3);
   --docsearch-border-color: rgb(148 163 184 / 0.1);
   --docsearch-heading-color: theme('colors.white');
   --docsearch-key-background: rgb(51 65 85 / 0.4);
   --docsearch-key-hover-background: rgb(51 65 85 / 0.8);
-  --docsearch-key-color: theme('colors.slate.400');
+  --docsearch-key-color: theme('colors.zinc.400');
   --docsearch-input-color: theme('colors.white');
-  --docsearch-action-color: theme('colors.slate.500');
-  --docsearch-action-active-background: theme('colors.slate.700');
-  --docsearch-loading-background: theme('colors.slate.500');
+  --docsearch-action-color: theme('colors.zinc.500');
+  --docsearch-action-active-background: theme('colors.zinc.700');
+  --docsearch-loading-background: theme('colors.zinc.500');
   --docsearch-loading-foreground: theme('colors.white');
 }
 
@@ -106,10 +106,16 @@
   background: transparent;
   padding: 0 1rem 0 3rem;
   outline: none;
+
+  @apply mx-2 mt-1;
+}
+
+.DocSearch-Input:focus-visible {
+  @apply outline-none ring-1 ring-primary-500;
 }
 
 .DocSearch-Input::placeholder {
-  color: theme('colors.slate.400');
+  color: theme('colors.zinc.400');
   opacity: 1;
 }
 
@@ -504,5 +510,9 @@ svg.DocSearch-Hit-Select-Icon {
       var(--docsearch-modal-height) - var(--docsearch-searchbox-height) -
         var(--docsearch-footer-height)
     );
+  }
+
+  .DocSearch-VisuallyHiddenForAccessibility {
+    @apply sr-only;
   }
 }

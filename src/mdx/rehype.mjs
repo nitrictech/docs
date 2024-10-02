@@ -1,14 +1,10 @@
+import { slugifyWithCounter } from '@sindresorhus/slugify'
+import * as acorn from 'acorn'
+import { toString } from 'mdast-util-to-string'
 import { mdxAnnotations } from 'mdx-annotations'
 import { visit } from 'unist-util-visit'
-import rehypeMdxTitle from 'rehype-mdx-title'
-import {
-  createHighlighter,
-  createCssVariablesTheme,
-  getSingletonHighlighter,
-} from 'shiki'
-import { toString } from 'mdast-util-to-string'
-import * as acorn from 'acorn'
-import { slugifyWithCounter } from '@sindresorhus/slugify'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 
 function rehypeParseCodeBlocks() {
   return (tree) => {
@@ -16,63 +12,8 @@ function rehypeParseCodeBlocks() {
       if (node.tagName === 'code' && node.properties.className) {
         parentNode.properties.language = node.properties.className[0]?.replace(
           /^language-/,
-          ''
+          '',
         )
-      }
-    })
-  }
-}
-
-function rehypeShiki() {
-  return async (tree) => {
-    const cssTheme = createCssVariablesTheme({
-      name: 'css-variables',
-      variablePrefix: '--shiki-',
-      variableDefaults: {},
-      fontStyle: true,
-    })
-
-    const highlighter = await getSingletonHighlighter({
-      themes: [cssTheme],
-      langs: [
-        'javascript',
-        'typescript',
-        'php',
-        'python',
-        'ruby',
-        'shellscript',
-        'csharp',
-        'text',
-        'java',
-        'kotlin',
-        'terraform',
-        'make',
-        'hcl',
-        'dart',
-        'go',
-        'yaml',
-        'bicep',
-        'dockerfile',
-        'json',
-        'prisma',
-        'toml',
-        'graphql',
-      ],
-    })
-
-    visit(tree, 'element', (node) => {
-      if (node.tagName === 'pre' && node.children[0]?.tagName === 'code') {
-        let codeNode = node.children[0]
-        let textNode = codeNode.children[0]
-
-        node.properties.code = textNode.value
-
-        if (node.properties.language) {
-          textNode.value = highlighter.codeToHtml(textNode.value, {
-            lang: node.properties.language,
-            theme: 'css-variables',
-          })
-        }
       }
     })
   }
@@ -137,16 +78,36 @@ function getSections(node) {
   return sections
 }
 
+const icon = fromHtmlIsomorphic(
+  `
+  <span class="content-header-link">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 linkicon">
+  <path d="M12.232 4.232a2.5 2.5 0 0 1 3.536 3.536l-1.225 1.224a.75.75 0 0 0 1.061 1.06l1.224-1.224a4 4 0 0 0-5.656-5.656l-3 3a4 4 0 0 0 .225 5.865.75.75 0 0 0 .977-1.138 2.5 2.5 0 0 1-.142-3.667l3-3Z" />
+  <path d="M11.603 7.963a.75.75 0 0 0-.977 1.138 2.5 2.5 0 0 1 .142 3.667l-3 3a2.5 2.5 0 0 1-3.536-3.536l1.225-1.224a.75.75 0 0 0-1.061-1.06l-1.224 1.224a4 4 0 1 0 5.656 5.656l3-3a4 4 0 0 0-.225-5.865Z" />
+  </svg>
+  </span>
+`,
+  { fragment: true },
+)
+
 export const rehypePlugins = [
   mdxAnnotations.rehype,
   rehypeParseCodeBlocks,
-  rehypeShiki,
   rehypeSlugify,
-  rehypeMdxTitle,
   [
     rehypeAddMDXExports,
     (tree) => ({
       sections: `[${getSections(tree).join()}]`,
     }),
+  ],
+  [
+    rehypeAutolinkHeadings,
+    {
+      behavior: 'append',
+      headingProperties: {
+        className: ['md-content-header group'],
+      },
+      content: icon,
+    },
   ],
 ]

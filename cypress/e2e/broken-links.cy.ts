@@ -33,7 +33,7 @@ const isExternalUrl = (url: string) => {
   return !url.includes('localhost')
 }
 
-const req = (url: string, retryCount = 0) => {
+const req = (url: string, retryCount = 0): any => {
   return cy
     .request({
       url,
@@ -71,7 +71,8 @@ describe('Broken links test suite', () => {
               (link.getAttribute('href') &&
                 link.getAttribute('href')?.includes(l)) ||
               //@ts-ignore
-              (link.getAttribute('src') && link.getAttribute('src').includes(l))
+              (link.getAttribute('src') &&
+                link.getAttribute('src').includes(l)),
           )
         })
         .each((link) => {
@@ -90,7 +91,7 @@ describe('Broken links test suite', () => {
               let acceptableCodes = CORRECT_CODES
               if (REDIRECT_CODES.includes(res.status) && !isExternalUrl(url)) {
                 assert.fail(
-                  `${url} returned ${res.status} to ${res.headers['location']}`
+                  `${url} returned ${res.status} to ${res.headers['location']}`,
                 )
               } else {
                 acceptableCodes = [
@@ -106,7 +107,7 @@ describe('Broken links test suite', () => {
 
               expect(res.status).oneOf(
                 acceptableCodes,
-                `${url} returned ${res.status}`
+                `${url} returned ${res.status}`,
               )
             })
           }
@@ -129,7 +130,7 @@ describe('Current links test suite', () => {
           ? '/docs'
           : `/docs${p.loc
               .substring(PROD_BASE_URL.length, p.loc.length)
-              .replace('/_index', '')}`
+              .replace('/_index', '')}`,
       )
     })
   })

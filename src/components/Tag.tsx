@@ -1,14 +1,15 @@
 import clsx from 'clsx'
 
 const variantStyles = {
+  small: '',
   medium: 'rounded-lg px-1.5 ring-1 ring-inset',
 }
 
 const colorStyles = {
-  pink: {
-    small: 'text-pink-500 dark:text-pink-400',
+  emerald: {
+    small: 'text-emerald-500 dark:text-emerald-400',
     medium:
-      'ring-pink-300 dark:ring-pink-400/30 bg-pink-400/10 text-pink-500 dark:text-pink-400',
+      'ring-emerald-300 dark:ring-emerald-400/30 bg-emerald-400/10 text-emerald-500 dark:text-emerald-400',
   },
   sky: {
     small: 'text-sky-500',
@@ -26,24 +27,27 @@ const colorStyles = {
       'ring-rose-200 bg-rose-50 text-red-500 dark:ring-rose-500/20 dark:bg-rose-400/10 dark:text-rose-400',
   },
   zinc: {
-    small: 'text-zinc-500 dark:text-zinc-200',
+    small: 'text-zinc-400 dark:text-zinc-500',
     medium:
       'ring-zinc-200 bg-zinc-50 text-zinc-500 dark:ring-zinc-500/20 dark:bg-zinc-400/10 dark:text-zinc-400',
   },
 }
 
 const valueColorMap = {
-  get: 'pink',
-  post: 'sky',
-  put: 'amber',
-  delete: 'rose',
-}
+  GET: 'emerald',
+  POST: 'sky',
+  PUT: 'amber',
+  DELETE: 'rose',
+} as Record<string, keyof typeof colorStyles>
 
 export function Tag({
   children,
   variant = 'medium',
-  color = valueColorMap[children.toLowerCase()] ?? 'zinc',
-  className = '',
+  color = valueColorMap[children] ?? 'emerald',
+}: {
+  children: keyof typeof valueColorMap & (string | {})
+  variant?: keyof typeof variantStyles
+  color?: keyof typeof colorStyles
 }) {
   return (
     <span
@@ -51,7 +55,6 @@ export function Tag({
         'font-mono text-[0.625rem] font-semibold leading-6',
         variantStyles[variant],
         colorStyles[color][variant],
-        className
       )}
     >
       {children}

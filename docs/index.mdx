@@ -1,0 +1,397 @@
+---
+title: Nitric Docs
+description: Build cloud backends that run anywhere, fast.
+---
+
+<HomeHeader
+  title="Nitric Documentation"
+  description="Build cloud backends that run anywhere, fast."
+/>
+
+---
+
+Nitric is a declarative cloud framework with common resources like APIs, websockets, databases, queues, topics, buckets, and more.
+
+However, Nitric doesn't just deploy the resources, it helps you interact with them. It also makes them pluggable, so you can swap services or even whole clouds without changing your code.
+
+It's what's missing between applications and infrastructure automation.
+
+Oh, and it supports basically any language, like JavaScript, TypeScript, Python, Go, you name it.
+
+<div className="">
+  <Libraries minimal />
+</div>
+
+If you're familiar Nitric already, you might want to jump to the [Installation](/getting-started/installation), [Guides](/guides) or [Resources](/apis) sections. Otherwise, keep reading to learn more about Nitric.
+
+---
+
+## Services
+
+Services are the heart of Nitric apps, they're the entrypoints to your code. They can serve as APIs, websockets, schedule handlers, subscribers and a lot more. You create services by telling Nitric where to look for your code and how to run it.
+
+```yaml nitric.yaml
+name: example
+services:
+  - match: services/*.ts
+    start: npm run dev:services $SERVICE_PATH
+```
+
+You might have one service that handles everything, or a service for each route. It's up to you. Every matched service becomes a container, allowing them run and scale independently.
+
+---
+
+## Resources
+
+Resources are the building blocks of your apps. They're the databases, queues, buckets, etc. that your services interact with. To request a resource, import the resource type and create one with a name.
+
+<CodeSwitcher>
+
+```javascript !! services/example.js
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read', 'write', 'delete')
+```
+
+```python !! services/example.py
+from nitric.resources import bucket
+from nitric.application import Nitric
+
+profiles = bucket('profiles').allow('read', 'write', 'delete')
+
+Nitric.run()
+```
+
+```go !! services/example/main.go
+import (
+	"fmt"
+
+	"github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite, nitric.BucketDelete)
+
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
+}
+```
+
+```dart !! services/example.dart
+import 'package:nitric_sdk/nitric.dart';
+
+void main() {
+  final profiles = Nitric.bucket("profiles").allow([
+    BucketPermission.read,
+    BucketPermission.write,
+    BucketPermission.delete,
+  ]);
+}
+```
+
+</CodeSwitcher>
+
+Nitric collects everything your services request. When you deploy, the deployment plugin you choose creates the resources and services, then links them all together.
+
+<Note>
+  That might sound like magic, but it's more like a compiler for
+  Infrastructure-as-Code - you can read about it in the
+  [Concepts](/concepts/introduction) section.
+</Note>
+
+## Deployment Plugins (Providers)
+
+Nitric is designed to be independent of any platform, so you can run your apps anywhere. You can deploy to AWS, Azure, GCP, your own Kubernetes cluster or a single server. You could even deploy to multiple clouds at once.
+
+Are the differences between a bucket on AWS and a bucket on Azure important to most apps? We don't think so. So why should the code be different?
+
+Nitric abstracts away API layer differences, so you can focus on your app. The part that makes that possible is a plugin, we call a **Provider**.
+
+<CodeWithTabs>
+
+```yaml !!tabs AWS Pulumi
+provider: nitric/aws@1.1.1
+region: us-east-1
+```
+
+```yaml !!tabs Azure Pulumi
+provider: nitric/azure@1.1.1
+region: East US
+```
+
+```yaml !!tabs Google Pulumi
+provider: nitric/gcp@1.1.1
+region: us-east1
+```
+
+```yaml !!tabs AWS Terraform
+provider: nitric/awstf@1.1.1
+region: us-east-1
+```
+
+```yaml !!tabs Google Terraform
+provider: nitric/gcptf@1.1.1
+region: us-east1
+```
+
+```yaml !!tabs Custom
+# Build your own provider to deploy anywhere you like.
+provider: custom/on-prem@1.0.0
+```
+
+</CodeWithTabs>
+
+We have several providers built-in with IaC from [Pulumi](https://www.pulumi.com/) or [Terraform](https://www.terraform.io/), but you can build your own with any tools you prefer and **deploy anywhere**.
+
+---
+
+## Projects
+
+Projects built with Nitric don't have many restrictions. You can use most languages, libraries, tools, clouds, services, mostly anything you like. But, you need to have a `nitric.yaml` file in the root of your project.
+
+```yaml {{ label:"nitric.yaml" }}
+name: example
+services:
+  - match: services/*.ts
+    start: npm run dev:services $SERVICE_PATH
+```
+
+Nitric uses this to find your services, then it turns each service into a container, runs them in deployment mode to match the resources you requested and gives the result to the Provider - which either generates IaC (like Terraform) or automatically deploys your app.
+
+So, a project structure might look something like this:
+
+<CodeWithTabs>
+
+```bash !!tabs JavaScript
+example/
+├── nitric.yaml
+├── services/
+│   └── orders.js
+│   └── users.js
+└── package.json
+```
+
+```bash !!tabs Python
+example/
+├── nitric.yaml
+├── services/
+│   └── orders.py
+│   └── users.py
+└── Pipfile
+```
+
+```bash !!tabs Go
+example/
+├── nitric.yaml
+├── services/
+│   ├── orders/
+│   │   └── main.go
+│   └── users/
+│       └── main.go
+├── dockerfile
+└── go.mod
+```
+
+```bash !!tabs Dart
+example/
+├── nitric.yaml
+├── services/
+│   └── orders.dart
+│   └── users.dart
+└── pubspec.yaml
+```
+
+</CodeWithTabs>
+
+---
+
+## CLI
+
+Nitric has a CLI to help you create, manage, run and deploy your projects. We recommend installing it with a package manager:
+
+<InstallNitric>
+
+```bash !!tabs macOS
+brew install nitrictech/tap/nitric
+```
+
+```bash !!tabs Windows
+scoop bucket add nitric https://github.com/nitrictech/scoop-bucket.git
+scoop install nitric
+```
+
+```bash !!tabs Linux
+curl -L "https://nitric.io/install?version=latest" | bash
+```
+
+</InstallNitric>
+
+<Note>
+  Nitric has a few dependencies, like Docker, which you can read about in the
+  [Installation](/getting-started/installation) section.
+</Note>
+
+### New
+
+You can create a new project from a template with the `new` command.
+
+```bash
+nitric new
+```
+
+### Start
+
+You can run your project locally with the `start` command.
+
+```bash
+nitric start
+```
+
+<Note>
+  Start also emulates the resources you requested, so you can test your app
+  locally. And provides a Dashboard UI to interact with the resources.
+</Note>
+
+### Deploy
+
+You can deploy your project with the `up` command, once you have a stack file (deployment target).
+
+```bash
+# Create a new stack (deployment target)
+nitric stack new
+# Deploy to the stack, using the provider in the stack file
+nitric up
+```
+
+<Note>
+  Some providers deploy directly, others generate IaC files for existing tools
+  (like HCL for Terraform). In the cases where IaC is generated you use the
+  chosen IaC tool to deploy (e.g. `terraform apply`).
+
+Currently, all Pulumi providers deploy directly, while Terraform providers generate IaC.
+
+</Note>
+
+### Tear Down
+
+You can tear down your project with the `down` command.
+
+```bash
+nitric down
+```
+
+<Note>
+  If you used a provider that generates IaC, use the IaC tool to tear down (e.g.
+  `terraform destroy`).
+</Note>
+
+---
+
+## Local development
+
+Sometimes you'll want to run your app locally. We don't mean "binds to a cloud environment and syncs your code, but doesn't work without Wifi" local, we mean "runs on your machine, on a desert island" local.
+
+`nitric start` hosts entrypoints like APIs, websockets, and schedules, as well as resources like databases, topics, queues, key/value stores and buckets.
+
+It also provides a Dashboard to interact with your resources, so you can trigger schedules without waiting, or topics without a publisher, or upload test files to a bucket. It even produces a live architecture diagram of your services and resources as your code updates.
+
+<img
+  src="/docs/images/docs/dashboard-architecture.png"
+  style={{ maxWidth: 800, width: '100%' }}
+  alt="screen shot of the local development dashboard"
+/>
+
+---
+
+## Extension & Escape Hatches
+
+The services of cloud providers are vast, we can't cover everything and we shouldn't. Many services are unique enough that abstraction would be a disservice. Nitric aims to make common "table stakes" services easy to use, but we never want to limit you.
+
+Here are some ways you can extend or escape Nitric.
+
+### Runtime
+
+If you need to access a service in a way Nitric doesn't support, you can always use the provider's SDK directly. Code like this will always work:
+
+<CodeSwitcher>
+
+```javascript !!
+// Import the AWS SDK
+import { S3Client } from '@aws-sdk/client-s3'
+
+// Use it like you normally would
+const s3 = new S3Client({ region: 'us-east-1' })
+const { Contents } = await s3.listObjectsV2({ Bucket: 'my-bucket' })
+```
+
+```python !!
+# Import the boto3 (AWS) SDK
+from boto3 import client
+
+# Use it like you normally would
+s3 = client('s3', region_name='us-east-1')
+response = s3.list_objects_v2(Bucket='my-bucket')
+```
+
+```go !!
+import (
+  "context"
+  // Import the AWS SDK
+  "github.com/aws/aws-sdk-go-v2/config"
+  "github.com/aws/aws-sdk-go-v2/service/s3"
+)
+
+// Use it like you normally would
+cfg, _ := config.LoadDefaultConfig(context.TODO())
+client := s3.NewFromConfig(cfg)
+
+output, _ := client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
+  Bucket: aws.String("my-bucket"),
+})
+```
+
+```dart !!
+// Import the AWS SDK
+import 'package:aws_s3/aws_s3.dart';
+
+// Use it like you normally would
+final s3 = S3(region: 'us-east-1');
+final response = await s3.listObjectsV2(Bucket: 'my-bucket');
+print(response.contents);
+```
+
+</CodeSwitcher>
+
+### Manual Install
+
+Alternatively, you can download pre-compiled binaries from the [releases](https://github.com/nitrictech/cli/releases) page and install them manually.
+
+## Update to the latest version
+
+<InstallNitric>
+
+```bash !!tabs macOS
+brew upgrade nitric
+```
+
+```bash !!tabs Windows
+scoop update nitric
+```
+
+```bash !!tabs Linux
+curl -L "https://nitric.io/install?version=latest" | bash
+```
+
+</InstallNitric>
+
+You can easily check which version you're on by running `nitric version`.
+
+## Release notes
+
+You can view the CLI release notes on our [CLI GitHub Releases page](https://github.com/nitrictech/cli/releases).
+
+## What's next
+
+- Checkout out our [concepts](/concepts/introduction) page for a quick overview of Nitric.
+- Start building with our [quickstart guide](./quickstart).
