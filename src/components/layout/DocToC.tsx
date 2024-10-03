@@ -26,8 +26,8 @@ const DocToC: React.FC<Props> = ({ doc }) => {
   const articleRef = useRef<HTMLDivElement>(null)
 
   return (
-    <div className="h-full min-w-52" ref={articleRef}>
-      <aside className="sticky top-[calc(var(--header-height)+1px+2rem)] hidden max-h-[calc(100vh-var(--header-height)-3rem)] min-w-40 space-y-6 md:block">
+    <div className="hidden h-full min-w-52 md:block" ref={articleRef}>
+      <aside className="sticky top-[calc(var(--header-height)+1px+2rem)] max-h-[calc(100vh-var(--header-height)-3rem)] min-w-40 space-y-6">
         {doc.toc.length ? (
           <div className="relative flex flex-col">
             <p className="mb-2 font-mono text-sm uppercase dark:text-zinc-300">

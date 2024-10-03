@@ -25,8 +25,8 @@ export default function DocLayout({
 
   return (
     <article className="mx-auto flex h-full max-w-7xl flex-col gap-y-10 px-4 pb-10 pt-16">
-      <div className="relative grid grid-cols-12 gap-10">
-        <div className="col-span-12 w-full flex-auto space-y-20 md:col-span-9">
+      <div className="relative grid grid-cols-1 gap-10 md:grid-cols-12">
+        <div className="w-full flex-auto space-y-20 md:col-span-9">
           <div>
             <Breadcrumbs doc={doc} className="mb-4" />
             <Prose>{children}</Prose>
