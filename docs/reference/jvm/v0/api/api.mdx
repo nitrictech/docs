@@ -5,9 +5,9 @@ export const description =
 
 Creates a new HTTP API.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 
 public class Application {
@@ -19,7 +19,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -29,7 +29,7 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ## Parameters
 
@@ -81,9 +81,9 @@ The `middleware` property on the `options` param is useful for applying universa
 
 ### Create an API
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 
 public class Application {
@@ -95,7 +95,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -105,13 +105,13 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Create an API with universal middleware
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.Handler;
 import io.nitric.faas.v0.HttpContext;
@@ -133,7 +133,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.HttpContext
 import io.nitric.faas.v0.Middleware
@@ -151,7 +151,7 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Notes
 
@@ -161,9 +161,9 @@ Middleware functions are supplied a `HttpContext` object and a `next()` function
 
 If you need to put all the routes in your api below a shared base path, you can do that with the `basePath` option. In this example we ensure all routes start with `/api/v1/` before the route specific path.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.ApiOptions;
 
@@ -178,7 +178,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.HttpContext
 import io.nitric.faas.v0.Middleware
@@ -196,13 +196,13 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Apply JWT authentication to an API
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.ApiOptions;
 import io.nitric.resources.JwtSecurityDefinition;
@@ -233,7 +233,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.resources.ApiOptions
 import io.nitric.resources.JwtSecurityDefinition
@@ -259,4 +259,4 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>

@@ -42,7 +42,7 @@ An API named ‘milkyway’ with:
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { api, kv, bucket } from '@nitric/sdk'
 
 const milkyWayApi = api('milkyway')
@@ -56,7 +56,7 @@ milkyWayApi.get('/planets/:id', async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import api, kv, bucket
 from nitric.application import Nitric
 from nitric.context import HttpContext

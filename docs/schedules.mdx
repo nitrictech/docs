@@ -32,7 +32,7 @@ Here are a couple of example schedules that use both definition types:
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { schedule } from '@nitric/sdk'
 
 // Run every 5 minutes
@@ -46,7 +46,7 @@ schedule('send-reminder').cron('0 22 * * 1-5', async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import schedule
 from nitric.resources import Nitric
 
@@ -66,7 +66,7 @@ async def send_reminder(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "fmt"
   "time"
@@ -89,7 +89,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 // run every 5 minutes
@@ -117,7 +117,7 @@ Here are some example rate-based schedules:
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { schedule } from '@nitric/sdk'
 
 schedule('process-often').every('5 minutes', async (ctx) => {
@@ -133,7 +133,7 @@ schedule('process-rarely').every('30 days', async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import schedule
 
 
@@ -152,7 +152,7 @@ async def process_rarely(ctx):
   pass
 ```
 
-```go
+```go !!
 import (
   "fmt"
   "time"
@@ -181,7 +181,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final processor = Nitric.schedule("processing");
@@ -220,7 +220,7 @@ Here are some example cron-based schedules:
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { schedule } from '@nitric/sdk'
 
 // every 15 minutes
@@ -234,7 +234,7 @@ schedule('delete stale data').cron('0 1 1 * *', async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import schedule
 
 updater = schedule("updates")
@@ -249,7 +249,7 @@ async def clear_data(ctx):
   print("clearing data")
 ```
 
-```go
+```go !!
 package main
 
 import (
@@ -274,7 +274,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final updater = Nitric.schedule("updates");

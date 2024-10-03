@@ -6,9 +6,9 @@ description: 'Configuring your AWS stacks'
 
 ## Complete Example with comments
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```yaml {{ title: "Pulumi" }}
+```yaml !!tabs Pulumi
 # The provider to use and it's published version
 # See releases:
 # https://github.com/nitrictech/nitric/tags
@@ -86,7 +86,7 @@ config:
       provisioned-concurrency: 1
 ```
 
-```yaml {{ title: "Terraform (Preview)" }}
+```yaml !!tabs Terraform (Preview)
 # The name of your AWS stack
 name: my-aws-stack-name
 
@@ -149,7 +149,7 @@ config:
       provisioned-concurrency: 1
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 <Note>
   Missing something? Let us know by raising an issue in

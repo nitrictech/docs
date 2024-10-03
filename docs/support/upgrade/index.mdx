@@ -14,15 +14,16 @@ The first step in upgrading your project is to upgrade the Nitric CLI. You can d
 
 <InstallNitric>
 
-```bash {{ title: 'macOS' }}
-brew upgrade nitric
+```bash !!tabs macOS
+brew install nitrictech/tap/nitric
 ```
 
-```bash {{ title: 'Windows' }}
-scoop update nitric
+```bash !!tabs Windows
+scoop bucket add nitric https://github.com/nitrictech/scoop-bucket.git
+scoop install nitric
 ```
 
-```bash {{ title: 'Linux' }}
+```bash !!tabs Linux
 curl -L "https://nitric.io/install?version=latest" | bash
 ```
 

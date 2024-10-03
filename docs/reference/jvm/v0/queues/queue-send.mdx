@@ -5,9 +5,9 @@ export const description =
 
 Send tasks to a queue.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -23,7 +23,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -37,7 +37,7 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ## Parameters
 
@@ -51,9 +51,9 @@ fun main() {
 
 ### Send a task to a queue
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -69,7 +69,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -83,13 +83,13 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Send multiple tasks to a queue
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -120,7 +120,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -147,15 +147,15 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Dealing with failures
 
 In rare cases when sending tasks to a queue some tasks might fail to be sent. The response from `send()` will include an array of any tasks that failed to send. You can process this array to retry or log the error.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 var failed = queue.send(tasks);
 
 failed.forEach((task) -> {
@@ -163,7 +163,7 @@ failed.forEach((task) -> {
 });
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 val failed = queue.send(tasks)
 
 failed.forEach { task ->
@@ -171,4 +171,4 @@ failed.forEach { task ->
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>

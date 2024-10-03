@@ -24,19 +24,19 @@ Sometimes it's easier to explain IfC by exploring the benefits.
 
 Nitric significantly reduces or removes cloud-specific code. For example, accessing a file in a cloud storage bucket with Nitric is just a few lines of code, while the equivalent code using cloud provider SDKs is much more verbose and error prone:
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```javascript {{ title:"Nitric SDK" }}
+```javascript !!tabs Nitric SDK
 import { bucket } from '@nitric/sdk'
 
 const profiles = bucket('profiles').allow('read')
 
 export const getProfilePic = async (filename) => {
   return await profiles.file(filename).read()
-})
+}
 ```
 
-```javascript {{ title:"AWS SDK" }}
+```javascript !!tabs AWS SDK
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
 const client = new S3Client({})
@@ -57,7 +57,7 @@ export const getProfilePic = async (filename) => {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ---
 
@@ -79,25 +79,25 @@ export const publishMessage = async (message) => {
 
 We can change the underlying messaging service through a simple configuration change, without modifying the application code.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```yaml {{ label:"nitric.prod.yaml", title:"AWS" }}
+```yaml !!tabs AWS file:nitric.prod.yaml
 provider: nitric/aws@1.1.1
 ```
 
-```yaml {{ label:"nitric.prod.yaml", title:"Azure" }}
+```yaml !!tabs Azure file:nitric.prod.yaml
 provider: nitric/azure@1.1.1
 ```
 
-```yaml {{ label:"nitric.prod.yaml", title:"Google Cloud" }}
+```yaml !!tabs Google Cloud file:nitric.prod.yaml
 provider: nitric/gcp@1.1.1
 ```
 
-```yaml {{ label:"nitric.prod.yaml", title:"Anything Else" }}
+```yaml !!tabs Anything Else file:nitric.prod.yaml
 provider: your_namespace/custom@1.0.0
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 <Note>
   The runtime code for cloud services like SNS still exists, it's just isolated

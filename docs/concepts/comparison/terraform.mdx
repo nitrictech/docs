@@ -26,9 +26,13 @@ Nitric is a framework designed to aid developers in building full cloud applicat
 
 To showcase the power of the abstraction provided by Nitric here is a showcase of a Nitric program with an equivalent Terraform configuration with application code.
 
-<CodeSwitcher compare>
+<Row>
 
-```javascript {{title: 'Nitric', label: 'handle.ts' }}
+<Col>
+
+**Nitric**
+
+```javascript file:handle.js
 import * as nitric from '@nitric/sdk'
 
 const bucket = nitric.bucket('my-bucket').allow('read', 'write')
@@ -38,7 +42,13 @@ bucket.on('create', '*', async (ctx) => {
 })
 ```
 
-```javascript {{title: 'Terraform', label: 'src/index.js'}}
+</Col>
+
+<Col>
+
+**Terraform**
+
+```javascript file:src/index.js
 const AWS = require('aws-sdk')
 
 exports.handler = async (event) => {
@@ -49,7 +59,7 @@ exports.handler = async (event) => {
 }
 ```
 
-```hcl {{title: 'Terraform', label: 'main.tf'}}
+```hcl file:main.tf
 terraform {
   required_providers {
     aws = {
@@ -167,7 +177,9 @@ output "lambda_function_name" {
 }
 ```
 
-</CodeSwitcher>
+</Col>
+
+</Row>
 
 <Note>
   In the Terraform example we get control over absolutely every facet of our

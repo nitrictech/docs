@@ -44,7 +44,7 @@ const Pre: React.FC<Props> = ({
   return (
     <>
       {showFileNamePanel && (
-        <div className="flex h-12 items-center justify-start border-b border-zinc-300/10 pr-12 font-display text-xs font-semibold text-zinc-300">
+        <div className="flex h-12 items-center justify-start border-b border-zinc-300/10 bg-zinc-800/50 pr-12 font-display text-xs font-semibold text-zinc-300">
           {/* one-off breakpoint to hide the filename on extremely narrow screens - to avoid interfering with the lang select */}
           <span className="hidden whitespace-nowrap px-4 py-2 min-[320px]:block">
             {fileName}
@@ -61,7 +61,7 @@ const Pre: React.FC<Props> = ({
         handlers={handlers}
         className={cn(
           'overflow-auto overscroll-x-contain p-4',
-          !showFileNamePanel && 'pt-8', // add padding to ensure the code doesn't touch the top of the panel
+          showPanel && !fileName && 'pt-8', // add padding to ensure the code doesn't touch the top of the panel
           className,
         )}
         style={{

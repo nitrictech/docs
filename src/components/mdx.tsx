@@ -1,33 +1,19 @@
 import Link from 'next/link'
 import clsx from 'clsx'
-//import { Table } from '@/components/ui/table'
-import { Feedback } from '@/components/Feedback'
+import { Table } from '@/components/ui/table'
 
-import { Prose } from '@/components/Prose'
+export {
+  TableHead as th,
+  TableHeader as thead,
+  TableRow as tr,
+  TableBody as tbody,
+  TableCell as td,
+  TableFooter as tfoot,
+} from './ui/table'
 
-// export {
-//   TableHead as th,
-//   TableHeader as thead,
-//   TableRow as tr,
-//   TableBody as tbody,
-//   TableCell as td,
-//   TableFooter as tfoot,
-// } from './ui/table'
-
-// export function wrapper({ children }: { children: React.ReactNode }) {
-//   return (
-//     <article className="flex h-full flex-col pb-10 pt-16">
-//       <Prose className="flex-auto">{children}</Prose>
-//       <footer className="mx-auto mt-16 w-full max-w-2xl lg:max-w-5xl">
-//         <Feedback />
-//       </footer>
-//     </article>
-//   )
-// }
-
-// export const table = (props: React.ComponentPropsWithoutRef<typeof Table>) => (
-//   <Table {...props} className="text-base" />
-// )
+export const table = (props: React.ComponentPropsWithoutRef<typeof Table>) => (
+  <Table {...props} className="mt-4 text-base" />
+)
 
 export function a({
   href,

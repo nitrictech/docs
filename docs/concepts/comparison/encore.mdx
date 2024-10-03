@@ -17,38 +17,40 @@ These are the main differences between the two:
 
 To get a deeper understanding of the differences, let's see the same app built in both Nitric and Encore.
 
-<CodeSwitcher compare>
+<Row>
 
-```go {{title: 'Nitric', label: 'services/hello/main.go' }}
+<Col>
+
+**Nitric**
+
+```go file:services/hello/main.go
 package main
 
 import (
-	"fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric/apis"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	mainApi, err := nitric.NewApi("main")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+  api := nitric.NewApi("main")
 
-	mainApi.Get("/hello/:name", func(ctx *apis.Ctx) {
-		params := ctx.Request.PathParams()
+  api.Get("/hello/:name", func(ctx *apis.Ctx) {
+    ctx.Response.Body = []byte("Hello " + ctx.Request.PathParams()["name"])
+  })
 
-		ctx.Response.Body = []byte("Hello " + params["name"])
-	})
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
-```go {{title: 'Encore', label: 'hello.go'}}
+</Col>
+
+<Col>
+
+**Encore**
+
+```go file:hello.go
 package hello
 
 import (
@@ -66,7 +68,9 @@ type Response struct {
 }
 ```
 
-</CodeSwitcher>
+</Col>
+
+</Row>
 
 The Nitric example shows an API where HTTP request handling is achieved using `faas.HttpContext`, providing control over the request and response objects. The Encore example demonstrates an API where HTTP request handling is reflected through the function parameters and return types, with defined structs for responses.
 

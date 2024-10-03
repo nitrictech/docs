@@ -16,7 +16,7 @@ Add a new custom runtime in the `runtimes` configuration.
 
 To use the runtime, simply specify the runtime key per service as shown below.
 
-```yaml {{ tag: "nitric.yaml" }}
+```yaml file:nitric.yaml
 name: custom-example
 services:
   - match: services/*.ts
@@ -42,9 +42,9 @@ Here are some example dockerfiles:
   final container.
 </Note>
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```docker {{ title: "Python" }}
+```docker !!tabs Python
 FROM python:3.11-slim
 
 ARG HANDLER
@@ -74,7 +74,7 @@ COPY . .
 ENTRYPOINT python $HANDLER
 ```
 
-```docker {{ title: "JavaScript" }}
+```docker !!tabs JavaScript
 # syntax=docker/dockerfile:1
 FROM node:alpine
 
@@ -103,7 +103,7 @@ RUN \
 ENTRYPOINT node $HANDLER
 ```
 
-```docker {{ title: "TypeScript" }}
+```docker !!tabs TypeScript
 # syntax=docker/dockerfile:1
 FROM node:alpine as build
 
@@ -146,7 +146,7 @@ COPY --from=build /usr/app/lib/ ./lib/
 ENTRYPOINT ["node", "lib/index.js"]
 ```
 
-```docker {{ title: "Go" }}
+```docker !!tabs Go
 FROM golang:alpine as build
 
 ARG HANDLER
@@ -173,7 +173,7 @@ RUN apk update && \
 ENTRYPOINT ["/bin/main"]
 ```
 
-```docker {{ title: "Dart" }}
+```docker !!tabs Dart
 FROM dart:stable AS build
 
 ARG HANDLER
@@ -202,7 +202,7 @@ COPY --from=build /app/bin/main /app/bin/
 ENTRYPOINT ["/app/bin/main"]
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Create an ignore file
 
@@ -218,7 +218,7 @@ Nitric supports monorepos via the custom runtime feature, this allows you to cha
 
 [Turborepo](https://turbo.build/) is a monorepo tool for JavaScript and TypeScript that allows you to manage multiple packages in a single repository. In this example, we will use a custom runtime to build a service in a monorepo using a custom dockerfile.
 
-```yaml {{ tag: "root/backends/guestbook-app/nitric.yaml" }}
+```yaml file:root/backends/guestbook-app/nitric.yaml
 name: guestbook-app
 services:
   - match: services/*.ts
@@ -233,7 +233,7 @@ runtimes:
       TURBO_SCOPE: 'guestbook-api'
 ```
 
-```docker {{ tag: "root/backends/guestbook-app/turbo.dockerfile"  }}
+```docker file:root/backends/guestbook-app/turbo.dockerfile"  }}
 FROM node:alpine AS builder
 ARG TURBO_SCOPE
 

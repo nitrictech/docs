@@ -6,18 +6,18 @@ description: 'Getting started guide for an initial Nitric project'
 
 Before you begin, you'll need to install the Nitric CLI.
 
-<InstallNitric >
+<InstallNitric>
 
-```bash {{ title: 'macOS' }}
+```bash !!tabs macOS
 brew install nitrictech/tap/nitric
 ```
 
-```bash {{ title: 'Windows' }}
+```bash !!tabs Windows
 scoop bucket add nitric https://github.com/nitrictech/scoop-bucket.git
 scoop install nitric
 ```
 
-```bash {{ title: 'Linux' }}
+```bash !!tabs Linux
 curl -L "https://nitric.io/install?version=latest" | bash
 ```
 
@@ -32,47 +32,47 @@ curl -L "https://nitric.io/install?version=latest" | bash
 
 The Nitric CLI's `new` command provides prompts to scaffold new projects from templates. Here's an example of creating a new project from a template:
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```bash {{ title: "TypeScript" }}
+```bash !!tabs TypeScript
 nitric new hello-world ts-starter
 ```
 
-```bash {{ title: "JavaScript" }}
+```bash !!tabs JavaScript
 nitric new hello-world js-starter
 ```
 
-```bash {{ title: "Python" }}
+```bash !!tabs Python
 nitric new hello-world py-starter
 ```
 
-```bash {{ title: "Go" }}
+```bash !!tabs Go
 nitric new hello-world go-starter
 ```
 
-```bash {{ title: "Dart" }}
+```bash !!tabs Dart
 nitric new hello-world dart-starter
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 Navigate to the new project directory and install the dependencies:
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```bash {{ title: "TypeScript" }}
+```bash !!tabs TypeScript
 cd hello-world
 
 npm install
 ```
 
-```bash {{ title: "JavaScript" }}
+```bash !!tabs JavaScript
 cd hello-world
 
 npm install
 ```
 
-```bash {{ title: "Python" }}
+```bash !!tabs Python
 cd hello-world
 
 # We recommend using [Pipenv](https://pipenv.pypa.io/en/latest/) for dependency and virtual environments
@@ -81,25 +81,25 @@ cd hello-world
 pipenv install --dev
 ```
 
-```bash {{ title: "Go" }}
+```bash !!tabs Go
 cd hello-world
 
 go mod tidy
 ```
 
-```bash {{ title: "Dart" }}
+```bash !!tabs Dart
 cd hello-world
 
 dart pub get
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 Your project should now look like this:
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```txt {{ title: "TypeScript" }}
+```txt !!tabs TypeScript
 +--services/
 |  +-- hello.ts
 +--node_modules/
@@ -110,7 +110,7 @@ Your project should now look like this:
 +--README.md
 ```
 
-```txt {{ title: "JavaScript" }}
+```txt !!tabs JavaScript
 +--services/
 |  +-- hello.js
 +--node_modules/
@@ -121,7 +121,7 @@ Your project should now look like this:
 +--README.md
 ```
 
-```txt {{ title: "Python" }}
+```txt !!tabs Python
 +--services/
 |  +-- hello.py
 +--Pipfile
@@ -130,7 +130,7 @@ Your project should now look like this:
 +--README.md
 ```
 
-```txt {{ title: "Go" }}
+```txt !!tabs Go
 +--services/hello/
 |  +-- main.go
 +--go.mod
@@ -140,7 +140,7 @@ Your project should now look like this:
 +--README.md
 ```
 
-```txt {{ title: "Dart" }}
+```txt !!tabs Dart
 +--services/
 |  +-- hello.dart
 +--analysis_options.yaml
@@ -150,7 +150,7 @@ Your project should now look like this:
 +--README.md
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ## Running your app
 
@@ -206,7 +206,7 @@ Start by opening the `hello` service in your editor and adding a new route to th
 
 <CodeSwitcher>
 
-```typescript {{ tag: "services/hello.ts" }}
+```typescript !! file:services/hello.ts
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -225,7 +225,7 @@ helloApi.get('/goodbye/:name', async (ctx) => {
 })
 ```
 
-```javascript {{ tag: "services/hello.js" }}
+```javascript !! file:services/hello.js
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -244,7 +244,7 @@ helloApi.get('/goodbye/:name', async (ctx) => {
 })
 ```
 
-```python {{ tag: "services/hello.py" }}
+```python !! file:services/hello.py
 from nitric.resources import api
 from nitric.application import Nitric
 
@@ -266,7 +266,7 @@ async def hello_world(ctx):
 Nitric.run()
 ```
 
-```go {{ tag: "services/hello/main.go" }}
+```go !! file:services/hello/main.go
 package main
 
 import (
@@ -299,7 +299,7 @@ func main() {
 }
 ```
 
-```dart {{ tag: "services/hello.dart" }}
+```dart !! file:services/hello.dart
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {

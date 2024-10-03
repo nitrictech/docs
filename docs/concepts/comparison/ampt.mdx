@@ -17,9 +17,13 @@ These are the main differences between the two:
 
 To get a deeper understanding of the differences, let's see the same app built in both Nitric and Ampt.
 
-<CodeSwitcher compare>
+<Row>
 
-```javascript {{title: 'Nitric', label: 'hello.ts' }}
+<Col>
+
+**Nitric**
+
+```typescript file:hello.ts
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -31,7 +35,13 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-```javascript {{title: 'Ampt (Experimental)', label: 'hello.ts' }}
+</Col>
+
+<Col>
+
+**Ampt (Experimental)**
+
+```typescript file:hello.ts
 import { api } from '@ampt/api'
 
 const helloApi = api('main').router('/hello')
@@ -43,7 +53,9 @@ helloApi.get('/:name', async (event) => {
 })
 ```
 
-</CodeSwitcher>
+</Col>
+
+</Row>
 
 ## Differences
 

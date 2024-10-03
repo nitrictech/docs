@@ -1,5 +1,6 @@
-export const description =
-  'Learn how to develop an event-driven uptime monitoring tool using Node.js and Nitric.'
+---
+description: Learn how to develop an event-driven uptime monitoring tool using Node.js and Nitric.
+---
 
 # Build an Uptime Monitoring Tool with Nitric
 
@@ -32,48 +33,48 @@ git clone -b tutorial-start https://github.com/nitrictech/uptime-monitoring.git 
 
 Install backend dependencies:
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```bash {{ title: "npm" }}
+```bash !!tabs npm
 cd uptime
 npm install
 ```
 
-```bash {{ title: "yarn" }}
+```bash !!tabs yarn
 cd uptime
 yarn install
 ```
 
-```bash {{ title: "pnpm" }}
+```bash !!tabs pnpm
 cd uptime
 pnpm install
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 Check that the frontend works:
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```bash {{ title: "npm" }}
+```bash !!tabs npm
 cd frontend
 npm install
 npm run dev
 ```
 
-```bash {{ title: "yarn" }}
+```bash !!tabs yarn
 cd frontend
 yarn install
 yarn dev
 ```
 
-```bash {{ title: "pnpm" }}
+```bash !!tabs pnpm
 cd frontend
 pnpm install
 pnpm run dev
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 Then visit http://localhost:4321 to see your Astro frontend. It won't currently work with no backend services, but we will work on that next!
 
@@ -101,7 +102,7 @@ touch resources/index.ts
 
 Add a Nitric API named `public` to handle all our requests:
 
-```ts {{ title: "resources/index.ts" }}
+```ts file:resources/index.ts
 import { api } from '@nitric/sdk
 
 export const publicApi = api('public')
@@ -118,7 +119,7 @@ touch common/cors.ts
 
 Then add this generic CORS middleware:
 
-```ts {{ title: "common/cors.ts" }}
+```ts file:common/cors.ts
 import { HttpMiddleware } from '@nitric/sdk'
 
 export const corsMiddleware: HttpMiddleware = (ctx, next) => {
@@ -134,7 +135,7 @@ export const corsMiddleware: HttpMiddleware = (ctx, next) => {
 
 And apply the middleware to your API globally:
 
-```ts {{ title: "resources/index.ts" }}
+```ts file:resources/index.ts
 import { api } from '@nitric/sdk'
 import { corsMiddleware } from '../common/cors'
 
@@ -145,7 +146,7 @@ export const publicApi = api('public', {
 
 To store our sites let's use Nitric [Key Value Stores](/keyvalue) and set our permissions to `set`, `get` and `delete`. We will also create a TypeScript interface for Site; we can use this for the KV Store and for our Topics later.
 
-```ts {{ title: "resources/index.ts" }}
+```ts file:resources/index.ts
 import { api, kv } from '@nitric/sdk'
 import { corsMiddleware } from '../common/cors'
 
@@ -166,7 +167,7 @@ To create the `site` service, let's start by adding code to the `site.ts` file.
 
 Add your `get`, `post`, `delete` and `options` endpoints to the `publicApi`. We can also finish off the get handler by implementing the `getAllSites` method, this will simply return all sites in the `sitesStore`.
 
-```ts {{ title: "services/site.ts" }}
+```ts file:services/site.ts
 import { type Site, publicApi, sitesStore } from '../resources'
 
 const getAllSites = async () => {
@@ -218,7 +219,7 @@ touch common/status.ts
 
 Add the following code, which performs a GET request against the site URL and checks the response status:
 
-```ts {{ title: "common/status.ts" }}
+```ts file:common/status.ts
 import { Site } from '../resources'
 
 export const statusCheck = async (url: string): Promise<Site> => {
@@ -238,7 +239,7 @@ export const statusCheck = async (url: string): Promise<Site> => {
 
 Now let's update our `post` handler code to use this check:
 
-```ts {{ title: "services/site.ts" }}
+```ts file:services/site.ts
 import { statusCheck } from '../common/status'
 
 ...
@@ -298,7 +299,7 @@ Navigate to the `check.ts` file and add a new [schedule](/schedules) called `sit
 
 Reuse the `statusCheck` function from earlier to check and update all sites:
 
-```ts {{ title: "services/check.ts" }}
+```ts file:services/check.ts
 import { schedule } from '@nitric/sdk'
 import { statusCheck } from '../common/status'
 import { sitesStore } from '../resources'
@@ -339,7 +340,7 @@ Let's create a service called `notify` that will use Nitric [messages](/messagin
 
 Start by creating new topics for the `site-added`, `site-removed` and `site-update` events:
 
-```ts {{ title: "resources/index.ts" }}
+```ts file:resources/index.ts
 import { api, kv, topic } from '@nitric/sdk'
 import { corsMiddleware } from '../common/cors'
 
@@ -368,7 +369,7 @@ To send the events to Discord we need to set the `DISCORD_WEBHOOK_URL` environme
 
 Add the following code that adds a subscriber to each topic with the relevant details for Discord to handle.
 
-```ts {{ title: "services/notify.ts" }}
+```ts file:services/notify.ts
 import { siteAddedTopic, siteRemovedTopic, siteUpdateTopic } from '../resources'
 
 const discordWebhook = process.env.DISCORD_WEBHOOK_URL
@@ -423,7 +424,7 @@ Within the `site.ts` service, import the `siteAddedTopic` and `siteRemovedTopic`
 
 These will be used to call the `publish` method, which will send the payload to the topic subscriber.
 
-```ts {{ title: "services/site.ts" }}
+```ts file:services/site.ts
 import { statusCheck } from '../common/status'
 import {
   type Site,
@@ -469,7 +470,7 @@ publicApi.delete('/sites/:url', async (ctx) => {
 
 Let's update our `check` service to notify site downtime changes via the `site-update` topic. We will add additional logic to only publish changes if the up status has actually changed.
 
-```ts {{ title: "services/check.ts" }}
+```ts file:services/check.ts
 import { schedule } from '@nitric/sdk'
 import { statusCheck } from '../common/status'
 import { siteUpdateTopic, sitesStore } from '../resources'

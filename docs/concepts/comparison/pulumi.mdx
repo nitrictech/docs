@@ -28,9 +28,13 @@ Nitric is a framework designed to aid developers in building full cloud applicat
 
 To showcase the power of the abstraction provided by Nitric here is a showcase of a Nitric program with an equivalent Pulumi program with application code.
 
-<CodeSwitcher compare>
+<Row>
 
-```javascript {{title: 'Nitric', label: 'handle.ts' }}
+<Col>
+
+**Nitric**
+
+```javascript file:handle.js
 import * as nitric from '@nitric/sdk'
 
 const bucket = nitric.bucket('my-bucket').allow('read', 'write')
@@ -40,7 +44,13 @@ bucket.on('create', '*', async (ctx) => {
 })
 ```
 
-```javascript {{title: 'Pulumi', label: 'src/index.js'}}
+</Col>
+
+<Col>
+
+**Pulumi**
+
+```javascript file:src/index.js
 const AWS = require('aws-sdk')
 
 exports.handler = async (event) => {
@@ -51,7 +61,7 @@ exports.handler = async (event) => {
 }
 ```
 
-```javascript {{title: 'Pulumi', label: 'lib/handle-stack.ts'}}
+```javascript file:lib/handle-stack.js
 import * as pulumi from '@pulumi/pulumi'
 import * as aws from '@pulumi/aws'
 import * as fs from 'fs'
@@ -143,7 +153,9 @@ export const bucketName = bucket.bucket
 export const lambdaFunctionName = lambdaFunction.name
 ```
 
-</CodeSwitcher>
+</Col>
+
+</Row>
 
 <Note>
   In the pulumi example we get control over absolutely every facet of our

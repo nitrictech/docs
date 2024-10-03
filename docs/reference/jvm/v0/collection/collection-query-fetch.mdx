@@ -5,9 +5,9 @@ export const description =
 
 Retrieve a page of results for a query. This is an alternative to [collection.query.stream()](./collection-query-stream)
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.CollectionPermission;
 
@@ -35,7 +35,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.resources.CollectionPermission
 
@@ -53,15 +53,15 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ## Examples
 
 ### Paging through results from a query
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.CollectionPermission;
 
@@ -99,7 +99,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.Nitric.collection
 import io.nitric.api.documents.v0.DocumentSnapshot
@@ -129,7 +129,7 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### See also
 

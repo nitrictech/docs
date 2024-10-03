@@ -22,7 +22,7 @@ A working example:
 
 <CodeSwitcher>
 
-```typescript
+```typescript !!
 import { api, bucket } from '@nitric/sdk'
 
 // ✅ This declaration will work
@@ -34,7 +34,7 @@ api('public').get('/files/:name', (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import api, bucket
 from nitric.application import Nitric
 
@@ -51,7 +51,7 @@ async def get_file(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 package main
 
 import (
@@ -84,7 +84,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {
@@ -115,7 +115,7 @@ A working example:
 
 <CodeSwitcher>
 
-```typescript
+```typescript !!
 import { api, bucket } from '@nitric/sdk'
 
 const files = bucket('files').allow('read')
@@ -129,7 +129,7 @@ api('public').get('/files/:name', (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import api, bucket
 from nitric.application import Nitric
 
@@ -148,7 +148,7 @@ async def get_file(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 package main
 
 import (
@@ -182,7 +182,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {
@@ -209,8 +209,6 @@ void main() {
   implementing a lazy singleton.
 </Note>
 
-<CodeSwitcher>
-
 ```typescript
 import { api, bucket } from '@nitric/sdk'
 
@@ -233,8 +231,6 @@ api('public').get('/files/:name', (ctx) => {
 })
 ```
 
-</CodeSwitcher>
-
 ## Best Practices
 
 ### ✅ Re-use declarations for shared resources
@@ -245,7 +241,7 @@ For example:
 
 <CodeSwitcher>
 
-```typescript
+```typescript !!
 // lib/resources.ts
 import { api, topic } from '@nitric/sdk'
 
@@ -270,7 +266,7 @@ updateTopic.subscribe((ctx) => {
 })
 ```
 
-```python
+```python !!
 # resources.py
 from nitric.resources import api, topic
 
@@ -296,7 +292,7 @@ async def updates_sub(ctx):
   print(ctx.req.payload)
 ```
 
-```go
+```go !!
 // resources/main.go
 package resources
 
@@ -369,7 +365,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 // lib/resources.dart
 import 'package:nitric_sdk/nitric.dart';
 
@@ -417,7 +413,7 @@ Creating resource permissions in the same context as the resources can make thos
 
 <CodeSwitcher>
 
-```typescript
+```typescript !!
 // lib/resources.ts
 import { api, bucket } from '@nitric/sdk'
 
@@ -441,7 +437,7 @@ publicApi.get('bucket-two/file/:name', (ctx) => {
 })
 ```
 
-```python
+```python !!
 # resources.py
 from nitric.resources import api, bucket
 from nitric.application import Nitric
@@ -474,7 +470,7 @@ async def get_file(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 // resources/main.go
 package resources
 
@@ -540,7 +536,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 // lib/resources.dart
 import 'package:nitric_sdk/nitric.dart';
 

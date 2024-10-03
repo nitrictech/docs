@@ -5,9 +5,9 @@ export const description =
 
 Register an API route and set a specific HTTP POST handler on that route.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 
 public class Application {
@@ -24,7 +24,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -39,7 +39,7 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ## Parameters
 
@@ -58,9 +58,9 @@ fun main() {
 
 ### Register a handler for POST requests
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 
 public class Application {
@@ -77,7 +77,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -92,15 +92,15 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Chain functions as a single method handler
 
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.HttpContext;
 import io.nitric.faas.v0.Handler;
@@ -128,7 +128,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.HttpContext
 import io.nitric.faas.v0.Middleware
@@ -152,15 +152,15 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Access the request body
 
 The POST request body is accessible from the `ctx.req` object.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 
 public class Application {
@@ -177,7 +177,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -192,4 +192,4 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>

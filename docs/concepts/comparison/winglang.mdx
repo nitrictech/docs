@@ -14,9 +14,13 @@ Both options are extremely productive, it's up to you which approach you prefer.
 
 ## Code Comparison
 
-<CodeSwitcher compare>
+<Row>
 
-```javascript {{title: 'Nitric', label: 'hello.js' }}
+<Col>
+
+**Nitric**
+
+```javascript file:hello.js
 import { api } from '@nitric/sdk'
 
 const helloApi = api('far-away-galaxy-api')
@@ -26,7 +30,13 @@ helloApi.get('/', async ({ req, res }) => {
 })
 ```
 
-```javascript {{title: 'Wing', label: 'hello.w'}}
+</Col>
+
+<Col>
+
+**Wing**
+
+```javascript title:hello.w
 bring cloud;
 
 let api = new cloud.Api();
@@ -39,4 +49,6 @@ api.get("/", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
 });
 ```
 
-</CodeSwitcher>
+</Col>
+
+</Row>

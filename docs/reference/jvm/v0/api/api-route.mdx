@@ -5,9 +5,9 @@ export const description =
 
 Creates a new route (path) within an API.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 
 public class Application {
@@ -21,7 +21,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -33,7 +33,7 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ## Parameters
 
@@ -68,9 +68,9 @@ The `middleware` property on the `options` param is useful for applying universa
 
 ### Create a route
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 
 public class Application {
@@ -84,7 +84,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -96,7 +96,7 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Create a route with path params
 
@@ -104,9 +104,9 @@ Route paths can include dynamic parameters. These values will automatically be p
 
 For example, if you have a customers path and you want to include a `customerId` param you would define the route like this.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 
 public class Application {
@@ -120,7 +120,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -132,13 +132,13 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Create a route with middleware
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.RouteOptions;
 
@@ -156,7 +156,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -168,4 +168,4 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>

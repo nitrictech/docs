@@ -18,9 +18,13 @@ These are the main differences between the two:
 
 To get a deeper understanding of the differences, let's see the same app built in both Nitric and SST. The SST App in this example is standalone without the frontend code.
 
-<CodeSwitcher compare>
+<Row>
 
-```javascript {{title: 'Nitric', label: 'hello.ts' }}
+<Col>
+
+**Nitric**
+
+```javascript file:hello.js
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -32,7 +36,13 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-```javascript {{title: 'SST', label: 'packages/functions/hello.ts'}}
+</Col>
+
+<Col>
+
+**SST**
+
+```javascript file:packages/functions/hello.ts
 import { ApiHandler, usePathParam } from 'sst/node/api'
 
 export const handler = ApiHandler(async (evt) => {
@@ -45,7 +55,7 @@ export const handler = ApiHandler(async (evt) => {
 })
 ```
 
-```javascript {{title: 'SST', label: 'stacks/hello-stack.ts'}}
+```javascript file: stacks/hello-stack.ts
 import { StackContext, Api } from 'sst/constructs'
 
 export function API({ stack }: StackContext) {
@@ -61,7 +71,9 @@ export function API({ stack }: StackContext) {
 }
 ```
 
-</CodeSwitcher>
+</Col>
+
+</Row>
 
 One key difference between Nitric and SST examples is while Nitric allows defining the API route handler inline which streamlines and simplifies the code, SST separates the route definition and the handler into different files for modularity. Another difference is that Nitric is cloud-neutral while SST is designed specifically for AWS.
 

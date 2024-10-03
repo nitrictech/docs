@@ -22,15 +22,15 @@ Continue by selecting your preferred cloud, this will create your stack definiti
 
 Now you can enter the required fields for your chosen cloud:
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```yaml {{ title: "AWS" }}
+```yaml !!tabs AWS
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/aws@latest
 region: us-east-1
 ```
 
-```yaml {{ title: "Azure" }}
+```yaml !!tabs Azure
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/azure@latest
 adminemail: admin@company.co
@@ -38,20 +38,20 @@ org: my-org
 region: eastus
 ```
 
-```yaml {{ title: "Google Cloud" }}
+```yaml !!tabs Google Cloud
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/gcp@latest
 gcp-project-id: project-id
 region: us-east1
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 If you want to specify different configuration for your services you can use the following syntax:
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```yaml {{ title: "AWS" }}
+```yaml !!tabs AWS
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/aws@latest
 region: us-east-1
@@ -66,7 +66,7 @@ config:
       memory: 4096
 ```
 
-```yaml {{ title: "Azure" }}
+```yaml !!tabs Azure
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/azure@latest
 adminemail: admin@company.co
@@ -80,7 +80,7 @@ config:
       cpu: 0.25
 ```
 
-```yaml {{ title: "Google Cloud" }}
+```yaml !!tabs Google Cloud
 # Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
 provider: nitric/gcp@latest
 gcp-project-id: project-id
@@ -93,7 +93,7 @@ config:
       timeout: 15
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 <Note>
   For more information on what can be configured, [look

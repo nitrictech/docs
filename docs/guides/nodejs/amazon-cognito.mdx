@@ -31,7 +31,7 @@ In this new Nitric project there will be an example API with a single `GET: /hel
 
 <CodeSwitcher>
 
-```typescript {{ tag: "services/hello.ts" }}
+```typescript !! file:services/hello.ts
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -43,7 +43,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-```javascript {{ tag: "services/hello.js" }}
+```javascript !! file:services/hello.js
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -65,7 +65,7 @@ To add this API Gateway authentication we need to create a `security definition`
 
 <CodeSwitcher>
 
-```typescript {{ tag: "services/hello.ts" }}
+```typescript !! file:services/hello.ts
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main', {
@@ -87,7 +87,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-```javascript {{ tag: "services/hello.js" }}
+```javascript !! file:services/hello.js
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main', {
@@ -122,7 +122,7 @@ In this example we'll apply the security at the API level, ensuring all routes r
 
 <CodeSwitcher>
 
-```typescript {{ tag: "services/hello.ts" }}
+```typescript !! file:services/hello.ts
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main', {
@@ -148,7 +148,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-```javascript {{ tag: "services/hello.js" }}
+```javascript !! file:services/hello.js
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main', {
@@ -196,7 +196,7 @@ In the example below we're simply checking whether the user is a member of a par
 
 <CodeSwitcher>
 
-```typescript {{ tag: "services/hello.ts" }}
+```typescript !! file:services/hello.ts
 import { api, HttpContext, HttpMiddleware } from '@nitric/sdk'
 import * as jwt from 'jsonwebtoken'
 
@@ -265,7 +265,7 @@ helloApi.get('/hello/:name', async (ctx: AuthContext) => {
 })
 ```
 
-```javascript {{ tag: "services/hello.js" }}
+```javascript !! file:services/hello.js
 import { api, HttpContext } from '@nitric/sdk'
 import * as jwt from 'jsonwebtoken'
 
@@ -344,7 +344,7 @@ aws cognito-idp admin-confirm-sign-up --region <region> --user-pool-id <user-poo
 
 Next, you'll need to create a JSON file contain the details you want to use to sign-in.
 
-```json {{ tag: "test-auth.json" }}
+```json file:test-auth.json
 {
   "UserPoolId": "<user-pool-id>",
   "ClientId": "<app-client-id>",

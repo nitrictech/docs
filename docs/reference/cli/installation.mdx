@@ -23,22 +23,22 @@ Please follow these links to the official installation steps for each.
 
 ## Installing the Nitric CLI
 
-<CodeSwitcher>
+<InstallNitric>
 
-```bash {{ title: 'macOS' }}
+```bash !!tabs macOS
 brew install nitrictech/tap/nitric
 ```
 
-```bash {{ title: 'Windows' }}
+```bash !!tabs Windows
 scoop bucket add nitric https://github.com/nitrictech/scoop-bucket.git
 scoop install nitric
 ```
 
-```bash {{ title: 'Linux' }}
-curl -L https://nitric.io/install?version=latest | bash
+```bash !!tabs Linux
+curl -L "https://nitric.io/install?version=latest" | bash
 ```
 
-</CodeSwitcher>
+</InstallNitric>
 
 ### Manual Install
 
@@ -46,21 +46,21 @@ You can download pre-compiled binaries from the [releases](https://github.com/ni
 
 ## Update to the latest version
 
-<CodeSwitcher>
+<InstallNitric>
 
-```bash {{ title: 'macOS' }}
+```bash !!tabs macOS
 brew upgrade nitric
 ```
 
-```bash {{ title: 'Windows' }}
+```bash !!tabs Windows
 scoop update nitric
 ```
 
-```bash {{ title: 'Linux' }}
-curl -L https://nitric.io/install?version=latest | bash
+```bash !!tabs Linux
+curl -L "https://nitric.io/install?version=latest" | bash
 ```
 
-</CodeSwitcher>
+</InstallNitric>
 
 You can easily check which version you're on by running `nitric version`.
 

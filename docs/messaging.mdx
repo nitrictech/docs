@@ -25,13 +25,13 @@ Here's an example of how to create a topic with permissions to publish messages.
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { topic } from '@nitric/sdk'
 
 const userCreatedTopic = topic('user-created').allow('publish')
 ```
 
-```python
+```python !!
 from nitric.resources import topic
 from nitric.application import Nitric
 
@@ -40,7 +40,7 @@ user_created_topic = topic("user-created").allow("publish")
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/topics"
@@ -53,7 +53,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final userCreatedTopic = Nitric.topic("user-created").allow([
@@ -71,7 +71,7 @@ The below example publishes a message to a topic called `user-created`.
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { topic } from '@nitric/sdk'
 
 const userCreatedTopic = topic('user-created').allow('publish')
@@ -81,7 +81,7 @@ await userCreatedTopic.publish({
 })
 ```
 
-```python
+```python !!
 from nitric.resources import topic
 from nitric.application import Nitric
 
@@ -94,7 +94,7 @@ await user_created_topic.publish({
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "context"
 
@@ -113,7 +113,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final userCreatedTopic = Nitric.topic("user-created").allow([
@@ -135,7 +135,7 @@ The below code shows a subscription that responds to messages when new users are
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { topic } from '@nitric/sdk'
 import { sendWelcomeEmail } from 'common'
 
@@ -149,7 +149,7 @@ userCreatedTopic.subscribe(async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import topic
 from nitric.application import Nitric
 from common import send_welcome_email
@@ -165,7 +165,7 @@ async def updates_sub(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/topics"
@@ -188,7 +188,7 @@ func sendWelcomeEmail(email string) {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 import 'package:common';
 
@@ -229,7 +229,7 @@ Usually checking for duplicate payloads or IDs is enough. When you receive an ev
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { topic } from '@nitric/sdk'
 import { isDuplicate } from '../common'
 
@@ -244,7 +244,7 @@ updates.subscribe((ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import topic
 from nitric.application import Nitric
 from common import is_duplicate
@@ -262,7 +262,7 @@ async def process_update(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/topics"
@@ -285,7 +285,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 import 'package:common';
 
@@ -334,13 +334,13 @@ Here's an example of how to create a queue with permissions for enqueueing and d
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { queue } from '@nitric/sdk'
 
 const transactionQueue = queue('transactions').allow('enqueue', 'dequeue')
 ```
 
-```python
+```python !!
 from nitric.resources import queue
 
 transaction_queue = queue("transactions").allow("enqueue", "dequeue")
@@ -348,7 +348,7 @@ transaction_queue = queue("transactions").allow("enqueue", "dequeue")
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/queues"
@@ -361,7 +361,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final transactionQueue = Nitric.queue("transactions").allow([
@@ -380,7 +380,7 @@ The below example sends a message to a queue called `transactions`.
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { queue } from '@nitric/sdk'
 
 const transactionQueue = queue('transactions').allow('enqueue')
@@ -390,7 +390,7 @@ await transactionQueue.enqueue({
 })
 ```
 
-```python
+```python !!
 from nitric.resources import queue
 
 transaction_queue = queue("transactions").allow("enqueue")
@@ -402,7 +402,7 @@ await transaction_queue.enqueue({
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "context"
 
@@ -423,7 +423,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final transactionQueue = Nitric.queue("transactions").allow([
@@ -441,7 +441,7 @@ Messages can also be sent in batches by providing an array.
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { queue } from '@nitric/sdk'
 
 const transactionQueue = queue('transactions').allow('enqueue')
@@ -456,7 +456,7 @@ await transactionQueue.enqueue([
 ])
 ```
 
-```python
+```python !!
 from nitric.resources import queue
 from nitric.application import Nitric
 
@@ -473,7 +473,7 @@ await transaction_queue.enqueue([
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "context"
 
@@ -495,7 +495,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final transactionQueue = Nitric.queue("transactions").allow([
@@ -527,7 +527,7 @@ The below example dequeues 10 messages using the `dequeue()` method, then acknow
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { queue } from '@nitric/sdk'
 
 const transactionQueue = queue('transactions').allow('dequeue')
@@ -543,7 +543,7 @@ for (let task of tasks) {
 }
 ```
 
-```python
+```python !!
 from nitric.resources import queue
 
 transaction_queue = queue("transactions").allow("dequeue")
@@ -558,7 +558,7 @@ for task in tasks:
   await task.complete()
 ```
 
-```go
+```go !!
 import (
   "context"
   "fmt"
@@ -584,7 +584,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final batchQueue = Nitric.queue("batch").allow([

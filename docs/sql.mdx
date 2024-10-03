@@ -39,31 +39,31 @@ Here's an example of how to create a SQL database:
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { sql } from '@nitric/sdk'
 
 const db = sql('my-database')
 ```
 
-```typescript
+```typescript !!
 import { sql } from '@nitric/sdk'
 
 const db = sql('my-database')
 ```
 
-```python
+```python !!
 from nitric.resources import sql
 
 db = sql("my-database")
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final db = Nitric.sql("my-database");
 ```
 
-```go
+```go !!
 import (
   "github.com/nitrictech/go-sdk/nitric"
 )
@@ -85,7 +85,7 @@ Nitric provides a helper function to retrieve the connection details for your SQ
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { sql, api } from '@nitric/sdk'
 
 const db = sql('my-database')
@@ -97,7 +97,7 @@ api('example').get('/hello', async (ctx) => {
 })
 ```
 
-```typescript
+```typescript !!
 import { sql, api } from '@nitric/sdk'
 
 const db = sql('my-database')
@@ -109,7 +109,7 @@ api('example').get('/hello', async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import api, sql
 from nitric.application import Nitric
 from nitric.context import HttpContext
@@ -127,7 +127,7 @@ async def hello(ctx: HttpContext):
 Nitric.run()
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final db = Nitric.sql("my-database");
@@ -139,7 +139,7 @@ Nitric.api("example").get("/hello", (ctx) async {
 });
 ```
 
-```go
+```go !!
 import (
   "context"
 
@@ -202,7 +202,7 @@ Next, configure your database to use these migration files, ensuring they're aut
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { sql } from '@nitric/sdk'
 
 const db = sql('my-database', {
@@ -210,7 +210,7 @@ const db = sql('my-database', {
 })
 ```
 
-```typescript
+```typescript !!
 import { sql } from '@nitric/sdk'
 
 const db = sql('my-database', {
@@ -218,13 +218,13 @@ const db = sql('my-database', {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import sql
 
 db = sql("my-database", migrations="file://migrations/my-database")
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final db = Nitric.sql("my-database",
@@ -232,7 +232,7 @@ final db = Nitric.sql("my-database",
 );
 ```
 
-```go
+```go !!
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/sql"
@@ -255,7 +255,7 @@ Nitric also provides a more powerful option for migrations - running them as a o
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { sql } from '@nitric/sdk'
 
 const db = sql('my-database', {
@@ -263,7 +263,7 @@ const db = sql('my-database', {
 })
 ```
 
-```typescript
+```typescript !!
 import { sql } from '@nitric/sdk'
 
 const db = sql('my-database', {
@@ -271,13 +271,13 @@ const db = sql('my-database', {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import sql
 
 db = sql("my-database", migrations="dockerfile://migrations.dockerfile")
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final db = Nitric.sql("my-database",
@@ -285,7 +285,7 @@ final db = Nitric.sql("my-database",
 );
 ```
 
-```go
+```go !!
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/sql"

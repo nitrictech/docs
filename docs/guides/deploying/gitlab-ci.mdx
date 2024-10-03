@@ -1,5 +1,6 @@
-export const description =
-  'Deploy to AWS, Google Cloud or Microsoft Azure using GitLab CI and the Nitric CLI'
+---
+description: Deploy to AWS, Google Cloud or Microsoft Azure using GitLab CI and the Nitric CLI
+---
 
 # Deployment Automation with GitLab CI and Nitric
 
@@ -21,9 +22,9 @@ This guide will demonstrate how Nitric can be used, along with [GitLab CI](https
 
 Here’s example content for each cloud provider:
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```yaml {{ title: "AWS", tag: ".gitlab-ci.yml" }}
+```yaml !!tabs AWS file:.gitlab-ci.yml
 deploy:
   image: docker:27
 
@@ -67,7 +68,7 @@ deploy:
     - nitric up --ci
 ```
 
-```yaml {{ title: "Azure", tag: ".gitlab-ci.yml" }}
+```yaml !!tabs Azure file:.gitlab-ci.yml
 deploy:
   image: docker:27
 
@@ -124,4 +125,4 @@ deploy:
     - nitric up --ci
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>

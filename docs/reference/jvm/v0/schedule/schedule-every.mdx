@@ -5,9 +5,9 @@ export const description =
 
 Sets the frequency and one or many handlers to be triggered.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.Frequency;
 
@@ -24,7 +24,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.Frequency
 
@@ -39,7 +39,7 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ## Parameters
 
@@ -66,9 +66,9 @@ fun main() {
 
 ### Create a Schedule to run every 3 minutes
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.Frequency;
 
@@ -85,7 +85,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.Frequency
 
@@ -100,13 +100,13 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ### Create a Schedule with multiple middleware/handlers
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.EventContext;
 import io.nitric.faas.v0.Frequency;
@@ -135,7 +135,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.EventContext
 import io.nitric.faas.v0.Frequency
@@ -160,4 +160,4 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>

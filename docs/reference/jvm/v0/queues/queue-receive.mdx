@@ -5,9 +5,9 @@ export const description =
 
 Receive tasks from a queue.
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -29,7 +29,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -49,7 +49,7 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>
 
 ## Parameters
 
@@ -88,9 +88,9 @@ This means calls to receive will return between 0 and _depth_ tasks.
 
 ### Receive tasks from a queue
 
-<CodeSwitcher>
+<CodeWithTabs>
 
-```java
+```java !!tabs Java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -112,7 +112,7 @@ public class Application {
 }
 ```
 
-```kotlin
+```kotlin !!tabs Kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -132,4 +132,4 @@ fun main() {
 }
 ```
 
-</CodeSwitcher>
+</CodeWithTabs>

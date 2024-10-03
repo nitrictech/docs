@@ -18,7 +18,7 @@ There are three events that must be defined to deploy a valid websocket implemen
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { websocket } from '@nitric/sdk'
 
 const socket = websocket('socket')
@@ -36,7 +36,7 @@ socket.on('message', async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import websocket
 from nitric.application import Nitric
 
@@ -57,7 +57,7 @@ async def on_message(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/websockets"
@@ -82,7 +82,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final socket = Nitric.websocket("socket");
@@ -109,7 +109,7 @@ out of the box that can be used to do this or you can use any other store or dat
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { websocket, kv } from '@nitric/sdk'
 
 // Initialize KV store for connections and a WebSocket
@@ -130,7 +130,7 @@ socket.on('disconnect', async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import websocket
 from nitric.application import Nitric
 
@@ -159,7 +159,7 @@ async def on_disconnect(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "context"
 
@@ -189,7 +189,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final socket = Nitric.websocket("socket");
@@ -219,7 +219,7 @@ socket.onDisconnect((ctx) async {
 
 <CodeSwitcher>
 
-```javascript
+```javascript !!
 import { websocket, kv } from '@nitric/sdk'
 
 // Initialize KV store for connections and a WebSocket
@@ -255,7 +255,7 @@ socket.on('message', async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import websocket
 from nitric.application import Nitric
 
@@ -297,7 +297,7 @@ async def on_message(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "context"
 
@@ -342,7 +342,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 final socket = Nitric.websocket("socket");
