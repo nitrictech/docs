@@ -6,6 +6,7 @@ import { z } from 'zod'
 import Pre from './Pre'
 import CodeContainer from './CodeContainer'
 import CODE_THEME from './theme'
+import { meta } from './meta'
 
 export const Schema = Block.extend({ tabs: z.array(CodeBlock) })
 export async function CodeWithTabs(props: unknown) {
@@ -26,26 +27,30 @@ export function CodeTabs(props: {
 
   return (
     <CodeContainer>
-      <Tabs defaultValue={tabs[0]?.meta}>
-        <TabsList className="mt-auto h-10 bg-transparent">
+      <Tabs defaultValue={meta(tabs[0]).base}>
+        <TabsList className="mt-auto h-12 bg-transparent">
           {tabs.map((tab) => (
             <TabsTrigger
-              key={tab.meta}
-              value={tab.meta}
+              key={meta(tab).base}
+              value={meta(tab).base}
               className="group/tab relative hover:text-zinc-200 data-[state=active]:bg-transparent data-[state=active]:text-primary-300"
             >
-              {tab.meta}
-              <div className="absolute inset-x-2 -bottom-[4.5px] h-px bg-primary-300 opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100" />
+              {meta(tab).base}
+              <div className="absolute inset-x-2 -bottom-[8px] h-px bg-primary-300 opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100" />
             </TabsTrigger>
           ))}
         </TabsList>
         {tabs.map((tab, i) => (
           <TabsContent
-            key={tab.meta}
-            value={tab.meta}
+            key={meta(tab).base}
+            value={meta(tab).base}
             className="m-0 border-t border-zinc-300/10"
           >
-            <Pre highlighted={highlighted[i]} copyButtonClassName="top-12" />
+            <Pre
+              highlighted={highlighted[i]}
+              showPanel={!!meta(tab).file}
+              copyButtonClassName={'top-14'}
+            />
           </TabsContent>
         ))}
       </Tabs>

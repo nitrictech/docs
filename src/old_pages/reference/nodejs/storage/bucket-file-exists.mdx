@@ -1,0 +1,26 @@
+export const description =
+  "Reference for Nitric's Node.js library - Determine if a file exists in a bucket."
+
+# Node.js - bucket.file.exists()
+
+Determine if a file exists in a bucket.
+
+```javascript
+import { bucket } from '@nitric/sdk'
+
+const assets = bucket('assets').allow('read')
+
+const exists = await assets.file('images/logo.png').exists()
+```
+
+## Examples
+
+### Determine if a file exists
+
+```javascript
+import { bucket } from '@nitric/sdk'
+
+const assets = bucket('assets').allow('read')
+
+const exists = await assets.file('images/logo.png').exists()
+```

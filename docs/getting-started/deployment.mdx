@@ -1,0 +1,94 @@
+---
+description: 'How to deploy Nitric applications'
+---
+
+# Deployment
+
+Nitric can automatically deploy your application to a supported cloud provider. As discussed in the [concepts](/concepts/how-nitric-works) page, Nitric has three standard `providers`, one each for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). If none of those fit your needs you're also able to [build a custom provider](/reference/providers/custom/building-custom-provider) to target the host you prefer with your own tools and configuration.
+
+The Nitric CLI command to perform deployments is `nitric up`. However, before your first deployment you'll need to create a `stack`, stacks represent deployment targets. If you haven't created a stack before we recommend reading the steps in our [quickstart guide](/getting-started/quickstart#deploying-the-app). The `up` command will prompt you to create a <a href="/docs/concepts/project-structure#stack-files" target="_blank">stack</a> if you haven't already created one for you project.
+
+```bash
+nitric up
+```
+
+To tear down a previously deployed application use the `down` command.
+
+```bash
+nitric down
+```
+
+## Providers
+
+Each of your project's stacks will target a specific hosting platform. The plugins that perform the deployments to these platforms are called `providers`. Nitric currently has 3 official providers, one each for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). All of the official providers use [Pulumi](https://pulumi.com) under the hood for their deployments, so Pulumi will need to be configured to persist your stack state and to run the deployment to the cloud of your choice.
+
+### Configuring cloud credentials
+
+You will need to configure your cloud credentials, either locally or in your CI/CD pipeline, to allow Nitric to create resources in a cloud account. Instructions on how to setup credentials for your target provider can be found in the provider documentation: [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure).
+
+### Configuring state backend
+
+To track the state of your stack between deployments you'll need to configure a location for Pulumi to store its stack state (also known as a 'backend'). Pulumi provides several options for state backends, a common choice is [Pulumi's managed service](https://www.pulumi.com/docs/concepts/state/#pulumi-cloud-backend) which stores state in the cloud allowing for secure storage and collaboration. Alternatively, you can use any other state [backends](https://www.pulumi.com/docs/concepts/state/#using-a-self-managed-backend) Pulumi support.
+
+<Note>
+  If you're trying Nitric for the first time we recommend starting with a
+  `local` backend, which stores the stack state in a file on your machine. If
+  you haven't already configured a backend for Pulumi, Nitric will prompt you to
+  automatically setup this local backend when you run `nitric up`.
+</Note>
+
+## Configuring stacks
+
+When using stacks to deploy to different environments such as a development, testing or production environment, you'll typically want to go beyond the default configuration Nitric uses when deploying cloud resources. This environment specific configuration is added to the stack files.
+
+When deploying the application, you can add extra configuration for specific services or globally for all services. This configuration is unique to each stack file, allowing you to deploy the same application to different environments with different configurations. Since the configuration options available are unique to the cloud platform and the services they offer these settings are typically different between provider implementations.
+
+Below is an example of configuration added to an AWS stack to augment the memory, timeout, and telemetry sampling percentage for deployed services.
+
+```yaml {{ tag: "nitric.aws-deployment.yaml" }}
+provider: nitric/aws@1.1.0
+region: us-east-1
+telemetry: 10
+config:
+  default:
+    lambda:
+      memory: 1024
+  memory-optimized:
+    lambda:
+      memory: 4096
+```
+
+Note that the configuration above creates two types of services with different configuration for each. The `default` configuration, which we'll apply to most services. There is also a `memory-optimized` handler group, which we've used to allocate more memory to those services specifically.
+
+To apply these handler group configurations, we need to create the groups. That's done by updating the project file to create groups and match them to different source code locations:
+
+```yaml {{ tag: "nitric.yaml" }}
+name: my-project
+services:
+  - match: services/*.ts
+    start: ts-node $SERVICE_PATH
+    type: default
+  - match: custom/*.ts
+    start: ts-node $SERVICE_PATH
+    type: memory-optimized
+```
+
+Provider specific stack configuration can be viewed in the reference docs for each [provider](/reference/providers).
+
+- [AWS stack configuration](/reference/providers/aws/configuration)
+- [Azure stack configuration](/reference/providers/azure/configuration)
+- [GCP stack configuration](/reference/providers/gcp/configuration)
+
+<Note>
+  If you create a custom provider you're able define the options available in
+  the stack files that target your provider.
+</Note>
+
+## CI/CD
+
+Deploying your Nitric application with your preferred CI/CD pipeline is simple. Explore our guides below:
+
+- [GitHub Actions](/guides/deploying/github-actions)
+- [GitLab CI](/guides/deploying/gitlab-ci)
+- [Azure Pipelines](/guides/deploying/azure-pipelines)
+- [Google Cloud Build](/guides/deploying/google-cloud-build)

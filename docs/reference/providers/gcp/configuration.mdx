@@ -1,0 +1,145 @@
+---
+description: 'Configuring your Google Cloud stacks'
+---
+
+# Google Cloud Configuration
+
+# Complete Example with comments
+
+<CodeSwitcher>
+
+```yaml {{ title: "Pulumi" }}
+# The provider to use and it's published version
+# See releases:
+# https://github.com/nitrictech/nitric/tags
+provider: nitric/gcp@1.12.4
+
+# The target GCP region to deploy to
+# See available regions:
+# https://cloud.google.com/run/docs/locations
+region: my-gcp-stack-region
+
+# ID of the google cloud project to deploy into
+gcp-project-id: my-gcp-project-id
+
+# All configuration below is optional
+
+# The timezone that deployed schedules will run with
+# Format is in tz identifiers:
+# https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+schedule-timezone: Australia/Sydney
+
+# Import existing GCP Resources
+# Currently only secrets are supported
+# Available since v1.4.0
+import:
+  # A map of nitric names to GCP Secret Manager names
+  secrets: # Available since v1.4.0
+    # NOTE: Imported secrets must exist in the same project as specified by gcp-project-id
+    # In typescript this would import the provided secret reference for a secret declared as
+    # const mySecret = secret('my-secret');
+    my-secret: existing-secret
+
+# Apply configuration to nitric APIs
+apis:
+  # Target an API by its nitric name
+  my-api:
+    # provide domains to be used for the api
+    description: An Azure API
+
+# Configure your deployed services
+config:
+  # How services without a type will be deployed
+  default:
+    # configure services to deploy to Google Cloud Run
+    cloudrun:
+      # set 512MB of RAM
+      # See cloudrun configuration docs here:
+      # https://cloud.google.com/run/docs/configuring/memory-limits
+      memory: 512
+      # set a timeout of 15 seconds
+      # https://cloud.google.com/run/docs/configuring/request-timeout
+      timeout: 15
+      # The maximum number of instances to scale down to
+      # https://cloud.google.com/run/docs/configuring/min-instances
+      min-instances: 0
+      # The maximum number of instances to scale up to
+      # https://cloud.google.com/run/docs/configuring/max-instances
+      max-instances: 10
+      # Number of concurrent requests that each instance can handle
+      # https://cloud.google.com/run/docs/configuring/concurrency
+      concurrency: 80
+  # Additional deployment types
+  # You can target these types by setting a `type` in your project configuration
+  big-service:
+    cloudrun:
+      memory: 1024
+      timeout: 60
+      min-instances: 2
+      max-instances: 100
+      concurrency: 1000
+```
+
+```yaml {{ title: "Terraform (Preview)" }}
+# The name of your GCP stack
+name: my-gcp-stack-name
+
+# The provider to use and it's published version
+# See releases:
+# https://github.com/nitrictech/nitric/tags
+provider: nitric/gcptf@1.10.0
+
+# The target GCP region to deploy to
+# See available regions:
+# https://cloud.google.com/run/docs/locations
+region: my-gcp-stack-region
+
+# ID of the google cloud project to deploy into
+gcp-project-id: my-gcp-project-id
+
+# All configuration below is optional
+
+# The timezone that deployed schedules will run with
+# Format is in tz identifiers:
+# https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+schedule-timezone: Australia/Sydney
+
+# Configure your deployed services
+config:
+  # How services without a type will be deployed
+  default:
+    # configure services to deploy to Google Cloud Run
+    cloudrun:
+      # set 512MB of RAM
+      # See cloudrun configuration docs here:
+      # https://cloud.google.com/run/docs/configuring/memory-limits
+      memory: 512
+      # set a timeout of 15 seconds
+      # https://cloud.google.com/run/docs/configuring/request-timeout
+      timeout: 15
+  # Additional deployment types
+  # You can target these types by setting a `type` in your project configuration
+  big-service:
+    cloudrun:
+      memory: 1024
+      timeout: 60
+```
+
+</CodeSwitcher>
+
+## Document Reference Links:
+
+- https://github.com/nitrictech/nitric/tags
+- https://cloud.google.com/run/docs/locations
+- https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+- https://cloud.google.com/run/docs/configuring/memory-limits
+- https://cloud.google.com/run/docs/configuring/request-timeout
+- https://cloud.google.com/run/docs/configuring/min-instances
+- https://cloud.google.com/run/docs/configuring/max-instances
+- https://cloud.google.com/run/docs/configuring/concurrency
+
+<Note>
+  Missing something? Let us know by raising an issue in
+  [GitHub](https://github.com/nitrictech/nitric) or by dropping us a line on
+  [Discord](https://nitric.io/chat)
+</Note>

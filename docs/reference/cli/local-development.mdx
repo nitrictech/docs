@@ -1,0 +1,53 @@
+---
+description: 'Local development with Nitric'
+---
+
+# Local Development
+
+One of the key features of the Nitric CLI is the ability to run your application locally, using an environment that closely resembles what would be run in the cloud. This allows you to test your application locally before deploying it to the cloud.
+
+Nitric is able to run a local environment that can serve your application, as well as any other services that your application may depend on such as queues, buckets, secrets, etc. This is done by using the `nitric start` command to run your application directly or by using `nitric run` to use Docker to run your application in containers, in both cases any other services that your application may depend on are either hosted by the CLI directly or by using Docker containers.
+
+## Running your application directly
+
+To run your application, you can use the `nitric start` command. This command starts your application and any other services it depends on. This is the recommended way to run your application locally as it is the simplest way to run your application, starts the fastest and makes attaching other tools like debuggers easier.
+
+```bash
+nitric start
+```
+
+Once the command starts, you'll be presented with a list of your running APIs and other services. You'll also see a link to the [local development dashboard](/getting-started/local-dashboard) where you can view a live architecture diagram of your running application and interact with various services for testing.
+
+<img
+  src="/docs/images/docs/dashboard-architecture.png"
+  style={{ maxWidth: 800, width: '100%' }}
+  alt="screen shot of the local development dashboard"
+/>
+
+## Running your application in Containers
+
+If you prefer to run your application in containers, you can use the `nitric run` command. This command builds and runs your application in Docker containers (one per service), along with any other services it depends on. This is useful if you want to run your application in an environment that more closely resembles the cloud, or if you want to run your application in a containerized environment. That said, this method is slower to start and may require more resources than running your application directly, it also makes attaching other tools like debuggers more difficult.
+
+```bash
+nitric run
+```
+
+The output for this command will be similar to the `nitric start` command.
+
+## Stopping your application
+
+In either case you can stop your application by pressing `Esc` or `Ctrl+C` in the terminal where you started your application.
+
+## Enabling Https for local development
+
+By default, Nitric will run your application's APIs and HTTP Proxies over HTTP to avoid common issues with self-signed certificates. In most cases, this is sufficient for local development. However, if you need to test your application over HTTPS, the `nitric start` command supports enabling HTTPS using the `--https-preview` flag.
+
+This command will generate a self-signed certificate and key for your application and use them to serve your application over HTTPS. This is useful if you need to test your application over HTTPS locally, but keep in mind that self-signed certificates are not trusted by browsers and may cause security warnings.
+
+```bash
+nitric start --https-preview
+```
+
+If you need to use a custom certificate and key, you can place them in the `.nitric/tls` directory in your project and Nitric will use them to serve your application over HTTPS. The files must be named `cert.pem` and `key.pem` respectively.
+
+<Note>This feature is experimental and may change in future releases.</Note>

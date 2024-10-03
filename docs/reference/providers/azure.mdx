@@ -1,0 +1,59 @@
+---
+description: 'The Azure provider for Nitric'
+---
+
+# Azure Provider Overview
+
+The officially supported Nitric Azure Provider.
+
+<Note>
+  Nitric runs services (APIs, Schedules and Topic Subscribers) on Azure
+  Container Apps, which is unavailable in a [small number of
+  regions](https://azure.microsoft.com/en-au/explore/global-infrastructure/products-by-region/?products=container-apps&regions=all).
+</Note>
+
+## Usage
+
+The Azure provider is supported by the Nitric SDKs and CLI by default. However, credentials for an Azure account will be required when using the [up command](/reference/cli) from the CLI.
+
+## Azure CLI Installation
+
+Installing the Azure CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Microsoft docs](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
+
+### Windows
+
+Download & install the [latest CLI release](https://aka.ms/installazurecliwindows).
+
+### Linux
+
+```
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+```
+
+### Install with Homebrew on macOS
+
+```bash
+brew update && brew install azure-cli
+```
+
+## Azure Credentials
+
+The Nitric CLI uses the standard Azure credentials to authenticate with Azure. If you've set up local credentials for the Azure CLI or an SDK previously, these settings should work without modification.
+
+If you're setting up your credentials for the first time, simply run azure login command and finish the login via your browser.
+
+```bash
+az login
+```
+
+Verify the Azure CLI install -
+
+```bash
+az -v
+```
+
+<Note>
+  See [Azure
+  documentation](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli)
+  for full details on credentials and configuration.
+</Note>

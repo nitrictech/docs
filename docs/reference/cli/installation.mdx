@@ -1,0 +1,73 @@
+---
+description: 'Basic installation instructions for the Nitric CLI'
+---
+
+# CLI Installation
+
+## Prerequisites
+
+Nitric relies on functionality from the following projects to help retrieve plugins, containerize and deploy your application.
+
+Please follow these links to the official installation steps for each.
+
+- [Git](https://git-scm.com/)
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Buildx](https://github.com/docker/buildx/)
+- [Pulumi](https://www.pulumi.com/docs/cli/) _(for deployments, only needed if using the default providers)_
+
+<Note>
+  When setting up docker on Linux be sure to follow the [post-installation
+  steps](https://docs.docker.com/engine/install/linux-postinstall/) so you can
+  run docker as a non-root user.
+</Note>
+
+## Installing the Nitric CLI
+
+<CodeSwitcher>
+
+```bash {{ title: 'macOS' }}
+brew install nitrictech/tap/nitric
+```
+
+```bash {{ title: 'Windows' }}
+scoop bucket add nitric https://github.com/nitrictech/scoop-bucket.git
+scoop install nitric
+```
+
+```bash {{ title: 'Linux' }}
+curl -L https://nitric.io/install?version=latest | bash
+```
+
+</CodeSwitcher>
+
+### Manual Install
+
+You can download pre-compiled binaries from the [releases](https://github.com/nitrictech/cli/releases) page and copy them into your desired location
+
+## Update to the latest version
+
+<CodeSwitcher>
+
+```bash {{ title: 'macOS' }}
+brew upgrade nitric
+```
+
+```bash {{ title: 'Windows' }}
+scoop update nitric
+```
+
+```bash {{ title: 'Linux' }}
+curl -L https://nitric.io/install?version=latest | bash
+```
+
+</CodeSwitcher>
+
+You can easily check which version you're on by running `nitric version`.
+
+## Release notes
+
+You can view the CLI release notes on our [CLI GitHub Releases page](https://github.com/nitrictech/cli/releases).
+
+## What's next
+
+Checkout out our [concepts](/concepts/how-nitric-works) page for a quick overview of Nitric.

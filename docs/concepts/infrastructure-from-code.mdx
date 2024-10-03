@@ -1,0 +1,159 @@
+---
+description: Introducing the concept of Infrastructure from Code (IfC) and how Nitric uses it to automate infrastructure and deployment.
+---
+
+# Infrastructure from Code (IfC)
+
+Infrastructure from Code (IfC) is an extension of Infrastructure as Code (IaC) that takes runtime application code into consideration and enhances Separation of Concerns (SoC).
+
+<Note>
+  Several products describe themselves as "Infrastructure from Code" (IfC), but
+  they're not all like Nitric. Many are platforms/SaaS products, not a
+  framework. Those products have different benefits and trade-offs.
+</Note>
+
+Nitric's Infrastructure from Code (IfC) automates the creation of infrastructure from your application code, ensuring a clear separation between application logic and deployment concerns.
+
+It abstracts the infrastructure layer, allowing developers to define what their application needs without getting bogged down in the specifics of cloud services or infrastructure configurations.
+
+Sometimes it's easier to explain IfC by exploring the benefits.
+
+---
+
+## Rapid Development
+
+Nitric significantly reduces or removes cloud-specific code. For example, accessing a file in a cloud storage bucket with Nitric is just a few lines of code, while the equivalent code using cloud provider SDKs is much more verbose and error prone:
+
+<CodeSwitcher>
+
+```javascript {{ title:"Nitric SDK" }}
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read')
+
+export const getProfilePic = async (filename) => {
+  return await profiles.file(filename).read()
+})
+```
+
+```javascript {{ title:"AWS SDK" }}
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
+
+const client = new S3Client({})
+const PROFILES_BUCKET = process.env.PROFILES_BUCKET
+
+if (!bucket) {
+  throw new Error('PROFILES_BUCKET environment variable not set')
+}
+
+export const getProfilePic = async (filename) => {
+  const command = new GetObjectCommand({
+    Bucket: PROFILES_BUCKET,
+    Key: filename,
+  })
+
+  const response = await client.send(command)
+  return await response.Body.transformToByteArray()
+}
+```
+
+</CodeSwitcher>
+
+---
+
+## Decoupled Applications and Infrastructure
+
+Nitric keeps application code independent of specific cloud services. Developers focus on designing the application architecture and building features, without first making long-term technology choices.
+
+For example this same code would work equally well backed by AWS SNS, AWS EventBridge, Google Cloud Pub/Sub, Azure EventGrid, Apache Kafka, or any other messaging service:
+
+```javascript
+import { topic } from '@nitric/sdk'
+
+const myTopic = topic('my-topic').allow('publish')
+
+export const publishMessage = async (message) => {
+  await myTopic.publish(message)
+}
+```
+
+We can change the underlying messaging service through a simple configuration change, without modifying the application code.
+
+<CodeSwitcher>
+
+```yaml {{ label:"nitric.prod.yaml", title:"AWS" }}
+provider: nitric/aws@1.1.1
+```
+
+```yaml {{ label:"nitric.prod.yaml", title:"Azure" }}
+provider: nitric/azure@1.1.1
+```
+
+```yaml {{ label:"nitric.prod.yaml", title:"Google Cloud" }}
+provider: nitric/gcp@1.1.1
+```
+
+```yaml {{ label:"nitric.prod.yaml", title:"Anything Else" }}
+provider: your_namespace/custom@1.0.0
+```
+
+</CodeSwitcher>
+
+<Note>
+  The runtime code for cloud services like SNS still exists, it's just isolated
+  to an independent module. It could be from a [Nitric
+  provider](https://github.com/nitrictech/nitric/blob/main/cloud/aws/runtime/topic/sns.go)
+  or [something custom](/reference/providers/custom/building-custom-provider)
+  built by you or an independent team, such as platform engineers or DevOps
+  teams.
+</Note>
+
+---
+
+## Automate Application Infrastructure Requirements
+
+Using Infrastructure as Code (IaC) tools like Terraform, Pulumi, or AWS CDK, developers can define the infrastructure requirements for their application. You can even create reusable modules for common infrastructure patterns. For example, you could create a pattern for async messaging, which includes a topic, and a subscription bound to a compute function.
+
+The problem is that these tools in isolation require manual processes to keep the infrastructure in sync with the application code. Processes that are error-prone and time-consuming.
+
+Infrastructure lingers in production that's no longer in use, permissions are too broad creating security risks, or too strict causing application failures. Environment variables used to determine resource names can be can be broken by a simple typo. It's a mess.
+
+Nitric solves this by automatically generating a requirements specification from the application code. This specification describes the resources used by the application, their hierarchy, and how the application intends to use them at runtime.
+
+If you want to see the spec for your application you can run `nitric spec`:
+
+```bash
+nitric spec
+```
+
+### No Rogue Resources or Permissions
+
+Resources and access requirements are defined as close as possible to where they're used - so it's easy to see when they're no longer needed or permissions are too broad.
+
+```javascript
+import { queue } from '@nitric/sdk'
+
+// Delete this line and the queue disappears from the IaC
+const myQueue = queue('my-queue').allow('enqueue')
+
+// It's easy to tell when `enqueue` is no longer needed
+export const enqueueMessage = async (message) => {
+  await myQueue.enqueue(message)
+}
+```
+
+### No Broken Environment Variables
+
+The name of a resource is defined **_once_** (in the code), instead of twice (in the code and the IaC). IaC configuration is generated, so it's never out of sync with the application code.
+
+```javascript
+sql('profiles')
+```
+
+and the framework maps the requirements specification to plugins written with existing IaC tools. These tools are still responsible for provisioning the resources, roles, and permissions.
+
+### Don't Change App Code for Infrastructure Changes
+
+You haven't imported the AWS SDK, Google Cloud SDK, or Azure SDK. You haven't written any cloud-specific code. You haven't written any mocks or tests for these cloud services, or anything that makes your code less portable.
+
+So when changes are needed for performance, cost, or compliance, you can make them instantly. It's just a line of config.

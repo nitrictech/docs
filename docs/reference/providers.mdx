@@ -1,0 +1,79 @@
+---
+description: 'Details on the cloud providers supported by Nitric'
+---
+
+# Providers
+
+Nitric can declare and interact with cloud features in a way that is decoupled from any particular cloud provider. Nitric providers are the abstraction layer that enables this.
+
+Providers are separate plugins comprised of two components—a Deployment Engine, which automatically deploys your cloud resources and a Runtime Adapter, which handles requests from the SDKs forwarding them to appropriate cloud service APIs.
+
+## How it works
+
+Applications built with Nitric declare resources, services, and permissions directly in the application code. The following example defines an API named `main`, a bucket named `images`, and permissions for the service to `read` and `write` from the bucket.
+
+```js {{ tag: 'services/example.js' }}
+import { api, bucket } from '@nitric/sdk'
+
+const images = bucket('images').allow('read', 'write')
+const mainApi = api('main')
+```
+
+The chosen language SDKs forward these resource requests to the Nitric CLI, which compiles a graph of the required resources and their connections. The graph of cloud resources is then sent the chosen provider for deployment. The provider convert this declaration graph into any cloud resources it wishes that fulfill the developers intentions, typically using Infrastructure as Code tools like Pulumi or Terraform.
+
+The specific cloud services that Nitric's out-of-the-box providers use for each resource is listed in the [table below](#standard-providers).
+
+```js
+mainApi.get('/', async (ctx) => {
+  const imageContents = await images.file('cat.png').read()
+
+  ctx.res.body = imageContents
+
+  return ctx
+})
+```
+
+The runtime adapter acts as a Nitric protocol compliant server, accepting runtime calls made by a Nitric client (such as one of the Nitric language SDKs), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specific SDK.
+
+This allows your functions to be built, testing and run independent of any underlying cloud service. The end result is code that's faster to write, easier to test and remains portable between cloud services and cloud providers.
+
+It also significantly reduces the burden of writing project specific Infrastructure as Code and ensures the application and its deployment automation don't drift apart as development continues.
+
+![Nitric Architecture](/docs/images/guides/custom-provider/custom-provider-architecture.png)
+
+You can find out more about how the Nitric CLI and SDK interact with providers on our [concepts page](/concepts/how-nitric-works).
+
+## Standard Providers
+
+Nitric publishes standard providers for AWS, GCP, and Azure, which are available as part of the core open-source repository on [GitHub](https://github.com/nitrictech/nitric/tree/main/cloud). These providers enable deploying and running code across AWS, Google Cloud, and Azure. The following is a description of the underlying cloud services that each of the standard providers use:
+
+| **Resource**                           | **AWS**                                              | **Azure**                                   | **Google Cloud**                             | **Local**                                                                          |
+| -------------------------------------- | ---------------------------------------------------- | ------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [APIs](/apis)                          | [API Gateway](./providers/aws/apis)                  | [API Management](./providers/azure/apis)    | [API Gateway](./providers/gcp/apis)          | [Custom](https://github.com/nitrictech/cli/blob/main/pkg/cloud/gateway/gateway.go) |
+| [Key Value Stores ](/keyvalue)         | [DynamoDB](./providers/aws/keyvalue)                 | [Table Storage](./providers/azure/keyvalue) | [FireStore](./providers/gcp/keyvalue)        | BoltDB                                                                             |
+| [Messaging: Topics](/messaging#topics) | [SNS](./providers/aws/topics)                        | [Event Grid](./providers/azure/topics)      | [PubSub](./providers/gcp/topics)             | Custom                                                                             |
+| [Messaging: Queues](/messaging#queues) | [SQS](./providers/aws/queues)                        | [Storage Queues](./providers/azure/queues)  | [PubSub](./providers/gcp/queues)             | Custom                                                                             |
+| [Schedules](/schedules)                | [CloudWatch Event Bridge](./providers/aws/schedules) | [Dapr Binding](./providers/azure/schedules) | [Cloud Scheduler](./providers/gcp/schedules) | Custom                                                                             |
+| [Secrets](/secrets)                    | [Secrets Manager](./providers/aws/secrets)           | [Key Vault](./providers/azure/secrets)      | [Secret Manager](./providers/gcp/secrets)    | Custom                                                                             |
+| [Storage](/storage#buckets)            | [S3](./providers/aws/storage)                        | [Blob Storage](./providers/azure/storage)   | [Cloud Storage](./providers/gcp/storage)     | SeaweedFS                                                                          |
+| Services                               | Lambda                                               | Container Apps                              | CloudRun                                     | Docker                                                                             |
+
+Our code is completely open-source on our [GitHub](https://github.com/nitrictech/nitric), so you can know exactly how your resources are being deployed and handled at runtime.
+
+## Custom Providers
+
+Because Nitric providers are plugins you're able to create or extend them to meet your specific deployment requirements. Common reasons for custom provider development include:
+
+- Using a language other than Go to develop a provider (Nitric providers can be written in many other languages).
+- Using a specific Infrastructure as Code engine, e.g. using Terraform or AWS CDK instead of Pulumi.
+- Changing the way resources are deployed to use a preferred service or meet regulatory or policy requirements within your organization.
+- Reusing existing work on infrastructure automation, such using existing Terraform Modules for deployment with Nitric.
+- Deployments to another cloud provider or on-premises deployments.
+  You can read more about building custom providers [here](/reference/providers/custom/building-custom-provider).
+  <Note>
+    Improving the ease and flexibility of custom provider development is
+    currently a priority for the Nitric team, if you need help or want to
+    request a feature get in touch on
+    [GitHub](https://github.com/nitrictech/nitric) or
+    [Discord](https://nitric.io/chat).
+  </Note>

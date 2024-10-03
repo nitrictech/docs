@@ -1,5 +1,5 @@
 ---
-title: Nitric Docs
+title_seo: Welcome to Nitric
 description: Build cloud backends that run anywhere, fast.
 ---
 
@@ -7,8 +7,6 @@ description: Build cloud backends that run anywhere, fast.
   title="Nitric Documentation"
   description="Build cloud backends that run anywhere, fast."
 />
-
----
 
 Nitric is a declarative cloud framework with common resources like APIs, websockets, databases, queues, topics, buckets, and more.
 
@@ -30,7 +28,7 @@ If you're familiar Nitric already, you might want to jump to the [Installation](
 
 Services are the heart of Nitric apps, they're the entrypoints to your code. They can serve as APIs, websockets, schedule handlers, subscribers and a lot more. You create services by telling Nitric where to look for your code and how to run it.
 
-```yaml nitric.yaml
+```yaml file:nitric.yaml
 name: example
 services:
   - match: services/*.ts
@@ -47,13 +45,13 @@ Resources are the building blocks of your apps. They're the databases, queues, b
 
 <CodeSwitcher>
 
-```javascript !! services/example.js
+```javascript !! file:services/example.js
 import { bucket } from '@nitric/sdk'
 
 const profiles = bucket('profiles').allow('read', 'write', 'delete')
 ```
 
-```python !! services/example.py
+```python !! file:services/example.py
 from nitric.resources import bucket
 from nitric.application import Nitric
 
@@ -62,7 +60,7 @@ profiles = bucket('profiles').allow('read', 'write', 'delete')
 Nitric.run()
 ```
 
-```go !! services/example/main.go
+```go !! file:services/example/main.go
 import (
 	"fmt"
 
@@ -78,7 +76,7 @@ func main() {
 }
 ```
 
-```dart !! services/example.dart
+```dart !! file:services/example.dart
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {
@@ -110,32 +108,32 @@ Nitric abstracts away API layer differences, so you can focus on your app. The p
 
 <CodeWithTabs>
 
-```yaml !!tabs AWS Pulumi
+```yaml !!tabs AWS Pulumi file:nitric.prod.yaml
 provider: nitric/aws@1.1.1
 region: us-east-1
 ```
 
-```yaml !!tabs Azure Pulumi
+```yaml !!tabs Azure Pulumi file:nitric.prod.yaml
 provider: nitric/azure@1.1.1
 region: East US
 ```
 
-```yaml !!tabs Google Pulumi
+```yaml !!tabs Google Pulumi file:nitric.prod.yaml
 provider: nitric/gcp@1.1.1
 region: us-east1
 ```
 
-```yaml !!tabs AWS Terraform
+```yaml !!tabs AWS Terraform file:nitric.prod.yaml
 provider: nitric/awstf@1.1.1
 region: us-east-1
 ```
 
-```yaml !!tabs Google Terraform
+```yaml !!tabs Google Terraform file:nitric.prod.yaml
 provider: nitric/gcptf@1.1.1
 region: us-east1
 ```
 
-```yaml !!tabs Custom
+```yaml !!tabs Custom file:nitric.prod.yaml
 # Build your own provider to deploy anywhere you like.
 provider: custom/on-prem@1.0.0
 ```

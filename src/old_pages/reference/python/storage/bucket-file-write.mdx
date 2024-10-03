@@ -1,0 +1,49 @@
+export const description =
+  "Reference for Nitric's Python library - Write a file to a bucket."
+
+# Python - bucket.file.write()
+
+Write a file to a bucket.
+
+```python
+from nitric.resources import bucket
+from nitric.application import Nitric
+
+assets = bucket('assets').allow('read')
+
+logo = assets.file('images/logo.png')
+
+logo_data = await logo.write(some_data)
+
+Nitric.run()
+```
+
+> Earlier versions of the Nitric SDK used 'reading'. The latest version uses 'read'.
+
+## Parameters
+
+<Properties>
+  <Property name="data" type="bytes" required>
+    The data to write to the file.
+  </Property>
+</Properties>
+
+## Examples
+
+### Write a file
+
+```python
+from nitric.resources import bucket
+from nitric.application import Nitric
+
+# Create a reference to an 'assets' bucket with write permissions
+assets = bucket('assets').allow('write')
+
+logo = assets.file('images/logo.png')
+
+logo_data = await logo.write(some_data)
+
+Nitric.run()
+```
+
+> Earlier versions of the Nitric SDK used 'writing'. The latest version uses 'write'.

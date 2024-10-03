@@ -1,0 +1,92 @@
+# How Developers use Nitric
+
+![diagram](/docs/images/concepts/dev-workflow.svg)
+
+## Application Code
+
+The development process begins with using the Nitric CLI to scaffold an application with a starter template. Each starter template is tailored to feel familiar to each language choice, and comes with an example 'hello-world’ application wired up with the language SDK, ready to run locally or deploy to the cloud.
+
+Applications built with Nitric don't have a strict project structure. To allow flexibility, Nitric only requires the presence of a basic configuration file for development, which contains meta information such as the project name and where to look for service files.
+
+Projects can have as many service files as desired, and each one will map to a compute action in the corresponding cloud. To build applications, developers can utilize components from the Nitric SDK and begin to build out API routes, schedules or event handlers.
+
+## Nitric Language SDK
+
+The Nitric SDK offers a comprehensive set of tools, including handlers for events/topics, queues, storage, key-value (KV) stores, schedules, APIs and secrets. These components are the essential building blocks for building cloud applications.
+
+SDKs communicate with the Nitric Server using gRPC and Protocol Buffers, which enables the framework to support [many languages](/concepts/language-support). Resources defined in the SDK do not require low-level configuration, which means that application code will never contain parameters or annotations for config, such as the replication policies for data stores. This fine-grained control is handled by [Providers](/concepts/how-ops-use-nitric#nitric-providers), which are described in the Ops workflow.
+
+## Local Cloud Emulation
+
+Nitric applications can be tested in a local cloud emulation environment at any time. This environment emulates a cloud setup on local machines, allowing developers to test and debug their applications safely before deploying to a cloud environment and incurring costs.
+
+Applications can be run locally as containers or using the runtime environment of your language choice (e.g. `pip` or `node`) alongside a Nitric server which can be launched using the CLI. This allows developers to use their choice of development tools, IDEs and test frameworks. This also includes the ability to use IDE debugging tools and avoid manual debugging with print statements and container image logs in docker.
+
+The Nitric CLI also includes a [local development dashboard](/getting-started/quickstart#your-local-dashboard) that provides real-time visualization of the resources that the application is using and their relationship to each other. The developer can also use the dashboard to test applications by instantly triggering API routes, Schedules and Websockets.
+
+## Resource Specification
+
+As part of the emulation process, Nitric generates a detailed resource specification. This specification outlines all the necessary resources, relationships hierarchy, and how the application intends to use each resource.
+
+Nitric does this by gathering information about runtime requirements directly from your application code. When you declare a resource, the Nitric SDK requires that an intention of use be provided. Nitric takes the combination of resource declaration with its intent and translates that into resource permission policies that support principles like ‘least privilege’ by default. This ensures that when an application is deployed or redeployed it will not have excessive permissions to resources, which often lead to security risks.
+
+For example, the cloud environment gets the following runtime requirements from the snippet of code below:
+
+An API named ‘milkyway’ with:
+
+- A compute/service that is routed on the /planets/:id path.
+  - A key-value store named planets_store.
+    - This service intends to get and set values to the key-value store.
+  - A storage bucket named planets_images.
+    - This service intends to read and write content to the bucket.
+
+<CodeSwitcher>
+
+```javascript
+import { api, kv, bucket } from '@nitric/sdk'
+
+const milkyWayApi = api('milkyway')
+const planets = kv('planets_store').allow('get', 'set')
+const images = bucket('planets_bucket').allow('read', 'write')
+
+milkyWayApi.get('/planets/:id', async (ctx) => {
+  const { id: pid } = ctx.req.params
+  const d = await planets.get(pid)
+  ctx.res.body = d.content
+})
+```
+
+```python
+from nitric.resources import api, kv, bucket
+from nitric.application import Nitric
+from nitric.context import HttpContext
+
+milky_way_api = api("milkyway")
+planets = kv('planets_store').allow('get', 'set')
+images = bucket('planets_bucket').allow('read', 'write')
+
+@milky_way_api.get("/planets/:id")
+async def get_planet(ctx: HttpContext) -> None:
+    pid = ctx.req.params['id']
+    d = await planets.get(pid)
+    ctx.res.body = f"{d.content}"
+
+Nitric.run()
+```
+
+</CodeSwitcher>
+
+The resource specification is used to generate real-time visualizations of the application and will also be used during the deployment phase to automatically communicate the application’s runtime requirements to the deployment engine that provisions the resources.
+
+![visualization](/docs/images/concepts/visualization.png)
+
+Without Nitric this detailed information would normally be communicated manually, by verbal requests, support tickets, or individual adjustments configured directly in the cloud console.
+
+## Version Control Integration
+
+As with standard application development, your Nitric project application code can be committed to version control systems like Git. This step ensures that all code changes are tracked, facilitating collaboration and maintaining a history of modifications.
+
+<Note>
+  The resource specification is generated in real-time and does not require
+  version control.
+</Note>

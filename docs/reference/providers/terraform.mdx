@@ -1,0 +1,83 @@
+---
+description: 'How Nitric integrates with Terraform'
+---
+
+# Terraform
+
+Nitric's cloud portability is enabled through plugin interfaces known as [providers](/reference/providers). Providers allow applications built with Nitric to be deployed using a variety of Infrastructure Automation technologies, including [Terraform](https://www.terraform.io/).
+
+<Note>
+  Terraform providers are currently in preview, they're not recommended for
+  production deployments. We recommend using the [Standard
+  Provider](/reference/providers) for production deployments until the Terraform
+  providers are stable.
+</Note>
+
+## Terraform Providers
+
+The Nitric Terraform providers allow you to deploy Nitric applications using Terraform. Currently, a Terraform provider is in Preview for AWS, with support for other cloud providers coming soon. While the standard Nitric Providers deploy your application directly to the cloud, the Terraform providers act more like a Transpiler for the cloud infrastructure requirements, allowing Nitric to generate a Terraform stack using [CDKTF](https://developer.hashicorp.com/terraform/cdktf).
+
+The main benefits of using the Nitric Terraform provider are:
+
+- **Infrastructure from Code**: Define your application using Nitric and automatically generate the necessary Terraform code.
+- **Terraform Ecosystem**: Leverage the existing Terraform ecosystem for managing your cloud infrastructure.
+- **Customization**: Customize your cloud infrastructure using Terraform modules and resources.
+
+You're also able to [create your own Terraform provider](/reference/providers/custom/building-custom-provider) for Nitric, this is the best option when you have existing Terraform Modules and expertise you want to reuse to deploy Nitric applications.
+
+<Note>
+  If you're new to Terraform and/or Nitric, we recommend starting with a
+  [standard Nitric provider](/reference/providers/pulumi). The Terraform
+  provider is more advanced and requires a foundational understanding of
+  Terraform.
+</Note>
+
+## Enabling Nitric Terraform Providers
+
+The Nitric Terraform providers are currently in preview, to enable them you'll need to enable `beta-providers` in your Nitric project. You can do this by adding the following to your project's `nitric.yaml` file:
+
+```yaml
+preview:
+  - beta-providers
+```
+
+<Note>
+  The `beta-providers` flag enables all non-stable providers, including the
+  Terraform providers.
+</Note>
+
+## Getting Started
+
+To get started with the Nitric Terraform provider, you'll need to install the Nitric CLI and the Terraform CLI. You can find the installation instructions for both in the [Nitric CLI](/reference/cli) and [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) documentation.
+
+Once you have the Nitric CLI and Terraform CLI installed, you can create a new Nitric project as usual, if you're new to Nitric, check out the [Getting Started](/getting-started/quickstart) guide.
+
+To use the Nitric Terraform provider, you'll need to create a new Nitric stack that uses the Terraform provider. You can do this by running the following command:
+
+```bash
+nitric stack new
+```
+
+This will create a new Nitric stack and prompt you to select a provider. Select the Terraform provider of your choice during this process.
+
+Once you've created your Nitric stack, you can generate the Terraform code by running the following command:
+
+```bash
+nitric up
+```
+
+<Note>
+  If you project has more than one stack you'll be prompted to select the stack
+  you want to deploy. Choose the stack that uses the Terraform provider to
+  generate the Terraform code.
+</Note>
+
+This will generate the Terraform code for your Nitric application into a folder named `cdktf.out` by default. You can change this via the `outdir` property and inspect the code before deploying.
+
+To deploy the application using Terraform, you can navigate into your Terraform stack directory and use the standard Terraform commands:
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```

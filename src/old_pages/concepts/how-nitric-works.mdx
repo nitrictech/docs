@@ -1,0 +1,32 @@
+# How Nitric works
+
+Nitric streamlines the development and deployment of cloud applications by automating the provisioning of necessary infrastructure. It allows you to focus on writing code without worrying about the underlying cloud resources, and was designed with portability and flexibility in mind to fit a wide range of projects.
+
+## Key Components of Nitric
+
+![diagram](/docs/images/concepts/how-it-works.svg)
+
+## CLI
+
+The Nitric Command Line Interface (CLI) is your primary tool for interacting with Nitric. It allows you to scaffold new projects, run local development environments, deploy your applications to the cloud or generate IaC for later deployment. The CLI simplifies complex tasks into straightforward commands, ensuring a smooth development experience.
+For local development, the CLI also launches a developer dashboard which provides real time visualization of the resources that are utilized in the application and the ability to trigger and test API routes, Scheduled Events and Websockets and more.
+
+## Server
+
+The Nitric Server acts as the interface between your applications and the Deploy or Runtime Plugins. During deployment the Nitric Server is run by the CLI and generates a detailed resource specification outlining all the necessary resources, how the application intends to use the resources and their hierarchy. The Server also creates container images for the application code and a lightweight adapter that translates runtime requests such as a read/write/delete, from a Nitric language SDK to cloud-specific APIs.
+
+The Nitric Server orchestrates, then offloads the deployment process to the selected deployment plugin (provider), ensuring that all necessary resources defined in the specification are provisioned and configured correctly. It does this by creating a mapping between the resource specification and the deployment and runtime plugins for the target cloud.
+
+## Deployment Plugins
+
+Deployment plugins are responsible for provisioning and configuring the cloud resources defined by your application. These plugins translate the resource specifications generated during development into actionable deployment instructions (built with popular IaC tools like Terraform and Pulumi) for your chosen cloud provider. Nitric supports deployment plugins for AWS, Google Cloud, and Azure, ensuring compatibility with major cloud platforms.
+These plugins can directly deploy your resources or act like an Infrastructure-as-Code compiler, outputting an IaC project for later deployment.
+
+## Runtime Plugins
+
+Runtime plugins are lightweight adapters that translate requests from a Nitric SDK to the cloud-specific APIs of your provider. They listen for events/requests from the cloud provider, such as HTTP requests or messages from a topic, and forward them to your application code in a common format. A resource that has a deployment plugin will often have a runtime plugin equivalent to allow developers to interact with the resource, e.g. writing to a bucket.
+A combination of a Runtime and Deployment Plugin in Nitric is called a “provider”, Nitric has providers for several clouds, these are a good place to start, but custom providers can also be built.
+
+## Language SDKs
+
+Language SDKs enable Nitric to support various programming languages and execution environments. Language support is idiomatic, designed to feel familiar to developers of each language and make the best use of unique language features. Community support is offered for the [following languages](/concepts/language-support).

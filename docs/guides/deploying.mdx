@@ -1,0 +1,47 @@
+---
+description: 'How to deploy Nitric with CI/CD'
+---
+
+import { FaGithub, FaGitlab } from 'react-icons/fa'
+import { SiAzurepipelines, SiGooglecloud } from 'react-icons/si'
+
+# CI/CD Deployment Guides
+
+<GuidesGrid title="Recommended CI/CD Guides">
+  <Guide
+    href="/guides/deploying/github-actions"
+    name="GitHub Actions"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={FaGithub}
+    description="Use GitHub Actions to deploy your Nitric application."
+  />
+  <Guide
+    href="/guides/deploying/gitlab-ci"
+    name="GitLab Actions"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={FaGitlab}
+    description="Use GitLab CI to deploy your Nitric application."
+  />
+  <Guide
+    href="/guides/deploying/azure-pipelines"
+    name="Azure Pipelines"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={SiAzurepipelines}
+    description="Use Azure Pipelines to deploy your Nitric application."
+  />
+  <Guide
+    href="/guides/deploying/google-cloud-build"
+    name="Google Cloud Build"
+    iconClassName={
+      'fill-zinc-700/50 dark:fill-white/40 dark:group-hover:fill-primary-300/60'
+    }
+    customIcon={SiGooglecloud}
+    description="Use Google Cloud Build to deploy your Nitric application."
+  />
+</GuidesGrid>

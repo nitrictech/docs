@@ -1,0 +1,43 @@
+export const description =
+  "Reference for Nitric's Python library - Store a key value pair in a key value store."
+
+# Python - kv.set()
+
+Store a key value pair in a key value store.
+
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
+
+profiles = kv('profiles').allow('set')
+
+await profiles.set('profile-1a2b3c', { 'name': 'John Smith' })
+
+Nitric.run()
+```
+
+## Parameters
+
+<Properties>
+  <Property name="key" required type="string">
+    The key that references value.
+  </Property>
+  <Property name="value" required type="object">
+    A json serializable object that is stored as the value.
+  </Property>
+</Properties>
+
+## Examples
+
+### Set a key value pair
+
+```python
+from nitric.resources import kv
+from nitric.application import Nitric
+
+profiles = kv('profiles').allow('set')
+
+await profiles.set('profile-1a2b3c', { 'name': 'John Smith' })
+
+Nitric.run()
+```

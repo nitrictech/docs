@@ -3,6 +3,7 @@
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { ClipboardIcon } from '../icons/ClipboardIcon'
+import { cn } from '@/lib/utils'
 
 export function CopyButton({
   code,
@@ -28,9 +29,9 @@ export function CopyButton({
   return (
     <button
       type="button"
-      className={clsx(
+      className={cn(
         'group/button absolute right-2 h-8 rounded-md px-1.5 py-1 text-2xs font-medium backdrop-blur transition',
-        showPanel ? 'top-1.5' : 'top-2.5',
+        showPanel ? 'top-[6.5px]' : 'top-2.5',
         copied
           ? 'bg-primary-400/10 ring-primary-400/20'
           : 'bg-white/5 ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5',

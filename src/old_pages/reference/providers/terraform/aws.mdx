@@ -1,0 +1,59 @@
+export const description =
+  'Terraform - Amazon Web Service (AWS) provider for Nitric'
+
+# Terraform AWS Provider Overview
+
+The officially supported Nitric Terraform AWS Provider.
+
+<Note>
+  The Nitric Terraform AWS Provider is currently in preview, it's not
+  recommended for production deployments. We recommend using the [Standard
+  Providers](/reference/providers) for production deployments until the
+  Terraform providers are stable.
+</Note>
+
+## Usage
+
+The Terraform AWS provider is supported by the Nitric SDKs and CLI by default. However, the Terraform CLI or equivalent will be required to deploy the resulting Terraform Stack that Nitric generates.
+
+### AWS Credentials
+
+The Terraform CLI typically uses standard AWS credential settings to authenticate with AWS. If you've set credentials for the AWS CLI or an AWS SDK previously, these settings should work without modification.
+
+If you're setting your credentials for the first time, there are several available methods. We recommend the standard AWS credentials file to get started.
+
+#### AWS Credential File Setup
+
+Create a new credentials files at one of these locations:
+
+- `~/.aws/credentials` on Linux, macOS, or Unix
+- `C:\Users\USERNAME\.aws\credentials` on Windows
+
+The file should contain the following:
+
+```toml
+[default]
+aws_access_key_id = your_access_key_id
+aws_secret_access_key = your_secret_access_key
+```
+
+<Note>
+  To use a different AWS profile for your deployments, you can use the
+  `AWS_PROFILE` environment variable. If no profile is supplied, we will use the
+  `[default]` profile.
+</Note>
+
+Replace `your_access_key_id` and `your_secret_access_key` with your own values.
+
+You can create an Access Key by logging into the [AWS console](https://aws.amazon.com/console/) and navigating to:
+`Username Menu > Security credentials > Access keys > Create New Access Key`
+
+<Note>
+  See [AWS
+  documentation](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html)
+  for full details on credentials and configuration.
+</Note>
+
+## Configuration
+
+See the original [AWS Configuration](/reference/providers/aws/configuration) guide and select the Terraform tab for more information on configuring your AWS stacks with Terraform.

@@ -1,0 +1,41 @@
+---
+description: 'The Google Cloud provider for Nitric'
+---
+
+# Google Cloud Provider Overview
+
+The officially supported Nitric Google Cloud Platform (GCP) Provider.
+
+## Usage
+
+The Google Cloud provider is supported by the Nitric SDKs and CLI by default. However, credentials for a Google Cloud account will be required when using the [up command](/reference/cli) from the CLI.
+
+## Google CLI Installation
+
+Installing the Google Cloud CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Google docs](https://cloud.google.com/sdk/install).
+
+### Windows
+
+Download & install the [latest CLI release](https://cloud.google.com/sdk/install#windows).
+
+### Linux
+
+```bash
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-378.0.0-linux-x86_64.tar.gz
+```
+
+### macOS
+
+Download & install the [latest CLI release](https://cloud.google.com/sdk/install#mac).
+
+### Google Cloud Credentials
+
+Authorize `gcloud` to access the Cloud Platform with Google user credentials:
+
+```bash
+gcloud auth application-default login
+```
+
+### Create Billing Account
+
+For Google Cloud to allow deployments, a billing account must be [created and attached](https://console.cloud.google.com/billing) to the project you deploy to.

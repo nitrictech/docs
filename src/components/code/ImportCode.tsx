@@ -1,6 +1,6 @@
 import React from 'react'
 import { Code } from './Code'
-import { RawCode } from 'codehike/code'
+import type { RawCode } from 'codehike/code'
 import path from 'path'
 import fs from 'fs/promises'
 

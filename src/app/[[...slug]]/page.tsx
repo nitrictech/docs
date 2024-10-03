@@ -21,12 +21,15 @@ export async function generateMetadata({
 
   const { navItem } = getNavInfo(doc)
 
-  let seoTitle = doc.slug
-    ? `${title(doc.slug.split('/')[0])}: ${navItem?.title}`
-    : 'Welcome to Nitric Docs'
+  const title_meta = doc.title_seo || navItem?.title || doc.title
+
+  let seoTitle =
+    doc.slug.split('/').length > 1
+      ? `${title(doc.slug.split('/')[0])}: ${title_meta}`
+      : title_meta
 
   if (navItem && navItem.breadcrumbParentItem?.title) {
-    seoTitle = `${navItem.breadcrumbParentItem.title}: ${navItem.title}`
+    seoTitle = `${navItem.breadcrumbParentItem.title}: ${title_meta}`
   }
 
   const openGraph: OpenGraph = {
@@ -35,7 +38,7 @@ export async function generateMetadata({
     url: `${BASE_URL}/docs/${doc.slug}`,
     images: [
       {
-        url: `${BASE_URL}/docs/og?title=${encodeURIComponent(doc.title || 'Nitric Docs')}&description=${encodeURIComponent(doc.description || '')}`,
+        url: `${BASE_URL}/docs/og?title=${encodeURIComponent(doc.slug ? title_meta : 'Nitric Docs')}&description=${encodeURIComponent(doc.description || '')}`,
         alt: 'Nitric Docs',
       },
     ],

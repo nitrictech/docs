@@ -61,7 +61,7 @@ export function CodeSwitcherSelect({
           >
             <SelectTrigger
               aria-label="Switch code language"
-              className="absolute right-20 top-1.5 hidden h-8 w-[120px] bg-white/5 text-2xs font-medium text-zinc-400 ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5 md:flex"
+              className="absolute right-20 top-[6.5px] hidden h-8 w-[120px] bg-white/5 text-2xs font-medium text-zinc-400 ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5 md:flex"
             >
               <SelectValue />
             </SelectTrigger>
@@ -78,7 +78,7 @@ export function CodeSwitcherSelect({
             onChange={(e) => setCurrentLanguage(e.target.value as LanguageId)}
             className={cn(
               'flex h-8 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
-              'absolute right-20 top-1.5 w-[120px] bg-white/5 font-sans text-2xs font-medium text-zinc-400 ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5 md:hidden',
+              'absolute right-20 top-[6.5px] w-[120px] bg-white/5 font-sans text-2xs font-medium text-zinc-400 ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5 md:hidden',
             )}
             value={selectedLang}
           >

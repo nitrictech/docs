@@ -1,0 +1,34 @@
+export const description =
+  "Reference for Nitric's Node.js library - Delete key from a key value store."
+
+# Node.js - kv.delete()
+
+Delete key from a key value store.
+
+```javascript
+import { kv } from '@nitric/sdk'
+
+const profiles = kv('profiles').allow('delete')
+
+await profiles.delete('profile-1a2b3c')
+```
+
+## Parameters
+
+<Properties>
+  <Property name="key" required type="string">
+    The key that references the key value pair that should be deleted.
+  </Property>
+</Properties>
+
+## Examples
+
+### Delete a key
+
+```javascript
+import { kv } from '@nitric/sdk'
+
+const profiles = kv('profiles').allow('delete')
+
+await profiles.delete('profile-1a2b3c')
+```

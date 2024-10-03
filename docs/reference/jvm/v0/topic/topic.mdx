@@ -1,0 +1,79 @@
+export const description =
+  "Reference for Nitric's v0 JVM library - Creates a new Topic."
+
+# JVM - topic()
+
+Creates a new Topic.
+
+<CodeSwitcher>
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.TopicPermission;
+
+public class Application {
+  public static void main(String[] args) {
+    var topic = Nitric.INSTANCE.topic("topic").with(TopicPermission.Publishing);
+
+    Nitric.INSTANCE.run();
+  }
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.TopicPermission
+
+fun main() {
+  var topic = Nitric.topic("topic").with(TopicPermission.Publishing)
+
+  Nitric.run()
+}
+```
+
+</CodeSwitcher>
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="String">
+    The name of the topic to create.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a new topic
+
+<CodeSwitcher>
+
+```java
+import io.nitric.Nitric;
+import io.nitric.resources.TopicPermission;
+
+public class Application {
+  public static void main(String[] args) {
+    var topic = Nitric.INSTANCE.topic("topic").with(TopicPermission.Publishing);
+
+    Nitric.INSTANCE.run();
+  }
+}
+```
+
+```kotlin
+import io.nitric.Nitric
+import io.nitric.resources.TopicPermission
+
+fun main() {
+  var topic = Nitric.topic("topic").with(TopicPermission.Publishing)
+
+  Nitric.run()
+}
+```
+
+</CodeSwitcher>
+
+## See also
+
+- [topic.subscribe()](./topic-subscribe)
+- [topic.publish()](./topic-publish)

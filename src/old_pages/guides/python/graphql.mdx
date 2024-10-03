@@ -1,0 +1,375 @@
+export const description =
+  'Use the Nitric framework to easily build and deploy a serverless Python GraphQL API for AWS, Google Cloud, or Azure'
+
+export const title_meta = 'Building a GraphQL API with Python and Nitric'
+
+# Building a GraphQL API with Nitric
+
+## What we'll be doing
+
+[GraphQL](https://graphql.org) APIs rely on only one HTTP endpoint, which means that you want it to be reliable, scalable, and performant. By using serverless compute such as Lambda, the GraphQL endpoint can be auto-scaling, whilst maintaining performance and reliability.
+
+We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud of your choice, gaining the benefits of serverless compute.
+
+1. Create the GraphQL Schema
+2. Write Resolvers
+3. Create handler for GraphQL requests
+4. Run locally for testing
+5. Deploy to a cloud of your choice
+
+## Video
+
+Here's a video of this guide built with Node.js:
+
+[Serverless GraphQL on any Cloud](https://www.youtube.com/embed/K7T32ebYSLA)
+
+## Prerequisites
+
+- [Pipenv](https://pypi.org/project/pipenv/) - for simplified dependency management
+- The [Nitric CLI](/getting-started/installation)
+- _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account
+
+## Getting started
+
+We'll start by creating a new project for our API.
+
+```bash
+nitric new my-profile-api py-starter
+```
+
+Next, open the project in your editor of choice.
+
+```bash
+cd my-profile-api
+```
+
+Make sure all dependencies are resolved:
+
+Using Pipenv:
+
+```bash
+pipenv install --dev
+```
+
+The scaffolded project should have the following structure:
+
+```text
++--services/
+|  +-- hello.py
++--nitric.yaml
++--Pipfile
++--Pipfile.lock
++--README.md
+```
+
+You can test the project to verify everything is working as expected:
+
+Start the Nitric server to emulate cloud services on your machine:
+
+```bash
+nitric start
+```
+
+If everything is working as expected you can now delete all files in the `services/` folder, we'll create new services in this guide.
+
+## Build the GraphQL Schema
+
+GraphQL requests are typesafe, and so they require a schema to be defined to validate queries.
+
+Let's first add the [Ariadne library](https://ariadnegraphql.org/)
+
+```bash
+pipenv install ariadne
+```
+
+Create a new file named 'graphql.py' in the services folder.
+We can then import our dependencies, and write out the schema.
+
+```python
+from ariadne import MutationType, QueryType, gql, make_executable_schema, graphql
+from uuid import uuid4
+
+type_defs = gql("""
+  type Profile {
+    pid: String!
+    name: String!
+    age: Int!
+    home: String!
+  }
+
+  type Message {
+    msg: String!
+  }
+
+  input ProfileInput {
+    name: String!
+    age: Int!
+    home: String!
+  }
+
+  type Query {
+    getProfile(pid: String!): Profile
+  }
+
+  type Mutation {
+    createProfile(profile: ProfileInput!): Profile
+    updateProfile(pid: String!, profile: ProfileInput!): Profile
+  }
+""")
+```
+
+## Define a Key Value store
+
+Lets define a key value store resource for the resolvers get/set data from.
+
+```python
+from nitric.resources import api, kv
+from nitric.application import Nitric
+
+profiles = kv('profiles').allow('get','set')
+```
+
+## Create Resolvers
+
+We'll need to map our resolvers to mutations or queries using Ariadne's QueryType or MutationType.
+
+```python
+query = QueryType()
+mutation = MutationType()
+```
+
+We can then use the key value store within these services. Each resolver will receive a parent and info arguments, as well as any query or mutation's arguments as keyword arguments.
+
+An example of this is converting the GraphQL query function into Python:
+
+```graphql
+updateProfile(pid: String!, profile: ProfileInput!): Profile
+```
+
+```python
+@mutation.field("updateProfile")
+async def update_profiles(obj, info, pid, profile):
+  pass
+```
+
+## Create a profile
+
+```python
+@mutation.field("createProfile")
+async def resolve_create_profile(obj, info, profile):
+  pid = str(uuid4())
+
+  p = { 'pid': pid, 'name': profile['name'], 'age': profile['age'], 'home': profile['home'] }
+  await profiles.set(pid, p)
+
+  return p
+```
+
+## Update a profile
+
+```python
+@mutation.field("updateProfile")
+async def update_profiles(obj, info, pid, profile):
+  profile = await profiles.get(pid)
+  if profile is None:
+    return { 'msg': f'Profile with id {pid} not found.'}
+
+  p = { 'pid': pid, 'name': profile['name'], 'age': profile['age'], 'home': profile['home'] }
+  await profiles.doc(pid).set(p)
+
+  return p
+```
+
+## Get a profile by its ID
+
+```python
+@query.field("getProfile")
+async def resolve_get_profile(obj, info, pid):
+  profile = await profiles.get(pid)
+  return { 'pid': pid, 'name': profile['name'], 'age': profile['age'], 'home': profile['home'] }
+```
+
+## GraphQL Handler
+
+We'll define an API to put our handler in. This API will only have one endpoint, which will handle all the requests.
+
+First load the schema with our queries and mutations.
+
+```python
+from nitric.resources import kv, api
+from nitric.application import Nitric
+
+graph_api = api("public")
+schema = make_executable_schema(type_defs, [query, mutation])
+
+Nitric.run()
+```
+
+Then add the API handler.
+
+```python
+@graph_api.post("/")
+async def profile_handler(ctx: HttpContext) -> None:
+    query = ctx.req.json
+
+    success, result = await graphql(
+        schema,
+        query
+    )
+
+    ctx.res.status = 200 if success else 400
+    ctx.res.body = result
+
+Nitric.run()
+```
+
+## Run it!
+
+Now that you have an API defined with a handler for the GraphQL requests, it's time to test it out locally.
+
+Start your Nitric server:
+
+```bash
+nitric start
+```
+
+Then test out your service with the following command in a new terminal:
+
+```bash
+pipenv run dev
+```
+
+Once it starts, the service will be able to receive requests via the API port.
+
+## GraphQL Queries
+
+We can use cURL, postman or any other HTTP Client to test our application, however it's better if the client has GraphQL support.
+
+### Get all Profiles using cURL
+
+```bash
+curl --location -X POST \
+  'http://localhost:4001' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"query":"query { getProfiles { pid name age home }}","variables":{}}'
+```
+
+```json
+{
+  "data": {
+    "getProfiles": [
+      {
+        "pid": "3f70ca58-25ed-4e88-8a45-eea1fbbb45d8",
+        "name": "Tony Stark",
+        "age": 53,
+        "home": "Manhattan, New York City"
+      },
+      {
+        "pid": "9c53bd95-199c-4151-a2a6-0da3ae24c29d",
+        "name": "Peter Parker",
+        "age": 22,
+        "home": "Queens, New York City"
+      },
+      {
+        "pid": "9ff191b0-0fbe-4e49-b944-85e79b5caa21",
+        "name": "Steve Rogers",
+        "age": 105,
+        "home": "New York City"
+      }
+    ]
+  }
+}
+```
+
+### Get a single profile
+
+```bash
+curl --location -X POST \
+  'http://localhost:4001' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"query":"query { getProfile(pid: \"3f70ca58-25ed-4e88-8a45-eea1fbbb45d8\") { pid name age home }}","variables":{}}'
+
+```
+
+```json
+{
+  "data": {
+    "getProfile": {
+      "pid": "3f70ca58-25ed-4e88-8a45-eea1fbbb45d8",
+      "name": "Tony Stark",
+      "age": 53,
+      "home": "Manhattan, New York City"
+    }
+  }
+}
+```
+
+### Create a profile
+
+```bash
+curl --location -X POST \
+  'http://localhost:4001' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"query":"mutation { createProfile(profile: { name: \"Tony Stark\", age: 53, home: \"Manhattan, New York City\" }){ pid name age home }}","variables":{}}'
+```
+
+```json
+{
+  "data": {
+    "getProfile": {
+      "pid": "3f70ca58-25ed-4e88-8a45-eea1fbbb45d8",
+      "name": "Tony Stark",
+      "age": 53,
+      "home": "Manhattan, New York City"
+    }
+  }
+}
+```
+
+### Update a profile
+
+```bash
+curl --location -X POST \
+  'http://localhost:4001' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"query":"mutation { updateProfile(pid: \"3f70ca58-25ed-4e88-8a45-eea1fbbb45d8\",profile: { name: \"Peter Parker\", age: 22, home: \"Queens, New York City\" }){ pid name age home }}","variables":{}}'
+```
+
+```json
+{
+  "data": {
+    "getProfile": {
+      "pid": "3f70ca58-25ed-4e88-8a45-eea1fbbb45d8",
+      "name": "Peter Parker",
+      "age": 22,
+      "home": "Queens, New York City"
+    }
+  }
+}
+```
+
+## Deploy to the cloud
+
+Setup your credentials and any other cloud specific configuration:
+
+- [AWS](/reference/providers/aws)
+- [Azure](/reference/providers/azure)
+- [GCP](/reference/providers/gcp)
+
+Create your stack. This is an environment configuration file for the cloud provider for which your project will be deployed.
+
+```bash
+nitric stack new
+```
+
+You can then deploy using the following command:
+
+```bash
+nitric up
+```
+
+To undeploy run the following command:
+
+```bash
+nitric down
+```

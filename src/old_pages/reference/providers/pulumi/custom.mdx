@@ -1,0 +1,61 @@
+export const description =
+  'Create your own Infrastructure from Code experience with deployments powered by Pulumi'
+
+# Building Nitric providers using Pulumi
+
+If you're not already familiar with the basics of Nitric providers, a detailed overview on how Nitric providers work under the hood can be found [here](../custom/building-custom-provider).
+
+Nitric's providers are simple programs that implement a plugin interface backed by gRPC. A Nitric provider is a simple server that will be started by the Nitric CLI at deploy time and will be provided with a cloud specification to deploy any way the provider sees fit.
+
+![nitric pulumi diagram](/docs/images/nitric-pulumi.png)
+
+Although Nitric providers can be developed using any language, we'd recommend using Go due to the availability of pre-existing Nitric Pulumi custom resources and generated protobuf contracts in the Nitric core repository.
+
+This code provides a simple gRPC deployment server with references to the Pulumi Automation API. It can be used to get started with deploying infrastructure through Pulumi.
+
+```go
+type DeployServer struct {
+}
+
+func (d *DeployServer) Up(request *deploy.DeployUpRequest, stream deploy.DeployService_UpServer) error {
+    // Nitric provides details such as stack and project name on the request, but you're free to change these up to suit your needs
+    pulumiStack, err := auto.UpsertStackInlineSource(context.TODO(), "<your_stack_name>", "<you_stack_project>", func(ctx *pulumi.Context) error {
+        // 👇 Your pulumi program goes here...
+        for _, res := range request.Spec.Resources {
+            // Requested resources are provided as part of the deployment request
+        }
+    })
+
+    if err != nil {
+      return err
+    }
+
+    res, err := pulumiStack.Up(context.TODO(), optup.ProgressStreams(messageWriter))
+    if err != nil {
+        return err
+    }
+
+    // send final results
+    // err = stream.Send(...)
+
+    return err
+}
+
+func (d *DeployServer) Down(request *deploy.DeployDownRequest, stream deploy.DeployService_DownServer) error {
+    // Nitric provides details such as stack and project name on the request, but you're free to change these up to suit your needs
+    s, err := auto.UpsertStackInlineSource(context.TODO(), "<your_stack_name>", "<your_project_name>", nil)
+  if err != nil {
+    return status.Errorf(codes.Internal, err.Error())
+  }
+
+  // destroy the stack
+  _, err = s.Destroy(context.TODO(), optdestroy.ProgressStreams(dsMessageWriter))
+  if err != nil {
+    return err
+  }
+}
+```
+
+For complete example implementations check out our [AWS](https://github.com/nitrictech/nitric/tree/develop/cloud/aws), [GCP](https://github.com/nitrictech/nitric/tree/develop/cloud/gcp) and [Azure](https://github.com/nitrictech/nitric/tree/develop/cloud/azure) providers in the [Nitric GitHub repository](https://github.com/nitrictech/nitric).
+
+Let us know on our GitHub discussions or through our Discord if you are interested in seeing more work in this space, including the creation of [CDKs](/reference/providers/custom/building-custom-provider#future-features) that can simplify the process of scaffolding and building Nitric providers.

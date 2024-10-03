@@ -1,0 +1,82 @@
+---
+description: 'Importing existing AWS resources'
+---
+
+# Importing Existing Resources - AWS
+
+Nitric allows you to import existing AWS resources into your Nitric project. Currently, only [buckets](/storage) and [secrets](/secrets) are supported for import.
+
+## How imports work
+
+If you have existing AWS resources that you would like to use in your Nitric project, you may be able to import them using the `import` section of your Nitric [stack file](/concepts/project-structure#stack-files). This section allows you to import existing resources and use them in your Nitric project. This indicates to the `nitric/aws` provider that you would like to use the existing resources in your Nitric project, rather than create a new one.
+
+Imports are stack specific, meaning that you can import resources into a specific stack file, and they will only be available in that stack. Other stacks for the same project can either create or import those resources as needed.
+
+### What happens during `nitric up`
+
+When deploying a stack that has imported resources, the resources will not be created. Instead, Nitric will use the referenced resources from the stack file. If the resources can't be located or accessed, the deployment will fail.
+
+Nitric attempts to make the minimum changes needed to the imported resources to make them compatible with the Nitric project. Since the `nitric/aws` uses custom tags for resource location the resources will have these tags added during deployment. Additionally, Nitric will add the necessary permissions to the resources to allow the Nitric project to access them, just like it would with resources it creates.
+
+The tags created are extremely unlikely to conflict with existing tags. For example, an S3 bucket will have these two tags created `x-nitric-{project}-{stack}-{randomId}-type` and `x-nitric-{project}-{stack}-{randomId}-name`. The type tag identified the type of nitric resource, and the name tag is the name of the resource in the Nitric project.
+
+### What happens during `nitric down`
+
+When tearing down a stack that has imported resources, the resources will not be deleted. This is because the resources were not created by Nitric, so for safety they're always set to 'retainOnDelete'. If you would like to delete the resources, you will need to do so manually or using whichever tools created those resources initially.
+
+The tags added to the resources during deployment may not be removed during the `nitric down` process. If you intend to redeploy the stack with an updated import, you may need to remove these tags manually.
+
+## Importable Resources
+
+The Nitric team is working to expand the list of resources that can be imported. Currently, only the following resources are supported:
+
+- [Secrets](/secrets)
+- [Buckets](/storage)
+
+<Note>
+  Only resources in the same AWS account and region as the Nitric project are
+  currently supported.
+</Note>
+
+### Buckets
+
+To import an S3 bucket, you will need to know the bucket's name or ARN. You can find the ARN of an S3 bucket in the AWS console or by using the AWS CLI.
+
+First add the bucket to your project as you usually would if it wasn't imported. Then add the bucket to the `import` section of your stack file. Here's an example of how to import an S3 bucket:
+
+```javascript
+import { bucket } from '@nitric/sdk'
+
+const images = bucket('images').allow('read', 'write', 'delete')
+```
+
+```yaml
+import:
+  buckets:
+    images: arn:aws:s3:::images-bucket-example
+```
+
+<Note>
+  Either the bucket's name or ARN can be used to import the bucket. The ARN is
+  recommended as it is more specific.
+</Note>
+
+### Secrets
+
+To import a secret, you will need to know the secret's ARN. You can find the ARN of a secret in the AWS console or by using the AWS CLI.
+
+First add the secret to your project as you usually would if it wasn't imported. Then add the secret to the `import` section of your stack file. Here's an example of how to import a secret:
+
+```javascript
+import { secret } from "@nitric/sdk
+
+const mySecret = secret("credentials").allow("access");
+```
+
+```yaml
+import:
+  secrets:
+    credentials: arn:aws:secretsmanager:us-east-1:123456789012:secret:my-secret
+```
+
+Need to import another resource type or have another question? Chat with us on [Discord](https://nitric.io/chat) or [open an issue](https://github.com/nitrictech/nitric/issues) on GitHub.

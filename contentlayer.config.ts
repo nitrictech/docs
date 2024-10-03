@@ -1,6 +1,5 @@
 import { defineDocumentType, makeSource } from 'contentlayer2/source-files'
 import { extractTocHeadings } from './src/mdx/remark-toc-headings.mjs'
-import { title } from 'radash'
 import path from 'path'
 import fs from 'fs'
 
@@ -12,13 +11,10 @@ const Doc = defineDocumentType(() => ({
   name: 'Doc',
   filePathPattern: '**/*.mdx',
   fields: {
-    title: {
+    title_seo: {
       type: 'string',
-      description: 'The meta title of the doc',
-    },
-    nav_title: {
-      type: 'string',
-      description: 'The title of the doc in the navigation',
+      description:
+        'The meta title of the doc, this will override the title extracted from the markdown and the nav title',
     },
     description: {
       type: 'string',
@@ -43,6 +39,14 @@ const Doc = defineDocumentType(() => ({
       resolve: (doc) => doc._raw.flattenedPath,
     },
     toc: { type: 'json', resolve: (doc) => extractTocHeadings(doc.body.raw) },
+    title: {
+      type: 'string',
+      resolve: async (doc) => {
+        const headings = await extractTocHeadings(doc.body.raw, [1])
+
+        return headings[0]?.value
+      },
+    },
     editUrl: {
       type: 'string',
       resolve: (doc) =>

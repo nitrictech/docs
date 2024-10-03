@@ -1,0 +1,58 @@
+---
+description: 'Amazon Web Service (AWS) provider for Nitric'
+---
+
+# AWS Provider Overview
+
+The officially supported Nitric AWS Provider.
+
+## Variants
+
+The Nitric AWS provider is available in two variants, while these variants are functionally similar, deploying the same underlying cloud resources, they are implemented using different Infrastructure-as-Code tools:
+
+- [Pulumi (Standard)](/reference/providers/aws)
+- [Terraform](/reference/providers/terraform/aws)
+
+The Pulumi provider is recommended for most users, as it provides the most streamlined experience with Nitric. The Terraform provider is recommended for users already familiar with Terraform, particularly if you have existing Terraform tools or workflows you'd like to integrate with Nitric.
+
+## Usage
+
+The AWS provider is supported by the Nitric SDKs and CLI by default. However, credentials for an AWS account will be required when using the [up command](/reference/cli) from the CLI.
+
+### AWS Credentials
+
+The Nitric CLI uses standard AWS credential settings to authenticate with AWS. If you've set credentials for the AWS CLI or an AWS SDK previously, these settings should work without modification.
+
+If you're setting your credentials for the first time, there are several available methods. We recommend the standard AWS credentials file to get started.
+
+#### AWS Credential File Setup
+
+Create a new credentials files at one of these locations:
+
+- `~/.aws/credentials` on Linux, macOS, or Unix
+- `C:\Users\USERNAME\.aws\credentials` on Windows
+
+The file should contain the following:
+
+```toml
+[default]
+aws_access_key_id = your_access_key_id
+aws_secret_access_key = your_secret_access_key
+```
+
+<Note>
+  To use a different AWS profile for your deployments, you can use the
+  `AWS_PROFILE` environment variable. If no profile is supplied, we will use the
+  `[default]` profile.
+</Note>
+
+Replace `your_access_key_id` and `your_secret_access_key` with your own values.
+
+You can create an Access Key by logging into the [AWS console](https://aws.amazon.com/console/) and navigating to:
+`Username Menu > Security credentials > Access keys > Create New Access Key`
+
+<Note>
+  See [AWS
+  documentation](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html)
+  for full details on credentials and configuration.
+</Note>

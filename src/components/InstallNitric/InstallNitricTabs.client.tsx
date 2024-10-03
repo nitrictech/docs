@@ -19,7 +19,7 @@ export const InstallNitricTabs: React.FC<InstallNitricProps> = ({
 
   return (
     <Tabs value={currentOS} onValueChange={(val) => setCurrentOS(val as OS)}>
-      <TabsList className="mt-auto h-10 bg-transparent">
+      <TabsList className="mt-auto h-12 bg-transparent">
         {tabs.map((tab) => (
           <TabsTrigger
             key={tab.meta}
@@ -27,7 +27,7 @@ export const InstallNitricTabs: React.FC<InstallNitricProps> = ({
             className="group/tab relative hover:text-zinc-200 data-[state=active]:bg-transparent data-[state=active]:text-primary-300"
           >
             {tab.meta}
-            <div className="absolute inset-x-2 -bottom-[4.5px] h-px bg-primary-300 opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100" />
+            <div className="absolute inset-x-2 -bottom-[8px] h-px bg-primary-300 opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100" />
           </TabsTrigger>
         ))}
       </TabsList>
@@ -37,7 +37,7 @@ export const InstallNitricTabs: React.FC<InstallNitricProps> = ({
           value={tab.meta}
           className="m-0 border-t border-zinc-300/10"
         >
-          <Pre highlighted={highlighted[i]} />
+          <Pre highlighted={highlighted[i]} copyButtonClassName={'top-14'} />
         </TabsContent>
       ))}
     </Tabs>

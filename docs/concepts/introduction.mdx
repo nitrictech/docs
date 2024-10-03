@@ -1,0 +1,64 @@
+# What is Nitric?
+
+Nitric is a [multi-language](/concepts/language-support) framework for rapidly building cloud applications that uses infrastructure automation to reduce boilerplate, prevent drift and enable applications to run on any cloud provider – such as AWS, Google Cloud or Microsoft Azure. Nitric streamlines cloud development from local dev iteration through to testing and deployment.
+
+The goal of Nitric is to enable teams to be highly productive while building portable, customizable cloud applications that use the best technology.
+
+- Provides a runtime that works locally and in the cloud immediately.
+- Removes blockers around manual infrastructure decision-making, setup and troubleshooting.
+- Enables consistent deployments that always match the current version of your application.
+
+## Infrastructure from Code (IfC)
+
+Nitric’s automation of infrastructure is often called Infrastructure-_from_-Code (IfC), since the core of your application becomes the source of truth for both the application logic and deployment architecture.
+Nitric achieves this by adding lightweight resource declarations to your application, as close as possible to where they're used.
+Here's an example of using Nitric to create a secure bucket for file storage and granting read access to that bucket.
+
+<CodeSwitcher>
+
+```javascript
+import { api, bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read')
+const myApi = api('main')
+
+myApi.get('/profiles/:name', async (ctx) => {
+  const image = await profiles.file('users/bruce-wayne.png').read()
+})
+```
+
+```python
+from nitric.resources import api, bucket
+from nitric.application import Nitric
+
+publicApi = api("main")
+profiles = bucket("profiles").allow("read")
+
+@publicApi.get("/profiles/:name")
+async def customer_get(ctx):
+    image = await profiles.file("users/bruce-wayne.png").read()
+
+Nitric.run()
+```
+
+</CodeSwitcher>
+
+You'll notice in the example that there aren't cloud-specific references, such as a call to AWS S3 or Google Cloud Storage. The deployment automation, identity/access management and runtime access are handled by Nitric through [provider](/reference/providers) plugins, which you choose at deployment. This ensures applications built with Nitric maintain portability and allows you to focus on your product first and a cloud provider second. Apps built with Nitric can even be deployed to multiple cloud providers at once to improve reliability or to maximize availability of free-tier resources.
+
+### Infrastructure from Code (IfC) vs. Infrastructure as Code (IaC)
+
+IaC is a way of programmatically provisioning infrastructure, including detailed configuration of all resources. IaC tools like Pulumi, Terraform, AWS CDK, Ansible and others bring repeatability to infrastructure by giving you scripts that you can use across different environments or projects to provision infrastructure. This code/config is in addition to your application code, typically with a tight brittle coupling between the two.
+
+IfC is the link between your IaC project and your application code. Rather than manually updating infrastructure, Nitric’s IfC automatically generates a requirements specification which describes the resources used by the application, their hierarchy, and how the application intends to use them at runtime.
+
+The framework then maps the requirements specification to plugins written with existing IaC tools like Pulumi or Terraform, which are still responsible for provisioning the resources, roles and permissions. Applications deployed this way stay in sync with their infrastructure, which means no rogue resources or permissions – only what the app requires.
+
+## Nitric’s Philosophy
+
+Here are a few principles that guide the design choices for Nitric:
+
+- Open Source - The framework is freely available to use and extend.
+- Developer Experience - We strive to make the framework simple & transparent and to automate repetitive tasks.
+- Flexibility - Avoiding cloud lock-in motivated the initial design of Nitric, and we’ve continued to design for customization and extensibility to avoid both vendor and architecture lock-in (including to Nitric) and to support a broad range of use cases.
+
+You can get a better understanding of the Nitric framework by learning [how it works](/concepts/how-nitric-works) – how it fits in your workflow and what it does for you during development and deployment.

@@ -1,0 +1,49 @@
+export const description =
+  "Reference for Nitric's Dart library - Register a handler for HTTP GET requests to the route."
+
+# Dart - api.route.get()
+
+Register a handler for HTTP GET requests to the route.
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final customersRoute = Nitric.api("public").route("/customers");
+
+customersRoute.get((ctx) async {
+  // construct response for the GET: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
+```
+
+## Parameters
+
+<Properties>
+  <Property name="handler" required type="HttpHandler">
+    The middleware service to use as the handler for HTTP requests.
+  </Property>
+  <Property name="security" type="List<OidcOptions>">
+    Security rules to apply with scopes to the entire API.
+  </Property>
+</Properties>
+
+## Examples
+
+### Register a handler for GET requests
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+final customersRoute = Nitric.api("public").route("/customers");
+
+customersRoute.get((ctx) async {
+  // construct response for the GET: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
+```

@@ -1,0 +1,47 @@
+export const description =
+  "Reference for Nitric's Go library - Creates a new Topic."
+
+# Go - NewTopic()
+
+Creates a new Topic.
+
+```go
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+  updates := nitric.NewTopic("updates")
+
+  nitric.Run()
+}
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The name of the topic to create.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a new topic
+
+```go
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+  updates := nitric.NewTopic("updates")
+
+  nitric.Run()
+}
+```
+
+### See also
+
+- [Topic.Subscribe()](./topic-subscribe)
+- [Topic.Publish()](./topic-publish)

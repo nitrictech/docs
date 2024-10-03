@@ -1,0 +1,42 @@
+---
+description: 'Comparison to Winglang'
+---
+
+# Wing vs. Nitric
+
+[Wing](https://www.winglang.io) and Nitric share common goals of allowing developers to build modern applications for the cloud without worrying about infrastructure. Where they differ is on approach and fine details.
+
+Wing is a new language for cloud development, it lets you bring cloud concepts into your application code. Applications written in Wing are transpiled into Terraform and JavaScript for deployment to the cloud.
+
+Nitric is implemented differently, providing SDKs for existing languages such as TypeScript, JavaScript, C#, Go, Python and Java. The Nitric SDKs interact with a deployment engine and [providers](/reference/providers) which can deploy your applications to different clouds.
+
+Both options are extremely productive, it's up to you which approach you prefer. As you can see from the examples below the experience with either option is similar.
+
+## Code Comparison
+
+<CodeSwitcher compare>
+
+```javascript {{title: 'Nitric', label: 'hello.js' }}
+import { api } from '@nitric/sdk'
+
+const helloApi = api('far-away-galaxy-api')
+
+helloApi.get('/', async ({ req, res }) => {
+  res.body = 'Hello from Nitric'
+})
+```
+
+```javascript {{title: 'Wing', label: 'hello.w'}}
+bring cloud;
+
+let api = new cloud.Api();
+
+api.get("/", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+    return cloud.ApiResponse {
+      status: 200,
+      body: "Hello from Wing"
+    };
+});
+```
+
+</CodeSwitcher>

@@ -28,7 +28,7 @@ const languages = ['javascript', 'python', 'go', 'typescript', 'dart']
 const LOCAL_STORAGE_KEY = 'nitric.docs.selected.language'
 
 const useLang = () => {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams() || new URLSearchParams()
 
   const queryParamLang = searchParams.get('lang') as LanguageId
 

@@ -1,0 +1,394 @@
+export const description =
+  'Use the Nitric framework to easily build and deploy a serverless Node.js GraphQL API for AWS, Google Cloud, or Azure'
+
+export const title_meta = 'Building a GraphQL API with Node.js and Nitric'
+
+# Building a GraphQL API with Nitric
+
+## What we'll be doing
+
+[GraphQL](https://graphql.org) APIs rely on only one HTTP endpoint, which means that you want it to be reliable, scalable, and performant. By using serverless compute such as Lambda, the GraphQL endpoint can be auto-scaling, whilst maintaining performance and reliability.
+
+We'll be using Nitric to create a GraphQL API, that can be deployed to a cloud of your choice, gaining the benefits of serverless compute.
+
+1. Create the GraphQL Schema
+2. Write Resolvers
+3. Create handler for GraphQL requests
+4. Run locally for testing
+5. Deploy to a cloud of your choice
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/en/download/)
+- The [Nitric CLI](/getting-started/installation)
+- An [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account (_your choice_)
+
+## Getting started
+
+We'll start by creating a new project for our API.
+
+```bash
+nitric new my-profile-api ts-starter
+```
+
+Next, open the project in your editor of choice.
+
+```bash
+cd my-profile-api
+```
+
+Make sure all dependencies are resolved:
+
+Using NPM:
+
+```bash
+npm install
+```
+
+The scaffolded project should have the following structure:
+
+```text
++--services/
+|  +-- hello.ts
++--node_modules/
+|  ...
++--nitric.yaml
++--package.json
++--README.md
+```
+
+You can test the project to verify everything is working as expected:
+
+```bash
+npm run dev
+```
+
+<Note>
+  The `dev` script starts the Nitric Server using `nitric start`, which provides
+  local interfaces to emulate cloud resources, then runs your services and
+  allows them to connect.
+</Note>
+
+If everything is working as expected you can now delete all files in the `services/` folder, we'll create new services in this guide.
+
+## Build the GraphQL Schema
+
+GraphQL requests are typesafe, and so they require a schema to be defined to validate queries.
+
+Let's first add the GraphQL and uuid module from NPM.
+
+```bash
+npm install graphql
+npm install uuid
+```
+
+Create a new file named 'graphql.ts' in the services folder.
+We can then import `buildSchema`, and write out the schema.
+
+```typescript
+import { graphql, buildSchema } from 'graphql'
+import { v4 as uuid } from 'uuid'
+
+const schema = buildSchema(`
+  type Profile {
+    pid: String!
+    name: String!
+    age: Int!
+    home: String!
+  }
+
+  input ProfileInput {
+    name: String!
+    age: Int!
+    home: String!
+  }
+
+  type Query {
+    fetchProfiles: [Profile]
+    fetchProfile(pid: String!): Profile
+  }
+
+  type Mutation {
+    createProfile(profile: ProfileInput!): Profile
+  }
+`)
+```
+
+We will also define a few types to mirror the schema definition.
+
+```typescript
+interface Profile {
+  pid: string
+  name: string
+  age: number
+  home: string
+}
+
+type ProfileInput = Omit<Profile, 'pid'>
+```
+
+## Define a KV Store
+
+Lets define a KV resource for the resolvers get/set data from with some helper functions for serialization.
+
+```typescript
+import { kv } from '@nitric/sdk'
+
+const profiles = kv('profiles').allow('get', 'set')
+
+// Helper function to get current profiles
+async function getProfiles() {
+  try {
+    const serializedList = await profiles.get('profiles')
+    return serializedList && serializedList['ids']
+      ? JSON.parse(serializedList['ids'])
+      : []
+  } catch (error) {
+    await profiles.set('profiles', { ids: [] })
+    return []
+  }
+}
+
+// Helper function to update profiles list
+async function updateProfiles(profileList) {
+  try {
+    const updatedSerializedList = JSON.stringify(profileList)
+    await profiles.set('profiles', { ids: updatedSerializedList })
+  } catch (error) {
+    console.error('Error updating profiles:', error)
+  }
+}
+```
+
+## Create Resolvers
+
+We can create a resolver object for use by the graphql handler.
+
+```typescript
+const resolvers = {
+  createProfile,
+  fetchProfiles,
+  fetchProfile,
+}
+```
+
+These services don't exist, so we'll have to define them.
+
+We can then use the KV resource within these services. Each resolver will receive an `args` object which holds the graphql arguments from the query.
+
+## Create a profile
+
+```typescript
+const createProfile = async ({ profile }): Promise<Profile> => {
+  const profileList = await getProfiles()
+  profile.pid = uuid()
+  profileList.push(profile)
+  await updateProfiles(profileList)
+  return profile
+}
+```
+
+## Get all profiles
+
+```typescript
+const fetchProfiles = async (): Promise<Profile[]> => {
+  return await getProfiles()
+}
+```
+
+## Get a profile by its ID
+
+```typescript
+const fetchProfile = async ({ pid }): Promise<Profile> => {
+  const profileList = await getProfiles()
+  const profile = profileList.find((profile) => profile.pid === pid)
+  return profile
+}
+```
+
+## GraphQL Handler
+
+We'll define an api to put our handler in. This api will only have one endpoint, which will handle all the requests.
+
+Update the imports to include api and declare the api.
+
+```typescript
+import { api, kv } from '@nitric/sdk'
+
+const profileApi = api('public')
+```
+
+Then add the api handler.
+
+```typescript
+import { graphql, buildSchema } from 'graphql'
+
+profileApi.post('/', async (ctx) => {
+  const { query, variables } = ctx.req.json()
+  const result = await graphql({
+    schema: schema,
+    source: query,
+    rootValue: resolvers,
+  })
+
+  return ctx.res.json(result)
+})
+```
+
+## Run it!
+
+Now that you have an API defined with a handler for the GraphQL requests, it's time to test it out locally.
+
+Test out your application with the following command:
+
+```bash
+npm run dev
+```
+
+<Note>
+  The `dev` script in the template starts the Nitric Server using `nitric start`
+  and runs your services.
+</Note>
+
+Once it starts, the application will be able to receive requests via the API port.
+
+Pressing `ctrl + a + k` will end the application.
+
+## GraphQL Queries
+
+We can use cURL, postman or any other HTTP Client to test our application, however it's better if the client has GraphQL support.
+
+### Get all Profiles using cURL
+
+```bash
+curl --location -X POST \
+  'http://localhost:4001' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"query":"query { getProfiles { pid name age home }}","variables":{}}'
+```
+
+```json
+{
+  "data": {
+    "getProfiles": [
+      {
+        "pid": "3f70ca58-25ed-4e88-8a45-eea1fbbb45d8",
+        "name": "Tony Stark",
+        "age": 53,
+        "home": "Manhattan, New York City"
+      },
+      {
+        "pid": "9c53bd95-199c-4151-a2a6-0da3ae24c29d",
+        "name": "Peter Parker",
+        "age": 22,
+        "home": "Queens, New York City"
+      },
+      {
+        "pid": "9ff191b0-0fbe-4e49-b944-85e79b5caa21",
+        "name": "Steve Rogers",
+        "age": 105,
+        "home": "New York City"
+      }
+    ]
+  }
+}
+```
+
+### Get a single profile
+
+```bash
+curl --location -X POST \
+  'http://localhost:4001' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"query":"query { getProfile(pid: \"3f70ca58-25ed-4e88-8a45-eea1fbbb45d8\") { pid name age home }}","variables":{}}'
+
+```
+
+```json
+{
+  "data": {
+    "getProfile": {
+      "pid": "3f70ca58-25ed-4e88-8a45-eea1fbbb45d8",
+      "name": "Tony Stark",
+      "age": 53,
+      "home": "Manhattan, New York City"
+    }
+  }
+}
+```
+
+### Create a profile
+
+```bash
+curl --location -X POST \
+  'http://localhost:4001' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"query":"mutation { createProfile(profile: { name: \"Tony Stark\", age: 53, home: \"Manhattan, New York City\" }){ pid name age home }}","variables":{}}'
+```
+
+```json
+{
+  "data": {
+    "getProfile": {
+      "pid": "3f70ca58-25ed-4e88-8a45-eea1fbbb45d8",
+      "name": "Tony Stark",
+      "age": 53,
+      "home": "Manhattan, New York City"
+    }
+  }
+}
+```
+
+### Update a profile
+
+```bash
+curl --location -X POST \
+  'http://localhost:4001' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{"query":"mutation { updateProfile(pid: \"3f70ca58-25ed-4e88-8a45-eea1fbbb45d8\",profile: { name: \"Peter Parker\", age: 22, home: \"Queens, New York City\" }){ pid name age home }}","variables":{}}'
+```
+
+```json
+{
+  "data": {
+    "getProfile": {
+      "pid": "3f70ca58-25ed-4e88-8a45-eea1fbbb45d8",
+      "name": "Peter Parker",
+      "age": 22,
+      "home": "Queens, New York City"
+    }
+  }
+}
+```
+
+## Deploy to the cloud
+
+Setup your credentials and any other cloud specific configuration:
+
+- [AWS](/reference/providers/aws)
+- [Azure](/reference/providers/azure)
+- [GCP](/reference/providers/gcp)
+
+Create a stack - a collection of resources identified in your project which will be deployed.
+
+```bash
+nitric stack new
+```
+
+```
+? What should we name this stack? dev
+? Which provider do you want to deploy with? aws
+? Which region should the stack deploy to? us-east-1
+```
+
+You can then deploy using the following command:
+
+```bash
+nitric up
+```
+
+To undeploy run the following command:
+
+```bash
+nitric down
+```

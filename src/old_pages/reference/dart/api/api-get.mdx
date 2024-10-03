@@ -1,0 +1,64 @@
+export const description =
+  "Reference for Nitric's Dart library - Register an API route and set a specific HTTP GET handler on that route."
+
+# Dart - api.get()
+
+Register an API route and set a specific HTTP GET handler on that route.
+
+<Note>
+  This method is a convenient short version of
+  [api().route().get()](./api-route-get)
+</Note>
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+// Create an API named 'public'
+final api = Nitric.api("public");
+
+api.get("/customers/:customerId", (ctx) async {
+  // Extract the path parameter
+  final id = ctx.req.pathParams["customerId"]!;
+
+  // Construct response for the GET: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
+```
+
+## Parameters
+
+<Properties>
+  <Property name="match" required type="String">
+    The path matcher to use for the route. Matchers accept path parameters in
+    the form of a colon prefixed string. The string provided will be used as
+    that path parameter's name when calling handlers.
+  </Property>
+  <Property name="handler" required type="HttpHandler">
+    The middleware service to use as the handler for HTTP requests.
+  </Property>
+  <Property name="security" type="List<OidcOptions>">
+    Security rules to apply with scopes to the entire API.
+  </Property>
+</Properties>
+
+## Examples
+
+### Register a handler for GET requests
+
+```dart
+import 'package:nitric_sdk/nitric.dart';
+
+// Create an API named 'public'
+final api = Nitric.api("public");
+
+api.get("/customers", (ctx) async {
+  // Construct response for the GET: /customers request...
+  final responseBody = {};
+  ctx.res.json(responseBody);
+
+  return ctx;
+});
+```

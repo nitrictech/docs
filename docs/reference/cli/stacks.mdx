@@ -1,0 +1,138 @@
+---
+description: 'Understanding Nitric stacks'
+---
+
+# Stacks
+
+## Stacks
+
+A Nitric stack represents a pairing of a project and its deployment target. A project may have multiple stacks as the deployment target is broken down into a cloud provider e.g. `aws` and a region e.g. `us-east-1`.
+
+If your project needs to deploy to `aws` in two regions `us-east-1` and `eu-west-1`, you'll have two stack definitions in your project.
+
+## Creating a stack
+
+To create a stack use the new command from your project root. Each stack name must be unique within the project.
+
+```bash
+nitric stack new
+```
+
+Continue by selecting your preferred cloud, this will create your stack definition file. The stack definition will be created in the root of your project as a YAML file prefixed with `nitric.` e.g. `nitric.aws-stack.yaml`.
+
+Now you can enter the required fields for your chosen cloud:
+
+<CodeSwitcher>
+
+```yaml {{ title: "AWS" }}
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/aws@latest
+region: us-east-1
+```
+
+```yaml {{ title: "Azure" }}
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/azure@latest
+adminemail: admin@company.co
+org: my-org
+region: eastus
+```
+
+```yaml {{ title: "Google Cloud" }}
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/gcp@latest
+gcp-project-id: project-id
+region: us-east1
+```
+
+</CodeSwitcher>
+
+If you want to specify different configuration for your services you can use the following syntax:
+
+<CodeSwitcher>
+
+```yaml {{ title: "AWS" }}
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/aws@latest
+region: us-east-1
+config:
+  default:
+    lambda:
+      memory: 1024
+      telemetry: 10
+    target: lambda
+  memory-optimized:
+    lambda:
+      memory: 4096
+```
+
+```yaml {{ title: "Azure" }}
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/azure@latest
+adminemail: admin@company.co
+org: my-org
+region: eastus
+config:
+  default:
+    telemetry: 0
+    containerapps:
+      memory: 0.5
+      cpu: 0.25
+```
+
+```yaml {{ title: "Google Cloud" }}
+# Using @latest in production can lead to breaking changes. Pin to a specific version for stability.
+provider: nitric/gcp@latest
+gcp-project-id: project-id
+region: us-east1
+config:
+  default:
+    telemetry: 0
+    cloudrun:
+      memory: 512
+      timeout: 15
+```
+
+</CodeSwitcher>
+
+<Note>
+  For more information on what can be configured, [look
+  here](/getting-started/deployment#configuring-deployment)
+</Note>
+
+Once you have created a stack, you're ready to deploy and undeploy to your deployment target. See the [CLI docs](/reference/cli) for available commands.
+
+### Legacy Stacks
+
+Previously, stacks were not tied to a specific runtime and did not version the providers. It had the following format:
+
+```yaml
+name: my-aws-stack
+provider: aws
+region: us-east-1
+config:
+  default:
+    memory: 1024
+    telemetry: 10
+  memory-optimized:
+    memory: 4096
+```
+
+The provider has been updated from `aws`, `gcp`, and `azure` to `nitric/aws@x.x.x`, `nitric/gcp@x.x.x`, and `nitric/azure@x.x.x` respectively. This change enables locking a version for your deployments, as it was previously tied to the CLI version. This change will also enable creation of your own [custom deployment providers](/reference/providers/custom/building-custom-provider).
+
+There was also a change to the way configuration is written to support multiple execution runtimes. Currently there are no new runtimes supported (just Lambda, Cloud Run, and Container Apps), however there are plans to support more in the near future, hence the change. The migration involves adding the runtime key to the configuration, letting the deployment know what runtime it should apply the configuration to.
+
+```yaml
+# Legacy
+config:
+  default:
+    memory: 1024
+  memory-optimized:
+    memory: 4096
+```
+
+You can read the new configuration for each provider here, [AWS](/reference/providers/aws/configuration), [Google Cloud](/reference/providers/gcp/configuration), and [Azure](/reference/providers/azure/configuration).
+
+## Updating a stack definition
+
+You are free to manually edit the stack definition if required, ensure that both the provider and region values are valid or simply run the `nitric stack new` command again with the `--force` flag.
