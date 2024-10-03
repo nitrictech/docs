@@ -8,10 +8,10 @@ Job handlers are the code that is run when a job request is submitted. These han
 ```python
 from nitric.resources import job
 
-analyse = job("analyse")
+analyze = job("analyze")
 
-@analyse(cpus=1, memory=2048, gpus=0)
-def do_analyse(data):
+@analyze(cpus=1, memory=2048, gpus=0)
+def do_analyze(data):
   # Run batch job
   pass
 ```
@@ -47,10 +47,10 @@ batch-services:
 ```python
 from nitric.resources import job
 
-analyse = job("analyse")
+analyze = job("analyze")
 
-@analyse()
-def do_analyse(data):
+@analyze()
+def do_analyze(data):
   # Run batch job
   pass
 ```
@@ -60,10 +60,10 @@ def do_analyse(data):
 ```python
 from nitric.resources import job
 
-analyse = job("analyse")
+analyze = job("analyze")
 
-@analyse(cpus=1, memory=2048, gpus=0)
-def do_analyse(data):
+@analyze(cpus=1, memory=2048, gpus=0)
+def do_analyze(data):
   # Run batch job
   pass
 ```

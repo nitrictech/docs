@@ -14,12 +14,12 @@ import (
 )
 
 func main() {
-	analyse, err := nitric.NewJob("analyse").Allow(nitric.JobSubmit)
+	analyze, err := nitric.NewJob("analyze").Allow(nitric.JobSubmit)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	analyse.Submit(context.TODO(), map[string]interface{}{
+	analyze.Submit(context.TODO(), map[string]interface{}{
 		"message": "message contents",
 	})
 
@@ -50,12 +50,12 @@ import (
 )
 
 func main() {
-	analyse, err := nitric.NewJob("analyse").Allow(nitric.JobSubmit)
+	analyze, err := nitric.NewJob("analyze").Allow(nitric.JobSubmit)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	analyse.Submit(context.TODO(), map[string]interface{}{
+	analyze.Submit(context.TODO(), map[string]interface{}{
 		"message": "message contents",
 	})
 

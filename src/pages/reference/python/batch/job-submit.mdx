@@ -8,9 +8,9 @@ Jobs may be submitted from Nitric `services` or other `batches` using the `submi
 ```python
 from nitric.resources import job
 
-analyse = job("analyse").allow("submit")
+analyze = job("analyze").allow("submit")
 
-await analyse.submit({ "message": "message contents" })
+await analyze.submit({ "message": "message contents" })
 ```
 
 ## Parameters
@@ -28,7 +28,7 @@ await analyse.submit({ "message": "message contents" })
 ```python
 from nitric.resources import job
 
-analyse = job("analyse").allow("submit")
+analyze = job("analyze").allow("submit")
 
-await analyse.submit({ "message": "message contents" })
+await analyze.submit({ "message": "message contents" })
 ```

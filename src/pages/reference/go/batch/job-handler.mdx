@@ -14,9 +14,9 @@ import (
 )
 
 func main() {
-	analyse := nitric.NewJob("analyse")
+	analyze := nitric.NewJob("analyze")
 
-	analyse.Handler(nitric.JobResourceRequirements{
+	analyze.Handler(nitric.JobResourceRequirements{
 		Cpus:   1,
 		Memory: 2048,
 		Gpus:   0,
@@ -72,9 +72,9 @@ import (
 )
 
 func main() {
-	analyse := nitric.NewJob("analyse")
+	analyze := nitric.NewJob("analyze")
 
-	analyse.Handler(nitric.JobResourceRequirements{}, func(ctx *batch.Ctx) {
+	analyze.Handler(nitric.JobResourceRequirements{}, func(ctx *batch.Ctx) {
 		// do long running work
 	})
 
@@ -95,9 +95,9 @@ import (
 )
 
 func main() {
-	analyse := nitric.NewJob("analyse")
+	analyze := nitric.NewJob("analyze")
 
-	analyse.Handler(nitric.JobResourceRequirements{
+	analyze.Handler(nitric.JobResourceRequirements{
 		Cpus:   1,
 		Memory: 2048,
 		Gpus:   0,

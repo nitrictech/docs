@@ -8,9 +8,9 @@ Jobs may be submitted from Nitric `services` or other `batches` using the `submi
 ```ts
 import { job } from '@nitric/sdk'
 
-const analyse = job('analyse').allow('submit')
+const analyze = job('analyze').allow('submit')
 
-await analyse.submit({ message: 'message contents' })
+await analyze.submit({ message: 'message contents' })
 ```
 
 ## Parameters
@@ -28,7 +28,7 @@ await analyse.submit({ message: 'message contents' })
 ```ts
 import { job } from '@nitric/sdk'
 
-const analyse = job('analyse').allow('submit')
+const analyze = job('analyze').allow('submit')
 
-await analyse.submit({ message: 'message contents' })
+await analyze.submit({ message: 'message contents' })
 ```

@@ -56,12 +56,15 @@ Within a Batch we create Job Definitions, by creating a new Job with a unique na
 ```typescript
 import { job, JobContext } from '@nitric/sdk'
 
-const myJob = job('analyse')
+const analyze = job('analyze')
 
 // Use `handler` to register the callback function that will run when a job is submitted
-myJob.handler(async (ctx: JobContext) => {
-  // Do some work
-}, { cpus: 1, memory: 1024, gpus: 0 })
+analyze.handler(
+  async (ctx: JobContext) => {
+    // Do some work
+  },
+  { cpus: 1, memory: 1024, gpus: 0 }
+)
 ```
 
 ```python
@@ -84,7 +87,7 @@ Nitric.run()
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {
-  final job = Nitric.job("batch-jobs");
+  final job = Nitric.job("analyze");
 
   job.handler((ctx) async {
     print("New job submitted for ${ctx.req.jobName}: ${ctx.req.message}");

@@ -8,9 +8,9 @@ Jobs may be submitted from Nitric `services` or other `batches` using the `submi
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final analyse = Nitric.job("analyse").allow([JobPermission.submit]);
+final analyze = Nitric.job("analyze").allow([JobPermission.submit]);
 
-await analyse.submit({ message: "message contents" });
+await analyze.submit({ message: "message contents" });
 ```
 
 ## Parameters
@@ -28,7 +28,7 @@ await analyse.submit({ message: "message contents" });
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final analyse = Nitric.job("analyse").allow([JobPermission.submit]);
+final analyze = Nitric.job("analyze").allow([JobPermission.submit]);
 
-await analyse.submit({ message: "data contents" });
+await analyze.submit({ message: "data contents" });
 ```

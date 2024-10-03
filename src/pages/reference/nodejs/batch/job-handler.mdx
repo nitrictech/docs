@@ -8,12 +8,15 @@ Job handlers are the code that is run when a job request is submitted. These han
 ```ts
 import { job, JobContext } from '@nitric/sdk'
 
-const analyse = job('analyse')
+const analyze = job('analyze')
 
-analyse.handler(async (ctx: JobContext) => {
-  // Do some work
-  return ctx
-}, { cpus: 1, memory: 1024, gpus: 0 })
+analyze.handler(
+  async (ctx: JobContext) => {
+    // Do some work
+    return ctx
+  },
+  { cpus: 1, memory: 1024, gpus: 0 }
+)
 ```
 
 ## Defining Batches
@@ -53,9 +56,9 @@ batch-services:
 ```ts
 import { job, JobContext } from '@nitric/sdk'
 
-const analyse = job('analyse')
+const analyze = job('analyze')
 
-analyse.handler(async (ctx: JobContext) => {
+analyze.handler(async (ctx: JobContext) => {
   // Do some work
   return ctx
 })
@@ -66,10 +69,13 @@ analyse.handler(async (ctx: JobContext) => {
 ```ts
 import { job, JobContext } from '@nitric/sdk'
 
-const analyse = job('analyse')
+const analyze = job('analyze')
 
-analyse.handler(async (ctx: JobContext) => {
-  // Do some work
-  return ctx
-}, { cpus: 1, memory: 2048, gpus: 0 })
+analyze.handler(
+  async (ctx: JobContext) => {
+    // Do some work
+    return ctx
+  },
+  { cpus: 1, memory: 2048, gpus: 0 }
+)
 ```

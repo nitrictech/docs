@@ -8,9 +8,9 @@ Job handlers are the code that is run when a job request is submitted. These han
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final analyse = Nitric.job("analyse").allow([JobPermission.submit]);
+final analyze = Nitric.job("analyze").allow([JobPermission.submit]);
 
-analyse.handler((ctx) async {
+analyze.handler((ctx) async {
   return ctx;
 }, opts: JobResourceRequirements(cpus: 1, memory: 2048, gpus: 0));
 ```
@@ -51,9 +51,9 @@ batch-services:
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final analyse = Nitric.job("analyse").allow([JobPermission.submit]);
+final analyze = Nitric.job("analyze").allow([JobPermission.submit]);
 
-analyse.handler((ctx) async {
+analyze.handler((ctx) async {
   return ctx;
 });
 ```
@@ -63,9 +63,9 @@ analyse.handler((ctx) async {
 ```dart
 import 'package:nitric_sdk/nitric.dart';
 
-final analyse = Nitric.job("analyse").allow([JobPermission.submit]);
+final analyze = Nitric.job("analyze").allow([JobPermission.submit]);
 
-analyse.handler((ctx) async {
+analyze.handler((ctx) async {
   return ctx;
 }, opts: JobResourceRequirements(cpus: 1, memory: 2048, gpus: 1));
 ```

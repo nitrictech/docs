@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	analyse := nitric.NewJob("analyse")
+	analyze := nitric.NewJob("analyze")
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
@@ -42,7 +42,7 @@ import (
 )
 
 func main() {
-	analyse := nitric.NewJob("analyse")
+	analyze := nitric.NewJob("analyze")
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
@@ -60,7 +60,7 @@ import (
 )
 
 func main() {
-	analyse, err := nitric.NewJob("analyse").Allow(nitric.JobSubmit)
+	analyze, err := nitric.NewJob("analyze").Allow(nitric.JobSubmit)
 	if err != nil {
 		fmt.Println(err)
 	}
