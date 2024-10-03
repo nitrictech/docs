@@ -49,7 +49,7 @@ const FeedbackForm = () => {
     >
       <input
         name="ua"
-        value={navigator.userAgent}
+        value={typeof window !== 'undefined' ? window.navigator.userAgent : ''}
         className="hidden"
         readOnly
       />

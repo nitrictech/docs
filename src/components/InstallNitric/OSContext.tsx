@@ -17,7 +17,8 @@ export interface OSContextProps {
 
 // this function detects the operating system of the user and returns the name that will be used to sort the instructions
 function detectOS() {
-  const userAgent = window.navigator.userAgent
+  const userAgent =
+    typeof window !== 'undefined' ? window.navigator.userAgent : ''
   if (userAgent.includes('Mac')) {
     return 'macOS'
   } else if (userAgent.includes('Win')) {
