@@ -13,6 +13,7 @@ CORS
 ECR
 GCP
 GCR
+HPC
 IAM
 OpenID
 JSON
@@ -82,6 +83,7 @@ roadmap
 scaffolded
 scalable
 serverless
+transcoding
 triages
 undeploy
 uuid

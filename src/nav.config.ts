@@ -4,6 +4,7 @@ import {
   ClockIcon,
   CloudIcon,
   CommandLineIcon,
+  CpuChipIcon,
   GlobeAltIcon,
   HomeIcon,
   LockClosedIcon,
@@ -67,6 +68,11 @@ const buildingBlockLinks = [
     title: 'HTTP',
     href: '/http',
     icon: ServerIcon,
+  },
+  {
+    title: 'AI & Batch',
+    href: '/batch',
+    icon: CpuChipIcon,
   },
   {
     title: 'Key Value Stores',
@@ -694,6 +700,20 @@ const fullNav: FullNav = {
       links: buildingBlockLinks.filter((link) => link.href !== '/http'),
     },
   ],
+  batch: [
+    {
+      links: [
+        {
+          title: 'Overview',
+          href: '/batch',
+        },
+      ],
+    },
+    {
+      title: 'More Building Blocks',
+      links: buildingBlockLinks.filter((link) => link.href !== '/batch'),
+    },
+  ],
   keyvalue: [
     {
       links: [
@@ -1171,6 +1191,23 @@ const fullNav: FullNav = {
       ],
     },
     {
+      title: 'Batch Jobs',
+      links: [
+        {
+          title: 'job()',
+          href: '/reference/nodejs/batch/job',
+        },
+        {
+          title: 'job.handler()',
+          href: '/reference/nodejs/batch/job-handler',
+        },
+        {
+          title: 'job.send()',
+          href: '/reference/nodejs/batch/job-submit',
+        },
+      ],
+    },
+    {
       title: 'HTTP',
       links: [
         {
@@ -1637,6 +1674,23 @@ const fullNav: FullNav = {
       ],
     },
     {
+      title: 'Batch Jobs',
+      links: [
+        {
+          title: 'job()',
+          href: '/reference/python/batch/job',
+        },
+        {
+          title: 'job.handler()',
+          href: '/reference/python/batch/job-handler',
+        },
+        {
+          title: 'job.send()',
+          href: '/reference/python/batch/job-submit',
+        },
+      ],
+    },
+    {
       title: 'Key Value Stores',
       links: [
         {
@@ -1864,6 +1918,23 @@ const fullNav: FullNav = {
         {
           title: 'api.route.patch()',
           href: '/reference/dart/api/api-route-patch',
+        },
+      ],
+    },
+    {
+      title: 'Batch Jobs',
+      links: [
+        {
+          title: 'job()',
+          href: '/reference/dart/batch/job',
+        },
+        {
+          title: 'job.handler()',
+          href: '/reference/dart/batch/job-handler',
+        },
+        {
+          title: 'job.send()',
+          href: '/reference/dart/batch/job-submit',
         },
       ],
     },
@@ -2499,6 +2570,10 @@ const fullNav: FullNav = {
           href: '/reference/go/api/api',
         },
         {
+          title: 'NewJob()',
+          href: '/reference/go/batch/job',
+        },
+        {
           title: 'NewKv()',
           href: '/reference/go/keyvalue/keyvalue',
         },
@@ -2578,6 +2653,19 @@ const fullNav: FullNav = {
         {
           title: 'Api.Route.Patch()',
           href: '/reference/go/api/api-route-patch',
+        },
+      ],
+    },
+    {
+      title: 'Batch Jobs',
+      links: [
+        {
+          title: 'Job.Handler()',
+          href: '/reference/go/batch/job-handler',
+        },
+        {
+          title: 'Job.Send()',
+          href: '/reference/go/batch/job-submit',
         },
       ],
     },
