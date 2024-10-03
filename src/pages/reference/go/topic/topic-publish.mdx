@@ -8,29 +8,21 @@ Publish an event (push based message) to a topic.
 ```go
 import (
   "context"
-  "fmt"
 
-  "github.com/nitrictech/go-sdk/api/events"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-  updates, err := nitric.NewTopic("updates").Allow(nitric.TopicPublishing)
-  if err != nil {
-    fmt.Println(err)
+  updates := nitric.NewTopic("updates").Allow(topics.TopicPublish)
 
-    return
-  }
-
-  updates.Publish(context.TODO(), &events.Event{
-    Payload: map[string]interface{}{
+  updates.Publish(context.TODO(),
+    map[string]interface{}{
       "something": "amazing happened",
     },
-  })
+  )
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -40,19 +32,8 @@ func main() {
   <Property name="ctx" required type="context">
     The context of the call, used for tracing.
   </Property>
-  <Property name="event" required type="Event">
+  <Property name="event" required type="map[string]interface{}">
     The event to publish to the topic.
-    <Properties nested>
-      <Property name="ID" type="string">
-        Unique ID to apply to the event.
-      </Property>
-      <Property name="Payload" required type="map[string]interface{}">
-        Payload to send with the event.
-      </Property>
-      <Property name="PayloadType" type="string">
-        A hint to the type of payload supplied.
-      </Property>
-    </Properties>
   </Property>
   <Property name="opts" type="PublishOption">
     Optional function to send a message with a delay.
@@ -68,28 +49,21 @@ Publishing messages to a topic will push a copy of the message to each of the to
 ```go
 import (
   "context"
-  "fmt"
 
-  "github.com/nitrictech/go-sdk/api/events"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-  updates, err := nitric.NewTopic("updates").Allow(nitric.TopicPublishing)
-  if err != nil {
-    fmt.Println(err)
+  updates := nitric.NewTopic("updates").Allow(topics.TopicPublish)
 
-    return
-  }
-
-  err := updates.Publish(context.TODO(), &events.Event{
-    Payload: map[string]interface{}{
+  updates.Publish(context.TODO(),
+    map[string]interface{}{
       "something": "amazing happened",
     },
-  })
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  )
+
+  nitric.Run()
 }
 ```
 
@@ -100,34 +74,19 @@ You can delay the delivery of messages sent to a topic. The current maximum dela
 ```go
 import (
   "context"
-  "fmt"
   "time"
 
-  "github.com/nitrictech/go-sdk/api/events"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-  updates, err := nitric.NewTopic("updates").Allow(nitric.TopicPublishing)
-  if err != nil {
-    fmt.Println(err)
+  updates := nitric.NewTopic("updates").Allow(topics.TopicPublish)
 
-    return
-  }
+  updates.Publish(context.TODO(), map[string]interface{}{
+    "something": "amazing happened",
+  }, topics.WithDelay(time.Hour))
 
-  updates.Publish(context.TODO(), &events.Event{
-    Payload: map[string]interface{}{
-      "something": "amazing happened",
-    },
-  }, events.WithDelay(time.Hour))
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
-
-### Notes
-
-- If an id is not supplied with an event a UUID(v4) will be generated for you.
-- A function may subscribe to OR publish to a topic but not both.

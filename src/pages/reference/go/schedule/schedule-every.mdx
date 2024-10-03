@@ -7,23 +7,16 @@ Sets the frequency and one or many handlers to be triggered.
 
 ```go
 import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
   // Create a schedule that runs every 3 minutes
-  nitric.NewSchedule("send reminder").Every("3 minutes", func(ctx *handler.IntervalContext, _ handler.IntervalHandler) (*handler.IntervalContext, error) {
+  nitric.NewSchedule("send reminder").Every("3 minutes", func() {
     // code which sends a reminder
-
-    return ctx, nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -34,9 +27,9 @@ func main() {
     The rate to run the schedule, e.g., '7 days'. All rates accept a number and
     a frequency. Valid frequencies are 'days', 'hours', or 'minutes'.
   </Property>
-  <Property name="middleware" required type="EventMiddleware">
-    One or more middleware functions to use as the handler which will run on the
-    defined frequency.
+  <Property name="handler" required type="interface{}">
+    The callback function to use as the handler which will run on the defined
+    frequency.
   </Property>
 </Properties>
 
@@ -46,53 +39,15 @@ func main() {
 
 ```go
 import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
   // Create a schedule that runs every 3 minutes
-  nitric.NewSchedule("send reminder").Every("3 minutes", func(ctx *handler.IntervalContext, _ handler.IntervalHandler) (*handler.IntervalContext, error) {
+  nitric.NewSchedule("send reminder").Every("3 minutes", func() {
     // code which sends a reminder
-
-    return ctx, nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-### Create a Schedule with multiple middleware/handlers
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func generateReport(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
-  // generate report
-
-  return next(ctx)
-}
-
-func sendNotification(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
-  // send notification with the report
-
-  return next(ctx)
-}
-
-func main() {
-  nitric.NewSchedule("aggregate data").Every("3 days", handler.ComposeIntervalMiddleware(generateReport, sendNotification))
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

@@ -56,7 +56,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/apis"
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -70,11 +70,9 @@ func main() {
 	// ✅ This declaration will work
 	bucket, err := nitric.NewBucket("files").Allow(nitric.BucketRead)
 
-	api.Get("/files/:name", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+	api.Get("/files/:name", func(ctx *apis.Ctx) {
 		// ❌ This declaration will not work, as this is only called at runtime.
 		badBucket, err := nitric.NewBucket("wont-work").Allow(nitric.BucketRead)
-
-		return next(ctx)
 	})
 
 	if err := nitric.Run(); err != nil {
@@ -155,7 +153,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/apis"
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -170,20 +168,16 @@ func main() {
 	bucket, err := nitric.NewBucket("files").Allow(nitric.BucketRead)
 
 	// ❌ This access will not work
-	fileContents, _ := bucket.File("example.txt").Read()
+	fileContents, _ := bucket.Read(context.TODO(), "example.txt")
 
-	api.Get("/files/:name", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+	api.Get("/files/:name", func(ctx *apis.Ctx) {
 		// ✅ This access will work
-		fileContents, _ := bucket.File("example.txt").Read()
-
-		return next(ctx)
+		fileContents, _ := bucket.Read(context.TODO(), "example.txt")
 	})
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
-
-	fmt.Println("Service has started")
 }
 ```
 
@@ -329,7 +323,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
 	"github.com/nitrictech/go-sdk/nitric"
 	"github.com/nitrictech/your-org/your-repo/resources"
 )
@@ -340,19 +333,15 @@ func main() {
 		panic(err)
 	}
 
-	resources.PublicApi.Post("/update", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+	resources.PublicApi.Post("/update", func() {
 		publisher.Publish(context.TODO(), map[string]interface{}{
 			"test": "message",
 		})
-
-		return next(ctx)
 	})
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
-
-	fmt.Println("Api service has started")
 }
 
 
@@ -362,16 +351,13 @@ package main
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
 	"github.com/nitrictech/go-sdk/nitric"
 	"github.com/nitrictech/your-org/your-repo/resources"
 )
 
 func main() {
-	resources.UpdateTopic.Subscribe(func(mc *handler.MessageContext, mh handler.MessageHandler) (*handler.MessageContext, error) {
+	resources.UpdateTopic.Subscribe(func() {
 		println("got the message")
-
-		return mc, nil
 	})
 
 	if err := nitric.Run(); err != nil {
@@ -516,22 +502,19 @@ package main
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/apis"
 	"github.com/nitrictech/go-sdk/nitric"
 	"github.com/your-org/your-repo/resources"
 )
 
 func main() {
-	resources.PublicApi.Get("/bucket-one/file/:name", func(hc *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+	resources.PublicApi.Get("/bucket-one/file/:name", func(ctx *apis.Ctx) {
 		// do something with the file
-		return next(hc)
 	})
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
-
-	fmt.Println("Service has started")
 }
 
 // services/service-two/main.go
@@ -540,22 +523,19 @@ package main
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
+	"github.com/nitrictech/go-sdk/nitric/apis"
 	"github.com/nitrictech/go-sdk/nitric"
 	"github.com/your-org/your-repo/resources"
 )
 
 func main() {
-	resources.PublicApi.Get("/bucket-two/file/:name", func(hc *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+	resources.PublicApi.Get("/bucket-two/file/:name", func(hc *apis.Ctx) {
 		// do something with the file
-		return next(hc)
 	})
 
 	if err := nitric.Run(); err != nil {
 		fmt.Println(err)
 	}
-
-	fmt.Println("Service has started")
 }
 ```
 

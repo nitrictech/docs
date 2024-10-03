@@ -42,17 +42,14 @@ Nitric.run()
 
 ```go
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-	userCreatedTopic, _ := nitric.NewTopic("user-created").Allow(nitric.TopicPublish)
+  userCreatedTopic := nitric.NewTopic("user-created").Allow(topics.TopicPublish)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -99,22 +96,20 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-	userCreatedTopic, _ := nitric.NewTopic("user-created").Allow(nitric.TopicPublish)
+  userCreatedTopic := nitric.NewTopic("user-created").Allow(topics.TopicPublish)
 
-	_ = userCreatedTopic.Publish(context.TODO(), map[string]interface{}{
-		"email": "new.user@example.com",
-	})
+  _ = userCreatedTopic.Publish(context.TODO(), map[string]interface{}{
+    "email": "new.user@example.com",
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -172,27 +167,24 @@ Nitric.run()
 
 ```go
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
-	"github.com/your-org/your-project/common"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-	userCreatedTopic := nitric.NewTopic("user-created")
+  userCreatedTopic := nitric.NewTopic("user-created")
 
-	userCreatedTopic.Subscribe(func(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
-		email := ctx.Request.Message()["email"].(string)
+  userCreatedTopic.Subscribe(func(ctx *topics.Ctx) {
+    email := ctx.Request.Message()["email"].(string)
 
-		sendWelcomeEmail(email)
+    sendWelcomeEmail(email)
+  })
 
-		return ctx, nil
-	})
+  nitric.Run()
+}
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+func sendWelcomeEmail(email string) {
+  // TODO: Implement email sending
 }
 ```
 
@@ -272,30 +264,24 @@ Nitric.run()
 
 ```go
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
-	"github.com/your-org/your-project/common"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
+  "github.com/your-org/your-project/common"
 )
 
 func main() {
-	userCreatedTopic := nitric.NewTopic("updates")
+  userCreatedTopic := nitric.NewTopic("updates")
 
-	userCreatedTopic.Subscribe(func(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
-		if common.isDuplicate(ctx.Request) {
-			return ctx, nil
-		}
+  userCreatedTopic.Subscribe(func(ctx *topics.Ctx) {
+    if common.isDuplicate(ctx.Request) {
+      return
+    }
 
-		// not a duplicate, process the event
-  		// ...
+    // not a duplicate, process the event
+    // ...
+  })
 
-		return ctx, nil
-	})
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -364,17 +350,14 @@ Nitric.run()
 
 ```go
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
 )
 
 func main() {
-	transactionQueue, _ := nitric.NewQueue("transactions").Allow(nitric.QueueEnqueue, nitric.QueueDequeue)
+  transactionQueue := nitric.NewQueue("transactions").Allow(queues.QueueEnqueue, queues.QueueDequeue)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -421,24 +404,22 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
 )
 
 func main() {
-	transactionQueue, _ := nitric.NewQueue("transactions").Allow(nitric.QueueEnqueue)
+  transactionQueue := nitric.NewQueue("transactions").Allow(queues.QueueEnqueue)
 
-	messages := []map[string]interface{}{
-		{"message": "hello world"},
-	}
+  messages := []map[string]interface{}{
+    {"message": "hello world"},
+  }
 
-	transactionQueue.Enqueue(context.TODO(), messages)
+  transactionQueue.Enqueue(context.TODO(), messages)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -494,25 +475,23 @@ Nitric.run()
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
 )
 
 func main() {
-	transactionQueue, _ := nitric.NewQueue("transactions").Allow(nitric.QueueEnqueue)
+  transactionQueue := nitric.NewQueue("transactions").Allow(queues.QueueEnqueue)
 
-	messages := []map[string]interface{}{
-		{"message": "batch task 1"},
-		{"message": "batch task 2"},
-	}
+  messages := []map[string]interface{}{
+    {"message": "batch task 1"},
+    {"message": "batch task 2"},
+  }
 
-	transactionQueue.Enqueue(context.TODO(), messages)
+  transactionQueue.Enqueue(context.TODO(), messages)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -581,28 +560,27 @@ for task in tasks:
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
 )
 
 func main() {
-	transactionQueue, _ := nitric.NewQueue("transactions").Allow(nitric.QueueDequeue)
+  transactionQueue := nitric.NewQueue("transactions").Allow(queues.QueueDequeue)
 
-	messages, _ := transactionQueue.Dequeue(context.TODO(), 10)
+  messages, _ := transactionQueue.Dequeue(context.TODO(), 10)
 
-	for _, message := range messages {
-		// process your message's data
-		fmt.Println(message.Message())
+  for _, message := range messages {
+    // process your message's data
+    fmt.Println(message.Message())
 
-		// acknowledge when the message is complete
-		message.Complete(context.TODO())
-	}
+    // acknowledge when the message is complete
+    message.Complete(context.TODO())
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 

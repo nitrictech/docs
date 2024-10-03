@@ -34,9 +34,7 @@ func main() {
     return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -113,9 +111,7 @@ func main() {
     return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -151,8 +147,6 @@ func main() {
 
   ws.On(faas.WebsocketMessage, faas.ComposeWebsocketMiddleware(validateMessage, handleMessage))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

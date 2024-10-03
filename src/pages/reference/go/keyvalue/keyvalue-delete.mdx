@@ -7,27 +7,23 @@ Delete key from a key value store.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
-	// Initialize the KV service
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreDelete)
-	if err != nil {
-		return
-	}
+  // Initialize the KV service
+  profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreDelete)
 
-	err = profiles.Delete(context.Background(), "profile-1a2b3c")
-	if err != nil {
-		fmt.Println(err)
-	}
+  err := profiles.Delete(context.Background(), "profile-1a2b3c")
+  if err != nil {
+    fmt.Println(err)
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -52,22 +48,18 @@ import (
 	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/keyvalue"
 )
 
 func main() {
 	// Initialize the KV service
-	profiles, err := nitric.NewKv("profiles").Allow(nitric.KvStoreDelete)
-	if err != nil {
-		return
-	}
+	profiles := nitric.NewKv("profiles").Allow(keyvalue.KvStoreDelete)
 
-	err = profiles.Delete(context.Background(), "profile-1a2b3c")
+	err := profiles.Delete(context.Background(), "profile-1a2b3c")
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```

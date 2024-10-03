@@ -7,36 +7,26 @@ Register a handler for connections, disconnections, or messages for the websocke
 
 ```go
 import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/websockets"
 )
 
 func main() {
-  ws, err := nitric.NewWebsocket("public")
-  if err != nil {
-    return
-  }
+  ws := nitric.NewWebsocket("public")
 
-  ws.On(handler.WebsocketConnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+  ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
     // handle connections
-    return next(ctx)
   })
 
-  ws.On(handler.WebsocketDisconnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+  ws.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) {
     // handle disconnections
-    return next(ctx)
   })
 
-  ws.On(handler.WebsocketMessage, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+  ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
     // handle messages
-    return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -44,13 +34,11 @@ func main() {
 
 <Properties>
   <Property name="eventType" required type="WebsocketEventType">
-    The type of websocket event to listen for. Can be `WebsocketConnect`,
-    `WebsocketDisconnect`, or `WebsocketMessage`.
+    The type of websocket event to listen for. Can be `EventType_Connect`,
+    `EventType_Disconnect`, or `EventType_Message`.
   </Property>
-  <Property name="middleware" required type="WebsocketMiddleware">
-    The middleware function to use as the handler for Websocket events. If you
-    want to compose more than one middleware use
-    `handler.ComposeWebsocketMiddleware`.
+  <Property name="handler" required type="interface{}">
+    The callback function to use as the handler for Websocket events.
   </Property>
 </Properties>
 
@@ -59,10 +47,8 @@ func main() {
 ### Register a handler for message events
 
 ```go
-ws.On(handler.WebsocketMessage, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
   fmt.Printf("New Message from %s: %s\n", ctx.Request.ConnectionID(), ctx.Request.Message())
-
-  return next(ctx)
 })
 ```
 
@@ -72,106 +58,52 @@ To store Websocket connections you can use a Nitric collection.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
 
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
+  "github.com/nitrictech/go-sdk/nitric/websockets"
 )
 
 func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
+  ws := nitric.NewWebsocket("public")
 
-	connections, err := nitric.NewKv("connections").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
-	if err != nil {
-		return
-	}
+  connections := nitric.NewKv("connections").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
-	// Register a new connection on connect
-	ws.On(handler.WebsocketConnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
-		err := connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
-			"connectionId": ctx.Request.ConnectionID(),
-		})
-		if err != nil {
-			return ctx, err
-		}
+  // Register a new connection on connect
+  ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) error {
+    return connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
+      "connectionId": ctx.Request.ConnectionID(),
+    })
+  })
 
-		return next(ctx)
-	})
+  // Remove a registered connection on disconnect
+  ws.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) error {
+    return connections.Delete(context.TODO(), ctx.Request.ConnectionID())
+  })
 
-	// Remove a registered connection on disconnect
-	ws.On(handler.WebsocketDisconnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
-		err := connections.Delete(context.TODO(), ctx.Request.ConnectionID())
-		if err != nil {
-			return ctx, err
-		}
+  // Broadcast message to all the registered websocket connections
+  ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) error {
+    connectionStream, err := connections.Keys(context.TODO())
+    if err != nil {
+      return err
+    }
 
-		return next(ctx)
-	})
+    for {
+      connectionId, err := connectionStream.Recv()
+      if err != nil {
+        break // reached the end of the documents
+      }
 
-	// Broadcast message to all the registered websocket connections
-	ws.On(handler.WebsocketMessage, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
-		connectionStream, err := connections.Keys(context.TODO())
-		if err != nil {
-			return ctx, err
-		}
+      err = ws.Send(context.TODO(), connectionId, []byte(ctx.Request.Message()))
+      if err != nil {
+        return err
+      }
+    }
 
-		for {
-			connectionId, err := connectionStream.Recv()
-			if err != nil {
-				break // reached the end of the documents
-			}
+    return nil
+  })
 
-			err = ws.Send(context.TODO(), connectionId, []byte(ctx.Request.Message()))
-			if err != nil {
-				return ctx, err
-			}
-		}
-
-		return next(ctx)
-	})
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
-}
-```
-
-### Chain functions as a single method handler
-
-```go
-import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
-)
-
-func validateMessage(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
-	// validate that the message does not contain explicit content
-
-	return next(ctx)
-}
-
-func handleMessage(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
-	fmt.Printf("New Message from %s: %s\n", ctx.Request.ConnectionID(), ctx.Request.Message())
-
-	return next(ctx)
-}
-
-func main() {
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		return
-	}
-
-	ws.On(handler.WebsocketMessage, handler.ComposeWebsocketMiddleware(validateMessage, handleMessage))
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```

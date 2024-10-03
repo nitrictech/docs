@@ -41,30 +41,17 @@ Nitric.run()
 package main
 
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	galaxyApi, err := nitric.NewApi("far-away-galaxy-api")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+  galaxyApi := nitric.NewApi("far-away-galaxy-api")
+  galaxyApi.Get("/moon", func(ctx *apis.Ctx) {
+    ctx.Response.Body = []byte("that's no moon, it's a space station.")
+  })
 
-	galaxyApi.Get("/moon", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-		ctx.Response.Body = []byte("that's no moon, it's a space station.")
-
-		return next(ctx)
-	})
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("Service has started")
+  nitric.Run()
 }
 ```
 
@@ -126,39 +113,24 @@ async def create_planet(ctx):
 package main
 
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
-	"github.com/your-org/your-repo/planets"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	galaxyApi, err := nitric.NewApi("far-away-galaxy-api")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+  galaxyApi := nitric.NewApi("far-away-galaxy-api")
 
-	galaxyApi.Get("/planets", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-		ctx.Response.Headers = map[string][]string{"Content-Type": {"application/json"}}
-		ctx.Response.Body = []byte(GetPlanetList())
+  galaxyApi.Get("/planets", func(ctx *apis.Ctx) {
+    ctx.Response.Headers = map[string][]string{"Content-Type": {"application/json"}}
+    ctx.Response.Body = []byte(GetPlanetList())
+  })
 
-		return next(ctx)
-	})
+  galaxyApi.Post("/planets", func(ctx *apis.Ctx) {
+    CreatePlanet(ctx.Request.Data())
+    ctx.Response.Status = 201
+  })
 
-	galaxyApi.Post("/planets", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-		CreatePlanet(ctx.Request.Data())
-		ctx.Response.Status = 201
-
-		return next(ctx)
-	})
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("Service has started")
+  nitric.Run()
 }
 
 ```
@@ -220,35 +192,23 @@ async def get_planet_route(ctx):
 package main
 
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
-	"github.com/your-org/your-repo/planets"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	galaxyApi, err := nitric.NewApi("far-away-galaxy-api")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+  galaxyApi := nitric.NewApi("far-away-galaxy-api")
 
-	// create a dynamic route and extract the parameter `name`
-	galaxyApi.Get("/planets/:name", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-		name := ctx.Request.PathParams()["name"]
+  // create a dynamic route and extract the parameter `name`
+  galaxyApi.Get("/planets/:name", func(ctx *apis.Ctx) {
+    name := ctx.Request.PathParams()["name"]
 
-		ctx.Response.Body = []byte(GetPlanet(name))
+    ctx.Response.Body = []byte(GetPlanet(name))
+  })
 
-		return next(ctx)
-	})
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("Service has started")
+  nitric.Run()
 }
+
 ```
 
 ```dart
@@ -290,11 +250,9 @@ async def find_alderaan(ctx):
 
 ```go
 // return a redirect response using status 301
-galaxyApi.Get("/planets/alderaan", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+galaxyApi.Get("/planets/alderaan", func(ctx *apis.Ctx) {
   ctx.Response.Status = 301
   ctx.Response.Location = "https://example.org/debris/alderaan"
-
-  return next(ctx)
 })
 ```
 
@@ -379,25 +337,23 @@ Nitric.run()
 package main
 
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	defaultSecurityRule := nitric.OidcRule("default", "https://dev-abc123.us.auth0.com", []string{"https://test-security-definition/"})
+  defaultSecurityRule := apis.OidcRule(
+    "default",
+    "https://dev-abc123.us.auth0.com/.well-known/openid-configuration",
+    []string{"https://test-security-definition"},
+  )
 
-	secureApi, err := nitric.NewApi(
-		"main",
-		nitric.WithSecurity(defaultSecurityRule([]string{})),
-	)
-	if err != nil {
-		return
-	}
+  secureApi := nitric.NewApi(
+    "main",
+    apis.WithSecurity(defaultSecurityRule([]string{})),
+  )
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -471,26 +427,25 @@ Nitric.run()
 package main
 
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	defaultSecurityRule := nitric.OidcRule("default", "https://dev-abc123.us.auth0.com", []string{"https://test-security-definition/"})
+  defaultSecurityRule := apis.OidcRule(
+    "default",
+    "https://dev-abc123.us.auth0.com/.well-known/openid-configuration",
+    []string{"https://test-security-definition/"},
+  )
 
-	secureApi, err := nitric.NewApi(
-		"main",
-		nitric.WithSecurity(defaultSecurityRule([]string{"user.read"})),
-	)
-	if err != nil {
-		return
-	}
+  secureApi := nitric.NewApi(
+    "main",
+    apis.WithSecurity(defaultSecurityRule([]string{"user.read"})),
+  )
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
+
 ```
 
 ```dart
@@ -552,16 +507,14 @@ async def get_planet(ctx):
 
 ```go
 // override top level security to remove security from this route
-secureApi.Get("/planets/unsecured-planet", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+secureApi.Get("/planets/unsecured-planet", func(ctx *apis.Ctx) {
 	// Handle request
-	return next(ctx)
-}, nitric.WithNoMethodSecurity())
+}, apis.WithNoMethodSecurity())
 
 // override top level security to require user.write scope to access
-secureApi.Get("/planets/unsecured-planet", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
+secureApi.Get("/planets/unsecured-planet", func(ctx *apis.Ctx) {
 	// Handle request
-	return next(ctx)
-}, nitric.WithSecurity(customRule([]string{"users:write"})))
+}, apis.WithSecurity(customRule([]string{"users:write"})))
 ```
 
 ```dart
@@ -580,9 +533,9 @@ galaxyApi.post("/planets/unsecured-planet", (ctx) async {
 
 ## Defining Middleware
 
-Behavior that's common to several APIs or routes can be applied using middleware services. Multiple middleware can also be composed to create a cascading set of steps to perform on incoming requests or outgoing responses.
+Behavior that's common to several APIs or routes can be applied using middleware. Multiple middleware can also be composed to create a cascading set of steps to perform on incoming requests or outgoing responses.
 
-Middleware services look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
+In most of Nitric's supported languages middleware functions look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
 
 <CodeGroup>
 
@@ -600,22 +553,25 @@ async function validate(ctx, next) {
 ```python
 async def validate(ctx, nxt: HttpMiddleware):
   if ctx.req.headers['content-type'] is None:
-    ctx.res.status = 400;
+    ctx.res.status = 400
     ctx.res.body = "header Content-Type is required"
     return ctx
   return await nxt(ctx)
 ```
 
 ```go
-func validate(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-	if ctx.Request.Headers()["content-type"] != nil {
-		ctx.Response.Status = 400
-		ctx.Response.Body = []byte("header Content-Type is required")
+// Using the Go SDK we recommend using higher-order functions to define middleware
+func validate(next apis.Handler) apis.Handler {
+  return func (ctx *apis.Ctx) error {
+    if ctx.Request.Headers()["content-type"] != nil {
+      ctx.Response.Status = 400
+      ctx.Response.Body = []byte("header Content-Type is required")
 
-		return ctx, nil
-	}
+      return nil
+    }
 
-	return next(ctx)
+    return next(ctx)
+  }
 }
 ```
 
@@ -652,35 +608,29 @@ Nitric.run()
 
 ```go
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
-func validate(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-	if ctx.Request.Headers()["content-type"] != nil {
-		ctx.Response.Status = 400
-		ctx.Response.Body = []byte("header Content-Type is required")
+func validate(next apis.Handler) apis.Handler {
+  return func(ctx *apis.Ctx) error {
+    if ctx.Request.Headers()["content-type"] != nil {
+      ctx.Response.Status = 400
+      ctx.Response.Body = []byte("header Content-Type is required")
 
-		return ctx, nil
-	}
+      return nil
+    }
 
-	return next(ctx)
+    return next(ctx)
+  }
 }
 
 func main() {
-	customersApi, err := nitric.NewApi(
-		"customers",
-		nitric.WithMiddleware(validate))
+  customersApi := nitric.NewApi(
+    "customers",
+    apis.WithMiddleware(validate))
 
-	if err != nil {
-		return
-	}
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -717,38 +667,32 @@ Route level middleware currently not supported in python
 
 ```go
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
-func validate(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-	if ctx.Request.Headers()["content-type"] != nil {
-		ctx.Response.Status = 400
-		ctx.Response.Body = []byte("header Content-Type is required")
+func validate(next apis.Handler) apis.Handler {
+  return func(ctx *apis.Ctx) error {
+    if ctx.Request.Headers()["content-type"] != nil {
+      ctx.Response.Status = 400
+      ctx.Response.Body = []byte("header Content-Type is required")
 
-		return ctx, nil
-	}
+      return nil
+    }
 
-	return next(ctx)
+    return next(ctx)
+  }
 }
 
 func main() {
-	customersApi, err := nitric.NewApi(
-		"customers")
+  customersApi := nitric.NewApi("customers")
 
-	if err != nil {
-		return
-	}
+  customersApi.Get("/customers", validate(func(ctx *apis.Ctx) error {
+    // handle request
+    return nil
+  }))
 
-	customersApi.Get("/customers", handler.ComposeHttpMiddleware(validate, func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-		return next(ctx)
-	}))
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -912,30 +856,19 @@ Nitric.run()
 ```
 
 ```go {{ tag: 'services/one/main.go' }}
-package main
-
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	accountsApi, err := nitric.NewApi("accounts")
+  accountsApi := nitric.NewApi("accounts")
 
-	if err != nil {
-		return
-	}
+  accountsApi.Get("/users/:id", func(ctx *apis.Ctx) {
+    // your logic here
+  })
 
-	accountsApi.Get("/users/:id", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-		// your logic here
-		return next(ctx)
-	})
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -978,30 +911,19 @@ Nitric.run()
 ```
 
 ```go {{ tag: 'services/two/main.go' }}
-package main
-
 import (
-	"fmt"
-
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	accountsApi, err := nitric.NewApi("accounts")
+  accountsApi := nitric.NewApi("accounts")
 
-	if err != nil {
-		return
-	}
+  accountsApi.Get("/orgs/:id", func(ctx *apis.Ctx) {
+    // your logic here
+  })
 
-	accountsApi.Get("/orgs/:id", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-		// your logic here
-		return next(ctx)
-	})
-
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -1043,19 +965,16 @@ accounts_api = api('accounts')
 ```
 
 ```go {{ tag: 'resources/main.go' }}
-package resources
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
+)
 
-import "github.com/nitrictech/go-sdk/nitric"
-
-var AccountsApi nitric.Api
+var AccountsApi apis.Api
 
 func init() {
-	accountsApi, err := nitric.NewApi("accounts")
-	if err != nil {
-		panic(err)
-	}
-
-	AccountsApi = accountsApi
+  accountsApi := nitric.NewApi("accounts")
+  AccountsApi = accountsApi
 }
 ```
 
@@ -1094,22 +1013,18 @@ Nitric.run()
 package main
 
 import (
-	"fmt"
+  "your/resources"
 
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
-    "github.com/your-org/your-repo/resources"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	Resources.AccountsApi.Get("/users/:id", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-		// your logic here
-		return next(ctx)
-	})
+  resources.AccountsApi.Get("/users/:id", func(ctx *apis.Ctx) {
+    // your logic here
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -1150,22 +1065,18 @@ Nitric.run()
 package main
 
 import (
-	"fmt"
+  "your/resources"
 
-	"github.com/nitrictech/go-sdk/handler"
-	"github.com/nitrictech/go-sdk/nitric"
-    "github.com/your-org/your-repo/resources"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
 )
 
 func main() {
-	Resources.AccountsApi.Get("/orgs/:id", func(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-		// your logic here
-		return next(ctx)
-	})
+  resources.AccountsApi.Get("/orgs/:id", func(ctx *apis.Ctx) {
+    // your logic here
+  })
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 

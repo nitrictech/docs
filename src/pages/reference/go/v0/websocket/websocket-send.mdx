@@ -21,9 +21,7 @@ func main() {
 
   ws.Send(context.TODO(), "D28BA458-BFF4-404A", []byte("Hello World"))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -118,8 +116,6 @@ func main() {
     return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

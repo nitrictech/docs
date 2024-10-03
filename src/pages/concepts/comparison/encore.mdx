@@ -22,7 +22,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/faas"
+	"github.com/nitrictech/go-sdk/nitric/apis"
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
@@ -33,12 +33,10 @@ func main() {
 		return
 	}
 
-	mainApi.Get("/hello/:name", func(ctx *faas.HttpContext, next faas.HttpHandler) (*faas.HttpContext, error) {
+	mainApi.Get("/hello/:name", func(ctx *apis.Ctx) {
 		params := ctx.Request.PathParams()
 
 		ctx.Response.Body = []byte("Hello " + params["name"])
-
-		return next(ctx)
 	})
 
 	if err := nitric.Run(); err != nil {
@@ -74,7 +72,7 @@ The Nitric example shows an API where HTTP request handling is achieved using `f
 |                      | Nitric                                                                                       | Encore                     |
 | -------------------- | -------------------------------------------------------------------------------------------- | -------------------------- |
 | Language             | Your choice                                                                                  | Go                         |
-| Lines of code        | 27                                                                                           | 15                         |
+| Lines of code        | 26                                                                                           | 15                         |
 | Cloud Infrastructure | Inferred                                                                                     | Inferred                   |
 | Extensibility        | [Custom providers](/reference/providers/custom/building-custom-provider) can be created      | No                         |
 | Local simulation     | Built-in local simulator                                                                     | Built-in local simulator   |

@@ -8,25 +8,20 @@ Create an upload URL for a file within a bucket.
 ```go
 import (
   "context"
-  "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketWrite)
+  bucket := nitric.NewBucket("bucket-name").Allow(storage.BucketWrite)
+
+  uploadUrl, err := bucket.UploadUrl(context.TODO(), "cat.png")
   if err != nil {
     return
   }
 
-  uploadUrl, err := bucket.File("cat.png").UploadUrl(context.TODO(), 600)
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -36,8 +31,11 @@ func main() {
   <Property name="ctx" required type="context">
     The context of the call, used for tracing.
   </Property>
-  <Property name="expiry" required type="int">
-    Seconds until link expiry. Maximum of `604800` (7 days).
+  <Property name="key" required type="string">
+    The key of the file to create an upload url for.
+  </Property>
+  <Property name="...opts" required type="storage.PresignUrlOption">
+    Options to configure the upload url.
   </Property>
 </Properties>
 
@@ -48,24 +46,19 @@ func main() {
 ```go
 import (
   "context"
-  "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketWrite)
+  bucket := nitric.NewBucket("bucket-name").Allow(storage.BucketWrite)
+
+  uploadUrl, err := bucket.UploadUrl(context.TODO(), "cat.png")
   if err != nil {
     return
   }
 
-  uploadUrl, err := bucket.File("cat.png").UploadUrl(context.TODO(), 600)
-  if err != nil {
-    return
-  }
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

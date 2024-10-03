@@ -7,17 +7,13 @@ Creates a new Topic.
 
 ```go
 import (
-  "fmt"
-
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
   updates := nitric.NewTopic("updates")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -35,17 +31,13 @@ func main() {
 
 ```go
 import (
-  "fmt"
-
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
   updates := nitric.NewTopic("updates")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

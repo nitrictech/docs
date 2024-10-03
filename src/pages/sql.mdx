@@ -60,6 +60,18 @@ import 'package:nitric_sdk/nitric.dart';
 final db = Nitric.sql("my-database");
 ```
 
+```go
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+  db := nitric.NewSqlDatabase("my-database")
+
+  nitric.Run()
+}
+```
+
 </CodeGroup>
 
 ## Accessing a SQL database
@@ -122,6 +134,24 @@ Nitric.api("example").get("/hello", (ctx) async {
   // TODO: Interact with the database using the connection string
   return ctx;
 });
+```
+
+```go
+import (
+  "context"
+
+  "github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+  db := nitric.NewSqlDatabase("my-database")
+
+  nitric.NewApi("example").Get("/hello", func() {
+    connStr, _ := db.ConnectionString(context.TODO())
+  })
+
+  nitric.Run()
+}
 ```
 
 </CodeGroup>
@@ -199,6 +229,19 @@ final db = Nitric.sql("my-database",
 );
 ```
 
+```go
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/sql"
+)
+
+func main() {
+  db := nitric.NewSqlDatabase("my-database", sql.WithMigrationsPath("file://migrations/my-database"))
+
+  nitric.Run()
+}
+```
+
 </CodeGroup>
 
 When new migration files are added Nitric will automatically apply them when you redeploy your project.
@@ -237,6 +280,19 @@ import 'package:nitric_sdk/nitric.dart';
 final db = Nitric.sql("my-database",
   migrations: "dockerfile://migrations.dockerfile"
 );
+```
+
+```go
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/sql"
+)
+
+func main() {
+  db := nitric.NewSqlDatabase("my-database", sql.WithMigrationsPath("dockerfile://migrations.dockerfile"))
+
+  nitric.Run()
+}
 ```
 
 </CodeGroup>

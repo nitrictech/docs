@@ -7,22 +7,15 @@ Sets the cron expressions that determines when the schedule triggers and a callb
 
 ```go
 import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
-  "github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  nitric.NewSchedule("archive-data").Cron("0 1 1 * *", func (ctx *handler.IntervalContext, _ handler.IntervalHandler) (*handler.IntervalContext, error) {
-    fmt.Println("archiving data")
+	nitric.NewSchedule("archive-data").Cron("0 1 1 * *", func() {
+		// code which archives data
+	})
 
-    return ctx, nil
-  })
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+	nitric.Run()
 }
 ```
 
@@ -33,9 +26,9 @@ func main() {
     The expression that sets when the schedule will be triggered. This value
     should be a standard 5 value Unix cron expression, e.g., '0 1 1 * *'.
   </Property>
-  <Property name="middleware" required type="EventMiddleware">
-    One or more callback functions to use as the handler which will run on the
-    defined frequency.
+  <Property name="handler" required type="interface{}">
+    The callback function to use as the handler which will run on the defined
+    frequency.
   </Property>
 </Properties>
 
@@ -47,58 +40,20 @@ func main() {
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
   // every 15 minutes
-  nitric.NewSchedule("check for updates").Cron("0/15 * * * *", func (ctx *handler.IntervalContext, _ handler.IntervalHandler) (*handler.IntervalContext, error) {
+  nitric.NewSchedule("check for updates").Cron("0/15 * * * *", func () {
     fmt.Println("checking for updates")
-
-    return ctx, nil
   })
 
   // at 1:00am on the 1st of every month
-  nitric.NewSchedule("delete stale data").Cron("0 1 1 * *", func (ctx *handler.IntervalContext, _ handler.IntervalHandler) (*handler.IntervalContext, error) {
+  nitric.NewSchedule("delete stale data").Cron("0 1 1 * *", func () {
     fmt.Println("deleting stale data")
-
-    return ctx, nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-### Create a Schedule with multiple middleware/handlers
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func generateReport(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
-  // generate report
-
-  return next(ctx)
-}
-
-func sendNotification(ctx *handler.IntervalContext, next handler.IntervalHandler) (*handler.IntervalContext, error) {
-  // send notification with the report
-
-  return next(ctx)
-}
-
-func main() {
-  nitric.NewSchedule("check for updates").Cron("0 1 1 * *", handler.ComposeIntervalMiddleware(generateReport, sendNotification))
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

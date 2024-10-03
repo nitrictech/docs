@@ -1,32 +1,35 @@
 export const description =
   "Reference for Nitric's Go library - Get a list of file references for files that exist in the bucket."
 
-# Go - Bucket.Files()
+# Go - Bucket.ListFiles()
 
-Get a list of file references for files that exist in the bucket.
+Get a list of file keys for files that exist in the bucket.
 
 ```go
 import (
   "context"
-  "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
+  bucket := nitric.NewBucket("bucket-name").Allow(storage.BucketRead)
+
+  files, err := bucket.ListFiles(context.TODO())
   if err != nil {
     return
   }
 
-  files, err := bucket.Files(context.TODO())
-  if err != nil {
-    return
+  for _, file := range files {
+    contents, err := bucket.Read(context.TODO(), file)
+    if err != nil {
+      continue
+    }
+    // Do something with the file contents
   }
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -48,32 +51,24 @@ import (
   "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
-  if err != nil {
-    return
-  }
+  bucket := nitric.NewBucket("bucket-name").Allow(storage.BucketRead)
 
   ctx := context.TODO()
 
-  files, err := bucket.Files(ctx)
+  files, err := bucket.ListFiles(ctx)
   if err != nil {
     fmt.Println(err)
     return
   }
 
   for _, file := range files {
-    file.Delete(ctx)
+    bucket.Delete(ctx, file)
   }
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
-
-## Notes
-
-This method returns a list of [File](./bucket-file) references that exist on the bucket.

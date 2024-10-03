@@ -7,23 +7,15 @@ Creates a new route (path) within an API.
 
 ```go
 import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  api, err := nitric.NewApi("public")
-  if err != nil {
-    return
-  }
+  api := nitric.NewApi("public")
 
   route := api.NewRoute("/hello")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -38,93 +30,7 @@ func main() {
     middleware and handlers. See [create a route with path
     params](#create-a-route-with-path-params)
   </Property>
-  <Property name="middleware" type="...HttpMiddleware">
-    The middleware (code) that should be run on all requests to this route.
-    Useful for applying universal middleware such as CORS headers or Auth,
-    across an entire route from a single place.
+  <Property name="options" type="...RouteOption">
+    Additional options for the route.
   </Property>
 </Properties>
-
-## Examples
-
-### Create a route
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  api, err := nitric.NewApi("public")
-  if err != nil {
-    return
-  }
-
-  route := api.NewRoute("/hello")
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-### Create a route with path params
-
-Route paths can include dynamic parameters. These values will automatically be parsed and provided in the context object for your middleware and handlers as a `string`.
-
-For example, if you have a customers path and you want to include a `customerId` param you would define the route like this.
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func main() {
-  api, err := nitric.NewApi("public")
-  if err != nil {
-    return
-  }
-
-  // Define route with customerId param
-  route := api.NewRoute("/customers/:customerId")
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-### Create a route with middleware
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func authMiddleware(ctx *handler.HttpContext, next handler.HttpHandler) (*handler.HttpContext, error) {
-  // Perform auth validation
-  return next(ctx)
-}
-
-func main() {
-  api, err := nitric.NewApi("public")
-  if err != nil {
-    return
-  }
-
-  route := api.NewRoute("/hello", authMiddleware)
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```

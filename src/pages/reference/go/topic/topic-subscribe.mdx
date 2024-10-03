@@ -9,28 +9,23 @@ Subscribe a handler to a topic and receive new events for processing.
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
-  nitric.NewTopic("updates").Subscribe(func(ctx *handler.MessageContext, _ handler.MessageHandler) (*handler.MessageContext, error) {
+  nitric.NewTopic("updates").Subscribe(func() {
     fmt.Println("received update")
-
-    return ctx, nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
 ## Parameters
 
 <Properties>
-  <Property name="middleware" required type="EventMiddleware">
-    The middleware (code) to be triggered by the topic.
+  <Property name="handler" required type="interface{}">
+    The callback to be triggered when new messages are sent to the topic.
   </Property>
 </Properties>
 
@@ -42,51 +37,16 @@ func main() {
 import (
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
 )
 
 func main() {
-  nitric.NewTopic("updates").Subscribe(func(ctx *handler.MessageContext, _ handler.MessageHandler) (*handler.MessageContext, error) {
-    fmt.Println("received update")
-
-    return ctx, nil
+  nitric.NewTopic("updates").Subscribe(func(ctx *topics.Ctx) {
+    fmt.Printf("received update %+v", ctx.Request.Message())
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
-}
-```
-
-### Subscribe to a topic with multiple middleware
-
-```go
-import (
-  "fmt"
-
-  "github.com/nitrictech/go-sdk/handler"
-  "github.com/nitrictech/go-sdk/nitric"
-)
-
-func validateUpdate(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
-  // validate update
-
-  return next(ctx)
-}
-
-func handleUpdate(ctx *handler.MessageContext, next handler.MessageHandler) (*handler.MessageContext, error) {
-  // handle update
-
-  return next(ctx)
-}
-
-func main() {
-  nitric.NewTopic("updates").Subscribe(handler.ComposeMessageMiddleware(validateUpdate, handleUpdate))
-
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

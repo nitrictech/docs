@@ -28,9 +28,7 @@ func main() {
     },
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -87,9 +85,7 @@ func main() {
       "something": "amazing happened",
     },
   })
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -121,9 +117,7 @@ func main() {
     },
   }, events.WithDelay(time.Hour))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

@@ -7,35 +7,31 @@ Dequeue messages.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
 )
 
 func main() {
-	queue, err := nitric.NewQueue("queue-name").Allow(nitric.QueueDequeue)
-	if err != nil {
-		return
-	}
+  queue := nitric.NewQueue("queue-name").Allow(queues.QueueDequeue)
 
-	ctx := context.TODO()
+  ctx := context.TODO()
 
-	// dequeue up to 10 messages
-	messages, err := queue.Dequeue(ctx, 10)
-	if err != nil {
-		return
-	}
+  // dequeue up to 10 messages
+  messages, err := queue.Dequeue(ctx, 10)
+  if err != nil {
+    return
+  }
 
-	for _, message := range messages {
-		fmt.Println("Message: ", message.Message())
+  for _, message := range messages {
+    fmt.Println("Message: ", message.Message())
 
-		message.Complete(ctx)
-	}
+    message.Complete(ctx)
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```
 
@@ -81,34 +77,30 @@ This means calls to dequeue will return between 0 and _depth_ tasks.
 
 ```go
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
 )
 
 func main() {
-	queue, err := nitric.NewQueue("queue-name").Allow(nitric.QueueDequeue)
-	if err != nil {
-		return
-	}
+  queue := nitric.NewQueue("queue-name").Allow(queues.QueueDequeue)
 
-	ctx := context.TODO()
+  ctx := context.TODO()
 
-	// dequeue up to 10 messages
-	messages, err := queue.Dequeue(ctx, 10)
-	if err != nil {
-		return
-	}
+  // dequeue up to 10 messages
+  messages, err := queue.Dequeue(ctx, 10)
+  if err != nil {
+    return
+  }
 
-	for _, message := range messages {
-		fmt.Println("Message: ", message.Message())
+  for _, message := range messages {
+    fmt.Println("Message: ", message.Message())
 
-		message.Complete(ctx)
-	}
+    message.Complete(ctx)
+  }
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+  nitric.Run()
 }
 ```

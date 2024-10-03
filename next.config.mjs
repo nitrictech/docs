@@ -37,6 +37,23 @@ const nextConfig = {
       },
       // redirects from old docs
       ...[
+        '/docs/reference/go/secrets/secret-version',
+        '/docs/reference/go/secrets/secret-latest',
+        '/docs/reference/go/secrets/secret-version-access',
+        '/docs/reference/go/storage/bucket-file',
+        '/docs/reference/go/storage/bucket-files',
+        '/docs/reference/go/storage/bucket-file-read',
+        '/docs/reference/go/storage/bucket-file-write',
+        '/docs/reference/go/storage/bucket-file-delete',
+        '/docs/reference/go/storage/bucket-file-downloadurl',
+        '/docs/reference/go/storage/bucket-file-uploadurl',
+      ].map((source) => ({
+        source: source,
+        destination: `/docs/reference/go`,
+        basePath: false,
+        permanent: true,
+      })),
+      ...[
         '/docs/testing',
         '/docs/guides/debugging',
         '/docs/guides/serverless-rest-api-example',

@@ -23,9 +23,7 @@ func main() {
     documents.Condition("name").StartsWith(documents.StringValue("T")),
   )
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -63,9 +61,7 @@ func main() {
     documents.Condition("firstName").Eq(documents.StringValue("Drake")),
   )
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -90,9 +86,7 @@ func main() {
     documents.Condition("age").Gt(documents.DoubleValue(21)),
   )
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

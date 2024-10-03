@@ -21,9 +21,7 @@ func main() {
 
   ws.Close(context.TODO(), "D28BA458-BFF4-404A")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -67,8 +65,6 @@ func main() {
     return next(ctx)
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

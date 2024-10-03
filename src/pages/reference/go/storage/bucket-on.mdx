@@ -10,44 +10,35 @@ import (
   "context"
   "fmt"
 
-  "github.com/nitrictech/go-sdk/handler"
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
   assets := nitric.NewBucket("assets")
 
-  readableAssets, err := nitric.NewBucket("assets").Allow(nitric.BucketRead)
-  if err != nil {
-    return
-  }
+  readableAssets := nitric.NewBucket("assets").Allow(storage.BucketRead)
 
-  assets.On(handler.DeleteNotification, "*", func(ctx *handler.BlobEventContext, _ handler.BlobEventHandler) (*handler.BlobEventContext, error) {
+  assets.On(storage.DeleteNotification, "*", func(ctx *storage.Ctx) {
     fmt.Printf("a file named %s was deleted\n", ctx.Request.Key())
-
-    return ctx, nil
   })
 
-  assets.On(handler.WriteNotification, "/images/cat", func(ctx *handler.BlobEventContext, _ handler.BlobEventHandler) (*handler.BlobEventContext, error) {
+  assets.On(storage.WriteNotification, "/images/cat", func(ctx *storage.Ctx) {
     fmt.Printf("a cat image was written")
-
-    return ctx, nil
   })
 
-  assets.On(handler.WriteNotification, "/images/dog", func(ctx *handler.BlobEventContext, _ handler.BlobEventHandler) (*handler.BlobEventContext, error) {
-    dogImage, err := readableAssets.File(ctx.Request.Key()).Read(context.TODO())
+  assets.On(storage.WriteNotification, "/images/dog", func(ctx *storage.Ctx) error {
+    dogImage, err := readableAssets.Read(context.TODO(), ctx.Request.Key())
     if err != nil {
-      return ctx, err
+      return err
     }
 
     fmt.Println(dogImage)
 
-    return ctx, nil
+    return nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -67,9 +58,8 @@ func main() {
     filters overlap across notifications, an error will be thrown when
     registering the resource.
   </Property>
-  <Property name="middleware" required type="BlobEventMiddleware">
-    The middleware (code) to be triggered by the bucket notification being
-    triggered.
+  <Property name="handler" required type="interface{}">
+    The callback function to be triggered when bucket events occur.
   </Property>
 </Properties>
 
@@ -77,11 +67,11 @@ func main() {
 
 **WriteNotification**
 
-Run when a file in the bucket is created using: `File.Write()`
+Run when a file in the bucket is created using: `Bucket.Write()`
 
 **DeleteNotification**
 
-Run when a file in the bucket is deleted using: `File.Delete()`
+Run when a file in the bucket is deleted using: `Bucket.Delete()`
 
 ### Trigger type cloud mapping
 

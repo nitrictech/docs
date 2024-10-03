@@ -15,9 +15,7 @@ import (
 func main() {
   updates := nitric.NewTopic("updates")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -43,9 +41,7 @@ import (
 func main() {
   updates := nitric.NewTopic("updates")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

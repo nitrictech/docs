@@ -7,20 +7,14 @@ Create a new bucket for storing and retrieving files.
 
 ```go
 import (
-  "fmt"
-
   "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/storage"
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketWrite, nitric.BucketRead, nitric.BucketDelete)
-  if err != nil {
-    return
-  }
+  bucket := nitric.NewBucket("bucket-name").Allow(storage.BucketWrite, storage.BucketRead, storage.BucketDelete)
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -64,9 +58,9 @@ This permission allows your function to delete files from the bucket
 See the following for examples on working with files in a bucket:
 
 - [On()](./bucket-on)
-- [File()](./bucket-file)
-- [File.Read()](./bucket-file-read)
-- [File.Write()](./bucket-file-write)
-- [File.Delete()](./bucket-file-delete)
-- [File.DownloadUrl()](./bucket-file-downloadurl)
-- [File.UploadUrl()](./bucket-file-uploadurl)
+- [Read()](./bucket-read)
+- [Write()](./bucket-write)
+- [Delete()](./bucket-delete)
+- [DownloadUrl()](./bucket-downloadurl)
+- [UploadUrl()](./bucket-uploadurl)
+- [ListFiles()](./bucket-listfiles)

@@ -21,9 +21,7 @@ func main() {
 
   route := api.NewRoute("/hello")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -65,9 +63,7 @@ func main() {
 
   route := api.NewRoute("/hello")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -94,9 +90,7 @@ func main() {
   // Define route with customerId param
   route := api.NewRoute("/customers/:customerId")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -123,8 +117,6 @@ func main() {
 
   route := api.NewRoute("/hello", authMiddleware)
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```

@@ -20,9 +20,7 @@ func main() {
 
   drakeProfileRef := profiles.Doc("Drake Mallard")
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 

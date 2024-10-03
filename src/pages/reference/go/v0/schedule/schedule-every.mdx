@@ -21,9 +21,7 @@ func main() {
     return ctx, nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -60,9 +58,7 @@ func main() {
     return ctx, nil
   })
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
 
@@ -91,8 +87,6 @@ func sendNotification(ctx *faas.EventContext, next faas.EventHandler) (*faas.Eve
 func main() {
   nitric.NewSchedule("aggregate data").Every("3 days", faas.ComposeEventMiddleware(generateReport, sendNotification))
 
-  if err := nitric.Run(); err != nil {
-    fmt.Println(err)
-  }
+  nitric.Run()
 }
 ```
