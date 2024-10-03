@@ -7,17 +7,13 @@ Creates a new Batch Job.
 
 ```go
 import (
-	"fmt"
-
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
 	analyze := nitric.NewJob("analyze")
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -36,37 +32,29 @@ func main() {
 
 ```go
 import (
-	"fmt"
-
 	"github.com/nitrictech/go-sdk/nitric"
 )
 
 func main() {
 	analyze := nitric.NewJob("analyze")
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
 ### Create a Job with permissions to submit jobs
 
 ```go
-import (
-	"fmt"
+package main
 
+import (
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/batch"
 )
 
 func main() {
-	analyze, err := nitric.NewJob("analyze").Allow(nitric.JobSubmit)
-	if err != nil {
-		fmt.Println(err)
-	}
+	analyse := nitric.NewJob("analyse").Allow(batch.JobSubmit)
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```

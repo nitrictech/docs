@@ -4,9 +4,24 @@ export const description = 'Running AI & Batch workloads with Nitric'
 
 Nitric provides functionality that allows you to run large-scale jobs in parallel across multiple virtual machines or compute resources. Unlike Nitric Services, which respond to real-time events (APIs, Schedules, etc.), Batch is intended to efficiently handle tasks that can be processed in batches, which means they don't need to run in real time but can be executed asynchronously. Batches can include tasks that require a lot of computing power, or access to GPU resources, such as machine learning model training, image processing, video transcoding, data processing, and data analysis.
 
+<Note>
+  Batches are currently in [Preview](/reference/preview-features) and are
+  currently only available in the following languages: JavaScript, Python, Go,
+  and Dart, using the nitric/aws@1.14.0, nitric/gcp@1.14.0 or later.
+</Note>
+
 Nitric Batch is designed to be used in conjunction with Nitric Services, allowing you to run long-running, computationally intensive tasks in parallel with your real-time services. This allows you to build complex applications that can handle both real-time and batch processing workloads.
 
 Batches are deployed to cloud services such as [AWS Batch](https://aws.amazon.com/batch/), [Azure Batch](https://azure.microsoft.com/en-au/products/batch), and [Google Cloud Batch](https://cloud.google.com/batch/docs). Nitric abstracts the underlying cloud provider, allowing you to run your batch jobs on any of the supported cloud providers without having to worry about the specifics of each provider.
+
+## Enabling Batches
+
+Batches are currently in [Preview](/reference/preview-features). To enable this feature in your project add the following to your `nitric.yaml` file
+
+```yaml
+preview:
+  - batch-services
+```
 
 ## Definitions
 
@@ -42,7 +57,7 @@ Batches are defined similarly to services in a project's `nitric.yaml` file. For
 ```yaml
 batch-services:
   - match: ./batches/*.ts
-    start: yarn dev:batches $SERVICE_PATH
+    start: yarn dev:services $SERVICE_PATH
 ```
 
 <Note>Batches can contain any number of Job Definitions.</Note>
@@ -81,6 +96,24 @@ async def generate_image(ctx: None):
 
 
 Nitric.run()
+```
+
+```go
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/batch"
+)
+
+func main() {
+  analyze := nitric.NewJob("analyze")
+
+  // Use `Handler` to register the callback function that will run when a job is submitted
+  analyze.Handler(func(ctx *batch.Ctx) {
+    // Do some work
+  }, batch.WithCpus(1), batch.WithMemory(1024), batch.WithGpus(0))
+
+  nitric.Run()
+}
 ```
 
 ```dart
@@ -134,6 +167,29 @@ async def submit_job(ctx):
     )
 
 Nitric.run()
+```
+
+```go
+import (
+	"context"
+
+	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/apis"
+	"github.com/nitrictech/go-sdk/nitric/batch"
+)
+
+func main() {
+	api := nitric.NewApi("public")
+	analyze := nitric.NewJob("analyze").Allow(batch.JobSubmit)
+
+	api.Post("/submit-job", func(ctx *apis.Ctx) {
+		analyze.Submit(context.Background(), map[string]interface{}{
+			"someKey": "someValue",
+		})
+	})
+
+	nitric.Run()
+}
 ```
 
 ```dart

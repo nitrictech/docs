@@ -8,24 +8,19 @@ Jobs may be submitted from Nitric `services` or other `batches` using the `submi
 ```go
 import (
 	"context"
-	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/batch"
 )
 
 func main() {
-	analyze, err := nitric.NewJob("analyze").Allow(nitric.JobSubmit)
-	if err != nil {
-		fmt.Println(err)
-	}
+	analyse := nitric.NewJob("analyse").Allow(batch.JobSubmit)
 
 	analyze.Submit(context.TODO(), map[string]interface{}{
 		"message": "message contents",
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -44,23 +39,18 @@ func main() {
 ```go
 import (
 	"context"
-	"fmt"
 
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/batch"
 )
 
 func main() {
-	analyze, err := nitric.NewJob("analyze").Allow(nitric.JobSubmit)
-	if err != nil {
-		fmt.Println(err)
-	}
+	analyse := nitric.NewJob("analyse").Allow(batch.JobSubmit)
 
 	analyze.Submit(context.TODO(), map[string]interface{}{
 		"message": "message contents",
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```

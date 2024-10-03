@@ -7,8 +7,6 @@ Job handlers are the code that is run when a job request is submitted. These han
 
 ```go
 import (
-	"fmt"
-
 	"github.com/nitrictech/go-sdk/nitric"
 	"github.com/nitrictech/go-sdk/nitric/batch"
 )
@@ -16,17 +14,11 @@ import (
 func main() {
 	analyze := nitric.NewJob("analyze")
 
-	analyze.Handler(nitric.JobResourceRequirements{
-		Cpus:   1,
-		Memory: 2048,
-		Gpus:   0,
-	}, func(ctx *batch.Ctx) {
+	analyse.Handler(func(ctx *batch.Ctx) {
 		// do long running work
-	})
+	}, batch.WithCpus(1), batch.WithMemory(2048), batch.WithGpus(1))
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -46,14 +38,14 @@ batch-services:
   <Property name="handler" required type="JobHandler">
     The middleware service to use as the handler for Job requests.
   </Property>
-  <Property name="opts" type="JobResourceRequirements" nested>
-    <Property name="cpus" type="float32">
+  <Property name="options" type="...JobOption" nested>
+    <Property name="WithCpus" type="float32">
       The number of CPUs to allocate to the handler
     </Property>
-    <Property name="gpus" type="int64">
+    <Property name="WithGpus" type="int64">
       The number of GPUs to allocate to the handler
     </Property>
-    <Property name="memory" type="int64">
+    <Property name="WithMemory" type="int64">
       The amount of memory (MB) to allocate to the handler
     </Property>
   </Property>
@@ -65,8 +57,6 @@ batch-services:
 
 ```go
 import (
-	"fmt"
-
 	"github.com/nitrictech/go-sdk/nitric"
 	"github.com/nitrictech/go-sdk/nitric/batch"
 )
@@ -74,13 +64,11 @@ import (
 func main() {
 	analyze := nitric.NewJob("analyze")
 
-	analyze.Handler(nitric.JobResourceRequirements{}, func(ctx *batch.Ctx) {
+	analyse.Handler(func(ctx *batch.Ctx) {
 		// do long running work
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -88,8 +76,6 @@ func main() {
 
 ```go
 import (
-	"fmt"
-
 	"github.com/nitrictech/go-sdk/nitric"
 	"github.com/nitrictech/go-sdk/nitric/batch"
 )
@@ -97,16 +83,10 @@ import (
 func main() {
 	analyze := nitric.NewJob("analyze")
 
-	analyze.Handler(nitric.JobResourceRequirements{
-		Cpus:   1,
-		Memory: 2048,
-		Gpus:   0,
-	}, func(ctx *batch.Ctx) {
+	analyse.Handler(func(ctx *batch.Ctx) {
 		// do long running work
-	})
+	}, batch.WithCpus(1), batch.WithMemory(2048), batch.WithGpus(1))
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
