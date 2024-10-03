@@ -511,8 +511,8 @@ svg.DocSearch-Hit-Select-Icon {
         var(--docsearch-footer-height)
     );
   }
+}
 
-  .DocSearch-VisuallyHiddenForAccessibility {
-    @apply sr-only;
-  }
+.DocSearch-VisuallyHiddenForAccessibility {
+  @apply sr-only;
 }
