@@ -2,12 +2,16 @@ import { BASE_URL } from '@/lib/constants'
 import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
 
-//export const runtime = 'edge'
+export const runtime = 'edge'
 
 const size = {
   width: 1200,
   height: 630,
 }
+
+const font = fetch(new URL('../../assets/Sora-Bold.ttf', import.meta.url)).then(
+  (res) => res.arrayBuffer(),
+)
 
 // Image generation
 export async function GET(req: NextRequest) {
@@ -23,15 +27,6 @@ export async function GET(req: NextRequest) {
   const description = hasDescription
     ? searchParams.get('description')?.slice(0, 100)
     : 'Docs for the Nitric cloud application framework.'
-
-  const imageBaseUrl = req.headers.get('host')?.startsWith('localhost')
-    ? `http://${req.headers.get('host')}`
-    : `https://${req.headers.get('host')}`
-
-  // Font
-  const soraBold = fetch(
-    new URL('../../assets/Sora-Bold.ttf', import.meta.url),
-  ).then((res) => res.arrayBuffer())
 
   return new ImageResponse(
     (
@@ -103,7 +98,7 @@ export async function GET(req: NextRequest) {
       fonts: [
         {
           name: 'Sora',
-          data: await soraBold,
+          data: await font,
           style: 'normal',
           weight: 600,
         },
