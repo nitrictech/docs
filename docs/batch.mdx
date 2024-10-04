@@ -1,4 +1,6 @@
-export const description = 'Running AI & Batch workloads with Nitric'
+---
+description: Running AI & Batch workloads with Nitric
+---
 
 # Batch
 
@@ -66,9 +68,9 @@ batch-services:
 
 Within a Batch we create Job Definitions, by creating a new Job with a unique name and defining a handler function that will be executed when the job is submitted.
 
-<CodeGroup>
+<CodeSwitcher>
 
-```typescript
+```typescript !!
 import { job, JobContext } from '@nitric/sdk'
 
 const analyze = job('analyze')
@@ -78,11 +80,11 @@ analyze.handler(
   async (ctx: JobContext) => {
     // Do some work
   },
-  { cpus: 1, memory: 1024, gpus: 0 }
+  { cpus: 1, memory: 1024, gpus: 0 },
 )
 ```
 
-```python
+```python !!
 from nitric.resources import job
 from nitric.application import Nitric
 from nitric.context import JobContext
@@ -98,7 +100,7 @@ async def generate_image(ctx: None):
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/batch"
@@ -116,7 +118,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {
@@ -130,15 +132,15 @@ void main() {
 }
 ```
 
-</CodeGroup>
+</CodeSwitcher>
 
 ## Submitting Jobs for Execution
 
 Jobs may be submitted from Nitric `services` or other `batches` using the `submit` method on the job reference. When submitting a job you can provide a payload that will be passed to the job handler function.
 
-<CodeGroup>
+<CodeSwitcher>
 
-```javascript
+```javascript !!
 import * as nitric from '@nitric/sdk'
 
 const api = nitric.api('public')
@@ -151,7 +153,7 @@ api.post('/submit-job', async (ctx) => {
 })
 ```
 
-```python
+```python !!
 from nitric.resources import api, job
 from nitric.application import Nitric
 
@@ -169,7 +171,7 @@ async def submit_job(ctx):
 Nitric.run()
 ```
 
-```go
+```go !!
 import (
 	"context"
 
@@ -192,7 +194,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {
@@ -209,4 +211,4 @@ void main() {
 }
 ```
 
-</CodeGroup>
+</CodeSwitcher>
