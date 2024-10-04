@@ -8,7 +8,7 @@ async function run() {
   try {
     const paths = allDocs
       .map((doc) => {
-        return doc.slug ? `/${doc.slug}` : '/'
+        return doc.slug === '/' ? '/docs' : `/docs/${doc.slug}`
       })
       .sort((a, b) => a.localeCompare(b))
 
