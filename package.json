@@ -49,7 +49,7 @@
     "autoprefixer": "^10.4.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "codehike": "^1.0.1",
+    "codehike": "^1.0.2",
     "contentlayer2": "^0.5.1",
     "fathom-client": "^3.7.2",
     "framer-motion": "^10.18.0",

@@ -43,7 +43,7 @@ export class SmoothPre extends React.Component<CustomPreProps> {
         duration: options.duration * MAX_TRANSITION_DURATION,
         delay: options.delay * MAX_TRANSITION_DURATION,
         easing: options.easing,
-        fill: 'backwards',
+        fill: 'both',
       })
     })
   }
