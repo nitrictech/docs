@@ -44,7 +44,7 @@ const Pre: React.FC<Props> = ({
   return (
     <>
       {showFileNamePanel && (
-        <div className="flex h-12 items-center justify-start border-b border-zinc-300/10 bg-zinc-800/50 pr-12 font-display text-xs font-semibold text-zinc-300">
+        <div className="flex h-12 items-center justify-start border-b border-zinc-300/10 bg-zinc-800/50 pr-12 font-display text-2xs font-semibold text-zinc-300 sm:text-xs">
           {/* one-off breakpoint to hide the filename on extremely narrow screens - to avoid interfering with the lang select */}
           <span className="hidden whitespace-nowrap px-4 py-2 min-[320px]:block">
             {fileName}

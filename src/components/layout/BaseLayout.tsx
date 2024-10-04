@@ -19,7 +19,7 @@ export function BaseLayout({ children }: React.PropsWithChildren) {
           <Navigation className="hidden lg:block" />
         </div>
       </header>
-      <div className="relative px-4 pt-14 sm:px-6 lg:px-8">
+      <div className="relative px-2 pt-14 sm:px-6 lg:px-8">
         {children}
         <Footer />
       </div>
