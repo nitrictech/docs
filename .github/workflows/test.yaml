@@ -41,7 +41,7 @@ jobs:
           config: video=false
           browser: chrome
           spec: cypress/e2e/broken-links.cy.ts
-          build: yarn build
+          build: yarn cypress:build
           start: yarn start
           wait-on: 'http://localhost:3000'
         env:
@@ -66,7 +66,7 @@ jobs:
           config: video=false
           browser: chrome
           spec: cypress/e2e/a11y.cy.ts
-          build: yarn build
+          build: yarn cypress:build
           start: yarn start
           wait-on: 'http://localhost:3000'
         env:
@@ -91,7 +91,7 @@ jobs:
           config: video=false
           browser: chrome
           spec: cypress/e2e/seo.cy.ts
-          build: yarn build
+          build: yarn cypress:build
           start: yarn start
           wait-on: 'http://localhost:3000'
         env:

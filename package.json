@@ -12,6 +12,8 @@
     "format:check": "prettier --check src",
     "format:fix": "prettier --write src",
     "cypress": "cypress open",
+    "cypress:fixtures": "node scripts/build-pages-fixture.mjs",
+    "cypress:build": "yarn build && yarn cypress:fixtures",
     "lint-staged": "lint-staged"
   },
   "browserslist": "defaults, not ie <= 11",
