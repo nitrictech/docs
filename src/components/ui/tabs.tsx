@@ -15,6 +15,8 @@ const TabsList = React.forwardRef<
     ref={ref}
     className={cn(
       'inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground',
+      // classes to make the tabs overflow horizontally
+      'w-full scroll-px-5 justify-start overflow-x-auto overscroll-x-contain [scrollbar-width:none] sm:scroll-px-0 [&::-webkit-scrollbar]:hidden',
       className,
     )}
     {...props}
