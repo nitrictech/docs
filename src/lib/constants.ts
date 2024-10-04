@@ -31,4 +31,6 @@ export const discordChatUrl =
 export const BASE_URL =
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
     ? 'https://nitric.io'
-    : `https://${process.env.NEXT_PUBLIC_VERCEL_URL || 'localhost:3000'}`
+    : process.env.NEXT_PUBLIC_VERCEL_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      : 'http://localhost:3000'
