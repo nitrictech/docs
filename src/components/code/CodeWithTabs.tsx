@@ -7,6 +7,7 @@ import Pre from './Pre'
 import CodeContainer from './CodeContainer'
 import CODE_THEME from './theme'
 import { meta } from './meta'
+import { dash } from 'radash'
 
 export const Schema = Block.extend({ tabs: z.array(CodeBlock) })
 export async function CodeWithTabs(props: unknown) {
@@ -27,12 +28,12 @@ export function CodeTabs(props: {
 
   return (
     <CodeContainer>
-      <Tabs defaultValue={meta(tabs[0]).base}>
+      <Tabs defaultValue={dash(meta(tabs[0]).base)}>
         <TabsList className="relative mx-0 mt-auto h-12 w-full rounded-b-none bg-transparent p-0">
           {tabs.map((tab) => (
             <TabsTrigger
-              key={meta(tab).base}
-              value={meta(tab).base}
+              key={dash(meta(tab).base)}
+              value={dash(meta(tab).base)}
               className="group/tab relative h-12 hover:text-zinc-200 data-[state=active]:bg-transparent data-[state=active]:text-primary-300"
             >
               {meta(tab).base}
@@ -43,8 +44,8 @@ export function CodeTabs(props: {
         </TabsList>
         {tabs.map((tab, i) => (
           <TabsContent
-            key={meta(tab).base}
-            value={meta(tab).base}
+            key={dash(meta(tab).base)}
+            value={dash(meta(tab).base)}
             className="m-0"
           >
             <Pre
