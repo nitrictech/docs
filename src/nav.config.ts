@@ -596,6 +596,10 @@ const fullNav: FullNav = {
           title: 'AWS API Gateway Throttle',
           href: '/guides/terraform/api-gateway-throttle',
         },
+        {
+          title: 'Terratest for Testing AWS Resources',
+          href: '/guides/terraform/terratest',
+        },
       ],
     },
   ],
