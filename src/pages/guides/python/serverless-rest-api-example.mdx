@@ -124,7 +124,8 @@ async def get_profile(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
   d = await profiles.get(pid)
 
-  ctx.res.body = f"{d.content}"
+  ctx.res.body = f"{d}"
+  ctx.res.headers['Content-Type'] = 'application/json'
 ```
 
 ### Remove a profile with DELETE
