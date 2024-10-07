@@ -73,7 +73,7 @@ const FeedbackForm = () => {
         {choices.map(({ label, value, emoji }) => (
           <div key={value} className="group flex items-center">
             <RadioGroupItem value={value} id={value} className="group">
-              <span className="zincscale group-checked:zincscale-0 group-data-[state=checked]:zincscale-0 mr-2">
+              <span className="mr-2 grayscale group-checked:grayscale-0 group-data-[state=checked]:grayscale-0">
                 {emoji}
               </span>
             </RadioGroupItem>
