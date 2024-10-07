@@ -13,6 +13,10 @@ export const navigation: NavEntry[] = [
     href: '/',
   },
   {
+    title: 'Guides',
+    href: '/guides',
+  },
+  {
     title: 'Concepts',
     items: [
       {
