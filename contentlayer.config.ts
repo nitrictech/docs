@@ -32,6 +32,13 @@ const Doc = defineDocumentType(() => ({
       type: 'boolean',
       description: 'Disable the github edit button',
     },
+    tags: {
+      type: 'list',
+      of: {
+        type: 'string',
+      },
+      description: 'The tags of the post, used by guides',
+    },
   },
   computedFields: {
     slug: {
