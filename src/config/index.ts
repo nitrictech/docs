@@ -35,60 +35,69 @@ export const navigation: NavEntry[] = [
     href: '/guides',
   },
   {
-    title: 'Concepts',
-    items: [
-      {
-        title: 'Infrastructure from Code',
-        href: '/infrastructure-from-code',
-      },
-      {
-        title: 'Project',
-        href: '/concepts/project',
-      },
-      {
-        title: 'Service',
-        href: '/concepts/service',
-      },
-      {
-        title: 'Resource',
-        href: '/concepts/resource',
-      },
-      {
-        title: 'Security',
-        href: '/concepts/security',
-      },
-      {
-        title: 'Provider',
-        href: '/concepts/provider',
-      },
-      {
-        title: 'Stack',
-        href: '/concepts/stack',
-      },
-    ],
-  },
-  {
-    title: 'Basics',
+    title: 'Getting Started',
     items: [
       {
         title: 'Installation',
         href: '/basics/installation',
       },
       {
-        title: 'Configuration',
-        href: '/basics/configuration',
+        title: 'Basics',
+        items: [
+          {
+            title: 'Project Structure',
+            href: '/basics/project-structure',
+          },
+          {
+            title: 'Project Config',
+            href: '/basics/configuration',
+          },
+          {
+            title: 'Local Development',
+            href: '/basics/local-development',
+          },
+          {
+            title: 'Deployment',
+            href: '/basics/deployment',
+          },
+        ],
       },
       {
-        title: 'Project Structure',
-        href: '/basics/project-structure',
-      },
-      {
-        title: 'Local Development',
-        href: '/basics/local-development',
-      },
-      {
-        title: 'Deployment',
-        href: '/basics/deployment',
+        title: 'Nitric Concepts',
+        items: [
+          {
+            title: 'The Problem',
+            href: '/the-problem',
+          },
+          {
+            title: 'Infrastructure from Code',
+            href: '/concepts/infrastructure-from-code',
+          },
+          {
+            title: 'Project',
+            href: '/concepts/project',
+          },
+          {
+            title: 'Service',
+            href: '/concepts/service',
+          },
+          {
+            title: 'Resource',
+            href: '/concepts/resource',
+          },
+          {
+            title: 'Security',
+            href: '/concepts/security',
+          },
+          {
+            title: 'Provider',
+            href: '/concepts/provider',
+          },
+          {
+            title: 'Stack',
+            href: '/concepts/stack',
+          },
+        ],
       },
     ],
   },
@@ -199,7 +208,16 @@ export const navigation: NavEntry[] = [
   },
   {
     title: 'Languages',
-    items: [NodeReference, PyReference, GoReference, DartReference],
+    items: [
+      {
+        title: 'Overview',
+        href: '/reference/languages',
+      },
+      NodeReference,
+      PyReference,
+      GoReference,
+      DartReference,
+    ],
   },
   {
     title: 'Reference',
