@@ -1,5 +1,5 @@
 import { type Metadata } from 'next'
-import { Inter, Sora, IBM_Plex_Mono } from 'next/font/google'
+import { Inter, Sora, JetBrains_Mono } from 'next/font/google'
 
 import { Providers } from '@/app/providers'
 
@@ -21,9 +21,9 @@ const sora = Sora({
   display: 'swap',
 })
 
-const ibmPlexMono = IBM_Plex_Mono({
+const jetBrainsMono = JetBrains_Mono({
   weight: ['500', '600', '700'],
-  variable: '--font-ibm-plex-mono',
+  variable: '--font-jetbrains-mono',
   display: 'swap',
   subsets: ['latin'],
 })
@@ -60,7 +60,7 @@ export default async function RootLayout({
         'h-full',
         inter.variable,
         sora.variable,
-        ibmPlexMono.variable,
+        jetBrainsMono.variable,
       )}
       suppressHydrationWarning
     >
