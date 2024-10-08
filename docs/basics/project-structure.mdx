@@ -1,0 +1,61 @@
+---
+description: 'The structure of a Nitric project'
+---
+
+# Project structure
+
+Nitric doesn't enforce a strict project structure. By default, Nitric only requires a `nitric.yaml` file to identify the project and a `nitric.[stack ID].yaml` file to define the deployment target. However, Nitric projects can be organized in a way that makes sense for you or your team.
+
+We recommend starting with a project template, using the `nitric new` CLI command. These templates often contain an opinionated project structure, to get you started quickly. You can then modify the project structure to suit your needs.
+
+## Basic structure
+
+Here are some examples of basic Nitric project structures:
+
+<CodeWithTabs>
+
+```text !!tabs Go
+my-project/
+├── nitric.yaml
+├── nitric.aws.yaml
+└── services/
+    ├── service1/
+    │   └── main.go
+    └── service2/
+        └── main.go
+```
+
+```text !!tabs JavaScript
+my-project/
+├── nitric.yaml
+├── nitric.aws.yaml
+└── services/
+    ├── service1.js
+    └── service2.js
+```
+
+```text !!tabs Python
+my-project/
+├── nitric.yaml
+├── nitric.aws.yaml
+└── services/
+    ├── service1.py
+    └── service2.py
+```
+
+</CodeWithTabs>
+
+This flexibility allows you to organize your project in a way that makes sense for you or your team. For example, you may build a single monolithic service, multiple microservices, or something else entirely.
+
+<Note>
+  The `services` directory is a common convention for Nitric projects, but you
+  can organize your project however you like.
+</Note>
+
+## Project file
+
+The existence of a `nitric.yaml` file, indicates that the directory contains a project built with Nitric. The file defines the project's name and how to locate and run the entrypoints to your application (services). You can read about the `nitric.yaml` file in the [configuration](/basics/configuration) section.
+
+## Stack files
+
+Nitric projects can be deployed to multiple environments and cloud providers; stack files identify these deployment targets. These files can be created by running the `nitric stack new` CLI command. You can read more about stack files in the [deployment](/basics/deployment) section.
