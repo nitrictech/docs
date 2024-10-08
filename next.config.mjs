@@ -346,6 +346,12 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       },
+      ...['nodejs', 'dart', 'go', 'jvm', 'python'].map((page) => ({
+        source: `/docs/guides/${page}`,
+        destination: `/docs/guides`,
+        basePath: false,
+        permanent: true,
+      })),
     ]
   },
   async headers() {
