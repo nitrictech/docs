@@ -26,7 +26,7 @@ interface Props {
 
 const GuideList: React.FC<Props> = ({ className, guides }) => {
   const { searchParams } = useParams()
-  const selectedTags = searchParams.get('tags')?.split(',') || []
+  const selectedTags = searchParams?.get('tags')?.split(',') || []
   const { currentLanguage } = useLang()
   const filteredGuides = guides.filter((guide) => {
     let include = true
@@ -40,7 +40,13 @@ const GuideList: React.FC<Props> = ({ className, guides }) => {
     return include && selectedTags.some((tag) => guide.tags?.includes(tag))
   })
 
-  return (
+  return filteredGuides.length === 0 ? (
+    <div className={className}>
+      <p className="text-lg">
+        No guides found. Please try selecting different filters.
+      </p>
+    </div>
+  ) : (
     <ul className={cn('space-y-4', className)}>
       {filteredGuides.map((guide) => (
         <li key={guide.slug}>
