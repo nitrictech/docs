@@ -25,6 +25,7 @@ const jetBrainsMono = JetBrains_Mono({
   weight: ['500', '600', '700'],
   variable: '--font-jetbrains-mono',
   display: 'swap',
+  adjustFontFallback: false,
   subsets: ['latin'],
 })
 

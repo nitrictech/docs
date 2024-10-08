@@ -5,6 +5,8 @@ const {
   default: flattenColorPalette,
 } = require('tailwindcss/lib/util/flattenColorPalette')
 
+import defaultTheme from 'tailwindcss/defaultTheme'
+
 import typographyStyles from './typography'
 
 const nitricColors = {
@@ -61,7 +63,7 @@ export default {
       fontFamily: {
         sans: ['var(--font-inter)'],
         display: ['var(--font-sora)'],
-        mono: ['var(--font-jetbrains-mono)'],
+        mono: ['var(--font-jetbrains-mono)', ...defaultTheme.fontFamily.mono],
       },
       boxShadow: {
         glow: '0 0 4px rgb(0 0 0 / 0.1)',
