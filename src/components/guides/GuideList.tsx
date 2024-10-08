@@ -1,11 +1,10 @@
+'use client'
+
 import { Doc } from '@/content'
 import React from 'react'
-import { Separator } from '../ui/separator'
-import Link from 'next/link'
-import { cn } from '@/lib/utils'
-import { title } from 'radash'
 import GuideItem from './GuideItem'
 import { Checkbox } from '../ui/checkbox'
+import useParams from '@/hooks/useParams'
 
 interface Props {
   guides: Doc[]
@@ -13,7 +12,13 @@ interface Props {
 }
 
 const GuideList: React.FC<Props> = ({ guides, allTags }) => {
-  allTags = ['python', 'node', 'go']
+  const { searchParams, setParams } = useParams()
+  const selectedTags = searchParams.get('tags')?.split(',') || []
+
+  const filteredGuides = guides.filter((guide) => {
+    if (!selectedTags.length) return true
+    return selectedTags.some((tag) => guide.tags?.includes(tag))
+  })
 
   return (
     <div className="mt-10 grid grid-cols-[280px,1fr]">
@@ -25,12 +30,28 @@ const GuideList: React.FC<Props> = ({ guides, allTags }) => {
           {allTags.map((tag) => (
             <li key={tag}>
               <div className="flex items-center space-x-4">
-                <Checkbox id={tag} />
+                <Checkbox
+                  id={tag}
+                  checked={selectedTags.includes(tag)}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setParams('tags', [...selectedTags, tag].join(','))
+                    } else {
+                      setParams(
+                        'tags',
+                        selectedTags
+                          .filter((selectedTag) => selectedTag !== tag)
+                          .join(','),
+                      )
+                    }
+                  }}
+                  className="h-5 w-5 border-primary-400 data-[state=checked]:bg-primary"
+                />
                 <label
                   htmlFor={tag}
-                  className="cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="cursor-pointer text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  {title(tag)}
+                  {tag}
                 </label>
               </div>
             </li>
@@ -38,8 +59,8 @@ const GuideList: React.FC<Props> = ({ guides, allTags }) => {
         </ul>
       </aside>
       <ul className="space-y-4">
-        {guides.map((guide) => (
-          <li key={guide.title}>
+        {filteredGuides.map((guide) => (
+          <li key={guide.slug}>
             <GuideItem guide={guide} />
           </li>
         ))}

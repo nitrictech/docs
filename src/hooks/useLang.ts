@@ -1,5 +1,7 @@
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect } from 'react'
+import useParams from './useParams'
+import { set } from 'node_modules/cypress/types/lodash'
 
 export type LanguageId =
   | 'javascript'
@@ -28,7 +30,7 @@ const languages = ['javascript', 'python', 'go', 'typescript', 'dart']
 const LOCAL_STORAGE_KEY = 'nitric.docs.selected.language'
 
 const useLang = () => {
-  const searchParams = useSearchParams() || new URLSearchParams()
+  const { searchParams, setParams } = useParams()
 
   const queryParamLang = searchParams.get('lang') as LanguageId
 
@@ -45,17 +47,10 @@ const useLang = () => {
       )
 
       if (!id) {
-        currentParams.delete('lang')
+        setParams('lang', null)
       } else {
-        currentParams.set('lang', id)
-      }
+        setParams('lang', id)
 
-      const search = currentParams.toString()
-      const query = search ? `?${search}` : ''
-
-      window.history.pushState(null, '', query)
-
-      if (query) {
         // set language in local storage
         try {
           localStorage.setItem(LOCAL_STORAGE_KEY, id)
