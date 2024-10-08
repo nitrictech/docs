@@ -19,11 +19,13 @@ function rehypeParseCodeBlocks() {
   }
 }
 
+const ALLOWED_TAGS = ['h2', 'h3']
+
 function rehypeSlugify() {
   return (tree) => {
     let slugify = slugifyWithCounter()
     visit(tree, 'element', (node) => {
-      if (node.tagName === 'h2' && !node.properties.id) {
+      if (ALLOWED_TAGS.includes(node.tagName) && !node.properties.id) {
         node.properties.id = slugify(toString(node))
       }
     })
@@ -103,6 +105,7 @@ export const rehypePlugins = [
   [
     rehypeAutolinkHeadings,
     {
+      test: ALLOWED_TAGS,
       behavior: 'append',
       headingProperties: {
         className: ['md-content-header group'],
