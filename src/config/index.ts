@@ -25,23 +25,23 @@ export const navigation: NavEntry[] = [
       },
       {
         title: 'Project',
-        href: '/project',
+        href: '/concepts/project',
       },
       {
         title: 'Service',
-        href: '/service',
+        href: '/concepts/service',
       },
       {
         title: 'Resource',
-        href: '/resource',
+        href: '/concepts/resource',
       },
       {
         title: 'Provider',
-        href: '/provider',
+        href: '/concepts/provider',
       },
       {
         title: 'Stack',
-        href: '/stack',
+        href: '/concepts/stack',
       },
     ],
   },
@@ -50,27 +50,27 @@ export const navigation: NavEntry[] = [
     items: [
       {
         title: 'Installation',
-        href: '/getting-started/installation',
+        href: '/basics/installation',
       },
       {
         title: 'Configuration',
-        href: '/getting-started/configuration',
+        href: '/basics/configuration',
       },
       {
         title: 'Project Structure',
-        href: '/getting-started/project-structure',
+        href: '/basics/project-structure',
       },
       {
         title: 'Local Development',
-        href: '/getting-started/local-development',
+        href: '/basics/local-development',
       },
       {
         title: 'Security',
-        href: '/getting-started/security',
+        href: '/basics/security',
       },
       {
         title: 'Deployment',
-        href: '/getting-started/deploying',
+        href: '/basics/deploying',
       },
     ],
   },
@@ -83,11 +83,11 @@ export const navigation: NavEntry[] = [
         items: [
           {
             title: 'API',
-            href: '/getting-started/node/quick-start',
+            href: '/basics/node/quick-start',
           },
           {
             title: 'Todo App',
-            href: '/getting-started/node/to-do',
+            href: '/basics/node/to-do',
           },
         ],
       },
@@ -97,11 +97,11 @@ export const navigation: NavEntry[] = [
         items: [
           {
             title: 'API',
-            href: '/getting-started/python/quick-start',
+            href: '/basics/python/quick-start',
           },
           {
             title: 'Todo App',
-            href: '/getting-started/python/to-do',
+            href: '/basics/python/to-do',
           },
         ],
       },
@@ -111,11 +111,11 @@ export const navigation: NavEntry[] = [
         items: [
           {
             title: 'API',
-            href: '/getting-started/go/quick-start',
+            href: '/basics/go/quick-start',
           },
           {
             title: 'Todo App',
-            href: '/getting-started/go/to-do',
+            href: '/basics/go/to-do',
           },
         ],
       },
@@ -125,11 +125,11 @@ export const navigation: NavEntry[] = [
         items: [
           {
             title: 'API',
-            href: '/getting-started/dart/quick-start',
+            href: '/basics/dart/quick-start',
           },
           {
             title: 'Todo App',
-            href: '/getting-started/dart/to-do',
+            href: '/basics/dart/to-do',
           },
         ],
       },
@@ -140,27 +140,27 @@ export const navigation: NavEntry[] = [
     items: [
       {
         title: 'Intro',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
       {
         title: 'AWS',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
       {
         title: 'GCP',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
       {
         title: 'Azure',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
       {
         title: 'Custom',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
       {
         title: 'CD/CD',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
     ],
   },
@@ -169,19 +169,19 @@ export const navigation: NavEntry[] = [
     items: [
       {
         title: 'Node.js',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
       {
         title: 'Python',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
       {
         title: 'Go',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
       {
         title: 'Dart',
-        href: '/getting-started/quick-start',
+        href: '/basics/quick-start',
       },
     ],
   },
