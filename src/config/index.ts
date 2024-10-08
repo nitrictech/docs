@@ -66,8 +66,8 @@ export const navigation: NavEntry[] = [
         title: 'Nitric Concepts',
         items: [
           {
-            title: 'The Problem',
-            href: '/the-problem',
+            title: 'Why Nitric',
+            href: '/concepts/why-nitric',
           },
           {
             title: 'Infrastructure from Code',

@@ -1,0 +1,52 @@
+---
+description: 'The problems with modern cloud development'
+---
+
+# Why Nitric
+
+Building and deploying cloud applications should be simple. But in practice, cloud development comes with numerous challenges, from managing provider-specific services to wrestling with deployment automation. Nitric was designed to address these pain points and provide a modern, highly declarative, and flexible approach to building cloud apps that work across providers.
+
+## The Problems
+
+### Provider Lock-in and Highly Coupled Architectures
+
+Many applications are built with deep dependencies on a single cloud provider's services (think the AWS S3 client library or the specific shape of a Google Pub/Sub message, or any number of other subtle and not-so-subtle dependencies on cloud services).
+
+These dependencies makes it difficult to port your app to another service, or move to a different cloud get the best price, or run your app locally for testing, or even work in hybrid cloud environments. As the app grows, so does the reliance on specific cloud services, leading to vendor lock-in, making it harder to scale and evolve over time.
+
+Nitric abstracts these details, giving you the flexibility to deploy across different cloud providers without having to rewrite your application code. By decoupling your logic from the underlying infrastructure, Nitric ensures your app works wherever you need it to.
+
+### Deployment Automation: A Second Application
+
+Building a cloud app you can easily find yourself building a second application—deployment automation—that manages the infrastructure and services your app depends on. This includes provisioning cloud resources, managing permissions, configuring networking, and more. The deployment scripts become an integral part of your project, with a complex set of instructions that must be maintained alongside your app.
+
+While this is a necessary part of cloud development, it can be a significant burden - one that can be simplified and made more robust.
+
+Nitric simplifies this by automatically collecting what your app needs to run and providing this to plugins that can generate the deployment automation for you. You no longer need to manually craft unique and complex Infrastructure-as-Code (IaC) files to describe each app's requirements. Instead, use independently testable and reusable deployment automation layers.
+
+### Hidden Details in the Code
+
+Many of the details about how an application interacts with its infrastructure are buried in the code. For example, the permissions required to access services, the environment variables needed to function, or the correct configuration of cloud resources are often implied by the codebase, but not explicitly defined. Keeping track of these is challenging, and small mistakes can lead to broken deployments or runtime failures.
+
+Nitric brings these details to the surface, ensuring that the infrastructure requirements are automatically generated based on how your app is written. This eliminates the need to manually interrogate the code (or more likely its author) to specify the needed permissions, environment variables, and cloud resource dependencies.
+
+### Automation Sync & Zombies
+
+Keeping your app code in sync with the deployment automation is a constant battle. When you make changes to your app—such as removing a resource—the deployment automation must be manually updated to prevent zombie resources. Conversely, if your deployment script creates a resource and passes its ARN as an environment variable, any typo in that variable can cause your app to fail at runtime. These issues are hard to catch because there's no strong link between the app and the IaC code.
+
+With Nitric, your app and deployment automation are always in sync. The resources your app uses are automatically aggregated, and environment variables are no longer needed, with resource ID resolution built directly into your app at runtime. No more hunting for missing or misconfigured settings. Everything your app needs is declared in one place—your application code.
+
+## Nitric's Solution
+
+Nitric addresses these challenges by taking a fundamentally different approach:
+
+- **Decoupling App Logic from Infrastructure**: Nitric handles the cloud infrastructure for you, so your app can focus on what matters—delivering functionality. No more writing and maintaining complex deployment scripts specific to just one app.
+- **Automatic Infrastructure Management**: Nitric automatically provisions the resources your app needs based on its code. There's no need to manually declare and update cloud resources. Or worse, forget to update them.
+- **Built-in Permissions and Configuration**: Nitric configures permissions and resource resolution for you, so your app is ready to run securely and with the correct settings.
+- **Cross-Cloud Flexibility**: Whether you want to deploy to AWS, Azure, GCP, all three, or somewhere else entirely, Nitric ensures your app works consistently across cloud providers.
+
+Nitric makes cloud development a frictionless experience. By eliminating the tedious and error-prone aspects of deployment, you can focus on building great applications, confident that they will deploy reliably.
+
+## The Limits
+
+Nitric is not a silver bullet. It can't solve every problem in cloud development, nor is it a one-size-fits-all solution. However, it does provide a powerful set of tools and practices that can significantly simplify and streamline your cloud development workflow.
