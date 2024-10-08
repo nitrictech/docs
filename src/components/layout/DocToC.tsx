@@ -7,6 +7,7 @@ import { DocTracingBeam } from './DocTracingBeam'
 import { Button } from '../ui/button'
 import { GitHubIcon } from '../icons/GitHubIcon'
 import { useMotionValue } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 interface Toc {
   url: string
@@ -22,9 +23,11 @@ const DocToC = ({ doc }: { doc: Doc }) => {
   const y1 = useMotionValue(0)
   const y2 = useMotionValue(0)
 
+  const [activeIndex, setActiveIndex] = useState(-1)
+
   useEffect(() => {
     const headings = document
-      .querySelectorAll<HTMLHeadingElement>('.md-content-header')
+      .querySelectorAll<HTMLHeadingElement>('h2.md-content-header')
       .values()
       .toArray()
 
@@ -42,6 +45,8 @@ const DocToC = ({ doc }: { doc: Doc }) => {
           )
 
           y2.set(initial + (index * sectionSize + offset))
+
+          setActiveIndex(index)
         }
       })
     }, options)
@@ -68,7 +73,12 @@ const DocToC = ({ doc }: { doc: Doc }) => {
                     <li key={item.url + i}>
                       <Link
                         href={item.url}
-                        className="text-2xs text-muted-foreground transition-colors hover:text-zinc-900 dark:hover:text-zinc-200"
+                        className={cn(
+                          'text-2xs',
+                          activeIndex === i
+                            ? 'text-zinc-900 dark:text-zinc-200'
+                            : 'text-muted-foreground transition-colors hover:text-zinc-900 dark:hover:text-zinc-200',
+                        )}
                       >
                         {item.value}
                       </Link>
