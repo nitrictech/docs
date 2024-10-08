@@ -61,7 +61,7 @@ export default {
       fontFamily: {
         sans: ['var(--font-inter)'],
         display: ['var(--font-sora)'],
-        mono: ['var(--font-ibm-plex-mono)'],
+        mono: ['var(--font-jetbrains-mono)'],
       },
       boxShadow: {
         glow: '0 0 4px rgb(0 0 0 / 0.1)',
