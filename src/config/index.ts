@@ -1,29 +1,28 @@
-import { CommandLineIcon, HomeIcon } from '@heroicons/react/24/outline'
 import {
-  FaNodeJs,
-  FaPython,
-  FaJava,
-  FaAws,
-  FaGithub,
-  FaCode,
-  FaToggleOn,
-  FaInternetExplorer,
-  FaBrain,
-  FaDatabase,
-  FaBullhorn,
-  FaFileArchive,
-  FaClock,
-  FaComments,
-  FaLock,
-  FaArchive,
-  FaGlobe,
-} from 'react-icons/fa'
-import { SiDart, SiGo, SiPulumi, SiTerraform } from 'react-icons/si'
+  CommandLineIcon,
+  ArchiveBoxIcon,
+  CircleStackIcon,
+  ClockIcon,
+  CpuChipIcon,
+  CursorArrowRippleIcon,
+  GlobeAltIcon,
+  MegaphoneIcon,
+  LockClosedIcon,
+  CodeBracketIcon,
+  BeakerIcon,
+} from '@heroicons/react/24/outline'
+import {
+  SiGooglecloud,
+  SiMicrosoftazure,
+  SiPulumi,
+  SiTerraform,
+} from 'react-icons/si'
 import { NavEntry } from './types'
 import { NodeReference } from './reference/node'
 import { PyReference } from './reference/python'
 import { DartReference } from './reference/dart'
 import { GoReference } from './reference/go'
+import { FaAws } from 'react-icons/fa'
 
 export const navigation: NavEntry[] = [
   {
@@ -106,42 +105,42 @@ export const navigation: NavEntry[] = [
     items: [
       {
         title: 'APIs',
-        icon: FaGlobe,
+        icon: GlobeAltIcon,
         href: '/apis',
       },
       {
         title: 'Batch (AI/ML/HPC)',
-        icon: FaBrain,
+        icon: CpuChipIcon,
         href: '/batch',
       },
       {
         title: 'Schedules',
-        icon: FaClock,
+        icon: ClockIcon,
         href: '/schedules',
       },
       {
         title: 'Websockets',
-        icon: FaComments,
+        icon: CursorArrowRippleIcon,
         href: '/websockets',
       },
       {
         title: 'Storage',
-        icon: FaArchive,
+        icon: ArchiveBoxIcon,
         href: '/storage',
       },
       {
         title: 'SQL Databases',
-        icon: FaDatabase,
+        icon: CircleStackIcon,
         href: '/sql',
       },
       {
         title: 'Async Messaging',
-        icon: FaBullhorn,
+        icon: MegaphoneIcon,
         href: '/messaging',
       },
       {
         title: 'Secrets',
-        icon: FaLock,
+        icon: LockClosedIcon,
         href: '/secrets',
       },
     ],
@@ -160,12 +159,12 @@ export const navigation: NavEntry[] = [
           },
           {
             title: 'Google Cloud',
-            icon: FaAws,
+            icon: SiGooglecloud,
             href: '/providers/pulumi/gcp',
           },
           {
             title: 'Azure',
-            icon: FaAws,
+            icon: SiMicrosoftazure,
             href: '/providers/pulumi/azure',
           },
         ],
@@ -181,14 +180,14 @@ export const navigation: NavEntry[] = [
           },
           {
             title: 'Google Cloud',
-            icon: FaAws,
+            icon: SiGooglecloud,
             href: '/providers/terraform/gcp',
           },
         ],
       },
       {
         title: 'Custom',
-        icon: FaCode,
+        icon: CodeBracketIcon,
         items: [
           {
             title: 'Overview',
@@ -237,7 +236,7 @@ export const navigation: NavEntry[] = [
       },
       {
         title: 'Preview Features',
-        icon: FaToggleOn,
+        icon: BeakerIcon,
         href: '/reference/preview-features',
       },
     ],
