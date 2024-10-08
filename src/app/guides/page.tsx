@@ -1,5 +1,4 @@
-import Breadcrumbs from '@/components/Breadcrumbs'
-import GuideList from '@/components/guides/GuideList'
+import GuidePage from '@/components/guides/GuidePage'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -48,7 +47,7 @@ export default function GuidesPage() {
       </div>
       <div className="-mx-2 border-t px-4 sm:-mx-6 lg:-mx-8">
         <div className="mx-auto max-w-7xl px-4">
-          <GuideList guides={allGuides} allTags={allTags} />
+          <GuidePage guides={allGuides} allTags={allTags} />
         </div>
       </div>
     </>
