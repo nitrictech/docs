@@ -1,0 +1,14 @@
+### Configuring cloud credentials
+
+You will need to configure your cloud credentials, either locally or in your CI/CD pipeline, to allow Nitric to create resources in a cloud account. Instructions on how to setup credentials for your target provider can be found in the provider documentation: [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure).
+
+### Configuring state backend
+
+To track the state of your stack between deployments you'll need to configure a location for Pulumi to store its stack state (also known as a 'backend'). Pulumi provides several options for state backends, a common choice is [Pulumi's managed service](https://www.pulumi.com/docs/concepts/state/#pulumi-cloud-backend) which stores state in the cloud allowing for secure storage and collaboration. Alternatively, you can use any other state [backends](https://www.pulumi.com/docs/concepts/state/#using-a-self-managed-backend) Pulumi support.
+
+<Note>
+  If you're trying Nitric for the first time we recommend starting with a
+  `local` backend, which stores the stack state in a file on your machine. If
+  you haven't already configured a backend for Pulumi, Nitric will prompt you to
+  automatically setup this local backend when you run `nitric up`.
+</Note>

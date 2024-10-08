@@ -36,6 +36,10 @@ export const navigation: NavEntry[] = [
         href: '/concepts/resource',
       },
       {
+        title: 'Security',
+        href: '/concepts/security',
+      },
+      {
         title: 'Provider',
         href: '/concepts/provider',
       },
@@ -65,12 +69,8 @@ export const navigation: NavEntry[] = [
         href: '/basics/local-development',
       },
       {
-        title: 'Security',
-        href: '/basics/security',
-      },
-      {
         title: 'Deployment',
-        href: '/basics/deploying',
+        href: '/basics/deployment',
       },
     ],
   },

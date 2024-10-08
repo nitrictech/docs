@@ -4,76 +4,116 @@ description: 'How to deploy Nitric applications'
 
 # Deployment
 
-Nitric can automatically deploy your application to a supported cloud provider. As discussed in the [concepts](/concepts/how-nitric-works) page, Nitric has three standard `providers`, one each for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). If none of those fit your needs you're also able to [build a custom provider](/reference/providers/custom/building-custom-provider) to target the host you prefer with your own tools and configuration.
+Nitric applications are decoupled from the underlying hosting provider, allowing you to develop your application locally and deploy it to your preferred cloud provider or another platform without these concerns bleeding into the application code.
 
-The Nitric CLI command to perform deployments is `nitric up`. However, before your first deployment you'll need to create a `stack`, stacks represent deployment targets. If you haven't created a stack before we recommend reading the steps in our [quickstart guide](/getting-started/quickstart#deploying-the-app). The `up` command will prompt you to create a <a href="/docs/concepts/project-structure#stack-files" target="_blank">stack</a> if you haven't already created one for you project.
-
-```bash
-nitric up
-```
-
-To tear down a previously deployed application use the `down` command.
-
-```bash
-nitric down
-```
-
-## Providers
-
-Each of your project's stacks will target a specific hosting platform. The plugins that perform the deployments to these platforms are called `providers`. Nitric currently has 3 official providers, one each for [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure). All of the official providers use [Pulumi](https://pulumi.com) under the hood for their deployments, so Pulumi will need to be configured to persist your stack state and to run the deployment to the cloud of your choice.
-
-### Configuring cloud credentials
-
-You will need to configure your cloud credentials, either locally or in your CI/CD pipeline, to allow Nitric to create resources in a cloud account. Instructions on how to setup credentials for your target provider can be found in the provider documentation: [AWS](/reference/providers/aws), [Google Cloud](/reference/providers/gcp) and [Azure](/reference/providers/azure).
-
-### Configuring state backend
-
-To track the state of your stack between deployments you'll need to configure a location for Pulumi to store its stack state (also known as a 'backend'). Pulumi provides several options for state backends, a common choice is [Pulumi's managed service](https://www.pulumi.com/docs/concepts/state/#pulumi-cloud-backend) which stores state in the cloud allowing for secure storage and collaboration. Alternatively, you can use any other state [backends](https://www.pulumi.com/docs/concepts/state/#using-a-self-managed-backend) Pulumi support.
+You can read more the [concepts](/concepts/how-nitric-works) behind Nitric to understand why this separation is important and how it is achieved. This page will focus on the deployment process and how to configure your application for deployment.
 
 <Note>
-  If you're trying Nitric for the first time we recommend starting with a
-  `local` backend, which stores the stack state in a file on your machine. If
-  you haven't already configured a backend for Pulumi, Nitric will prompt you to
-  automatically setup this local backend when you run `nitric up`.
+  If you're new to Nitric we recommend starting with the [quickstart
+  guide](/guides/quickstart) to get a feel for how Nitric works. You can return
+  to this page later to learn more about the deployment process and how to
+  customize it.
 </Note>
 
-## Configuring stacks
+## Provider Types
 
-When using stacks to deploy to different environments such as a development, testing or production environment, you'll typically want to go beyond the default configuration Nitric uses when deploying cloud resources. This environment specific configuration is added to the stack files.
+The plugins used to deploy your application to a specific target platform are called [providers](/reference/providers). Typically providers do one of two things:
 
-When deploying the application, you can add extra configuration for specific services or globally for all services. This configuration is unique to each stack file, allowing you to deploy the same application to different environments with different configurations. Since the configuration options available are unique to the cloud platform and the services they offer these settings are typically different between provider implementations.
+1. **Deploy your application directly**
+2. **Generate Infrastructure-as-Code**
 
-Below is an example of configuration added to an AWS stack to augment the memory, timeout, and telemetry sampling percentage for deployed services.
+The first option is useful for simplicity, where you deployment automation is handled directly by the provider plugin. The second option is useful for more complex deployments where you want to manage the infrastructure as code yourself.
+
+For example, if you prefer to use Terraform and you rely on other Terraform tools for policy enforcement, or cost estimation, you can use or build a provider that generates Terraform code for you to deploy. This allows you to use Nitric's deployment automation and still leverage your existing Terraform workflows.
+
+Alternatively, if you're looking for a simple deployment process, you can use or build a provider that deploys your application directly to your cloud provider of choice.
+
+It's important to know which type of provider you're using, as the configuration options and deployment process will differ between them.
+
+Nitric ships with five official providers. The first three are direct deployment providers, and the last two are IaC providers.
+
+### Direct Deployment Providers
+
+All of the direct deployment providers use [Pulumi](https://pulumi.com) under the hood for their deployments, so Pulumi will need to be configured to persist your stack state and to run the deployment to the cloud of your choice.
+
+- [AWS](/reference/providers/aws)
+- [Google Cloud](/reference/providers/gcp)
+- [Azure](/reference/providers/azure)
+
+<Note>
+  If you're new to Nitric we recommend starting with one of the direct
+  deployment providers for simplicity.
+</Note>
+
+### Infrastructure-as-Code Providers
+
+All of the IaC providers generate Terraform code for deployment. This allows you to use Nitric's deployment automation and still leverage your existing Terraform workflows.
+
+- [AWSTF](/reference/providers/awstf)
+- [GCPTF](/reference/providers/gcptf)
+
+<Note>An Azure Terraform provider is in development.</Note>
+
+These providers are also a good starting point for customization when you have existing Terraform Modules or workflows you want to integrate with Nitric.
+
+## Custom Providers
+
+If you have a specific cloud service, deployment workflow or tooling you want to use, you can build a [custom provider](/reference/providers/custom). Custom providers allow you to target the host you prefer with your own tools and configuration.
+
+You can also extend the existing providers to change which cloud services are used to fulfill the Nitric resource contracts, to add configuration options or to change the deployment process.
+
+## Deploying your application
+
+Read the concepts page on [deployment](/concepts/deployment) to understand how Nitric prepares your application for deployment. This section focuses on how to configure your application for deployment and how to deploy it.
+
+There are two primary commands for deploying your application with Nitric:
+
+- `nitric up` - Build the application and run the provider plugin to deploy it
+- `nitric down` - Run the provider plugin to tear down the application
+
+<Note>
+  The `nitric down` is only available for [direct deployment
+  providers](#direct-deployment-providers). If you're using an IaC provider
+  you'll need to manage deployments and teardowns with your IaC tooling, such as
+  Terraform.
+</Note>
+
+These commands are used to deploy [stacks](#stacks) to different environments, such as development, testing, or production.
+
+### `nitric up`
+
+The Nitric CLI command to perform builds/deployments is `nitric up`. This command performs the following steps:
+
+1. **Build the application**: Nitric will build the application using the configuration in the `nitric.yaml` file. This includes building container images for each service.
+2. **Run the application in resource collection mode**: Nitric will run the application in a mode where it collects the resources used by the application. This is used to generate the graph of cloud resources required to run the application.
+3. **Run the provider plugin**: Nitric will run the provider plugin to deploy the application to the target platform. The provider plugin will use the resource graph and service container images to create the required cloud resources.
+
+In the case of direct deployment providers, the provider plugin will use the embedded IaC tool of choice to deploy the application. For the official providers, this is Pulumi.
+
+In the case of IaC providers, the provider plugin will generate IaC code for you using existing tools, such as the Terraform CLI. This code is typically output to a directory in your project, which you can then use to deploy the application with your existing CI/CD workflows. For example, you might commit the generated IaC code to a repository and use a CI/CD pipeline to deploy the application.
+
+### `nitric down`
+
+The Nitric CLI command to tear down the application is `nitric down`. This command simply runs the provider plugin to tear down the application. This command is only available for direct deployment providers.
+
+## Stacks
+
+Since an application can be deployed to multiple environments and cloud providers, Nitric uses stack files to identify these deployment targets. These files can be created by running the `nitric stack new` CLI command.
+
+Stack files define the deployment plugin (provider), any additional configuration required by that plugin for it to be able to generate IaC or deploy your application. Most configuration options available in the stack files are specific to the provider you're using.
+
+The common configuration option available in all stack files is the `provider` field, which specifies the provider plugin to use for the deployment. The standard format for specifying a provider is `[namespace]/[provider]@[version]`. The `namespace` for all standard providers is `nitric`. The `provider` is the name of the provider plugin, and the `version` is the version of the provider plugin to use.
+
+There is another format for specifying providers as a container image `docker://[image]`, which you can read about in the [reference docs](/reference/providers/custom/docker).
+
+Here is a basic example, using the standard nitric AWS provider `nitric/aws@1.1.0`.
 
 ```yaml {{ tag: "nitric.aws-deployment.yaml" }}
 provider: nitric/aws@1.1.0
 region: us-east-1
-telemetry: 10
-config:
-  default:
-    lambda:
-      memory: 1024
-  memory-optimized:
-    lambda:
-      memory: 4096
 ```
 
-Note that the configuration above creates two types of services with different configuration for each. The `default` configuration, which we'll apply to most services. There is also a `memory-optimized` handler group, which we've used to allocate more memory to those services specifically.
-
-To apply these handler group configurations, we need to create the groups. That's done by updating the project file to create groups and match them to different source code locations:
-
-```yaml {{ tag: "nitric.yaml" }}
-name: my-project
-services:
-  - match: services/*.ts
-    start: ts-node $SERVICE_PATH
-    type: default
-  - match: custom/*.ts
-    start: ts-node $SERVICE_PATH
-    type: memory-optimized
-```
-
-Provider specific stack configuration can be viewed in the reference docs for each [provider](/reference/providers).
+Provider specific stack configuration, including advanced configuration options, can be viewed in the reference docs for each [provider](/reference/providers).
 
 - [AWS stack configuration](/reference/providers/aws/configuration)
 - [Azure stack configuration](/reference/providers/azure/configuration)
@@ -86,7 +126,7 @@ Provider specific stack configuration can be viewed in the reference docs for ea
 
 ## CI/CD
 
-Deploying your Nitric application with your preferred CI/CD pipeline is simple. Explore our guides below:
+Deploying Nitric applications with CI/CD automation tools is simple. Explore the guides below for examples with common CI/CD tools:
 
 - [GitHub Actions](/guides/deploying/github-actions)
 - [GitLab CI](/guides/deploying/gitlab-ci)
