@@ -207,24 +207,7 @@ export const navigation: NavEntry[] = [
       {
         title: 'CLI',
         icon: CommandLineIcon,
-        items: [
-          {
-            title: 'Overview',
-            href: '/reference/cli',
-          },
-          {
-            title: 'Installation',
-            href: '/reference/cli/installation',
-          },
-          {
-            title: 'Local Development',
-            href: '/reference/cli/local-development',
-          },
-          {
-            title: 'Stacks',
-            href: '/reference/cli/stacks',
-          },
-        ],
+        href: '/reference/cli',
       },
       {
         title: 'Env Vars',
