@@ -1,24 +1,26 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { motion, useTransform, useScroll, useSpring } from 'framer-motion'
+import {
+  motion,
+  useTransform,
+  useSpring,
+  useMotionValue,
+  MotionValue,
+} from 'framer-motion'
 import { cn } from '@/lib/utils'
 
-// TODO this should set the height based off the h2 offset heights, not current scroll progress
 export const DocTracingBeam = ({
   children,
   className,
-  targetRef,
+  y1,
+  y2,
 }: {
   children: React.ReactNode
   className?: string
-  targetRef: React.RefObject<HTMLDivElement>
+  y1: MotionValue<number>
+  y2: MotionValue<number>
 }) => {
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-    offset: ['start start', 'end end'],
-  })
-
   const contentRef = useRef<HTMLDivElement>(null)
   const [svgHeight, setSvgHeight] = useState(0)
 
@@ -27,21 +29,6 @@ export const DocTracingBeam = ({
       setSvgHeight(contentRef.current.offsetHeight)
     }
   }, [])
-
-  const y1 = useSpring(
-    useTransform(scrollYProgress, [0, 0.8], [0, svgHeight]),
-    {
-      stiffness: 500,
-      damping: 90,
-    },
-  )
-  const y2 = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, svgHeight - 210]),
-    {
-      stiffness: 500,
-      damping: 90,
-    },
-  )
 
   return (
     <motion.div
@@ -81,7 +68,7 @@ export const DocTracingBeam = ({
               x1="0"
               x2="0"
               y1={y1} // set y1 for gradient
-              y2={y2} // set y2 for gradient
+              y2={useSpring(y2)} // set y2 for gradient
             >
               <stop stopColor="var(--primary-500)" stopOpacity="0"></stop>
               <stop stopColor="var(--primary-500)"></stop>
