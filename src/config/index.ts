@@ -1,6 +1,24 @@
 import { CommandLineIcon, HomeIcon } from '@heroicons/react/24/outline'
-import { FaNodeJs, FaPython, FaJava, FaAws, FaGithub } from 'react-icons/fa'
-import { SiDart, SiGo } from 'react-icons/si'
+import {
+  FaNodeJs,
+  FaPython,
+  FaJava,
+  FaAws,
+  FaGithub,
+  FaCode,
+  FaToggleOn,
+  FaInternetExplorer,
+  FaBrain,
+  FaDatabase,
+  FaBullhorn,
+  FaFileArchive,
+  FaClock,
+  FaComments,
+  FaLock,
+  FaArchive,
+  FaGlobe,
+} from 'react-icons/fa'
+import { SiDart, SiGo, SiPulumi, SiTerraform } from 'react-icons/si'
 import { NavEntry } from './types'
 import { NodeReference } from './reference/node'
 import { PyReference } from './reference/python'
@@ -75,136 +93,113 @@ export const navigation: NavEntry[] = [
     ],
   },
   {
-    title: 'Get Started',
+    title: 'Resources',
     items: [
       {
-        title: 'Node.js',
-        icon: FaNodeJs,
-        items: [
-          {
-            title: 'API',
-            href: '/basics/node/quick-start',
-          },
-          {
-            title: 'Todo App',
-            href: '/basics/node/to-do',
-          },
-        ],
+        title: 'APIs',
+        icon: FaGlobe,
+        href: '/apis',
       },
       {
-        title: 'Python',
-        icon: FaPython,
-        items: [
-          {
-            title: 'API',
-            href: '/basics/python/quick-start',
-          },
-          {
-            title: 'Todo App',
-            href: '/basics/python/to-do',
-          },
-        ],
+        title: 'Batch (AI/ML/HPC)',
+        icon: FaBrain,
+        href: '/batch',
       },
       {
-        title: 'Go',
-        icon: SiGo,
-        items: [
-          {
-            title: 'API',
-            href: '/basics/go/quick-start',
-          },
-          {
-            title: 'Todo App',
-            href: '/basics/go/to-do',
-          },
-        ],
+        title: 'Schedules',
+        icon: FaClock,
+        href: '/schedules',
       },
       {
-        title: 'Dart',
-        icon: SiDart,
-        items: [
-          {
-            title: 'API',
-            href: '/basics/dart/quick-start',
-          },
-          {
-            title: 'Todo App',
-            href: '/basics/dart/to-do',
-          },
-        ],
+        title: 'Websockets',
+        icon: FaComments,
+        href: '/websockets',
+      },
+      {
+        title: 'Storage',
+        icon: FaArchive,
+        href: '/storage',
+      },
+      {
+        title: 'SQL Databases',
+        icon: FaDatabase,
+        href: '/sql',
+      },
+      {
+        title: 'Async Messaging',
+        icon: FaBullhorn,
+        href: '/messaging',
+      },
+      {
+        title: 'Secrets',
+        icon: FaLock,
+        href: '/secrets',
       },
     ],
   },
   {
-    title: 'Deployment',
+    title: 'Providers',
     items: [
       {
-        title: 'Intro',
-        href: '/basics/quick-start',
+        title: 'Pulumi',
+        icon: SiPulumi,
+        items: [
+          {
+            title: 'AWS',
+            icon: FaAws,
+            href: '/providers/pulumi/aws',
+          },
+          {
+            title: 'Google Cloud',
+            icon: FaAws,
+            href: '/providers/pulumi/gcp',
+          },
+          {
+            title: 'Azure',
+            icon: FaAws,
+            href: '/providers/pulumi/azure',
+          },
+        ],
       },
       {
-        title: 'AWS',
-        href: '/basics/quick-start',
-      },
-      {
-        title: 'GCP',
-        href: '/basics/quick-start',
-      },
-      {
-        title: 'Azure',
-        href: '/basics/quick-start',
+        title: 'Terraform',
+        icon: SiTerraform,
+        items: [
+          {
+            title: 'AWS',
+            icon: FaAws,
+            href: '/providers/terraform/aws',
+          },
+          {
+            title: 'Google Cloud',
+            icon: FaAws,
+            href: '/providers/terraform/gcp',
+          },
+        ],
       },
       {
         title: 'Custom',
-        href: '/basics/quick-start',
-      },
-      {
-        title: 'CD/CD',
-        href: '/basics/quick-start',
+        icon: FaCode,
+        items: [
+          {
+            title: 'Overview',
+            href: '/providers/custom',
+          },
+          {
+            title: 'Provider Extension',
+            href: '/providers/custom/extend',
+          },
+          {
+            title: 'Custom Providers',
+            href: '/providers/custom/create',
+          },
+        ],
       },
     ],
   },
   {
     title: 'Languages',
-    items: [
-      {
-        title: 'Node.js',
-        href: '/basics/quick-start',
-      },
-      {
-        title: 'Python',
-        href: '/basics/quick-start',
-      },
-      {
-        title: 'Go',
-        href: '/basics/quick-start',
-      },
-      {
-        title: 'Dart',
-        href: '/basics/quick-start',
-      },
-    ],
-  },
-  {
-    title: 'Extension',
-    items: [
-      {
-        title: 'Overview',
-        href: '/extension/overview',
-      },
-      {
-        title: 'Provider Extension',
-        href: '/extension/provider-extension',
-      },
-      {
-        title: 'Custom Providers',
-        href: '/extension/custom-providers',
-      },
-      {
-        title: 'Custom Containers',
-        href: '/extension/custom-containers',
-      },
-    ],
+    items: [NodeReference, PyReference, GoReference, DartReference],
   },
   {
     title: 'Reference',
@@ -231,10 +226,6 @@ export const navigation: NavEntry[] = [
           },
         ],
       },
-      NodeReference,
-      PyReference,
-      GoReference,
-      DartReference,
       {
         title: 'Env Vars',
         href: '/reference/env-vars',
@@ -245,6 +236,7 @@ export const navigation: NavEntry[] = [
       },
       {
         title: 'Preview Features',
+        icon: FaToggleOn,
         href: '/reference/preview-features',
       },
     ],
