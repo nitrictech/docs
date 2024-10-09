@@ -36,10 +36,10 @@ export const Tabs: React.FC<TabProps> = ({ children, value, ref, syncKey }) => {
           <TabsTrigger
             value={tab.props.label}
             key={tab.props.label}
-            className="group/tab relative h-12 hover:text-zinc-200 data-[state=active]:bg-transparent data-[state=active]:text-primary-300"
+            className="group/tab relative h-12 data-[state=active]:bg-transparent data-[state=active]:text-primary dark:hover:text-zinc-200 dark:data-[state=active]:text-primary-300"
           >
             {tab.props.label}
-            <div className="absolute inset-x-2 bottom-0 h-px bg-primary-300 opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100" />
+            <div className="absolute inset-x-2 bottom-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100 dark:bg-primary-300" />
           </TabsTrigger>
         ))}
         <div className="absolute inset-x-0 bottom-0 h-px bg-zinc-300/10" />
