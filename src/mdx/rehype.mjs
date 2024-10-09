@@ -26,7 +26,10 @@ function rehypeSlugify() {
     let slugify = slugifyWithCounter()
     visit(tree, 'element', (node) => {
       if (ALLOWED_TAGS.includes(node.tagName) && !node.properties.id) {
-        node.properties.id = slugify(toString(node))
+        node.properties.id = slugify(toString(node), {
+          decamelize: false,
+          customReplacements: [['’', '']],
+        })
       }
     })
   }

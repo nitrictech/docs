@@ -1,7 +1,7 @@
 import { visit } from 'unist-util-visit'
 import { toString } from 'mdast-util-to-string'
 import { remark } from 'remark'
-import slugify from 'slugify'
+import { slugifyWithCounter } from '@sindresorhus/slugify'
 
 /**
  * Extracts TOC headings from markdown file and adds it to the file's data object.
@@ -9,6 +9,8 @@ import slugify from 'slugify'
 export const remarkTocHeadings =
   (includedDepths = [2]) =>
   () => {
+    const slugify = slugifyWithCounter()
+
     return (tree, file) => {
       const toc = []
       visit(tree, 'heading', (node) => {
@@ -20,8 +22,8 @@ export const remarkTocHeadings =
           url:
             '#' +
             slugify(textContent, {
-              lower: true,
-              strict: true,
+              decamelize: false,
+              customReplacements: [['’', '']],
             }),
           depth: node.depth,
         })
