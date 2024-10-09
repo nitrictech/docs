@@ -1,16 +1,13 @@
-'use client'
-
-import useLang, { LanguageId } from '@/hooks/useLang'
-import { cn } from '@/lib/utils'
-import React from 'react'
-import { Button } from './ui/button'
+import React, { Suspense } from 'react'
 import JavaScriptLogoColour from '@/components/icons/JavaScriptLogoColour'
 import TypeScriptLogoColour from '@/components/icons/TypeScriptLogoColour'
 import PythonColorLogo from '@/components/icons/PythonLogoColour'
 import GoColorLogo from '@/components/icons/GoLogoColour'
 import DartLogoNoTextColour from '@/components/icons/DartLogoNoTextColour'
+import { LanguageSwitchClient } from './LanguageSwitch.client'
+import { Button } from '../ui/button'
 
-const languages = [
+const languages: { name: string; icon: React.ReactNode }[] = [
   {
     name: 'javascript',
     icon: <JavaScriptLogoColour className={'size-8'} />,
@@ -34,27 +31,27 @@ const languages = [
 ]
 
 export const LanguageSwitch = () => {
-  const { currentLanguage, setCurrentLanguage } = useLang()
-
   return (
-    <ul className="flex gap-x-4">
-      {languages.map(({ name, icon }) => (
-        <li
-          key={name}
-          className={cn(
-            'cursor-pointer transition-all',
-            currentLanguage !== name ? 'grayscale hover:grayscale-0' : '',
-          )}
-        >
-          <Button
-            variant="unstyled"
-            onClick={() => setCurrentLanguage(name as LanguageId)}
-          >
-            {icon}
-            <span className="sr-only">set language to {name}</span>
-          </Button>
-        </li>
-      ))}
-    </ul>
+    <Suspense
+      fallback={
+        <ul className="flex gap-x-4">
+          {languages.map(({ name, icon }) => (
+            <li
+              key={name}
+              className={
+                'cursor-pointer grayscale transition-all hover:grayscale-0'
+              }
+            >
+              <Button variant="unstyled">
+                {icon}
+                <span className="sr-only">set language to {name}</span>
+              </Button>
+            </li>
+          ))}
+        </ul>
+      }
+    >
+      <LanguageSwitchClient languages={languages} />
+    </Suspense>
   )
 }

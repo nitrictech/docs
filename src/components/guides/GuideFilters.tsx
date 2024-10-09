@@ -18,9 +18,7 @@ export const GuideFilters: React.FC<Props> = ({ allTags }) => {
           </li>
         ))}
       </ul>
-      <Suspense>
-        <LanguageSwitch />
-      </Suspense>
+      <LanguageSwitch />
     </>
   )
 }
