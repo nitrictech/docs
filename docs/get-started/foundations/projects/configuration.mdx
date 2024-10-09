@@ -4,7 +4,7 @@ description: 'Configuring a Nitric Project using nitric.yaml'
 
 # Configuration
 
-The Nitric CLI uses a configuration file named `nitric.yaml` to define the structure of your project. This file defines the name of your project, where nitric should look for the entrypoints to your application, and other project-specific settings.
+The Nitric CLI uses a configuration file named `nitric.yaml` to define the structure of your project. This file specifies the name of your project, where nitric should look for the entrypoints to your application, and other project-specific settings.
 
 Projects created from a template using the Nitric CLI will have a `nitric.yaml` file created for you. If you are creating a project from scratch, you can create a `nitric.yaml` file in the root of your project.
 
@@ -39,7 +39,7 @@ The name of your project. This is used to identify your project and it used when
 
 ### `services`
 
-A list of [service](/concepts/service) types that make up your project. Typically, nitric will build each service in your project into a separate container image. Each service can have its own runtime, build configuration, and start command.
+A list of [service](/foundations/infrastructure/services) types that make up your project. Typically, nitric will build each service in your project into a separate container image. Each service can have its own runtime, build configuration, and start command.
 
 #### `match`
 
@@ -95,7 +95,7 @@ If a runtime is provided it must match the name of a runtime configuration in th
 
 Type is essentially the name for this group of services. It is used to group services together for deployment and resource management. If not provided, the service will be grouped under the 'default' type.
 
-The most common use case for this is grouping service with similar deployed resource requirements together. For example, you make have a set of services that required additional vCPU or memory resources at runtime. You can group these services together under a specific type and apply resource constraints to that type in a [stack file](/concepts/stack).
+The most common use case for this is grouping service with similar deployed resource requirements together. For example, you make have a set of services that required additional vCPU or memory resources at runtime. You can group these services together under a specific type and apply resource constraints to that type in a [stack file](/foundations/deployment/stacks).
 
 For example, if you have a set of services that require additional memory, you can group them together under a type named `memory-intensive`, separate from the default type.
 
@@ -144,9 +144,9 @@ go run ./services/service2/main.go
 
 ### `batch-services` (optional)
 
-A list of [batch service](/concepts/batch-service) types that make up your project. Batch services are used to run high-performance computing tasks, data processing or tasks requiring GPUs, or a large number of vCPUs or memory.
+A list of [batch service](/foundations/infrastructure/services#batch-services) types that make up your project. Batch services are used to run high-performance computing tasks, data processing or tasks requiring GPUs, or a large number of vCPUs or memory.
 
-Batch services are similar to services but are optimized for running batch processing tasks. You can read more about batch services in the [batch services](/concepts/service#batch) section.
+Batch services are similar to services but are optimized for running batch processing tasks. You can read more about batch services in the [batch service](/foundations/infrastructure/services#batch-services) section.
 
 The configuration options for `batch-services` are the same as for `services`.
 

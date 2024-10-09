@@ -30,78 +30,88 @@ export const navigation: NavEntry[] = [
     href: '/',
   },
   {
-    title: 'Guides',
-    href: '/guides',
-  },
-  {
-    title: 'Getting Started',
+    title: 'Get Started',
     items: [
       {
         title: 'Installation',
-        href: '/basics/installation',
+        href: '/get-started/installation',
       },
       {
-        title: 'Basics',
-        items: [
-          {
-            title: 'Project Structure',
-            href: '/basics/project-structure',
-          },
-          {
-            title: 'Project Config',
-            href: '/basics/configuration',
-          },
-          {
-            title: 'Local Development',
-            href: '/basics/local-development',
-          },
-          {
-            title: 'Deployment',
-            href: '/basics/deployment',
-          },
-        ],
+        title: 'Quick Start',
+        href: '/get-started/quickstart',
       },
       {
-        title: 'Nitric Concepts',
+        title: 'Guides',
+        href: '/guides',
+      },
+      {
+        title: 'Foundations',
         items: [
           {
             title: 'Why Nitric',
-            href: '/concepts/why-nitric',
+            href: '/get-started/foundations/why-nitric',
           },
           {
-            title: 'Infrastructure from Code',
-            href: '/concepts/infrastructure-from-code',
+            title: 'Projects',
+            items: [
+              {
+                title: 'Overview',
+                href: '/get-started/foundations/projects',
+              },
+              {
+                title: 'Configuration',
+                href: '/get-started/foundations/projects/configuration',
+              },
+            ],
           },
           {
-            title: 'Project',
-            href: '/concepts/project',
+            title: 'Infrastructure',
+            items: [
+              {
+                title: 'Overview',
+                href: '/get-started/foundations/infrastructure',
+              },
+              {
+                title: 'Services',
+                href: '/get-started/foundations/infrastructure/services',
+              },
+              {
+                title: 'Resources',
+                href: '/get-started/foundations/infrastructure/resources',
+              },
+              {
+                title: 'Security',
+                href: '/get-started/foundations/infrastructure/security',
+              },
+            ],
           },
           {
-            title: 'Service',
-            href: '/concepts/service',
+            title: 'Local Development',
+            href: '/get-started/foundations/projects/local-development',
           },
           {
-            title: 'Resource',
-            href: '/concepts/resource',
-          },
-          {
-            title: 'Security',
-            href: '/concepts/security',
-          },
-          {
-            title: 'Provider',
-            href: '/concepts/provider',
-          },
-          {
-            title: 'Stack',
-            href: '/concepts/stack',
+            title: 'Deployment',
+            items: [
+              {
+                title: 'Overview',
+                href: '/get-started/foundations/deployment',
+              },
+              {
+                title: 'Providers',
+                href: '/get-started/foundations/providers',
+              },
+              {
+                title: 'Stacks',
+                href: '/get-started/foundations/stacks',
+              },
+            ],
           },
         ],
       },
     ],
   },
   {
-    title: 'Resources',
+    title: 'Build',
     items: [
       {
         title: 'APIs',
@@ -146,7 +156,7 @@ export const navigation: NavEntry[] = [
     ],
   },
   {
-    title: 'Providers',
+    title: 'Deploy',
     items: [
       {
         title: 'Pulumi',
@@ -225,6 +235,10 @@ export const navigation: NavEntry[] = [
         title: 'CLI',
         icon: CommandLineIcon,
         href: '/reference/cli',
+      },
+      {
+        title: 'Project Config (nitric.yaml)',
+        href: '/reference/project/configuration',
       },
       {
         title: 'Env Vars',

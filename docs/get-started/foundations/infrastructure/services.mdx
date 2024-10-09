@@ -1,0 +1,17 @@
+---
+description: 'Nitric Services Overview'
+---
+
+# Services
+
+In Nitric, a service is an entrypoint for your application's logic. Each service represents a specific task or function your app needs to handle, such as managing APIs, processing events, handling web socket connections, or running scheduled tasks. Services are designed to be highly flexible and scalable, meaning you can have a single service handling multiple routes or create multiple services that each handle specific tasks.
+
+## How Services Work
+
+When you define a service in your nitric.yaml file, Nitric automatically takes care of turning it into a container. Each service can then run independently, allowing your app to scale and manage different workloads efficiently. Services can interact with resources like databases, queues, and buckets, which are defined separately but linked at runtime by Nitric.
+
+## Standard Services
+
+## Batch Services
+
+Batch services are designed to process large amounts of data in a single operation. They are ideal for tasks like data processing, image resizing, or running scheduled jobs. Batch services can be triggered by events, run on a schedule, or be manually invoked.
