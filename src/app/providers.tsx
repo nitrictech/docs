@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { ThemeProvider, useTheme } from 'next-themes'
-import { OSProvider } from '@/components/InstallNitric/OSContext'
+import { TabsProvider } from '@/components/tabs/TabsContext'
 
 function ThemeWatcher() {
   let { resolvedTheme, setTheme } = useTheme()
@@ -32,7 +32,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" disableTransitionOnChange>
       <ThemeWatcher />
-      <OSProvider>{children}</OSProvider>
+      <TabsProvider>{children}</TabsProvider>
     </ThemeProvider>
   )
 }

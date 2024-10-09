@@ -100,39 +100,63 @@ Are the differences between a bucket on AWS and a bucket on Azure important to m
 
 Nitric abstracts away API layer differences, so you can focus on your app. The part that makes that possible is a plugin, we call a **Provider**.
 
-<CodeWithTabs>
+<Tabs syncKey="providers">
 
-```yaml !!tabs AWS Pulumi file:nitric.prod.yaml
+<TabItem label="AWS Pulumi">
+
+```yaml file:nitric.prod.yaml
 provider: nitric/aws@1.1.1
 region: us-east-1
 ```
 
-```yaml !!tabs Azure Pulumi file:nitric.prod.yaml
+</TabItem>
+
+<TabItem label="Azure Pulumi">
+
+```yaml file:nitric.prod.yaml
 provider: nitric/azure@1.1.1
 region: East US
 ```
 
-```yaml !!tabs Google Pulumi file:nitric.prod.yaml
+</TabItem>
+
+<TabItem label="Google Pulumi">
+
+```yaml file:nitric.prod.yaml
 provider: nitric/gcp@1.1.1
 region: us-east1
 ```
 
-```yaml !!tabs AWS Terraform file:nitric.prod.yaml
+</TabItem>
+
+<TabItem label="AWS Terraform">
+
+```yaml file:nitric.prod.yaml
 provider: nitric/awstf@1.1.1
 region: us-east-1
 ```
 
-```yaml !!tabs Google Terraform file:nitric.prod.yaml
+</TabItem>
+
+<TabItem label="Google Terraform">
+
+```yaml file:nitric.prod.yaml
 provider: nitric/gcptf@1.1.1
 region: us-east1
 ```
 
-```yaml !!tabs Custom file:nitric.prod.yaml
+</TabItem>
+
+<TabItem label="Custom">
+
+```yaml file:nitric.prod.yaml
 # Build your own provider to deploy anywhere you like.
 provider: custom/on-prem@1.0.0
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 We have several providers built-in with IaC from [Pulumi](https://www.pulumi.com/) or [Terraform](https://www.terraform.io/), but you can build your own with any tools you prefer and **deploy anywhere**.
 
@@ -153,9 +177,11 @@ Nitric uses this to find your services, then it turns each service into a contai
 
 So, a project structure might look something like this:
 
-<CodeWithTabs>
+<Tabs>
 
-```bash !!tabs JavaScript
+<TabItem label="JavaScript">
+
+```bash
 example/
 ├── nitric.yaml
 ├── services/
@@ -164,7 +190,11 @@ example/
 └── package.json
 ```
 
-```bash !!tabs Python
+</TabItem>
+
+<TabItem label="Python">
+
+```bash
 example/
 ├── nitric.yaml
 ├── services/
@@ -173,7 +203,11 @@ example/
 └── Pipfile
 ```
 
-```bash !!tabs Go
+</TabItem>
+
+<TabItem label="Go">
+
+```bash
 example/
 ├── nitric.yaml
 ├── services/
@@ -185,7 +219,11 @@ example/
 └── go.mod
 ```
 
-```bash !!tabs Dart
+</TabItem>
+
+<TabItem label="Dart">
+
+```bash
 example/
 ├── nitric.yaml
 ├── services/
@@ -194,7 +232,9 @@ example/
 └── pubspec.yaml
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ---
 
@@ -202,22 +242,34 @@ example/
 
 Nitric has a CLI to help you create, manage, run and deploy your projects. We recommend installing it with a package manager:
 
-<InstallNitric>
+<InstallNitricTabs>
 
-```bash !!tabs macOS
+<TabItem label="macOS">
+
+```bash
 brew install nitrictech/tap/nitric
 ```
 
-```bash !!tabs Windows
+</TabItem>
+
+<TabItem label="Windows">
+
+```bash
 scoop bucket add nitric https://github.com/nitrictech/scoop-bucket.git
 scoop install nitric
 ```
 
-```bash !!tabs Linux
+</TabItem>
+
+<TabItem label="Linux">
+
+```bash
 curl -L "https://nitric.io/install?version=latest" | bash
 ```
 
-</InstallNitric>
+</TabItem>
+
+</InstallNitricTabs>
 
 <Note>
   Nitric has a few dependencies, like Docker, which you can read about in the
@@ -361,21 +413,33 @@ Alternatively, you can download pre-compiled binaries from the [releases](https:
 
 ## Update to the latest version
 
-<InstallNitric>
+<InstallNitricTabs>
 
-```bash !!tabs macOS
+<TabItem label="macOS">
+
+```bash
 brew upgrade nitric
 ```
 
-```bash !!tabs Windows
+</TabItem>
+
+<TabItem label="Windows">
+
+```bash
 scoop update nitric
 ```
 
-```bash !!tabs Linux
+</TabItem>
+
+<TabItem label="Linux">
+
+```bash
 curl -L "https://nitric.io/install?version=latest" | bash
 ```
 
-</InstallNitric>
+</TabItem>
+
+</InstallNitricTabs>
 
 You can easily check which version you're on by running `nitric version`.
 

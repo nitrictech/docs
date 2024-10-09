@@ -140,7 +140,7 @@ export function Property({
   )
 }
 
-export { InstallNitric } from '@/components/InstallNitric'
+export { InstallNitricTabs } from '@/components/InstallNitricTabs'
 
 export { HomeHeader } from '@/components/HomeHeader'
 
@@ -149,5 +149,7 @@ export { ShowIfLang } from '@/components/ShowIfLang'
 export { Libraries } from '@/components/Libraries'
 
 export { ImportCode } from '@/components/code/ImportCode'
+
+export { Tabs, TabItem } from '@/components/tabs/Tabs'
 
 // see if we need to remove these
