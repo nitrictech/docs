@@ -144,7 +144,7 @@ export { HomeHeader } from '@/components/HomeHeader'
 
 export { ShowIfLang } from '@/components/ShowIfLang'
 
-export { Libraries } from '@/components/Libraries'
+export { LanguageSwitch } from '@/components/LanguageSwitch'
 
 export { ImportCode } from '@/components/code/ImportCode'
 
