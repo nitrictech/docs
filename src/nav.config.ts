@@ -558,6 +558,10 @@ const fullNav: FullNav = {
           title: 'REST API',
           href: '/guides/dart/serverless-rest-api-example',
         },
+        {
+          title: 'Flutter Web',
+          href: '/guides/dart/flutter',
+        },
       ],
     },
   ],
