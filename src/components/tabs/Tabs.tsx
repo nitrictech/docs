@@ -31,7 +31,7 @@ export const Tabs: React.FC<TabProps> = ({ children, value, ref, syncKey }) => {
       onValueChange={syncKey ? (value) => set(syncKey, value) : undefined}
       ref={ref}
     >
-      <TabsList className="relative mx-0 mt-auto h-12 w-full rounded-b-none bg-transparent p-0">
+      <TabsList className="relative mx-0 mb-2 mt-auto h-12 w-full rounded-b-none bg-transparent p-0">
         {tabs.map((tab) => (
           <TabsTrigger
             value={tab.props.label}
@@ -39,7 +39,7 @@ export const Tabs: React.FC<TabProps> = ({ children, value, ref, syncKey }) => {
             className="group/tab relative h-12 data-[state=active]:bg-transparent data-[state=active]:text-primary dark:hover:text-zinc-200 dark:data-[state=active]:text-primary-300"
           >
             {tab.props.label}
-            <div className="absolute inset-x-2 bottom-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100 dark:bg-primary-300" />
+            <div className="absolute inset-x-0 bottom-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100 dark:bg-primary-300" />
           </TabsTrigger>
         ))}
         <div className="absolute inset-x-0 bottom-0 h-px bg-zinc-300/10" />
