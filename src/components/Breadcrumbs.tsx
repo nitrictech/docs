@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
 } from './ui/breadcrumb'
 import { Doc } from '@/content'
-import { getNavInfo } from '@/lib/getNavInfo'
+import { getNavInfo, NavInfo } from '@/lib/getNavInfo'
 import Link from 'next/link'
 
 interface Props {
@@ -21,7 +21,27 @@ const Breadcrumbs: React.FC<Props> = ({ doc, className }) => {
 
   const docs = doc.slug.split('/')
 
-  const navInfo = getNavInfo(doc)
+  const isGuide = docs[0] === 'guides'
+
+  let navInfo: NavInfo = getNavInfo(doc)
+
+  // If the doc is a guide, generate the navInfo for the guides
+  if (isGuide && !navInfo?.navItem) {
+    navInfo = {
+      prevItem: null,
+      navItem: {
+        title: doc.title,
+        href: `/${doc.slug}`,
+        breadcrumbParentItem: {
+          title: 'Guides',
+          href: '/guides',
+        },
+      },
+      nextItem: null,
+    }
+  }
+
+  console.log(navInfo)
 
   if (
     docs.length === 1 ||

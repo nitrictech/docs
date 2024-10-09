@@ -6,7 +6,7 @@ interface NavItemWithBreadcrumb extends NavItem {
   breadcrumbParentItem?: NavEntry
 }
 
-interface NavInfo {
+export interface NavInfo {
   prevItem: NavItemWithBreadcrumb | null
   navItem: NavItemWithBreadcrumb | null
   nextItem: NavItemWithBreadcrumb | null
