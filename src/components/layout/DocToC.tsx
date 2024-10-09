@@ -26,10 +26,9 @@ const DocToC = ({ doc }: { doc: Doc }) => {
   const [activeIndex, setActiveIndex] = useState(-1)
 
   useEffect(() => {
-    const headings = document
-      .querySelectorAll<HTMLHeadingElement>('h2.md-content-header')
-      .values()
-      .toArray()
+    const headings = Array.from(
+      document.querySelectorAll<HTMLHeadingElement>('h2.md-content-header'),
+    )
 
     const options = {
       root: null,

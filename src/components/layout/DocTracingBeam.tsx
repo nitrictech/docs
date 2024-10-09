@@ -1,13 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  motion,
-  useTransform,
-  useSpring,
-  useMotionValue,
-  MotionValue,
-} from 'framer-motion'
+import { motion, useSpring, MotionValue } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 export const DocTracingBeam = ({
