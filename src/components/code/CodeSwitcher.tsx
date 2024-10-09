@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react'
-import { highlight, RawCode } from 'codehike/code'
+import { RawCode } from 'codehike/code'
 import CodeContainer from './CodeContainer'
 import { CodeSwitcherSelect } from './CodeSwitcherSelect'
-import CODE_THEME from './theme'
 import Pre, { HandlerProps } from './Pre'
+import { highlight } from './highlight'
 
 export async function CodeSwitcher({
   code,
@@ -14,7 +14,7 @@ export async function CodeSwitcher({
   className?: string
 } & HandlerProps) {
   const highlighted = await Promise.all(
-    code.map((codeblock) => highlight(codeblock, CODE_THEME)),
+    code.map((codeblock) => highlight(codeblock)),
   )
 
   return (

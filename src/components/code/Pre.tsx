@@ -2,7 +2,6 @@ import { HighlightedCode, Pre as CodeHikePre } from 'codehike/code'
 import React from 'react'
 import { callout } from './annotations/callout'
 import { CopyButton } from './CopyButton'
-import { className } from './annotations/classname'
 import { fold } from './annotations/fold'
 import {
   collapse,
@@ -76,7 +75,7 @@ const Pre: React.FC<Props> = ({
         code={highlighted}
         handlers={handlers}
         className={cn(
-          'overflow-auto overscroll-x-contain p-4',
+          'overflow-auto overscroll-x-contain p-4 text-sm',
           showPanel && !title && 'pt-7', // add padding to ensure the code doesn't touch the top of the panel
           className,
         )}

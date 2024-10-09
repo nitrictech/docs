@@ -1,8 +1,8 @@
-import { highlight, RawCode } from 'codehike/code'
+import { RawCode } from 'codehike/code'
 import Pre from './Pre'
 import CodeContainer from './CodeContainer'
-import CODE_THEME from './theme'
 import { meta } from './meta'
+import { highlight } from './highlight'
 
 export async function Code({
   codeblock,
@@ -10,7 +10,7 @@ export async function Code({
   codeblock: RawCode
   isPanel?: boolean
 }) {
-  const highlighted = await highlight(codeblock, CODE_THEME)
+  const highlighted = await highlight(codeblock)
 
   const { title } = meta(codeblock)
 

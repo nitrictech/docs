@@ -27,10 +27,7 @@ export const collapse: AnnotationHandler = {
   },
   Block: ({ annotation, children }) => {
     return (
-      <Collapsible
-        className="-ml-[17px]"
-        defaultOpen={annotation.query !== 'collapsed'}
-      >
+      <Collapsible defaultOpen={annotation.query !== 'collapsed'}>
         {children}
       </Collapsible>
     )
