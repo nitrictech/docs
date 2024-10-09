@@ -41,8 +41,6 @@ const Breadcrumbs: React.FC<Props> = ({ doc, className }) => {
     }
   }
 
-  console.log(navInfo)
-
   if (
     docs.length === 1 ||
     !navInfo ||
