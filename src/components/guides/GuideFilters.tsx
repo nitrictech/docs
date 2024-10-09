@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { LanguageSwitch } from './LanguageSwitch'
+import { LanguageSwitch } from '../LanguageSwitch'
 import GuideFilterCheckbox from './GuideFilterCheckbox'
 
 interface Props {

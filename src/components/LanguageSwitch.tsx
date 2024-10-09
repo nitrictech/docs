@@ -3,7 +3,7 @@
 import useLang, { LanguageId } from '@/hooks/useLang'
 import { cn } from '@/lib/utils'
 import React from 'react'
-import { Button } from '../ui/button'
+import { Button } from './ui/button'
 import JavaScriptLogoColour from '@/components/icons/JavaScriptLogoColour'
 import TypeScriptLogoColour from '@/components/icons/TypeScriptLogoColour'
 import PythonColorLogo from '@/components/icons/PythonLogoColour'

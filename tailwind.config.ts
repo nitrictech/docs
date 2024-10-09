@@ -39,7 +39,7 @@ const nitricColors = {
 }
 
 export default {
-  content: ['./src/**/*.{js,mjs,jsx,ts,tsx,md,mdx}'],
+  content: ['./src/**/*.{js,mjs,jsx,ts,tsx,md,mdx}', './docs/**/*.{md,mdx}'],
   darkMode: ['class'],
   theme: {
     fontSize: {

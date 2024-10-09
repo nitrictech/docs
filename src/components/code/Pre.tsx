@@ -70,7 +70,7 @@ const Pre: React.FC<Props> = ({
       )}
       <CopyButton
         code={highlighted.code}
-        className={cn(showFileNamePanel && 'top-12', isBash && 'top-11')}
+        className={cn(showPanel && 'top-12', isBash && 'top-11')}
       />
       <CodeHikePre
         code={highlighted}
