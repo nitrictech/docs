@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils'
 import { NavLink } from './NavLink'
 import { usePathname } from 'next/navigation'
 import { Button } from '../ui/button'
-import { NavigationGroup } from './NavigationGroup'
 import { NavGroup } from '@/config/types'
 
 interface Props {

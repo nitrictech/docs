@@ -40,7 +40,7 @@ export const NavLink: React.FC<NavLinkProps> = ({
           <div
             aria-hidden="true"
             className={cn(
-              'absolute bottom-0 left-2 top-0 w-[1px]',
+              'absolute bottom-0 left-2 top-0 z-10 w-[1px]',
               active ? 'bg-primary-500' : 'bg-zinc-300 dark:bg-zinc-700',
             )}
           />
