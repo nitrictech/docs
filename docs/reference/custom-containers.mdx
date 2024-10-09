@@ -16,7 +16,7 @@ Add a new custom runtime in the `runtimes` configuration.
 
 To use the runtime, simply specify the runtime key per service as shown below.
 
-```yaml file:nitric.yaml
+```yaml title:nitric.yaml
 name: custom-example
 services:
   - match: services/*.ts
@@ -238,7 +238,7 @@ Nitric supports monorepos via the custom runtime feature, this allows you to cha
 
 [Turborepo](https://turbo.build/) is a monorepo tool for JavaScript and TypeScript that allows you to manage multiple packages in a single repository. In this example, we will use a custom runtime to build a service in a monorepo using a custom dockerfile.
 
-```yaml file:root/backends/guestbook-app/nitric.yaml
+```yaml title:root/backends/guestbook-app/nitric.yaml
 name: guestbook-app
 services:
   - match: services/*.ts
@@ -253,7 +253,7 @@ runtimes:
       TURBO_SCOPE: 'guestbook-api'
 ```
 
-```docker file:root/backends/guestbook-app/turbo.dockerfile"  }}
+```docker title:root/backends/guestbook-app/turbo.dockerfile"  }}
 FROM node:alpine AS builder
 ARG TURBO_SCOPE
 

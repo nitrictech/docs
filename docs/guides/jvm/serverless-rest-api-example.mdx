@@ -95,7 +95,7 @@ The `build.gradle.kts` in the template project shows how to use the [shadow jar 
 
 You can then the point to the compiled JARs in your handlers.
 
-```yaml file:nitric.yaml
+```yaml title:nitric.yaml
 name: my-profile-api
 handlers:
   - 'build/libs/*.jar'
@@ -143,7 +143,7 @@ Applications built with Nitric can contain many APIs, let's start by adding one 
 
 <TabItem label="Java">
 
-```java file:src/main/java/Application.java
+```java title:src/main/java/Application.java
 import io.nitric.Nitric;
 import io.nitric.resources.CollectionPermission;
 
@@ -162,7 +162,7 @@ public class Application {
 
 <TabItem label="Kotlin">
 
-```kotlin file:src/main/kotlin/Application.kt
+```kotlin title:src/main/kotlin/Application.kt
 import io.nitric.Nitric
 import io.nitric.resources.CollectionPermission
 

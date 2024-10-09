@@ -24,7 +24,7 @@ To get a deeper understanding of the differences, let's see the same app built i
 
 **Nitric**
 
-```javascript file:hello.js
+```javascript title:hello.js
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -42,7 +42,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 **SST**
 
-```javascript file:packages/functions/hello.ts
+```javascript title:packages/functions/hello.ts
 import { ApiHandler, usePathParam } from 'sst/node/api'
 
 export const handler = ApiHandler(async (evt) => {
@@ -55,7 +55,7 @@ export const handler = ApiHandler(async (evt) => {
 })
 ```
 
-```javascript file: stacks/hello-stack.ts
+```javascript title: stacks/hello-stack.ts
 import { StackContext, Api } from 'sst/constructs'
 
 export function API({ stack }: StackContext) {

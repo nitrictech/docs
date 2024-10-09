@@ -31,7 +31,7 @@ const Pre: React.FC<Props> = ({
   className,
   copyButtonClassName,
 }) => {
-  const fileName = meta(highlighted).file
+  const { title } = meta(highlighted)
 
   let handlers = [callout, fold, collapse, collapseTrigger, collapseContent]
   // TODO: Fix transitions, they currently break colours in the code when switching languages
@@ -39,7 +39,7 @@ const Pre: React.FC<Props> = ({
     handlers = [...handlers, tokenTransitions]
   }
 
-  const showFileNamePanel = showPanel && !!fileName
+  const showFileNamePanel = showPanel && !!title
 
   return (
     <>
@@ -47,7 +47,7 @@ const Pre: React.FC<Props> = ({
         <div className="flex h-12 items-center justify-start border-b border-zinc-300/10 bg-zinc-800/50 pr-12 font-display text-2xs font-semibold text-zinc-300 sm:text-xs">
           {/* one-off breakpoint to hide the filename on extremely narrow screens - to avoid interfering with the lang select */}
           <span className="hidden whitespace-nowrap px-4 py-2 min-[320px]:block">
-            {fileName}
+            {title}
           </span>
         </div>
       )}
@@ -61,7 +61,7 @@ const Pre: React.FC<Props> = ({
         handlers={handlers}
         className={cn(
           'overflow-auto overscroll-x-contain p-4',
-          showPanel && !fileName && 'pt-8', // add padding to ensure the code doesn't touch the top of the panel
+          showPanel && !title && 'pt-8', // add padding to ensure the code doesn't touch the top of the panel
           className,
         )}
         style={{

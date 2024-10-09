@@ -24,7 +24,7 @@ To get a deeper understanding of the differences, let's see the same app built i
 
 **Nitric**
 
-```typescript file:hello.ts
+```typescript title:hello.ts
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -42,7 +42,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 **AWS CDK**
 
-```javascript file:src/index.js
+```javascript title:src/index.js
 exports.handler = async function (event = {}) {
   const name = event.pathParameters.name
 
@@ -53,7 +53,7 @@ exports.handler = async function (event = {}) {
 }
 ```
 
-```typescript file:lib/hello-stack.ts
+```typescript title:lib/hello-stack.ts
 import * as cdk from 'aws-cdk-lib'
 import { Construct } from 'constructs'
 import * as apigateway from 'aws-cdk-lib/aws-apigateway'

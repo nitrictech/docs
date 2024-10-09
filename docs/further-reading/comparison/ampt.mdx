@@ -23,7 +23,7 @@ To get a deeper understanding of the differences, let's see the same app built i
 
 **Nitric**
 
-```typescript file:hello.ts
+```typescript title:hello.ts
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -41,7 +41,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 **Ampt (Experimental)**
 
-```typescript file:hello.ts
+```typescript title:hello.ts
 import { api } from '@ampt/api'
 
 const helloApi = api('main').router('/hello')

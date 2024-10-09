@@ -28,7 +28,7 @@ If you're familiar Nitric already, you might want to jump to the [Installation](
 
 Services are the heart of Nitric apps, they're the entrypoints to your code. They can serve as APIs, websockets, schedule handlers, subscribers and a lot more. You create services by telling Nitric where to look for your code and how to run it.
 
-```yaml file:nitric.yaml
+```yaml title:nitric.yaml
 name: example
 services:
   - match: services/*.ts
@@ -45,13 +45,13 @@ Resources are the building blocks of your apps. They're the databases, queues, b
 
 <CodeSwitcher>
 
-```javascript !! file:services/example.js
+```javascript !! title:services/example.js
 import { bucket } from '@nitric/sdk'
 
 const profiles = bucket('profiles').allow('read', 'write', 'delete')
 ```
 
-```python !! file:services/example.py
+```python !! title:services/example.py
 from nitric.resources import bucket
 from nitric.application import Nitric
 
@@ -60,7 +60,7 @@ profiles = bucket('profiles').allow('read', 'write', 'delete')
 Nitric.run()
 ```
 
-```go !! file:services/example/main.go
+```go !! title:services/example/main.go
 import (
 	"fmt"
 
@@ -76,7 +76,7 @@ func main() {
 }
 ```
 
-```dart !! file:services/example.dart
+```dart !! title:services/example.dart
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {
@@ -104,7 +104,7 @@ Nitric abstracts away API layer differences, so you can focus on your app. The p
 
 <TabItem label="AWS Pulumi">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 provider: nitric/aws@1.1.1
 region: us-east-1
 ```
@@ -113,7 +113,7 @@ region: us-east-1
 
 <TabItem label="Azure Pulumi">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 provider: nitric/azure@1.1.1
 region: East US
 ```
@@ -122,7 +122,7 @@ region: East US
 
 <TabItem label="Google Pulumi">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 provider: nitric/gcp@1.1.1
 region: us-east1
 ```
@@ -131,7 +131,7 @@ region: us-east1
 
 <TabItem label="AWS Terraform">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 provider: nitric/awstf@1.1.1
 region: us-east-1
 ```
@@ -140,7 +140,7 @@ region: us-east-1
 
 <TabItem label="Google Terraform">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 provider: nitric/gcptf@1.1.1
 region: us-east1
 ```
@@ -149,7 +149,7 @@ region: us-east1
 
 <TabItem label="Custom">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 # Build your own provider to deploy anywhere you like.
 provider: custom/on-prem@1.0.0
 ```

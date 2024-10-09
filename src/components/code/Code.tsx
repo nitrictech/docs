@@ -12,9 +12,9 @@ export async function Code({
 }) {
   const highlighted = await highlight(codeblock, CODE_THEME)
 
-  const fileName = meta(codeblock).file
+  const { title } = meta(codeblock)
 
-  const isPanel = !!fileName
+  const isPanel = !!title
 
   return (
     <CodeContainer>

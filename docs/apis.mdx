@@ -714,7 +714,7 @@ By default APIs deployed by Nitric will be assigned a domain by the target cloud
 
 <TabItem label="AWS">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 provider: nitric/aws@1.1.0
 region: ap-southeast-2
 
@@ -731,7 +731,7 @@ apis:
 
 <TabItem label="Azure">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 # currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
 ```
 
@@ -739,7 +739,7 @@ apis:
 
 <TabItem label="Google Cloud">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 # currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
 ```
 
@@ -755,7 +755,7 @@ By default, APIs will not be deployed with a description. You can add a descript
 
 <TabItem label="AWS">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 provider: nitric/aws@1.12.4
 region: ap-southeast-2
 
@@ -771,7 +771,7 @@ apis:
 
 <TabItem label="Azure">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 provider: nitric/azure@1.12.4
 region: Australia East
 org: example-org
@@ -788,7 +788,7 @@ apis:
 
 <TabItem label="Google Cloud">
 
-```yaml file:nitric.prod.yaml
+```yaml title:nitric.prod.yaml
 provider: nitric/gcp@1.12.4
 region: australia-southeast1
 
@@ -857,7 +857,7 @@ Since resource names are unique across each Nitric project, you can access a res
 
 <CodeSwitcher>
 
-```javascript !! file:services/one.js
+```javascript !! title:services/one.js
 import { api } from '@nitric/sdk'
 
 const accountsApi = api('accounts')
@@ -867,7 +867,7 @@ accountsApi.get('/users/:id', async () => {
 })
 ```
 
-```python !! file:services/one.py
+```python !! title:services/one.py
 from nitric.application import Nitric
 from nitric.context import HttpContext
 from nitric.resources import api
@@ -881,7 +881,7 @@ async def get_user(ctx: HttpContext):
 Nitric.run()
 ```
 
-```go !! file:services/one/main.go
+```go !! title:services/one/main.go
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/apis"
@@ -898,7 +898,7 @@ func main() {
 }
 ```
 
-```dart !! file:services/one.dart
+```dart !! title:services/one.dart
 import 'package:nitric_sdk/nitric.dart';
 
 final accountsApi = Nitric.api("accounts");
@@ -912,7 +912,7 @@ galaxyApi.get("/users/:id", (ctx) async {
 
 <CodeSwitcher>
 
-```javascript !! file:services/two.js
+```javascript !! title:services/two.js
 import { api } from '@nitric/sdk'
 
 const accountsApi = api('accounts')
@@ -922,7 +922,7 @@ accountsApi.get('/orgs/:id', async () => {
 })
 ```
 
-```python !! file:services/two.py
+```python !! title:services/two.py
 from nitric.application import Nitric
 from nitric.context import HttpContext
 from nitric.resources import api
@@ -936,7 +936,7 @@ async def get_org(ctx: HttpContext):
 Nitric.run()
 ```
 
-```go !! file:services/two/main.go
+```go !! title:services/two/main.go
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/apis"
@@ -953,7 +953,7 @@ func main() {
 }
 ```
 
-```dart !! file:services/two.dart
+```dart !! title:services/two.dart
 import 'package:nitric_sdk/nitric.dart';
 
 final accountsApi = Nitric.api("accounts");
@@ -978,19 +978,19 @@ Here is the same example enhanced to import a common API resource.
 
 <CodeSwitcher>
 
-```javascript !! file:resources/index.js
+```javascript !! title:resources/index.js
 import { api } from '@nitric/sdk'
 
 export const accountsApi = api('accounts')
 ```
 
-```python !! file:common/resources.py
+```python !! title:common/resources.py
 from nitric.resources import api
 
 accounts_api = api('accounts')
 ```
 
-```go !! file:resources/main.go
+```go !! title:resources/main.go
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/apis"
@@ -1004,7 +1004,7 @@ func init() {
 }
 ```
 
-```dart !! file:common/resources.dart
+```dart !! title:common/resources.dart
 import 'package:nitric_sdk/nitric.dart';
 
 final accountsApi = Nitric.api("accounts");
@@ -1014,7 +1014,7 @@ final accountsApi = Nitric.api("accounts");
 
 <CodeSwitcher>
 
-```javascript !! file:services/one.js
+```javascript !! title:services/one.js
 import { accountsApi } from '../resources'
 
 accountsApi.get('/users/:id', async () => {
@@ -1022,7 +1022,7 @@ accountsApi.get('/users/:id', async () => {
 })
 ```
 
-```python !! file:services/one.py
+```python !! title:services/one.py
 from nitric.application import Nitric
 from nitric.context import HttpContext
 from common.resources import accounts_api
@@ -1035,7 +1035,7 @@ async def get_user(ctx: HttpContext):
 Nitric.run()
 ```
 
-```go !! file:services/one/main.go
+```go !! title:services/one/main.go
 package main
 
 import (
@@ -1054,7 +1054,7 @@ func main() {
 }
 ```
 
-```dart !! file:services/one.dart
+```dart !! title:services/one.dart
 import '../resources';
 
 accountsApi.get("/users/:id", (ctx) async {
@@ -1066,7 +1066,7 @@ accountsApi.get("/users/:id", (ctx) async {
 
 <CodeSwitcher>
 
-```javascript !! file:services/two.js
+```javascript !! title:services/two.js
 import { accountsApi } from '../resources'
 
 accountsApi.get('/orgs/:id', async () => {
@@ -1074,7 +1074,7 @@ accountsApi.get('/orgs/:id', async () => {
 })
 ```
 
-```python !! file:services/two.py
+```python !! title:services/two.py
 from nitric.application import Nitric
 from nitric.context import HttpContext
 from common.resources import accounts_api
@@ -1087,7 +1087,7 @@ async def get_org(ctx: HttpContext):
 Nitric.run()
 ```
 
-```go !! file:services/two/main.go
+```go !! title:services/two/main.go
 package main
 
 import (
@@ -1106,7 +1106,7 @@ func main() {
 }
 ```
 
-```dart !! file:services/two.dart
+```dart !! title:services/two.dart
 import '../resources';
 
 accountsApi.get("/orgs/:id", (ctx) async {
