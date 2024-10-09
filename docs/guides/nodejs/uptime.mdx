@@ -33,48 +33,72 @@ git clone -b tutorial-start https://github.com/nitrictech/uptime-monitoring.git 
 
 Install backend dependencies:
 
-<CodeWithTabs>
+<Tabs syncKey="node-pkg-manager">
 
-```bash !!tabs npm
+<TabItem label="npm">
+
+```bash npm
 cd uptime
 npm install
 ```
 
-```bash !!tabs yarn
+</TabItem>
+
+<TabItem label="yarn">
+
+```bash yarn
 cd uptime
 yarn install
 ```
 
-```bash !!tabs pnpm
+</TabItem>
+
+<TabItem label="pnpm">
+
+```bash pnpm
 cd uptime
 pnpm install
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 Check that the frontend works:
 
-<CodeWithTabs>
+<Tabs syncKey="node-pkg-manager">
 
-```bash !!tabs npm
+<TabItem label="npm">
+
+```bash npm
 cd frontend
 npm install
 npm run dev
 ```
 
-```bash !!tabs yarn
+</TabItem>
+
+<TabItem label="yarn">
+
+```bash yarn
 cd frontend
 yarn install
 yarn dev
 ```
 
-```bash !!tabs pnpm
+</TabItem>
+
+<TabItem label="pnpm">
+
+```bash pnpm
 cd frontend
 pnpm install
 pnpm run dev
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 Then visit http://localhost:4321 to see your Astro frontend. It won't currently work with no backend services, but we will work on that next!
 

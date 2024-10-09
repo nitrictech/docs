@@ -5,9 +5,11 @@ export const description =
 
 Register an API route and set a specific HTTP GET handler on that route.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 
 class User {
@@ -35,7 +37,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 
 data class User(val name: String, val age: Int)
@@ -53,7 +59,9 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Parameters
 
@@ -72,9 +80,11 @@ fun main() {
 
 ### Register a handler for GET requests
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 
 class User {
@@ -102,7 +112,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 
 data class User(val name: String, val age: Int)
@@ -120,15 +134,19 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Chain functions as a single method handler
 
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.HttpContext;
 import io.nitric.faas.v0.Handler;
@@ -156,7 +174,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.HttpContext
 import io.nitric.faas.v0.Middleware
@@ -180,4 +202,6 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>

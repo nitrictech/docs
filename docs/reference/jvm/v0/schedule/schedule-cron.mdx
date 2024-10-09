@@ -5,9 +5,11 @@ export const description =
 
 Sets the cron expressions that determines when the schedule triggers and a callback to be triggered.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.Frequency;
 
@@ -24,7 +26,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.Frequency
 
@@ -39,7 +45,9 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Parameters
 
@@ -62,9 +70,11 @@ fun main() {
 
 ### Create a Schedule
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.Frequency;
 
@@ -87,7 +97,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.Frequency
 
@@ -108,4 +122,6 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>

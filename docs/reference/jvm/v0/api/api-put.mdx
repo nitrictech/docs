@@ -10,9 +10,11 @@ Register an API route and set a specific HTTP PUT handler on that route.
   [api().route().put()](./api-route-put)
 </Note>
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 
 public class Application {
@@ -29,7 +31,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -44,7 +50,9 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Parameters
 
@@ -69,9 +77,11 @@ fun main() {
 
 ### Register a handler for PUT requests
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 
 public class Application {
@@ -88,7 +98,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -103,15 +117,19 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Chain functions as a single method handler
 
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.HttpContext;
 import io.nitric.faas.v0.Handler;
@@ -139,7 +157,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.HttpContext
 import io.nitric.faas.v0.Middleware
@@ -163,15 +185,19 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Access the request body
 
 The PUT request body is accessible from the `ctx.req` object.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 
 public class Application {
@@ -188,7 +214,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -203,4 +233,6 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>

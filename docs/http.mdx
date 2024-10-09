@@ -16,9 +16,11 @@ Nitric supports existing web app and API frameworks, including Express, Koa, Fas
 
 Here are some examples of how to connect your existing API frameworks with Nitric:
 
-<CodeWithTabs>
+<Tabs>
 
-```javascript !!tabs Express.js
+<TabItem label="Express.js">
+
+```javascript
 import { http } from '@nitric/sdk'
 import express from 'express'
 
@@ -31,7 +33,11 @@ app.use('/hello', (req, res) => {
 http(app)
 ```
 
-```javascript !!tabs NestJS
+</TabItem>
+
+<TabItem label="NestJS">
+
+```javascript
 import { http } from '@nitric/sdk'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
@@ -44,4 +50,6 @@ async function bootstrap(port: number) {
 http(bootstrap)
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>

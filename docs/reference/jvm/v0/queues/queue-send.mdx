@@ -5,9 +5,11 @@ export const description =
 
 Send tasks to a queue.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -23,7 +25,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -37,7 +43,9 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Parameters
 
@@ -51,9 +59,11 @@ fun main() {
 
 ### Send a task to a queue
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -69,7 +79,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -83,13 +97,17 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Send multiple tasks to a queue
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -120,7 +138,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -147,15 +169,19 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Dealing with failures
 
 In rare cases when sending tasks to a queue some tasks might fail to be sent. The response from `send()` will include an array of any tasks that failed to send. You can process this array to retry or log the error.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 var failed = queue.send(tasks);
 
 failed.forEach((task) -> {
@@ -163,7 +189,11 @@ failed.forEach((task) -> {
 });
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 val failed = queue.send(tasks)
 
 failed.forEach { task ->
@@ -171,4 +201,6 @@ failed.forEach { task ->
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>

@@ -5,9 +5,11 @@ export const description =
 
 Creates a new Queue to send and receive asynchronous tasks.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -20,7 +22,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -31,7 +37,9 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Parameters
 
@@ -71,9 +79,11 @@ This permission allows your code to receive tasks from the queue.
 
 ### Create a Queue
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -86,7 +96,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -97,13 +111,17 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Receive tasks from a queue
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.QueuePermission;
 
@@ -118,7 +136,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.resources.QueuePermission
 
@@ -131,4 +153,6 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>

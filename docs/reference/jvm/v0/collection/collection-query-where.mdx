@@ -5,9 +5,11 @@ export const description =
 
 Adds a new where clause to a query, which filters the data returned.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.CollectionPermission;
 import io.nitric.api.documents.v0.Operator;
@@ -34,7 +36,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.resources.CollectionPermission
 import io.nitric.api.documents.v0.Operator
@@ -51,7 +57,9 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Parameters
 
@@ -75,9 +83,11 @@ fun main() {
 
 ### A simple query
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.CollectionPermission;
 import io.nitric.api.documents.v0.Operator;
@@ -104,7 +114,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.resources.CollectionPermission
 import io.nitric.api.documents.v0.Operator
@@ -121,27 +135,37 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Combining where clauses
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 var profileQuery = profiles
   .query()
   .where("firstName", Operator.EQ, "Drake")
   .where("age", Operator.GTE, 21)
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 val profileQuery = profiles
   .query()
   .where("firstName", Operator.EQ, "Drake")
   .where("age", Operator.GTE, 21);
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### See also
 

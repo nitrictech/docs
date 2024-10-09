@@ -24,9 +24,11 @@ This guide will demonstrate how Nitric can be used, along with [GitLab CI](https
 
 Here’s example content for each cloud provider:
 
-<CodeWithTabs>
+<Tabs>
 
-```yaml !!tabs AWS file:.gitlab-ci.yml
+<TabItem label="AWS">
+
+```yaml file:.gitlab-ci.yml
 deploy:
   image: docker:27
 
@@ -70,7 +72,11 @@ deploy:
     - nitric up --ci
 ```
 
-```yaml !!tabs Azure file:.gitlab-ci.yml
+</TabItem>
+
+<TabItem label="Azure">
+
+```yaml Azure file:.gitlab-ci.yml
 deploy:
   image: docker:27
 
@@ -127,4 +133,6 @@ deploy:
     - nitric up --ci
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>

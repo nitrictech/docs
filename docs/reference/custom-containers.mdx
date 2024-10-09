@@ -42,9 +42,11 @@ Here are some example dockerfiles:
   final container.
 </Note>
 
-<CodeWithTabs>
+<Tabs>
 
-```docker !!tabs Python
+<TabItem label="Python">
+
+```docker Python
 FROM python:3.11-slim
 
 ARG HANDLER
@@ -74,7 +76,11 @@ COPY . .
 ENTRYPOINT python $HANDLER
 ```
 
-```docker !!tabs JavaScript
+</TabItem>
+
+<TabItem label="JavaScript">
+
+```docker JavaScript
 # syntax=docker/dockerfile:1
 FROM node:alpine
 
@@ -103,7 +109,11 @@ RUN \
 ENTRYPOINT node $HANDLER
 ```
 
-```docker !!tabs TypeScript
+</TabItem>
+
+<TabItem label="TypeScript">
+
+```docker TypeScript
 # syntax=docker/dockerfile:1
 FROM node:alpine as build
 
@@ -146,7 +156,11 @@ COPY --from=build /usr/app/lib/ ./lib/
 ENTRYPOINT ["node", "lib/index.js"]
 ```
 
-```docker !!tabs Go
+</TabItem>
+
+<TabItem label="Go">
+
+```docker Go
 FROM golang:alpine as build
 
 ARG HANDLER
@@ -173,7 +187,11 @@ RUN apk update && \
 ENTRYPOINT ["/bin/main"]
 ```
 
-```docker !!tabs Dart
+</TabItem>
+
+<TabItem label="Dart">
+
+```docker Dart
 FROM dart:stable AS build
 
 ARG HANDLER
@@ -202,7 +220,9 @@ COPY --from=build /app/bin/main /app/bin/
 ENTRYPOINT ["/app/bin/main"]
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Create an ignore file
 

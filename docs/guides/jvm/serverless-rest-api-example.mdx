@@ -39,17 +39,25 @@ There is also an extended section of the guide that adds file operations using a
 
 Let's start by creating a new project from a Nitric template, this will provide a base to start building the API. In this case, you can choose the Java or Kotlin starter, examples for both are provided.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```bash !!tabs Java
+<TabItem label="Java">
+
+```bash
 nitric new my-profile-api "official/Java - Starter (experimental)"
 ```
 
-```bash !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```bash
 nitric new my-profile-api "official/Kotlin - Starter (experimental)"
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 Next, open the project in your editor of choice.
 
@@ -97,9 +105,11 @@ handlers:
 
 We will create a class to represent the profiles that we will store in the collection.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 class Profile {
   String name;
   int age;
@@ -113,19 +123,27 @@ class Profile {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 data class Profile(val name: String, val age: Int, val homeTown: String)
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Building the API
 
 Applications built with Nitric can contain many APIs, let's start by adding one to this project to serve as the public endpoint. Delete the template code from the `Application` code and add the following code to that file.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java file:src/main/java/Application.java
+<TabItem label="Java">
+
+```java file:src/main/java/Application.java
 import io.nitric.Nitric;
 import io.nitric.resources.CollectionPermission;
 
@@ -140,7 +158,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin file:src/main/kotlin/Application.kt
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin file:src/main/kotlin/Application.kt
 import io.nitric.Nitric
 import io.nitric.resources.CollectionPermission
 
@@ -153,7 +175,9 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 Here we're creating an API named `public` and collection named `profiles`, then requesting read and write permissions which allows our function to access the collection.
 
@@ -175,30 +199,36 @@ Let's start adding features that allow our API consumers to work with profile da
   prefer. For simplicity we'll group them together in this guide.
 </Note>
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+```java
 import java.util.UUID;
 
 ...
 
 profileApi.post("/profiles", (ctx) -> {
-  var id = UUID.randomUUID();
+var id = UUID.randomUUID();
 
-  // Get the request JSON as a Profile object
-  var profileRequest = ctx.getReq().json(Profile.class);
+// Get the request JSON as a Profile object
+var profileRequest = ctx.getReq().json(Profile.class);
 
-  // Store the new profile in the profiles collection
-  profiles.doc(id).set(profileRequest);
+// Store the new profile in the profiles collection
+profiles.doc(id).set(profileRequest);
 
-  // Return the ID
-  ctx.getResp().text(id);
+// Return the ID
+ctx.getResp().text(id);
 
-  return ctx;
+return ctx;
 });
-```
 
-```kotlin !!tabs Kotlin
+````
+
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import java.util.UUID;
 
 data class Profile(val name: String, val age: Int, val homeTown: String)
@@ -219,15 +249,19 @@ profileApi.post("/profiles") { ctx ->
 
   ctx
 }
-```
+````
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Retrieve a profile with GET
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 profileApi.get("/profiles/:id", (ctx) -> {
   var id = ctx.getReq().getParams().get("id");
 
@@ -245,7 +279,11 @@ profileApi.get("/profiles/:id", (ctx) -> {
 });
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 profileApi.get("/profiles/:id") { ctx ->
   val id = ctx.req.params["id"]
 
@@ -263,13 +301,17 @@ profileApi.get("/profiles/:id") { ctx ->
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### List all profiles with GET
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 profileApi.get("/profiles", (ctx) -> {
   var allProfiles = profiles.query().fetch();
 
@@ -277,7 +319,11 @@ profileApi.get("/profiles", (ctx) -> {
 });
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 profileApi.get("/profiles") { ctx ->
   val allProfiles = profiles.query().fetch()
 
@@ -285,13 +331,17 @@ profileApi.get("/profiles") { ctx ->
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Remove a profile with DELETE
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 profileApi.delete("/profiles/:id", (ctx) -> {
   var id = ctx.getReq().getParams().get("id");
 
@@ -307,7 +357,11 @@ profileApi.delete("/profiles/:id", (ctx) -> {
 });
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 profileApi.delete("/profiles/:id") { ctx ->
   val id = ctx.req.params["id"]
 
@@ -323,7 +377,9 @@ profileApi.delete("/profiles/:id") { ctx ->
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Ok, let's run this thing!
 
@@ -420,23 +476,33 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 
 Define a bucket named `profilesImg` with reading/writing permissions.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 var profilesImg = Nitric.INSTANCE.bucket("profilesImg").with(BucketPermission.Read, BucketPermission.Write);
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 val profilesImg = Nitric.bucket("profilesImg").with(BucketPermission.Read, BucketPermission.Write)
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Get a URL to upload a profile image
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 profileApi.get("/profiles/:id/image/upload", (ctx) -> {
   var id = ctx.getReq().getParams().get("id");
 
@@ -451,7 +517,11 @@ profileApi.get("/profiles/:id/image/upload", (ctx) -> {
 });
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 profileApi.get("/profiles/:id/image/upload") { ctx ->
   val id = ctx.req.params["id"]
 
@@ -464,13 +534,17 @@ profileApi.get("/profiles/:id/image/upload") { ctx ->
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Get a URL to download a profile image
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 profileApi.get("/profiles/:id/image/download", (ctx) -> {
   var id = ctx.getReq().getParams().get("id");
 
@@ -485,7 +559,11 @@ profileApi.get("/profiles/:id/image/download", (ctx) -> {
 });
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 profileApi.get("/profiles/:id/image/download") { ctx ->
   val id = ctx.req.params["id"]
 
@@ -498,13 +576,17 @@ profileApi.get("/profiles/:id/image/download") { ctx ->
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 You can also return a redirect response that takes the HTTP client directly to the photo URL.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import java.util.Map;
 import java.util.List;
 
@@ -525,7 +607,11 @@ profileApi.get("/profiles/:id/image/download", (ctx) -> {
 });
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin Kotlin
 profileApi.get("/profiles/:id/image/download") { ctx ->
   val id = ctx.req.params["id"]
 
@@ -539,7 +625,9 @@ profileApi.get("/profiles/:id/image/download") { ctx ->
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 #### Test the extended API
 

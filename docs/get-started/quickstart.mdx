@@ -44,47 +44,77 @@ curl -L "https://nitric.io/install?version=latest" | bash
 
 The Nitric CLI's `new` command provides prompts to scaffold new projects from templates. Here's an example of creating a new project from a template:
 
-<CodeWithTabs>
+<Tabs syncKey="lang">
 
-```bash !!tabs TypeScript
+<TabItem label="TypeScript">
+
+```bash
 nitric new hello-world ts-starter
 ```
 
-```bash !!tabs JavaScript
+</TabItem>
+
+<TabItem label="JavaScript">
+
+```bash
 nitric new hello-world js-starter
 ```
 
-```bash !!tabs Python
+</TabItem>
+
+<TabItem label="Python">
+
+```bash
 nitric new hello-world py-starter
 ```
 
-```bash !!tabs Go
+</TabItem>
+
+<TabItem label="Go">
+
+```bash
 nitric new hello-world go-starter
 ```
 
-```bash !!tabs Dart
+</TabItem>
+
+<TabItem label="Dart">
+
+```bash
 nitric new hello-world dart-starter
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 Navigate to the new project directory and install the dependencies:
 
-<CodeWithTabs>
+<Tabs syncKey="lang">
 
-```bash !!tabs TypeScript
+<TabItem label="TypeScript">
+
+```bash TypeScript
 cd hello-world
 
 npm install
 ```
 
-```bash !!tabs JavaScript
+</TabItem>
+
+<TabItem label="JavaScript">
+
+```bash JavaScript
 cd hello-world
 
 npm install
 ```
 
-```bash !!tabs Python
+</TabItem>
+
+<TabItem label="Python">
+
+```bash Python
 cd hello-world
 
 # We recommend using [Pipenv](https://pipenv.pypa.io/en/latest/) for dependency and virtual environments
@@ -93,25 +123,37 @@ cd hello-world
 pipenv install --dev
 ```
 
-```bash !!tabs Go
+</TabItem>
+
+<TabItem label="Go">
+
+```bash Go
 cd hello-world
 
 go mod tidy
 ```
 
-```bash !!tabs Dart
+</TabItem>
+
+<TabItem label="Dart">
+
+```bash Dart
 cd hello-world
 
 dart pub get
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 Your project should now look like this:
 
-<CodeWithTabs>
+<Tabs syncKey="lang">
 
-```txt !!tabs TypeScript
+<TabItem label="TypeScript">
+
+```txt TypeScript
 +--services/
 |  +-- hello.ts
 +--node_modules/
@@ -122,7 +164,11 @@ Your project should now look like this:
 +--README.md
 ```
 
-```txt !!tabs JavaScript
+</TabItem>
+
+<TabItem label="JavaScript">
+
+```txt JavaScript
 +--services/
 |  +-- hello.js
 +--node_modules/
@@ -133,7 +179,11 @@ Your project should now look like this:
 +--README.md
 ```
 
-```txt !!tabs Python
+</TabItem>
+
+<TabItem label="Python">
+
+```txt Python
 +--services/
 |  +-- hello.py
 +--Pipfile
@@ -142,7 +192,11 @@ Your project should now look like this:
 +--README.md
 ```
 
-```txt !!tabs Go
+</TabItem>
+
+<TabItem label="Go">
+
+```txt Go
 +--services/hello/
 |  +-- main.go
 +--go.mod
@@ -152,7 +206,11 @@ Your project should now look like this:
 +--README.md
 ```
 
-```txt !!tabs Dart
+</TabItem>
+
+<TabItem label="Dart">
+
+```txt Dart
 +--services/
 |  +-- hello.dart
 +--analysis_options.yaml
@@ -162,7 +220,9 @@ Your project should now look like this:
 +--README.md
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Running your app
 

@@ -24,9 +24,11 @@ We recommend starting with a template, using the `nitric new` CLI command. These
 
 Here are some examples of basic Nitric project structures:
 
-<CodeWithTabs>
+<Tabs>
 
-```text !!tabs Go
+<TabItem label="Go">
+
+```text Go
 my-project/
 ├── nitric.yaml
 ├── nitric.aws.yaml
@@ -37,7 +39,11 @@ my-project/
         └── main.go
 ```
 
-```text !!tabs JavaScript
+</TabItem>
+
+<TabItem label="JavaScript">
+
+```text JavaScript
 my-project/
 ├── nitric.yaml
 ├── nitric.aws.yaml
@@ -46,7 +52,11 @@ my-project/
     └── service2.js
 ```
 
-```text !!tabs Python
+</TabItem>
+
+<TabItem label="Python">
+
+```text Python
 my-project/
 ├── nitric.yaml
 ├── nitric.aws.yaml
@@ -55,7 +65,9 @@ my-project/
     └── service2.py
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 This flexibility allows you to build apps as a single monolithic service, multiple microservices, or something else entirely.
 

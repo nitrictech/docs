@@ -36,8 +36,6 @@ export function a({
 
 export { Code } from './code/Code'
 
-export { CodeWithTabs } from './code/CodeWithTabs'
-
 export { CodeSwitcher } from './code/CodeSwitcher'
 
 function InfoIcon(props: React.ComponentPropsWithoutRef<'svg'>) {

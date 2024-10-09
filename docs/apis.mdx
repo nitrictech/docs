@@ -710,9 +710,11 @@ func main() {
 
 By default APIs deployed by Nitric will be assigned a domain by the target cloud provider. If you would like to deploy APIs with predefined custom domains you can specify the custom domains for each API in your project's stack files. For these domains to be successfully configured you will need to meet the prerequisites defined for each cloud provider below.
 
-<CodeWithTabs>
+<Tabs syncKey="providers">
 
-```yaml !!tabs AWS file:nitric.prod.yaml
+<TabItem label="AWS">
+
+```yaml file:nitric.prod.yaml
 provider: nitric/aws@1.1.0
 region: ap-southeast-2
 
@@ -725,23 +727,35 @@ apis:
       - test.example.com
 ```
 
-```yaml !!tabs Azure file:nitric.prod.yaml
+</TabItem>
+
+<TabItem label="Azure">
+
+```yaml file:nitric.prod.yaml
 # currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
 ```
 
-```yaml !!tabs Google Cloud file:nitric.prod.yaml
+</TabItem>
+
+<TabItem label="Google Cloud">
+
+```yaml file:nitric.prod.yaml
 # currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Custom Descriptions
 
 By default, APIs will not be deployed with a description. You can add a description using the following configuration in your stack file.
 
-<CodeWithTabs>
+<Tabs syncKey="providers">
 
-```yaml !!tabs AWS file:nitric.prod.yaml
+<TabItem label="AWS">
+
+```yaml file:nitric.prod.yaml
 provider: nitric/aws@1.12.4
 region: ap-southeast-2
 
@@ -753,7 +767,11 @@ apis:
     description: An AWS API
 ```
 
-```yaml !!tabs Azure file:nitric.prod.yaml
+</TabItem>
+
+<TabItem label="Azure">
+
+```yaml file:nitric.prod.yaml
 provider: nitric/azure@1.12.4
 region: Australia East
 org: example-org
@@ -766,7 +784,11 @@ apis:
     description: An Azure API
 ```
 
-```yaml !!tabs Google Cloud file:nitric.prod.yaml
+</TabItem>
+
+<TabItem label="Google Cloud">
+
+```yaml file:nitric.prod.yaml
 provider: nitric/gcp@1.12.4
 region: australia-southeast1
 
@@ -778,7 +800,9 @@ apis:
     description: A GCP API
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### AWS Custom Domain Prerequisites
 

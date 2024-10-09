@@ -24,9 +24,11 @@ This guide will demonstrate how Nitric can be used, along with [GitHub Actions](
 
 Here’s example content for each cloud provider:
 
-<CodeWithTabs>
+<Tabs>
 
-```yaml !!tabs AWS file:.github/deploy-aws.yaml
+<TabItem label="AWS">
+
+```yaml file:.github/deploy-aws.yaml
 name: Example Nitric AWS Deployment
 
 # Triggers for the workflow
@@ -86,7 +88,11 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 ```
 
-```yaml !!tabs Azure file:.github/deploy-azure.yaml
+</TabItem>
+
+<TabItem label="Azure">
+
+```yaml file:.github/deploy-azure.yaml
 name: Example Nitric Azure Deployment
 
 # Triggers for the workflow
@@ -163,20 +169,25 @@ jobs:
           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 ```
 
-```yaml !!tabs Google Cloud file:.github/deploy-gcp.yaml
+</TabItem>
+
+<TabItem label="Google Cloud">
+
+```yaml file:.github/deploy-gcp.yaml
 name: Example Nitric GCP Deployment
 
 # Triggers for the workflow
+
 on:
-  # Triggers the workflow on push to the main branch
-  push:
-    branches:
-      - main
+
+# Triggers the workflow on push to the main branch
+
+push:
+branches: - main
 
 jobs:
-  update:
-    # The workflow will run on the latest Ubuntu OS
-    runs-on: ubuntu-latest
+update: # The workflow will run on the latest Ubuntu OS
+runs-on: ubuntu-latest
 
     steps:
       # Check out the code from the repository
@@ -231,6 +242,9 @@ jobs:
           # Google Cloud project ID
           # You can obtain the project ID from the Google Cloud Console.
           PROJECT_ID: ${{ env.PROJECT_ID }}
+
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>

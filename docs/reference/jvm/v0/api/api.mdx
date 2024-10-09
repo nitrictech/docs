@@ -5,9 +5,11 @@ export const description =
 
 Creates a new HTTP API.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 
 public class Application {
@@ -19,7 +21,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -29,7 +35,9 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ## Parameters
 
@@ -81,9 +89,11 @@ The `middleware` property on the `options` param is useful for applying universa
 
 ### Create an API
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 
 public class Application {
@@ -95,7 +105,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 
 fun main() {
@@ -105,13 +119,17 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Create an API with universal middleware
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.faas.v0.Handler;
 import io.nitric.faas.v0.HttpContext;
@@ -133,7 +151,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.HttpContext
 import io.nitric.faas.v0.Middleware
@@ -151,7 +173,9 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Notes
 
@@ -161,9 +185,11 @@ Middleware functions are supplied a `HttpContext` object and a `next()` function
 
 If you need to put all the routes in your api below a shared base path, you can do that with the `basePath` option. In this example we ensure all routes start with `/api/v1/` before the route specific path.
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.ApiOptions;
 
@@ -178,7 +204,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.faas.v0.HttpContext
 import io.nitric.faas.v0.Middleware
@@ -196,13 +226,17 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
 
 ### Apply JWT authentication to an API
 
-<CodeWithTabs>
+<Tabs syncKey="jvm-lang">
 
-```java !!tabs Java
+<TabItem label="Java">
+
+```java
 import io.nitric.Nitric;
 import io.nitric.resources.ApiOptions;
 import io.nitric.resources.JwtSecurityDefinition;
@@ -233,7 +267,11 @@ public class Application {
 }
 ```
 
-```kotlin !!tabs Kotlin
+</TabItem>
+
+<TabItem label="Kotlin">
+
+```kotlin
 import io.nitric.Nitric
 import io.nitric.resources.ApiOptions
 import io.nitric.resources.JwtSecurityDefinition
@@ -259,4 +297,6 @@ fun main() {
 }
 ```
 
-</CodeWithTabs>
+</TabItem>
+
+</Tabs>
