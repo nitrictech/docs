@@ -1,15 +1,25 @@
 export const description =
   'Use the Nitric framework to easily build and deploy a backend for your Flutter application'
 
-export const title_meta = 'Building your first Flutter application with Nitric'
+export const title_meta = 'Building a Full Stack Flutter Application in Dart'
 
-# Building a Flutter Application with Nitric
+# Building a Full Stack Flutter Application in Dart
+
+Flutter is an open-source development framework developed by Google for developing cross-platform applications. It is used by frontend and full-stack developers for building cross-platform user interfaces from a single codebase. The abstractions that are built into the framework allow it to support mobile, web, and applications for MacOS, Windows, and Linux.
+
+Cross-platform development has become increasingly important due to the growing demand for mobile apps, cost savings, and increased reach and engagement. By developing an application once using cross-platform technologies like Flutter, companies can reduce development costs, simplify maintenance and updates, and target a broader audience across different platforms, devices, and operating systems.
+
+Cross-platform development often faces criticism regarding performance and native feature access; however, Flutter provides features to achieve high performance while supporting native features. This close-to-native performance is enabled through two key aspects: the open-source programming language Dart, optimized for building user interfaces by compiling to native machine code; and Flutter's use of Skia, a graphics engine providing consistent rendering across different platforms. This leads to a unified experience for users and developers across various devices.
+
+Flutter further enhances developer experience with widgets - reusable components used to build applications. Developers can customize these widgets using composition, where complex layouts are created from smaller widgets. This approach simplifies the development process and allows for easy customization of user interfaces.
+
+When combined with Nitric, portability is taken to a whole new level. Together, they enable developers to create applications that are not only high-performance but also extremely portable across different devices, platforms, and even clouds. This complimentary integration empowers developers to build robust applications that can adapt to changing user needs and environments.
+
+## Getting started
 
 In this guide we'll go over how to create a basic Flutter application using the Nitric framework as the backend. Dart does not have native support on AWS, GCP, or Azure, so by using the Nitric framework you can use your skills in Dart to create an API and interact with cloud services in an intuitive way.
 
-The application will have a Flutter frontend that will generate wordpairs that can be added to a list of favourites. The backend will be a Nitric API with a key value store that can store favourited wordpairs. This application will be simple, but requires that you know the basics of Flutter and Nitric.
-
-## Getting started
+The application will have a Flutter frontend that will generate word pairs that can be added to a list of favorites. The backend will be a Nitric API with a key value store that can store liked word pairs. This application will be simple, but requires that you know the basics of Flutter and Nitric.
 
 To get started make sure you have the following prerequisites installed:
 
@@ -41,7 +51,7 @@ We can then scaffold the project using the following command:
 flutter create word_generator
 ```
 
-Then open your project in your favourite editor:
+Then open your project in your favorite editor:
 
 ```bash
 code word_generator
@@ -49,7 +59,7 @@ code word_generator
 
 ## Backend
 
-Let's start by building out the backend. This will be an API with a route dedicated to getting a list of all the favourites and a route to toggle a favourite on or off. These favourites will be stored in a [key value store](/keyvalue). To create a Nitric project add the `nitric.yaml` to the Flutter template project.
+Let's start by building out the backend. This will be an API with a route dedicated to getting a list of all the favorites and a route to toggle a favorite on or off. These favorites will be stored in a [key value store](/keyvalue). To create a Nitric project add the `nitric.yaml` to the Flutter template project.
 
 ```yaml {{ label: "nitric.yaml" }}
 name: word_generator
@@ -67,20 +77,13 @@ touch lib/services/main.dart
 
 You will also need to add Nitric to your `pubspec.yaml`.
 
-```yaml {{ label: "pubspec.yaml" }}
-dependencies:
-  flutter:
-    sdk: flutter
-
-  nitric_sdk:
-    git:
-      url: https://github.com/nitrictech/dart-sdk.git
-      ref: main
+```bash
+flutter pub add nitric_sdk
 ```
 
 ### Building the API
 
-Define the API and the key value store in the `main.dart` service file. This will create an API named `main` and a kv store named `favourites` and give the function permissions to get, set, and delete documents. The `favourites` store will contain keys with the name of the favourite and then a value with the favourites object.
+Define the API and the key value store in the `main.dart` service file. This will create an API named `main`, a key value store named `favorites`, and the function permissions to get, set, and delete documents. The `favorites` store will contain keys with the name of the favorite and then a value with the favorites object.
 
 ```dart {{ label: "lib/services/main.dart" }}
 import 'package:nitric_sdk/nitric.dart';
@@ -88,7 +91,7 @@ import 'package:nitric_sdk/nitric.dart';
 void main() {
   final api = Nitric.api("main");
 
-  final favouritesKV = Nitric.kv("favourites").allow([
+  final favoritesKV = Nitric.kv("favorites").allow([
     KeyValueStorePermission.get,
     KeyValueStorePermission.set,
     KeyValueStorePermission.delete
@@ -96,81 +99,86 @@ void main() {
 }
 ```
 
-We will define a favourites class to convert our JSON requests to Favourite objects and then back into JSON. Conversion to a `Map<String, dynamic` will also allow us to store the Favourites objects in the key value store. We can do this by defining `fromJson` and `toJson` methods, allowing the builtin `jsonEncode` and `jsonDecode` methods to understand our model. By defining this as a class it unifies the way the frontend and backend handle Favourites objects, while leaving room for extension for additional metadata.
+We will define a favorites class to convert our JSON requests to favorite objects and then back into JSON. Conversion to a `Map<String, dynamic>` will also allow us to store the favorites objects in the key value store. We can do this by defining `fromJson` and `toJson` methods, allowing the builtin `jsonEncode` and `jsonDecode` methods to understand our model. By defining this as a class it unifies the way the frontend and backend handle favorites objects, while leaving room for extension for additional metadata.
 
-```dart {{ label: "lib/favourite.dart" }}
-class Favourite {
-  /// The name of the favourite
+```dart {{ label: "lib/favorite.dart" }}
+class favorite {
+  /// The name of the favorite
   String name;
 
-  Favourite(this.name);
+  favorite(this.name);
 
-  /// Convert a json decodable map to a Favourite object
-  Favourite.fromJson(Map<String, dynamic> json) : name = json['name'];
+  /// Convert a json decodable map to a favorite object
+  favorite.fromJson(Map<String, dynamic> json) : name = json['name'];
 
-  /// Convert a Favourite object to a json encodable
-  static Map<String, dynamic> toJson(Favourite favourite) =>
-    {'name': favourite.name};
+  /// Convert a favorite object to a json encodable
+  static Map<String, dynamic> toJson(favorite favorite) =>
+    {'name': favorite.name};
 }
 ```
 
-For the API we will define two routes, one GET method for `/favourites` and one POST method on `/favourite`. Let's start by defining the GET `/favourites` route. Make sure you import `dart:convert` to get access to the `jsonEncode` method for converting the documents to favourites.
+For the API we will define two routes, one GET method for `/favorites` and one POST method on `/favorite`. Let's start by defining the GET `/favorites` route. Make sure you import `dart:convert` to get access to the `jsonEncode` method for converting the documents to favorites.
 
 ```dart {{ label: "lib/services/main.dart" }}
 import 'dart:convert';
 
 ...
 
-api.get("/favourites", (ctx) async {
+api.get("/favorites", (ctx) async {
   // Get a list of all the keys in the store
-  var keyStream = await favouritesKV.keys();
+  var keys = await favouritesKV.keys();
 
-  // Convert the keys to a list of favourites
-  var favourites = await keyStream.asyncMap((k) async {
+  var favourites = await keys.asyncMap((k) async {
     final favourite = await favouritesKV.get(k);
 
     return favourite;
   }).toList();
 
-  // Return the body as a list of favourites
-  ctx.res.body = jsonEncode(favourites);
+  // Return the body as a list of favorites
+  ctx.res.body = jsonEncode(favorites);
+  ctx.res.headers["Content-Type"] = ["application/json"];
 
   return ctx;
 });
 ```
 
-We can then define the route for adding favourites. This will toggle a favourite on or off depending on whether the key exists in the key value store. Make sure you import the `Favourite` class from `package:word_generator/favourite.dart`
+We can then define the route for adding favorites. This will toggle a favorite on or off depending on whether the key exists in the key value store. Make sure you import the `favorite` class from `package:word_generator/favorite.dart`
 
 ```dart {{ label: "lib/services/main.dart" }}
-import 'package:word_generator/favourite.dart';
+import 'package:word_generator/favorite.dart';
 
 ...
 
-api.post("/favourite", (ctx) async {
+api.post("/favorite", (ctx) async {
   final req = ctx.req.json();
 
-  // convert the request json to a Favourite object
-  final favourite = Favourite.fromJson(req);
+  // convert the request json to a favorite object
+  final favorite = favorite.fromJson(req);
 
-  // search for the key, filtering by the name of the favourite
-  final stream = await favouritesKV.keys(prefix: favourite.name);
+  // search for the key, filtering by the name of the favorite
+  final keys = await favoritesKV.keys(prefix: favorite.name);
 
-  // checks if the favourite exists in the list of keys
-  final exists = await stream.any((f) => f == favourite.name);
+  // checks if the favorite exists in the list of keys
+  var exists = false;
+  await for (final key in keys) {
+    if (key == favourite.name) {
+      exists = true;
+    }
+  }
 
   // if it exists delete and return
   if (exists) {
-    await favouritesKV.delete(favourite.name);
+    await favoritesKV.delete(favorite.name);
 
     return ctx;
   }
 
   // if it doesn't exist, create it
   try {
-    await favouritesKV.set(favourite.name, Favourite.toJson(favourite));
+    await favoritesKV.set(favorite.name, favorite.toJson(favorite));
   } catch (e) {
     ctx.res.status = 500;
-    ctx.res.body = "could not set ${favourite.name}";
+    ctx.res.body = "could not set ${favorite.name}";
   }
 
   return ctx;
@@ -210,7 +218,7 @@ Future<HttpContext> addCors(HttpContext ctx) async {
 We can then add the options routes and add the CORS middleware to the API. When we add a middleware at the API level it will run on every request to any route on that API.
 
 ```dart {{ label: "lib/services/main.dart" }}
-import 'package:flutter_blog/cors.dart';
+import 'package:word_generator/cors.dart';
 
 ...
 
@@ -218,8 +226,8 @@ final api = Nitric.api("main", opts: ApiOptions(middlewares: [addCors]));
 
 ...
 
-api.options("/favourites", optionsHandler);
-api.options("/favourite", optionsHandler);
+api.options("/favorites", optionsHandler);
+api.options("/favorite", optionsHandler);
 ```
 
 ### Test
@@ -233,29 +241,29 @@ nitric start
 You can test the routes using the dashboard or cURL commands in your terminal.
 
 ```bash
-> curl http://localhost:4001/favourites
+> curl http://localhost:4001/favorites
 []
 
-> curl -X POST -d '{"name": "testpair"}' http://localhost:4001/favourite
-> curl http://localhost:4001/favourites
+> curl -X POST -d '{"name": "testpair"}' http://localhost:4001/favorite
+> curl http://localhost:4001/favorites
 [{"name": "testpair"}]
 ```
 
-## Frontend
+## Flutter Frontend
 
-We can now start on the frontend. The application will contain two pages which can be navigated between by using the
+We can now start on the frontend. The application will contain two pages which can be navigated between by using the side navigation.
 
 The first will show the current generated word along with a history of all previously generated words. It will have a button to like the word and a button to generate the next word.
 
 ![main flutter page](/docs/images/guides/flutter/main_page_final.png)
 
-The second page will show the list of favourites if there are any, otherwise it will display that there are no word pairs currently favourited.
+The second page will show the list of favorites if there are any, otherwise it will display that there are no word pairs currently liked.
 
-![favourites flutter page](/docs/images/guides/flutter/favourites_page_final.png)
+![favorites flutter page](/docs/images/guides/flutter/favourites_page_final.png)
 
 ### Providers
 
-Before creating these pages, we'll first create the data providers as these are required for the pages to function. These will be split into a provider for word generation and a provider for favourites gathering. These will both be `ChangeNotifiers` to allow for dynamic updates to the pages.
+Before creating these pages, we'll first create the data providers as these are required for the pages to function. These will be split into a provider for word generation and a provider for favorites gathering. These will both be `ChangeNotifiers` to allow for dynamic updates to the pages.
 
 Let's start with the word provider. For this you'll need to add the `english_words` dependency to generate new words.
 
@@ -285,51 +293,51 @@ void getNext() {
 }
 ```
 
-We can then build the `FavouritesProvider`. This will use the Nitric API to get a list of favourites and also toggle if a favourite is liked or not. To start, we'll define our `FavouritesProvider` and add the attributes for setting the list of favourites and whether the list is loading.
+We can then build the `FavoritesProvider`. This will use the Nitric API to get a list of favorites and also toggle if a favorite is liked or not. To start, we'll define our `FavoritesProvider` and add the attributes for setting the list of favorites and whether the list is loading.
 
-```dart {{ label: "lib/providers/favourites.dart" }}
+```dart {{ label: "lib/providers/favorites.dart" }}
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:word_generator/favourite.dart';
+import 'package:word_generator/favorite.dart';
 import 'package:http/http.dart' as http;
 
-class FavouritesProvider extends ChangeNotifier {
+class FavoritesProvider extends ChangeNotifier {
   final baseApiUrl = "http://localhost:4001";
 
-  List<Favourite> _favourites = [];
+  List<favorite> _favorites = [];
   bool _isLoading = false;
 
-  /// Get a list of active favourites
-  List<Favourite> get favourites => _favourites;
+  /// Get a list of active favorites
+  List<favorite> get favorites => _favorites;
 
   /// Check whether the data is loading or not
   bool get isLoading => _isLoading;
 }
 ```
 
-We'll then add a method for getting a list of favourites and notifying the listeneres. For this we require the `http` package to make requests to our API.
+We'll then add a method for getting a list of favorites and notifying the listeners. For this we require the `http` package to make requests to our API.
 
 ```bash
 flutter pub add http
 ```
 
-```dart {{ label: "lib/providers/favourites.dart" }}
-/// Updates the list of favourites whilst returning a Future with the list of favourites.
-/// Sets isLoading to true when the favourites have been fetched
-Future<List<Favourite>> fetchData() async {
+```dart {{ label: "lib/providers/favorites.dart" }}
+/// Updates the list of favorites whilst returning a Future with the list of favorites.
+/// Sets isLoading to true when the favorites have been fetched
+Future<List<favorite>> fetchData() async {
   _isLoading = true;
   notifyListeners();
 
-  final response = await http.get(Uri.parse("$baseApiUrl/favourites"));
+  final response = await http.get(Uri.parse("$baseApiUrl/favorites"));
 
   if (response.statusCode == 200) {
     // Decode the json data into an iterable list of unknown objects
-    Iterable rawFavourites = jsonDecode(response.body);
+    Iterable rawfavorites = jsonDecode(response.body);
 
-    // Map over the iterable, converting it to a list of Favourite objects
-    _favourites =
-        List<Favourite>.from(rawFavourites.map((model) => Favourite.fromJson(model)));
+    // Map over the iterable, converting it to a list of favorite objects
+    _favorites =
+        List<favorite>.from(rawfavorites.map((model) => favorite.fromJson(model)));
   } else {
     throw Exception('Failed to load data');
   }
@@ -337,50 +345,50 @@ Future<List<Favourite>> fetchData() async {
   _isLoading = false;
   notifyListeners();
 
-  return _favourites;
+  return _favorites;
 }
 ```
 
-We can then make a function for listeners to check if a word pair has been favourited. This requires the `english_words` package for importing the `WordPair` typing.
+We can then make a function for listeners to check if a word pair has been liked. This requires the `english_words` package for importing the `WordPair` typing.
 
-```dart {{ label: "lib/providers/favourites.dart" }}
+```dart {{ label: "lib/providers/favorites.dart" }}
 /// Add english words import
 import 'package:english_words/english_words.dart';
 
 ...
 
-/// Checks if the word pair exists in the list of favourites
-bool hasFavourite(WordPair pair) {
+/// Checks if the word pair exists in the list of favorites
+bool hasfavorite(WordPair pair) {
   if (isLoading) {
     return false;
   }
 
-  return _favourites.any((f) => f.name == pair.asLowerCase);
+  return _favorites.any((f) => f.name == pair.asLowerCase);
 }
 ```
 
-Finally, we'll define a function for toggling a word pair as being liked or unliked.
+Finally, we'll define a function for toggling a word pair as being liked or not.
 
-```dart {{ label: "lib/providers/favourites.dart" }}
-/// Toggles whether a favourite being liked or unliked.
-Future<void> toggleFavourite(WordPair pair) async {
+```dart {{ label: "lib/providers/favorites.dart" }}
+/// Toggles whether a favorite being liked or unliked.
+Future<void> togglefavorite(WordPair pair) async {
 // Convert the word pair into a json encoded
-final encodedFavourites = jsonEncode(Favourite.toJson(Favourite(pair.asLowerCase)));
+final encodedfavorites = jsonEncode(favorite.toJson(favorite(pair.asLowerCase)));
 
-    // Makes a post request to the toggle favourite route.
-    final response = await http.post(Uri.parse("$baseApiUrl/favourite"), body: encodedFavourites);
+    // Makes a post request to the toggle favorite route.
+    final response = await http.post(Uri.parse("$baseApiUrl/favorite"), body: encodedfavorites);
 
     // If the response doesn't respond with OK, throw an error
     if (response.statusCode != 200) {
-      throw Exception("Failed to add favourite: ${response.body}");
+      throw Exception("Failed to add favorite: ${response.body}");
     }
 
-    // If it was successfully removed update favourites
-    if (hasFavourite(pair)) {
-      // Remove the favourite for
-      _favourites.removeWhere((f) => f.name == pair.asLowerCase);
+    // If it was successfully removed update favorites
+    if (hasfavorite(pair)) {
+      // Remove the favorite for
+      _favorites.removeWhere((f) => f.name == pair.asLowerCase);
     } else {
-      _favourites.add(Favourite(pair.asLowerCase));
+      _favorites.add(favorite(pair.asLowerCase));
     }
 
     notifyListeners();
@@ -400,7 +408,7 @@ You can then create the generator page with the following stateless widget. This
 ```dart {{ label: "lib/pages/generator.dart" }}
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:word_generator/providers/favourites.dart';
+import 'package:word_generator/providers/favorites.dart';
 import 'package:word_generator/providers/word.dart';
 
 class GeneratorPage extends StatelessWidget {
@@ -413,13 +421,13 @@ class GeneratorPage extends StatelessWidget {
       color: theme.colorScheme.onPrimary,
     );
 
-    // Start listening to both the favourites and the word providers
-    final favourites = context.watch<FavouritesProvider>();
+    // Start listening to both the favorites and the word providers
+    final favorites = context.watch<FavoritesProvider>();
     final words = context.watch<WordProvider>();
 
     IconData icon = Icons.favorite_border;
 
-    if (favourites.hasFavourite(words.current)) {
+    if (favorites.hasfavorite(words.current)) {
       icon = Icons.favorite;
     }
 
@@ -459,7 +467,7 @@ class GeneratorPage extends StatelessWidget {
               // Button to like the current word pair
               ElevatedButton.icon(
                 onPressed: () {
-                  favourites.toggleFavourite(words.current);
+                  favorites.togglefavorite(words.current);
                 },
                 icon: Icon(icon),
                 label: Text('Like'),
@@ -481,13 +489,13 @@ class GeneratorPage extends StatelessWidget {
 }
 ```
 
-To test this generation we can build the application entrypoint to run our paplication. In this application we use a `MultiProvider` to supply the child pages with the ability to listen to the `FavouritesProvider` and the `WordProvider`.
+To test this generation we can build the application entrypoint to run our application. In this application we use a `MultiProvider` to supply the child pages with the ability to listen to the `FavoritesProvider` and the `WordProvider`.
 
 ```dart {{ label: "lib/main.dart" }}
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:word_generator/pages/generator.dart';
-import 'package:word_generator/providers/favourites.dart';
+import 'package:word_generator/providers/favorites.dart';
 import 'package:word_generator/providers/word.dart';
 
 // Start the application
@@ -501,7 +509,7 @@ class Application extends StatelessWidget {
     return MultiProvider(
       // Allow the child pages to reference the data providers
       providers: [
-        ChangeNotifierProvider(create: (context) => FavouritesProvider()),
+        ChangeNotifierProvider(create: (context) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => WordProvider()),
       ],
       child: MaterialApp(
@@ -576,7 +584,7 @@ class HistoryListView extends StatefulWidget {
 class _HistoryListViewState extends State<HistoryListView> {
   final _key = GlobalKey();
 
-  // Create a mask which will make a fade out appearance by making a linear gradient of transparent -> opaque.
+  // Create a linear gradient mask from transparent to opaque.
   static const Gradient _maskingGradient = LinearGradient(
     colors: [Colors.transparent, Colors.black],
     stops: [0.0, 0.5],
@@ -586,7 +594,7 @@ class _HistoryListViewState extends State<HistoryListView> {
 
   @override
   Widget build(BuildContext context) {
-    final favourites = context.watch<FavouritesProvider>();
+    final favorites = context.watch<FavoritesProvider>();
     final words = context.watch<WordProvider>();
 
     // Set the key of the animated list to the WordProvider GlobalKey so it can be manipulated from there
@@ -613,10 +621,10 @@ class _HistoryListViewState extends State<HistoryListView> {
             child: Center(
               child: TextButton.icon(
                 onPressed: () {
-                  favourites.toggleFavourite(pair);
+                  favorites.togglefavorite(pair);
                 },
-                // If the word pair was favourited, show a heart next to it
-                icon: favourites.hasFavourite(pair)
+                // If the word pair was favorited, show a heart next to it
+                icon: favorites.hasfavorite(pair)
                     ? Icon(Icons.favorite, size: 12)
                     : SizedBox(),
                 label: Text(
@@ -658,22 +666,22 @@ If you reload the flutter app it should now display your history when you click 
 
 ![generator page with history](/docs/images/guides/flutter/main_page_2.png)
 
-### Favourites Page
+### Favorites Page
 
-The favourites page will simply list all the favourites and the number that have been favourited:
+The favorites page will simply list all the favorites and the number that have been liked:
 
-```dart {{ label: "lib/pages/favourites.dart" }}
+```dart {{ label: "lib/pages/favorites.dart" }}
 import 'package:flutter/material.dart';
-import 'package:word_generator/providers/favourites.dart';
+import 'package:word_generator/providers/favorites.dart';
 import 'package:provider/provider.dart';
 
-class FavouritesPage extends StatelessWidget {
+class favoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var favourites = context.watch<FavouritesProvider>();
+    var favorites = context.watch<FavoritesProvider>();
 
-    // If the favourites list is still loading then show a spinning circle.
-    if (favourites.isLoading) {
+    // If the favorites list is still loading then show a spinning circle.
+    if (favorites.isLoading) {
       return Center(
           child: SizedBox(
         width: 40,
@@ -682,20 +690,20 @@ class FavouritesPage extends StatelessWidget {
       ));
     }
 
-    // Otherwise return a list of all the favourites
+    // Otherwise return a list of all the favorites
     return ListView(
       children: [
         Padding(
           padding: const EdgeInsets.all(20),
-          // Display how many favourites there are
+          // Display how many favorites there are
           child: Text('You have '
-              '${favourites.favourites.length} favourites:'),
+              '${favorites.favorites.length} favorites:'),
         ),
-        // Create a list tile for every favourite in the list of favourites
-        for (var favourite in favourites.favourites)
+        // Create a list tile for every favorite in the list of favorites
+        for (var favorite in favorites.favorites)
           ListTile(
             leading: Icon(Icons.favorite), // <- A heart icon
-            title: Text(favourite.name),
+            title: Text(favorite.name),
           ),
       ],
     );
@@ -703,20 +711,20 @@ class FavouritesPage extends StatelessWidget {
 }
 ```
 
-You might notice at no point is the favourites list actually being fetched, so the `FavouritesProvider` will always contain an empty favourites list. This will be handled in the next section where we build the navigation.
+You might notice that at no point is the favorites list actually being fetched, so the `FavoritesProvider` will always contain an empty favorites list. This will be handled in the next section where we build the navigation.
 
 ### Navigation
 
-To finish, we'll add the navigation page. This will wrap the `GeneratorPage` and the `FavouritesPage` and allow a user to switch between them through a nav bar. This will be responsive, with a desktop having it appear on the side and a mobile appearing at the bottom. It will be a `StatefulWidget` so it can maintain the page that is being viewed. In the `initState` we will fetch the favourites data.
+To finish, we'll add the navigation page. This will wrap the `GeneratorPage` and the `favoritesPage` and allow a user to switch between them through a nav bar. This will be responsive, with a desktop having it appear on the side and a mobile appearing at the bottom. It will be a `StatefulWidget` so it can maintain the page that is being viewed. In the `initState` we will fetch the favorites data.
 
 Start by scaffolding the main page `StatefulWidget` and `State`.
 
 ```dart {{ label: "lib/pages/home.dart" }}
 import 'package:flutter/material.dart';
-import 'package:word_generator/providers/favourites.dart';
+import 'package:word_generator/providers/favorites.dart';
 import 'package:provider/provider.dart';
 
-import 'favourites.dart';
+import 'favorites.dart';
 import 'generator.dart';
 
 class HomePage extends StatefulWidget {
@@ -725,14 +733,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // The page that the user is currently viewing: Generator (0) or Favourites (1)
+  // The page that the user is currently viewing: Generator (0) or favorites (1)
   var selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
     // Fetch
-    context.read<FavouritesProvider>().fetchData();
+    context.read<FavoritesProvider>().fetchData();
   }
 }
 ```
@@ -747,7 +755,7 @@ Widget build(BuildContext context) {
     case 0:
       page = GeneratorPage();
     case 1:
-      page = FavouritesPage();
+      page = favoritesPage();
     default:
       throw UnimplementedError('no widget for $selectedIndex');
   }
@@ -782,7 +790,7 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => FavouritesProvider()),
+        ChangeNotifierProvider(create: (context) => FavoritesProvider()),
         ChangeNotifierProvider(create: (context) => WordProvider()),
       ],
       child: MaterialApp(
@@ -798,7 +806,7 @@ class Application extends StatelessWidget {
 }
 ```
 
-For now, you can test both pages by swapping the `selectedIndex` manually. We'll then want to build out a navigation bar for desktop and for mobile. For this we will use a `LayoutBuilder` to check if the screen width is less than 450px.
+For now, you can test both pages by swapping the `selectedIndex` manually. We'll then want to build out a navigation bar for desktop and for mobile. For this we will use a `LayoutBuilder` to check if the screen width is less than `450px`.
 
 ```dart {{ label: "lib/pages/home.dart" }}
 Widget build(BuildContext context) {
@@ -855,7 +863,8 @@ return Row(
   children: [
     SafeArea(
       child: NavigationRail(
-        extended: constraints.maxWidth >= 600, // Display only icons if screen width is less than 600px
+        // Display only icons if screen width is less than 600px
+        extended: constraints.maxWidth >= 600,
         destinations: [
           NavigationRailDestination(
             icon: Icon(Icons.home),
@@ -863,7 +872,7 @@ return Row(
           ),
           NavigationRailDestination(
             icon: Icon(Icons.favorite),
-            label: Text('Favourites'),
+            label: Text('favorites'),
           ),
         ],
         selectedIndex: selectedIndex,
@@ -884,9 +893,9 @@ Altogether, the page code should look like this:
 ```dart {{ label: "lib/pages/home.dart" }}
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:word_generator/providers/favourites.dart';
+import 'package:word_generator/providers/favorites.dart';
 
-import 'favourites.dart';
+import 'favorites.dart';
 import 'generator.dart';
 
 class HomePage extends StatefulWidget {
@@ -900,7 +909,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    context.read<FavouritesProvider>().fetchData();
+    context.read<FavoritesProvider>().fetchData();
   }
 
   @override
@@ -912,7 +921,7 @@ class _HomePageState extends State<HomePage> {
       case 0:
         page = GeneratorPage();
       case 1:
-        page = FavouritesPage();
+        page = favoritesPage();
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -993,7 +1002,9 @@ class _HomePageState extends State<HomePage> {
 
 ## Deployment
 
-At this point, you can deploy the application to any supported cloud provider. Start by setting up your credentials and any configuration for the cloud you prefer:
+At this point, we can get started on deploying our application. The frontend application deployment depends on which platform you wish to deploy to. You can take a look at the Flutter documentation for this [here](https://docs.flutter.dev/deployment). The backend will be deployed to one of the cloud platforms, AWS, Google Cloud, or Azure. This guide will demonstrate deploying to AWS.
+
+For the backend, start by setting up your credentials and any configuration for the cloud you prefer:
 
 - [AWS](/reference/providers/aws)
 - [Azure](/reference/providers/azure)
@@ -1014,7 +1025,7 @@ region: us-east-1
 
 ### Dockerfile
 
-Because we've mixed Flutter and Dart dependencies, we need to use a [custom container](/docs/reference/custom-containers) that fetches our dependencies using Flutter. You can point to a custom container in your `nitric.yaml`:
+Because we've mixed Flutter and Dart dependencies, we need to use a [custom container](/reference/custom-containers) that fetches our dependencies using Flutter. You can point to a custom container in your `nitric.yaml`:
 
 <Note>
   If you have a separate Dart backend that doesn't share dependencies with your
@@ -1035,7 +1046,7 @@ runtimes:
 
 Create the Dockerfile at the same path as your runtime specifies. This Dockerfile is fairly straightforward, taking its
 
-```Dockerfile {{ label: "docker/flutter.dockerfile" }}
+```dockerfile {{ label: "docker/flutter.dockerfile" }}
 FROM dart:stable AS build
 
 # The Nitric CLI will provide the HANDLER arg with the location of our service
@@ -1078,7 +1089,7 @@ COPY --from=build /app/bin/main /app/bin/
 ENTRYPOINT ["/app/bin/main"]
 ```
 
-We can also add a `.dockerignore` to optimise our image further:
+We can also add a `.dockerignore` to optimize our image further:
 
 ```txt {{ label: "docker/flutter.dockerignore" }}
 build
@@ -1115,10 +1126,10 @@ API Endpoints:
 main: https://xxxxxxxx.execute-api.us-east-1.amazonaws.com
 ```
 
-Once we have our API, we can update our flutter app to use the new endpoint. Go into the `FavouritesProvider` and set the `baseApiUrl` to your AWS endpoint.
+Once we have our API, we can update our flutter app to use the new endpoint. Go into the `FavoritesProvider` and set the `baseApiUrl` to your AWS endpoint.
 
-```dart {{ label: "lib/providers/favourites.dart" }}
-class FavouritesProvider extends ChangeNotifier {
+```dart {{ label: "lib/providers/favorites.dart" }}
+class FavoritesProvider extends ChangeNotifier {
   final baseApiUrl = "https://xxxxxxxx.execute-api.us-east-1.amazonaws.com";
 ```
 
