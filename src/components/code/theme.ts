@@ -658,7 +658,7 @@ const theme: Theme = {
       scope: ['comment', 'punctuation.definition.comment'],
       settings: {
         foreground: '#6e738d',
-        fontStyle: 'normal',
+        fontStyle: 'italic',
       },
     },
     {
@@ -1927,7 +1927,7 @@ const theme: Theme = {
       ],
       settings: {
         foreground: '#eed49f',
-        fontStyle: 'italic',
+        fontStyle: 'normal',
       },
     },
     {
@@ -1980,7 +1980,7 @@ const theme: Theme = {
       scope: 'entity.name.impl.rust',
       settings: {
         foreground: '#eed49f',
-        fontStyle: 'italic',
+        fontStyle: 'normal',
       },
     },
     {
@@ -1995,7 +1995,7 @@ const theme: Theme = {
       scope: 'entity.name.trait.rust',
       settings: {
         foreground: '#eed49f',
-        fontStyle: 'italic',
+        fontStyle: 'normal',
       },
     },
     {
@@ -2028,7 +2028,7 @@ const theme: Theme = {
       ],
       settings: {
         foreground: '#8aadf4',
-        fontStyle: 'italic',
+        fontStyle: 'normal',
       },
     },
     {
@@ -2036,7 +2036,7 @@ const theme: Theme = {
       scope: ['storage.modifier.lifetime.rust', 'entity.name.type.lifetime'],
       settings: {
         foreground: '#8aadf4',
-        fontStyle: 'italic',
+        fontStyle: 'normal',
       },
     },
     {
@@ -2117,7 +2117,7 @@ const theme: Theme = {
       ],
       settings: {
         foreground: '#f5bde6',
-        fontStyle: 'italic',
+        fontStyle: 'normal',
       },
     },
     {
@@ -2125,7 +2125,7 @@ const theme: Theme = {
       scope: 'comment.line.shebang constant.language',
       settings: {
         foreground: '#8bd5ca',
-        fontStyle: 'italic',
+        fontStyle: 'normal',
       },
     },
     {
@@ -2146,7 +2146,7 @@ const theme: Theme = {
         'meta.string meta.interpolation.parameter.shell variable.other.readwrite',
       settings: {
         foreground: '#f5a97f',
-        fontStyle: 'italic',
+        fontStyle: 'normal',
       },
     },
     {
