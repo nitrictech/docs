@@ -10,6 +10,7 @@ import {
   LockClosedIcon,
   CodeBracketIcon,
   BeakerIcon,
+  DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline'
 import {
   SiGooglecloud,
@@ -122,8 +123,13 @@ export const navigation: NavEntry[] = [
       },
       {
         title: 'Storage',
-        icon: ArchiveBoxIcon,
+        icon: DocumentDuplicateIcon,
         href: '/storage',
+      },
+      {
+        title: 'Key/Value Stores',
+        icon: ArchiveBoxIcon,
+        href: '/keyvalue',
       },
       {
         title: 'SQL Databases',
