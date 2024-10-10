@@ -2,33 +2,26 @@
 description: 'How Nitric integrates with Terraform'
 ---
 
-# Terraform
+# Nitric Terraform Providers
 
-Nitric's cloud portability is enabled through plugin interfaces known as [providers](/reference/providers). Providers allow applications built with Nitric to be deployed using a variety of Infrastructure Automation technologies, including [Terraform](https://www.terraform.io/).
+Nitric enables application portability and deployments through pluggable modules known as [providers](/get-started/foundations/providers). This allows applications to be deployed with many different Infrastructure Automation technologies, including [Terraform](https://www.terraform.io/). Nitric has pre-built providers that use Terraform to deploy to [AWS](/providers/terraform/aws) and [Google Cloud](/providers/terraform/gcp), with Azure support planned.
+
+<Note>
+  All pre-built Terraform providers are [IaC generating
+  providers](/get-started/foundations/deployment#providers).
+</Note>
+
+## Prerequisites
+
+The **Terraform CLI** is required to deploy the resulting Terraform Stack that Nitric generates. You can find the installation instructions for Terraform in the [Terraform documentation](https://learn.hashicorp.com/tutorials/terraform/install-cli).
+
+The provider is built with the [Cloud Development Kit for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf). Since CDKTF relies on **Node.js**, you'll need to have Node.js installed, you can read about the full CDKTF prerequisites in the [CDKTF documentation](https://developer.hashicorp.com/terraform/tutorials/cdktf/cdktf-install#prerequisites).
 
 <Note>
   Terraform providers are currently in preview, they're not recommended for
   production deployments. We recommend using the [Pulumi
   Provider](/providers/pulumi) for production deployments until the Terraform
   providers are stable.
-</Note>
-
-## Terraform Providers
-
-The Nitric Terraform providers allow you to deploy Nitric applications using Terraform. Currently, a Terraform provider is in Preview for AWS, with support for other cloud providers coming soon. While the standard Nitric Providers deploy your application directly to the cloud, the Terraform providers act more like a Transpiler for the cloud infrastructure requirements, allowing Nitric to generate a Terraform stack using [CDKTF](https://developer.hashicorp.com/terraform/cdktf).
-
-The main benefits of using the Nitric Terraform provider are:
-
-- **Infrastructure from Code**: Define your application using Nitric and automatically generate the necessary Terraform code.
-- **Terraform Ecosystem**: Leverage the existing Terraform ecosystem for managing your cloud infrastructure.
-- **Customization**: Customize your cloud infrastructure using Terraform modules and resources.
-
-You're also able to [create your own Terraform provider](/providers/custom/create) for Nitric, this is the best option when you have existing Terraform Modules and expertise you want to reuse to deploy Nitric applications.
-
-<Note>
-  If you're new to Terraform and/or Nitric, we recommend starting with a
-  [standard Nitric provider](/providers/pulumi). The Terraform provider is more
-  advanced and requires a foundational understanding of Terraform.
 </Note>
 
 ## Enabling Nitric Terraform Providers
@@ -40,10 +33,23 @@ preview:
   - beta-providers
 ```
 
-<Note>
-  The `beta-providers` flag enables all non-stable providers, including the
-  Terraform providers.
-</Note>
+## Available Terraform Providers
+
+- [AWS](/providers/terraform/aws)
+- [Google Cloud](/providers/terraform/gcp)
+- Azure (Coming Soon)
+
+## How Nitric integrates with Terraform
+
+Nitric uses the [Cloud Development Kit for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf) to generate Terraform code for your application. This code can be deployed using the standard Terraform CLI commands.
+
+When you run `nitric up` in your project directory, Nitric will generate the Terraform code for your application, outputting the result to a directory named `cdktf.out` by default. You can then navigate into this directory and use the standard Terraform commands to deploy your application.
+
+```bash
+terraform init
+terraform plan
+terraform apply
+```
 
 ## Getting Started
 
