@@ -44,7 +44,7 @@ export function CopyButton({
       <span
         aria-hidden={copied}
         className={clsx(
-          'pointer-events-none flex items-center gap-0.5 text-zinc-400 transition duration-300',
+          'pointer-events-none flex items-center gap-0.5 text-zinc-600 transition duration-300 dark:text-zinc-400',
           copied && '-translate-y-1.5 opacity-0',
         )}
       >
