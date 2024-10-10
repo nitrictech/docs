@@ -22,11 +22,15 @@ export const NavLink: React.FC<NavLinkProps> = ({
   icon: Icon,
   className,
 }) => {
+  const isExternal = href.startsWith('http')
+
   return (
     <Button variant="link" asChild>
       <Link
         href={href}
         aria-current={active ? 'page' : undefined}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener noreferrer' : undefined}
         className={cn(
           'relative flex w-full justify-between gap-2 py-1 pr-3 text-sm no-underline transition hover:no-underline',
           isAnchorLink ? 'pl-7' : 'pl-2',
