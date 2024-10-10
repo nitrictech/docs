@@ -9,6 +9,7 @@ interface Props {
 export const GuideFilters: React.FC<Props> = ({ allTags }) => {
   return (
     <>
+      <LanguageSwitch />
       <ul className="space-y-4">
         {allTags.map((tag) => (
           <li key={tag}>
@@ -18,7 +19,6 @@ export const GuideFilters: React.FC<Props> = ({ allTags }) => {
           </li>
         ))}
       </ul>
-      <LanguageSwitch />
     </>
   )
 }

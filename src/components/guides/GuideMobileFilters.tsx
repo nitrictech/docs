@@ -25,7 +25,7 @@ const GuideMobileFilters: React.FC<GuideMobileFiltersProps> = ({ allTags }) => {
           <AdjustmentsHorizontalIcon className="h-6 w-6" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[calc(100vh-5rem)] overflow-y-auto">
         <DialogHeader className="mb-10">
           <DialogTitle className="sr-only">Set Filters</DialogTitle>
         </DialogHeader>

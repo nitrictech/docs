@@ -18,7 +18,7 @@ const GuidePage: React.FC<Props> = ({ guides, allTags }) => {
       <div className="hidden border-r pb-10 lg:block">
         <aside
           aria-label="Sidebar"
-          className="sticky top-[calc(var(--header-height)+1px+2rem)] mt-10 max-h-[calc(100vh-var(--header-height)-3rem)] w-80 space-y-10 overflow-y-auto"
+          className="mt-10 w-80 space-y-10 overflow-y-auto"
         >
           <GuideFilters allTags={allTags} />
         </aside>
