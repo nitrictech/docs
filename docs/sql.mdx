@@ -37,7 +37,7 @@ preview:
 
 Here's an example of how to create a SQL database:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { sql } from '@nitric/sdk'
@@ -83,7 +83,7 @@ Unlike some Nitric resources, which abstract away the underlying service to enab
 
 Nitric provides a helper function to retrieve the connection details for your SQL database:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { sql, api } from '@nitric/sdk'
@@ -200,7 +200,7 @@ migrations/
 
 Next, configure your database to use these migration files, ensuring they're automatically applied when you deploy your project.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { sql } from '@nitric/sdk'
@@ -253,7 +253,7 @@ When new migration files are added Nitric will automatically apply them when you
 
 Nitric also provides a more powerful option for migrations - running them as a once-per-deployment task using a docker container. This is useful when you need to run more complex migrations or you're using tools such as an ORM which can't generate SQL migration files. To do this, create a Dockerfile in your project that runs your migrations and add it to your database configuration.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { sql } from '@nitric/sdk'

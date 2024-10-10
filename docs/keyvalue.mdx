@@ -24,7 +24,7 @@ Values are the data that is stored in the key value store. They are referenced b
 
 Here's an example of how to create a key value store, with permissions for getting, setting, and deleting:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { kv } from '@nitric/sdk'
@@ -87,7 +87,7 @@ Key value pairs are created based on the `key` and the contents of the `value`. 
 
 The below example first creates a key value store that has permissions for setting. It then adds a key to the store called `USA` and a value which describes the country.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { kv } from '@nitric/sdk'
@@ -151,7 +151,7 @@ await countries.set("USA", {
 
 To update a value call `set` with the same key and a new value.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 await countries.set('USA', {
@@ -187,7 +187,7 @@ await countries.set("USA", {
 
 Values can be accessed from a store by calling the `get` method with the key of the value you want to retrieve.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { kv } from '@nitric/sdk'
@@ -243,7 +243,7 @@ Values can be deleted from the key value store by referencing the key.
 
 The below example first creates a key value store that has permissions for deleting and setting. It then creates a value called `USA`, which is deleted using `delete` on the key.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { kv } from '@nitric/sdk'
@@ -320,7 +320,7 @@ Keys can be listed and filtered by an optional prefix.
 
 The below example first creates a key value store that has permissions for listing. It then lists all keys in the store.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { kv } from '@nitric/sdk'

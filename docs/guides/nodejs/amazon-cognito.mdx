@@ -32,7 +32,7 @@ nitric new
 
 In this new Nitric project there will be an example API with a single `GET: /hello/:name` route. We'll start by securing this route.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```typescript !! title:services/hello.ts
 import { api } from '@nitric/sdk'
@@ -66,7 +66,7 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 To add this API Gateway authentication we need to create a `security definition` and then apply that definition to specific routes or the entire API. Here we'll update the `main` API by adding a new security definition named `cognito`.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```typescript !! title:services/hello.ts
 import { api } from '@nitric/sdk'
@@ -123,7 +123,7 @@ Next, we need to ensure this security definition is applied, otherwise it won't 
 
 In this example we'll apply the security at the API level, ensuring all routes require authentication.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```typescript !! title:services/hello.ts
 import { api } from '@nitric/sdk'
@@ -197,7 +197,7 @@ In the example below we're simply checking whether the user is a member of a par
   handlers or middleware.
 </Note>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```typescript !! title:services/hello.ts
 import { api, HttpContext, HttpMiddleware } from '@nitric/sdk'

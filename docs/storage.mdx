@@ -24,7 +24,7 @@ Most cloud object/blob storage services function as key-value systems, where the
 
 Nitric enables you to define named buckets with customizable permissions. When defining a bucket, you can specify permissions for reading, writing, and deleting files within the bucket. In the example below, we declare a bucket named `profiles` and indicate that our service requires access to read, write, and delete files within that bucket:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { bucket } from '@nitric/sdk'
@@ -76,7 +76,7 @@ To get a reference to a specific file in a bucket, use the `file()` method on th
   No network calls are made when you get a file reference using `file()`
 </Note>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { bucket } from '@nitric/sdk'
@@ -117,7 +117,7 @@ To list all files in a bucket, use the `files()` method on the bucket reference.
 
 <Note>A network call is made when you list files using `files()`</Note>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```typescript !!
 import { bucket } from '@nitric/sdk'
@@ -192,7 +192,7 @@ You can read the contents of a file directly from your application code using th
   error will be thrown.
 </Note>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { bucket } from '@nitric/sdk'
@@ -254,7 +254,7 @@ You can write the contents of a file directly from your application code using t
   using an [upload url](#signed-urls).
 </Note>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { bucket } from '@nitric/sdk'
@@ -316,7 +316,7 @@ await profiles.file("users/bruce-wayne/profile.png").write(profileImage);
 
 You can delete a file directly from your service code using the `delete()` method on a file reference.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { bucket } from '@nitric/sdk'
@@ -378,7 +378,7 @@ You have the option to customize the expiration time of the URL by specifying a 
   trusted users.
 </Note>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { bucket } from '@nitric/sdk'
@@ -461,7 +461,7 @@ To illustrate, suppose we want to trigger a service whenever a new profile image
   an infinite loop, which is highly undesirable for your cloud bill.
 </Note>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { bucket } from '@nitric/sdk'
@@ -525,7 +525,7 @@ profiles.on(BlobEventType.write, "/users/images", (ctx) async {
 
 If we instead wanted to trigger the function whenever any file was deleted from the bucket, we would use the following snippet:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { bucket } from '@nitric/sdk'

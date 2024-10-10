@@ -20,7 +20,19 @@ The Nitric deployment engine does not evaluate runtime code at deployment time a
 
 A working example:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
+
+```javascript !!
+import { api, bucket } from '@nitric/sdk'
+
+// ✅ This declaration will work
+const files = bucket('files').allow('read')
+
+api('public').get('/files/:name', (ctx) => {
+  // ❌ This declaration will not work, as this is only called at runtime.
+  const badBucket = bucket('wont-work').allow('read')
+})
+```
 
 ```typescript !!
 import { api, bucket } from '@nitric/sdk'
@@ -113,7 +125,21 @@ Calling runtime methods in top-level code can lead to unintended side effects. N
 
 A working example:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
+
+```javascript !!
+import { api, bucket } from '@nitric/sdk'
+
+const files = bucket('files').allow('read')
+
+// ❌ This access will not work.
+const fileContents = files.file('example.txt').read()
+
+api('public').get('/files/:name', (ctx) => {
+  // ✅ This access will work.
+  const fileContents = files.file('example.txt').read()
+})
+```
 
 ```typescript !!
 import { api, bucket } from '@nitric/sdk'
@@ -239,7 +265,32 @@ When many services share a resource it's helpful to re-use resource declaration 
 
 For example:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
+
+```javascript !!
+// lib/resources.ts
+import { api, topic } from '@nitric/sdk'
+
+export const publicApi = api('public')
+
+export const updateTopic = topic('updates')
+
+// services/api.ts
+import { publicApi, updateTopic } from '../lib/resources'
+
+const publisher = updateTopic.allow('publish')
+
+publicApi.post('/update', async (ctx) => {
+  await publisher.publish({ test: 'message' })
+})
+
+// services/updates.ts
+import { updateTopic } from '../lib/resources'
+
+updateTopic.subscribe((ctx) => {
+  console.log('got the message')
+})
+```
 
 ```typescript !!
 // lib/resources.ts
@@ -411,7 +462,31 @@ void main() {
 
 Creating resource permissions in the same context as the resources can make those permissions leak. This is demonstrated in the below example:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
+
+```javascript !!
+// lib/resources.ts
+import { api, bucket } from '@nitric/sdk'
+
+export const publicApi = api('public')
+
+export const bucketOne = bucket('bucket-one').allow('read')
+export const bucketTwo = bucket('bucket-two').allow('read')
+
+// services/service-one.ts
+import { publicApi, bucketOne } from '../lib/resources'
+
+publicApi.get('bucket-one/file/:name', (ctx) => {
+  // do something with the file
+})
+
+// services/service-two.ts
+import { publicApi, bucketTwo } from '../lib/resources'
+
+publicApi.get('bucket-two/file/:name', (ctx) => {
+  // do something with the file
+})
+```
 
 ```typescript !!
 // lib/resources.ts

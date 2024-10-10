@@ -13,13 +13,20 @@ export interface TabProps extends PropsWithChildren {
   syncKey?: string
   value?: string
   ref?: React.Ref<HTMLDivElement>
+  onValueChange?: (value: string) => void
 }
 
 export interface TabItemProps extends PropsWithChildren {
   label: string
 }
 
-export const Tabs: React.FC<TabProps> = ({ children, value, ref, syncKey }) => {
+export const Tabs: React.FC<TabProps> = ({
+  children,
+  value,
+  onValueChange,
+  ref,
+  syncKey,
+}) => {
   const tabs = React.Children.toArray(children) as ReactElement<TabItemProps>[]
 
   const { set, get } = useTabs()
@@ -27,8 +34,8 @@ export const Tabs: React.FC<TabProps> = ({ children, value, ref, syncKey }) => {
   return (
     <BaseTabs
       defaultValue={tabs[0] ? tabs[0].props.label : undefined}
-      value={syncKey ? get(syncKey) : undefined}
-      onValueChange={syncKey ? (value) => set(syncKey, value) : undefined}
+      value={syncKey ? get(syncKey) : value}
+      onValueChange={syncKey ? (value) => set(syncKey, value) : onValueChange}
       ref={ref}
     >
       <TabsList className="relative mx-0 mb-2 mt-auto h-12 w-full rounded-b-none bg-transparent p-0">

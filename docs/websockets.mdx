@@ -16,7 +16,7 @@ Nitric provides support for serverless websockets. This feature allows you to co
 
 There are three events that must be defined to deploy a valid websocket implementation. These are `connect`, `disconnect` and `message`.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { websocket } from '@nitric/sdk'
@@ -107,7 +107,7 @@ socket.onMessage((ctx) async {
 Nitric connects your services to a websocket interface, but it is up to you to manage the connections. Nitric provides `kv`
 out of the box that can be used to do this or you can use any other store or database you like.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { websocket, kv } from '@nitric/sdk'
@@ -217,7 +217,7 @@ socket.onDisconnect((ctx) async {
 
 ## Sending Messages
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { websocket, kv } from '@nitric/sdk'

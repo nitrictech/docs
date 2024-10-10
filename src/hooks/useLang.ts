@@ -2,6 +2,7 @@ import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect } from 'react'
 import useParams from './useParams'
 import { set } from 'node_modules/cypress/types/lodash'
+import { languages } from '@/lib/constants'
 
 export type LanguageId =
   | 'javascript'
@@ -24,8 +25,6 @@ export type LanguageId =
   | 'shell'
   | 'sql'
   | 'plaintext'
-
-const languages = ['javascript', 'python', 'go', 'typescript', 'dart']
 
 const LOCAL_STORAGE_KEY = 'nitric.docs.selected.language'
 

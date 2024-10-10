@@ -1,19 +1,15 @@
-interface Language {
-  label: string
-  value: string
-  icon: string
+export const LANGUAGE_LABEL_MAP: Record<string, string> = {
+  javascript: 'JavaScript',
+  python: 'Python',
+  typescript: 'TypeScript',
+  go: 'Go',
+  dart: 'Dart',
+  java: 'JVM',
+  kotlin: 'Kotlin',
+  csharp: 'C#',
 }
 
-export const LANGUAGES: Language[] = [
-  {
-    label: 'Node.js',
-    value: 'node',
-    icon: '/img/node-logo.svg',
-  },
-  { label: 'Python', value: 'python', icon: '/img/python-logo.svg' },
-  { label: 'Java', value: 'java', icon: '/img/java-logo.svg' },
-  { label: 'Go', value: 'go', icon: '/img/go-logo.svg' },
-]
+export const languages = ['javascript', 'python', 'go', 'typescript', 'dart']
 
 export const isMobile =
   typeof navigator !== 'undefined' &&

@@ -35,25 +35,16 @@ export function CodeSwitcherSelect({
 } & HandlerProps) {
   const { currentLanguage, setCurrentLanguage } = useLang()
 
-  // Make sure the selected language is in the list of languages in this code block
-  const selectedLang =
-    !currentLanguage || highlighted.find((h) => h.lang === currentLanguage)
-      ? currentLanguage
-      : (() => {
-          console.warn(
-            `CodeSwitcher missing ${currentLanguage} example - defaulting to ${highlighted[0].lang}: ${highlighted[0].meta}`,
-          )
-          return highlighted[0].lang
-        })()
-
-  const selectedCode = highlighted.find((code) => code.lang === selectedLang)!
+  const selectedCode = highlighted.find(
+    (code) => code.lang === currentLanguage,
+  )!
 
   return (
     <>
       {showPanel && (
         <>
           <Select
-            value={selectedLang}
+            value={currentLanguage}
             onValueChange={(lang) => {
               // This is necessary to fix a ui update delay causing 200ms lag
               setTimeout(() => setCurrentLanguage(lang as LanguageId), 0)
@@ -80,7 +71,7 @@ export function CodeSwitcherSelect({
               'flex h-8 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
               'absolute right-3.5 top-[2.5px] z-10 w-24 bg-white/5 font-sans text-2xs font-medium text-zinc-400 ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5 md:hidden',
             )}
-            value={selectedLang}
+            value={currentLanguage}
           >
             {highlighted.map(({ lang }, index) => (
               <option key={index} value={lang} className="font-sans text-sm">

@@ -16,15 +16,9 @@ It's what's missing between applications and infrastructure automation.
 
 Oh, and it supports basically any language, like JavaScript, TypeScript, Python, Go, you name it.
 
-<div className="flex items-center flex-col gap-4 mt-10">
-
-<div className="not-prose">
-  <LanguageSwitch />
-</div>
-
 <div className="w-full">
 
-<CodeSwitcher className="xl:max-h-[300px]">
+<CodeSwitcher className="xl:max-h-[300px]" tabs>
 
 ```javascript !! title:services/api.js
 import { api } from '@nitric/sdk'
@@ -103,8 +97,6 @@ void main() {
 
 </div>
 
-</div>
-
 If you're familiar Nitric already, you might want to jump to the [Installation](/getting-started/installation), [Guides](/guides) or [Resources](/apis) sections. Otherwise, keep reading to learn more about Nitric.
 
 ---
@@ -128,9 +120,15 @@ You might have one service that handles everything, or a service for each route.
 
 Resources are the building blocks of your apps. They're the databases, queues, buckets, etc. that your services interact with. To request a resource, import the resource type and create one with a name.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !! title:services/example.js
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read', 'write', 'delete')
+```
+
+```typescript !! title:services/example.ts
 import { bucket } from '@nitric/sdk'
 
 const profiles = bucket('profiles').allow('read', 'write', 'delete')
@@ -262,7 +260,7 @@ Nitric uses this to find your services, then it turns each service into a contai
 
 So, a project structure might look something like this:
 
-<Tabs>
+<CodeTabs>
 
 <TabItem label="JavaScript">
 
@@ -272,6 +270,19 @@ example/
 ├── services/
 │   └── orders.js
 │   └── users.js
+└── package.json
+```
+
+</TabItem>
+
+<TabItem label="TypeScript">
+
+```bash
+example/
+├── nitric.yaml
+├── services/
+│   └── orders.ts
+│   └── users.ts
 └── package.json
 ```
 
@@ -319,7 +330,7 @@ example/
 
 </TabItem>
 
-</Tabs>
+</CodeTabs>
 
 ---
 
@@ -443,9 +454,18 @@ Here are some ways you can extend or escape Nitric.
 
 If you need to access a service in a way Nitric doesn't support, you can always use the provider's SDK directly. Code like this will always work:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+// Import the AWS SDK
+import { S3Client } from '@aws-sdk/client-s3'
+
+// Use it like you normally would
+const s3 = new S3Client({ region: 'us-east-1' })
+const { Contents } = await s3.listObjectsV2({ Bucket: 'my-bucket' })
+```
+
+```typescript !!
 // Import the AWS SDK
 import { S3Client } from '@aws-sdk/client-s3'
 

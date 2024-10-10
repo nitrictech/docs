@@ -12,9 +12,20 @@ Nitric allows you define named APIs, each with their own routes, middleware, han
 
 Here's an example of how to create a new API with Nitric:
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+import { api } from '@nitric/sdk'
+
+// each API needs a unique name
+const galaxyApi = api('far-away-galaxy-api')
+
+galaxyApi.get('/moon', async ({ req, res }) => {
+  res.body = "that's no moon, it's a space station."
+})
+```
+
+```typescript !!
 import { api } from '@nitric/sdk'
 
 // each API needs a unique name
@@ -83,9 +94,22 @@ For example, you can declare a route that handles `POST` requests using the `pos
   defined using decorators.
 </Note>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+import { getPlanetList, createPlanet } from 'planets'
+
+galaxyApi.get('/planets', async (ctx) => {
+  ctx.res.json(getPlanetList())
+})
+
+galaxyApi.post('/planets', async (ctx) => {
+  createPlanet(ctx.req.json())
+  ctx.res.status = 201
+})
+```
+
+```typescript !!
 import { getPlanetList, createPlanet } from 'planets'
 
 galaxyApi.get('/planets', async (ctx) => {
@@ -168,9 +192,19 @@ The path string used to declare routes can include named parameters. The values 
 
 <Note>Path parameters are denoted by a colon prefix `:`</Note>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+import { getPlanet } from 'planets'
+
+// create a dynamic route and extract the parameter `name`
+galaxyApi.get('/planets/:name', async (ctx) => {
+  const { name } = ctx.req.params
+  ctx.res.json(getPlanet(name))
+})
+```
+
+```typescript !!
 import { getPlanet } from 'planets'
 
 // create a dynamic route and extract the parameter `name`
@@ -232,9 +266,17 @@ galaxyApi.get("/planets/:name", (ctx) async {
 
 The response object provides `status` and `headers` properties you can use to return HTTP status codes and headers.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+// return a redirect response using status 301
+galaxyApi.get('/planets/alderaan', async (ctx) => {
+  ctx.res.status = 301
+  ctx.res.headers['Location'] = ['https://example.org/debris/alderaan']
+})
+```
+
+```typescript !!
 // return a redirect response using status 301
 galaxyApi.get('/planets/alderaan', async (ctx) => {
   ctx.res.status = 301
@@ -299,9 +341,24 @@ The security definition describes the kind of authentication to perform and the 
 
 Once a security definition is available it can be applied to the entire API or selectively to individual routes.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+import { api, oidcRule } from '@nitric/sdk'
+
+const defaultSecurityRule = oidcRule({
+  name: 'default',
+  audiences: ['https://test-security-definition/'],
+  issuer: 'https://dev-abc123.us.auth0.com',
+})
+
+const secureApi = api('main', {
+  // apply the security definition to all routes in this API.
+  security: [defaultSecurityRule()],
+})
+```
+
+```typescript !!
 import { api, oidcRule } from '@nitric/sdk'
 
 const defaultSecurityRule = oidcRule({
@@ -388,9 +445,25 @@ In addition to authentication, Nitric APIs can also be configured to perform aut
 
 Add the required scopes to the `security` object when applying a security definition.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+import { api, oidcRule } from '@nitric/sdk'
+
+const defaultSecurityRule = oidcRule({
+  name: 'default',
+  audiences: ['https://test-security-definition/'],
+  issuer: 'https://dev-abc123.us.auth0.com',
+})
+
+const secureApi = api('main', {
+  // apply the security definition to all routes in this API.
+  // add scopes to the rule to authorize
+  security: [defaultSecurityRule('user.read')],
+})
+```
+
+```typescript !!
 import { api, oidcRule } from '@nitric/sdk'
 
 const defaultSecurityRule = oidcRule({
@@ -481,9 +554,21 @@ Individual routes can have their own security rules which apply any available `s
 
 This allows you to selectively increase or decrease the security requirements for specific routes.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+galaxyApi.get('planets/unsecured-planet', async (ctx) => {}, {
+  // override top level security to remove security from this route
+  security: [],
+})
+
+galaxyApi.post('planets/secured-planet', async (ctx) => {}, {
+  // override top level security to require user.write scope to access
+  security: [customSecurityRule('user.write')],
+})
+```
+
+```typescript !!
 galaxyApi.get('planets/unsecured-planet', async (ctx) => {}, {
   // override top level security to remove security from this route
   security: [],
@@ -539,9 +624,20 @@ Behavior that's common to several APIs or routes can be applied using middleware
 
 In most of Nitric's supported languages middleware functions look nearly identical to handlers except for an additional parameter called `next`, which is the next middleware or handler to be called in the chain. By providing each middleware the next middleware in the chain it allows them to intercept requests, response and errors to perform operations like logging, decoration, exception handling and many other common tasks.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+async function validate(ctx, next) {
+  if (!ctx.req.headers['content-type']) {
+    ctx.res.status = 400
+    ctx.res.body = 'header Content-Type is required'
+    return ctx
+  }
+  return await next(ctx)
+}
+```
+
+```typescript !!
 async function validate(ctx, next) {
   if (!ctx.req.headers['content-type']) {
     ctx.res.status = 400
@@ -587,9 +683,18 @@ func validate(next apis.Handler) apis.Handler {
 
 Middleware defined at the API level will be called on every request to every route.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+import { api } from '@nitric/sdk'
+import { validate, logRequest } from '../middleware'
+
+const customersApi = api('customers', {
+  middleware: [logRequest, validate],
+})
+```
+
+```typescript !!
 import { api } from '@nitric/sdk'
 import { validate, logRequest } from '../middleware'
 
@@ -646,9 +751,24 @@ func main() {
 
 Middleware defined at the route level will only be called for that route.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
+import { api } from '@nitric/sdk'
+import { validate } from '../middleware'
+
+const customersApi = api('customers')
+
+const getAllCustomers = (ctx) => {}
+
+// Inline using .get()
+customersApi.get('/customers', [validate, getAllCustomers])
+
+// Using .route()
+customersApi.route('/customers').get([validate, getAllCustomers])
+```
+
+```typescript !!
 import { api } from '@nitric/sdk'
 import { validate } from '../middleware'
 
@@ -855,9 +975,19 @@ Nitric APIs are scoped to the project and can be referenced from multiple `servi
 
 Since resource names are unique across each Nitric project, you can access a resource in multiple locations by simply reusing it's name. Here's an example of services in different files serving different paths on the same API.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !! title:services/one.js
+import { api } from '@nitric/sdk'
+
+const accountsApi = api('accounts')
+
+accountsApi.get('/users/:id', async () => {
+  // your logic here
+})
+```
+
+```typescript !! title:services/one.js
 import { api } from '@nitric/sdk'
 
 const accountsApi = api('accounts')
@@ -910,9 +1040,19 @@ galaxyApi.get("/users/:id", (ctx) async {
 
 </CodeSwitcher>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !! title:services/two.js
+import { api } from '@nitric/sdk'
+
+const accountsApi = api('accounts')
+
+accountsApi.get('/orgs/:id', async () => {
+  // your logic here
+})
+```
+
+```typescript !! title:services/two.ts
 import { api } from '@nitric/sdk'
 
 const accountsApi = api('accounts')
@@ -976,9 +1116,15 @@ While reusing a name is useful, it can lead to errors due to typos or when the c
 
 Here is the same example enhanced to import a common API resource.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !! title:resources/index.js
+import { api } from '@nitric/sdk'
+
+export const accountsApi = api('accounts')
+```
+
+```typescript !! title:resources/index.ts
 import { api } from '@nitric/sdk'
 
 export const accountsApi = api('accounts')
@@ -1012,9 +1158,17 @@ final accountsApi = Nitric.api("accounts");
 
 </CodeSwitcher>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !! title:services/one.js
+import { accountsApi } from '../resources'
+
+accountsApi.get('/users/:id', async () => {
+  // your logic here
+})
+```
+
+```typescript !! title:services/one.ts
 import { accountsApi } from '../resources'
 
 accountsApi.get('/users/:id', async () => {
@@ -1064,9 +1218,17 @@ accountsApi.get("/users/:id", (ctx) async {
 
 </CodeSwitcher>
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !! title:services/two.js
+import { accountsApi } from '../resources'
+
+accountsApi.get('/orgs/:id', async () => {
+  // your logic here
+})
+```
+
+```typescript !! title:services/two.ts
 import { accountsApi } from '../resources'
 
 accountsApi.get('/orgs/:id', async () => {

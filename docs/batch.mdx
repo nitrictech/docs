@@ -68,7 +68,7 @@ batch-services:
 
 Within a Batch we create Job Definitions, by creating a new Job with a unique name and defining a handler function that will be executed when the job is submitted.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```typescript !!
 import { job, JobContext } from '@nitric/sdk'
@@ -138,7 +138,7 @@ void main() {
 
 Jobs may be submitted from Nitric `services` or other `batches` using the `submit` method on the job reference. When submitting a job you can provide a payload that will be passed to the job handler function.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import * as nitric from '@nitric/sdk'

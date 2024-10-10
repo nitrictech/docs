@@ -150,4 +150,6 @@ export { ImportCode } from '@/components/code/ImportCode'
 
 export { Tabs, TabItem } from '@/components/tabs/Tabs'
 
+export { CodeTabs } from '@/components/code/CodeTabs'
+
 // see if we need to remove these

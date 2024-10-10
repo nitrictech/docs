@@ -23,7 +23,7 @@ Nitric allows you to define named topics. When defining topics, you can give the
 
 Here's an example of how to create a topic with permissions to publish messages.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { topic } from '@nitric/sdk'
@@ -69,7 +69,7 @@ To send a message to a topic and notify all subscribers, use the `publish()` met
 
 The below example publishes a message to a topic called `user-created`.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { topic } from '@nitric/sdk'
@@ -133,7 +133,7 @@ To execute a function when new messages are published you can create subscribers
 
 The below code shows a subscription that responds to messages when new users are created.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { topic } from '@nitric/sdk'
@@ -227,7 +227,7 @@ Messages from a topic can be delivered more than once, but they should typically
 
 Usually checking for duplicate payloads or IDs is enough. When you receive an event you've seen before don't process it, skip straight to returning a `success` response from your subscriber.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { topic } from '@nitric/sdk'
@@ -332,7 +332,7 @@ Nitric allows you to define named queues. When defining queues, you can give the
 
 Here's an example of how to create a queue with permissions for enqueueing and dequeueing.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { queue } from '@nitric/sdk'
@@ -378,7 +378,7 @@ To send a message to a queue, use the `enqueue()` method on the queue reference.
 
 The below example sends a message to a queue called `transactions`.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { queue } from '@nitric/sdk'
@@ -439,7 +439,7 @@ await transactionQueue.enqueue(messages);
 
 Messages can also be sent in batches by providing an array.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { queue } from '@nitric/sdk'
@@ -525,7 +525,7 @@ By following this approach, you can ensure reliable message processing and minim
 
 The below example dequeues 10 messages using the `dequeue()` method, then acknowledges them as complete using the `complete()` method. You'll note that the service has permissions to dequeue messages.
 
-<CodeSwitcher>
+<CodeSwitcher tabs>
 
 ```javascript !!
 import { queue } from '@nitric/sdk'
