@@ -91,20 +91,7 @@ export const navigation: NavEntry[] = [
           },
           {
             title: 'Deployment',
-            items: [
-              {
-                title: 'Overview',
-                href: '/get-started/foundations/deployment',
-              },
-              {
-                title: 'Providers',
-                href: '/get-started/foundations/providers',
-              },
-              {
-                title: 'Stacks',
-                href: '/get-started/foundations/stacks',
-              },
-            ],
+            href: '/get-started/foundations/deployment',
           },
         ],
       },
