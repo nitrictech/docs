@@ -33,7 +33,6 @@ const Pre: React.FC<Props> = ({
   const { title } = meta(highlighted)
 
   let handlers = [callout, fold, collapse, collapseTrigger, collapseContent]
-  // TODO: Fix transitions, they currently break colours in the code when switching languages
   if (enableTransitions) {
     handlers = [...handlers, tokenTransitions]
   }
