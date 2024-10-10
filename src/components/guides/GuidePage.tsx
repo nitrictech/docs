@@ -29,7 +29,7 @@ const GuidePage: React.FC<Props> = ({ guides, allTags }) => {
       <Suspense>
         <GuideList
           guides={guides}
-          className="relative mx-2 my-4 w-full lg:mx-8 lg:my-10"
+          className="relative mx-2 my-4 w-full sm:px-8 lg:my-10"
         />
       </Suspense>
     </div>

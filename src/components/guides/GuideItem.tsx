@@ -29,7 +29,7 @@ const guide: React.FC<Props> = ({ guide, featured }) => {
         </p>
         <p
           className={cn(
-            'text-md mt-3 text-base text-foreground-light',
+            'text-md mt-3 text-base text-foreground dark:text-foreground-light',
             featured ? 'lg:text-md' : '',
           )}
         >
