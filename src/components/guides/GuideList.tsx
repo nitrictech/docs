@@ -28,17 +28,19 @@ const GuideList: React.FC<Props> = ({ className, guides }) => {
   const { searchParams } = useParams()
   const selectedTags = searchParams?.get('tags')?.split(',') || []
   const { currentLanguage } = useLang()
-  const filteredGuides = guides.filter((guide) => {
-    let include = true
+  const filteredGuides = guides
+    .filter((guide) => {
+      let include = true
 
-    if (isLangSlug(guide.slug)) {
-      include = guide.slug.startsWith(langPathMap[currentLanguage])
-    }
+      if (isLangSlug(guide.slug)) {
+        include = guide.slug.startsWith(langPathMap[currentLanguage])
+      }
 
-    if (!selectedTags.length) return include
+      if (!selectedTags.length) return include
 
-    return include && selectedTags.some((tag) => guide.tags?.includes(tag))
-  })
+      return include && selectedTags.some((tag) => guide.tags?.includes(tag))
+    })
+    .sort((a, b) => a.title.localeCompare(b.title))
 
   return filteredGuides.length === 0 ? (
     <div className={className}>
