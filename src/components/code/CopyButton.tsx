@@ -31,7 +31,7 @@ export function CopyButton({
         'group/button absolute right-3.5 top-2.5 z-10 h-8 rounded-md px-1.5 py-1 text-2xs font-medium backdrop-blur transition',
         copied
           ? 'bg-primary-400/10 ring-primary-400/20'
-          : 'bg-white/5 ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5',
+          : 'bg-white/5 ring-1 ring-inset ring-zinc-300/80 hover:bg-white/7.5 dark:bg-white/2.5 dark:ring-zinc-300/10 dark:hover:bg-white/5',
         'opacity-0 focus:opacity-100 group-hover:opacity-100 group-focus:opacity-100',
         className,
       )}

@@ -43,13 +43,13 @@ export const Tabs: React.FC<TabProps> = ({
           <TabsTrigger
             value={tab.props.label}
             key={tab.props.label}
-            className="group/tab relative h-12 data-[state=active]:bg-transparent data-[state=active]:text-primary dark:hover:text-zinc-200 dark:data-[state=active]:text-primary-300"
+            className="group/tab relative h-12 hover:text-zinc-600 data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none dark:hover:text-zinc-200 dark:data-[state=active]:text-primary-300"
           >
             {tab.props.label}
-            <div className="absolute inset-x-0 bottom-0 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100 dark:bg-primary-300" />
+            <div className="absolute inset-x-0 bottom-0 z-10 h-px bg-primary opacity-0 transition-opacity group-data-[state=active]/tab:opacity-100 dark:bg-primary-300" />
           </TabsTrigger>
         ))}
-        <div className="absolute inset-x-0 bottom-0 h-px bg-zinc-300/10" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-zinc-200 dark:bg-zinc-300/10" />
       </TabsList>
       {children}
     </BaseTabs>

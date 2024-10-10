@@ -20,7 +20,7 @@ Oh, and it supports basically any language, like JavaScript, TypeScript, Python,
 
 <CodeSwitcher className="xl:max-h-[300px]" tabs>
 
-```javascript !! title:services/api.js
+```javascript title:services/api.js
 import { api } from '@nitric/sdk'
 
 const main = api('main')
@@ -31,7 +31,7 @@ main.get('/hello/:name', async ({ req, res }) => {
 })
 ```
 
-```typescript !! title:services/api.ts
+```typescript title:services/api.ts
 import { api } from '@nitric/sdk'
 
 const main = api('main')
@@ -42,7 +42,7 @@ main.get('/hello/:name', async ({ req, res }) => {
 })
 ```
 
-```python !! title:services/example.py
+```python title:services/example.py
 from nitric.application import Nitric
 from nitric.resources import api
 from nitric.context import HttpContext
@@ -57,7 +57,7 @@ async def hello_world(ctx: HttpContext):
 Nitric.run()
 ```
 
-```go !! title:services/example/main.go
+```go title:services/example/main.go
 // !collapse(1:5) collapsed
 import (
   "context"
@@ -78,7 +78,7 @@ func main() {
 }
 ```
 
-```dart !! title:services/example.dart
+```dart title:services/example.dart
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {
