@@ -97,7 +97,9 @@ void main() {
 
 </div>
 
-If you're familiar Nitric already, you might want to jump to the [Installation](/get-started/installation), [Guides](/guides) or [Resources](/apis) sections. Otherwise, keep reading to learn more about Nitric.
+If you're already familiar with Nitric, you might want to jump to the [Installation](/get-started/installation), [Guides](/guides) or [Resources](/apis) sections. If you're new to Nitric, consider starting with the [Why Nitric](/foundations/why-nitric) page, or the [Quick Start](/get-started/quickstart) guide if you want to jump straight into the action.
+
+Otherwise, keep reading to learn more about the core elements of Nitric.
 
 ---
 
@@ -332,11 +334,13 @@ example/
 
 </CodeTabs>
 
+You can read more about how [Nitric Projects](/get-started/foundations/projects) work in the Foundations section.
+
 ---
 
 ## CLI
 
-Nitric has a CLI to help you create, manage, run and deploy your projects. We recommend installing it with a package manager:
+Nitric has a CLI to help you create, manage, run and deploy your projects. We recommend installing it with one of the options below:
 
 <InstallNitricTabs>
 
@@ -388,10 +392,10 @@ You can run your project locally with the `start` command.
 nitric start
 ```
 
-<Note>
-  Start also emulates the resources you requested, so you can test your app
-  locally. And provides a Dashboard UI to interact with the resources.
-</Note>
+Start also emulates the resources you requested, so you can test your app
+locally. It also provides a Dashboard UI to interact with the resources.
+
+You can read about Nitric's [Local Development](/get-started/local-development) features in the Foundations section.
 
 ### Deploy
 
@@ -404,14 +408,16 @@ nitric stack new
 nitric up
 ```
 
+Some providers deploy directly, others generate IaC files for existing tools
+(like HCL for Terraform). In the cases where IaC is generated you can use
+your preferred IaC tool to deploy (e.g. `terraform apply`).
+
 <Note>
-  Some providers deploy directly, others generate IaC files for existing tools
-  (like HCL for Terraform). In the cases where IaC is generated you use the
-  chosen IaC tool to deploy (e.g. `terraform apply`).
-
-Currently, all Pulumi providers deploy directly, while Terraform providers generate IaC.
-
+  Currently, all Pulumi providers deploy directly, while Terraform providers
+  generate IaC.
 </Note>
+
+You can read more about [Nitric Providers](/get-started/foundations/providers) in the Foundations section.
 
 ### Tear Down
 
@@ -425,6 +431,8 @@ nitric down
   If you used a provider that generates IaC, use the IaC tool to tear down (e.g.
   `terraform destroy`).
 </Note>
+
+We recommend reading more about [Nitric Deployments](/get-started/foundations/deployments) in the Foundations section.
 
 ---
 
