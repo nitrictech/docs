@@ -12,7 +12,7 @@ Providers are separate plugins comprised of two components—a Deployment Engine
 
 Applications built with Nitric declare resources, services, and permissions directly in the application code. The following example defines an API named `main`, a bucket named `images`, and permissions for the service to `read` and `write` from the bucket.
 
-```js {{ tag: 'services/example.js' }}
+```js title:services/example.js
 import { api, bucket } from '@nitric/sdk'
 
 const images = bucket('images').allow('read', 'write')

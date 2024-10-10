@@ -83,7 +83,7 @@ npm install uuid
 
 Applications built with Nitric can contain many APIs, let's start by adding one to this project to serve as the public endpoint. Create a file named `profiles.ts` in the services directory and add the following code to that file.
 
-```javascript {{ tag: "services/profiles.ts" }}
+```javascript title:services/profiles.ts
 import { api, kv } from '@nitric/sdk'
 import { v4 as uuid } from 'uuid'
 
@@ -107,7 +107,7 @@ Here we're creating an API named `public` and key value store named `profiles`, 
 
 We will need some helper functions to serialize and deserialize our profiles for the keyvalue store.
 
-```javascript {{ tag: "services/profiles.ts" }}
+```javascript title:services/profiles.ts
 // Helper function to get current profiles
 async function getProfiles() {
   try {
@@ -141,7 +141,7 @@ Next we will add features that allow our API consumers to work with profile data
   prefer. For simplicity we'll group them together in this guide.
 </Note>
 
-```javascript {{ tag: "services/profiles.ts" }}
+```javascript title:services/profiles.ts
 profileApi.post('/profiles', async (ctx) => {
   let id = uuid()
   const { name, age, homeTown } = ctx.req.json()
@@ -164,7 +164,7 @@ profileApi.post('/profiles', async (ctx) => {
 
 ### Retrieve a profile with GET
 
-```javascript {{ tag: "services/profiles.ts" }}
+```javascript title:services/profiles.ts
 profileApi.get('/profiles/:id', async (ctx) => {
   const { id } = ctx.req.params
 
@@ -187,7 +187,7 @@ profileApi.get('/profiles/:id', async (ctx) => {
 
 ### Remove a profile with DELETE
 
-```javascript {{ tag: "services/profiles.ts" }}
+```javascript title:services/profiles.ts
 profileApi.delete('/profiles/:id', async (ctx) => {
   const { id } = ctx.req.params
   try {

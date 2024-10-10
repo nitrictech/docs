@@ -39,7 +39,7 @@ The project is split into two components:
 
 Since we're using TypeScript we've defined types for tasks and the api request/response payloads.
 
-```typescript {{ tag: "todo-api/types.ts" }}
+```typescript title:todo-api/types.ts
 /* Base Types */
 export interface Task {
   id: string
@@ -73,7 +73,7 @@ export type TaskPatchRequest = { completed: boolean }
 
 Apps built with Nitric define resources in code, you can write this in the root of any `.js` or `.ts` file, but for organization we recommend putting them together. So let's start by defining the resources we'll need to support our API in a `resources` directory.
 
-```typescript {{ tag: "todo-api/resources/apis.ts" }}
+```typescript title:todo-api/resources/apis.ts
 import { api } from '@nitric/sdk'
 
 export const taskListApi = api('taskList')
@@ -81,7 +81,7 @@ export const taskListApi = api('taskList')
 
 We also want a key/value store to store task lists.
 
-```typescript {{ tag: "todo-api/resources/stores.ts" }
+```typescript title:todo-api/resources/stores.ts"
 import { kv } from '@nitric/sdk'
 import { TaskList } from 'types'
 
@@ -92,7 +92,7 @@ export const taskLists = kv<TaskList>('taskLists')
 
 Next, we setup API routes, these can remain as empty functions until we're ready to fill them in.
 
-```typescript {{ tag: "todo-api/functions/tasks.ts" }}
+```typescript title:todo-api/functions/tasks.ts
 import { taskListApi } from '../resources/apis.ts';
 
 taskListApi.get("/:listid/:id", async (ctx) => {});      // Get task with [id]
@@ -106,7 +106,7 @@ taskListApi.delete("/:listid/:id", async (ctx) => {});   // Delete task
 
 Now we can import the task list key/value store and request permissions that allow this service to access it.
 
-```typescript {{ tag: "todo-api/functions/tasks.ts" }}
+```typescript title:todo-api/functions/tasks.ts
 import { taskListCol } from '../resources/stores.ts'
 
 const taskLists = taskListCol.allow('set', 'get', 'delete')
@@ -116,7 +116,7 @@ With access to the key/value store, we can start adding tasks and task lists.
 
 ### Create a task list
 
-```typescript {{ tag: "todo-api/functions/tasks.ts" }}
+```typescript title:todo-api/functions/tasks.ts
 taskListApi.post('/', async (ctx) => {
   const { name, tasks } = ctx.req.json() as TaskListPostRequest
 
@@ -156,7 +156,7 @@ taskListApi.post('/', async (ctx) => {
 
 We can now accept task list ids and use them to add new tasks under that list.
 
-```typescript {{ tag: "todo-api/functions/tasks.ts" }}
+```typescript title:todo-api/functions/tasks.ts
 taskListApi.post('/:listid', async (ctx) => {
   const { listid } = ctx.req.params
   const task = ctx.req.json() as TaskPostRequest
@@ -206,7 +206,7 @@ taskListApi.post('/:listid', async (ctx) => {
 
 ### Retrieve a task with filters
 
-```typescript {{ tag: "todo-api/functions/tasks.ts" }}
+```typescript title:todo-api/functions/tasks.ts
 // Get all tasks from a task list, with filters
 taskListApi.get('/:listid', async (ctx) => {
   const { listid } = ctx.req.params
@@ -247,7 +247,7 @@ taskListApi.get('/:listid', async (ctx) => {
 
 ### Retrieve a task from a task list
 
-```typescript {{ tag: "todo-api/functions/tasks.ts" }}
+```typescript title:todo-api/functions/tasks.ts
 taskListApi.get('/:listid/:id', async (ctx) => {
   const { listid, id } = ctx.req.params
 
@@ -267,7 +267,7 @@ taskListApi.get('/:listid/:id', async (ctx) => {
 
 ### Update a task
 
-```typescript {{ tag: "todo-api/functions/tasks.ts" }}
+```typescript title:todo-api/functions/tasks.ts
 taskListApi.patch('/:listid/:id', async (ctx) => {
   const { listid: listId, id } = ctx.req.params
   const { completed } = ctx.req.json() as ToggleRequest
@@ -291,7 +291,7 @@ taskListApi.patch('/:listid/:id', async (ctx) => {
 
 ### Delete a task
 
-```typescript {{ tag: "todo-api/functions/tasks.ts" }}
+```typescript title:todo-api/functions/tasks.ts
 taskListApi.delete('/:listid/:id', async (ctx) => {
   const { listid: listId, id } = ctx.req.params
 
@@ -340,7 +340,7 @@ mv web/.env.example web/.env
 
 Within the `next.config.js` you should have rewrites defined to proxy between your universal Next.js API route and your Nitric APIs. It takes the `API_BASE_URL` variable which is defined in the `.env` file.
 
-```javascript {{ tag: "web/next.config.js" }}
+```javascript title:web/next.config.js
 module.exports = {
   reactStrictMode: true,
   api: {

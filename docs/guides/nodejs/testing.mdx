@@ -314,7 +314,7 @@ We can add another test case for hitting the `POST /:name` route. This will need
   Otherwise, the bucket test will not be run.
 </Note>
 
-```javascript {{ tag: "tests/integration.test.ts" }}
+```javascript title:tests/integration.test.ts
 import supertest from 'supertest';
 import assert from 'assert';
 import { imageBucket } from '../resources/buckets';
@@ -398,7 +398,7 @@ The first step is to ensure the application is deployed before running our tests
 
 Now we can test against the deployed API. To do this we need to swap out our supertest agent host from the `localhost` endpoint to the deployed endpoint. This new endpoint will look something like this:
 
-```javascript {{ tag: "tests/integration.test.js" }}
+```javascript title:tests/integration.test.js
 const api = request('https://xxxx.us-east-1.amazonaws.com')
 ```
 

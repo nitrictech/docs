@@ -44,7 +44,7 @@ To begin our customization, we will start adding configuration to this module.
 
 Add the following at the end of `aws/deploytf/.nitric/modules/bucket/main.tf`:
 
-```hcl {{ tag: 'aws/deploytf/.nitric/modules/bucket/main.tf' }}
+```hcl title:aws/deploytf/.nitric/modules/bucket/main.tf
 # AWS S3 bucket server-side encryption configuration
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption" {
   bucket = aws_s3_bucket.bucket.bucket
@@ -90,7 +90,7 @@ region: us-east-2
 
 Because the [Terraform providers](/reference/providers/terraform) are in preview, you'll also need to enable `beta-providers` in your Nitric project by adding the following to your project's nitric.yaml file:
 
-```yaml {{ tag: 'nitric.yaml' }}
+```yaml title:nitric.yaml
 preview:
   - beta-providers
 ```
