@@ -142,12 +142,15 @@ Future<List<int>> getReceiptDoc(String filename) async {
 
 </CodeSwitcher>
 
-Code like this makes very clear demands of the environment it expects to run in:
+Code like very clearly sets up a list of implicit expectations of the environment it runs in:
 
 - I need a bucket to be available
 - I need to be able to read objects from that bucket
 - The bucket must be an AWS S3 bucket
-- I need to know the ARN/Name of the bucket
+- I expect the S3 API to be accessible (networking)
+- I need to know the name of the bucket
+- I expect the bucket name to be provided via an environment variable
+- The environment variable must be named `RECEIPT_DOCUMENTS_BUCKET`
 
 The problem is that these requirements are implicit. They're hidden throughout the code and for non-trivial apps it's challenging to collect them all and be sure the requirements are met.
 
