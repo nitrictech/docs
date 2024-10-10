@@ -1,11 +1,7 @@
 'use client'
 
 import React from 'react'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '../ui/collapsible'
+import { Collapsible, CollapsibleTrigger } from '../ui/collapsible'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
 import { NavLink } from './NavLink'
@@ -32,7 +28,7 @@ const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className={cn('space-y-2 pl-2', className)}
+      className={cn('group/nav-collapse space-y-2 pl-2', className)}
     >
       <CollapsibleTrigger asChild>
         <Button
@@ -51,7 +47,10 @@ const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
           <ChevronDownIcon className={cn('h-4 w-4', isOpen && 'rotate-180')} />
         </Button>
       </CollapsibleTrigger>
-      <CollapsibleContent className="relative mt-2 space-y-2">
+      <div
+        hidden={!isOpen}
+        className="relative mt-2 space-y-2 overflow-hidden group-data-[state='closed']/nav-collapse:h-0 group-data-[state='open']/nav-collapse:h-auto"
+      >
         <ul role="list">
           {items.map((entry, idx) =>
             'href' in entry ? (
@@ -79,7 +78,7 @@ const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
             ),
           )}
         </ul>
-      </CollapsibleContent>
+      </div>
     </Collapsible>
   )
 }
