@@ -97,7 +97,7 @@ void main() {
 
 </div>
 
-If you're familiar Nitric already, you might want to jump to the [Installation](/get-started/installation), [Guides](/guides) or [Resources](/apis) sections. Otherwise, keep reading to learn more about Nitric.
+If you're familiar Nitric already, you might want to jump to the [Installation](/getting-started/installation), [Guides](/guides) or [Resources](/apis) sections. Otherwise, keep reading to learn more about Nitric.
 
 ---
 
@@ -112,7 +112,7 @@ services:
     start: npm run dev:services $SERVICE_PATH
 ```
 
-You might have one service that handles everything, or a service for each route. It's up to you. Every matched service becomes a container, allowing them to run and scale independently.
+You might have one service that handles everything, or a service for each route. It's up to you. Every matched service becomes a container, allowing them run and scale independently.
 
 ---
 
@@ -153,7 +153,9 @@ import (
 func main() {
 	profiles, _ := nitric.NewBucket("profiles").Allow(nitric.BucketRead, nitric.BucketWrite, nitric.BucketDelete)
 
-	nitric.Run()
+	if err := nitric.Run(); err != nil {
+		fmt.Println(err)
+	}
 }
 ```
 
@@ -367,7 +369,7 @@ curl -L "https://nitric.io/install?version=latest" | bash
 
 <Note>
   Nitric has a few dependencies, like Docker, which you can read about in the
-  [Installation](/get-started/installation) section.
+  [Installation](/getting-started/installation) section.
 </Note>
 
 ### New
@@ -387,9 +389,8 @@ nitric start
 ```
 
 <Note>
-  Start also emulates the resources you requested, so you can [test your app
-  locally](/get-started/foundations/projects/local-development). And provides a
-  Dashboard UI to interact with the resources.
+  Start also emulates the resources you requested, so you can test your app
+  locally. And provides a Dashboard UI to interact with the resources.
 </Note>
 
 ### Deploy
@@ -511,26 +512,47 @@ print(response.contents);
 
 </CodeSwitcher>
 
-### Overriding
+### Manual Install
 
-If you need to change how Nitric deploys a resources or how it interacts with a service at runtime, you can [extend or modify a provider](/providers/custom/extend).
+Alternatively, you can download pre-compiled binaries from the [releases](https://github.com/nitrictech/cli/releases) page and install them manually.
 
-<Note>
-  For example, here's a [project that swaps SNS for
-  EventBridge](https://github.com/jyecusch/iac-ifc-comparison) on AWS.
-</Note>
+## Update to the latest version
 
-### Full Customization
+<InstallNitricTabs>
 
-If you need to deploy to a new platform or new set of services that Nitric doesn't support, you can [build your own provider](/providers/custom/create). This is a bit more advanced, but it's the ultimate escape hatch.
+<TabItem label="macOS">
 
-The included providers are written in Go and built using Terraform or Pulumi, but you can use any language or tool you like.
+```bash
+brew upgrade nitric
+```
 
-### Additional Resources
+</TabItem>
 
-If you need to use a service/resource that Nitric doesn't support, you do that like you always would. Nitric doesn't get in the way of you using the cloud, it just makes it easier.
+<TabItem label="Windows">
+
+```bash
+scoop update nitric
+```
+
+</TabItem>
+
+<TabItem label="Linux">
+
+```bash
+curl -L "https://nitric.io/install?version=latest" | bash
+```
+
+</TabItem>
+
+</InstallNitricTabs>
+
+You can easily check which version you're on by running `nitric version`.
+
+## Release notes
+
+You can view the CLI release notes on our [CLI GitHub Releases page](https://github.com/nitrictech/cli/releases).
 
 ## What's next
 
-- Start building with the [quick start guide](/get-started/quickstart).
-- Checkout out the [foundations](/get-started/foundations/why-nitric) section for a more detailed introduction to Nitric.
+- Start building with the [quick start guide](./get-started/quickstart).
+- Checkout out the [foundations](/foundations/why-nitric) section for a more detailed introduction to Nitric.

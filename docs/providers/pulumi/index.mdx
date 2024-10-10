@@ -4,7 +4,7 @@ description: 'How Nitric integrates with Pulumi'
 
 # Pulumi
 
-Nitric's cloud deployments are built on a pluggable interface known as [providers](/reference/providers). All of Nitric's standard providers [AWS](/reference/providers/aws), [GCP](/reference/providers/gcp) and [Azure](/reference/providers/azure) are powered by [Pulumi](https://pulumi.com).
+Nitric's cloud deployments are built on a pluggable interface known as [providers](/providers). All of Nitric's standard providers [AWS](/providers/pulumi/aws), [GCP](/providers/pulumi/gcp) and [Azure](/reference/providers/azure) are powered by [Pulumi](https://pulumi.com).
 
 The reason for using Pulumi is that it provides a powerful automation API that allows Nitric to define, deploy, and manage cloud infrastructure directly, without transpiling into another Infrastructure-as-Code language first. This allows Nitric to automate infrastructure deployments more efficiently, without additional steps or tooling.
 
@@ -12,8 +12,8 @@ The reason for using Pulumi is that it provides a powerful automation API that a
   The Standard Providers (Pulumi) are recommended if you're new to Nitric or
   Infrastructure-as-Code in general. However, if you have a specific need to use
   another IfC tool, such as Terraform, those providers are [also
-  available](./terraform) or you can [build your
-  own](./custom/building-custom-provider).
+  available](/providers/terraform) or you can [build your
+  own](/providers/custom/create).
 </Note>
 
 ## How Nitric integrates with Pulumi
@@ -24,7 +24,7 @@ Despite these differences, it does not change how you integrate Nitric with Pulu
 
 ### Get the Nitric CLI and scaffold a new project
 
-You can get the Nitric CLI by following the instructions [here](/getting-started/installation). Once its set up you can scaffold a new project by running:
+You can get the Nitric CLI by following the instructions [here](/get-started/installation). Once its set up you can scaffold a new project by running:
 
 ```bash
 nitric new

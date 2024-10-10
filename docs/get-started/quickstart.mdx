@@ -37,7 +37,7 @@ curl -L "https://nitric.io/install?version=latest" | bash
 
 <Note>
   For more installation options and dependency information review the full
-  [installation guide](/get-started/installation).
+  [installation guide](/getting-started/installation).
 </Note>
 
 ## Using the `new` command
@@ -118,8 +118,8 @@ npm install
 cd hello-world
 
 # We recommend using [Pipenv](https://pipenv.pypa.io/en/latest/) for dependency and virtual environments
-# We have included it in our python templates.
-# Installation instructions: https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv
+#   We have included it in our python templates.
+#   Installation instructions: https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv
 pipenv install --dev
 ```
 
@@ -226,7 +226,7 @@ Your project should now look like this:
 
 ## Running your app
 
-Nitric provides a local development environment offering emulated versions of cloud services, suitable for local development/testing. You can use the Nitric CLI to start your application and the local environment using the `nitric start` command.
+Nitric provides a local development server offering emulated versions of cloud services, suitable for local development/testing. You can use the Nitric CLI to start the local server using the `nitric start` command.
 
 ```bash
 nitric start
@@ -234,27 +234,47 @@ nitric start
 
 Nitric will automatically run your application using the service start script, this is located in your `nitric.yaml`.
 
-```yaml title:nitric.yaml
-name: example
-services:
-  - match: services/*.ts
-    start: npm run dev:services $SERVICE_PATH
-```
+After your service is running, it will register itself with the server. All the APIs are locally hosted on their own port, which will be displayed in the CLI output as `http://localhost:<port_number>`.
 
-All the APIs are locally hosted on their own port, which will be displayed in the CLI output as `http://localhost:<port_number>`.
+The output will also show the local dashboard URL, the dashboard will automatically refresh with API details and other useful tools for building your application.
 
-The output will also show the [local dashboard](/get-started/foundations/projects/local-development#local-dashboard) URL, the dashboard will automatically refresh with details about your resources and tools to interact with each of them.
-
-Once the API is registered, you can test the API using any HTTP client, your browser, or the [local dashboard](/get-started/foundations/projects/local-development#local-dashboard):
+Once the API is registered, you can test the API using any HTTP client, your browser, or the [local dashboard](/getting-started/local-dashboard):
 
 ```bash
 curl http://localhost:4001/hello/John
 Hello John
 ```
 
+## Your local dashboard
+
+Access the [local development dashboard](./local-dashboard) by opening the URL and port displayed in the CLI output.
+
+The development dashboard is a powerful tool designed to help you move faster when developing new features. With the API explorer, you can easily access automatically generated endpoints and path params. Additionally, the Schedules Explorer allows you to trigger your schedules with ease, making it easier than ever to stay on top of your tasks. Make the most of your local development process with this essential tool.
+
+Watch this brief video to see the development dashboard in action. You'll get a firsthand look at how the dashboard streamlines your development process by showcasing the [debugging](/guides/nodejs/debugging) of APIs and schedules in the popular code editor, VS Code.
+
+<div>
+  <div className="video-container">
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/cjbg-klgDNM"
+      title="YouTube video player"
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen
+    />
+  </div>
+</div>
+
+<Note>
+  The video currently showcases v0 of the local dashboard and will be updated
+  soon.
+</Note>
+
 ## Making updates
 
-At this point, you can start making changes to services. Start by opening the `hello` service in your editor and adding a new route to the API:
+Nitric's language templates enable hot-reloading by default, so at this point, you can start making changes to services and see what happens.
+
+Start by opening the `hello` service in your editor and adding a new route to the API, then save, and execute the file:
 
 <CodeSwitcher tabs>
 
@@ -377,17 +397,17 @@ void main() {
 
 <Note>
   Depending on the language you choose the template may support hot-reloading,
-  if not you'll need to restart the `nitric start` command.
+  if not you'll need to restart the service.
 </Note>
 
-After making the change, the new route will be registered and you can test it:
+After saving the file, the new route will be registered and you can test it:
 
 ```bash
 curl http://localhost:4001/goodbye/John
 Goodbye John
 ```
 
-When you're finished testing, you can stop the application.
+When you're finished testing, you can stop your application and the Nitric Server.
 
 ## Deploying the app
 
@@ -395,13 +415,13 @@ Now that you've implemented a basic API and tested that it works, you can deploy
 
 The first step is to set up your credentials for the cloud provider.
 
-- [AWS](/providers/pulumi/aws)
-- [Azure](/providers/pulumi/azure)
-- [GCP](/providers/pulumi/gcp)
+- [AWS](/reference/providers/aws)
+- [Azure](/reference/providers/azure)
+- [GCP](/reference/providers/gcp)
 
-You'll then need to create a [stack](/get-started/foundations/deployment#stacks) that represents your project and a deployment target.
+You'll then need to create a [stack](/reference/cli#stacks) that represents your project and a deployment target.
 
-The `nitric stack new` command below will create a stack named `dev` that uses the `aws` provider.
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
 ```bash
 nitric stack new dev aws
@@ -426,4 +446,5 @@ nitric down
 # What's next?
 
 - Learn more about [APIs](/apis)
+- See other features in the [introduction](/#building-blocks)
 - Learn more about the [foundations](/foundations/projects) of Nitric

@@ -9,7 +9,7 @@ Nitric's cloud portability is enabled through plugin interfaces known as [provid
 <Note>
   Terraform providers are currently in preview, they're not recommended for
   production deployments. We recommend using the [Standard
-  Provider](/reference/providers) for production deployments until the Terraform
+  Provider](/providers/pulumi) for production deployments until the Terraform
   providers are stable.
 </Note>
 
@@ -23,13 +23,12 @@ The main benefits of using the Nitric Terraform provider are:
 - **Terraform Ecosystem**: Leverage the existing Terraform ecosystem for managing your cloud infrastructure.
 - **Customization**: Customize your cloud infrastructure using Terraform modules and resources.
 
-You're also able to [create your own Terraform provider](/reference/providers/custom/building-custom-provider) for Nitric, this is the best option when you have existing Terraform Modules and expertise you want to reuse to deploy Nitric applications.
+You're also able to [create your own Terraform provider](/providers/custom/create) for Nitric, this is the best option when you have existing Terraform Modules and expertise you want to reuse to deploy Nitric applications.
 
 <Note>
   If you're new to Terraform and/or Nitric, we recommend starting with a
-  [standard Nitric provider](/reference/providers/pulumi). The Terraform
-  provider is more advanced and requires a foundational understanding of
-  Terraform.
+  [standard Nitric provider](/providers/pulumi). The Terraform provider is more
+  advanced and requires a foundational understanding of Terraform.
 </Note>
 
 ## Enabling Nitric Terraform Providers
@@ -50,7 +49,7 @@ preview:
 
 To get started with the Nitric Terraform provider, you'll need to install the Nitric CLI and the Terraform CLI. You can find the installation instructions for both in the [Nitric CLI](/reference/cli) and [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) documentation.
 
-Once you have the Nitric CLI and Terraform CLI installed, you can create a new Nitric project as usual, if you're new to Nitric, check out the [Getting Started](/getting-started/quickstart) guide.
+Once you have the Nitric CLI and Terraform CLI installed, you can create a new Nitric project as usual, if you're new to Nitric, check out the [Getting Started](/get-started/quickstart) guide.
 
 To use the Nitric Terraform provider, you'll need to create a new Nitric stack that uses the Terraform provider. You can do this by running the following command:
 
