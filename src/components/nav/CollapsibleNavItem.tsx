@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useId } from 'react'
 import { Collapsible, CollapsibleTrigger } from '../ui/collapsible'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
@@ -17,6 +17,9 @@ interface Props {
 const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
   const pathname = usePathname()
 
+  // overriding radix id as we don't need their CollapsibleContent component
+  const navItemId = useId()
+
   const { title, items, icon: Icon } = group
 
   const isActive = items.some(
@@ -30,7 +33,7 @@ const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
       onOpenChange={setIsOpen}
       className={cn('group/nav-collapse space-y-2 pl-2', className)}
     >
-      <CollapsibleTrigger asChild>
+      <CollapsibleTrigger asChild aria-controls={navItemId}>
         <Button
           variant="link"
           className={cn(
@@ -47,7 +50,9 @@ const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
           <ChevronDownIcon className={cn('h-4 w-4', isOpen && 'rotate-180')} />
         </Button>
       </CollapsibleTrigger>
+
       <div
+        id={navItemId}
         hidden={!isOpen}
         className="relative mt-2 space-y-2 overflow-hidden group-data-[state='closed']/nav-collapse:h-0 group-data-[state='open']/nav-collapse:h-auto"
       >
