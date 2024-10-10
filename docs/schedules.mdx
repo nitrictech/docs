@@ -32,6 +32,20 @@ schedule('send-reminder').cron('0 22 * * 1-5', async (ctx) => {
 })
 ```
 
+```typescript !!
+import { schedule } from '@nitric/sdk'
+
+// Run every 5 minutes
+schedule('process-transactions').every('5 minutes', async (ctx) => {
+  console.log(`processing at ${new Date().toLocaleString()}`)
+})
+
+// Run at 22:00 Monday through Friday.
+schedule('send-reminder').cron('0 22 * * 1-5', async (ctx) => {
+  console.log(`reminder at ${new Date().toLocaleString()}`)
+})
+```
+
 ```python !!
 from nitric.resources import schedule
 from nitric.resources import Nitric
@@ -104,6 +118,22 @@ Here are some example rate-based schedules:
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { schedule } from '@nitric/sdk'
+
+schedule('process-often').every('5 minutes', async (ctx) => {
+  console.log(`processing at ${new Date().toLocaleString()}`)
+})
+
+schedule('process-sometimes').every('2 hours', async (ctx) => {
+  console.log(`processing at ${new Date().toLocaleString()}`)
+})
+
+schedule('process-rarely').every('30 days', async (ctx) => {
+  console.log(`processing at ${new Date().toLocaleString()}`)
+})
+```
+
+```typescript !!
 import { schedule } from '@nitric/sdk'
 
 schedule('process-often').every('5 minutes', async (ctx) => {
@@ -207,6 +237,20 @@ Here are some example cron-based schedules:
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { schedule } from '@nitric/sdk'
+
+// every 15 minutes
+schedule('check for updates').cron('0/15 * * * *', async (ctx) => {
+  console.log('checking for updates')
+})
+
+// at 1:00am on the 1st of every month
+schedule('delete stale data').cron('0 1 1 * *', async (ctx) => {
+  console.log('clearing data')
+})
+```
+
+```typescript !!
 import { schedule } from '@nitric/sdk'
 
 // every 15 minutes

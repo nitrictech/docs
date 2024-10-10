@@ -32,6 +32,12 @@ import { bucket } from '@nitric/sdk'
 const profiles = bucket('profiles').allow('read', 'write', 'delete')
 ```
 
+```typescript !!
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read', 'write', 'delete')
+```
+
 ```python !!
 from nitric.resources import bucket
 from nitric.application import Nitric
@@ -86,6 +92,14 @@ const profiles = bucket('profiles').allow('read')
 const profilePicture = profiles.file('users/bruce-wayne/profile.png')
 ```
 
+```typescript !!
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read')
+
+const profilePicture = profiles.file('users/bruce-wayne/profile.png')
+```
+
 ```python !!
 from nitric.resources import bucket
 from nitric.application import Nitric
@@ -118,6 +132,18 @@ To list all files in a bucket, use the `files()` method on the bucket reference.
 <Note>A network call is made when you list files using `files()`</Note>
 
 <CodeSwitcher tabs>
+
+```javascript !!
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read')
+
+const files = await profiles.files()
+
+files.forEach((file) => {
+  console.log(file.name)
+})
+```
 
 ```typescript !!
 import { bucket } from '@nitric/sdk'
@@ -202,6 +228,14 @@ const profiles = bucket('profiles').allow('read')
 const image = await profiles.file('users/bruce-wayne/profile.png').read()
 ```
 
+```typescript !!
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read')
+
+const image = await profiles.file('users/bruce-wayne/profile.png').read()
+```
+
 ```python !!
 from nitric.resources import bucket
 from nitric.application import Nitric
@@ -257,6 +291,16 @@ You can write the contents of a file directly from your application code using t
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('write')
+
+const profileImage = 'image data'
+
+await profiles.file('users/bruce-wayne/profile.png').write(profileImage)
+```
+
+```typescript !!
 import { bucket } from '@nitric/sdk'
 
 const profiles = bucket('profiles').allow('write')
@@ -326,6 +370,14 @@ const profiles = bucket('profiles').allow('delete')
 await profiles.file('users/bruce-wayne/profile.png').delete()
 ```
 
+```typescript !!
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('delete')
+
+await profiles.file('users/bruce-wayne/profile.png').delete()
+```
+
 ```python !!
 from nitric.resources import bucket
 from nitric.application import Nitric
@@ -381,6 +433,21 @@ You have the option to customize the expiration time of the URL by specifying a 
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles').allow('read', 'write')
+
+// Get pre-signed URLs for downloading or uploading
+const downloadUrl = await profiles.file('profile.png').getDownloadUrl({
+  expiry: 3600, // Expiry defaults to 600 (10 minutes)
+})
+
+const uploadUrl = await profiles.file('profile.png').getUploadUrl({
+  expiry: 3600, // Expiry defaults to 600 (10 minutes)
+})
+```
+
+```typescript !!
 import { bucket } from '@nitric/sdk'
 
 const profiles = bucket('profiles').allow('read', 'write')
@@ -474,6 +541,17 @@ profiles.on('write', '/users/images', (ctx) => {
 })
 ```
 
+```typescript !!
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles')
+
+// Filter for 'write' events for files starting with '/users/images'
+profiles.on('write', '/users/images', (ctx) => {
+  console.log(`new profile image for ${ctx.req.key} was created`)
+})
+```
+
 ```python !!
 from nitric.resources import bucket
 from nitric.application import Nitric
@@ -528,6 +606,17 @@ If we instead wanted to trigger the function whenever any file was deleted from 
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { bucket } from '@nitric/sdk'
+
+const profiles = bucket('profiles')
+
+// Filter for 'delete' events for any file
+profiles.on('delete', '*', (ctx) => {
+  console.log(`${ctx.req.key} was deleted`)
+})
+```
+
+```typescript !!
 import { bucket } from '@nitric/sdk'
 
 const profiles = bucket('profiles')

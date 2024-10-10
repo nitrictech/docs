@@ -31,6 +31,12 @@ import { topic } from '@nitric/sdk'
 const userCreatedTopic = topic('user-created').allow('publish')
 ```
 
+```typescript !!
+import { topic } from '@nitric/sdk'
+
+const userCreatedTopic = topic('user-created').allow('publish')
+```
+
 ```python !!
 from nitric.resources import topic
 from nitric.application import Nitric
@@ -72,6 +78,16 @@ The below example publishes a message to a topic called `user-created`.
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { topic } from '@nitric/sdk'
+
+const userCreatedTopic = topic('user-created').allow('publish')
+
+await userCreatedTopic.publish({
+  email: 'new.user@example.com',
+})
+```
+
+```typescript !!
 import { topic } from '@nitric/sdk'
 
 const userCreatedTopic = topic('user-created').allow('publish')
@@ -136,6 +152,20 @@ The below code shows a subscription that responds to messages when new users are
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { topic } from '@nitric/sdk'
+import { sendWelcomeEmail } from 'common'
+
+const userCreatedTopic = topic('user-created')
+
+userCreatedTopic.subscribe(async (ctx) => {
+  // Extract data from the event payload for processing
+  const { email } = ctx.req.json()
+
+  sendWelcomeEmail(email)
+})
+```
+
+```typescript !!
 import { topic } from '@nitric/sdk'
 import { sendWelcomeEmail } from 'common'
 
@@ -230,6 +260,21 @@ Usually checking for duplicate payloads or IDs is enough. When you receive an ev
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { topic } from '@nitric/sdk'
+import { isDuplicate } from '../common'
+
+const updates = topic('updates')
+
+updates.subscribe((ctx) => {
+  if (isDuplicate(ctx.req)) {
+    return ctx
+  }
+  // not a duplicate, process the event
+  // ...
+})
+```
+
+```typescript !!
 import { topic } from '@nitric/sdk'
 import { isDuplicate } from '../common'
 
@@ -340,6 +385,12 @@ import { queue } from '@nitric/sdk'
 const transactionQueue = queue('transactions').allow('enqueue', 'dequeue')
 ```
 
+```typescript !!
+import { queue } from '@nitric/sdk'
+
+const transactionQueue = queue('transactions').allow('enqueue', 'dequeue')
+```
+
 ```python !!
 from nitric.resources import queue
 
@@ -381,6 +432,16 @@ The below example sends a message to a queue called `transactions`.
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { queue } from '@nitric/sdk'
+
+const transactionQueue = queue('transactions').allow('enqueue')
+
+await transactionQueue.enqueue({
+  message: 'hello world',
+})
+```
+
+```typescript !!
 import { queue } from '@nitric/sdk'
 
 const transactionQueue = queue('transactions').allow('enqueue')
@@ -442,6 +503,21 @@ Messages can also be sent in batches by providing an array.
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { queue } from '@nitric/sdk'
+
+const transactionQueue = queue('transactions').allow('enqueue')
+
+await transactionQueue.enqueue([
+  {
+    message: 'batch task 1',
+  },
+  {
+    message: 'batch task 2',
+  },
+])
+```
+
+```typescript !!
 import { queue } from '@nitric/sdk'
 
 const transactionQueue = queue('transactions').allow('enqueue')
@@ -528,6 +604,22 @@ The below example dequeues 10 messages using the `dequeue()` method, then acknow
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { queue } from '@nitric/sdk'
+
+const transactionQueue = queue('transactions').allow('dequeue')
+
+const tasks = await transactionQueue.dequeue(10)
+
+for (let task of tasks) {
+  // process your task's data
+  console.log(task.message)
+
+  // acknowledge when the task is complete
+  await task.complete()
+}
+```
+
+```typescript !!
 import { queue } from '@nitric/sdk'
 
 const transactionQueue = queue('transactions').allow('dequeue')

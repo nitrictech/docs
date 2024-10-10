@@ -40,7 +40,9 @@ An API named 'milkyway' with:
   - A storage bucket named planets_images.
     - This service intends to read and write content to the bucket.
 
-<CodeSwitcher tabs>
+<Tabs>
+
+<TabItem label="JavaScript">
 
 ```javascript !!
 import { api, kv, bucket } from '@nitric/sdk'
@@ -55,6 +57,10 @@ milkyWayApi.get('/planets/:id', async (ctx) => {
   ctx.res.body = d.content
 })
 ```
+
+</TabItem>
+
+<TabItem label="Python">
 
 ```python !!
 from nitric.resources import api, kv, bucket
@@ -74,7 +80,9 @@ async def get_planet(ctx: HttpContext) -> None:
 Nitric.run()
 ```
 
-</CodeSwitcher>
+</TabItem>
+
+</Tabs>
 
 The resource specification is used to generate real-time visualizations of the application and will also be used during the deployment phase to automatically communicate the application’s runtime requirements to the deployment engine that provisions the resources.
 

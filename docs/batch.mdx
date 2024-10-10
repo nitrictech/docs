@@ -70,6 +70,20 @@ Within a Batch we create Job Definitions, by creating a new Job with a unique na
 
 <CodeSwitcher tabs>
 
+```javascript !!
+import { job } from '@nitric/sdk'
+
+const analyze = job('analyze')
+
+// Use `handler` to register the callback function that will run when a job is submitted
+analyze.handler(
+  async (ctx) => {
+    // Do some work
+  },
+  { cpus: 1, memory: 1024, gpus: 0 },
+)
+```
+
 ```typescript !!
 import { job, JobContext } from '@nitric/sdk'
 
@@ -141,6 +155,19 @@ Jobs may be submitted from Nitric `services` or other `batches` using the `submi
 <CodeSwitcher tabs>
 
 ```javascript !!
+import * as nitric from '@nitric/sdk'
+
+const api = nitric.api('public')
+const analyze = nitric.job('analyze').allow('submit')
+
+api.post('/submit-job', async (ctx) => {
+  await analyze.submit({
+    someKey: 'someValue',
+  })
+})
+```
+
+```typescript !!
 import * as nitric from '@nitric/sdk'
 
 const api = nitric.api('public')

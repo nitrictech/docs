@@ -100,6 +100,17 @@ await countries.set('USA', {
 })
 ```
 
+```typescript !!
+import { kv } from '@nitric/sdk'
+
+const countries = kv('Countries').allow('set')
+
+await countries.set('USA', {
+  name: 'United States of America',
+  population: 329500000,
+})
+```
+
 ```python !!
 from nitric.resources import kv
 from nitric.application import Nitric
@@ -160,6 +171,13 @@ await countries.set('USA', {
 })
 ```
 
+```typescript !!
+await countries.set('USA', {
+  name: 'United States of America',
+  population: 330000000,
+})
+```
+
 ```python !!
 await countries.set('USA', {
   "name": "United States of America",
@@ -190,6 +208,14 @@ Values can be accessed from a store by calling the `get` method with the key of 
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { kv } from '@nitric/sdk'
+
+const countries = kv('Countries').allow('get')
+
+const country = await country.get('USA')
+```
+
+```typescript !!
 import { kv } from '@nitric/sdk'
 
 const countries = kv('Countries').allow('get')
@@ -246,6 +272,19 @@ The below example first creates a key value store that has permissions for delet
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { kv } from '@nitric/sdk'
+
+const countries = kv('Countries').allow('delete', 'set')
+
+await countries.set('USA', {
+  name: 'United States of America',
+  population: 329500000,
+})
+
+await countries.delete('USA')
+```
+
+```typescript !!
 import { kv } from '@nitric/sdk'
 
 const countries = kv('Countries').allow('delete', 'set')
@@ -323,6 +362,16 @@ The below example first creates a key value store that has permissions for listi
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { kv } from '@nitric/sdk'
+
+const countries = kv('Countries').allow('get')
+
+for await (const key of countries.keys()) {
+  console.log(key)
+}
+```
+
+```typescript !!
 import { kv } from '@nitric/sdk'
 
 const countries = kv('Countries').allow('get')

@@ -36,6 +36,24 @@ socket.on('message', async (ctx) => {
 })
 ```
 
+```typescript !!
+import { websocket } from '@nitric/sdk'
+
+const socket = websocket('socket')
+
+socket.on('connect', async (ctx) => {
+  // handle connections
+})
+
+socket.on('disconnect', async (ctx) => {
+  // handle disconnections
+})
+
+socket.on('message', async (ctx) => {
+  // handle messages
+})
+```
+
 ```python !!
 from nitric.resources import websocket
 from nitric.application import Nitric
@@ -110,6 +128,27 @@ out of the box that can be used to do this or you can use any other store or dat
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { websocket, kv } from '@nitric/sdk'
+
+// Initialize KV store for connections and a WebSocket
+const kvStore = kv('connections').allow('get', 'set', 'delete')
+const socket = websocket('example-websocket')
+
+// Handle new connections
+socket.on('connect', async (ctx) => {
+  await kvStore.set(ctx.req.connectionId, {
+    /* connection meta data here */
+  })
+})
+
+// Handle disconnections
+socket.on('disconnect', async (ctx) => {
+  const disconnectedId = ctx.req.connectionId
+  await kvStore.delete(disconnectedId)
+})
+```
+
+```typescript !!
 import { websocket, kv } from '@nitric/sdk'
 
 // Initialize KV store for connections and a WebSocket
@@ -220,6 +259,42 @@ socket.onDisconnect((ctx) async {
 <CodeSwitcher tabs>
 
 ```javascript !!
+import { websocket, kv } from '@nitric/sdk'
+
+// Initialize KV store for connections and a WebSocket
+const kvStore = kv('connections').allow('get', 'set', 'delete')
+const socket = websocket('example-websocket')
+
+// Handle new connections
+socket.on('connect', async (ctx) => {
+  await kvStore.set(ctx.req.connectionId, {
+    /* connection meta data here */
+  })
+})
+
+// Handle disconnections
+socket.on('disconnect', async (ctx) => {
+  const disconnectedId = ctx.req.connectionId
+  await kvStore.delete(disconnectedId)
+})
+
+// Send messages
+socket.on('message', async (ctx) => {
+  const message = ctx.req.text()
+  const connections = kvStore.keys()
+
+  // Send the message to each connection
+  try {
+    for await (const connectionId of connections) {
+      await socket.send(connectionId, message)
+    }
+  } catch (error) {
+    console.error('Error during message broadcasting:', error)
+  }
+})
+```
+
+```typescript !!
 import { websocket, kv } from '@nitric/sdk'
 
 // Initialize KV store for connections and a WebSocket

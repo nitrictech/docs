@@ -32,7 +32,9 @@ nitric new
 
 In this new Nitric project there will be an example API with a single `GET: /hello/:name` route. We'll start by securing this route.
 
-<CodeSwitcher tabs>
+<Tabs syncKey="lang-node">
+
+<TabItem label="TypeScript">
 
 ```typescript !! title:services/hello.ts
 import { api } from '@nitric/sdk'
@@ -46,6 +48,10 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
+</TabItem>
+
+<TabItem label="JavaScript">
+
 ```javascript !! title:services/hello.js
 import { api } from '@nitric/sdk'
 
@@ -58,7 +64,9 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-</CodeSwitcher>
+</TabItem>
+
+</Tabs>
 
 ## Rejecting unauthenticated requests with API Gateways
 
@@ -66,7 +74,9 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 To add this API Gateway authentication we need to create a `security definition` and then apply that definition to specific routes or the entire API. Here we'll update the `main` API by adding a new security definition named `cognito`.
 
-<CodeSwitcher tabs>
+<Tabs syncKey="lang-node">
+
+<TabItem label="TypeScript">
 
 ```typescript !! title:services/hello.ts
 import { api } from '@nitric/sdk'
@@ -90,6 +100,10 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
+</TabItem>
+
+<TabItem label="JavaScript">
+
 ```javascript !! title:services/hello.js
 import { api } from '@nitric/sdk'
 
@@ -112,7 +126,9 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-</CodeSwitcher>
+</TabItem>
+
+</Tabs>
 
 <Note>
   You will need to update the `region`, `user-pool-id` and `app-client-id`
@@ -123,7 +139,9 @@ Next, we need to ensure this security definition is applied, otherwise it won't 
 
 In this example we'll apply the security at the API level, ensuring all routes require authentication.
 
-<CodeSwitcher tabs>
+<Tabs syncKey="lang-node">
+
+<TabItem label="TypeScript">
 
 ```typescript !! title:services/hello.ts
 import { api } from '@nitric/sdk'
@@ -151,6 +169,10 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
+</TabItem>
+
+<TabItem label="JavaScript">
+
 ```javascript !! title:services/hello.js
 import { api } from '@nitric/sdk'
 
@@ -177,7 +199,9 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-</CodeSwitcher>
+</TabItem>
+
+</Tabs>
 
 <Note>
   It's worth noting that these security definitions are *not* enforced when
@@ -197,7 +221,9 @@ In the example below we're simply checking whether the user is a member of a par
   handlers or middleware.
 </Note>
 
-<CodeSwitcher tabs>
+<Tabs syncKey="lang-node">
+
+<TabItem label="TypeScript">
 
 ```typescript !! title:services/hello.ts
 import { api, HttpContext, HttpMiddleware } from '@nitric/sdk'
@@ -268,6 +294,10 @@ helloApi.get('/hello/:name', async (ctx: AuthContext) => {
 })
 ```
 
+</TabItem>
+
+<TabItem label="JavaScript">
+
 ```javascript !! title:services/hello.js
 import { api, HttpContext } from '@nitric/sdk'
 import * as jwt from 'jsonwebtoken'
@@ -329,7 +359,9 @@ helloApi.get('/hello/:name', async (ctx) => {
 })
 ```
 
-</CodeSwitcher>
+</TabItem>
+
+</Tabs>
 
 ## Testing authentication and authorization
 
