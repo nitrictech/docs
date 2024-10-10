@@ -1,14 +1,14 @@
-import { createLoader } from 'simple-functional-loader'
+import { slugifyWithCounter } from '@sindresorhus/slugify'
 import glob from 'fast-glob'
+import * as fs from 'fs'
+import { toString } from 'mdast-util-to-string'
+import * as path from 'path'
 import { remark } from 'remark'
 import remarkMdx from 'remark-mdx'
-import * as url from 'url'
-import * as path from 'path'
-import * as fs from 'fs'
-import { visit, SKIP } from 'unist-util-visit'
-import { slugifyWithCounter } from '@sindresorhus/slugify'
-import { toString } from 'mdast-util-to-string'
+import { createLoader } from 'simple-functional-loader'
 import { filter } from 'unist-util-filter'
+import { SKIP, visit } from 'unist-util-visit'
+import * as url from 'url'
 
 const __filename = url.fileURLToPath(import.meta.url)
 const processor = remark().use(remarkMdx).use(extractSections)
@@ -44,7 +44,7 @@ function extractSections() {
   }
 }
 
-export default function (nextConfig = {}) {
+export default function Search(nextConfig = {}) {
   let cache = new Map()
 
   return Object.assign({}, nextConfig, {
@@ -53,14 +53,13 @@ export default function (nextConfig = {}) {
         test: __filename,
         use: [
           createLoader(function () {
-            let pagesDir = path.resolve('./src/pages')
-            this.addContextDependency(pagesDir)
+            let appDir = path.resolve('./src/app')
+            this.addContextDependency(appDir)
 
-            let files = glob.sync('**/*.mdx', { cwd: pagesDir })
+            let files = glob.sync('**/*.mdx', { cwd: appDir })
             let data = files.map((file) => {
-              let url =
-                file === 'index.mdx' ? '/' : `/${file.replace(/\.mdx$/, '')}`
-              let mdx = fs.readFileSync(path.join(pagesDir, file), 'utf8')
+              let url = '/' + file.replace(/(^|\/)page\.mdx$/, '')
+              let mdx = fs.readFileSync(path.join(appDir, file), 'utf8')
 
               let sections = []
 
