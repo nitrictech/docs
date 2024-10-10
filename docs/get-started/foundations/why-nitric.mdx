@@ -4,49 +4,276 @@ description: 'The problems with modern cloud development'
 
 # Why Nitric
 
-Building and deploying cloud applications should be simple. But in practice, cloud development comes with numerous challenges, from managing provider-specific services to wrestling with deployment automation. Nitric was designed to address these pain points and provide a modern, highly declarative, and flexible approach to building cloud apps that work across providers.
+### Infrastructure as Code: A System Out Approach
 
-## The Problems
+Infrastructure as Code (IaC) tools like Terraform, AWS CloudFormation, and Pulumi have reshaped how cloud infrastructure is managed. They allow teams to define resources and configurations in code, leading to reproducibility, automation, and more consistent environments.
 
-### Provider Lock-in and Highly Coupled Architectures
+However, these tools typically approach the problem from the point-of-view of the system: "What can the cloud platform do? What configuration options are available on this resource?". They expose these capabilities through configuration files, making infrastructure management more systematic but also tied to cloud/service/platform specific details.
 
-Many applications are built with deep dependencies on a single cloud provider's services (think the AWS S3 client library or the specific shape of a Google Pub/Sub message, or any number of other subtle and not-so-subtle dependencies on cloud services).
+### Nitric: A Developer In Approach
 
-These dependencies makes it difficult to port your app to another service, or move to a different cloud get the best price, or run your app locally for testing, or even work in hybrid cloud environments. As the app grows, so does the reliance on specific cloud services, leading to vendor lock-in, making it harder to scale and evolve over time.
+Nitric builds on this with a focus on what you want to achieve as the developer: "What workflow do you need to be productive? What system design are you trying to achieve?". From there, it's capable of mapping your application's needs down to the Infrastructure-as-Code required to achieve those goals.
 
-Nitric abstracts these details, giving you the flexibility to deploy across different cloud providers without having to rewrite your application code. By decoupling your logic from the underlying infrastructure, Nitric ensures your app works wherever you need it to.
+This approach keeps application code clean and focused on functionality, leaving the management and interaction with infrastructure to a new layer that supports the applications you develop.
 
-### Deployment Automation: A Second Application
+In a typical cloud application **you already make declarations of your system's requirements**.
 
-Building a cloud app you can easily find yourself building a second application—deployment automation—that manages the infrastructure and services your app depends on. This includes provisioning cloud resources, managing permissions, configuring networking, and more. The deployment scripts become an integral part of your project, with a complex set of instructions that must be maintained alongside your app.
+Consider the following code:
 
-While this is a necessary part of cloud development, it can be a significant burden - one that can be simplified and made more robust.
+<CodeSwitcher tabs>
 
-Nitric simplifies this by automatically collecting what your app needs to run and providing this to plugins that can generate the deployment automation for you. You no longer need to manually craft unique and complex Infrastructure-as-Code (IaC) files to describe each app's requirements. Instead, use independently testable and reusable deployment automation layers.
+```javascript !!
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
-### Hidden Details in the Code
+const s3 = new S3Client({})
+const RECEIPT_DOCUMENTS_BUCKET = process.env.RECEIPT_DOCUMENTS_BUCKET
 
-Many of the details about how an application interacts with its infrastructure are buried in the code. For example, the permissions required to access services, the environment variables needed to function, or the correct configuration of cloud resources are often implied by the codebase, but not explicitly defined. Keeping track of these is challenging, and small mistakes can lead to broken deployments or runtime failures.
+if (!RECEIPT_DOCUMENTS_BUCKET) {
+  throw new Error('RECEIPT_DOCUMENTS_BUCKET environment variable not set')
+}
 
-Nitric brings these details to the surface, ensuring that the infrastructure requirements are automatically generated based on how your app is written. This eliminates the need to manually interrogate the code (or more likely its author) to specify the needed permissions, environment variables, and cloud resource dependencies.
+export async function getReceiptDoc(filename) {
+  const command = new GetObjectCommand({
+    Bucket: RECEIPT_DOCUMENTS_BUCKET,
+    Key: filename,
+  })
 
-### Automation Sync & Zombies
+  const response = await s3.send(command)
+  return await response.Body.transformToByteArray()
+}
+```
 
-Keeping your app code in sync with the deployment automation is a constant battle. When you make changes to your app—such as removing a resource—the deployment automation must be manually updated to prevent zombie resources. Conversely, if your deployment script creates a resource and passes its ARN as an environment variable, any typo in that variable can cause your app to fail at runtime. These issues are hard to catch because there's no strong link between the app and the IaC code.
+```typescript !!
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
-With Nitric, your app and deployment automation are always in sync. The resources your app uses are automatically aggregated, and environment variables are no longer needed, with resource ID resolution built directly into your app at runtime. No more hunting for missing or misconfigured settings. Everything your app needs is declared in one place—your application code.
+const s3 = new S3Client({})
+const RECEIPT_DOCUMENTS_BUCKET = process.env.RECEIPT_DOCUMENTS_BUCKET
 
-## Nitric's Solution
+if (!RECEIPT_DOCUMENTS_BUCKET) {
+  throw new Error('RECEIPT_DOCUMENTS_BUCKET environment variable not set')
+}
 
-Nitric addresses these challenges by taking a fundamentally different approach:
+export async function getReceiptDoc(filename: string): Promise<Uint8Array> {
+  const command = new GetObjectCommand({
+    Bucket: RECEIPT_DOCUMENTS_BUCKET,
+    Key: filename,
+  })
 
-- **Decoupling App Logic from Infrastructure**: Nitric handles the cloud infrastructure for you, so your app can focus on what matters—delivering functionality. No more writing and maintaining complex deployment scripts specific to just one app.
-- **Automatic Infrastructure Management**: Nitric automatically provisions the resources your app needs based on its code. There's no need to manually declare and update cloud resources. Or worse, forget to update them.
-- **Built-in Permissions and Configuration**: Nitric configures permissions and resource resolution for you, so your app is ready to run securely and with the correct settings.
-- **Cross-Cloud Flexibility**: Whether you want to deploy to AWS, Azure, GCP, all three, or somewhere else entirely, Nitric ensures your app works consistently across cloud providers.
+  const response = await s3.send(command)
+  return await response.Body.transformToByteArray()
+}
+```
 
-Nitric makes cloud development a frictionless experience. By eliminating the tedious and error-prone aspects of deployment, you can focus on building great applications, confident that they will deploy reliably.
+```python !!
+import os
+import boto3
 
-## The Limits
+RECEIPT_DOCUMENTS_BUCKET = os.getenv('RECEIPT_DOCUMENTS_BUCKET')
 
-Nitric is not a silver bullet. It can't solve every problem in cloud development, nor is it a one-size-fits-all solution. However, it does provide a powerful set of tools and practices that can significantly simplify and streamline your cloud development workflow.
+if not RECEIPT_DOCUMENTS_BUCKET:
+    raise EnvironmentError('RECEIPT_DOCUMENTS_BUCKET environment variable not set')
+
+s3_client = boto3.client('s3')
+
+def get_receipt_doc(filename):
+    response = s3_client.get_object(Bucket=RECEIPT_DOCUMENTS_BUCKET, Key=filename)
+    return response['Body'].read()
+
+```
+
+```go !!
+package main
+
+import (
+	"context"
+	"os"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"io"
+)
+
+var receiptDocumentsBucket = os.Getenv("RECEIPT_DOCUMENTS_BUCKET")
+
+func init() {
+	if receiptDocumentsBucket == "" {
+		panic("RECEIPT_DOCUMENTS_BUCKET environment variable not set")
+	}
+}
+
+func getReceiptDoc(filename string) ([]byte, error) {
+	cfg, _ := config.LoadDefaultConfig(context.TODO())
+	s3Client := s3.NewFromConfig(cfg)
+
+	resp, _ := s3Client.GetObject(context.TODO(), &s3.GetObjectInput{
+		Bucket: aws.String(receiptDocumentsBucket),
+		Key:    aws.String(filename),
+	})
+
+	defer resp.Body.Close()
+	return io.ReadAll(resp.Body)
+}
+```
+
+```dart !!
+import 'dart:io';
+import 'package:aws_s3_api/s3-2006-03-01.dart';
+
+final receiptDocumentsBucket = Platform.environment['RECEIPT_DOCUMENTS_BUCKET'];
+
+void checkBucketEnv() {
+  if (receiptDocumentsBucket == null || receiptDocumentsBucket!.isEmpty) {
+    throw Exception('RECEIPT_DOCUMENTS_BUCKET environment variable not set');
+  }
+}
+
+Future<List<int>> getReceiptDoc(String filename) async {
+  checkBucketEnv();
+  final client = S3(region: 'us-west-2'); // Adjust region
+  final request = GetObjectRequest(
+    bucket: receiptDocumentsBucket!,
+    key: filename,
+  );
+
+  final response = await client.getObject(request);
+  return await response.body.toBytes();
+}
+```
+
+</CodeSwitcher>
+
+Code like this makes very clear demands of the environment it expects to run in:
+
+- I need a bucket to be available
+- I need to be able to read objects from that bucket
+- The bucket must be an AWS S3 bucket
+- I need to know the ARN/Name of the bucket
+
+The problem is that these requirements are implicit. They're hidden throughout the code and for non-trivial apps it's challenging to collect them all and be sure the requirements are met.
+
+In a IaC approach, you would write something like Terraform or CloudFormation by hand to declare these requirements, setup the necessary permissions, and set the appropriate values in the environment variables of the container/function/etc. running the code.
+
+This manual process requires a detailed knowledge of the cloud platform's capabilities and how to safely configure them, while simultaneously understanding the numerous requirements of the application code. Unfortunately, this process is error-prone and leads to inconsistency, misconfigurations, time-consuming debugging, and in the worst cases—security vulnerabilities.
+
+Nitric's primary goal is to flip this around. Making implicit requirements explicit and automating the process of collecting these requirements into a specification that can be used to automatically generate the appropriate IaC.
+
+Additionally, Nitric wants to make application code concise, portable and cloud-agnostic, so that you can run your application on any cloud provider, replace underlying services at will, or run on alternate infrastructure like Kubernetes, on-premises or your own laptop.
+
+Here's how the above code looks with Nitric:
+
+<CodeSwitcher tabs>
+
+```javascript !!
+import { bucket } from '@nitric/sdk'
+
+const receiptDocs = bucket('receipt-docs').allow('read')
+
+export async function getReceiptDoc(filename) {
+  return await receiptDocs.file(filename).read()
+}
+```
+
+```typescript !!
+import { bucket } from '@nitric/sdk'
+
+const receiptDocs = bucket('receipt-docs').allow('read')
+
+export async function getReceiptDoc(filename: string): Promise<Uint8Array> {
+  return await receiptDocs.file(filename).read()
+}
+```
+
+```python !!
+from nitric.resources import bucket
+
+receipts_docs = bucket("receipts").allow("read")
+
+async def get_receipt_doc(filename):
+  return await receipts_docs.file(filename).read()
+
+```
+
+```go !!
+import (
+	"context"
+
+	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/storage"
+)
+
+var receiptDocs storage.BucketClient
+
+func init() {
+	receiptDocs = *nitric.NewBucket("receipt-docs").Allow(storage.BucketRead)
+}
+
+func getReceiptDoc(ctx context.Context, filename string) ([]byte, error) {
+	return receiptDocs.Read(ctx, filename)
+}
+```
+
+```dart !!
+import 'package:nitric_sdk/nitric.dart';
+
+final receiptDocs = Nitric.bucket("receipt-docs").allow([
+  BucketPermission.read,
+]);
+
+Future<List<int>> getReceiptDoc(String filename) async {
+  return await receiptDocs.file(filename).read();
+}
+```
+
+</CodeSwitcher>
+
+There are a few key differences here:
+
+- The requirements are explicit. The code declares that it needs a bucket named `receipt-docs` and that it needs to be able to read from it.
+- The code is concise and focused on the application logic. The infrastructure requirements are declared in a separate layer, making the application code cleaner and more maintainable.
+- The code is cloud-agnostic. Nitric can map the requirements to the appropriate cloud services, allowing the application to run on any cloud provider or infrastructure.
+- There are no environment variables, so typos or missing values are less likely to cause runtime errors.
+- You don't need to read the code to find these requirements. Nitric can gather them all into a specification that can be used to automatically generate the necessary IaC.
+
+### Why Nitric?
+
+#### 1. **Developer-Centric Workflow**
+
+Amazing tools already exist for specifying _how_ to deploy infrastructure, Nitric focuses on _what_ infrastructure is needed. Nitric lets you design your application architecture, independent of the deployment automation tool or target platform. With highly declarative in-app infrastructure requirements.
+
+Instead of writing project-specific Terraform, Pulumi or CloudFormation scripts, Nitric centralizes this code and automatically generates the project-specific scripts based on your application's declarations. As we said earlier, your code already defines what the system needs—Nitric just makes that explicit and automates the rest.
+
+#### 2. **Making Implicit Requirements Explicit**
+
+In a typical application, your code defines its infrastructure needs implicitly—like when you access an S3 bucket or connect to a queue. Nitric makes requirements explicit declarations, ensuring the required cloud resources are provisioned, permissions are configured, and the app is connected to them in a consistent and reliable way.
+
+Instead of tracking these dependencies manually, Nitric automates this process. If your app needs storage, a database, or a message queue, Nitric ensures these resources are properly set up and integrated into your app, removing the friction of manual configuration.
+
+#### 3. **Cloud-Agnostic and Portable**
+
+Nitric decouples your application from the underlying cloud infrastructure. Whether you're using AWS, Azure, GCP, or Kubernetes, Nitric allows you to map your application's requirements to the appropriate services across platforms. This allows your app to run anywhere without the need for platform-specific code to be embedded in the application.
+
+This portability is key to future-proofing applications and avoiding lock-in to any one cloud provider or service. Nitric ensures that your app's architecture remains flexible and adaptable, so switching providers or moving between environments (cloud, on-premises, local) becomes seamless.
+
+#### 4. **Automated Infrastructure, Best Practices Included**
+
+One of the most error-prone aspects of cloud development is managing permissions, configurations, and security policies. Nitric automates this, making security best practices—like least privilege access and proper service configurations easy.
+
+This reduces the risk of misconfigurations, inconsistency, security holes, and the burden of having to write boilerplate IaC scripts to handle service permissions. Nitric offloads this work to consistent plugins for each target platform, ensuring your infrastructure is provisioned correctly without adding overhead to your development process.
+
+#### 5. **Focus on Application Logic**
+
+Nitric's approach allows you to focus on building your application, instead of the scaffolding required to run it in the cloud. By removing the manual steps from the IaC process, Nitric eliminates significant boilerplate and reduces the runtime checking needed to handle configuration errors.
+
+This isn't about skipping important cloud knowledge—you still benefit from understanding how your app interacts with the cloud. But by making infrastructure explicit and automating it, Nitric reduces the time spent configuring, debugging, and maintaining cloud services. This gives you more bandwidth to focus on what really matters: your app's features and functionality.
+
+#### 6. **Plugin-Based Architecture**
+
+Nitric's plugin-based architecture allows you to use the deployment plugins we provide, which use Pulumi or Terraform for deployment, or write your own. This flexibility allows you to use the tools you're comfortable with, while still benefiting from Nitric's infrastructure automation and cloud-agnostic approach.
+
+It can also act as a protocol for communication between app development and infrastructure teams, ensuring that the infrastructure requirements are clear and consistent. This ensures the two teams can work independently, with the infrastructure team focusing on the best way to provision the resources, and the development team focusing on building the application.
+
+### Conclusion
+
+Nitric simplifies the way you build your app—enhancing it with automatic gathering of infrastructure requirements, and decoupling the tools used to deploy that infrastructure. Your code already defines what resources are needed, Nitric just makes that clear, flexible, and portable.
+
+Nitric is designed to make cloud development more efficient, secure, and focused on what you're building—not how you're building it. It's a developer-centric layer added to cloud infrastructure automation and streamlines the development process, reduces complexity, and lets you build better applications faster.
