@@ -8,7 +8,7 @@ Nitric's cloud portability is enabled through plugin interfaces known as [provid
 
 <Note>
   Terraform providers are currently in preview, they're not recommended for
-  production deployments. We recommend using the [Standard
+  production deployments. We recommend using the [Pulumi
   Provider](/providers/pulumi) for production deployments until the Terraform
   providers are stable.
 </Note>
@@ -35,7 +35,7 @@ You're also able to [create your own Terraform provider](/providers/custom/creat
 
 The Nitric Terraform providers are currently in preview, to enable them you'll need to enable `beta-providers` in your Nitric project. You can do this by adding the following to your project's `nitric.yaml` file:
 
-```yaml
+```yaml title:nitric.yaml
 preview:
   - beta-providers
 ```

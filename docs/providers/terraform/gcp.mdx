@@ -11,30 +11,25 @@ provider: nitric/gcptf@latest
 
 <Note>
   The Nitric Terraform GCP Provider is currently in preview, it's not
-  recommended for production deployments. We recommend using the [Standard
-  Providers](/providers/pulumi/gcp) for production deployments until the
-  Terraform providers are stable.
+  recommended for production deployments. We recommend using the [Pulumi GCP
+  Provider](/providers/pulumi/gcp) for production deployments until the
+  Terraform provider is stable.
 </Note>
 
-The Terraform GCP provider is supported by the Nitric SDKs and CLI by default. However, the Terraform CLI or equivalent will be required to deploy the resulting Terraform Stack that Nitric generates.
+## Prerequisites
 
-## Google CLI Installation
+The **Terraform CLI** is required to deploy the resulting Terraform Stack that Nitric generates. You can find the installation instructions for Terraform in the [Terraform documentation](https://learn.hashicorp.com/tutorials/terraform/install-cli).
 
-Installing the Google Cloud CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Google docs](https://cloud.google.com/sdk/install).
+The provider is built with the [Cloud Development Kit for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf). Since CDKTF relies on Node.js, you'll need to have Node.js installed, you can read about the full CDKTF prerequisites in the [CDKTF documentation](https://developer.hashicorp.com/terraform/tutorials/cdktf/cdktf-install#prerequisites).
 
-### Windows
+## Enabling Nitric Terraform Providers
 
-Download & install the [latest CLI release](https://cloud.google.com/sdk/install#windows).
+The Nitric Terraform providers are currently in preview, to enable them you'll need to enable `beta-providers` in your Nitric project. You can do this by adding the following to your project's `nitric.yaml` file:
 
-### Linux
-
-```bash
-curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-378.0.0-linux-x86_64.tar.gz
+```yaml title:nitric.yaml
+preview:
+  - beta-providers
 ```
-
-### MacOS
-
-Download & install the [latest CLI release](https://cloud.google.com/sdk/install#mac).
 
 ## Google Cloud Credentials
 
@@ -46,9 +41,27 @@ Authorize `gcloud` to access the Cloud Platform with Google user credentials:
 gcloud auth application-default login
 ```
 
-## Configuration
+### Google CLI Installation
 
-```yaml
+Installing the Google Cloud CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Google docs](https://cloud.google.com/sdk/install).
+
+#### Windows
+
+Download & install the [latest CLI release](https://cloud.google.com/sdk/install#windows).
+
+#### Linux
+
+```bash
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-378.0.0-linux-x86_64.tar.gz
+```
+
+#### MacOS
+
+Download & install the [latest CLI release](https://cloud.google.com/sdk/install#mac).
+
+## Stack Configuration
+
+```yaml title:nitric.[stack ID].yaml
 # The provider to use and it's published version
 # See releases:
 # https://github.com/nitrictech/nitric/tags

@@ -156,6 +156,10 @@ export const navigation: NavEntry[] = [
         icon: SiPulumi,
         items: [
           {
+            title: 'Overview',
+            href: '/providers/pulumi',
+          },
+          {
             title: 'AWS',
             icon: FaAws,
             href: '/providers/pulumi/aws',
@@ -176,6 +180,10 @@ export const navigation: NavEntry[] = [
         title: 'Terraform',
         icon: SiTerraform,
         items: [
+          {
+            title: 'Overview',
+            href: '/providers/terraform',
+          },
           {
             title: 'AWS',
             icon: FaAws,

@@ -1,5 +1,6 @@
-export const description =
-  'Terraform - Amazon Web Service (AWS) provider for Nitric'
+---
+description: 'Terraform - Amazon Web Service (AWS) provider for Nitric'
+---
 
 # Terraform AWS Provider Overview
 
@@ -11,12 +12,25 @@ provider: nitric/awstf@latest
 
 <Note>
   The Nitric Terraform AWS Provider is currently in preview, it's not
-  recommended for production deployments. We recommend using the [Standard
+  recommended for production deployments. We recommend using the [Pulumi AWS
   Providers](/providers/pulumi/aws) for production deployments until the
-  Terraform providers are stable.
+  Terraform provider is stable.
 </Note>
 
-The Terraform AWS provider is supported by the Nitric SDKs and CLI by default. However, the Terraform CLI or equivalent will be required to deploy the resulting Terraform Stack that Nitric generates.
+## Prerequisites
+
+The **Terraform CLI** is required to deploy the resulting Terraform Stack that Nitric generates. You can find the installation instructions for Terraform in the [Terraform documentation](https://learn.hashicorp.com/tutorials/terraform/install-cli).
+
+The provider is built with the [Cloud Development Kit for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf). Since CDKTF relies on Node.js, you'll need to have Node.js installed, you can read about the full CDKTF prerequisites in the [CDKTF documentation](https://developer.hashicorp.com/terraform/tutorials/cdktf/cdktf-install#prerequisites).
+
+## Enabling Nitric Terraform Providers
+
+The Nitric Terraform providers are currently in preview, to enable them you'll need to enable `beta-providers` in your Nitric project. You can do this by adding the following to your project's `nitric.yaml` file:
+
+```yaml title:nitric.yaml
+preview:
+  - beta-providers
+```
 
 ## AWS Credentials
 
@@ -56,9 +70,9 @@ You can create an Access Key by logging into the [AWS console](https://aws.amazo
   for full details on credentials and configuration.
 </Note>
 
-## Configuration
+## Stack Configuration
 
-```yaml
+```yaml title:nitric.[stack ID].yaml
 # The provider to use and it's published version
 # See releases:
 # https://github.com/nitrictech/nitric/tags
