@@ -68,13 +68,13 @@ function SmallPrint() {
           </p>
           <span className="text-xs text-zinc-500">—</span>
           <Link
-            href={'/contributions'}
+            href={'/misc/contributions'}
             className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
           >
             Contributions
           </Link>
           <Link
-            href={'/support'}
+            href={'/misc/support'}
             className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
           >
             Support

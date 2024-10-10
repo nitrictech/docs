@@ -42,7 +42,7 @@ const nextConfig = {
       },
       {
         source: '/docs/reference',
-        destination: '/docs#libraries',
+        destination: '/docs',
         basePath: false,
         permanent: true,
       },
