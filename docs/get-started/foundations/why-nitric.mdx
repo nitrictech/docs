@@ -142,7 +142,7 @@ Future<List<int>> getReceiptDoc(String filename) async {
 
 </CodeSwitcher>
 
-Code like very clearly sets up a list of implicit expectations of the environment it runs in:
+Code like very clearly has a list expectations of the environment it runs in:
 
 - I need a bucket to be available
 - I need to be able to read objects from that bucket
@@ -154,7 +154,7 @@ Code like very clearly sets up a list of implicit expectations of the environmen
 
 The problem is that these requirements are implicit. They're hidden throughout the code and for non-trivial apps it's challenging to collect them all and be sure the requirements are met.
 
-In a IaC approach, you would write something like Terraform or CloudFormation by hand to declare these requirements, setup the necessary permissions, and set the appropriate values in the environment variables of the container/function/etc. running the code.
+Using current approaches, you write IaC (like Terraform, Pulumi, or CloudFormation) by hand to meet these requirements—locate or deploy infrastructure, setup the necessary permissions, and set the appropriate values in the environment variables of the container/function/etc. running the code.
 
 This manual process requires a detailed knowledge of the cloud platform's capabilities and how to safely configure them, while simultaneously understanding the numerous requirements of the application code. Unfortunately, this process is error-prone and leads to inconsistency, misconfigurations, time-consuming debugging, and in the worst cases—security vulnerabilities.
 
