@@ -20,6 +20,9 @@ export interface TabItemProps extends PropsWithChildren {
   label: string
 }
 
+// for a11y, remove spaces from the tab label
+const removeSpaces = (str: string) => str.replace(/\s/g, '')
+
 export const Tabs: React.FC<TabProps> = ({
   children,
   value,
@@ -33,7 +36,7 @@ export const Tabs: React.FC<TabProps> = ({
 
   return (
     <BaseTabs
-      defaultValue={tabs[0] ? tabs[0].props.label : undefined}
+      defaultValue={tabs[0] ? removeSpaces(tabs[0].props.label) : undefined}
       value={syncKey ? get(syncKey) : value}
       onValueChange={syncKey ? (value) => set(syncKey, value) : onValueChange}
       ref={ref}
@@ -41,8 +44,8 @@ export const Tabs: React.FC<TabProps> = ({
       <TabsList className="relative mx-0 mb-2 mt-auto h-12 w-full rounded-b-none bg-transparent p-0">
         {tabs.map((tab) => (
           <TabsTrigger
-            value={tab.props.label}
-            key={tab.props.label}
+            value={removeSpaces(tab.props.label)}
+            key={removeSpaces(tab.props.label)}
             className="group/tab relative h-12 hover:text-zinc-600 data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none dark:hover:text-zinc-200 dark:data-[state=active]:text-primary-300"
           >
             {tab.props.label}
@@ -57,5 +60,5 @@ export const Tabs: React.FC<TabProps> = ({
 }
 
 export const TabItem: React.FC<TabItemProps> = ({ children, label }) => {
-  return <TabsContent value={label}>{children}</TabsContent>
+  return <TabsContent value={removeSpaces(label)}>{children}</TabsContent>
 }
