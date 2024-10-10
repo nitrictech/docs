@@ -138,7 +138,7 @@ export function Property({
   )
 }
 
-export { InstallNitricTabs } from '@/components/InstallNitricTabs'
+export { OSTabs } from '@/components/OSTabs'
 
 export { HomeHeader } from '@/components/HomeHeader'
 

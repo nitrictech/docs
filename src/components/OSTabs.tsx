@@ -19,21 +19,21 @@ function detectOS() {
   return 'Linux'
 }
 
-export const InstallNitricTabs = React.forwardRef<HTMLDivElement, TabProps>(
+export const OSTabs = React.forwardRef<HTMLDivElement, TabProps>(
   ({ children }, ref) => {
     const { set } = useTabs()
 
     useEffect(() => {
       // this will only run on the client side
-      set('install-nitric', detectOS())
+      set('operating-system', detectOS())
     }, [])
 
     return (
-      <Tabs syncKey="install-nitric" ref={ref}>
+      <Tabs syncKey="operating-system" ref={ref}>
         {children}
       </Tabs>
     )
   },
 )
 
-InstallNitricTabs.displayName = 'InstallNitricTabs'
+OSTabs.displayName = 'OSTabs'
