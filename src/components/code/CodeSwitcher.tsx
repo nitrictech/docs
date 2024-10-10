@@ -7,6 +7,7 @@ import { highlight } from './highlight'
 import { TabItem, Tabs } from '../tabs/Tabs'
 import { LANGUAGE_LABEL_MAP, languages } from '@/lib/constants'
 import { CodeTabs } from './CodeTabs'
+import { meta } from './meta'
 
 export async function CodeSwitcher({
   code,
@@ -36,7 +37,7 @@ export async function CodeSwitcher({
     const children = highlighted.map((h) => (
       <TabItem key={h.lang} label={LANGUAGE_LABEL_MAP[h.lang]}>
         <CodeContainer>
-          <Pre highlighted={h} {...props} />
+          <Pre highlighted={h} {...props} showPanel={!!meta(h).title} />
         </CodeContainer>
       </TabItem>
     ))
