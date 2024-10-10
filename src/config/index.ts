@@ -224,46 +224,43 @@ export const navigation: NavEntry[] = [
         href: '/reference/cli',
       },
       {
-        title: 'Project Config (nitric.yaml)',
-        href: '/reference/project/configuration',
-      },
-      {
-        title: 'Env Vars',
-        href: '/reference/env-vars',
-      },
-      {
-        title: 'Examples',
-        href: '/reference/examples',
-      },
-      {
         title: 'Preview Features',
         icon: BeakerIcon,
         href: '/reference/preview-features',
       },
+      {
+        title: 'Other Config',
+        items: [
+          {
+            title: 'Env Vars',
+            href: '/reference/env',
+          },
+          {
+            title: 'Custom Service Containers',
+            href: '/reference/custom-containers',
+          },
+        ],
+      },
     ],
   },
   {
-    title: 'FAQ',
+    title: 'Misc',
     items: [
       {
-        title: 'How is nitric different from Pulumi?',
-        href: '/faq/nitric-vs-pulumi',
+        title: 'Examples',
+        href: 'https://github.com/nitrictech/examples',
       },
       {
-        title: 'How is nitric different from Terraform?',
-        href: '/faq/nitric-vs-terraform',
+        title: 'FAQ',
+        href: '/misc/faq',
       },
       {
-        title: 'Comparisons with other tools/frameworks',
-        href: '/faq/comparisons',
+        title: 'Contributions',
+        href: '/misc/contributions',
       },
       {
-        title: 'How to migrate between clouds',
-        href: '/faq/migrate-between-clouds',
-      },
-      {
-        title: 'Ask a question',
-        href: '/faq/ask-a-question',
+        title: 'Support',
+        href: '/misc/support',
       },
     ],
   },
