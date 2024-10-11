@@ -4,13 +4,13 @@ description: 'The problems with modern cloud development'
 
 # Why Nitric
 
-### Infrastructure as Code: A System Out Approach
+## Infrastructure as Code: A System Out Approach
 
 Infrastructure as Code (IaC) tools like Terraform, AWS CloudFormation, and Pulumi have reshaped how cloud infrastructure is managed. They allow teams to define resources and configurations in code, leading to reproducibility, automation, and more consistent environments.
 
 However, these tools typically approach the problem from the point-of-view of the system: "What can the cloud platform do? What configuration options are available on this resource?". They expose these capabilities through configuration files, making infrastructure management more systematic but also tied to cloud/service/platform specific details.
 
-### Nitric: A Developer In Approach
+## Nitric: A Developer In Approach
 
 Nitric builds on this with a focus on what you want to achieve as the developer: "What workflow do you need to be productive? What system design are you trying to achieve?". From there, it's capable of mapping your application's needs down to the Infrastructure-as-Code required to achieve those goals.
 
@@ -237,46 +237,46 @@ There are a few key differences here:
 - There are no environment variables, so typos or missing values are less likely to cause runtime errors.
 - You don't need to read the code to find these requirements. Nitric can gather them all into a specification that can be used to automatically generate the necessary IaC.
 
-### Why Nitric?
+## Why Nitric?
 
-#### 1. **Developer-Centric Workflow**
+### 1. **Developer-Centric Workflow**
 
 Amazing tools already exist for specifying _how_ to deploy infrastructure, Nitric focuses on _what_ infrastructure is needed. Nitric lets you design your application architecture, independent of the deployment automation tool or target platform. With highly declarative in-app infrastructure requirements.
 
 Instead of writing project-specific Terraform, Pulumi or CloudFormation scripts, Nitric centralizes this code and automatically generates the project-specific scripts based on your application's declarations. As we said earlier, your code already defines what the system needs—Nitric just makes that explicit and automates the rest.
 
-#### 2. **Making Implicit Requirements Explicit**
+### 2. **Making Implicit Requirements Explicit**
 
 In a typical application, your code defines its infrastructure needs implicitly—like when you access an S3 bucket or connect to a queue. Nitric makes requirements explicit declarations, ensuring the required cloud resources are provisioned, permissions are configured, and the app is connected to them in a consistent and reliable way.
 
 Instead of tracking these dependencies manually, Nitric automates this process. If your app needs storage, a database, or a message queue, Nitric ensures these resources are properly set up and integrated into your app, removing the friction of manual configuration.
 
-#### 3. **Cloud-Agnostic and Portable**
+### 3. **Cloud-Agnostic and Portable**
 
 Nitric decouples your application from the underlying cloud infrastructure. Whether you're using AWS, Azure, GCP, or Kubernetes, Nitric allows you to map your application's requirements to the appropriate services across platforms. This allows your app to run anywhere without the need for platform-specific code to be embedded in the application.
 
 This portability is key to future-proofing applications and avoiding lock-in to any one cloud provider or service. Nitric ensures that your app's architecture remains flexible and adaptable, so switching providers or moving between environments (cloud, on-premises, local) becomes seamless.
 
-#### 4. **Automated Infrastructure, Best Practices Included**
+### 4. **Automated Infrastructure, Best Practices Included**
 
 One of the most error-prone aspects of cloud development is managing permissions, configurations, and security policies. Nitric automates this, making security best practices—like least privilege access and proper service configurations easy.
 
 This reduces the risk of misconfigurations, inconsistency, security holes, and the burden of having to write boilerplate IaC scripts to handle service permissions. Nitric offloads this work to consistent plugins for each target platform, ensuring your infrastructure is provisioned correctly without adding overhead to your development process.
 
-#### 5. **Focus on Application Logic**
+### 5. **Focus on Application Logic**
 
 Nitric's approach allows you to focus on building your application, instead of the scaffolding required to run it in the cloud. By removing the manual steps from the IaC process, Nitric eliminates significant boilerplate and reduces the runtime checking needed to handle configuration errors.
 
 This isn't about skipping important cloud knowledge—you still benefit from understanding how your app interacts with the cloud. But by making infrastructure explicit and automating it, Nitric reduces the time spent configuring, debugging, and maintaining cloud services. This gives you more bandwidth to focus on what really matters: your app's features and functionality.
 
-#### 6. **Plugin-Based Architecture**
+### 6. **Plugin-Based Architecture**
 
 Nitric's plugin-based architecture allows you to use the deployment plugins we provide, which use Pulumi or Terraform for deployment, or write your own. This flexibility allows you to use the tools you're comfortable with, while still benefiting from Nitric's infrastructure automation and cloud-agnostic approach.
 
 It can also act as a protocol for communication between app development and infrastructure teams, ensuring that the infrastructure requirements are clear and consistent. This ensures the two teams can work independently, with the infrastructure team focusing on the best way to provision the resources, and the development team focusing on building the application.
 
-### Conclusion
+## Where to Go Next
 
-Nitric simplifies the way you build your app—enhancing it with automatic gathering of infrastructure requirements, and decoupling the tools used to deploy that infrastructure. Your code already defines what resources are needed, Nitric just makes that clear, flexible, and portable.
+If you'd like see Nitric is action, check out the [Quick Start](/get-started/quickstart) guide. This guide will walk you through setting up a Nitric project, creating a new stack, and deploying your application.
 
-Nitric is designed to make cloud development more efficient, secure, and focused on what you're building—not how you're building it. It's a developer-centric layer added to cloud infrastructure automation and streamlines the development process, reduces complexity, and lets you build better applications faster.
+If you're interested in learning more about how Nitric works, check out the [Deployment](/get-started/foundations/deployment) section. Which talks about how Nitric Providers work and how you can build your own.
