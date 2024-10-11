@@ -520,45 +520,24 @@ print(response.contents);
 
 </CodeSwitcher>
 
-### Manual Install
+### Overriding
 
-Alternatively, you can download pre-compiled binaries from the [releases](https://github.com/nitrictech/cli/releases) page and install them manually.
+If you need to change how Nitric deploys a resources or how it interacts with a service at runtime, you can [extend or modify a provider](/providers/custom/extend).
 
-## Update to the latest version
+<Note>
+  For example, here's a [project that swaps SNS for
+  EventBridge](https://github.com/jyecusch/iac-ifc-comparison) on AWS.
+</Note>
 
-<OSTabs>
+### Full Customization
 
-<TabItem label="macOS">
+If you need to deploy to a new platform or new set of services that Nitric doesn't support, you can [build your own provider](/providers/custom/create). This is a bit more advanced, but it's the ultimate escape hatch.
 
-```bash
-brew upgrade nitric
-```
+The included providers are written in Go and built using Terraform or Pulumi, but you can use any language or tool you like.
 
-</TabItem>
+### Additional Resources
 
-<TabItem label="Windows">
-
-```bash
-scoop update nitric
-```
-
-</TabItem>
-
-<TabItem label="Linux">
-
-```bash
-curl -L "https://nitric.io/install?version=latest" | bash
-```
-
-</TabItem>
-
-</OSTabs>
-
-You can easily check which version you're on by running `nitric version`.
-
-## Release notes
-
-You can view the CLI release notes on our [CLI GitHub Releases page](https://github.com/nitrictech/cli/releases).
+If you need to use a service/resource that Nitric doesn't support, you do that like you always would. Nitric doesn't get in the way of you using the cloud, it just makes it easier.
 
 ## What's next
 
