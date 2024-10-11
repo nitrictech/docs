@@ -21,7 +21,7 @@ const GuideMobileFilters: React.FC<GuideMobileFiltersProps> = ({ allTags }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" aria-label="Apply guide filters">
           <AdjustmentsHorizontalIcon className="h-6 w-6" />
         </Button>
       </DialogTrigger>
