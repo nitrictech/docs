@@ -4,7 +4,7 @@ description: 'Nitric Services Overview'
 
 # Services
 
-Ok, we've learned about how [Nitric helps with infrastructure](/docs/get-started/foundations/infrastructure), now let's dive _where_ you run your code: Services.
+Ok, we've learned about how [Nitric helps with infrastructure](/get-started/foundations/infrastructure), now let's dive _where_ you run your code: Services.
 
 In Nitric, a service is an isolated unit of computing, typically Nitric builds and deploys each services as its own Docker container. Your project might contain a single service (e.g. a monolithic web application), a few services (e.g. a web application, a background worker, and a scheduled task) or many services (e.g. a microservices architecture).
 
@@ -19,7 +19,7 @@ There are currently two categories of services in Nitric:
 
 Services are defined in your project's `nitric.yaml` file. Each service has a name, a type (groups of services with shared resource requirements), and a path to the service's code.
 
-See the [Project Configuration](/docs/get-started/foundations/projects/configuration) page for more information on defining services in your project.
+See the [Project Configuration](/get-started/foundations/projects/configuration) page for more information on defining services in your project.
 
 <Note>
   If you started with a project template, you'll already have a `nitric.yaml`
@@ -30,4 +30,4 @@ When you define a service in your nitric.yaml file, Nitric automatically takes c
 
 You can also specify your own Dockerfile template for some/all of your services, allowing you to customize the build process for your services.
 
-See the [Custom Containers](/reference/custom-containers) and [Project Configuration](/docs/get-started/foundations/projects/configuration) pages for more information about how to customize the way Nitric builds your services.
+See the [Custom Containers](/reference/custom-containers) and [Project Configuration](/get-started/foundations/projects/configuration) pages for more information about how to customize the way Nitric builds your services.
