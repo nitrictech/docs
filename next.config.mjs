@@ -18,7 +18,7 @@ const nextConfig = {
       '/**/*': ['./src/app/**/*.mdx'],
     },
     serverActions: {
-      allowedOrigins: ['nitric-docs.vercel.app', 'nitric.io'],
+      allowedOrigins: ['nitric.io', '*.nitric.io'],
     },
   },
   images: {
