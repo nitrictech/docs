@@ -9,7 +9,29 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Heading } from '@/components/ui/heading'
 import { allDocs } from '@/content'
+import { BASE_URL } from '@/lib/constants'
 import Link from 'next/link'
+import { Metadata } from 'next/types'
+
+export const metadata: Metadata = {
+  title: 'Guides',
+  description:
+    'Guides and tutorials for the Nitric cloud application framework.',
+  openGraph: {
+    siteName: 'Nitric Docs',
+    locale: 'en_US',
+    url: `${BASE_URL}/docs/guides`,
+    images: [
+      {
+        url: `${BASE_URL}/docs/og?title=${encodeURIComponent('Guides')}&description=${encodeURIComponent('Guides and tutorials for the Nitric cloud application framework.')}`,
+        alt: 'Nitric Docs',
+      },
+    ],
+  },
+  alternates: {
+    canonical: `${BASE_URL}/docs/guides`,
+  },
+}
 
 export default function GuidesPage() {
   const allGuides = allDocs.filter((doc) => doc.slug.startsWith('guides/'))
