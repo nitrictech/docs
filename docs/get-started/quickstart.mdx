@@ -117,11 +117,15 @@ npm install
 ```bash Python
 cd hello-world
 
-# We recommend using [Pipenv](https://pipenv.pypa.io/en/latest/) for dependency and virtual environments
-#   We have included it in our python templates.
-#   Installation instructions: https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv
 pipenv install --dev
 ```
+
+<Note>
+  We recommend using [Pipenv](https://pipenv.pypa.io/en/latest/) for dependence
+  management and virtual environments It's included it in our python templates
+  by default. Installation instructions:
+  https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv
+</Note>
 
 </TabItem>
 
@@ -224,7 +228,7 @@ Your project should now look like this:
 
 </Tabs>
 
-## Running your app
+## Running the app locally
 
 Nitric provides a local development server offering emulated versions of cloud services, suitable for local development/testing. You can use the Nitric CLI to start the local server using the `nitric start` command.
 
@@ -232,47 +236,31 @@ Nitric provides a local development server offering emulated versions of cloud s
 nitric start
 ```
 
-Nitric will automatically run your application using the service start script, this is located in your `nitric.yaml`.
+Nitric will automatically run your application using the service `start` command from the `nitric.yaml` file.
 
-After your service is running, it will register itself with the server. All the APIs are locally hosted on their own port, which will be displayed in the CLI output as `http://localhost:<port_number>`.
+Once your services are running, they will register themselves with the server. Resources like HTTP APIs and Websockets will be hosted on their own port, which will also be displayed in the CLI output as `http://localhost:<port_number>`.
 
-The output will also show the local dashboard URL, the dashboard will automatically refresh with API details and other useful tools for building your application.
+The output will include a link to the [Local Dashboard](/get-started/foundations/projects/local-development), which automatically refreshes with details about all the resources your application uses (e.g APIs, Buckets, Topics, Databases, etc.).
 
-Once the API is registered, you can test the API using any HTTP client, your browser, or the [local dashboard](/get-started/foundations/projects/local-development):
+![Nitric Local Dashboard](/docs/images/docs/dashboard-architecture.png)
+
+You can use the automatically generated HTTP client in the dashboard or any other HTTP client to test your APIs. For example, you can use `curl` to test the `hello` service:
 
 ```bash
 curl http://localhost:4001/hello/John
 Hello John
 ```
 
-## Your local dashboard
-
-Access the [local development dashboard](/get-started/foundations/projects/local-development) by opening the URL and port displayed in the CLI output.
-
-The development dashboard is a powerful tool designed to help you move faster when developing new features. With the API explorer, you can easily access automatically generated endpoints and path params. Additionally, the Schedules Explorer allows you to trigger your schedules with ease, making it easier than ever to stay on top of your tasks. Make the most of your local development process with this essential tool.
-
-Watch this brief video to see the development dashboard in action. You'll get a firsthand look at how the dashboard streamlines your development process by showcasing the [debugging](/guides/nodejs/debugging) of APIs and schedules in the popular code editor, VS Code.
-
-<div>
-  <div className="video-container">
-    <iframe
-      src="https://www.youtube-nocookie.com/embed/cjbg-klgDNM"
-      title="YouTube video player"
-      frameBorder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowFullScreen
-    />
-  </div>
-</div>
-
 <Note>
-  The video currently showcases v0 of the local dashboard and will be updated
-  soon.
+  The local dashboard provides real-time visualization of the application's
+  resources, along with useful testing tools. We recommend taking a look at the
+  [Local Dashboard](/get-started/foundations/projects/local-development)
+  documentation to learn more about its features.
 </Note>
 
 ## Making updates
 
-Nitric's language templates enable hot-reloading by default, so at this point, you can start making changes to services and see what happens.
+Nitric's project templates typically include hot-reloading by default, so at this point, you can start making changes to services and see what happens.
 
 Start by opening the `hello` service in your editor and adding a new route to the API, then save, and execute the file:
 
@@ -411,33 +399,39 @@ When you're finished testing, you can stop your application and the Nitric Serve
 
 ## Deploying the app
 
-Now that you've implemented a basic API and tested that it works, you can deploy it to one or more cloud platforms. Applications built with Nitric can be automatically deployed and run on multiple cloud providers without any code changes.
+Now that you've implemented a basic API and tested that it works, you can deploy it to one or more cloud platforms. Applications built with Nitric can be automatically deployed and run to different cloud providers without any code changes, thanks to Nitric [Provider Plugins](/get-started/foundations/deployment).
 
-The first step is to set up your credentials for the cloud provider.
+The first step is to configure your credentials for the cloud provider and any prerequisites for the provider plugin you want to use:
 
 - [AWS](/providers/pulumi/aws)
 - [Azure](/providers/pulumi/azure)
 - [GCP](/providers/pulumi/gcp)
 
-You'll then need to create a [stack](/reference/cli#stacks) that represents your project and a deployment target.
+You'll then need to create a [stack file](/reference/cli#stacks), which represents a deployment target for your application.
 
-The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
+The `stack new` command can help you create a new stack file, with prompts to guide you through selecting a provider plugin and naming the stack:
 
 ```bash
-nitric stack new dev aws
+nitric stack new
 ```
 
-Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region, such as `us-east-1`.
+For this example we'll create a new stack named `dev` that uses the `aws` provider, but you can choose a different name and provider if you prefer.
 
-Now you can deploy your `dev` stack with the `up` command.
+Once you've created your stack file, you should see it appear in your project directory as `nitric.[stack ID].yaml`. In our case the file is named `nitric.dev.yaml`.
+
+Edit this file and set any remaining configuration options, such as the region you'd like to deploy to e.g. `us-east-1` for AWS.
+
+Now you can build your application and deploy the stack with the `up` command.
 
 ```bash
 nitric up
 ```
 
-When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
+Typically, when the deployment is complete any relevant URLs will be displayed in the CLI output. You can use these URLs to interact with your API. You can also use the relevant cloud console (e.g. [https://aws.amazon.com/](https://aws.amazon.com/)) to see the deployed resources.
 
-To tear down the stack use the `down` command:
+To deploy any changes you make to your application, you can use the `up` command again. Nitric will automatically detect the changes and update the deployed resources.
+
+When you're finished with your application, you can tear it down using the `down` command:
 
 ```bash
 nitric down
