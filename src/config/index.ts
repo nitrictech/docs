@@ -216,6 +216,10 @@ export const navigation: NavEntry[] = [
             title: 'Custom Providers',
             href: '/providers/custom/create',
           },
+          {
+            title: 'Install with Docker',
+            href: '/providers/custom/docker',
+          },
         ],
       },
     ],
