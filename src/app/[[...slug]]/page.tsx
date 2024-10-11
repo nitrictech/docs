@@ -36,12 +36,19 @@ export async function generateMetadata({
     siteName: 'Nitric Docs',
     locale: 'en_US',
     url: `${BASE_URL}/docs/${doc.slug}`,
-    images: [
-      {
-        url: `${BASE_URL}/docs/og?title=${encodeURIComponent(doc.slug ? title_meta : 'Nitric Docs')}&description=${encodeURIComponent(doc.description || '')}`,
-        alt: 'Nitric Docs',
-      },
-    ],
+    images: !doc.slug // is home page
+      ? [
+          {
+            url: `${BASE_URL}/docs/images/og_home.png`,
+            alt: 'Nitric Docs',
+          },
+        ]
+      : [
+          {
+            url: `${BASE_URL}/docs/og?title=${encodeURIComponent(title_meta)}&description=${encodeURIComponent(doc.description || '')}`,
+            alt: 'Nitric Docs',
+          },
+        ],
   }
 
   if (doc.image && doc.image_alt) {
