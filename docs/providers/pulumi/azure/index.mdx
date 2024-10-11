@@ -23,26 +23,6 @@ provider: nitric/azure@latest
 
 The Azure provider is supported by the Nitric SDKs and CLI by default. However, credentials for an Azure account will be required when using the [up command](/reference/cli) from the CLI.
 
-## Azure CLI Installation
-
-Installing the Azure CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Microsoft docs](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
-
-### Windows
-
-Download & install the [latest CLI release](https://aka.ms/installazurecliwindows).
-
-### Linux
-
-```
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-```
-
-### MacOS
-
-```bash
-brew update && brew install azure-cli
-```
-
 ## Azure Credentials
 
 The Nitric CLI uses the standard Azure credentials to authenticate with Azure. If you've set up local credentials for the Azure CLI or an SDK previously, these settings should work without modification.
@@ -65,7 +45,37 @@ az -v
   for full details on credentials and configuration.
 </Note>
 
-## Configuration
+### Azure CLI Installation
+
+Installing the Azure CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Microsoft docs](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
+
+<OSTabs>
+
+<TabItem label="Windows">
+
+Download & install the [latest CLI release](https://aka.ms/installazurecliwindows).
+
+</TabItem>
+
+<TabItem label="Linux">
+
+```bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+```
+
+</TabItem>
+
+<TabItem label="macOS">
+
+```bash
+brew update && brew install azure-cli
+```
+
+</TabItem>
+
+</OSTabs>
+
+## Stack Configuration
 
 ```yaml title:nitric.[stack ID].yaml
 # The provider to use and it's published version

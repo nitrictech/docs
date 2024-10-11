@@ -17,24 +17,6 @@ provider: nitric/gcp@latest
 
 The Google Cloud provider is supported by the Nitric SDKs and CLI by default. However, credentials for a Google Cloud account will be required when using the [up command](/reference/cli) from the CLI.
 
-## Google CLI Installation
-
-Installing the Google Cloud CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Google docs](https://cloud.google.com/sdk/install).
-
-### Windows
-
-Download & install the [latest CLI release](https://cloud.google.com/sdk/install#windows).
-
-### Linux
-
-```bash
-curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-378.0.0-linux-x86_64.tar.gz
-```
-
-### MacOS
-
-Download & install the [latest CLI release](https://cloud.google.com/sdk/install#mac).
-
 ## Google Cloud Credentials
 
 Authorize `gcloud` to access the Cloud Platform with Google user credentials:
@@ -43,11 +25,39 @@ Authorize `gcloud` to access the Cloud Platform with Google user credentials:
 gcloud auth application-default login
 ```
 
+### Google CLI Installation
+
+Installing the Google Cloud CLI assists with credentials setup. You can install it using these summarized instructions, for more options see the [Google docs](https://cloud.google.com/sdk/install).
+
+<OSTabs>
+
+<TabItem label="Windows">
+
+Download & install the [latest CLI release](https://cloud.google.com/sdk/install#windows).
+
+</TabItem>
+
+<TabItem label="Linux">
+
+```bash
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-378.0.0-linux-x86_64.tar.gz
+```
+
+</TabItem>
+
+<TabItem label="macOS">
+
+Download & install the [latest CLI release](https://cloud.google.com/sdk/install#mac).
+
+</TabItem>
+
+</OSTabs>
+
 ## Create Billing Account
 
 For Google Cloud to allow deployments, a billing account must be [created and attached](https://console.cloud.google.com/billing) to the project you deploy to.
 
-## Configuration
+## Stack Configuration
 
 ```yaml title:nitric.[stack ID].yaml
 # The provider to use and it's published version
