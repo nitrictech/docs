@@ -10,7 +10,11 @@ describe('canonical urls', () => {
 
       cy.get('link[rel="canonical"]')
         .invoke('attr', 'href')
-        .should('equal', `https://nitric.io${redirects[page] || page}`)
+        .should('equal', `http://localhost:3000${redirects[page] || page}`)
+
+      cy.get('meta[property="og:url"]')
+        .invoke('attr', 'content')
+        .should('equal', `http://localhost:3000${redirects[page] || page}`)
     })
   })
 })

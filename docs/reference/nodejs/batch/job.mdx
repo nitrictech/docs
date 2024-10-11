@@ -1,0 +1,40 @@
+---
+description: "Reference for Nitric's Node.js library - Create Batch Jobs"
+---
+
+# Node.js - job()
+
+Creates a new Batch Job.
+
+```ts
+import { job } from '@nitric/sdk'
+
+const analyze = job('analyze')
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The unique name of this Batch Job within the app. Subsequent calls to `job`
+    with the same name will return the same object.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a Job
+
+```ts
+import { job } from '@nitric/sdk'
+
+const analyze = job('analyze')
+```
+
+### Create a Job with permissions to submit jobs
+
+```ts
+import { job } from '@nitric/sdk'
+
+const analyze = job('analyze').allow('submit')
+```

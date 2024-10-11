@@ -1,6 +1,9 @@
 import clsx from 'clsx'
 
-export function Logo({ className, ...props }) {
+export function Logo({
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg
       className={clsx('text-gray-800 dark:text-white', className)}

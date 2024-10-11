@@ -203,6 +203,19 @@ monorepos
 decrypts
 deploytf
 href
+AWSTF
+GCPTF
+MacOS
+GPUs
+microservices
+misconfigured
+CMS
+frictionless
+ctx
+reproducibility
+misconfigurations
+DSL
+UI
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)

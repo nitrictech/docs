@@ -1,25 +1,36 @@
 import nextMDX from '@next/mdx'
-import withSearch from './src/mdx/search.mjs'
-import { remarkPlugins } from './src/mdx/remark.mjs'
-import { rehypePlugins } from './src/mdx/rehype.mjs'
-import { recmaPlugins } from './src/mdx/recma.mjs'
+import { createContentlayerPlugin } from 'next-contentlayer2'
+import { mdxOptions } from './src/mdx/mdx-options.mjs'
+import path from 'path'
 
 const withMDX = nextMDX({
-  options: {
-    remarkPlugins,
-    rehypePlugins,
-    recmaPlugins,
-    providerImportSource: '@mdx-js/react',
-  },
+  options: mdxOptions,
 })
+
+const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: '/docs',
-  reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
+  experimental: {
+    outputFileTracingIncludes: {
+      '/**/*': ['./src/app/**/*.mdx'],
+    },
+  },
   images: {
-    domains: ['github.com', 'raw.githubusercontent.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'github.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        port: '',
+      },
+    ],
   },
   async redirects() {
     return [
@@ -31,7 +42,7 @@ const nextConfig = {
       },
       {
         source: '/docs/reference',
-        destination: '/docs#libraries',
+        destination: '/docs',
         basePath: false,
         permanent: true,
       },
@@ -69,7 +80,7 @@ const nextConfig = {
         source: source,
         destination: `/docs/guides/nodejs${source.replace(
           /^(\/docs\/guides\/|\/docs\/)/,
-          '/'
+          '/',
         )}`,
         basePath: false,
         permanent: true,
@@ -85,7 +96,7 @@ const nextConfig = {
         source: source,
         destination: `/docs/getting-started${source.replace(
           /^(\/docs\/guides\/|\/docs\/)/,
-          '/'
+          '/',
         )}`,
         basePath: false,
         permanent: true,
@@ -95,11 +106,11 @@ const nextConfig = {
           source: source,
           destination: `/docs/guides/python${source.replace(
             /^(\/docs\/guides\/|\/docs\/)/,
-            '/'
+            '/',
           )}`,
           basePath: false,
           permanent: true,
-        })
+        }),
       ),
       {
         source: '/docs/comparison/:slug',
@@ -277,7 +288,7 @@ const nextConfig = {
         source: source,
         destination: `/docs/${source.replace(
           /^(\/docs\/guides\/|\/docs\/)/,
-          ''
+          '',
         )}`,
         basePath: false,
         permanent: true,
@@ -335,6 +346,260 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       },
+      ...['nodejs', 'dart', 'go', 'jvm', 'python', 'terraform'].map((page) => ({
+        source: `/docs/guides/${page}`,
+        destination: `/docs/guides`,
+        basePath: false,
+        permanent: true,
+      })),
+      {
+        source: '/docs/concepts/access-control',
+        destination: '/docs/get-started/foundations/infrastructure/security',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/build-with-nitric',
+        destination: '/docs/get-started/foundations/why-nitric',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/cicd',
+        destination: '/docs/get-started/foundations/deployment#ci-cd',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/comparison',
+        destination: '/docs/misc/faq#differences-from-other-solutions',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/comparison/:slug*',
+        destination: '/docs/misc/comparison/:slug*',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/extensibility',
+        destination: '/docs/get-started/foundations/deployment#flexibility',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/how-devs-use-nitric',
+        destination: '/docs/get-started/foundations/why-nitric',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/how-nitric-works',
+        destination: '/docs/get-started/foundations/deployment',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/how-ops-use-nitric',
+        destination: '/docs/get-started/foundations/deployment',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/infrastructure-from-code',
+        destination: '/docs/get-started/foundations/infrastructure',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/introduction',
+        destination: '/docs',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/language-support',
+        destination: '/docs/reference/languages#supported-languages',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/concepts/project-structure',
+        destination: '/docs/get-started/foundations/projects#project-structure',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/cli/installation',
+        destination: '/docs/get-started/installation',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/cli/local-development',
+        destination: '/docs/get-started/foundations/projects/local-development',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/cli/stacks',
+        destination: '/docs/get-started/foundations/deployment#stacks',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/examples',
+        destination: 'https://github.com/nitrictech/examples',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/deploying',
+        destination:
+          '/docs/get-started/foundations/deployment#deploying-your-application',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/getting-started/deployment',
+        destination: '/docs/get-started/foundations/deployment',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/getting-started/installation',
+        destination: '/docs/get-started/installation',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/getting-started/local-dashboard',
+        destination: '/docs/get-started/foundations/projects/local-development',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/getting-started/quickstart',
+        destination: '/docs/get-started/quickstart',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/getting-started/resources-overview',
+        destination: '/docs/get-started/foundations/infrastructure/resources',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers',
+        destination: '/docs/providers',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/aws',
+        destination: '/docs/providers/pulumi/aws',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/aws/configuration',
+        destination: '/docs/providers/pulumi/aws#stack-configuration',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/aws/:slug((?!configuration).*)',
+        destination: '/docs/providers/pulumi/aws/:slug*',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/gcp',
+        destination: '/docs/providers/pulumi/gcp',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/gcp/configuration',
+        destination: '/docs/providers/pulumi/gcp#stack-configuration',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/gcp/:slug((?!configuration).*)',
+        destination: '/docs/providers/pulumi/gcp/:slug*',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/azure',
+        destination: '/docs/providers/pulumi/azure',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/azure/configuration',
+        destination: '/docs/providers/pulumi/azure#stack-configuration',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/azure/:slug((?!configuration).*)',
+        destination: '/docs/providers/pulumi/azure/:slug*',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/custom/building-custom-provider',
+        destination: '/docs/providers/custom/create',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/custom/extend-standard-provider',
+        destination: '/docs/providers/custom/extend',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/pulumi',
+        destination: '/docs/providers/pulumi',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/pulumi/custom',
+        destination: '/docs/providers/custom',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/terraform',
+        destination: '/docs/providers/terraform',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/terraform/:slug*',
+        destination: '/docs/providers/terraform/:slug*',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/reference/providers/install/docker',
+        destination: '/docs/providers/custom/docker',
+        basePath: false,
+        permanent: true,
+      },
+
+      ...['contributions', 'faq', 'support', 'support/upgrade'].map((page) => ({
+        source: `/docs/${page}`,
+        destination: `/docs/misc/${page}`,
+        basePath: false,
+        permanent: true,
+      })),
     ]
   },
   async headers() {
@@ -363,4 +628,8 @@ const nextConfig = {
   },
 }
 
-export default withSearch(withMDX(nextConfig))
+const withContentlayer = createContentlayerPlugin({
+  configPath: path.resolve(process.cwd(), './contentlayer.config.ts'),
+})
+
+export default withContentlayer(withMDX(nextConfig))

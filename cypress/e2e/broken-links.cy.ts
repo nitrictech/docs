@@ -1,6 +1,5 @@
 import * as pages from '../fixtures/pages.json'
-import { XMLParser } from 'fast-xml-parser'
-const parser = new XMLParser()
+import * as prodPages from '../fixtures/prod_pages.json'
 
 const CORRECT_CODES = [200]
 // site should not return internal redirects
@@ -33,11 +32,11 @@ const isExternalUrl = (url: string) => {
   return !url.includes('localhost')
 }
 
-const req = (url: string, retryCount = 0) => {
+const req = (url: string, retryCount = 0, followRedirect = false): any => {
   return cy
     .request({
       url,
-      followRedirect: false,
+      followRedirect,
       failOnStatusCode: false,
       gzip: false,
     })
@@ -71,7 +70,8 @@ describe('Broken links test suite', () => {
               (link.getAttribute('href') &&
                 link.getAttribute('href')?.includes(l)) ||
               //@ts-ignore
-              (link.getAttribute('src') && link.getAttribute('src').includes(l))
+              (link.getAttribute('src') &&
+                link.getAttribute('src').includes(l)),
           )
         })
         .each((link) => {
@@ -84,13 +84,13 @@ describe('Broken links test suite', () => {
             cy.log(`link already checked`)
             expect(VISITED_SUCCESSFUL_LINKS[url]).to.be.true
           } else {
-            cy.wait(100)
+            cy.wait(25)
 
             req(url).then((res: Cypress.Response<any>) => {
               let acceptableCodes = CORRECT_CODES
               if (REDIRECT_CODES.includes(res.status) && !isExternalUrl(url)) {
                 assert.fail(
-                  `${url} returned ${res.status} to ${res.headers['location']}`
+                  `${url} returned ${res.status} to ${res.headers['location']}`,
                 )
               } else {
                 acceptableCodes = [
@@ -106,7 +106,7 @@ describe('Broken links test suite', () => {
 
               expect(res.status).oneOf(
                 acceptableCodes,
-                `${url} returned ${res.status}`
+                `${url} returned ${res.status}`,
               )
             })
           }
@@ -116,28 +116,11 @@ describe('Broken links test suite', () => {
 })
 
 describe('Current links test suite', () => {
-  let paths: string[]
-
-  beforeEach(() => {
-    const PROD_BASE_URL = 'https://nitric.io/docs'
-
-    cy.request(`${PROD_BASE_URL}/sitemap-0.xml`).then((response) => {
-      const jsonObj = parser.parse(response.body, false)
-
-      paths = jsonObj.urlset.url.map((p) =>
-        p.loc === PROD_BASE_URL
-          ? '/docs'
-          : `/docs${p.loc
-              .substring(PROD_BASE_URL.length, p.loc.length)
-              .replace('/_index', '')}`
-      )
-    })
-  })
-
-  it(`should visit all pages in the current prod sitemap`, function () {
-    paths.forEach((path) => {
-      cy.log(`visiting page: ${path}`)
-      cy.visit(path)
+  prodPages.forEach((path) => {
+    it(`should visit page ${path} in the current prod sitemap`, function () {
+      req(path, 3, true).then((res: Cypress.Response<any>) => {
+        expect(res.status).to.be.oneOf(CORRECT_CODES)
+      })
     })
   })
 })

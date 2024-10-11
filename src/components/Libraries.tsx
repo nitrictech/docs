@@ -1,6 +1,5 @@
 import Image from 'next/image'
 
-import { Heading } from '@/components/Heading'
 import logoNode from '@/images/logos/node.svg'
 import logoPython from '@/images/logos/python.svg'
 import logoCsharp from '@/images/logos/csharp.svg'
@@ -9,6 +8,7 @@ import logoJava from '@/images/logos/java.svg'
 import logoDart from '@/images/logos/dart.svg'
 import Link from 'next/link'
 import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import { Heading } from './ui/heading'
 
 const libraries = [
   {
@@ -56,7 +56,7 @@ export interface LibrariesProps {
 export function Libraries({ minimal = false }: LibrariesProps) {
   if (minimal) {
     return (
-      <div className="flex h-fit w-fit items-center">
+      <div className="flex h-fit w-fit items-center gap-2">
         {libraries.map((library) => (
           <Link
             href={library.href}
