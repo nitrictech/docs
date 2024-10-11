@@ -96,6 +96,20 @@ In the case of IaC providers, the provider plugin will generate IaC code for you
 
 The Nitric CLI command to tear down the application is `nitric down`. This command simply runs the provider plugin to tear down the application. This command is only available for direct deployment providers.
 
+### Runtime Adaptation
+
+Provider plugins aren't just about deploying your application. They also provide a runtime adapter that allows your application to interact with cloud services in a cloud-agnostic way.
+
+This allows code like `bucket.file('file.txt').read()` to work across platforms, even though the underlying services are different.
+
+The runtime adapter acts as a Nitric protocol compliant server, accepting runtime calls made by a Nitric client (such as one of the [Language SDKs](/reference/languages)), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specific SDK.
+
+This allows your services, functions, etc. to be built, tested and run independent of any specific cloud service. The end result is code that's faster to write, easier to test and remains portable between services and cloud providers.
+
+It also significantly reduces the burden of writing project-specific Infrastructure as Code and ensures the application and its deployment automation don't drift apart as development continues.
+
+![Nitric Architecture](/docs/images/guides/custom-provider/custom-provider-architecture.png)
+
 ## Stacks
 
 Since an application can be deployed to multiple environments and cloud providers, Nitric uses stack files to identify these deployment targets. These files can be created by running the `nitric stack new` CLI command.

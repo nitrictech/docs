@@ -152,6 +152,10 @@ export const navigation: NavEntry[] = [
     title: 'Deploy',
     items: [
       {
+        title: 'Overview',
+        href: '/providers',
+      },
+      {
         title: 'Pulumi',
         icon: SiPulumi,
         items: [

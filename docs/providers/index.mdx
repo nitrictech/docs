@@ -2,50 +2,37 @@
 description: 'Details on the cloud providers supported by Nitric'
 ---
 
-# Providers
+# Deploying Nitric Applications
 
-Nitric can declare and interact with cloud features in a way that is decoupled from any particular cloud provider. Nitric providers are the abstraction layer that enables this.
+When you're ready to deploy your Nitric application, you can choose from a variety provider plugins. Nitric has pre-built providers that use either Pulumi or Terraform to deploy to AWS, Google Cloud or Microsoft Azure. If you have specific requirements, you can [extend these providers](/providers/custom/extend) or [build your own](/providers/custom/create) custom provider.
 
-Providers are separate plugins comprised of two components—a Deployment Engine, which automatically deploys your cloud resources and a Runtime Adapter, which handles requests from the SDKs forwarding them to appropriate cloud service APIs.
+<Note>
+  If you're new to Nitric, or want a better understanding of Nitric Providers
+  work, we recommend reading the
+  [Foundations](/get-started/foundations/deployment) section.
+</Note>
 
-## How it works
+To learn how to deploy your Nitric application, we recommend starting with the [Quick Start](/get-started/quickstart) guide. This guide will walk you through setting up a Nitric project, creating a new stack, and deploying your application.
 
-Applications built with Nitric declare resources, services, and permissions directly in the application code. The following example defines an API named `main`, a bucket named `images`, and permissions for the service to `read` and `write` from the bucket.
+Use this page to learn more about the cloud providers supported by Nitric, and select or build a provider that meets your deployment requirements.
 
-```js title:services/example.js
-import { api, bucket } from '@nitric/sdk'
+## Pre-built Providers
 
-const images = bucket('images').allow('read', 'write')
-const mainApi = api('main')
-```
+Nitric publishes pre-built providers for AWS, Google Cloud (GCP), and Microsoft Azure, which are available as part of the core open-source repository on [GitHub](https://github.com/nitrictech/nitric/tree/main/cloud). These providers enable deploying and running code across AWS, Google Cloud, and Azure.
 
-The chosen language SDKs forward these resource requests to the Nitric CLI, which compiles a graph of the required resources and their connections. The graph of cloud resources is then sent the chosen provider for deployment. The provider convert this declaration graph into any cloud resources it wishes that fulfill the developers intentions, typically using Infrastructure as Code tools like Pulumi or Terraform.
+The following is a description of the underlying cloud services that each of the pre-built providers use:
 
-The specific cloud services that Nitric's out-of-the-box providers use for each resource is listed in the [table below](#standard-providers).
+<Note>
+  The Nitric team is actively working on expanding the number of pre-built
+  providers available. If you have a specific cloud provider or service you'd
+  like to see supported, please raise a [Feature
+  Request](https://github.com/nitrictech/nitric/issues/new?assignees=&labels=enhancement&projects=&template=2.feature.md)
+  on GitHub.
+</Note>
 
-```js
-mainApi.get('/', async (ctx) => {
-  const imageContents = await images.file('cat.png').read()
+### Default Cloud Services
 
-  ctx.res.body = imageContents
-
-  return ctx
-})
-```
-
-The runtime adapter acts as a Nitric protocol compliant server, accepting runtime calls made by a Nitric client (such as one of the Nitric language SDKs), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specific SDK.
-
-This allows your functions to be built, testing and run independent of any underlying cloud service. The end result is code that's faster to write, easier to test and remains portable between cloud services and cloud providers.
-
-It also significantly reduces the burden of writing project specific Infrastructure as Code and ensures the application and its deployment automation don't drift apart as development continues.
-
-![Nitric Architecture](/docs/images/guides/custom-provider/custom-provider-architecture.png)
-
-You can find out more about how the Nitric CLI and SDK interact with providers on the [deployment](/get-started/foundations/deployment) section.
-
-## Standard Providers
-
-Nitric publishes standard providers for AWS, GCP, and Azure, which are available as part of the core open-source repository on [GitHub](https://github.com/nitrictech/nitric/tree/main/cloud). These providers enable deploying and running code across AWS, Google Cloud, and Azure. The following is a description of the underlying cloud services that each of the standard providers use:
+Currently, both the Pulumi and Terraform providers use the same underlying cloud services to deploy your application. The following table shows the cloud services used by default on each cloud:
 
 | **Resource**                           | **AWS**                                              | **Azure**                                   | **Google Cloud**                             | **Local**                                                                          |
 | -------------------------------------- | ---------------------------------------------------- | ------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------- |
@@ -58,7 +45,7 @@ Nitric publishes standard providers for AWS, GCP, and Azure, which are available
 | [Storage](/storage#buckets)            | [S3](./providers/aws/storage)                        | [Blob Storage](./providers/azure/storage)   | [Cloud Storage](./providers/gcp/storage)     | SeaweedFS                                                                          |
 | Services                               | Lambda                                               | Container Apps                              | CloudRun                                     | Docker                                                                             |
 
-Our code is completely open-source on our [GitHub](https://github.com/nitrictech/nitric), so you can know exactly how your resources are being deployed and handled at runtime.
+The code is open-source on [GitHub](https://github.com/nitrictech/nitric), so you can see exactly how resources are deployed and handled at runtime, then make any changes you see fit.
 
 ## Custom Providers
 
@@ -69,11 +56,16 @@ Because Nitric providers are plugins you're able to create or extend them to mee
 - Changing the way resources are deployed to use a preferred service or meet regulatory or policy requirements within your organization.
 - Reusing existing work on infrastructure automation, such using existing Terraform Modules for deployment with Nitric.
 - Deployments to another cloud provider or on-premises deployments.
-  You can read more about building custom providers [here](/reference/providers/custom/building-custom-provider).
-  <Note>
-    Improving the ease and flexibility of custom provider development is
-    currently a priority for the Nitric team, if you need help or want to
-    request a feature get in touch on
-    [GitHub](https://github.com/nitrictech/nitric) or
-    [Discord](https://nitric.io/chat).
-  </Note>
+  You can read more about building custom providers [here](/providers/custom).
+
+Currently, there are two ways to build a custom provider:
+
+- **Extend an existing provider**: This is the easiest way to build a custom provider. You can extend an existing provider to add new resources or change the way resources are deployed. You can read more about extending providers [here](/providers/custom/extend).
+- **Create a new provider**: If you have specific requirements that can't be met by extending an existing provider, you can create a new provider from scratch. You can read more about creating a new provider [here](/providers/custom/create).
+
+<Note>
+  Improving the ease and flexibility of custom provider development is currently
+  a priority for the Nitric team, if you need help or want to request a feature
+  get in touch on [GitHub](https://github.com/nitrictech/nitric) or
+  [Discord](https://nitric.io/chat).
+</Note>
