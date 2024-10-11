@@ -85,7 +85,7 @@ describe('Broken links test suite', () => {
             cy.log(`link already checked`)
             expect(VISITED_SUCCESSFUL_LINKS[url]).to.be.true
           } else {
-            cy.wait(100)
+            cy.wait(25)
 
             req(url).then((res: Cypress.Response<any>) => {
               let acceptableCodes = CORRECT_CODES
