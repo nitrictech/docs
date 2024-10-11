@@ -1,5 +1,6 @@
-export const description =
-  "Reference for Nitric's Node.js library - Register a job handler"
+---
+description: "Reference for Nitric's Node.js library - Register a job handler"
+---
 
 # Node.js - job.handler()
 
@@ -15,7 +16,7 @@ analyze.handler(
     // Do some work
     return ctx
   },
-  { cpus: 1, memory: 1024, gpus: 0 }
+  { cpus: 1, memory: 1024, gpus: 0 },
 )
 ```
 
@@ -76,6 +77,6 @@ analyze.handler(
     // Do some work
     return ctx
   },
-  { cpus: 1, memory: 2048, gpus: 0 }
+  { cpus: 1, memory: 2048, gpus: 0 },
 )
 ```
