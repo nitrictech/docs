@@ -5,10 +5,12 @@
   "scripts": {
     "postinstall": "husky && prisma generate && node scripts/collect-assets",
     "dev": "next dev",
+    "prebuild": "yarn generate-sitemap-pages",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test:spellcheck": "spellchecker",
+    "generate-sitemap-pages": "node scripts/build-sitemap",
     "format:check": "prettier --check src",
     "format:fix": "prettier --write src",
     "cypress": "cypress open",

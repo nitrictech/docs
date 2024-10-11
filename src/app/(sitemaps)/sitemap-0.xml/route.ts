@@ -1,4 +1,5 @@
 import { allDocs } from '@/content'
+import staticPaths from '@/assets/sitemap.json'
 
 const URL = 'https://nitric.io/docs'
 
@@ -9,16 +10,27 @@ interface SitemapItem {
   priority: number
 }
 
+const lastmod = new Date().toISOString()
+
 // Function to construct the XML structure of the sitemap index.
 export async function GET() {
-  const pages: SitemapItem[] = allDocs.map((page) => ({
+  const pages = staticPaths.map((page) => ({
+    loc: page,
+    lastmod,
+    changefreq: 'daily',
+    priority: 0.7,
+  }))
+
+  const docPages: SitemapItem[] = allDocs.map((page) => ({
     loc: page.slug === '' ? URL : `${URL}/${page.slug}`,
     lastmod: new Date(page.lastModified).toISOString(),
     changefreq: 'daily',
     priority: 0.7,
   }))
 
-  const allPagesSorted = [...pages].sort((a, b) => (a.loc < b.loc ? -1 : 1))
+  const allPagesSorted = [...pages, ...docPages].sort((a, b) =>
+    a.loc < b.loc ? -1 : 1,
+  )
 
   const sitemapIndexXML = buildSitemap(allPagesSorted)
 
