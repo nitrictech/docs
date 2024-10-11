@@ -17,7 +17,7 @@ You can read about why this separation is important on the [why nitric](/get-sta
 
 ## Providers
 
-The plugins used to deploy your application to a specific target platform are called [providers](/reference/providers). Typically providers do one of two things:
+The plugins used to deploy your application to a specific target platform are called [providers](/providers). Typically providers do one of two things:
 
 1. **Deploy your application directly**
 2. **Generate Infrastructure-as-Code**
@@ -36,9 +36,9 @@ Nitric ships with five official providers. The first three are direct deployment
 
 All of the direct deployment providers use [Pulumi](https://pulumi.com) under the hood for their deployments, so Pulumi will need to be configured to persist your stack state and to run the deployment to the cloud of your choice.
 
-- [AWS](/reference/providers/aws)
-- [Google Cloud](/reference/providers/gcp)
-- [Azure](/reference/providers/azure)
+- [AWS](/providers/pulumi/aws)
+- [Google Cloud](/providers/pulumi/gcp)
+- [Azure](/providers/pulumi/azure)
 
 <Note>
   If you're new to Nitric we recommend starting with one of the direct
@@ -49,8 +49,8 @@ All of the direct deployment providers use [Pulumi](https://pulumi.com) under th
 
 All of the IaC providers generate Terraform code for deployment. This allows you to use Nitric's deployment automation and still leverage your existing Terraform workflows.
 
-- [AWSTF](/reference/providers/awstf)
-- [GCPTF](/reference/providers/gcptf)
+- [AWSTF](/providers/terraform/aws)
+- [GCPTF](/providers/terraform/gcp)
 
 <Note>An Azure Terraform provider is in development.</Note>
 
@@ -58,7 +58,7 @@ These providers are also a good starting point for customization when you have e
 
 ## Custom Providers
 
-If you have a specific cloud service, deployment workflow or tooling you want to use, you can build a [custom provider](/reference/providers/custom). Custom providers allow you to target the host you prefer with your own tools and configuration.
+If you have a specific cloud service, deployment workflow or tooling you want to use, you can build a [custom provider](/providers/custom). Custom providers allow you to target the host you prefer with your own tools and configuration.
 
 You can also extend the existing providers to change which cloud services are used to fulfill the Nitric resource contracts, to add configuration options or to change the deployment process.
 
@@ -118,7 +118,7 @@ Stack files define the deployment plugin (provider), any additional configuratio
 
 The common configuration option available in all stack files is the `provider` field, which specifies the provider plugin to use for the deployment. The standard format for specifying a provider is `[namespace]/[provider]@[version]`. The `namespace` for all standard providers is `nitric`. The `provider` is the name of the provider plugin, and the `version` is the version of the provider plugin to use.
 
-There is another format for specifying providers as a container image `docker://[image]`, which you can read about in the [reference docs](/reference/providers/custom/docker).
+There is another format for specifying providers as a container image `docker://[image]`, which you can read about in the [reference docs](/providers/custom/docker).
 
 Here is a basic example, using the standard nitric AWS provider `nitric/aws@1.1.0`.
 
@@ -127,11 +127,11 @@ provider: nitric/aws@1.1.0
 region: us-east-1
 ```
 
-Provider specific stack configuration, including advanced configuration options, can be viewed in the reference docs for each [provider](/reference/providers).
+Provider specific stack configuration, including advanced configuration options, can be viewed in the reference docs for each [provider](/providers).
 
-- [AWS stack configuration](/reference/providers/aws/configuration)
-- [Azure stack configuration](/reference/providers/azure/configuration)
-- [GCP stack configuration](/reference/providers/gcp/configuration)
+- [AWS stack configuration](/providers/pulumi/aws/configuration)
+- [Azure stack configuration](/providers/pulumi/azure/configuration)
+- [GCP stack configuration](/providers/pulumi/gcp/configuration)
 
 <Note>
   If you create a custom provider you're able define the options available in

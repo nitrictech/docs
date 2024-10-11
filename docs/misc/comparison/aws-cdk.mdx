@@ -11,7 +11,7 @@ These are the main differences between the two:
 
 1. **Cloud Provider Support:** Nitric is provider-agnostic, capable of deploying to multiple cloud providers such as AWS, Google Cloud, and Azure. AWS CDK is primarily designed for AWS services.
 2. **Abstraction Level:** Nitric provides a high level of abstraction, allowing developers to focus more on writing application code. AWS CDK, while also abstracting over raw CloudFormation, requires a more detailed understanding of AWS services and their interactions.
-3. **Infrastructure Provisioning:** Nitric uses Pulumi by default for provisioning cloud resources, but also allows the use of [custom providers](/reference/providers/custom/building-custom-provider). AWS CDK uses AWS CloudFormation for provisioning.
+3. **Infrastructure Provisioning:** Nitric uses Pulumi by default for provisioning cloud resources, but also allows the use of [custom providers](/providers/custom/create). AWS CDK uses AWS CloudFormation for provisioning.
 4. **Local Simulation:** Nitric provides a local cloud simulation tool, allowing you to test your applications locally before deploying them. This is a feature that AWS CDK does not offer, you are required to deploy your application to the cloud.
 
 ## Code Comparison
@@ -89,12 +89,12 @@ Nitric offers a simplified, user-friendly way to define APIs with the added bene
 
 ## Differences
 
-|                      | Nitric                                                                                       | AWS CDK                                                                                                 |
-| -------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Language             | Your choice                                                                                  | Your choice                                                                                             |
-| Lines of code        | 9                                                                                            | 33                                                                                                      |
-| Cloud Infrastructure | Inferred                                                                                     | Explicit                                                                                                |
-| Extensibility        | [Custom providers](/reference/providers/custom/building-custom-provider) can be created      | Custom Constructs / Resource Providers                                                                  |
-| Local simulation     | Built-in local simulator with instant hot reloading                                          | No                                                                                                      |
-| Cloud providers      | AWS, Azure, GCP and [Custom providers](/reference/providers/custom/building-custom-provider) | AWS                                                                                                     |
-| Provisioning engine  | Pulumi by default, other custom providers can be created                                     | CloudFormation (CDKTF is used for Terraform, but you cannot compile the same code to different engines) |
+|                      | Nitric                                                           | AWS CDK                                                                                                 |
+| -------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Language             | Your choice                                                      | Your choice                                                                                             |
+| Lines of code        | 9                                                                | 33                                                                                                      |
+| Cloud Infrastructure | Inferred                                                         | Explicit                                                                                                |
+| Extensibility        | [Custom providers](/providers/custom/create) can be created      | Custom Constructs / Resource Providers                                                                  |
+| Local simulation     | Built-in local simulator with instant hot reloading              | No                                                                                                      |
+| Cloud providers      | AWS, Azure, GCP and [Custom providers](/providers/custom/create) | AWS                                                                                                     |
+| Provisioning engine  | Pulumi by default, other custom providers can be created         | CloudFormation (CDKTF is used for Terraform, but you cannot compile the same code to different engines) |

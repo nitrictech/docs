@@ -34,16 +34,35 @@ The following is a description of the underlying cloud services that each of the
 
 Currently, both the Pulumi and Terraform providers use the same underlying cloud services to deploy your application. The following table shows the cloud services used by default on each cloud:
 
-| **Resource**                           | **AWS**                                              | **Azure**                                   | **Google Cloud**                             | **Local**                                                                          |
-| -------------------------------------- | ---------------------------------------------------- | ------------------------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------- |
-| [APIs](/apis)                          | [API Gateway](./providers/aws/apis)                  | [API Management](./providers/azure/apis)    | [API Gateway](./providers/gcp/apis)          | [Custom](https://github.com/nitrictech/cli/blob/main/pkg/cloud/gateway/gateway.go) |
-| [Key Value Stores ](/keyvalue)         | [DynamoDB](./providers/aws/keyvalue)                 | [Table Storage](./providers/azure/keyvalue) | [FireStore](./providers/gcp/keyvalue)        | BoltDB                                                                             |
-| [Messaging: Topics](/messaging#topics) | [SNS](./providers/aws/topics)                        | [Event Grid](./providers/azure/topics)      | [PubSub](./providers/gcp/topics)             | Custom                                                                             |
-| [Messaging: Queues](/messaging#queues) | [SQS](./providers/aws/queues)                        | [Storage Queues](./providers/azure/queues)  | [PubSub](./providers/gcp/queues)             | Custom                                                                             |
-| [Schedules](/schedules)                | [CloudWatch Event Bridge](./providers/aws/schedules) | [Dapr Binding](./providers/azure/schedules) | [Cloud Scheduler](./providers/gcp/schedules) | Custom                                                                             |
-| [Secrets](/secrets)                    | [Secrets Manager](./providers/aws/secrets)           | [Key Vault](./providers/azure/secrets)      | [Secret Manager](./providers/gcp/secrets)    | Custom                                                                             |
-| [Storage](/storage#buckets)            | [S3](./providers/aws/storage)                        | [Blob Storage](./providers/azure/storage)   | [Cloud Storage](./providers/gcp/storage)     | SeaweedFS                                                                          |
-| Services                               | Lambda                                               | Container Apps                              | CloudRun                                     | Docker                                                                             |
+return ctx
+})
+
+```
+
+The runtime adapter acts as a Nitric protocol compliant server, accepting runtime calls made by a Nitric client (such as one of the Nitric language SDKs), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specific SDK.
+
+This allows your functions to be built, testing and run independent of any underlying cloud service. The end result is code that's faster to write, easier to test and remains portable between cloud services and cloud providers.
+
+It also significantly reduces the burden of writing project specific Infrastructure as Code and ensures the application and its deployment automation don't drift apart as development continues.
+
+![Nitric Architecture](/docs/images/guides/custom-provider/custom-provider-architecture.png)
+
+You can find out more about how the Nitric CLI and SDK interact with providers on the [deployment](/get-started/foundations/deployment) section.
+
+## Standard Providers
+
+Nitric publishes standard providers for AWS, GCP, and Azure, which are available as part of the core open-source repository on [GitHub](https://github.com/nitrictech/nitric/tree/main/cloud). These providers enable deploying and running code across AWS, Google Cloud, and Azure. The following is a description of the underlying cloud services that each of the standard providers use:
+
+| **Resource**                           | **AWS**                                                     | **Azure**                                          | **Google Cloud**                                    | **Local**                                                                          |
+| -------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [APIs](/apis)                          | [API Gateway](./providers/pulumi/aws/apis)                  | [API Management](./providers/pulumi/azure/apis)    | [API Gateway](./providers/pulumi/gcp/apis)          | [Custom](https://github.com/nitrictech/cli/blob/main/pkg/cloud/gateway/gateway.go) |
+| [Key Value Stores ](/keyvalue)         | [DynamoDB](./providers/pulumi/aws/keyvalue)                 | [Table Storage](./providers/pulumi/azure/keyvalue) | [FireStore](./providers/pulumi/gcp/keyvalue)        | BoltDB                                                                             |
+| [Messaging: Topics](/messaging#topics) | [SNS](./providers/pulumi/aws/topics)                        | [Event Grid](./providers/pulumi/azure/topics)      | [PubSub](./providers/pulumi/gcp/topics)             | Custom                                                                             |
+| [Messaging: Queues](/messaging#queues) | [SQS](./providers/pulumi/aws/queues)                        | [Storage Queues](./providers/pulumi/azure/queues)  | [PubSub](./providers/pulumi/gcp/queues)             | Custom                                                                             |
+| [Schedules](/schedules)                | [CloudWatch Event Bridge](./providers/pulumi/aws/schedules) | [Dapr Binding](./providers/pulumi/azure/schedules) | [Cloud Scheduler](./providers/pulumi/gcp/schedules) | Custom                                                                             |
+| [Secrets](/secrets)                    | [Secrets Manager](./providers/pulumi/aws/secrets)           | [Key Vault](./providers/pulumi/azure/secrets)      | [Secret Manager](./providers/pulumi/gcp/secrets)    | Custom                                                                             |
+| [Storage](/storage#buckets)            | [S3](./providers/pulumi/aws/storage)                        | [Blob Storage](./providers/pulumi/azure/storage)   | [Cloud Storage](./providers/pulumi/gcp/storage)     | SeaweedFS                                                                          |
+| Services                               | Lambda                                                      | Container Apps                                     | CloudRun                                            | Docker                                                                             |
 
 The code is open-source on [GitHub](https://github.com/nitrictech/nitric), so you can see exactly how resources are deployed and handled at runtime, then make any changes you see fit.
 
@@ -56,7 +75,14 @@ Because Nitric providers are plugins you're able to create or extend them to mee
 - Changing the way resources are deployed to use a preferred service or meet regulatory or policy requirements within your organization.
 - Reusing existing work on infrastructure automation, such using existing Terraform Modules for deployment with Nitric.
 - Deployments to another cloud provider or on-premises deployments.
-  You can read more about building custom providers [here](/providers/custom).
+  You can read more about building custom providers [here](/providers/custom/create).
+  <Note>
+    Improving the ease and flexibility of custom provider development is
+    currently a priority for the Nitric team, if you need help or want to
+    request a feature get in touch on
+    [GitHub](https://github.com/nitrictech/nitric) or
+    [Discord](https://nitric.io/chat).
+  </Note>
 
 Currently, there are two ways to build a custom provider:
 
@@ -69,3 +95,4 @@ Currently, there are two ways to build a custom provider:
   get in touch on [GitHub](https://github.com/nitrictech/nitric) or
   [Discord](https://nitric.io/chat).
 </Note>
+```

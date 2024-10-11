@@ -258,9 +258,9 @@ curl --location --request DELETE 'http://localhost:4001/profiles/[id]'
 
 At this point, you can deploy the application to any supported cloud provider. Start by setting up your credentials and any configuration for the cloud you prefer:
 
-- [AWS](/reference/providers/aws)
-- [Azure](/reference/providers/azure)
-- [Google Cloud](/reference/providers/gcp)
+- [AWS](/providers/pulumi/aws)
+- [Azure](/providers/pulumi/azure)
+- [Google Cloud](/providers/pulumi/gcp)
 
 Next, we'll need to create a `stack`. Stacks represent deployed instances of an application, including the target provider and other details such as the deployment region. You'll usually define separate stacks for each environment such as development, testing and production. For now, let's start by creating a `dev` stack.
 

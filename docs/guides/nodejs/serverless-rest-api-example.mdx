@@ -99,10 +99,10 @@ Here we're creating an API named `public` and key value store named `profiles`, 
 <Note>
   Resources in Nitric like `api` and `key value store` represent high-level
   cloud resources. When your app is deployed Nitric automatically converts these
-  requests into appropriate resources for the specific
-  [provider](/reference/providers). Nitric also takes care of adding the IAM
-  roles, policies, etc. that grant the requested access. For example the `key
-  value store` resource uses DynamoDB in AWS or FireStore on Google Cloud.
+  requests into appropriate resources for the specific [provider](/providers).
+  Nitric also takes care of adding the IAM roles, policies, etc. that grant the
+  requested access. For example the `key value store` resource uses DynamoDB in
+  AWS or FireStore on Google Cloud.
 </Note>
 
 We will need some helper functions to serialize and deserialize our profiles for the keyvalue store.
@@ -244,9 +244,9 @@ curl --location --request DELETE 'http://localhost:4001/profiles/[id]'
 
 At this point, you can deploy the application to any supported cloud provider. Start by setting up your credentials and any configuration for the cloud you prefer:
 
-- [AWS](/reference/providers/aws)
-- [Azure](/reference/providers/azure)
-- [Google Cloud](/reference/providers/gcp)
+- [AWS](/providers/pulumi/aws)
+- [Azure](/providers/pulumi/azure)
+- [Google Cloud](/providers/pulumi/gcp)
 
 Next, we'll need to create a `stack`. Stacks represent deployed instances of an application, including the target provider and other details such as the deployment region. You'll usually define separate stacks for each environment such as development, testing and production.
 
