@@ -7,8 +7,6 @@ const withMDX = nextMDX({
   options: mdxOptions,
 })
 
-const isProd = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: '/docs',
@@ -18,8 +16,9 @@ const nextConfig = {
       '/**/*': ['./src/app/**/*.mdx'],
     },
     serverActions: {
-      allowedOrigins: ['nitric.io', '*.nitric.io'],
+      allowedOrigins: ['nitric.io'],
     },
+    scrollRestoration: true,
   },
   images: {
     remotePatterns: [
@@ -625,9 +624,6 @@ const nextConfig = {
         ],
       },
     ]
-  },
-  experimental: {
-    scrollRestoration: true,
   },
 }
 
