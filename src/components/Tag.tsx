@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import clsx from 'clsx'
 
 const variantStyles = {
@@ -43,18 +44,21 @@ const valueColorMap = {
 export function Tag({
   children,
   variant = 'medium',
-  color = valueColorMap[children] ?? 'emerald',
+  color = valueColorMap[children] ?? 'zinc',
+  className = '',
 }: {
   children: keyof typeof valueColorMap & (string | {})
   variant?: keyof typeof variantStyles
   color?: keyof typeof colorStyles
+  className?: string
 }) {
   return (
     <span
-      className={clsx(
+      className={cn(
         'font-mono text-[0.625rem] font-semibold leading-6',
         variantStyles[variant],
         colorStyles[color][variant],
+        className,
       )}
     >
       {children}
