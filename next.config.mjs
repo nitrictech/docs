@@ -17,9 +17,9 @@ const nextConfig = {
     outputFileTracingIncludes: {
       '/**/*': ['./src/app/**/*.mdx'],
     },
-  },
-  serverActions: {
-    allowedOrigins: ['nitric-docs.vercel.app', 'nitric.io'],
+    serverActions: {
+      allowedOrigins: ['nitric-docs.vercel.app', 'nitric.io'],
+    },
   },
   images: {
     remotePatterns: [
