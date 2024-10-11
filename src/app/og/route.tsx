@@ -16,17 +16,12 @@ const font = fetch(new URL('../../assets/Sora-Bold.ttf', import.meta.url)).then(
 // Image generation
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
-  // ?title=<title>
-  const hasTitle = searchParams.has('title')
-  const title = hasTitle
-    ? searchParams.get('title')?.slice(0, 100)
-    : 'Nitric Docs'
 
-  const hasDescription = searchParams.has('description')
+  const title = searchParams.get('title')?.slice(0, 100) || 'Nitric Docs'
 
-  const description = hasDescription
-    ? searchParams.get('description')?.slice(0, 100)
-    : 'Docs for the Nitric cloud application framework.'
+  const description =
+    searchParams.get('description')?.slice(0, 100) ||
+    'Docs for the Nitric cloud application framework.'
 
   return new ImageResponse(
     (
@@ -76,7 +71,7 @@ export async function GET(req: NextRequest) {
             textAlign: 'left',
           }}
         >
-          {title}
+          {decodeURIComponent(title)}
           <div
             style={{
               color: '#A1A1AA',
@@ -84,7 +79,7 @@ export async function GET(req: NextRequest) {
               fontWeight: 500,
             }}
           >
-            {description}
+            {decodeURIComponent(description)}
           </div>
         </div>
         <br />
