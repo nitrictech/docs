@@ -59,6 +59,18 @@ It also significantly reduces the burden of writing project-specific Infrastruct
 
 ![Nitric Runtime Architecture](/docs/images/docs/nitric-runtime-container-arch.png)
 
+## Flexibility
+
+The details above are true in the general case, but Nitric is extremely flexible.
+
+For example, you could build a provider that doesn't use a runtime adapter and have your applications continue to use the cloud SDKs directly. This could be useful if you prefer not to abstract the cloud services or you want Nitric to just managed the deployment process.
+
+Alternatively, you could build a provider that doesn't deploy your application at all, but instead generates a report of the resources required to run your application and their relationships. This could be useful for auditing or cost estimation. It could also be useful if you prefer more human control over the deployment process. At least you'll know a requirement is never missed.
+
+Maybe you want to deploy the runtime adapter as a shared service, allowing multiple applications to share the same runtime adapter, reducing the size of individual container images.
+
+The possibilities are endless, if you'd like to explore building a custom provider, check out the [custom provider](/providers/custom) documentation or come chat with us on [Discord](https://nitric.io/chat).
+
 ## Pre-built Providers
 
 Nitric ships with five pre-built providers. The first three are direct deployment providers, and the last two are IaC providers.
