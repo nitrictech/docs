@@ -30,7 +30,38 @@ Alternatively, if you're looking for a simple deployment process, you can use or
 
 It's important to know which type of provider you're using, as the configuration options and deployment process will differ between them.
 
-Nitric ships with five official providers. The first three are direct deployment providers, and the last two are IaC providers.
+## How Providers Work
+
+Nitric providers are plugins that are responsible for deploying your application to a specific target platform. They can be used to deploy your application directly or to generate Infrastructure-as-Code for deployment.
+
+### Deployment
+
+When you run `nitric up`, the provider plugin is responsible for deploying your application to the target platform. This typically involves the following steps:
+
+1. **Build the application**: The Nitric CLI will build the application using the configuration in the `nitric.yaml` file. This includes building container images for each service.
+2. **Run the application in resource collection mode**: Nitric will run the application in a mode where it collects the resources used by the application. This is used to generate the graph of cloud resources required to run the application.
+3. **Run the provider plugin**: Nitric will run the provider plugin to deploy the application to the target platform. The provider plugin will use the resource graph from the previous step and service container images to determine the required cloud resources.
+4. **Result**: The provider plugin will either deploy the application to the target platform directly or generate IaC code for you to deploy. The deployment process will vary depending on the provider you're using.
+
+![Nitric Deployment Architecture](/docs/images/docs/nitric-deployment-container-arch.png)
+
+### Runtime Adaptation
+
+Provider plugins aren't just about deploying your application. They also provide a runtime adapter that allows your application to interact with cloud services in a cloud-agnostic way.
+
+This allows code like `bucket.file('file.txt').read()` to work across platforms, even though the underlying services are different.
+
+The runtime adapter acts as a Nitric protocol compliant server, accepting runtime calls made by a Nitric client (such as one of the [Language SDKs](/reference/languages)), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specific SDK.
+
+This allows your services, functions, etc. to be built, tested and run independent of any specific cloud service. The end result is code that's faster to write, easier to test and remains portable between services and cloud providers.
+
+It also significantly reduces the burden of writing project-specific Infrastructure as Code and ensures the application and its deployment automation don't drift apart as development continues.
+
+![Nitric Runtime Architecture](/docs/images/docs/nitric-runtime-container-arch.png)
+
+## Pre-built Providers
+
+Nitric ships with five pre-built providers. The first three are direct deployment providers, and the last two are IaC providers.
 
 ### Direct Deployment Providers
 
@@ -95,20 +126,6 @@ In the case of IaC providers, the provider plugin will generate IaC code for you
 ### `nitric down`
 
 The Nitric CLI command to tear down the application is `nitric down`. This command simply runs the provider plugin to tear down the application. This command is only available for direct deployment providers.
-
-### Runtime Adaptation
-
-Provider plugins aren't just about deploying your application. They also provide a runtime adapter that allows your application to interact with cloud services in a cloud-agnostic way.
-
-This allows code like `bucket.file('file.txt').read()` to work across platforms, even though the underlying services are different.
-
-The runtime adapter acts as a Nitric protocol compliant server, accepting runtime calls made by a Nitric client (such as one of the [Language SDKs](/reference/languages)), for example calling `.read()` on a file in a bucket. The runtime adapter translates these requests into cloud-specific API requests, typically abstracting common boilerplate such as locating SDK credentials for the cloud specific SDK.
-
-This allows your services, functions, etc. to be built, tested and run independent of any specific cloud service. The end result is code that's faster to write, easier to test and remains portable between services and cloud providers.
-
-It also significantly reduces the burden of writing project-specific Infrastructure as Code and ensures the application and its deployment automation don't drift apart as development continues.
-
-![Nitric Architecture](/docs/images/docs/nitric-runtime-container-arch.png)
 
 ## Stacks
 
