@@ -661,7 +661,7 @@ async def validate(ctx, nxt: HttpMiddleware):
 // Using the Go SDK we recommend using higher-order functions to define middleware
 func validate(next apis.Handler) apis.Handler {
   return func (ctx *apis.Ctx) error {
-    if ctx.Request.Headers()["content-type"] != nil {
+    if ctx.Request.Headers()["content-type"] == nil {
       ctx.Response.Status = 400
       ctx.Response.Body = []byte("header Content-Type is required")
 
@@ -721,7 +721,7 @@ import (
 
 func validate(next apis.Handler) apis.Handler {
   return func(ctx *apis.Ctx) error {
-    if ctx.Request.Headers()["content-type"] != nil {
+    if ctx.Request.Headers()["content-type"] == nil {
       ctx.Response.Status = 400
       ctx.Response.Body = []byte("header Content-Type is required")
 
@@ -795,7 +795,7 @@ import (
 
 func validate(next apis.Handler) apis.Handler {
   return func(ctx *apis.Ctx) error {
-    if ctx.Request.Headers()["content-type"] != nil {
+    if ctx.Request.Headers()["content-type"] == nil {
       ctx.Response.Status = 400
       ctx.Response.Body = []byte("header Content-Type is required")
 
