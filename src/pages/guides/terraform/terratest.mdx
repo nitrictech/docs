@@ -47,54 +47,42 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/nitrictech/go-sdk/handler"
 	"github.com/nitrictech/go-sdk/nitric"
+	"github.com/nitrictech/go-sdk/nitric/keyvalue"
+	"github.com/nitrictech/go-sdk/nitric/websockets"
 )
 
 func main() {
 	// Create a WebSocket endpoint named "public".
-	ws, err := nitric.NewWebsocket("public")
-	if err != nil {
-		fmt.Println("Error creating WebSocket:", err)
-		return
-	}
+	ws := nitric.NewWebsocket("public")
 
 	// Initialize a KV store named "connections" with Get, Set, and Delete permissions.
-	connections, err := nitric.NewKv("connections").Allow(nitric.KvStoreGet, nitric.KvStoreSet, nitric.KvStoreDelete)
-	if err != nil {
-		fmt.Println("Error creating KV store:", err)
-		return
-	}
+	connections := nitric.NewKv("connections").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
 	// Handle new WebSocket connections by storing the connection ID in the KV store.
-	ws.On(handler.WebsocketConnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+	ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
 		err := connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
 			"connectionId": ctx.Request.ConnectionID(),
 		})
 		if err != nil {
-			return ctx, err
+			return
 		}
-
-		return next(ctx)
 	})
 
 	// Handle WebSocket disconnections by removing the connection ID from the KV store.
-	ws.On(handler.WebsocketDisconnect, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+	ws.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) {
 		err := connections.Delete(context.TODO(), ctx.Request.ConnectionID())
 		if err != nil {
-			return ctx, err
+			return
 		}
-
-		return next(ctx)
 	})
 
 	// Handle incoming messages by broadcasting them to all other connections.
-	ws.On(handler.WebsocketMessage, func(ctx *handler.WebsocketContext, next handler.WebsocketHandler) (*handler.WebsocketContext, error) {
+	ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
 		connectionStream, err := connections.Keys(context.TODO())
 		if err != nil {
-			return ctx, err
+			return
 		}
-
 		senderId := ctx.Request.ConnectionID()
 
 		for {
@@ -110,17 +98,12 @@ func main() {
 			message := fmt.Sprintf("%s: %s", senderId, ctx.Request.Message())
 			err = ws.Send(context.TODO(), connectionId, []byte(message))
 			if err != nil {
-				return ctx, err
+				return
 			}
 		}
-
-		return next(ctx)
 	})
 
-	// Start the Nitric service to handle WebSocket events.
-	if err := nitric.Run(); err != nil {
-		fmt.Println("Error running Nitric service:", err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -173,14 +156,14 @@ go get github.com/aws/aws-sdk-go/service/iam
 
 ### Create the Test File
 
-Create a new file named `test_terraform_resources.go` in your project’s test directory:
+Create a new file named `terraform_resources_test.go` in your project’s test directory:
 
 ```bash
 mkdir -p test
-touch test/test_terraform_resources.go
+touch test/terraform_resources_test.go
 ```
 
-Add the following code to `test_terraform_resources.go`:
+Add the following code to `terraform_resources_test.go`:
 
 ```go
 package test
@@ -199,7 +182,7 @@ import (
 func TestTerraformResources(t *testing.T) {
 	// Set Terraform options, specifying the directory with your Terraform configuration
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../cdktf.out/stacks/go-realtime-dev",
+		TerraformDir: "../cdktf.out/stacks/my-websocket-app-dev",
 	}
 
 	// Ensure resources are destroyed after test completion
