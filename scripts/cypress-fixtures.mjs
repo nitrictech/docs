@@ -12,11 +12,15 @@ const PROD_PAGES_PATH = 'cypress/fixtures/prod_pages.json'
 
 async function run() {
   try {
+    const staticPages = basePages.map((page) => `/docs${page}`)
+
     const docPages = allDocs.map((doc) => {
       return doc.slug === '/' ? '/docs' : `/docs/${doc.slug}`
     })
 
-    const paths = [...basePages, ...docPages].sort((a, b) => a.localeCompare(b))
+    const paths = [...staticPages, ...docPages].sort((a, b) =>
+      a.localeCompare(b),
+    )
 
     console.log(`${paths.length} paths found. Generating fixture`)
 
