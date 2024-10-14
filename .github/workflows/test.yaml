@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-broken-links
           path: cypress/screenshots
 
   test-a11y:
@@ -75,7 +75,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-a11y
           path: cypress/screenshots
 
   test-seo:
@@ -100,5 +100,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-seo
           path: cypress/screenshots

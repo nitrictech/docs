@@ -3,8 +3,6 @@ const fs = require('fs/promises')
 const excludedDirectories = ['[[...slug]]'] // ignore dynamic routes
 const pages = []
 
-const URL = 'https://nitric.io/docs'
-
 const readDirRecursive = async (dir) => {
   const files = await fs.readdir(dir)
 
@@ -14,11 +12,12 @@ const readDirRecursive = async (dir) => {
     if (stats.isDirectory() && !excludedDirectories.includes(file)) {
       await readDirRecursive(filePath)
     } else if (file.startsWith('page.')) {
-      const loc = `${URL}${filePath
+      const loc = filePath
         .replace('src/app', '')
         .replace('.tsx', '')
         .replace('.mdx', '')
-        .replace('page', '')}`.replace(/\/$/, '')
+        .replace('page', '')
+        .replace(/\/$/, '')
 
       pages.push(loc)
     }

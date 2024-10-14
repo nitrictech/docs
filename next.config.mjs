@@ -87,22 +87,6 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       })),
-      ...[
-        '/docs/local-dashboard',
-        '/docs/installation',
-        '/docs/deployment',
-        '/docs/language-support',
-        '/docs/guides/deploy',
-        '/docs/guides/github-actions',
-      ].map((source) => ({
-        source: source,
-        destination: `/docs/getting-started${source.replace(
-          /^(\/docs\/guides\/|\/docs\/)/,
-          '/',
-        )}`,
-        basePath: false,
-        permanent: true,
-      })),
       ...['/docs/guides/text-prediction', '/docs/guides/create-histogram'].map(
         (source) => ({
           source: source,
@@ -128,7 +112,7 @@ const nextConfig = {
       },
       {
         source: '/docs/assets',
-        destination: '/docs/concepts/introduction',
+        destination: '/docs',
         basePath: false,
         permanent: true,
       },
@@ -140,7 +124,7 @@ const nextConfig = {
       },
       {
         source: '/docs/concepts',
-        destination: '/docs/concepts/introduction',
+        destination: '/docs',
         basePath: false,
         permanent: true,
       },
@@ -164,7 +148,7 @@ const nextConfig = {
       },
       {
         source: '/docs/access-control',
-        destination: '/docs/concepts/access-control',
+        destination: '/docs/get-started/foundations/infrastructure/security',
         basePath: false,
         permanent: true,
       },
@@ -176,25 +160,25 @@ const nextConfig = {
       },
       {
         source: '/docs/getting-started',
-        destination: '/docs/getting-started/quickstart',
+        destination: '/docs/get-started/quickstart',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/guides/getting-started',
-        destination: '/docs/getting-started/quickstart',
+        destination: '/docs/get-started/quickstart',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/guides/getting-started/concepts',
-        destination: '/docs/concepts/introduction',
+        destination: '/docs',
         basePath: false,
         permanent: true,
       },
       {
         source: '/docs/getting-started/concepts',
-        destination: '/docs/concepts/introduction',
+        destination: '/docs',
         basePath: false,
         permanent: true,
       },
@@ -218,7 +202,7 @@ const nextConfig = {
       },
       {
         source: '/docs/assets/access-control',
-        destination: '/docs/concepts/access-control',
+        destination: '/docs/get-started/foundations/infrastructure/security',
         basePath: false,
         permanent: true,
       },
@@ -236,7 +220,7 @@ const nextConfig = {
       },
       {
         source: '/docs/guides/getting-started/language-support',
-        destination: '/docs/concepts/language-support',
+        destination: '/docs/reference/languages#supported-languages',
         basePath: false,
         permanent: true,
       },
@@ -281,43 +265,36 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       })),
-      ...[
-        '/docs/guides/getting-started/quickstart',
-        '/docs/guides/getting-started/installation',
-        '/docs/guides/getting-started/local-dashboard',
-        '/docs/guides/getting-started/deployment',
-      ].map((source) => ({
-        source: source,
-        destination: `/docs/${source.replace(
-          /^(\/docs\/guides\/|\/docs\/)/,
-          '',
-        )}`,
+      {
+        source: '/docs/guides/getting-started/quickstart',
+        destination: '/docs/get-started/quickstart',
         basePath: false,
         permanent: true,
-      })),
+      },
+      {
+        source: '/docs/guides/getting-started/installation',
+        destination: '/docs/get-started/installation',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/getting-started/local-dashboard',
+        destination: '/docs/get-started/foundations/projects/local-development',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/guides/getting-started/deployment',
+        destination: '/docs/get-started/foundations/deployment',
+        basePath: false,
+        permanent: true,
+      },
       {
         source: '/docs/faq/common-questions',
         destination: '/docs/faq',
         basePath: false,
         permanent: true,
       },
-      ...[
-        'aws-cdk',
-        'aws-sam',
-        'gcp-deployment-manager',
-        'bicep',
-        'pulumi',
-        'terraform',
-        'sst',
-        'encore',
-        'winglang',
-        'ampt',
-      ].map((page) => ({
-        source: `/docs/faq/comparison/${page}`,
-        destination: `/docs/concepts/comparison/${page}`,
-        basePath: false,
-        permanent: true,
-      })),
       {
         source: '/docs/reference/pulumi',
         destination: '/docs/reference/providers/pulumi',

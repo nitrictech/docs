@@ -1,8 +1,8 @@
+import { BASE_URL } from '@/lib/constants'
+
 // Function to construct the XML structure of the sitemap index.
 export async function GET() {
-  const sitemapIndexXML = buildSitemapIndex([
-    'https://nitric.io/docs/sitemap-0.xml',
-  ])
+  const sitemapIndexXML = buildSitemapIndex([`${BASE_URL}/docs/sitemap-0.xml`])
 
   // Return the sitemap index XML with the appropriate content type.
   return new Response(sitemapIndexXML, {

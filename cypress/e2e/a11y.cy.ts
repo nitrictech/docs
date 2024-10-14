@@ -6,7 +6,7 @@ describe('a11y accessiblity test suite', () => {
       cy.viewport('macbook-16')
       cy.visit(page)
       cy.injectAxe()
-      cy.wait(500)
+      cy.wait(100)
       cy.checkA11y(
         undefined,
         {
@@ -40,7 +40,7 @@ describe('a11y accessiblity test suite', () => {
       cy.viewport('iphone-x')
       cy.visit(page)
       cy.injectAxe()
-      cy.wait(500)
+      cy.wait(100)
       cy.checkA11y(
         undefined,
         {

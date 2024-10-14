@@ -1,7 +1,8 @@
 import { allDocs } from '@/content'
 import staticPaths from '@/assets/sitemap.json'
+import { BASE_URL } from '@/lib/constants'
 
-const URL = 'https://nitric.io/docs'
+const URL = `${BASE_URL}/docs`
 
 interface SitemapItem {
   loc: string
@@ -15,7 +16,7 @@ const lastmod = new Date().toISOString()
 // Function to construct the XML structure of the sitemap index.
 export async function GET() {
   const pages = staticPaths.map((page) => ({
-    loc: page,
+    loc: `${URL}${page}`,
     lastmod,
     changefreq: 'daily',
     priority: 0.7,
