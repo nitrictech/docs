@@ -187,7 +187,7 @@ api.post("/favorite", (ctx) async {
 
 ### Cross-Origin Resource Sharing
 
-When we are making requests to our backend from our frontend, we will run into issues with Cross-Origin Resource Sharing (CORS) errors. We can handle this by adding CORS headers to our responses and adding OPTIONS methods to respond to preflight requests from the frontend. If you want to learn more about CORS, you can read [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). Create a file called `lib/cors.dart` which is where we will define the middleware and options handler.
+When we are making requests to our backend from our frontend, we will run into issues with Cross-Origin Resource Sharing (CORS) errors. We can handle this by adding CORS headers to our responses and adding OPTIONS methods to respond to pre-flight requests from the frontend. If you want to learn more about CORS, you can read [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). Create a file called `lib/cors.dart` which is where we will define the middleware and options handler.
 
 ```dart {{ label: "lib/cors.dart" }}cors.
 import 'package:nitric_sdk/nitric.dart';
@@ -516,7 +516,7 @@ class Application extends StatelessWidget {
         title: 'Word Generator App',
         theme: ThemeData(
           useMaterial3: true,
-          // Set the default colour for the application.
+          // Set the default color for the application.
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         ),
         // Set the home page to the generator page
@@ -715,7 +715,7 @@ You might notice that at no point is the favorites list actually being fetched, 
 
 ### Navigation
 
-To finish, we'll add the navigation page. This will wrap the `GeneratorPage` and the `favoritesPage` and allow a user to switch between them through a nav bar. This will be responsive, with a desktop having it appear on the side and a mobile appearing at the bottom. It will be a `StatefulWidget` so it can maintain the page that is being viewed. In the `initState` we will fetch the favorites data.
+To finish, we'll add the navigation page. This will wrap the `GeneratorPage` and the `favoritesPage` and allow a user to switch between them through a navigation bar. This will be responsive, with a desktop having it appear on the side and a mobile appearing at the bottom. It will be a `StatefulWidget` so it can maintain the page that is being viewed. In the `initState` we will fetch the favorites data.
 
 Start by scaffolding the main page `StatefulWidget` and `State`.
 
@@ -745,7 +745,7 @@ class _HomePageState extends State<HomePage> {
 }
 ```
 
-We then want to fill out the `build` function so it returns the current page. This will be wrapped in a `ColoredBox` that has a consistent background colour between all pages.
+We then want to fill out the `build` function so it returns the current page. This will be wrapped in a `ColoredBox` that has a consistent background color between all pages.
 
 ```dart {{ label: "lib/pages/home.dart" }}
 @override
