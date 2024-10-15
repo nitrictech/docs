@@ -15,7 +15,7 @@ async function run() {
     const staticPages = basePages.map((page) => `/docs${page}`)
 
     const docPages = allDocs.map((doc) => {
-      return doc.slug === '/' ? '/docs' : `/docs/${doc.slug}`
+      return !doc.slug ? '/docs' : `/docs/${doc.slug}`
     })
 
     const paths = [...staticPages, ...docPages].sort((a, b) =>
