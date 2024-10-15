@@ -90,16 +90,6 @@ func main() {
   // Initialize a KV store named "connections" with Get, Set, and Delete permissions.
   connections := nitric.NewKv("connections").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
-  // Handle new WebSocket connections by storing the connection ID in the KV store.
-  ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
-    err := connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
-      "connectionId": ctx.Request.ConnectionID(),
-    })
-    if err != nil {
-      return
-    }
-  })
-
   // Add event handlers here
 
   nitric.Run()
@@ -108,8 +98,8 @@ func main() {
 
 Here we're creating:
 
-- A WebSocket endpoint named `public`
-- A Key-Value store named `connections` to track WebSocket connections
+- A [WebSocket](/websockets) endpoint named `public`
+- A [Key-Value store](/keyvalue) named `connections` to track WebSocket connections
 
 From here, let's add some features to that function that allow us to manage connections and broadcast messages.
 
@@ -150,6 +140,7 @@ ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
   if err != nil {
     return
   }
+  
   senderId := ctx.Request.ConnectionID()
 
   for {
@@ -196,15 +187,6 @@ func main() {
   connections := nitric.NewKv("connections").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
   // Handle new WebSocket connections by storing the connection ID in the KV store.
-  ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
-    err := connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
-      "connectionId": ctx.Request.ConnectionID(),
-    })
-    if err != nil {
-      return
-    }
-  })
-
   ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
     err := connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
       "connectionId": ctx.Request.ConnectionID(),
@@ -263,17 +245,13 @@ Now that you have your WebSocket application defined with handlers for each even
 nitric start
 ```
 
-Once it starts, the application will be ready to accept WebSocket connections. You can use a WebSocket client like Postman or any other WebSocket tool to test the application.
+Once it starts, the application will be ready to accept WebSocket connections. You can use a WebSocket client like Postman or any other WebSocket tool to test the application. Alternatively, you can use the [Nitric Dashboard](/get-started/foundations/projects/local-development#local-dashboard).
 
-We will keep it running for our tests. If you want to update your services, just save them, and they'll be reloaded automatically.
+We will keep it running for our tests.
 
 ## Deploy to the cloud
 
-At this point, you can deploy what you've built to any of the supported cloud providers. To do this, start by setting up your credentials and any configuration for the cloud you prefer:
-
-- [AWS](/reference/providers/aws)
-- [Azure](/reference/providers/azure)
-- [GCP](/reference/providers/gcp)
+At this point, you can deploy what you've built to any of the supported cloud providers. To do this, start by setting up your credentials and configuration for [AWS](/providers/pulumi/aws).
 
 Next, we'll need to create a `stack`. A stack represents a deployed instance of an application, which is a key value store of resources defined in your project. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a `dev` stack.
 
