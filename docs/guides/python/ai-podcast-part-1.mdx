@@ -364,13 +364,238 @@ async def do_generate_audio(ctx: JobContext):
     print("Done!")
 ```
 
-Then we can add an api endpoint to trigger the download job. This will allow us to prefetch models before we need them.
-
 <Note>
   If you like the download/cache step can also be rolled into the audio
-  generation job.
+  generation job. However having the download in a separate job is more cost
+  effective as you aren't downloading and caching the model on an instance where
+  you may also be paying for GPU time.
 </Note>
 
+Then we can add an api endpoint to trigger the download job and update out api endpoint to allow selection of models and voice presets.
+
+```python
+from common.resources import main_api, gen_audio_job, download_audio_model_job
+from nitric.application import Nitric
+from nitric.context import HttpContext
+
+generate_audio = gen_audio_job.allow('submit')
+download_audio_model = download_audio_model_job.allow('submit')
+
+audio_model_id = "suno/bark"
+default_voice_preset = "v2/en_speaker_6"
+
+@main_api.post("/download-audio-model")
+async def download_audio(ctx: HttpContext):
+    model_id = ctx.req.query.get("model", audio_model_id)
+
+    if isinstance(model_id, list):
+        model_id = model_id[0]
+
+    await download_audio_model.submit({ "model_id": model_id })
+
+# Generate a sample voice line
+@main_api.post("/audio/:filename")
+async def submit_auto(ctx: HttpContext):
+    name = ctx.req.params["filename"]
+    model_id = ctx.req.query.get("model", audio_model_id)
+    preset = ctx.req.query.get("preset", default_voice_preset)
+
+    if isinstance(model_id, list):
+        model_id = model_id[0]
+
+    if isinstance(preset, list):
+        preset = preset[0]
+
+    body = ctx.req.data
+    if body is None:
+        ctx.res.status = 400
+        return
+
+    print(f"using preset {preset}")
+
+    await generate_audio.submit({"file": name, "model_id": model_id, "text": body.decode('utf-8'), "preset": preset})
+
+
+Nitric.run()
 ```
 
+Once this is done we can give our project another test using:
+
+```bash
+nitric start
 ```
+
+Just to make sure everything is working as expected.
+
+## Defining our service docker images
+
+In order to make sure our AI workload can properly use GPUs in the cloud we'll need to make sure it ships with drivers and libraries to support that.
+
+We'll start by creating a new Dockerfile for our batch service under `docker/torch.dockerfile`.
+
+```dockerfile
+# Torch dockerfile
+# Used for torch runtime based nitric batch services
+# Don't need to include the CUDA runtime as the nvidia pypi dep already ships with it
+FROM nvcr.io/nvidia/driver:550-5.15.0-1065-nvidia-ubuntu22.04
+
+ARG HANDLER
+
+ENV HANDLER=${HANDLER}
+ENV PYTHONUNBUFFERED=TRUE
+ENV PYTHONPATH="."
+ENV NVIDIA_DRIVER_CAPABILITIES=all
+ENV NVIDIA_REQUIRE_CUDA="cuda>=8.0"
+
+RUN apt-get update -y && \
+  apt-get install -y ca-certificates curl git python3.11 && \
+  update-ca-certificates && \
+  curl https://bootstrap.pypa.io/get-pip.py | python3.11 && \
+  ln -sf /usr/bin/python3.11 /usr/bin/python3 && \
+  ln -sf /usr/bin/python3.11 /usr/bin/python && \
+  ln -sf /usr/bin/pip3.11 /usr/bin/pip3 && \
+  ln -sf /usr/bin/pip3.11 /usr/bin/pip
+
+RUN pip install --no-cache-dir --upgrade pip pipenv
+
+COPY Pipfile Pipfile.lock ./
+
+RUN pipenv install --system --categories="packages ml" --skip-lock --deploy --verbose
+
+COPY . .
+
+ENTRYPOINT python3.11 -u $HANDLER
+```
+
+We'll also add an ignorefile for this Dockerfile to try and keep the image size down.
+
+```gitignore
+.mypy_cache/
+.nitric/
+.venv/
+.model/
+```
+
+Next we'll define a `standard` runtime for our normal services that we want to deploy along with our batch service. under `docker/standard.dockerfile`.
+
+```dockerfile
+ARG IMAGE_BASE=python:3.11-slim
+
+FROM ${IMAGE_BASE}
+
+ARG HANDLER
+
+ENV HANDLER=${HANDLER}
+ENV PYTHONUNBUFFERED=TRUE
+ENV PYTHONPATH="."
+
+RUN apt-get update -y && \
+    apt-get install -y ca-certificates git && \
+    update-ca-certificates
+
+RUN pip install --no-cache-dir --upgrade pip pipenv
+
+COPY . .
+
+ARG CATEGORIES="packages"
+
+RUN pipenv install --categories="${CATEGORIES}" --skip-lock --system --deploy --verbose
+
+ENTRYPOINT python -u $HANDLER
+```
+
+And we'll add an ignorefile for this Dockerfile as well.
+
+```gitignore
+.mypy_cache/
+.nitric/
+.venv/
+.model/
+```
+
+Finally we'll update our `nitric.yaml` to include the new dockerfiles.
+
+```yaml
+name: podcast-ai
+services:
+  - match: services/*.py
+    start: pipenv run dev $SERVICE_PATH
+    runtime: standard
+batch-services:
+  - match: batches/*.py
+    start: pipenv run dev $SERVICE_PATH
+    runtime: torch
+
+runtimes:
+  torch:
+    dockerfile: './docker/torch.dockerfile'
+    args: {}
+  standard:
+    dockerfile: './docker/standard.dockerfile'
+    args: {}
+
+preview:
+  - batch-services
+```
+
+Finally we can define out nitric stack file for deploying to the cloud.
+
+```bash
+nitric stack new aws aws
+```
+
+This will generate a nitric stack called `aws` to deploy to AWS.
+
+Then we can tweak out stack with settings with some configuration for our batch service and the AWS Compute environment it will run in.
+
+```yaml
+# The nitric provider to use
+provider: nitric/aws@1.14.0
+# The target aws region to deploy to
+# See available regions:
+# https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
+region: ap-southeast-2
+
+batch-compute-env:
+  min-cpus: 0
+  # Allow a maximum of 4 CPUs to be used
+  max-cpus: 4
+  instance-types:
+    # Allow use of G5 instances
+    - g5
+    - optimal
+```
+
+<Note>
+  You will need to make sure your machine is configured to deploy to AWS. See
+  the [Nitric AWS provider documentation](/providers/aws) for more information.
+</Note>
+
+<Note>
+  Most AWS accounts will not have access to on demand GPU instances so you may
+  need to update your AWS service quotas to allow GPU instances to spin up. The
+  model will also work on CPU so if you can't get access to GPUs you can always
+  increase the CPU count and memory to compensate.
+</Note>
+
+Once that's configured we can deploy our project to the cloud using:
+
+```bash
+nitric up
+```
+
+<Note>
+  Deployment may take sometime due to the size of the python/Nvidia driver and
+  CUDA runtime dependencies. Be patient.
+</Note>
+
+Once the project is deployed you can try out some generation, just like before depending on the hardware you were running on locally you may notice a speed up in generation time.
+
+<Note>
+Running the project in the cloud will incur costs. Make sure to monitor your usage and shut down the project when you're done.
+
+Running on g5.xlarge from testing this project will cost ~$0.05/minute of audio you generate. Based on standard EC2 pricing for US regions.
+
+</Note>
+
+In part two of this guide we'll look at adding an LLM agent to our project to automatically generate scripts for our podcasts from small prompts.
