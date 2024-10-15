@@ -116,7 +116,7 @@ ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
   })
   if err != nil {
     fmt.Println("Error storing connection ID in KV store:", err)
-    return
+    ctx.Response.Reject = true
   }
 })
 ```
@@ -196,7 +196,7 @@ func main() {
     })
     if err != nil {
       fmt.Println("Error storing connection ID in KV store:", err)
-      return
+      ctx.Response.Reject = true
     }
   })
 
