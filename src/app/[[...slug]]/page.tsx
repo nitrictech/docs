@@ -32,10 +32,12 @@ export async function generateMetadata({
     seoTitle = `${navItem.breadcrumbParentItem.title}: ${title_meta}`
   }
 
+  const url = doc.slug ? `${BASE_URL}/docs/${doc.slug}` : `${BASE_URL}/docs`
+
   const openGraph: OpenGraph = {
     siteName: 'Nitric Docs',
     locale: 'en_US',
-    url: `${BASE_URL}/docs/${doc.slug}`,
+    url,
     images: !doc.slug // is home page
       ? [
           {
@@ -68,7 +70,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
     },
     alternates: {
-      canonical: doc.slug ? `${BASE_URL}/docs/${doc.slug}` : `${BASE_URL}/docs`,
+      canonical: url,
     },
   }
 }
