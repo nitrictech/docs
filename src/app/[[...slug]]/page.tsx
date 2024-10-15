@@ -68,7 +68,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
     },
     alternates: {
-      canonical: `${BASE_URL}/docs/${doc.slug}`,
+      canonical: doc.slug ? `${BASE_URL}/docs/${doc.slug}` : `${BASE_URL}/docs`,
     },
   }
 }
