@@ -11,17 +11,15 @@ tags:
 
 In this guide we'll be building the first of many parts to create a fully autonomous AI podcast.
 
-This part will focus on generating long form audio content from text using the Nitric Batch service.
+This part will focus on generating long form audio content from text using a [Nitric Batch service](/batch).
 
 By the end of this guide we'll have a project that will be able to produce audio content from text input.
 
 Here is a sample of what we'll be able to produce:
 
-{/* Add audio clip here */}
-
 <audio controls>
-  <source src="audio/dead-internet-podcast.m4a" type="audio/x-m4a" />
-</audio>{' '}
+  <source src="/docs/audio/dead-internet-podcast.m4a" type="audio/x-m4a" />
+</audio>
 
 ## Prerequisites
 
@@ -30,3 +28,349 @@ Here is a sample of what we'll be able to produce:
 - _(optional)_ Your choice of an [AWS](https://aws.amazon.com) or [GCP](https://cloud.google.com)
 
 ## Getting started
+
+We'll start by creating a new project for our AI podcast.
+
+```bash
+nitric new ai-podcast py-starter
+cd ai-podcast
+```
+
+Next we'll install our base dependencies:
+
+```bash
+pipenv install --dev
+```
+
+Then we'll install the dependencies we need for this project:
+
+```bash
+pipenv install --categories="ml" torch transformers scipy
+```
+
+<Note>
+  We'll be using the `transformers` library from Hugging Face to generate the
+  audio content. Specifically we'll be using the `suno/bark` model for this
+  project.
+</Note>
+
+## Designing our project
+
+We'll start off by creating a new module that will help us manage our cloud resources for this project.
+
+We'll create this as `common/resources.py` in our project.
+
+```python
+from nitric.resources import api, bucket, job
+# Our main API for invoking our project
+main_api = api("main")
+# A job for generating our audio content
+gen_audio_job = job("audio")
+# A job for managing our model downloads
+download_audio_model_job = job("download-audio-model")
+
+# A bucket for storing our audio clips
+clips_bucket = bucket("clips")
+# And another bucket for storing our models
+models_bucket = bucket("models")
+```
+
+## Creating our first batch job
+
+Next we'll create the beginnings of our audio generation job.
+
+```python
+from common.resources import gen_audio_job
+from nitric.context import JobContext
+from nitric.application import Nitric
+from transformers import AutoProcessor, BarkModel
+
+import scipy
+import io
+import torch
+import numpy as np
+import requests
+
+@gen_audio_job(cpus=4, memory=12000, gpus=1)
+async def do_generate_audio(ctx: JobContext):
+    file = ctx.req.data["file"]
+    text: str = ctx.req.data["text"]
+
+    print("Loading model")
+    model = BarkModel.from_pretrained("suno/bark")
+    processor = AutoProcessor.from_pretrained("suno/bark")
+    print("Model loaded")
+
+    # Split the text by sentences and chain the audio clips together
+    # We do this because the model can only reliably generate a certain amount of audio at a time
+    sentences = text.split(".")
+    sentences = [sentence for sentence in sentences if sentence.strip() != ""]
+
+    audio_arrays = []
+    # for each sentence, generate the audio clip
+    for index, sentence in enumerate(sentences):
+        # Insert pauses between sentences to prevent clips from running together
+        inputs = processor(f"{sentence}...", voice_preset=voice_preset)
+
+        if torch.cuda.is_available():
+            inputs.to("cuda")
+            model.to("cuda")
+        else:
+            print("CUDA unavailable, defaulting to CPU. This may take a while.")
+
+        print(f"Generating clip {index + 1}/{len(sentences)}")
+        audio_array = model.generate(**inputs, pad_token_id=0)
+        audio_array = audio_array.cpu().numpy().squeeze()
+
+        audio_arrays.append(audio_array)
+
+    final_array = np.concatenate(audio_arrays)
+
+    buffer = io.BytesIO()
+    print("Encoding clip")
+    sample_rate = model.generation_config.sample_rate
+    scipy.io.wavfile.write(buffer, rate=sample_rate, data=final_array)
+
+    print("Uploading clip")
+    upload_url = await clips.file(f'{file}.wav').upload_url()
+
+    # make a put request to the upload url
+    requests.put(upload_url, data=buffer.getvalue(), headers={"Content-Type": "audio/wav"}, timeout=600)
+
+    print("Done!")
+```
+
+## Creating our API
+
+First we'll remove out starter API and replace it with our own.
+
+```bash
+rm services/hello.pi
+touch services/api.py
+```
+
+Then we'll create an API endpoint in `services/api.py` that will us to call the job we defined in the first step.
+
+```python
+from common.resources import main_api, gen_audio_job
+
+# Give this service permission to submit the gen_audio_job
+gen_audio = gen_audio_job.allow("submit")
+
+default_voice_preset = "v2/en_speaker_6"
+
+# Generate a sample voice line
+@main_api.post("/audio/:filename")
+async def submit_auto(ctx: HttpContext):
+    name = ctx.req.params["filename"]
+    preset = ctx.req.query.get("preset", default_voice_preset)
+
+    if isinstance(model_id, list):
+        model_id = model_id[0]
+
+    if isinstance(preset, list):
+        preset = preset[0]
+
+    body = ctx.req.data
+    if body is None:
+        ctx.res.status = 400
+        return
+
+    print(f"using preset {preset}")
+
+    await generate_audio.submit({"file": name, "text": body.decode('utf-8'), "preset": preset})
+
+Nitric.run()
+```
+
+## Updating the nitric.yaml
+
+Finally we'll update our `nitric.yaml` to include the batch service we created and add the preview flag for batch.
+
+```yaml
+name: podcast-ai
+services:
+  - match: services/*.py
+    start: pipenv run dev $SERVICE_PATH
+batch-services:
+  - match: batches/*.py
+    start: pipenv run dev $SERVICE_PATH
+
+preview:
+  - batch-services
+```
+
+## Running our project
+
+We can start our project by running
+
+```bash
+nitric start
+```
+
+Once its up and running we can test out our API by running:
+
+```bash
+
+```
+
+Or you can use your favorite API client to test it out.
+
+<Note>
+  If you're running without a GPU it can take some time for the audio content to
+  generate
+</Note>
+
+Once the generation is complete you should have something like this:
+
+<audio>
+
+</audio>
+
+Feel free to play around with it a bit more before continuing on. It can be fun to experiment with different text inputs and see what the model generates.
+
+## Preparing to deploy to the cloud
+
+Before we can deploy our project to the cloud we need to make a few changes to our project.
+
+First we want to be able to cache models to be used between runs without having to pull them from hugging face hub each time.
+
+This is what we added the models bucket and download job for.
+
+Lets update our `batches/podcast.py` to include the download job.
+
+```python
+from common.resources import gen_audio_job, clips_bucket, models_bucket, download_audio_model_job
+from nitric.context import JobContext
+from nitric.application import Nitric
+from transformers import AutoProcessor, BarkModel
+
+import scipy
+import io
+import torch
+import numpy as np
+import requests
+import zipfile
+import os
+
+clips = clips_bucket.allow('write')
+models = models_bucket.allow('read', 'write')
+
+model_dir = "./.model"
+# Download the model and save it to a nitric bucket
+@download_audio_model_job(cpus=4, memory=12000)
+async def do_download_audio_model(ctx: JobContext):
+    model_id = ctx.req.data["model_id"]
+
+    print("Downloading models - this may take several minutes")
+    processor = AutoProcessor.from_pretrained(model_id)
+    model = BarkModel.from_pretrained(model_id)
+
+    processor.save_pretrained(f"{model_dir}/processor")
+    model.save_pretrained(f"{model_dir}/audio")
+
+    print("Compressing models")
+    zip_path = "model.zip"
+
+    # zip the model
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_STORED) as zip_file:
+        for root, dirs, files in os.walk(model_dir):
+            for file in files:
+                file_path = os.path.join(root, file)
+                archive_name = os.path.relpath(file_path, start=model_dir)
+                print(f"Adding {file_path} to zip as {archive_name}")
+                zip_file.write(file_path, archive_name)
+
+    print("Storing models in bucket")
+    # push the archive
+    module_url = await models.file(f"{model_id}.zip").upload_url()
+    print(module_url)
+    with open(zip_path, "rb") as f:
+        requests.put(module_url, data=f, timeout=6000)
+    print("Done!")
+```
+
+We'll also update our audio generation job to download the model from the bucket before processing the audio.
+
+```python
+@gen_audio_job(cpus=4, memory=12000, gpus=1)
+async def do_generate_audio(ctx: JobContext):
+    file = ctx.req.data["file"]
+    voice_preset = ctx.req.data["preset"]
+    text: str = ctx.req.data["text"]
+    model_id = ctx.req.data["model_id"]
+
+    # Copy model from nitric bucket to local storage
+    if not os.path.exists(model_dir):
+        print("Downloading model")
+        download_url = await models.file(f"{model_id}.zip").download_url()
+        response = requests.get(download_url, allow_redirects=True, timeout=600)
+        # save the zip file
+        with open("model.zip", "wb") as f:
+            f.write(response.content)
+        print("Unzipping model")
+        with zipfile.ZipFile("model.zip", 'r') as zip_ref:
+            zip_ref.extractall(model_dir)
+
+        # cleanup zip file
+        print("Cleaning up")
+        os.remove("model.zip")
+
+
+    print("Loading model")
+    model = BarkModel.from_pretrained(f"{model_dir}/audio")
+    processor = AutoProcessor.from_pretrained("./.model/processor")
+    print("Model loaded")
+
+    print(f'Using voice preset {voice_preset}')
+
+    # Split the text by sentences and chain the audio clips together
+    sentences = text.split(".")
+    sentences = [sentence for sentence in sentences if sentence.strip() != ""]
+
+    audio_arrays = []
+    # for each sentence, generate the audio clip
+    for index, sentence in enumerate(sentences):
+        # Insert pauses between sentences to prevent clips from running together
+        inputs = processor(f"{sentence}...", voice_preset=voice_preset)
+
+        if torch.cuda.is_available():
+            inputs.to("cuda")
+            model.to("cuda")
+        else:
+            print("CUDA unavailable, defaulting to CPU. This may take a while.")
+
+        print(f"Generating clip {index + 1}/{len(sentences)}")
+        audio_array = model.generate(**inputs, pad_token_id=0)
+        audio_array = audio_array.cpu().numpy().squeeze()
+
+        audio_arrays.append(audio_array)
+
+    final_array = np.concatenate(audio_arrays)
+
+    buffer = io.BytesIO()
+    print("Encoding clip")
+    sample_rate = model.generation_config.sample_rate
+    scipy.io.wavfile.write(buffer, rate=sample_rate, data=final_array)
+
+    print("Uploading clip")
+    upload_url = await clips.file(f'{file}.wav').upload_url()
+
+    # make a put request to the upload url
+    # with the buffer as the body
+    # and the content type as audio/wav
+    requests.put(upload_url, data=buffer.getvalue(), headers={"Content-Type": "audio/wav"}, timeout=600)
+
+    print("Done!")
+```
+
+Then we can add an api endpoint to trigger the download job. This will allow us to prefetch models before we need them.
+
+<Note>
+  If you like the download/cache step can also be rolled into the audio
+  generation job.
+</Note>
+
+```
+
+```
