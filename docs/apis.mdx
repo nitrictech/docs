@@ -673,7 +673,7 @@ func validate(next apis.Handler) apis.Handler {
 }
 ```
 
-```dart
+```dart !!
 Future<HttpContext> validate(HttpContext ctx) async {
   if (!ctx.req.headers.containsKey("Content-Type")) {
     ctx.res.status = 400;
@@ -750,7 +750,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 import '../middlewares';
 
@@ -835,7 +835,7 @@ func main() {
 }
 ```
 
-```dart
+```dart !!
 import 'package:nitric_sdk/nitric.dart';
 import '../middlewares';
 
