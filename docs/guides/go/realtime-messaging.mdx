@@ -1,16 +1,15 @@
 ---
-title_seo: Building your first WebSocket Application with Go and Nitric
 description: Use the Nitric framework to easily build and deploy Go WebSocket applications for AWS.
 tags:
   - Realtime & Websockets
   - Key Value Store
 ---
 
-# Building your first WebSocket Application with Nitric
+# Building a chat app in Go with WebSockets and Nitric
 
 ## What we'll be doing
 
-1. Use Nitric to create a WebSocket endpoint
+1. Use Nitric to create a WebSocket API
 2. Manage WebSocket connections using a Key-Value store
 3. Handle WebSocket events:
    - Register connections on connect
@@ -23,20 +22,20 @@ tags:
 
 - [Go](https://go.dev/dl/)
 - The [Nitric CLI](/get-started/installation)
-- An [AWS](https://aws.amazon.com) account
+- An [AWS](https://aws.amazon.com) account (optional)
 
 ## Getting started
 
 We'll start by creating a new project for our WebSocket application.
 
 ```bash
-nitric new my-websocket-app go-starter
+nitric new websocket-app go-starter
 ```
 
 Next, open the project in your editor of choice.
 
 ```bash
-cd my-websocket-app
+cd websocket-app
 ```
 
 Make sure all dependencies are resolved:
@@ -69,9 +68,9 @@ If everything is working as expected, you can now delete all files/folders in th
 
 ## Building the WebSocket Application
 
-Let's begin by setting up the WebSocket application. First, create a new folder called `websockets` within the services directory. Inside this folder, add a file named `main.go`, and include the following code:
+Let's begin by setting up the WebSocket application. Add a file named `main.go` to your 'services/websockets' folder, and include the following code:
 
-```go
+```go title:services/websockets/main.go
 package main
 
 import (
@@ -84,7 +83,7 @@ import (
 )
 
 func main() {
-  // Create a WebSocket endpoint named "public".
+  // Create a WebSocket API named "public".
   ws := nitric.NewWebsocket("public")
 
   // Initialize a KV store named "connections" with Get, Set, and Delete permissions.
@@ -98,8 +97,8 @@ func main() {
 
 Here we're creating:
 
-- A [WebSocket](/websockets) endpoint named `public`
-- A [Key-Value store](/keyvalue) named `connections` to track WebSocket connections
+- A [WebSocket](/websockets) API named `public`
+- A [Key-Value store](/keyvalue) named `connections` to track client connections
 
 From here, let's add some features to that function that allow us to manage connections and broadcast messages.
 
@@ -112,10 +111,11 @@ From here, let's add some features to that function that allow us to manage conn
 
 ```go
 ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
-  err := connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
+  err := connections.Set(context.Background(), ctx.Request.ConnectionID(), map[string]interface{}{
     "connectionId": ctx.Request.ConnectionID(),
   })
   if err != nil {
+    fmt.Println("Error storing connection ID in KV store:", err)
     return
   }
 })
@@ -125,8 +125,9 @@ ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
 
 ```go
 ws.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) {
-  err := connections.Delete(context.TODO(), ctx.Request.ConnectionID())
+  err := connections.Delete(context.Background(), ctx.Request.ConnectionID())
   if err != nil {
+    fmt.Println("Error deleting connection ID in KV store:", err)
     return
   }
 })
@@ -136,8 +137,9 @@ ws.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) {
 
 ```go
 ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
-  connectionStream, err := connections.Keys(context.TODO())
+  connectionStream, err := connections.Keys(context.Background())
   if err != nil {
+    fmt.Println("Error retrieving connection keys from KV store:", err)
     return
   }
 
@@ -154,8 +156,9 @@ ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
     }
 
     message := fmt.Sprintf("%s: %s", senderId, ctx.Request.Message())
-    err = ws.Send(context.TODO(), connectionId, []byte(message))
+    err = ws.Send(context.Background(), connectionId, []byte(message))
     if err != nil {
+      fmt.Println("Error sending message to connection ID", connectionId, ":", err)
       return
     }
   }
@@ -167,7 +170,7 @@ ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
 <details>
 <summary>Your code should look like this:</summary>
 
-```go
+```go title:services/websockets/main.go
 package main
 
 import (
@@ -188,24 +191,27 @@ func main() {
 
   // Handle new WebSocket connections by storing the connection ID in the KV store.
   ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
-    err := connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
+    err := connections.Set(context.Background(), ctx.Request.ConnectionID(), map[string]interface{}{
       "connectionId": ctx.Request.ConnectionID(),
     })
     if err != nil {
+      fmt.Println("Error storing connection ID in KV store:", err)
       return
     }
   })
 
   ws.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) {
-    err := connections.Delete(context.TODO(), ctx.Request.ConnectionID())
+    err := connections.Delete(context.Background(), ctx.Request.ConnectionID())
     if err != nil {
+      fmt.Println("Error deleting connection ID in KV store:", err)
       return
     }
   })
 
   ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
-    connectionStream, err := connections.Keys(context.TODO())
+    connectionStream, err := connections.Keys(context.Background())
     if err != nil {
+      fmt.Println("Error retrieving connection keys from KV store:", err)
       return
     }
 
@@ -222,8 +228,9 @@ func main() {
       }
 
       message := fmt.Sprintf("%s: %s", senderId, ctx.Request.Message())
-      err = ws.Send(context.TODO(), connectionId, []byte(message))
+      err = ws.Send(context.Background(), connectionId, []byte(message))
       if err != nil {
+        fmt.Println("Error sending message to connection ID", connectionId, ":", err)
         return
       }
     }
@@ -239,28 +246,23 @@ Do a quick `go mod tidy` to make sure all new dependencies are resolved.
 
 ## Ok, let's run this thing!
 
-Now that you have your WebSocket application defined with handlers for each event, it's time to test it locally. Update your `nitric.yaml` to point to the service at `websockets/main.go`:
-
-```yaml
-services:
-  - match: websockets/*
-    runtime: go
-    start: go run ./$SERVICE_PATH
-```
+Now that you have your WebSocket application defined with handlers for each event, it's time to test it locally.
 
 ```bash
 nitric start
 ```
 
-Once it starts, the application will be ready to accept WebSocket connections. You can use a WebSocket client like Postman or any other WebSocket tool to test the application. Alternatively, you can use the [Nitric Dashboard](/get-started/foundations/projects/local-development#local-dashboard).
+Once it starts, the application will be ready to accept WebSocket connections that you can easily test with the [Nitric Dashboard](/get-started/foundations/projects/local-development#local-dashboard). You can find the URL to the dashboard in the terminal running the Nitric CLI, by default, it is set to - http://localhost:49152.
 
-We will keep it running for our tests.
+![websocket dashboard](/docs/images/guides/realtime-messaging/dashboard.png)
+
+The dashboard will show you the WebSocket URL and allow you to connect as a client to send, receive and monitor messages.
 
 ## Deploy to the cloud
 
-At this point, you can deploy what you've built to any of the supported cloud providers. To do this, start by setting up your credentials and configuration for [AWS](/providers/pulumi/aws).
+At this point, you can deploy what you've built to any of the supported cloud providers. In this example we'll deploy to AWS. Start by setting up your credentials and configuration for the [nitric/aws provider](/providers/pulumi/aws).
 
-Next, we'll need to create a `stack`. A stack represents a deployed instance of an application, which is a key value store of resources defined in your project. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a `dev` stack.
+Next, we'll need to create a `stack file` (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
 
 The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
@@ -268,7 +270,7 @@ The `stack new` command below will create a stack named `dev` that uses the `aws
 nitric stack new dev aws
 ```
 
-Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region. Let's use `us-east-1`.
+Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
 
 ### AWS
 
@@ -277,7 +279,7 @@ Continue by checking your stack file `nitric.dev.yaml` and adding in your prefer
   costs associated with deployment.
 </Note>
 
-We called our stack `dev`. Let's try deploying it with the `up` command:
+Let's try deploying the stack with the `up` command:
 
 ```bash
 nitric up

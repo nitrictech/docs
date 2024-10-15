@@ -30,84 +30,92 @@ Our sample project creates a real-time communication service using [WebSockets](
 
 We intend to deploy to AWS and will use Terratest to ensure that the following:
 
-- **API Gateway WebSocket**: Confirm that the websocket endpoint is correctly configured for real-time communication.
+- **WebSocket API**: Confirm that the API Gateway WebSocket API is correctly configured for real-time communication.
 - **DynamoDB Table**: Verify that the key-value store for connections is created and operational.
 - **IAM Roles**: Ensure that permissions for interacting with AWS services are correctly set up.
 
-Let's start by creating a new project for our application.
+Let's begin by setting up the WebSocket application that we'll be testing.
+
+<Note>
+  You can find a more detailed set of instructions in this guide - [Building a
+  chat app in Go with WebSockets and Nitric ](/guides/go/realtime-messaging).
+  Once you've completed this guide, skip to [the next
+  step](#deploying-to-aws-with-a-terraform-provider)
+</Note>
 
 ```bash
-nitric new my-websocket-app go-starter
+nitric new websocket-app go-starter
 ```
 
-### Application code
+Then you can delete all files/folders in the `services/` folder and add a file named `main.go` to your 'services/websockets' folder with the following code:
 
-Replace the contents of `services\hello.go` with our websockets application.
-
-```go
+```go title:services/websockets/main.go
 package main
 
 import (
-	"context"
-	"fmt"
+  "context"
+  "fmt"
 
-	"github.com/nitrictech/go-sdk/nitric"
-	"github.com/nitrictech/go-sdk/nitric/keyvalue"
-	"github.com/nitrictech/go-sdk/nitric/websockets"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/keyvalue"
+  "github.com/nitrictech/go-sdk/nitric/websockets"
 )
 
 func main() {
-	// Create a WebSocket endpoint named "public".
-	ws := nitric.NewWebsocket("public")
+  // Create a WebSocket endpoint named "public".
+  ws := nitric.NewWebsocket("public")
 
-	// Initialize a KV store named "connections" with Get, Set, and Delete permissions.
-	connections := nitric.NewKv("connections").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
+  // Initialize a KV store named "connections" with Get, Set, and Delete permissions.
+  connections := nitric.NewKv("connections").Allow(keyvalue.KvStoreGet, keyvalue.KvStoreSet, keyvalue.KvStoreDelete)
 
-	// Handle new WebSocket connections by storing the connection ID in the KV store.
-	ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
-		err := connections.Set(context.TODO(), ctx.Request.ConnectionID(), map[string]interface{}{
-			"connectionId": ctx.Request.ConnectionID(),
-		})
-		if err != nil {
-			return
-		}
-	})
+  // Handle new WebSocket connections by storing the connection ID in the KV store.
+  ws.On(websockets.EventType_Connect, func(ctx *websockets.Ctx) {
+    err := connections.Set(context.Background(), ctx.Request.ConnectionID(), map[string]interface{}{
+      "connectionId": ctx.Request.ConnectionID(),
+    })
+    if err != nil {
+      fmt.Println("Error storing connection ID in KV store:", err)
+      return
+    }
+  })
 
-	// Handle WebSocket disconnections by removing the connection ID from the KV store.
-	ws.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) {
-		err := connections.Delete(context.TODO(), ctx.Request.ConnectionID())
-		if err != nil {
-			return
-		}
-	})
+  ws.On(websockets.EventType_Disconnect, func(ctx *websockets.Ctx) {
+    err := connections.Delete(context.Background(), ctx.Request.ConnectionID())
+    if err != nil {
+      fmt.Println("Error deleting connection ID in KV store:", err)
+      return
+    }
+  })
 
-	// Handle incoming messages by broadcasting them to all other connections.
-	ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
-		connectionStream, err := connections.Keys(context.TODO())
-		if err != nil {
-			return
-		}
-		senderId := ctx.Request.ConnectionID()
+  ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
+    connectionStream, err := connections.Keys(context.Background())
+    if err != nil {
+      fmt.Println("Error retrieving connection keys from KV store:", err)
+      return
+    }
 
-		for {
-			connectionId, err := connectionStream.Recv()
-			if err != nil {
-				break
-			}
+    senderId := ctx.Request.ConnectionID()
 
-			if connectionId == senderId {
-				continue
-			}
+    for {
+      connectionId, err := connectionStream.Recv()
+      if err != nil {
+        break
+      }
 
-			message := fmt.Sprintf("%s: %s", senderId, ctx.Request.Message())
-			err = ws.Send(context.TODO(), connectionId, []byte(message))
-			if err != nil {
-				return
-			}
-		}
-	})
+      if connectionId == senderId {
+        continue
+      }
 
-	nitric.Run()
+      message := fmt.Sprintf("%s: %s", senderId, ctx.Request.Message())
+      err = ws.Send(context.Background(), connectionId, []byte(message))
+      if err != nil {
+        fmt.Println("Error sending message to connection ID", connectionId, ":", err)
+        return
+      }
+    }
+  })
+
+  nitric.Run()
 }
 ```
 
@@ -121,7 +129,7 @@ nitric stack new dev aws-tf
 
 Update this newly created stack file to include your target region:
 
-```yaml
+```yaml title:nitric.dev.yaml
 # The nitric provider to use
 provider: nitric/awstf@1.11.6
 
@@ -131,18 +139,18 @@ region: us-east-2
 
 The Nitric Terraform providers are currently in preview, to enable them you'll need to enable beta-providers in your Nitric project. You can do this by adding the following to your project's `nitric.yaml` file:
 
-```
+```yaml title:nitric.yaml
 preview:
   - beta-providers
 ```
 
-Once you've created your Nitric stack, you can generate the Terraform code by running the following command:
+Once you've created your stack file, you can generate the Terraform code by running the following command:
 
 ```
 nitric up
 ```
 
-This will generate the Terraform code for your Nitric application into a folder named `cdktf.out` by default.
+This will generate Terraform code which can deploy your application. The output will be in a folder named `cdktf.out` by default.
 
 ## Add and execute Terratest
 
@@ -170,7 +178,7 @@ touch test/terraform_resources_test.go
 
 Add the following code to `terraform_resources_test.go`:
 
-```go
+```go title:test/terraform_resources_test.go
 package test
 
 import (
@@ -187,7 +195,7 @@ import (
 func TestTerraformResources(t *testing.T) {
 	// Set Terraform options, specifying the directory with your Terraform configuration
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../cdktf.out/stacks/my-websocket-app-dev",
+		TerraformDir: "../cdktf.out/stacks/websocket-app-dev",
 	}
 
 	// Ensure resources are destroyed after test completion
@@ -209,11 +217,11 @@ func TestTerraformResources(t *testing.T) {
 
 	// Test IAM role creation
 	iamClient := iam.New(sess)
-	roleName := "my-websocket-app_websockets-main" // Name of the IAM role to check
+	roleName := "websocket-app_websockets-main" // Name of the IAM role to check
 	_, err = iamClient.GetRole(&iam.GetRoleInput{
 		RoleName: aws.String(roleName),
 	})
-	assert.NoError(t, err, "Expected IAM role 'my-websocket-app_websockets-main' to be created")
+	assert.NoError(t, err, "Expected IAM role 'websocket-app_websockets-main' to be created")
 
 	// Test API gateway webSocket creation
 	apiClient := apigatewayv2.New(sess)
