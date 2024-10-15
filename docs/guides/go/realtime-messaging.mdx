@@ -1,6 +1,6 @@
 ---
 title_seo: Building your first WebSocket Application with Go and Nitric
-description: Use the Nitric framework to easily build and deploy Go WebSocket applications for AWS, Azure or Google Cloud.
+description: Use the Nitric framework to easily build and deploy Go WebSocket applications for AWS.
 tags:
   - Realtime & Websockets
   - Key Value Store
@@ -140,7 +140,7 @@ ws.On(websockets.EventType_Message, func(ctx *websockets.Ctx) {
   if err != nil {
     return
   }
-  
+
   senderId := ctx.Request.ConnectionID()
 
   for {
@@ -239,7 +239,14 @@ Do a quick `go mod tidy` to make sure all new dependencies are resolved.
 
 ## Ok, let's run this thing!
 
-Now that you have your WebSocket application defined with handlers for each event, it's time to test it locally.
+Now that you have your WebSocket application defined with handlers for each event, it's time to test it locally. Update your `nitric.yaml` to point to the service at `websockets/main.go`:
+
+```yaml
+services:
+  - match: websockets/*
+    runtime: go
+    start: go run ./$SERVICE_PATH
+```
 
 ```bash
 nitric start
@@ -265,7 +272,10 @@ Continue by checking your stack file `nitric.dev.yaml` and adding in your prefer
 
 ### AWS
 
-Note: You are responsible for staying within the limits of the free tier or any costs associated with deployment.
+<Note>
+  You are responsible for staying within the limits of the free tier or any
+  costs associated with deployment.
+</Note>
 
 We called our stack `dev`. Let's try deploying it with the `up` command:
 
