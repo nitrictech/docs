@@ -297,21 +297,22 @@ const nextConfig = {
       },
       {
         source: '/docs/reference/pulumi',
-        destination: '/docs/reference/providers/pulumi',
+        destination: '/docs/providers/pulumi',
         basePath: false,
-        permanent: false,
+        permanent: true,
       },
       {
         source: '/docs/reference/pulumi/custom-providers',
-        destination: '/docs/reference/providers/pulumi/custom',
+        destination: '/docs/providers/custom',
         basePath: false,
-        permanent: false,
+        permanent: true,
       },
       {
         source: '/docs/reference/pulumi/pulumi-cloud',
-        destination: '/docs/reference/providers/pulumi#pulumi-cloud',
+        destination:
+          '/docs/providers/pulumi#using-your-pulumi-cloud-account-optional',
         basePath: false,
-        permanent: false,
+        permanent: true,
       },
       {
         source: '/docs/reference/dart/v1',
