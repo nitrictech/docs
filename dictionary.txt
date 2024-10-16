@@ -217,6 +217,10 @@ misconfigurations
 DSL
 UI
 init
+LLMs?
+suno
+ignorefile
+EC2
 
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
