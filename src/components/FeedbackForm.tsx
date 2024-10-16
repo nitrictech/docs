@@ -72,14 +72,17 @@ const FeedbackForm = () => {
       >
         {choices.map(({ label, value, emoji }) => (
           <div key={value} className="group flex items-center">
-            <RadioGroupItem value={value} id={value} className="group">
-              <span className="mr-2 grayscale group-checked:grayscale-0 group-data-[state=checked]:grayscale-0">
+            <RadioGroupItem value={value} id={value} className="group flex">
+              <span className="mr-2 grayscale transition-all group-checked:grayscale-0 group-hover:grayscale-0 group-data-[state=checked]:grayscale-0">
                 {emoji}
               </span>
+              <Label
+                htmlFor={value}
+                className="cursor-pointer text-xs text-muted-foreground transition-colors group-hover:text-zinc-900 group-data-[state=checked]:text-zinc-900 dark:group-hover:text-white dark:group-data-[state=checked]:text-white"
+              >
+                {label}
+              </Label>
             </RadioGroupItem>
-            <Label htmlFor={value} className="cursor-pointer text-xs">
-              {label}
-            </Label>
           </div>
         ))}
       </RadioGroup>
