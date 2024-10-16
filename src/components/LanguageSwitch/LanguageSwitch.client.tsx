@@ -24,7 +24,7 @@ export const LanguageSwitchClient = () => {
 
   return (
     <ul className="flex gap-x-4">
-      {languages.map((name: string) => (
+      {languages.map((name) => (
         <li
           key={name}
           className={cn(

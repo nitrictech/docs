@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { TabProps, Tabs } from '../tabs/Tabs'
-import useLang, { LanguageId } from '@/hooks/useLang'
-import { LANGUAGE_LABEL_MAP } from '@/lib/constants'
+import useLang from '@/hooks/useLang'
+import { Language, LANGUAGE_LABEL_MAP } from '@/lib/constants'
 
 export const CodeTabsClient = React.forwardRef<HTMLDivElement, TabProps>(
   ({ children }, ref) => {
@@ -13,7 +13,7 @@ export const CodeTabsClient = React.forwardRef<HTMLDivElement, TabProps>(
       <Tabs
         value={LANGUAGE_LABEL_MAP[currentLanguage]}
         onValueChange={(value) =>
-          setCurrentLanguage(value.toLowerCase() as LanguageId)
+          setCurrentLanguage(value.toLowerCase() as Language)
         }
         ref={ref}
       >
