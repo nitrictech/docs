@@ -1,85 +1,96 @@
 ---
-title_seo: Building an autonomous AI podcast with Nitric - Part 1
-description: 'Use Nitric Batch services to generate long form audio content from text'
+title_seo: 'Building AI Workflows: Combining LLMs and Voice Models - Part 1'
+description: 'From Script to Sound: Automating AI-Generated Podcasts with Nitric'
 tags:
-  - AI
+  - AI & Machine Learning
 ---
 
-# Building an AI podcast with Nitric - Part 1
+# Building AI Workflows: Combining LLMs and Voice Models - Part 1
 
-## What we'll be doing
+In this guide we'll build a fully autonomous AI podcast, combining an LLM for script writing and a text-to-speech model to produce the audio content. By the end of this guide we'll be able to produce podcast style audio content from simple text prompts like "a 10 minute podcast about [add your topic here]".
 
-In this guide we'll be building the first of many parts to create a fully autonomous AI podcast.
+In this first part we'll focus on generating the audio content, here's a sample of what we'll be able to produce:
 
-This part will focus on generating long form audio content from text using a [Nitric Batch service](/batch).
+<div class="mx-auto max-w-lg rounded-sm bg-black p-4 text-white shadow dark:bg-white dark:text-black">
+  <div class="space-y-1 pb-4 pl-2 font-mono">
+    <div class="font-bold">The Dead Internet Podcast</div>
+    <div className="text-sm">Episode 1: The Dead Internet Theory</div>
+  </div>
+  <audio controls style={{ width: '100%' }}>
+    <source
+      src="/docs/audio/guides/ai-podcast/dead-internet-podcast.m4a"
+      type="audio/x-m4a"
+    />
+  </audio>
+</div>
 
-By the end of this guide we'll have a project that will be able to produce audio content from text input.
+Obviously, that example is a bit tongue-in-cheek, but the same features and techniques can be used to easily generate any number of outputs depending on your choice of models and how they're combined.
 
-Here is a sample of what we'll be able to produce:
-
-<audio controls>
-  <source src="/docs/audio/dead-internet-podcast.m4a" type="audio/x-m4a" />
-</audio>
+In this first part we'll using the [suno/bark](https://huggingface.co/suno/bark) model from [Hugging Face](https://huggingface.co) to generate the audio content. In part two we'll look at adding an LLM agent to our project to automatically generate scripts for our podcasts from small prompts.
 
 ## Prerequisites
 
 - [Pipenv](https://pypi.org/project/pipenv/) - for simplified dependency management
 - The [Nitric CLI](/get-started/installation)
-- _(optional)_ Your choice of an [AWS](https://aws.amazon.com) or [GCP](https://cloud.google.com)
+- _(optional)_ Your choice of an [AWS](https://aws.amazon.com) or [GCP](https://cloud.google.com) account
 
 ## Getting started
 
-We'll start by creating a new project for our AI podcast.
+We'll start by creating a new project for our AI podcast using Nitric's python starter template.
 
 ```bash
 nitric new ai-podcast py-starter
 cd ai-podcast
 ```
 
-Next we'll install our base dependencies:
+Next, let's install our base dependencies, then add the extra dependencies we need specifically for this project including the `transformers` library from Hugging Face.
 
 ```bash
+# Install the base dependencies
 pipenv install --dev
-```
-
-Then we'll install the dependencies we need for this project:
-
-```bash
+# Add the extra dependencies
 pipenv install --categories="ml" torch transformers scipy
 ```
 
 <Note>
-  We'll be using the `transformers` library from Hugging Face to generate the
-  audio content. Specifically we'll be using the `suno/bark` model for this
-  project.
+  We add the extra dependencies to the 'ml' category to keep them separate since
+  they can be quite large. This lets us just install them in the containers that
+  need them.
 </Note>
 
-## Designing our project
+## Designing the project
 
-We'll start off by creating a new module that will help us manage our cloud resources for this project.
+As you may know, Nitric helps with both cloud resource creation and interaction. We'll use Nitric to define the cloud resources our project needs. This includes an API to trigger new jobs, buckets for storing models and audio output and setting up our AI workloads to run as [batch jobs](/batch).
 
-We'll create this as `common/resources.py` in our project.
+To achieve this let's create a new python module which defines the resources for this project. We'll create this as `common/resources.py` in our project.
 
-```python
+```python title: common/resources.py
 from nitric.resources import api, bucket, job
-# Our main API for invoking our project
+# Our main API for submitting audio generation jobs
 main_api = api("main")
 # A job for generating our audio content
 gen_audio_job = job("audio")
-# A job for managing our model downloads
+# A job to pre-download models
 download_audio_model_job = job("download-audio-model")
 
-# A bucket for storing our audio clips
+# A bucket for storing output audio clips
 clips_bucket = bucket("clips")
 # And another bucket for storing our models
 models_bucket = bucket("models")
 ```
 
-## Creating our first batch job
+## Create the audio generation job
 
-Next we'll create the beginnings of our audio generation job.
+Next we'll create the beginnings of our audio generation job. First, we'll create a new directory for our batch services and create a new file for our audio generation job.
 
-```python
+```bash
+mkdir batches
+touch batches/podcast.py
+```
+
+Then we'll define our audio generation job in `batches/podcast.py`.
+
+```python title:batches/podcast.py
 from common.resources import gen_audio_job
 from nitric.context import JobContext
 from nitric.application import Nitric
@@ -91,9 +102,13 @@ import torch
 import numpy as np
 import requests
 
+# This defines the Job Handler that will process all audio generation jobs
+# using the job definition we created in the resources module
 @gen_audio_job(cpus=4, memory=12000, gpus=1)
 async def do_generate_audio(ctx: JobContext):
+    # The name of the file to save the audio to
     file = ctx.req.data["file"]
+    # The text to convert to audio
     text: str = ctx.req.data["text"]
 
     print("Loading model")
@@ -102,16 +117,17 @@ async def do_generate_audio(ctx: JobContext):
     print("Model loaded")
 
     # Split the text by sentences and chain the audio clips together
-    # We do this because the model can only reliably generate a certain amount of audio at a time
+    # We do this because the model can only reliably generate a small amount of audio at a time
     sentences = text.split(".")
     sentences = [sentence for sentence in sentences if sentence.strip() != ""]
 
     audio_arrays = []
-    # for each sentence, generate the audio clip
+    # generate an audio clip for each sentence
     for index, sentence in enumerate(sentences):
-        # Insert pauses between sentences to prevent clips from running together
+        # "..." inserts pauses between sentences to prevent clips from running together
         inputs = processor(f"{sentence}...", voice_preset=voice_preset)
 
+        # Move the inputs and model to the GPU if available
         if torch.cuda.is_available():
             inputs.to("cuda")
             model.to("cuda")
@@ -124,6 +140,7 @@ async def do_generate_audio(ctx: JobContext):
 
         audio_arrays.append(audio_array)
 
+    # Concatenate the audio clips together
     final_array = np.concatenate(audio_arrays)
 
     buffer = io.BytesIO()
@@ -131,35 +148,36 @@ async def do_generate_audio(ctx: JobContext):
     sample_rate = model.generation_config.sample_rate
     scipy.io.wavfile.write(buffer, rate=sample_rate, data=final_array)
 
-    print("Uploading clip")
+    print("Storing the audio to the clips bucket")
     upload_url = await clips.file(f'{file}.wav').upload_url()
-
-    # make a put request to the upload url
     requests.put(upload_url, data=buffer.getvalue(), headers={"Content-Type": "audio/wav"}, timeout=600)
 
     print("Done!")
 ```
 
-## Creating our API
+## Create the HTTP API
 
-First we'll remove out starter API and replace it with our own.
+Ok, now that we have our job defined we need a way to trigger it. We'll create an API that lets us submit text to be converted to audio, using the job we just defined.
+
+Since the template we started with already had a service defined, we'll remove the existing hello world service and create a new service for our API.
 
 ```bash
-rm services/hello.pi
+rm services/hello.py
 touch services/api.py
 ```
 
-Then we'll create an API endpoint in `services/api.py` that will us to call the job we defined in the first step.
+Now we can create the API endpoint in `services/api.py`.
 
-```python
+```python title:services/api.py
 from common.resources import main_api, gen_audio_job
 
-# Give this service permission to submit the gen_audio_job
+# Give this service permission to submit tasks to the gen_audio_job
 gen_audio = gen_audio_job.allow("submit")
 
+# See the list of available voice presets at https://suno-ai.notion.site/8b8e8749ed514b0cbf3f699013548683?v=bc67cff786b04b50b3ceb756fd05f68c
 default_voice_preset = "v2/en_speaker_6"
 
-# Generate a sample voice line
+# Generate a text-to-speech audio clip
 @main_api.post("/audio/:filename")
 async def submit_auto(ctx: HttpContext):
     name = ctx.req.params["filename"]
@@ -176,18 +194,19 @@ async def submit_auto(ctx: HttpContext):
         ctx.res.status = 400
         return
 
-    print(f"using preset {preset}")
-
+    # Submit the audio generation job, this will run the job we defined as an async task
     await generate_audio.submit({"file": name, "text": body.decode('utf-8'), "preset": preset})
 
 Nitric.run()
 ```
 
-## Updating the nitric.yaml
+## Update the nitric.yaml
 
-Finally we'll update our `nitric.yaml` to include the batch service we created and add the preview flag for batch.
+Finally, let's update the `nitric.yaml` to include the batch service we created and add the preview flag for batch.
 
-```yaml
+<Note>Nitric Batch is a new feature, which is currently in preview.</Note>
+
+```yaml title: nitric.yaml
 name: podcast-ai
 services:
   - match: services/*.py
@@ -200,9 +219,9 @@ preview:
   - batch-services
 ```
 
-## Running our project
+## Running the project locally
 
-We can start our project by running
+Now that we have the basic structure of our project set up, we can test it locally.
 
 ```bash
 nitric start
@@ -211,35 +230,41 @@ nitric start
 Once its up and running we can test out our API by running:
 
 ```bash
-
+curl -X POST http://localhost:8080/audio/test -d "Hello, this is a test of the audio generation system"
 ```
 
 Or you can use your favorite API client to test it out.
 
 <Note>
   If you're running without a GPU it can take some time for the audio content to
-  generate
+  generate, so keep the text input short to start with.
 </Note>
+
+Watch the logs in the terminal where you started the project to see the progress of the audio generation. When it's complete you'll can access it from the `clips` bucket using the local Nitric Dashboard e.g. http://localhost:49152/storage/.
 
 Once the generation is complete you should have something like this:
 
-<audio>
-
-</audio>
+<div class="mx-auto max-w-lg rounded-sm bg-black p-4 text-white shadow dark:bg-white dark:text-black">
+  <div class="pb-4 pl-2 font-mono">
+    <div className="text-sm">Sample Output</div>
+  </div>
+  <audio controls style={{ width: '100%' }}>
+    <source
+      src="/docs/audio/guides/ai-podcast/sample-output.m4a"
+      type="audio/x-m4a"
+    />
+  </audio>
+</div>
 
 Feel free to play around with it a bit more before continuing on. It can be fun to experiment with different text inputs and see what the model generates.
 
-## Preparing to deploy to the cloud
+## Prepare to deploy to the cloud
 
-Before we can deploy our project to the cloud we need to make a few changes to our project.
+Before we can deploy our project to the cloud we need to make a few changes. First, we want to be able to cache models to be used between runs without having to pull them from Hugging Face each time.
 
-First we want to be able to cache models to be used between runs without having to pull them from hugging face hub each time.
+This is why we added the models bucket and download job initially. It's time to use them. Let's add the download job to `batches/podcast.py`.
 
-This is what we added the models bucket and download job for.
-
-Lets update our `batches/podcast.py` to include the download job.
-
-```python
+```python title: batches/podcast.py
 from common.resources import gen_audio_job, clips_bucket, models_bucket, download_audio_model_job
 from nitric.context import JobContext
 from nitric.application import Nitric
@@ -253,6 +278,7 @@ import requests
 import zipfile
 import os
 
+# Allow the batch service to read and write to the models bucket and write to the clips bucket
 clips = clips_bucket.allow('write')
 models = models_bucket.allow('read', 'write')
 
@@ -288,11 +314,12 @@ async def do_download_audio_model(ctx: JobContext):
     with open(zip_path, "rb") as f:
         requests.put(module_url, data=f, timeout=6000)
     print("Done!")
+
 ```
 
 We'll also update our audio generation job to download the model from the bucket before processing the audio.
 
-```python
+```python title: batches/podcast.py
 @gen_audio_job(cpus=4, memory=12000, gpus=1)
 async def do_generate_audio(ctx: JobContext):
     file = ctx.req.data["file"]
@@ -367,11 +394,11 @@ async def do_generate_audio(ctx: JobContext):
 <Note>
   If you like the download/cache step can also be rolled into the audio
   generation job. However having the download in a separate job is more cost
-  effective as you aren't downloading and caching the model on an instance where
-  you may also be paying for GPU time.
+  effective as you won't be downloading and caching the model on an instance
+  where you're also paying for a GPU.
 </Note>
 
-Then we can add an api endpoint to trigger the download job and update out api endpoint to allow selection of models and voice presets.
+Then we can add an API endpoint to trigger the download job and update the API endpoint to allow selection of models and voice presets.
 
 ```python
 from common.resources import main_api, gen_audio_job, download_audio_model_job
@@ -419,21 +446,17 @@ async def submit_auto(ctx: HttpContext):
 Nitric.run()
 ```
 
-Once this is done we can give our project another test using:
+Once that's done we can give the project another test, just to make sure everything is still working as expected.
 
 ```bash
 nitric start
 ```
 
-Just to make sure everything is working as expected.
-
 ## Defining our service docker images
 
-In order to make sure our AI workload can properly use GPUs in the cloud we'll need to make sure it ships with drivers and libraries to support that.
+So that the AI workload can use GPUs in the cloud we'll need to make sure it ships with drivers and libraries to support that. We can do this by specifying a custom Dockerfile for our batch service under `docker/torch.dockerfile`.
 
-We'll start by creating a new Dockerfile for our batch service under `docker/torch.dockerfile`.
-
-```dockerfile
+```dockerfile title: docker/torch.dockerfile
 # Torch dockerfile
 # Used for torch runtime based nitric batch services
 # Don't need to include the CUDA runtime as the nvidia pypi dep already ships with it
@@ -467,18 +490,18 @@ COPY . .
 ENTRYPOINT python3.11 -u $HANDLER
 ```
 
-We'll also add an ignorefile for this Dockerfile to try and keep the image size down.
+We'll also add a dockerignore file to try and keep the image size down.
 
-```gitignore
+```gitignore title: docker/torch.dockerfile.dockerignore
 .mypy_cache/
 .nitric/
 .venv/
 .model/
 ```
 
-Next we'll define a `standard` runtime for our normal services that we want to deploy along with our batch service. under `docker/standard.dockerfile`.
+Next, we'll define a `standard` runtime for our normal services that we want to deploy along with our batch service. under `docker/standard.dockerfile`.
 
-```dockerfile
+```dockerfile title: docker/standard.dockerfile
 ARG IMAGE_BASE=python:3.11-slim
 
 FROM ${IMAGE_BASE}
@@ -506,16 +529,16 @@ ENTRYPOINT python -u $HANDLER
 
 And we'll add an ignorefile for this Dockerfile as well.
 
-```gitignore
+```gitignore title: docker/standard.dockerfile.dockerignore
 .mypy_cache/
 .nitric/
 .venv/
 .model/
 ```
 
-Finally we'll update our `nitric.yaml` to include the new dockerfiles.
+Let's also update the `nitric.yaml` to specify the new dockerfiles.
 
-```yaml
+```yaml title: nitric.yaml
 name: podcast-ai
 services:
   - match: services/*.py
@@ -538,17 +561,19 @@ preview:
   - batch-services
 ```
 
-Finally we can define out nitric stack file for deploying to the cloud.
+With that, we're ready to deploy our project to the cloud.
+
+## Deploy to the cloud
+
+To deploy our project to the cloud we'll need to create a new Nitric stack file for AWS (or GCP if you prefer). We can do this using the Nitric CLI.
 
 ```bash
-nitric stack new aws aws
+nitric stack new test aws
 ```
 
-This will generate a nitric stack file called `aws` that defines how we would like to deploy a stack to AWS.
+This will generate a nitric stack file called `test` which defines how we want to deploy a stack to AWS. We can update this stack file with settings to configure our batch service and the AWS Compute environment it will run in.
 
-Then we can tweak out stack with settings with some configuration for our batch service and the AWS Compute environment it will run in.
-
-```yaml
+```yaml title: nitric.test.yaml
 # The nitric provider to use
 provider: nitric/aws@1.14.0
 # The target aws region to deploy to
@@ -556,6 +581,7 @@ provider: nitric/aws@1.14.0
 # https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
 region: ap-southeast-2
 
+# specify the compute environment for the batch service
 batch-compute-env:
   min-cpus: 0
   # Allow a maximum of 4 CPUs to be used
@@ -568,14 +594,15 @@ batch-compute-env:
 
 <Note>
   You will need to make sure your machine is configured to deploy to AWS. See
-  the [Nitric AWS provider documentation](/providers/aws) for more information.
+  the [Nitric Pulumi AWS Provider documentation](/providers/aws) for more
+  information.
 </Note>
 
 <Note>
-  Most AWS accounts will not have access to on demand GPU instances so you may
-  need to update your AWS service quotas to allow GPU instances to spin up. The
-  model will also work on CPU so if you can't get access to GPUs you can always
-  increase the CPU count and memory to compensate.
+  Most AWS accounts **will not** have access to on demand GPU instances so
+  you'll probably need to update your AWS service quotas to allow GPU instances.
+  The model will also work on CPU so if you can't get access to GPUs you can
+  always increase the CPU count and memory to compensate.
 </Note>
 
 Once that's configured we can deploy our project to the cloud using:
@@ -585,14 +612,14 @@ nitric up
 ```
 
 <Note>
-  Deployment may take sometime due to the size of the python/Nvidia driver and
-  CUDA runtime dependencies. Be patient.
+  The initial deployment may take time due to the size of the python/Nvidia
+  driver and CUDA runtime dependencies. Be patient.
 </Note>
 
 Once the project is deployed you can try out some generation, just like before depending on the hardware you were running on locally you may notice a speed up in generation time.
 
 <Note>
-Running the project in the cloud will incur costs. Make sure to monitor your usage and shut down the project when you're done.
+Running the project in the cloud will incur costs. Make sure to monitor your usage and shut down the project if you're done with it.
 
 Running on g5.xlarge from testing this project will cost ~$0.05/minute of audio you generate. Based on standard EC2 pricing for US regions.
 
