@@ -9,7 +9,7 @@ export const LANGUAGE_LABEL_MAP: Record<string, string> = {
   csharp: 'C#',
 }
 
-export const languages = ['javascript', 'python', 'go', 'typescript', 'dart']
+export const languages = ['javascript', 'typescript', 'python', 'go', 'dart']
 
 export const isMobile =
   typeof navigator !== 'undefined' &&

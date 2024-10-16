@@ -39,6 +39,13 @@ const Doc = defineDocumentType(() => ({
       },
       description: 'The tags of the post, used by guides',
     },
+    languages: {
+      type: 'list',
+      of: {
+        type: 'string',
+      },
+      description: 'The languages of the content, used by guides',
+    },
   },
   computedFields: {
     slug: {
