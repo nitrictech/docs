@@ -79,6 +79,12 @@ clips_bucket = bucket("clips")
 models_bucket = bucket("models")
 ```
 
+We'll also need an `__init__.py` file in the `common` directory to make it a package.
+
+```bash
+touch common/__init__.py
+```
+
 ## Create the audio generation job
 
 Next we'll create the beginnings of our audio generation job. First, we'll create a new directory for our batch services and create a new file for our audio generation job.
