@@ -95,6 +95,7 @@
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "prisma": "^5.20.0",
+    "remark-frontmatter": "^5.0.0",
     "sharp": "0.33.1",
     "spellchecker-cli": "^6.2.0"
   }
