@@ -1,44 +1,20 @@
-import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect } from 'react'
 import useParams from './useParams'
-import { set } from 'node_modules/cypress/types/lodash'
-import { languages } from '@/lib/constants'
-
-export type LanguageId =
-  | 'javascript'
-  | 'typescript'
-  | 'dart'
-  | 'python'
-  | 'ruby'
-  | 'java'
-  | 'csharp'
-  | 'go'
-  | 'php'
-  | 'rust'
-  | 'swift'
-  | 'kotlin'
-  | 'scala'
-  | 'r'
-  | 'perl'
-  | 'haskell'
-  | 'lua'
-  | 'shell'
-  | 'sql'
-  | 'plaintext'
+import { Language, languages } from '@/lib/constants'
 
 const LOCAL_STORAGE_KEY = 'nitric.docs.selected.language'
 
 const useLang = () => {
   const { searchParams, setParams } = useParams()
 
-  const queryParamLang = searchParams.get('lang') as LanguageId
+  const queryParamLang = searchParams.get('lang') as Language
 
   const currentLanguage = languages.includes(queryParamLang)
     ? queryParamLang
     : languages[0]
 
   const setLanguage = useCallback(
-    (id: LanguageId) => {
+    (id: Language) => {
       // Apparently this nonsense is necessary to update the URL.
       //  See: https://github.com/vercel/next.js/discussions/47583
       const currentParams = new URLSearchParams(
@@ -67,7 +43,7 @@ const useLang = () => {
 
     // set query params from local storage if no query params are present
     if (!queryParamLang) {
-      const localLang = localStorage.getItem(LOCAL_STORAGE_KEY) as LanguageId
+      const localLang = localStorage.getItem(LOCAL_STORAGE_KEY) as Language
       if (
         localLang &&
         languages.includes(localLang) &&
