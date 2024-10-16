@@ -3,6 +3,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { LanguageIcon } from '../icons/LanguageIcon'
+import { Language } from '@/lib/constants'
 
 interface Props {
   guide: Doc
@@ -53,7 +54,11 @@ export const GuideItem: React.FC<Props> = ({ guide, featured }) => {
           {guide.languages?.length ? (
             <div className="ml-auto flex items-center gap-x-2">
               {guide.languages.map((lang) => (
-                <LanguageIcon key={lang} name={lang} className="size-6" />
+                <LanguageIcon
+                  key={lang}
+                  name={lang as Language}
+                  className="size-6"
+                />
               ))}
             </div>
           ) : null}
