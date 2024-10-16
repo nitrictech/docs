@@ -824,7 +824,7 @@ func validate(next apis.Handler) apis.Handler {
 }
 
 func main() {
-	customersApi, err := nitric.NewApi("customers")
+  customersApi := nitric.NewApi("customers")
 
   customersApi.Get("/customers", validate(func(ctx *apis.Ctx) error {
     // handle request
