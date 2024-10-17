@@ -572,7 +572,7 @@ name: ai-podcast
 services:
   - match: services/*.py
     start: pipenv run dev $SERVICE_PATH
-    runtime: standard
+    runtime: python
 batch-services:
   - match: batches/*.py
     start: pipenv run dev $SERVICE_PATH
