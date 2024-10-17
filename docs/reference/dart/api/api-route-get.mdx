@@ -52,7 +52,6 @@ When multiple services are provided they will be called as a chain. If one succe
 
 ```dart
 import 'package:nitric_sdk/nitric.dart';
-import '../middlewares';
 
 Future<HttpContext> validate(HttpContext ctx) async {
   if (!ctx.req.headers.containsKey("Content-Type")) {

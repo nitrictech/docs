@@ -60,7 +60,6 @@ When creating your route you can supply a list of middleware that will run befor
 
 ```dart
 import 'package:nitric_sdk/nitric.dart';
-import '../middlewares';
 
 /// Validate that all requests include a `Content-Type` header
 Future<HttpContext> validate(HttpContext ctx) async {
