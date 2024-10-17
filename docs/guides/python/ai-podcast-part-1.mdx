@@ -556,10 +556,19 @@ We'll also add a dockerignore file to try and keep the image size down.
 .model/
 ```
 
+We'll also need to update the `python.dockerfile` to ignore the `.model` directory.
+
+```gitignore title: python.dockerfile.dockerignore
+.mypy_cache/
+.nitric/
+.venv/
+.model/
+```
+
 Let's also update the `nitric.yaml` to add the new dockerfile to our runtimes.
 
 ```yaml title: nitric.yaml
-name: podcast-ai
+name: ai-podcast
 services:
   - match: services/*.py
     start: pipenv run dev $SERVICE_PATH
@@ -572,10 +581,8 @@ batch-services:
 runtimes:
   python:
     dockerfile: './python.dockerfile'
-    args: {}
   torch:
     dockerfile: './torch.dockerfile'
-    args: {}
 
 preview:
   - batch-services
