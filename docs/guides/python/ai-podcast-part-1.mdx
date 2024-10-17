@@ -47,15 +47,15 @@ Next, let's install our base dependencies, then add the extra dependencies we ne
 
 ```bash
 # Install the base dependencies
-pipenv install --dev
-# Add the extra dependencies
-pipenv install --categories="ml" torch transformers scipy
+uv sync
+# Add the extra optional ml dependencies
+uv add torch transformers scipy --optional ml
 ```
 
 <Note>
-  We add the extra dependencies to the 'ml' category to keep them separate since
-  they can be quite large. This lets us just install them in the containers that
-  need them.
+  We add the extra dependencies to the 'ml' optional dependencies to keep them
+  separate since they can be quite large. This lets us just install them in the
+  containers that need them.
 </Note>
 
 ## Designing the project
@@ -165,14 +165,7 @@ async def do_generate_audio(ctx: JobContext):
 
 Ok, now that we have our job defined we need a way to trigger it. We'll create an API that lets us submit text to be converted to audio, using the job we just defined.
 
-Since the template we started with already had a service defined, we'll remove the existing hello world service and create a new service for our API.
-
-```bash
-rm services/hello.py
-touch services/api.py
-```
-
-Now we can create the API endpoint in `services/api.py`.
+In the existing API endpoint in `services/api.py` overwrite with the following.
 
 ```python title:services/api.py
 from common.resources import main_api, gen_audio_job
@@ -505,44 +498,7 @@ We'll also add a dockerignore file to try and keep the image size down.
 .model/
 ```
 
-Next, we'll define a `standard` runtime for our normal services that we want to deploy along with our batch service. under `docker/standard.dockerfile`.
-
-```dockerfile title: docker/standard.dockerfile
-ARG IMAGE_BASE=python:3.11-slim
-
-FROM ${IMAGE_BASE}
-
-ARG HANDLER
-
-ENV HANDLER=${HANDLER}
-ENV PYTHONUNBUFFERED=TRUE
-ENV PYTHONPATH="."
-
-RUN apt-get update -y && \
-    apt-get install -y ca-certificates git && \
-    update-ca-certificates
-
-RUN pip install --no-cache-dir --upgrade pip pipenv
-
-COPY . .
-
-ARG CATEGORIES="packages"
-
-RUN pipenv install --categories="${CATEGORIES}" --skip-lock --system --deploy --verbose
-
-ENTRYPOINT python -u $HANDLER
-```
-
-And we'll add an ignorefile for this Dockerfile as well.
-
-```gitignore title: docker/standard.dockerfile.dockerignore
-.mypy_cache/
-.nitric/
-.venv/
-.model/
-```
-
-Let's also update the `nitric.yaml` to specify the new dockerfiles.
+Let's also update the `nitric.yaml` to add the new dockerfile to our runtimes.
 
 ```yaml title: nitric.yaml
 name: podcast-ai
@@ -556,11 +512,11 @@ batch-services:
     runtime: torch
 
 runtimes:
-  torch:
-    dockerfile: './docker/torch.dockerfile'
+  python:
+    dockerfile: './python.dockerfile'
     args: {}
-  standard:
-    dockerfile: './docker/standard.dockerfile'
+  torch:
+    dockerfile: './torch.dockerfile'
     args: {}
 
 preview:
