@@ -173,6 +173,8 @@ In the existing API endpoint in `services/api.py` overwrite with the following.
 
 ```python title:services/api.py
 from common.resources import main_api, gen_audio_job
+from nitric.application import Nitric
+from nitric.context import HttpContext
 
 # Give this service permission to submit tasks to the gen_audio_job
 gen_audio = gen_audio_job.allow("submit")
@@ -186,9 +188,6 @@ async def submit_auto(ctx: HttpContext):
     name = ctx.req.params["filename"]
     preset = ctx.req.query.get("preset", default_voice_preset)
 
-    if isinstance(model_id, list):
-        model_id = model_id[0]
-
     if isinstance(preset, list):
         preset = preset[0]
 
@@ -198,7 +197,7 @@ async def submit_auto(ctx: HttpContext):
         return
 
     # Submit the audio generation job, this will run the job we defined as an async task
-    await generate_audio.submit({"file": name, "text": body.decode('utf-8'), "preset": preset})
+    await gen_audio.submit({"file": name, "text": body.decode('utf-8'), "preset": preset})
 
 Nitric.run()
 ```
@@ -238,7 +237,7 @@ nitric start
 Once its up and running we can test out our API by running:
 
 ```bash
-curl -X POST http://localhost:8080/audio/test -d "Okay this is cool, but let's wait and see what comes next"
+curl -X POST http://localhost:4001/audio/test -d "Okay this is cool, but let's wait and see what comes next"
 ```
 
 Or you can use your favorite API client to test it out.
