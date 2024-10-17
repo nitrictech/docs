@@ -118,6 +118,7 @@ async def do_generate_audio(ctx: JobContext):
     file = ctx.req.data["file"]
     # The text to convert to audio
     text: str = ctx.req.data["text"]
+    voice_preset: str = ctx.req.data["preset"]
 
     print("Loading model")
     model = BarkModel.from_pretrained("suno/bark")
