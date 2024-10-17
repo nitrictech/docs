@@ -7,11 +7,25 @@ import { cn } from '@/lib/utils'
 import { NavLink } from './NavLink'
 import { usePathname } from 'next/navigation'
 import { Button } from '../ui/button'
-import { NavGroup } from '@/config/types'
+import { NavEntry, NavGroup } from '@/config/types'
 
 interface Props {
   group: NavGroup
   className?: string
+}
+
+const checkIfActive = (items: NavEntry[], pathname: string): boolean => {
+  return items.some((link) => {
+    if ('href' in link && link.href === pathname) {
+      return true
+    }
+
+    if ('items' in link && Array.isArray(link.items)) {
+      return checkIfActive(link.items, pathname)
+    }
+
+    return false
+  })
 }
 
 const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
@@ -22,9 +36,8 @@ const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
 
   const { title, items, icon: Icon } = group
 
-  const isActive = items.some(
-    (link) => 'href' in link && link.href === pathname,
-  )
+  const isActive = checkIfActive(items, pathname)
+
   const [isOpen, setIsOpen] = React.useState(isActive)
 
   return (
