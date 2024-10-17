@@ -216,7 +216,7 @@ services:
     runtime: python
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
 batch-services:
-  - match: services/*.py
+  - match: batches/*.py
     runtime: python
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
 runtimes:
