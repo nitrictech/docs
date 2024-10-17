@@ -456,9 +456,25 @@ Nitric.run()
 
 Once that's done we can give the project another test, just to make sure everything is still working as expected.
 
+If nitric isn't still running you can start it again with:
+
 ```bash
 nitric start
 ```
+
+First we'll make sure that our new model download code is working by running:
+
+```bash
+curl -X POST http://localhost:4001/download-audio-model
+```
+
+Then we can test the audio generation again with:
+
+```bash
+curl -X POST http://localhost:4001/audio/test -d "Okay this is cool, but let's wait and see what comes next"
+```
+
+You should get a similiar result to before. The main difference is that the model will be downloaded and cached in a nitric bucket before the audio generation starts.
 
 ## Defining our service docker images
 
