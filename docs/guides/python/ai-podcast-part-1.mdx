@@ -97,7 +97,7 @@ touch batches/podcast.py
 Then we'll define our audio generation job in `batches/podcast.py`.
 
 ```python title:batches/podcast.py
-from common.resources import gen_audio_job
+from common.resources import gen_audio_job, clips_bucket
 from nitric.context import JobContext
 from nitric.application import Nitric
 from transformers import AutoProcessor, BarkModel
@@ -107,6 +107,8 @@ import io
 import torch
 import numpy as np
 import requests
+
+clips = clips_bucket.allow("write")
 
 # This defines the Job Handler that will process all audio generation jobs
 # using the job definition we created in the resources module
@@ -159,6 +161,8 @@ async def do_generate_audio(ctx: JobContext):
     requests.put(upload_url, data=buffer.getvalue(), headers={"Content-Type": "audio/wav"}, timeout=600)
 
     print("Done!")
+
+Nitric.run()
 ```
 
 ## Create the HTTP API
