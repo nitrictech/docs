@@ -210,13 +210,18 @@ Finally, let's update the `nitric.yaml` to include the batch service we created 
 <Note>Nitric Batch is a new feature, which is currently in preview.</Note>
 
 ```yaml title: nitric.yaml
-name: podcast-ai
+name: ai-podcast
 services:
   - match: services/*.py
-    start: pipenv run dev $SERVICE_PATH
+    runtime: python
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
 batch-services:
-  - match: batches/*.py
-    start: pipenv run dev $SERVICE_PATH
+  - match: services/*.py
+    runtime: python
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+runtimes:
+  python:
+    dockerfile: ./python.dockerfile
 
 preview:
   - batch-services
