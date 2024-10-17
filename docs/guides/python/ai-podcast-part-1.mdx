@@ -478,9 +478,9 @@ You should get a similiar result to before. The main difference is that the mode
 
 ## Defining our service docker images
 
-So that the AI workload can use GPUs in the cloud we'll need to make sure it ships with drivers and libraries to support that. We can do this by specifying a custom Dockerfile for our batch service under `docker/torch.dockerfile`.
+So that the AI workload can use GPUs in the cloud we'll need to make sure it ships with drivers and libraries to support that. We can do this by specifying a custom Dockerfile for our batch service under `torch.dockerfile`.
 
-```dockerfile title: docker/torch.dockerfile
+```dockerfile title: torch.dockerfile
 # The python version must match the version in .python-version
 FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim AS builder
 
@@ -549,7 +549,7 @@ ENTRYPOINT python -u $HANDLER
 
 We'll also add a dockerignore file to try and keep the image size down.
 
-```gitignore title: docker/torch.dockerfile.dockerignore
+```gitignore title: torch.dockerfile.dockerignore
 .mypy_cache/
 .nitric/
 .venv/
