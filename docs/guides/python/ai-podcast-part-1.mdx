@@ -32,7 +32,7 @@ In this first part we'll using the [suno/bark](https://huggingface.co/suno/bark)
 
 - [uv](https://docs.astral.sh/uv/#getting-started) - for simplified dependency management
 - The [Nitric CLI](/get-started/installation)
-- _(optional)_ Your choice of an [AWS](https://aws.amazon.com) or [GCP](https://cloud.google.com) account
+- _(optional)_ An [AWS](https://aws.amazon.com) account
 
 ## Getting started
 
@@ -535,6 +535,10 @@ We'll also add a dockerignore file to try and keep the image size down.
 .nitric/
 .venv/
 .model/
+nitric-spec.json
+nitric.yaml
+README.md
+model.zip
 ```
 
 We'll also need to update the `python.dockerfile` to ignore the `.model` directory.
@@ -544,6 +548,10 @@ We'll also need to update the `python.dockerfile` to ignore the `.model` directo
 .nitric/
 .venv/
 .model/
+nitric-spec.json
+nitric.yaml
+README.md
+model.zip
 ```
 
 Let's also update the `nitric.yaml` to add the new dockerfile to our runtimes.
@@ -582,22 +590,28 @@ nitric stack new test aws
 This will generate a nitric stack file called `test` which defines how we want to deploy a stack to AWS. We can update this stack file with settings to configure our batch service and the AWS Compute environment it will run in.
 
 ```yaml title: nitric.test.yaml
-# The nitric provider to use
-provider: nitric/aws@1.14.0
+provider: nitric/aws@1.14.1
 # The target aws region to deploy to
 # See available regions:
 # https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
-region: ap-southeast-2
+region: <enter-your-region>
 
-# specify the compute environment for the batch service
 batch-compute-env:
   min-cpus: 0
-  # Allow a maximum of 4 CPUs to be used
   max-cpus: 4
   instance-types:
-    # Allow use of G5 instances
-    - g5
+    - g5 # Or use another instance type that supports GPUs
     - optimal
+  # Customize the ECS launch template for this compute environment
+  launch-template:
+    # Increase the default docker system volume size
+    # This is so large models can be downloaded and cached
+    block-device-mappings:
+      - device-name: /dev/xvda
+        ebs:
+          volume-size: 50
+          volume-type: gp2
+          delete-on-termination: 'true'
 ```
 
 <Note>
