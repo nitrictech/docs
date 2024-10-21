@@ -67,3 +67,21 @@ Many of these features make it possible to build and testing modules of your app
 All features provide real-time updates, ensuring you stay in sync with your application changes.
 
 To access the Development Dashboard open the local URL in your browser. By default, the URL is set to [http://localhost:49152](http://localhost:49152).
+
+## configuration
+
+The local development experience can be configured using a `local.nitric.yaml` file.
+
+A full example with example configuration is shown below:
+
+```yaml
+apis:
+  # 👀 Configure the "main" API to run on port 6001
+  main:
+    port: 6001
+
+websockets:
+  # 👀 Configure the "ws" WebSocket to run on port 6002
+  ws:
+    port: 6002
+```
