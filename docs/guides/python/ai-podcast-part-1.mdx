@@ -30,7 +30,7 @@ In this first part we'll using the [suno/bark](https://huggingface.co/suno/bark)
 
 ## Prerequisites
 
-- [uv](https://docs.astral.sh/uv/#getting-started) - for simplified dependency management
+- [uv](https://docs.astral.sh/uv/#getting-started) - for Python dependency management
 - The [Nitric CLI](/get-started/installation)
 - _(optional)_ An [AWS](https://aws.amazon.com) account
 
@@ -63,6 +63,11 @@ uv add torch transformers scipy --optional ml
 As you may know, Nitric helps with both cloud resource creation and interaction. We'll use Nitric to define the cloud resources our project needs. This includes an API to trigger new jobs, buckets for storing models and audio output and setting up our AI workloads to run as [batch jobs](/batch).
 
 To achieve this let's create a new python module which defines the resources for this project. We'll create this as `common/resources.py` in our project.
+
+```bash
+mkdir common
+touch common/resources.py
+```
 
 ```python title: common/resources.py
 from nitric.resources import api, bucket, job
@@ -170,7 +175,7 @@ Nitric.run()
 
 Ok, now that we have our job defined we need a way to trigger it. We'll create an API that lets us submit text to be converted to audio, using the job we just defined.
 
-In the existing API endpoint in `services/api.py` overwrite with the following.
+In the existing `services/api.py` file, overwrite the contents with the following.
 
 ```python title:services/api.py
 from common.resources import main_api, gen_audio_job
@@ -235,15 +240,25 @@ Now that we have the basic structure of our project set up, we can test it local
 nitric start
 ```
 
-Once its up and running we can test out our API by running:
+Once its up and running we can test our API with any HTTP Client:
 
 ```bash
 curl -X POST http://localhost:4001/audio/test -d "Okay this is cool, but let's wait and see what comes next"
 ```
 
-Or you can use the [nitric dashboard](http://localhost:49152/) to submit the same text.
+<Note>
+  If port 4001 is already in use on your machine the port will be different,
+  e.g. 4002. You can find the port in the terminal output when you start the
+  project.
+</Note>
 
-Or you can use your favorite API client to test it out.
+Alternatively, you can use the [nitric dashboard](http://localhost:49152/) to submit the same text.
+
+<img
+  src="/docs/images/guides/ai-podcast/part-1/dashboard.png"
+  style={{ maxWidth: 800, width: '100%' }}
+  alt="screen shot of the local development dashboard"
+/>
 
 <Note>
   If you're running without a GPU it can take some time for the audio content to
@@ -251,6 +266,12 @@ Or you can use your favorite API client to test it out.
 </Note>
 
 Watch the logs in the terminal where you started the project to see the progress of the audio generation. When it's complete you'll can access it from the `clips` bucket using the local Nitric Dashboard e.g. http://localhost:49152/storage/.
+
+<img
+  src="/docs/images/guides/ai-podcast/part-1/dashboard-storage.png"
+  style={{ maxWidth: 800, width: '100%' }}
+  alt="screen shot of the local development dashboard"
+/>
 
 Once the generation is complete you should have something like this:
 
@@ -302,7 +323,7 @@ model_dir = "./.model"
 async def do_download_audio_model(ctx: JobContext):
     model_id = ctx.req.data["model_id"]
 
-    print("Downloading models - this may take several minutes")
+    print("Downloading models - this may take several minutes without much feedback, please be patient")
     processor = AutoProcessor.from_pretrained(model_id)
     model = BarkModel.from_pretrained(model_id)
 
@@ -403,6 +424,8 @@ async def do_generate_audio(ctx: JobContext):
     requests.put(upload_url, data=buffer.getvalue(), headers={"Content-Type": "audio/wav"}, timeout=600)
 
     print("Done!")
+
+Nitric.run()
 ```
 
 <Note>
@@ -414,7 +437,7 @@ async def do_generate_audio(ctx: JobContext):
 
 Then we can add an API endpoint to trigger the download job and update the API endpoint to allow selection of models and voice presets.
 
-```python
+```python title: services/api.py
 from common.resources import main_api, gen_audio_job, download_audio_model_job
 from nitric.application import Nitric
 from nitric.context import HttpContext
@@ -486,6 +509,10 @@ You should get a similiar result to before. The main difference is that the mode
 
 So that the AI workload can use GPUs in the cloud we'll need to make sure it ships with drivers and libraries to support that. We can do this by specifying a custom Dockerfile for our batch service under `torch.dockerfile`.
 
+```bash
+touch torch.dockerfile
+```
+
 ```dockerfile title: torch.dockerfile
 # The python version must match the version in .python-version
 FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim AS builder
@@ -535,6 +562,10 @@ ENTRYPOINT python -u $HANDLER
 ```
 
 We'll also add a dockerignore file to try and keep the image size down.
+
+```bash
+touch torch.dockerfile.dockerignore
+```
 
 ```gitignore title: torch.dockerfile.dockerignore
 .mypy_cache/
@@ -621,19 +652,44 @@ batch-compute-env:
 ```
 
 <Note>
-  You will need to make sure your machine is configured to deploy to AWS. See
-  the [Nitric Pulumi AWS Provider documentation](/providers/aws) for more
-  information.
+  You will need to setup your machine to deploy to AWS. See the [Nitric Pulumi
+  AWS Provider documentation](/providers/aws) for more information.
 </Note>
+
+### Requesting a G instance quota increase
+
+Most AWS accounts **will not** have access to on-demand GPU instances (G
+Instances), if you'd like to run models using a GPU you'll need to request a quota increase for G instances.
+
+If you prefer not to use a GPU you can set `gpus=0` in the `@gen_audio_job` decorator in `batches/podcast.py`.
 
 <Note>
-  Most AWS accounts **will not** have access to on demand GPU instances so
-  you'll probably need to update your AWS service quotas to allow GPU instances.
-  The model will also work on CPU so if you can't get access to GPUs you can
-  always increase the CPU count and memory to compensate.
+  **Important:** If the gpus value in `batches/podcast.py` exceeds the number of
+  available GPUs in your AWS account, the job will never start. If you want to
+  run without a GPU, make sure to set `gpus=0` in the `@gen_audio_job`
+  decorator. This is just a quirk of how AWS Batch works.
 </Note>
 
-Once that's configured we can deploy our project to the cloud using:
+If you want to use a GPU you'll need to request a quota increase for G instances in AWS.
+
+To request a quota increase for G instances in AWS you can follow these steps:
+
+1. Go to the [AWS Service Quotas for EC2](https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas) page.
+2. Find/Search for **All G and VT Spot Instance Requests**
+3. Click **Request quota increase**
+4. Choose an appropriate value, e.g. 4, 8 or 16 depending on your needs
+
+<img
+  src="/docs/images/guides/ai-podcast/part-1/g-instance-quota-increase.png"
+  style={{ maxWidth: 500, width: '100%', border: '1px solid #e5e7eb' }}
+  alt="screen shot of requesting a G instance quota increase on AWS"
+/>
+
+Once you've requested the quota increase it may take time for AWS to approve it.
+
+### Deploy the project
+
+Once the above is complete, we can deploy the project to the cloud using:
 
 ```bash
 nitric up
@@ -641,7 +697,7 @@ nitric up
 
 <Note>
   The initial deployment may take time due to the size of the python/Nvidia
-  driver and CUDA runtime dependencies. Be patient.
+  driver and CUDA runtime dependencies.
 </Note>
 
 Once the project is deployed you can try out some generation, just like before depending on the hardware you were running on locally you may notice a speed up in generation time.
@@ -652,5 +708,9 @@ Running the project in the cloud will incur costs. Make sure to monitor your usa
 Running on g5.xlarge from testing this project will cost ~$0.05/minute of audio you generate. Based on standard EC2 pricing for US regions.
 
 </Note>
+
+You can see the status of your batch jobs in the [AWS Batch console](console.aws.amazon.com/batch/home) and the model and audio files in the [AWS S3 console](https://s3.console.aws.amazon.com/s3/home).
+
+## Next steps
 
 In part two of this guide we'll look at adding an LLM agent to our project to automatically generate scripts for our podcasts from small prompts.
