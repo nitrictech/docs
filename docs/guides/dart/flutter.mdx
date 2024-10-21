@@ -138,12 +138,12 @@ void main() {
 
   api.get("/favorites", (ctx) async {
     // Get a list of all the keys in the store
-    var keys = await favouritesKV.keys();
+    var keys = await favoritesKV.keys();
 
-    var favourites = await keys.asyncMap((k) async {
-    final favourite = await favouritesKV.get(k);
+    var favorites = await keys.asyncMap((k) async {
+    final favorite = await favoritesKV.get(k);
 
-        return favourite;
+        return favorite;
 
     }).toList();
 
@@ -175,12 +175,12 @@ void main() {
 
   api.get("/favorites", (ctx) async {
     // Get a list of all the keys in the store
-    var keys = await favouritesKV.keys();
+    var keys = await favoritesKV.keys();
 
-    var favourites = await keys.asyncMap((k) async {
-    final favourite = await favouritesKV.get(k);
+    var favorites = await keys.asyncMap((k) async {
+    final favorite = await favoritesKV.get(k);
 
-        return favourite;
+        return favorite;
 
     }).toList();
 
@@ -203,7 +203,7 @@ void main() {
     // checks if the favorite exists in the list of keys
     var exists = false;
     await for (final key in keys) {
-      if (key == favourite.name) {
+      if (key == favorite.name) {
         exists = true;
       }
     }
@@ -282,12 +282,12 @@ void main() {
 
   api.get("/favorites", (ctx) async {
     // Get a list of all the keys in the store
-    var keys = await favouritesKV.keys();
+    var keys = await favoritesKV.keys();
 
-    var favourites = await keys.asyncMap((k) async {
-    final favourite = await favouritesKV.get(k);
+    var favorites = await keys.asyncMap((k) async {
+    final favorite = await favoritesKV.get(k);
 
-        return favourite;
+        return favorite;
 
     }).toList();
 
@@ -310,7 +310,7 @@ void main() {
     // checks if the favorite exists in the list of keys
     var exists = false;
     await for (final key in keys) {
-      if (key == favourite.name) {
+      if (key == favorite.name) {
         exists = true;
       }
     }
@@ -364,7 +364,7 @@ The first will show the current generated word along with a history of all previ
 
 The second page will show the list of favorites if there are any, otherwise it will display that there are no word pairs currently liked.
 
-![favorites flutter page](/docs/images/guides/flutter/favourites_page_final.png)
+![favorites flutter page](/docs/images/guides/flutter/favorites_page_final.png)
 
 ### Providers
 
