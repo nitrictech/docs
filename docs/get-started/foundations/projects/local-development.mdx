@@ -76,12 +76,14 @@ A full example with example configuration is shown below:
 
 ```yaml
 apis:
-  # 👀 Configure the "main" API to run on port 6001
+  # 👀 Configure an API named "main" to run on port 6001
+  # e.g. const mainApi = api("main");
   main:
     port: 6001
 
 websockets:
-  # 👀 Configure the "ws" WebSocket to run on port 6002
+  # 👀 Configure a WebSocket named "ws" to run on port 6002
+  # e.g. const ws = websocket("ws");
   ws:
     port: 6002
 ```
