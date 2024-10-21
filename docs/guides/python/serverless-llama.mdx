@@ -1,0 +1,275 @@
+---
+description: Use Llama model with serverless compute to translate text and store results using Nitric
+tags:
+  - Nitric
+  - API
+  - AI & Machine Learning
+languages:
+  - python
+---
+
+# Using LLama models with serverless infrastructure
+
+This guide will walk you through setting up a lightweight translation service using the Llama model, combined with Nitric for API routing and bucket storage. 
+
+By leveraging serverless compute, you'll be able to deploy and run a machine learning model with minimal infrastructure overhead, making it a great fit for handling dynamic workloads such as real-time text translation.
+
+## What we'll be doing
+
+We will use the [Llama](https://huggingface.co/) models from Hugging Face for natural language processing, combined with Nitric to manage the API routes and storage.
+
+1. Setting up the environment.
+2. Creating the translation service.
+3. Deploying the service.
+4. Testing the translation functionality.
+
+## Prerequisites
+
+- [uv](https://docs.astral.sh/uv/#getting-started) - for Python dependency management
+- The [Nitric CLI](/get-started/installation)
+- _(optional)_ An [AWS](https://aws.amazon.com) account
+
+## Project setup
+
+We'll start by creating a new project for our translator service using Nitric's python starter template.
+
+```bash
+nitric new translator py-starter
+cd translator
+```
+
+Next, let's install our base dependencies, then add the extra dependencies we need specifically loading our language model.
+
+```bash
+# Install the base dependencies
+uv sync
+uv add llama-cpp-python
+```
+
+You will also need to [download the Llama model](https://huggingface.co/bartowski/Llama-3.2-1B-Instruct-GGUF/tree/main) file and ensure it is located in the `./models/` directory with the correct model file name.
+
+In this guide we'll be using 'Llama-3.2-1B-Instruct-Q4_K_M.gguf, this model is ideal for serverless because its reduced size and efficient 4-bit quantization make it cost-effective and scalable, running smoothly within the resource limits of serverless compute environments while maintaining solid performance.
+
+Your folder structure should look like this:
+
+```bash
+/translator
+    /models
+        Llama-3.2-1B-Instruct-Q4_K_M.gguf
+    /services
+        api.py
+    nitric.yaml
+    pyproject.toml
+    python.dockerfile
+    python.dockerfile.ignore
+    README.md
+    uv.lock
+```
+
+## Creating the translation service
+
+Our project will use Nitric to handle API requests, and we will process the text translation using Llama. The results will be stored in a Nitric bucket.
+
+Let's start by defining the translation logic using the Llama model:
+
+Remove the contents of `services/api.py` and update it with the following code that will load the Llama model and implement the translation functionality. We'll also do some basic calculations for evaluation times for tokens:
+
+```python title:services/api.py
+from llama_cpp import Llama
+import time
+
+# Load the locally stored Llama model
+llama_model = Llama(model_path="./models/Llama-3.2-1B-Instruct-Q4_K_M.gguf")
+
+# Function to perform translation using the Llama model
+def translate_text(text):
+    prompt = f'Translate "{text}" to Spanish.'
+    
+    start_time = time.time()
+
+    # Generate a response using the locally stored model
+    response = llama_model(
+        prompt=prompt,
+        max_tokens=150,  
+        temperature=0.7,
+        top_p=0.9,
+        stop=["\n"]  
+    )
+    
+    # Calculate evaluation time
+    end_time = time.time()
+    t_eval_ms = (end_time - start_time) * 1000
+    
+    translated_text = response['choices'][0]['text'].strip()
+    return translated_text, response, t_eval_ms
+```
+
+## Building the API and adding storage
+
+Now, let's integrate the translation logic into an API and store the results in a bucket.
+
+Expand `api.py` with the following code:
+
+```python title:services/api.py
+import uuid
+from nitric.resources import bucket
+from nitric.application import Nitric
+from nitric.resources import api
+from nitric.context import HttpContext
+
+# Define a Nitric bucket resource for storing translations
+translations_bucket = bucket("translations").allow("write")
+
+# Define an API for the translation service
+main = api("main")
+
+@main.post("/translate")
+async def handle_translation(ctx: HttpContext):
+    text = ctx.req.json["text"]
+
+    unique_id = str(uuid.uuid4())
+
+    try:
+        translated_text, output, t_eval_ms = translate_text(text)
+        
+        # Save the translated text to the Nitric bucket
+        translated_bytes = translated_text.encode()
+        file_path = f"translations/{unique_id}/translated.txt"
+        await translations_bucket.file(file_path).write(translated_bytes)
+
+        ctx.res.body = {
+            'output': output,
+            't_eval_ms': t_eval_ms,
+        }
+
+    except Exception as e:
+        ctx.res.body = {"error": str(e)}
+        ctx.res.status = 500
+
+Nitric.run()        
+```
+
+### Ok, let's run this thing!
+
+Now that you have your API route defined, it's time to test it locally.
+The starter template for python uses a slim image `python3.11-bookworm-slim` which does have the right dependencies to load our llama model, let's update our dockerfile to use `python3.11-bookworm`.
+
+```python title:python.dockerfile
+# Update line 2
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm AS builder
+
+# Update line 19: 
+FROM python:3.11-bookworm
+```
+
+Now we can run our services locally:
+
+```
+nitric run
+```
+
+<Note>
+  Nitric runs your application in a container that already includes the dependencies to use `llama_cpp`. If you'd rather use `nitric start` you'll need to install dependencies for llama-cpp-python such as [CMake](https://cmake.org/download/) and [LLVM](https://releases.llvm.org/download.html).
+</Note>
+
+Once it starts, you can easily test your application with the Nitric Dashboard. You can find the URL to the dashboard in the terminal running the Nitric CLI, by default, it is set to - http://localhost:49152.
+
+![api dashboard](/docs/images/guides/serverless-llama/dashboard.png)
+
+## Deploying to AWS 
+
+<Note>
+  You are responsible for staying within the limits of the free tier or any costs associated with deployment.
+</Note>
+
+Once your project is set up, create a new Nitric stack file for deployment to AWS:
+
+```bash
+nitric stack new dev aws
+```
+
+Update the stack file `nitric.dev.yaml` with the appropriate AWS region and memory allocation to handle the model.
+
+```yaml title:nitric.dev.yaml
+provider: nitric/aws@1.14.0
+region: us-east-1
+# Configure your deployed functions/services
+config:
+  # How functions without a type will be deployed
+  default:
+    # configure a sample rate for telemetry (between 0 and 1) e.g. 0.5 is 50%
+    telemetry: 0
+    # configure functions to deploy to AWS lambda
+    lambda: # Available since v0.26.0
+      # set 128MB of RAM
+      # See lambda configuration docs here:
+      # https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html#configuration-memory-console
+      memory: 6144
+      # set a timeout of 15 seconds
+      # See lambda timeout values here:
+      # https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html#configuration-timeout-console
+      timeout: 30
+      # set the amount of ephemeral-storage: of 512MB
+      # For info on ephemeral-storage for AWS Lambda see:
+      # https://docs.aws.amazon.com/lambda/latest/dg/configuration-ephemeral-storage.html
+      ephemeral-storage: 1024
+      # # set a provisioned concurrency value
+      # # For info on provisioned concurrency for AWS Lambda see:
+      # # https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html
+      provisioned-concurrency: 0
+```
+
+You can then deploy using the following command:
+
+```bash
+nitric up
+```
+
+To undeploy run the following command:
+
+```bash
+nitric down
+```
+
+## Testing the translation functionality
+
+To test the translation service, you can use any API testing tool such as Postman or cURL.
+
+### Example request
+
+Send a POST request to the `/translate` endpoint with the following JSON body:
+
+```json
+{
+  "text": "Hello, how are you?"
+}
+```
+
+### Example response
+
+The response will include the translation details, evaluation time, and tokens per second:
+
+```json
+{
+  "output": {
+    "choices": [
+      {
+        "text": "Hola, ¿cómo estás?"
+      }
+    ],
+    "usage": {
+      "total_tokens": 15
+    }
+  },
+  "t_eval_ms": 200,
+  "tps": 75.0
+}
+```
+
+The translated text will also be stored in the `translations` bucket with a unique ID.
+
+## Conclusion
+
+In this guide, we demonstrated how you can use a lightweight machine learning model like Llama with serverless compute, enabling you to efficiently handle real-time translation tasks without the need for constant infrastructure management. 
+
+The combination of serverless architecture and on-demand model execution provides scalability, flexibility, and cost-efficiency, ensuring that resources are only consumed when necessary. This setup allows you to run lightweight models in a cloud-native way, ideal for dynamic applications requiring minimal operational overhead.
