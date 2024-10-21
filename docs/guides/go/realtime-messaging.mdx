@@ -5,6 +5,11 @@ tags:
   - Key Value Store
 languages:
   - go
+start_steps: |
+  git clone --depth 1 https://github.com/nitrictech/examples
+  cd examples/v1/websocket-app
+  go mod tidy
+  nitric start
 ---
 
 # Building a chat app in Go with WebSockets and Nitric

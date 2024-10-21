@@ -46,6 +46,10 @@ const Doc = defineDocumentType(() => ({
       },
       description: 'The languages of the content, used by guides',
     },
+    start_steps: {
+      type: 'markdown',
+      description: 'The start steps of the doc, used by guides',
+    },
   },
   computedFields: {
     slug: {
