@@ -221,7 +221,6 @@ init
 .mkv
 .jpg
 .pdf
-colour
 preflight
 nav
 MacOS
