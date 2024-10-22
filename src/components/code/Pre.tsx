@@ -20,11 +20,13 @@ type Props = {
   highlighted: HighlightedCode
   showPanel?: boolean
   className?: string
+  hideBashPanel?: boolean
 } & HandlerProps
 
 const Pre: React.FC<Props> = ({
   highlighted,
   showPanel,
+  hideBashPanel,
   enableTransitions,
   className,
 }) => {
@@ -40,7 +42,7 @@ const Pre: React.FC<Props> = ({
 
   const showFileNamePanel = showPanel && !!title
 
-  const isBash = highlighted.lang === 'shellscript'
+  const isBash = highlighted.lang === 'shellscript' && !hideBashPanel
 
   return (
     <>

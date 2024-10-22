@@ -6,9 +6,11 @@ import { highlight } from './highlight'
 
 export async function Code({
   codeblock,
+  hideBashPanel,
 }: {
   codeblock: RawCode
   isPanel?: boolean
+  hideBashPanel?: boolean
 }) {
   const highlighted = await highlight(codeblock)
 
@@ -18,7 +20,11 @@ export async function Code({
 
   return (
     <CodeContainer>
-      <Pre highlighted={highlighted} showPanel={isPanel} />
+      <Pre
+        highlighted={highlighted}
+        showPanel={isPanel}
+        hideBashPanel={hideBashPanel}
+      />
     </CodeContainer>
   )
 }

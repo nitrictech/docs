@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { GitHubIcon } from '@/components/icons/GitHubIcon'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import FeedbackForm from '@/components/FeedbackForm'
+import { Code } from '@/components/mdx'
 
 export default function DocLayout({
   children,
@@ -22,10 +23,21 @@ export default function DocLayout({
     return <>{children}</>
   }
 
+  const startSteps = doc.start_steps && (
+    <Code
+      hideBashPanel
+      codeblock={{
+        lang: 'bash',
+        meta: '',
+        value: doc.start_steps?.raw,
+      }}
+    />
+  )
+
   return (
     <article className="mx-auto flex h-full max-w-7xl flex-col gap-y-10 px-4 pb-10 pt-16">
       <div className="relative grid grid-cols-1 gap-10 md:grid-cols-12">
-        <div className="w-full flex-auto space-y-20 md:col-span-9">
+        <div className="col-span-8 w-full flex-auto space-y-20 xl:col-span-9">
           <div>
             <Breadcrumbs doc={doc} className="mb-4" />
             <Prose>{children}</Prose>
@@ -55,7 +67,7 @@ export default function DocLayout({
             })}
           </div>
         </div>
-        <DocToc doc={doc} />
+        <DocToc doc={doc} startSteps={startSteps} />
       </div>
     </article>
   )

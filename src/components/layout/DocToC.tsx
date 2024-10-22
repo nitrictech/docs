@@ -1,7 +1,7 @@
 'use client'
 
 import type { Doc } from '@/content'
-import { useRef, useLayoutEffect, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { DocTracingBeam } from './DocTracingBeam'
 import { Button } from '../ui/button'
@@ -15,7 +15,13 @@ interface Toc {
   depth: number
 }
 
-const DocToC = ({ doc }: { doc: Doc }) => {
+const DocToC = ({
+  doc,
+  startSteps,
+}: {
+  doc: Doc
+  startSteps?: React.JSX.Element | undefined
+}) => {
   const initial = 14
   const sectionSize = 28
   const offset = 10
@@ -58,8 +64,8 @@ const DocToC = ({ doc }: { doc: Doc }) => {
   }, [])
 
   return (
-    <div className="hidden h-full min-w-52 md:block">
-      <aside className="sticky top-[calc(var(--header-height)+1px+2rem)] max-h-[calc(100vh-var(--header-height)-3rem)] min-w-40 space-y-6">
+    <div className="hidden h-full min-w-64 md:block">
+      <aside className="sticky top-[calc(var(--header-height)+1px+2rem)] max-h-[calc(100vh-var(--header-height)-3rem)] space-y-8">
         {doc.toc.length ? (
           <div className="relative flex flex-col">
             <p className="mb-2 font-mono text-sm uppercase dark:text-zinc-300">
@@ -101,6 +107,17 @@ const DocToC = ({ doc }: { doc: Doc }) => {
             </a>
           </Button>
         </div>
+        {startSteps && (
+          <div className="flex flex-col">
+            <p className="mb-2 font-mono text-sm uppercase dark:text-zinc-300">
+              Try this out
+            </p>
+            <p className="mb-2 text-2xs text-muted-foreground">
+              Run these commands in your terminal.
+            </p>
+            {startSteps}
+          </div>
+        )}
       </aside>
     </div>
   )
