@@ -308,7 +308,10 @@ Before we can deploy our project to the cloud we need to make a few changes. Fir
 This is why we added the models bucket and download topic initially. It's time to use them. Let's add the download topic subscriber and api endpoint to `services/api.py`.
 
 ```python title: services/api.py
-from common.resources import main_api, model_dir, cache_dir, zip_path, gen_audio_job, download_audio_model_topic, models_bucket
+from common.resources import (
+    main_api, model_dir, cache_dir, zip_path,
+    gen_audio_job, download_audio_model_topic, models_bucket
+)
 from nitric.application import Nitric
 from nitric.context import HttpContext, MessageContext
 from huggingface_hub import snapshot_download
@@ -328,16 +331,20 @@ async def do_download_audio_model(ctx: MessageContext):
     model_id: str = ctx.req.data["model_id"]
 
     print(f"Downloading model to {model_dir}")
-    dir = snapshot_download(model_id, local_dir=model_dir, cache_dir=cache_dir, allow_patterns=[
-        "config.json",
-        "generation_config.json",
-        "pytorch_model.bin",
-        "speaker_embeddings_path.json",
-        "special_tokens_map.json",
-        "tokenizer.json",
-        "tokenizer_config.json",
-        "vocab.txt"
-    ])
+    dir = snapshot_download(model_id,
+      local_dir=model_dir,
+      cache_dir=cache_dir,
+      allow_patterns=[
+          "config.json",
+          "generation_config.json",
+          "pytorch_model.bin",
+          "speaker_embeddings_path.json",
+          "special_tokens_map.json",
+          "tokenizer.json",
+          "tokenizer_config.json",
+          "vocab.txt"
+      ]
+    )
 
     print(f"Downloaded model to {dir}")
 
@@ -368,6 +375,35 @@ async def download_audio(ctx: HttpContext):
     model_id = ctx.req.query.get("model", audio_model_id)
     # asynchronously download the model
     await download_audio_model.publish({ "model_id": model_id })
+
+@main_api.post("/audio/:filename")
+async def submit_auto(ctx: HttpContext):
+    name = ctx.req.params["filename"]
+    model_id = ctx.req.query.get("model", audio_model_id)
+    preset = ctx.req.query.get("preset", default_voice_preset)
+
+    if isinstance(model_id, list):
+        model_id = model_id[0]
+
+    model_downloaded = await models.exists(f"{model_id}.zip")
+    if not model_downloaded:
+        ctx.res.status = 404
+        ctx.res.body = f'model \'{model_id}\' hasn\'t been downloaded yet, call POST: /download-audio-model to pre-download the model'
+        return
+
+    if isinstance(preset, list):
+        preset = preset[0]
+
+    body = ctx.req.data
+    if body is None:
+        ctx.res.status = 400
+        return
+
+    print(f"using preset {preset}")
+
+    await generate_audio.submit({"file": name, "model_id": model_id, "text": body.decode('utf-8'), "preset": preset})
+
+Nitric.run()
 ```
 
 We'll also update our audio generation job to download the model from the bucket before processing the audio.
