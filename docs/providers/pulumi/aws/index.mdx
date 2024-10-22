@@ -105,11 +105,11 @@ config:
     telemetry: 0
     # configure services to deploy to AWS lambda
     lambda: # Available since v0.26.0
-      # set 128MB of RAM
+      # set the memory in MB
       # See lambda configuration docs here:
       # https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html#configuration-memory-console
       memory: 128
-      # set a timeout of 15 seconds
+      # set a timeout in seconds
       # See lambda timeout values here:
       # https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html#configuration-timeout-console
       timeout: 15
