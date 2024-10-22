@@ -438,12 +438,13 @@ Nitric.run()
 Then we can add an API endpoint to trigger the download job and update the API endpoint to allow selection of models and voice presets.
 
 ```python title: services/api.py
-from common.resources import main_api, gen_audio_job, download_audio_model_job
+from common.resources import main_api, gen_audio_job, download_audio_model_job, models_bucket
 from nitric.application import Nitric
 from nitric.context import HttpContext
 
 generate_audio = gen_audio_job.allow('submit')
 download_audio_model = download_audio_model_job.allow('submit')
+models = models_bucket.allow("read")
 
 audio_model_id = "suno/bark"
 default_voice_preset = "v2/en_speaker_6"
@@ -466,6 +467,12 @@ async def submit_auto(ctx: HttpContext):
 
     if isinstance(model_id, list):
         model_id = model_id[0]
+
+    model_downloaded = await models.exists(f"{model_id}.zip")
+    if not model_downloaded:
+        ctx.res.status = 404
+        ctx.res.body = f'model \'{model_id}\' hasn\'t been downloaded yet, call POST: /download-audio-model to pre-download the model'
+        return
 
     if isinstance(preset, list):
         preset = preset[0]
