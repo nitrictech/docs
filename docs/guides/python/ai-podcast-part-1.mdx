@@ -72,7 +72,9 @@ touch common/resources.py
 ```
 
 ```python title: common/resources.py
-from nitric.resources import api, bucket, job
+from nitric.resources import api, bucket, job, topic
+import os
+import tempfile
 # Our main API for submitting audio generation jobs
 main_api = api("main")
 # A job for generating our audio content
