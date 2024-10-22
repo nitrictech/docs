@@ -38,7 +38,7 @@ nitric new translator py-starter
 cd translator
 ```
 
-Next, let's install our base dependencies, then add the extra dependencies we need specifically loading our language model.
+Next, let's install our base dependencies, then add the extra dependencies we need specifically for loading our language model.
 
 ```bash
 # Install the base dependencies
@@ -48,7 +48,7 @@ uv add llama-cpp-python
 
 You will also need to [download the Llama model](https://huggingface.co/bartowski/Llama-3.2-1B-Instruct-GGUF/tree/main) file and ensure it is located in the `./models/` directory with the correct model file name.
 
-In this guide we'll be using 'Llama-3.2-1B-Instruct-Q4_K_M.gguf, this model is ideal for serverless because its reduced size and efficient 4-bit quantization make it cost-effective and scalable, running smoothly within the resource limits of serverless compute environments while maintaining solid performance.
+In this guide we'll be using `Llama-3.2-1B-Instruct-Q4_K_M.gguf`, this model is ideal for serverless because its reduced size and efficient 4-bit quantization make it cost-effective and scalable, running smoothly within the resource limits of serverless compute environments while maintaining solid performance.
 
 Your folder structure should look like this:
 
