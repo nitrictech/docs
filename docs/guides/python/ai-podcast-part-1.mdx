@@ -390,7 +390,7 @@ async def submit_auto(ctx: HttpContext):
     model_downloaded = await models.exists(f"{model_id}.zip")
     if not model_downloaded:
         ctx.res.status = 404
-        ctx.res.body = f'model \'{model_id}\' hasn\'t been downloaded yet, call POST: /download-audio-model to pre-download the model'
+        ctx.res.body = f'model \'{model_id}\' hasn\'t been downloaded yet, call POST: /download-model to pre-download the model'
         return
 
     if isinstance(preset, list):
@@ -522,7 +522,7 @@ nitric start
 First we'll make sure that our new model download code is working by running:
 
 ```bash
-curl -X POST http://localhost:4001/download-audio-model
+curl -X POST http://localhost:4001/download-model
 ```
 
 Then we can test the audio generation again with:
