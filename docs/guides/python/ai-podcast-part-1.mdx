@@ -48,6 +48,8 @@ Next, let's install our base dependencies, then add the extra dependencies we ne
 ```bash
 # Install the base dependencies
 uv sync
+# Add hugginface hub dependencies
+uv add huggingface_hub
 # Add the extra optional ml dependencies
 uv add torch transformers scipy --optional ml
 ```
@@ -75,13 +77,19 @@ from nitric.resources import api, bucket, job
 main_api = api("main")
 # A job for generating our audio content
 gen_audio_job = job("audio")
-# A job to pre-download models
-download_audio_model_job = job("download-audio-model")
 
 # A bucket for storing output audio clips
 clips_bucket = bucket("clips")
 # And another bucket for storing our models
 models_bucket = bucket("models")
+
+# Many cloud API Gateways impose hard response time limits on synchronous requests.
+# To avoid these limits, we can use a Pub/Sub topic to trigger asynchronous processing.
+download_audio_model_topic = topic("download-audio-model")
+
+model_dir = os.path.join(tempfile.gettempdir(), "ai-podcast", ".model")
+cache_dir = os.path.join(tempfile.gettempdir(), "ai-podcast", ".cache")
+zip_path = os.path.join(tempfile.gettempdir(), "ai-podcast", "model.zip")
 ```
 
 We'll also need an `__init__.py` file in the `common` directory to make it a package.
@@ -297,10 +305,75 @@ Feel free to play around with it a bit more before continuing on. It can be fun 
 
 Before we can deploy our project to the cloud we need to make a few changes. First, we want to be able to cache models to be used between runs without having to pull them from Hugging Face each time.
 
-This is why we added the models bucket and download job initially. It's time to use them. Let's add the download job to `batches/podcast.py`.
+This is why we added the models bucket and download topic initially. It's time to use them. Let's add the download topic subscriber and api endpoint to `services/api.py`.
+
+```python title: services/api.py
+from common.resources import main_api, model_dir, cache_dir, zip_path, gen_audio_job, download_audio_model_topic, models_bucket
+from nitric.application import Nitric
+from nitric.context import HttpContext, MessageContext
+from huggingface_hub import snapshot_download
+import os
+import zipfile
+import requests
+
+models = models_bucket.allow('write')
+generate_audio = gen_audio_job.allow('submit')
+download_audio_model = download_audio_model_topic.allow("publish")
+
+audio_model_id = "suno/bark"
+default_voice_preset = "v2/en_speaker_6"
+
+@download_audio_model_topic.subscribe()
+async def do_download_audio_model(ctx: MessageContext):
+    model_id: str = ctx.req.data["model_id"]
+
+    print(f"Downloading model to {model_dir}")
+    dir = snapshot_download(model_id, local_dir=model_dir, cache_dir=cache_dir, allow_patterns=[
+        "config.json",
+        "generation_config.json",
+        "pytorch_model.bin",
+        "speaker_embeddings_path.json",
+        "special_tokens_map.json",
+        "tokenizer.json",
+        "tokenizer_config.json",
+        "vocab.txt"
+    ])
+
+    print(f"Downloaded model to {dir}")
+
+    # zip the model and upload it to the bucket
+    print("Compressing models")
+
+    # zip the model
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_STORED) as zip_file:
+        for root, dirs, files in os.walk(dir):
+            for file in files:
+                file_path = os.path.join(root, file)
+                archive_name = os.path.relpath(file_path, start=dir)
+                print(f"Adding {file_path} to zip as {archive_name}")
+                zip_file.write(file_path, archive_name)
+
+    # upload the model to the bucket
+    module_url = await models.file(f"{model_id}.zip").upload_url()
+
+    with open(zip_path, "rb") as f:
+        requests.put(module_url, data=f, timeout=6000)
+
+    os.remove(zip_path)
+
+    print("Successfully cached model in bucket")
+
+@main_api.post("/download-model")
+async def download_audio(ctx: HttpContext):
+    model_id = ctx.req.query.get("model", audio_model_id)
+    # asynchronously download the model
+    await download_audio_model.publish({ "model_id": model_id })
+```
+
+We'll also update our audio generation job to download the model from the bucket before processing the audio.
 
 ```python title: batches/podcast.py
-from common.resources import gen_audio_job, clips_bucket, models_bucket, download_audio_model_job
+from common.resources import model_dir, zip_path, gen_audio_job, clips_bucket, models_bucket
 from nitric.context import JobContext
 from nitric.application import Nitric
 from transformers import AutoProcessor, BarkModel
@@ -313,48 +386,11 @@ import requests
 import zipfile
 import os
 
-# Allow the batch service to read and write to the models bucket and write to the clips bucket
-clips = clips_bucket.allow('write')
-models = models_bucket.allow('read', 'write')
+clips = clips_bucket.allow("write")
+models = models_bucket.allow("read")
 
-model_dir = "./.model"
-# Download the model and save it to a nitric bucket
-@download_audio_model_job(cpus=4, memory=12000)
-async def do_download_audio_model(ctx: JobContext):
-    model_id = ctx.req.data["model_id"]
-
-    print("Downloading models - this may take several minutes without much feedback, please be patient")
-    processor = AutoProcessor.from_pretrained(model_id)
-    model = BarkModel.from_pretrained(model_id)
-
-    processor.save_pretrained(f"{model_dir}/processor")
-    model.save_pretrained(f"{model_dir}/audio")
-
-    print("Compressing models")
-    zip_path = "model.zip"
-
-    # zip the model
-    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_STORED) as zip_file:
-        for root, dirs, files in os.walk(model_dir):
-            for file in files:
-                file_path = os.path.join(root, file)
-                archive_name = os.path.relpath(file_path, start=model_dir)
-                print(f"Adding {file_path} to zip as {archive_name}")
-                zip_file.write(file_path, archive_name)
-
-    print("Storing models in bucket")
-    # push the archive
-    module_url = await models.file(f"{model_id}.zip").upload_url()
-    print(module_url)
-    with open(zip_path, "rb") as f:
-        requests.put(module_url, data=f, timeout=6000)
-    print("Done!")
-
-```
-
-We'll also update our audio generation job to download the model from the bucket before processing the audio.
-
-```python title: batches/podcast.py
+# This defines the Job Handler that will process all audio generation jobs
+# using the job definition we created in the resources module
 @gen_audio_job(cpus=4, memory=12000, gpus=1)
 async def do_generate_audio(ctx: JobContext):
     file = ctx.req.data["file"]
@@ -367,21 +403,23 @@ async def do_generate_audio(ctx: JobContext):
         print("Downloading model")
         download_url = await models.file(f"{model_id}.zip").download_url()
         response = requests.get(download_url, allow_redirects=True, timeout=600)
+
+        # make sure zip_path exists
+        os.makedirs(os.path.dirname(zip_path), exist_ok=True)
         # save the zip file
-        with open("model.zip", "wb") as f:
+        with open(zip_path, "wb") as f:
             f.write(response.content)
         print("Unzipping model")
-        with zipfile.ZipFile("model.zip", 'r') as zip_ref:
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(model_dir)
 
         # cleanup zip file
         print("Cleaning up")
-        os.remove("model.zip")
-
+        os.remove(zip_path)
 
     print("Loading model")
-    model = BarkModel.from_pretrained(f"{model_dir}/audio")
-    processor = AutoProcessor.from_pretrained("./.model/processor")
+    model = BarkModel.from_pretrained(f"{model_dir}")
+    processor = AutoProcessor.from_pretrained(f"{model_dir}")
     print("Model loaded")
 
     print(f'Using voice preset {voice_preset}')
@@ -434,61 +472,6 @@ Nitric.run()
   effective as you won't be downloading and caching the model on an instance
   where you're also paying for a GPU.
 </Note>
-
-Then we can add an API endpoint to trigger the download job and update the API endpoint to allow selection of models and voice presets.
-
-```python title: services/api.py
-from common.resources import main_api, gen_audio_job, download_audio_model_job, models_bucket
-from nitric.application import Nitric
-from nitric.context import HttpContext
-
-generate_audio = gen_audio_job.allow('submit')
-download_audio_model = download_audio_model_job.allow('submit')
-models = models_bucket.allow("read")
-
-audio_model_id = "suno/bark"
-default_voice_preset = "v2/en_speaker_6"
-
-@main_api.post("/download-audio-model")
-async def download_audio(ctx: HttpContext):
-    model_id = ctx.req.query.get("model", audio_model_id)
-
-    if isinstance(model_id, list):
-        model_id = model_id[0]
-
-    await download_audio_model.submit({ "model_id": model_id })
-
-# Generate a sample voice line
-@main_api.post("/audio/:filename")
-async def submit_auto(ctx: HttpContext):
-    name = ctx.req.params["filename"]
-    model_id = ctx.req.query.get("model", audio_model_id)
-    preset = ctx.req.query.get("preset", default_voice_preset)
-
-    if isinstance(model_id, list):
-        model_id = model_id[0]
-
-    model_downloaded = await models.exists(f"{model_id}.zip")
-    if not model_downloaded:
-        ctx.res.status = 404
-        ctx.res.body = f'model \'{model_id}\' hasn\'t been downloaded yet, call POST: /download-audio-model to pre-download the model'
-        return
-
-    if isinstance(preset, list):
-        preset = preset[0]
-
-    body = ctx.req.data
-    if body is None:
-        ctx.res.status = 400
-        return
-
-    print(f"using preset {preset}")
-
-    await generate_audio.submit({"file": name, "model_id": model_id, "text": body.decode('utf-8'), "preset": preset})
-
-
-Nitric.run()
-```
 
 Once that's done we can give the project another test, just to make sure everything is still working as expected.
 
@@ -647,15 +630,15 @@ batch-compute-env:
     - g5 # Or use another instance type that supports GPUs
     - optimal
   # Customize the ECS launch template for this compute environment
-  launch-template:
-    # Increase the default docker system volume size
-    # This is so large models can be downloaded and cached
-    block-device-mappings:
-      - device-name: /dev/xvda
-        ebs:
-          volume-size: 50
-          volume-type: gp2
-          delete-on-termination: 'true'
+
+config:
+  # How functions without a type will be deployed
+  default:
+    lambda: # Available since v0.26.0
+      # increase ephemeral storage size to allow for largish model files
+      ephemeral-storage: 10000
+      memory: 1024
+      timeout: 900
 ```
 
 <Note>
