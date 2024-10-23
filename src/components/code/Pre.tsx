@@ -11,6 +11,8 @@ import {
 import { tokenTransitions } from './annotations/token-transitions'
 import { cn } from '@/lib/utils'
 import { meta } from './meta'
+import { mark } from './Mark'
+import { diff } from './Diff'
 
 export interface HandlerProps {
   enableTransitions?: boolean
@@ -32,7 +34,15 @@ const Pre: React.FC<Props> = ({
 }) => {
   const { title } = meta(highlighted)
 
-  let handlers = [callout, fold, collapse, collapseTrigger, collapseContent]
+  let handlers = [
+    callout,
+    fold,
+    collapse,
+    collapseTrigger,
+    collapseContent,
+    mark,
+    diff,
+  ]
 
   // Getting an issue with color transitions on the -code-text token
   // Note: this also won't work with the Tabs component, only the CodeSwitcherSelect
