@@ -670,9 +670,8 @@ batch-compute-env:
   # Customize the ECS launch template for this compute environment
 
 config:
-  # How functions without a type will be deployed
   default:
-    lambda: # Available since v0.26.0
+    lambda:
       # increase ephemeral storage size to allow for largish model files
       ephemeral-storage: 10000
       memory: 1024
