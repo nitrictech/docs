@@ -18,6 +18,10 @@ export const DartReference: NavGroup = {
           href: '/reference/dart/api/api',
         },
         {
+          title: 'api.all()',
+          href: '/reference/dart/api/api-all',
+        },
+        {
           title: 'api.get()',
           href: '/reference/dart/api/api-get',
         },
