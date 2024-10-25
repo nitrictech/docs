@@ -11,9 +11,9 @@ In this guide we'll build a fully autonomous AI podcast, combining an LLM for sc
 
 In this first part we'll focus on generating the audio content, here's a sample of what we'll be able to produce:
 
-<div class="mx-auto max-w-lg rounded-sm bg-black p-4 text-white shadow dark:bg-white dark:text-black">
-  <div class="space-y-1 pb-4 pl-2 font-mono">
-    <div class="font-bold">The Dead Internet Podcast</div>
+<div className="mx-auto max-w-lg rounded-sm bg-black p-4 text-white shadow dark:bg-white dark:text-black">
+  <div className="space-y-1 pb-4 pl-2 font-mono">
+    <div className="font-bold">The Dead Internet Podcast</div>
     <div className="text-sm">Episode 1: The Dead Internet Theory</div>
   </div>
   <audio controls style={{ width: '100%' }}>
@@ -62,7 +62,7 @@ uv add torch transformers scipy --optional ml
 
 ## Designing the project
 
-As you may know, Nitric helps with both cloud resource creation and interaction. We'll use Nitric to define the cloud resources our project needs. This includes an API to trigger new jobs, buckets for storing models and audio output and setting up our AI workloads to run as [batch jobs](/batch).
+As you may know, Nitric helps with both cloud resource creation and interaction. We'll use Nitric to define the cloud resources our project needs. This includes an API to trigger new jobs, buckets for storing models and audio output, and the setup of our AI workloads to run as [batch jobs](/batch).
 
 To achieve this let's create a new python module which defines the resources for this project. We'll create this as `common/resources.py` in our project.
 
