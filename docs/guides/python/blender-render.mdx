@@ -1,0 +1,741 @@
+---
+description: Use the Nitric framework to build a service for rendering Blender scenes using cloud GPUs
+tags:
+  - API
+  - AI & Machine Learning
+languages:
+  - python
+---
+
+# Use Cloud GPUs for rendering your Blender projects
+
+## Prerequisites
+
+- [UV](https://docs.astral.sh/uv/) - for dependency management
+- The [Nitric CLI](/get-started/installation)
+- An [AWS](https://aws.amazon.com) or [Google Cloud](https://cloud.google.com) account (_your choice_)
+
+## Getting started
+
+We'll start by creating a new Nitric project.
+
+<Note>
+  If you want to take a look at the finished code, it can be found
+  [here](https://github.com/nitrictech/examples/tree/main/v1/blender-render).
+</Note>
+
+```bash
+nitric new blender-rendering
+```
+
+We can then resolve our dependencies.
+
+```bash
+uv sync
+```
+
+We'll also add [bpy](https://docs.blender.org/api/current/info_overview.html#python-in-blender) as a dependency. This is the API that will interact with the Blender environment for setting up and rendering our scenes. The version of `bpy` should match the version of Blender you intend on using.
+
+```bash
+uv add bpy==4.2.0
+```
+
+We'll organise our project structure like so:
+
+```text
++--src/
+|  +--services/
+|      +-- main.py
++--nitric.yaml
++--docker/
+|  +-- python.dockerfile
++--.gitignore
++--.python-version
++--pyproject.toml
++--README.md
+```
+
+## Creating the resources
+
+We'll start by creating a file to define our Nitric resources. For this project we'll need an API, Batch Job, and two buckets, one for the `.blend` files and one for the resulting renders. The API will interface with the buckets, while the Batch Job will handle the long-running renders.
+
+```python title:src/resources.py
+from nitric.resources import api, job, bucket
+
+main_api = api("main")
+
+renderer_job = job("render-image")
+
+blend_bucket = bucket("blend_files")
+rendered_bucket = bucket("rendered_bucket")
+```
+
+## Routes for our API
+
+Now that we have defined resources, we can import our API and add some routes to access the buckets. Start by importing the resources and adding permissions to the resources.
+
+```python title:src/services/main.py
+from nitric.application import Nitric
+from nitric.context import HttpContext
+from resources import rendered_bucket, main_api, blend_bucket, renderer_job
+
+readable_rendered_bucket = rendered_bucket.allow("read")
+writeable_blend_bucket = blend_bucket.allow("write")
+submittable_renderer_job = renderer_job.allow("submit")
+
+Nitric.run()
+```
+
+We'll then write a route for getting an image from the rendered bucket and a route for getting any videos from the bucket. These will get a signed download url and redirect the user to this url for downloading the content.
+
+```python title:src/services/main.py
+# !collapse(1:7) collapsed
+from nitric.application import Nitric
+from nitric.context import HttpContext
+from resources import rendered_bucket, main_api, blend_bucket, renderer_job
+
+readable_rendered_bucket = rendered_bucket.allow("read")
+writeable_blend_bucket = blend_bucket.allow("write")
+submittable_renderer_job = renderer_job.allow("submit")
+
+@main_api.get("/image/:image")
+async def get_image(ctx: HttpContext):
+  image = ctx.req.params['image']
+
+  download_url = await readable_rendered_bucket.file(f"{image}.png").download_url(3600)
+
+  ctx.res.headers["Location"] = download_url
+  ctx.res.status = 303
+
+  return ctx
+
+@main_api.get("/video/:video")
+async def get_video(ctx: HttpContext):
+  video = ctx.req.params["video"]
+
+  download_url = await readable_rendered_bucket.file(f"{video}.mpg")
+
+  ctx.res.headers["Location"] = download_url
+  ctx.res.status = 303
+
+  return ctx
+
+Nitric.run()
+```
+
+The final route will be for sending off a `.blend` file for rendering. This will add the contents of the request to a file in the blend bucket and trigger the rendering job.
+
+```python title:src/services/main.py
+# !collapse(1:29) collapsed
+from nitric.application import Nitric
+from nitric.context import HttpContext
+from resources import rendered_bucket, main_api, blend_bucket, renderer_job
+
+readable_rendered_bucket = rendered_bucket.allow("read")
+writeable_blend_bucket = blend_bucket.allow("write")
+submittable_renderer_job = renderer_job.allow("submit")
+
+@main_api.get("/image/:image")
+async def get_image(ctx: HttpContext):
+  image = ctx.req.params['image']
+
+  download_url = await readable_rendered_bucket.file(f"{image}.png").download_url(3600)
+
+  ctx.res.headers["Location"] = download_url
+  ctx.res.status = 303
+
+  return ctx
+
+@main_api.get("/video/:video")
+async def get_video(ctx: HttpContext):
+  video = ctx.req.params["video"]
+
+  download_url = await readable_rendered_bucket.file(f"{video}.mpg").download_url(3600)
+
+  ctx.res.headers["Location"] = download_url
+  ctx.res.status = 303
+
+  return ctx
+
+@main_api.post("/:blend")
+async def write_image(ctx: HttpContext):
+  blend_scene_key = ctx.req.data["blend"]
+  format = ctx.req.data["format"]
+
+  await writeable_blend_bucket.file(blend_scene_key).write(ctx.req.data)
+
+  await submittable_renderer_job.submit(
+    {
+      "key": blend_scene_key,
+      "format": format if format is not None else "image",
+    }
+  )
+
+  return ctx
+
+Nitric.run()
+```
+
+## Using bpy for scripted blender rendering
+
+Start by adding our imports and the resources we defined earlier.
+
+```python title:src/jobs/renderer.py
+import os.path
+from nitric.context import JobContext
+from nitric.application import Nitric
+from resources import rendered_bucket, renderer_job, blend_bucket
+
+readable_blend_bucket = blend_bucket.allow("read")
+writeable_rendered_bucket = rendered_bucket.allow("write")
+
+@renderer_job(cpus=1, memory=1024, gpus=0)
+async def render_image(ctx: JobContext):
+  pass
+```
+
+Next, we'll add functionality to render the scene based on the file that is sent in the job context. Start by pointing `bpy` to the blender binary.
+
+```python title:src/jobs/renderer.py
+# !collapse(1:7) collapsed
+import os.path
+from nitric.context import JobContext
+from nitric.application import Nitric
+from resources import rendered_bucket, renderer_job, blend_bucket
+
+readable_blend_bucket = blend_bucket.allow("read")
+writeable_rendered_bucket = rendered_bucket.allow("write")
+
+@renderer_job(cpus=1, memory=1024, gpus=0)
+async def render_image(ctx: JobContext):
+  import bpy
+
+  blend_key, data_format = ctx.req.data["key"], ctx.req.data["format"]
+
+  # Register the blender binary with bpy
+  blender_bin = "blender"
+
+  if os.path.isfile(blender_bin):
+    bpy.app.binary_path = blender_bin
+  else:
+    ctx.res.success = False
+    return ctx
+
+  return ctx
+
+Nitric.run()
+```
+
+Next, we'll read the blend file from the bucket that matches the key sent in the context and write it to a file accessible by the blender renderer. The line `bpy.ops.wm.open_mainfile(filepath="input")` will set the input scene for the renderer.
+
+```python title:src/jobs/renderer.py
+# !collapse(1:7) collapsed
+import os.path
+from nitric.context import JobContext
+from nitric.application import Nitric
+from resources import rendered_bucket, renderer_job, blend_bucket
+
+readable_blend_bucket = blend_bucket.allow("read")
+writeable_rendered_bucket = rendered_bucket.allow("write")
+
+@renderer_job(cpus=1, memory=1024, gpus=0)
+async def render_image(ctx: JobContext):
+  # !collapse(1:12) collapsed
+  import bpy
+
+  blend_key, data_format = ctx.req.data["key"], ctx.req.data["format"]
+
+  # Register the blender binary
+  blender_bin = "blender"
+
+  if os.path.isfile(blender_bin):
+    bpy.app.binary_path = blender_bin
+  else:
+    ctx.res.success = False
+    return ctx
+
+  # load the file from a bucket to a local file
+  blend_file = await blend_bucket.file(blend_key).read()
+
+  with open("input", "wb") as f:
+    f.write(blend_file)
+
+  bpy.ops.wm.open_mainfile(filepath="input")
+
+  return ctx
+
+
+Nitric.run()
+```
+
+We'll then set the render engine to use CYCLES and use our GPU with CUDA. If your device doesn't have a GPU or you're not utilising cloud GPUs, then comment out the GPU and CUDA lines.
+
+```python title:src/jobs/renderer.py
+# !collapse(1:7) collapsed
+import os.path
+from nitric.context import JobContext
+from nitric.application import Nitric
+from resources import rendered_bucket, renderer_job, blend_bucket
+
+readable_blend_bucket = blend_bucket.allow("read")
+writeable_rendered_bucket = rendered_bucket.allow("write")
+
+@renderer_job(cpus=1, memory=1024, gpus=0)
+async def render_image(ctx: JobContext):
+  # !collapse(1:20) collapsed
+  import bpy
+
+  blend_key, data_format = ctx.req.data["key"], ctx.req.data["format"]
+
+  # Register the blender binary
+  blender_bin = "blender"
+
+  if os.path.isfile(blender_bin):
+    bpy.app.binary_path = blender_bin
+  else:
+    ctx.res.success = False
+    return ctx
+
+  # load the file from a bucket to a local file
+  blend_file = await blend_bucket.file(blend_key).read()
+
+  with open("input", "wb") as f:
+    f.write(blend_file)
+
+  bpy.ops.wm.open_mainfile(filepath="input")
+
+  # Set render options
+  bpy.context.scene.render.engine = 'CYCLES'
+  bpy.context.scene.cycles.device = "GPU"
+  bpy.context.scene.cycles.preferences.compute_device_type = "CUDA"
+
+  bpy.context.scene.render.filepath = "output"
+
+  return ctx
+
+
+Nitric.run()
+```
+
+The next step is to set the output settings and render depending on whether the requested scene was an image or a video.
+
+```python title:src/jobs/renderer.py
+# !collapse(1:7) collapsed
+import os.path
+from nitric.context import JobContext
+from nitric.application import Nitric
+from resources import rendered_bucket, renderer_job, blend_bucket
+
+readable_blend_bucket = blend_bucket.allow("read")
+writeable_rendered_bucket = rendered_bucket.allow("write")
+
+@renderer_job(cpus=1, memory=1024, gpus=0)
+async def render_image(ctx: JobContext):
+  # !collapse(1:27) collapsed
+  import bpy
+
+  blend_key, data_format = ctx.req.data["key"], ctx.req.data["format"]
+
+  # Register the blender binary
+  blender_bin = "blender"
+
+  if os.path.isfile(blender_bin):
+    bpy.app.binary_path = blender_bin
+  else:
+    ctx.res.success = False
+    return ctx
+
+  # load the file from a bucket to a local file
+  blend_file = await blend_bucket.file(blend_key).read()
+
+  with open("input", "wb") as f:
+    f.write(blend_file)
+
+  bpy.ops.wm.open_mainfile(filepath="input")
+
+  # Set render options
+  bpy.context.scene.render.engine = 'CYCLES'
+  # bpy.context.scene.cycles.preferences.compute_device_type = "CUDA"
+  # bpy.context.scene.cycles.device = "GPU"
+
+  bpy.context.scene.render.filepath = "output"
+
+  # Change settings and render depending on if its a video or image
+  if data_format == "video":
+    bpy.context.scene.render.image_settings.file_format = 'FFMPEG'
+    bpy.context.scene.render.fps = 30
+    bpy.context.scene.render.filepath = "output"
+    bpy.ops.render.render(animation=True)
+  # Set values for if the output format is a still image
+  else:
+    bpy.context.scene.render.image_settings.file_format = 'PNG'
+    bpy.ops.render.render(write_still=True)
+
+  return ctx
+
+
+Nitric.run()
+```
+
+With the rendering complete, we'll read the contents of the outputted render and add it to the bucket.
+
+```python title:src/jobs/renderer.py
+# !collapse(1:7) collapsed
+import os.path
+from nitric.context import JobContext
+from nitric.application import Nitric
+from resources import rendered_bucket, renderer_job, blend_bucket
+
+readable_blend_bucket = blend_bucket.allow("read")
+writeable_rendered_bucket = rendered_bucket.allow("write")
+
+@renderer_job(cpus=1, memory=1024, gpus=0)
+async def render_image(ctx: JobContext):
+  # !collapse(1:38) collapsed
+  import bpy
+
+  blend_key, data_format = ctx.req.data["key"], ctx.req.data["format"]
+
+  # Register the blender binary
+  blender_bin = "blender"
+
+  if os.path.isfile(blender_bin):
+    bpy.app.binary_path = blender_bin
+  else:
+    ctx.res.success = False
+    return ctx
+
+  # load the file from a bucket to a local file
+  blend_file = await blend_bucket.file(blend_key).read()
+
+  with open("input", "wb") as f:
+    f.write(blend_file)
+
+  bpy.ops.wm.open_mainfile(filepath="input")
+
+  # Set render options
+  bpy.context.scene.render.engine = 'CYCLES'
+  # bpy.context.scene.cycles.preferences.compute_device_type = "CUDA"
+  # bpy.context.scene.cycles.device = "GPU"
+
+  bpy.context.scene.render.filepath = "output"
+
+  # Change settings and render depending on if its a video or image
+  if data_format == "video":
+    bpy.context.scene.render.image_settings.file_format = 'FFMPEG'
+    bpy.context.scene.render.fps = 30
+    bpy.context.scene.render.filepath = "output"
+    bpy.ops.render.render(animation=True)
+  # Set values for if the output format is a still image
+  else:
+    bpy.context.scene.render.image_settings.file_format = 'PNG'
+    bpy.ops.render.render(write_still=True)
+
+  with open("output", "rb") as f:
+    image_bytes = f.read()
+
+    # swap the `.blend` extension for a `.png`
+    file_extension = data_format == "video" if "mpg" else "png"
+
+    await rendered_bucket.file(f"{blend_key}.{file_extension}").write(image_bytes)
+
+  return ctx
+
+
+Nitric.run()
+```
+
+## Blender Dockerfile
+
+With our code complete, we can write a dockerfile that our batch job will run in. Start with the base image that copies our application code and resolves the dependencies using `uv`.
+
+```dockerfile title:docker/blender.dockerfile
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm AS builder
+
+ARG HANDLER
+ENV HANDLER=${HANDLER}
+
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
+
+WORKDIR /app
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+  --mount=type=bind,source=uv.lock,target=uv.lock \
+  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+  uv sync --frozen -v --no-install-project --extra ml --no-dev --no-python-downloads
+
+COPY . /app
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+  uv sync --frozen -v --no-dev --extra ml --no-python-downloads
+```
+
+The next stage is another image with the base image of `nvidia/cuda` which will enable CUDA support with the render engine. We'll set some environment variables to enable GPU use and download some apt dependencies that blender requires.
+
+```dockerfile title:docker/blender.dockerfile
+# !collapse(1:18) collapsed
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm AS builder
+
+ARG HANDLER
+ENV HANDLER=${HANDLER}
+
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
+
+WORKDIR /app
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+  --mount=type=bind,source=uv.lock,target=uv.lock \
+  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+  uv sync --frozen -v --no-install-project --extra ml --no-dev --no-python-downloads
+
+COPY . /app
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+  uv sync --frozen -v --no-dev --extra ml --no-python-downloads
+
+FROM nvidia/cuda:12.6.2-cudnn-runtime-ubuntu24.04
+
+ENV NVIDIA_DRIVER_CAPABILITIES=all
+ENV NVIDIA_REQUIRE_CUDA="cuda>=8.0"
+
+RUN --mount=type=cache,target=/var/cache/apt/archives \
+  apt-get update && apt-get install -y \
+  software-properties-common \
+  build-essential \
+  libxi6 \
+  libglu1-mesa \
+  libgl1 \
+  libglx-mesa0  \
+  libxxf86vm1 \
+  libxkbcommon0 \
+  libsm6 \
+  libxext6 \
+  libxrender1 \
+  libxrandr2 \
+  libx11-6 \
+  xorg \
+  libxkbcommon0 \
+  ffmpeg \
+  wget \
+  curl \
+  ca-certificates && \
+  # Add python 3.11
+  add-apt-repository ppa:deadsnakes/ppa && \
+  apt-get install -y python3.11 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 && \
+  rm -rf /var/lib/apt/lists/*
+```
+
+We'll then download blender using the `ADD` command, downloading and extracting the file into the `/app` directory so it can be used by our job application.
+
+```dockerfile title:docker/blender.dockerfile
+# !collapse(1:49) collapsed
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm AS builder
+
+ARG HANDLER
+ENV HANDLER=${HANDLER}
+
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
+
+WORKDIR /app
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+  --mount=type=bind,source=uv.lock,target=uv.lock \
+  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+  uv sync --frozen -v --no-install-project --extra ml --no-dev --no-python-downloads
+
+COPY . /app
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+  uv sync --frozen -v --no-dev --extra ml --no-python-downloads
+
+FROM nvidia/cuda:12.6.2-cudnn-runtime-ubuntu24.04
+
+ENV NVIDIA_DRIVER_CAPABILITIES=all
+ENV NVIDIA_REQUIRE_CUDA="cuda>=8.0"
+
+RUN --mount=type=cache,target=/var/cache/apt/archives \
+  apt-get update && apt-get install -y \
+  software-properties-common \
+  build-essential \
+  libxi6 \
+  libglu1-mesa \
+  libgl1 \
+  libglx-mesa0  \
+  libxxf86vm1 \
+  libxkbcommon0 \
+  libsm6 \
+  libxext6 \
+  libxrender1 \
+  libxrandr2 \
+  libx11-6 \
+  xorg \
+  libxkbcommon0 \
+  ffmpeg \
+  wget \
+  curl \
+  ca-certificates && \
+  add-apt-repository ppa:deadsnakes/ppa && \
+  apt-get install -y python3.11 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 && \
+  rm -rf /var/lib/apt/lists/*
+
+  # Blender variables used for specifying the blender version
+  ARG BLENDER_OS="linux-x64"
+  ARG BL_VERSION_SHORT="4.2"
+  ARG BL_VERSION_FULL="4.2.2"
+  ARG BL_DL_ROOT_URL="https://mirrors.ocf.berkeley.edu/blender/release"
+  ARG BLENDER_DL_URL=${BL_DL_ROOT_URL}/Blender${BL_VERSION_SHORT}/blender-${BL_VERSION_FULL}-${BLENDER_OS}.tar.xz
+
+  WORKDIR /app
+
+  # Download and unpack Blender
+  ADD $BLENDER_DL_URL blender
+```
+
+Finally, we'll make sure we add our code from the base image and set the entrypoint as the python code.
+
+```dockerfile title:docker/blender.dockerfile
+# !collapse(1:61) collapsed
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm AS builder
+
+ARG HANDLER
+ENV HANDLER=${HANDLER}
+
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
+
+WORKDIR /app
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+  --mount=type=bind,source=uv.lock,target=uv.lock \
+  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+  uv sync --frozen -v --no-install-project --extra ml --no-dev --no-python-downloads
+
+COPY . /app
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+  uv sync --frozen -v --no-dev --extra ml --no-python-downloads
+
+FROM nvidia/cuda:12.6.2-cudnn-runtime-ubuntu24.04
+
+ENV NVIDIA_DRIVER_CAPABILITIES=all
+ENV NVIDIA_REQUIRE_CUDA="cuda>=8.0"
+
+RUN --mount=type=cache,target=/var/cache/apt/archives \
+  apt-get update && apt-get install -y \
+  software-properties-common \
+  build-essential \
+  libxi6 \
+  libglu1-mesa \
+  libgl1 \
+  libglx-mesa0  \
+  libxxf86vm1 \
+  libxkbcommon0 \
+  libsm6 \
+  libxext6 \
+  libxrender1 \
+  libxrandr2 \
+  libx11-6 \
+  xorg \
+  libxkbcommon0 \
+  ffmpeg \
+  wget \
+  curl \
+  ca-certificates && \
+  add-apt-repository ppa:deadsnakes/ppa && \
+  apt-get install -y python3.11 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 && \
+  rm -rf /var/lib/apt/lists/*
+
+# Blender variables used for specifying the blender version
+ARG BLENDER_OS="linux-x64"
+ARG BL_VERSION_SHORT="4.2"
+ARG BL_VERSION_FULL="4.2.2"
+ARG BL_DL_ROOT_URL="https://mirrors.ocf.berkeley.edu/blender/release"
+ARG BLENDER_DL_URL=${BL_DL_ROOT_URL}/Blender${BL_VERSION_SHORT}/blender-${BL_VERSION_FULL}-${BLENDER_OS}.tar.xz
+
+WORKDIR /app
+
+# Download and unpack Blender
+ADD $BLENDER_DL_URL blender
+
+ARG HANDLER
+
+ENV HANDLER=${HANDLER}
+ENV PYTHONUNBUFFERED=TRUE
+ENV PYTHONPATH="."
+
+# Copy the application from the builder
+COPY --from=builder --chown=app:app /app /app
+
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Run the service using the path to the handler
+ENTRYPOINT python -u $HANDLER
+```
+
+Add two dockerignore files to help optimise the size of the image. These will be `docker/python.dockerignore` and `docker/blender.dockerignore`.
+
+```text
+.mypy_cache/
+.nitric/
+.venv/
+nitric-spec.json
+nitric.yaml
+README.md
+```
+
+We can update the `nitric.yaml` file to use the correct dockerfiles when running and deploying our applications.
+
+```yaml title:nitric.yaml
+name: blender-render
+services:
+  - match: src/services/*.py
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    runtime: python
+
+batch-services:
+  - match: src/jobs/*.py
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    runtime: blender
+
+runtimes:
+  blender:
+    dockerfile: ./docker/blender.dockerfile
+  python:
+    dockerfile: ./docker/python.dockerfile
+```
+
+We'll also need to add `batch-services` as a preview feature.
+
+```yaml title:nitric.yaml
+# !collapse(1:16) collapsed
+name: blender-render
+  services:
+    - match: src/services/*.py
+      start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+      runtime: python
+
+  batch-services:
+    - match: src/jobs/*.py
+      start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+      runtime: blender
+
+  runtimes:
+    blender:
+      dockerfile: ./docker/blender.dockerfile
+    python:
+      dockerfile: ./docker/python.dockerfile
+
+preview:
+  - batch-services
+```
+
+## Run Locally
+
+We can test the application locally using the following code:
+
+```
+nitric run
+```
