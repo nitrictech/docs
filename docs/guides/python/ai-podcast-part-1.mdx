@@ -1,8 +1,9 @@
 ---
-title_seo: 'Building AI Workflows: Combining LLMs and Voice Models - Part 1'
 description: 'From Script to Sound: Automating AI-Generated Podcasts with Nitric'
 tags:
   - AI & Machine Learning
+languages:
+  - python
 ---
 
 # Building AI Workflows: Combining LLMs and Voice Models - Part 1
@@ -229,11 +230,11 @@ name: ai-podcast
 services:
   - match: services/*.py
     runtime: python
-    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R uv run $SERVICE_PATH
 batch-services:
   - match: batches/*.py
     runtime: python
-    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R uv run $SERVICE_PATH
 runtimes:
   python:
     dockerfile: ./python.dockerfile
@@ -285,8 +286,8 @@ Watch the logs in the terminal where you started the project to see the progress
 
 Once the generation is complete you should have something like this:
 
-<div class="mx-auto max-w-lg rounded-sm bg-black p-4 text-white shadow dark:bg-white dark:text-black">
-  <div class="pb-4 pl-2 font-mono">
+<div className="mx-auto max-w-lg rounded-sm bg-black p-4 text-white shadow dark:bg-white dark:text-black">
+  <div className="pb-4 pl-2 font-mono">
     <div className="text-sm">Sample Output</div>
   </div>
   <audio controls style={{ width: '100%' }}>
@@ -625,11 +626,11 @@ Let's also update the `nitric.yaml` to add the new dockerfile to our runtimes.
 name: ai-podcast
 services:
   - match: services/*.py
-    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R uv run $SERVICE_PATH
     runtime: python
 batch-services:
   - match: batches/*.py
-    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R uv run $SERVICE_PATH
     runtime: torch
 
 runtimes:
@@ -680,7 +681,7 @@ config:
 
 <Note>
   You will need to setup your machine to deploy to AWS. See the [Nitric Pulumi
-  AWS Provider documentation](/providers/aws) for more information.
+  AWS Provider documentation](/providers/pulumi/aws) for more information.
 </Note>
 
 ### Requesting a G instance quota increase
