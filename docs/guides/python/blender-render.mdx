@@ -77,7 +77,7 @@ Now that we have defined resources, we can import our API and add some routes to
 ```python title:src/services/main.py
 from nitric.application import Nitric
 from nitric.context import HttpContext
-from resources import rendered_bucket, main_api, blend_bucket, renderer_job
+from src.resources import rendered_bucket, main_api, blend_bucket, renderer_job
 
 readable_rendered_bucket = rendered_bucket.allow("read")
 writeable_blend_bucket = blend_bucket.allow("write")
@@ -92,7 +92,7 @@ We'll then write a route for getting an image from the rendered bucket and a rou
 # !collapse(1:7) collapsed
 from nitric.application import Nitric
 from nitric.context import HttpContext
-from resources import rendered_bucket, main_api, blend_bucket, renderer_job
+from src.resources import rendered_bucket, main_api, blend_bucket, renderer_job
 
 readable_rendered_bucket = rendered_bucket.allow("read")
 writeable_blend_bucket = blend_bucket.allow("write")
@@ -113,7 +113,7 @@ async def get_image(ctx: HttpContext):
 async def get_video(ctx: HttpContext):
   video = ctx.req.params["video"]
 
-  download_url = await readable_rendered_bucket.file(f"{video}.mpg")
+  download_url = await readable_rendered_bucket.file(f"{video}.mkv")
 
   ctx.res.headers["Location"] = download_url
   ctx.res.status = 303
@@ -129,7 +129,7 @@ The final route will be for sending off a `.blend` file for rendering. This will
 # !collapse(1:29) collapsed
 from nitric.application import Nitric
 from nitric.context import HttpContext
-from resources import rendered_bucket, main_api, blend_bucket, renderer_job
+from src.resources import rendered_bucket, main_api, blend_bucket, renderer_job
 
 readable_rendered_bucket = rendered_bucket.allow("read")
 writeable_blend_bucket = blend_bucket.allow("write")
@@ -150,7 +150,7 @@ async def get_image(ctx: HttpContext):
 async def get_video(ctx: HttpContext):
   video = ctx.req.params["video"]
 
-  download_url = await readable_rendered_bucket.file(f"{video}.mpg").download_url(3600)
+  download_url = await readable_rendered_bucket.file(f"{video}.mkv").download_url(3600)
 
   ctx.res.headers["Location"] = download_url
   ctx.res.status = 303
@@ -184,7 +184,7 @@ Start by adding our imports and the resources we defined earlier.
 import os.path
 from nitric.context import JobContext
 from nitric.application import Nitric
-from resources import rendered_bucket, renderer_job, blend_bucket
+from src.resources import rendered_bucket, renderer_job, blend_bucket
 
 readable_blend_bucket = blend_bucket.allow("read")
 writeable_rendered_bucket = rendered_bucket.allow("write")
@@ -201,7 +201,7 @@ Next, we'll add functionality to render the scene based on the file that is sent
 import os.path
 from nitric.context import JobContext
 from nitric.application import Nitric
-from resources import rendered_bucket, renderer_job, blend_bucket
+from src.resources import rendered_bucket, renderer_job, blend_bucket
 
 readable_blend_bucket = blend_bucket.allow("read")
 writeable_rendered_bucket = rendered_bucket.allow("write")
@@ -233,7 +233,7 @@ Next, we'll read the blend file from the bucket that matches the key sent in the
 import os.path
 from nitric.context import JobContext
 from nitric.application import Nitric
-from resources import rendered_bucket, renderer_job, blend_bucket
+from src.resources import rendered_bucket, renderer_job, blend_bucket
 
 readable_blend_bucket = blend_bucket.allow("read")
 writeable_rendered_bucket = rendered_bucket.allow("write")
@@ -255,7 +255,7 @@ async def render_image(ctx: JobContext):
     return ctx
 
   # load the file from a bucket to a local file
-  blend_file = await blend_bucket.file(blend_key).read()
+  blend_file = await readable_blend_bucket.file(blend_key).read()
 
   with open("input", "wb") as f:
     f.write(blend_file)
@@ -275,7 +275,7 @@ We'll then set the render engine to use CYCLES and use our GPU with CUDA. If you
 import os.path
 from nitric.context import JobContext
 from nitric.application import Nitric
-from resources import rendered_bucket, renderer_job, blend_bucket
+from src.resources import rendered_bucket, renderer_job, blend_bucket
 
 readable_blend_bucket = blend_bucket.allow("read")
 writeable_rendered_bucket = rendered_bucket.allow("write")
@@ -297,7 +297,7 @@ async def render_image(ctx: JobContext):
     return ctx
 
   # load the file from a bucket to a local file
-  blend_file = await blend_bucket.file(blend_key).read()
+  blend_file = await readable_blend_bucket.file(blend_key).read()
 
   with open("input", "wb") as f:
     f.write(blend_file)
@@ -324,7 +324,7 @@ The next step is to set the output settings and render depending on whether the 
 import os.path
 from nitric.context import JobContext
 from nitric.application import Nitric
-from resources import rendered_bucket, renderer_job, blend_bucket
+from src.resources import rendered_bucket, renderer_job, blend_bucket
 
 readable_blend_bucket = blend_bucket.allow("read")
 writeable_rendered_bucket = rendered_bucket.allow("write")
@@ -346,7 +346,7 @@ async def render_image(ctx: JobContext):
     return ctx
 
   # load the file from a bucket to a local file
-  blend_file = await blend_bucket.file(blend_key).read()
+  blend_file = await readable_blend_bucket.file(blend_key).read()
 
   with open("input", "wb") as f:
     f.write(blend_file)
@@ -355,8 +355,8 @@ async def render_image(ctx: JobContext):
 
   # Set render options
   bpy.context.scene.render.engine = 'CYCLES'
-  # bpy.context.scene.cycles.preferences.compute_device_type = "CUDA"
-  # bpy.context.scene.cycles.device = "GPU"
+  bpy.context.scene.cycles.preferences.compute_device_type = "CUDA"
+  bpy.context.scene.cycles.device = "GPU"
 
   bpy.context.scene.render.filepath = "output"
 
@@ -384,7 +384,7 @@ With the rendering complete, we'll read the contents of the outputted render and
 import os.path
 from nitric.context import JobContext
 from nitric.application import Nitric
-from resources import rendered_bucket, renderer_job, blend_bucket
+from src.resources import rendered_bucket, renderer_job, blend_bucket
 
 readable_blend_bucket = blend_bucket.allow("read")
 writeable_rendered_bucket = rendered_bucket.allow("write")
@@ -406,7 +406,7 @@ async def render_image(ctx: JobContext):
     return ctx
 
   # load the file from a bucket to a local file
-  blend_file = await blend_bucket.file(blend_key).read()
+  blend_file = await readable_blend_bucket.file(blend_key).read()
 
   with open("input", "wb") as f:
     f.write(blend_file)
@@ -415,8 +415,8 @@ async def render_image(ctx: JobContext):
 
   # Set render options
   bpy.context.scene.render.engine = 'CYCLES'
-  # bpy.context.scene.cycles.preferences.compute_device_type = "CUDA"
-  # bpy.context.scene.cycles.device = "GPU"
+  bpy.context.scene.cycles.preferences.compute_device_type = "CUDA"
+  bpy.context.scene.cycles.device = "GPU"
 
   bpy.context.scene.render.filepath = "output"
 
@@ -431,13 +431,12 @@ async def render_image(ctx: JobContext):
     bpy.context.scene.render.image_settings.file_format = 'PNG'
     bpy.ops.render.render(write_still=True)
 
-  with open("output", "rb") as f:
+  file_extension = "mkv" if data_format == "video" else "png"
+
+  with open(f"output.{file_extension}", "rb") as f:
     image_bytes = f.read()
 
-    # swap the `.blend` extension for a `.png`
-    file_extension = data_format == "video" if "mpg" else "png"
-
-    await rendered_bucket.file(f"{blend_key}.{file_extension}").write(image_bytes)
+    await writeable_rendered_bucket.file(f"{blend_key}.{file_extension}").write(image_bytes)
 
   return ctx
 
@@ -445,7 +444,7 @@ async def render_image(ctx: JobContext):
 Nitric.run()
 ```
 
-## Blender Dockerfile
+## Creating GPU enabled dockerfiles
 
 With our code complete, we can write a dockerfile that our batch job will run in. Start with the base image that copies our application code and resolves the dependencies using `uv`.
 
@@ -686,17 +685,17 @@ nitric.yaml
 README.md
 ```
 
-We can update the `nitric.yaml` file to use the correct dockerfiles when running and deploying our applications.
+We can update the `nitric.yaml` file to allow our services and batch jobs to use the custom docker runtime we set up and point to the services directly.
 
 ```yaml title:nitric.yaml
 name: blender-render
 services:
-  - match: src/services/*.py
+  - match: src/services/main.py
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
     runtime: python
 
 batch-services:
-  - match: src/jobs/*.py
+  - match: src/jobs/renderer.py
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
     runtime: blender
 
@@ -732,10 +731,55 @@ preview:
   - batch-services
 ```
 
-## Run Locally
+## Run your renderer locally
 
-We can test the application locally using the following code:
+We can test our application locally using:
 
-```
+```bash
 nitric run
 ```
+
+You can then use any HTTP client capable of posting binary in the request, like the Nitric [local dashboard](/get-started/foundations/projects/local-development#local-dashboard).
+
+```bash
+curl --request POST --data-binary "@cube.blend" http://localhost:4001/cube
+```
+
+## Deploy to the cloud
+
+At this point, you can deploy what you've built to any of the supported cloud providers. In this example we'll deploy to AWS. Start by setting up your credentials and configuration for the [nitric/aws provider](/providers/pulumi/aws).
+
+Next, we'll need to create a stack file (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
+
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
+
+```
+nitric stack new dev aws
+```
+
+Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
+
+<Note>
+  You are responsible for staying within the limits of the free tier or any
+  costs associated with deployment.
+</Note>
+
+Let's try deploying the stack with the `up` command:
+
+```bash
+nitric up
+```
+
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your Blender rendering application.
+
+To tear down your application from the cloud, use the `down` command:
+
+```bash
+nitric down
+```
+
+## Summary
+
+In this guide, we've created a remote Blender Renderer using Python and Nitric. We showed how to use batch jobs to run long-running workloads and connect these jobs to buckets to store rendered output. We also demonstrated how to expose buckets using simple CRUD routes on a cloud API. Finally, we were able to create dockerfiles with GPU support for optimal Blender rendering speeds.
+
+For more information and advanced usage, refer to the [Nitric documentation](/docs).
