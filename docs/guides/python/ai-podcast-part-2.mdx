@@ -171,18 +171,17 @@ import tempfile
 main_api = api("main")
 # A job for generating our audio content
 gen_audio_job = job("audio")
-# !diff +
+# !diff(1:2) +
 # A job for generating our audio script
-# !diff +
 gen_podcast_job = job("podcast")
 
 # A bucket for storing output audio clips
 clips_bucket = bucket("clips")
 # And another bucket for storing our models
 models_bucket = bucket("models")
-# !diff +
+
+# !diff(1:2) +
 # A bucket for storing our scripts
-# !diff +
 scripts_bucket = bucket("scripts")
 
 # Many cloud API Gateways impose hard response time limits on synchronous requests.
@@ -298,27 +297,17 @@ async def submit_audio(ctx: HttpContext):
 
     await generate_audio.submit({"file": name, "model_id": model_id, "text": body.decode('utf-8'), "preset": preset})
 
-# !diff +
+# !diff(1:12) +
 # Generate a full podcast from script to audio
-# !diff +
 @main_api.post("/podcast/:title")
-# !diff +
 async def submit_script(ctx: HttpContext):
-  # !diff +
   title = ctx.req.params["title"]
-  # !diff +
-
-  # !diff +
   body = ctx.req.data
-  # !diff +
-  if body is None:
-    # !diff +
-    ctx.res.status = 400
-    # !diff +
-    return
-  # !diff +
 
-  # !diff +
+  if body is None:
+    ctx.res.status = 400
+    return
+
   await generate_podcast.submit({"title": title, "prompt": body.decode('utf-8')})
 
 Nitric.run()
@@ -396,15 +385,12 @@ services:
 batch-services:
   # !diff -
   - match: batches/*.py
-  # !diff +
+  # !diff(1:6) +
   - match: batches/podcast.py
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
     runtime: torch
-    # !diff +
   - match: batches/script.py
-    # !diff +
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
-    # !diff +
     runtime: llama
 
 runtimes:
@@ -412,9 +398,8 @@ runtimes:
     dockerfile: './python.dockerfile'
   torch:
     dockerfile: './torch.dockerfile'
-  # !diff +
+  # !diff(1:2) +
   llama:
-    # !diff +
     dockerfile: './llama.dockerfile'
 
 preview:
