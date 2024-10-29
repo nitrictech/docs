@@ -13,7 +13,7 @@ const cleanCode = (code: string, annotations: CodeAnnotation[]) => {
   const lines = code.split('\n')
 
   // Sort annotations by fromLineNumber in descending order to avoid conflicts
-  const sortedAnnotations = [...annotations]
+  const sortedAnnotations = annotations
     .filter((a) => 'fromLineNumber' in a)
     .sort((a, b) => b.fromLineNumber - a.fromLineNumber)
 
