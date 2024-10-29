@@ -55,6 +55,36 @@ You can create an Access Key by logging into the [AWS console](https://aws.amazo
   for full details on credentials and configuration.
 </Note>
 
+## Locating resources deployed with Nitric
+
+Nitric creates a resource tag manager group and tags all possible resources to be referenced by this group. You can locate resources in the console by going to the [AWS Console](https://console.aws.amazon.com/)
+
+Navigate to the resource groups service:
+
+![resource group search image](/docs/images/docs/aws-rg.png)
+
+Find your resource group in the resource groups list and click it:
+
+![resource group list image](/docs/images/docs/aws-rg-screen.png)
+
+Resource groups are conventionally named `<project-name>-<stack-name>`
+
+So in the example above, the project name is `api-testing` and the stack name is `aws`.
+
+More recent versions of the Nitric AWS provider also output a direct link to it's resource group in the console from running `nitric up`
+
+Example:
+
+```bash
+Deployed Resources:
+──────────────
+https://us-east-2.console.aws.amazon.com/resource-groups/group/arn%3Aaws%3Aresource-groups%3Aus-east-2%3A3123456789%3Agroup%2Fexample-aws
+
+API Endpoints:
+──────────────
+main: https://example.execute-api.us-east-2.amazonaws.com
+```
+
 ## Stack Configuration
 
 ```yaml title:nitric.[stack ID].yaml
