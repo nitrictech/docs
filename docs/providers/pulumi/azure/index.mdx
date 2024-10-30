@@ -75,6 +75,34 @@ brew update && brew install azure-cli
 
 </OSTabs>
 
+## Locating deployed resources
+
+This Nitric Azure provider deploys resources for a stack into a resource group dedicated to that stack. You can either use one your already have by configuring it in the stack configuration or let Nitric create one for you.
+
+Once a stack has been deployed to Azure it's resource group should be present in the [Resource groups](https://portal.azure.com/#blade/HubsExtension/BrowseResourceGroupBlade/resourceType/Microsoft.Resources%2Fsubscriptions%2FresourceGroups) page of the portal. Assuming it was deployed to a subscription you have access to.
+
+<Note>
+  Resource groups are conventionally named `<project-name>-<stack-name>-<randomId>`
+
+  In this example the project name is `api-testing` and the stack name is `az`.
+</Note>
+
+![resource group page screen](/docs/images/docs/az-rg.png)
+
+More recent versions of the Nitric Azure provider display a direct link to the resource group in output from `nitric up`.
+
+Example:
+
+```bash
+Resource Group:
+──────────────
+https://portal.azure.com/#@your-tenant-id/resource/subscriptions/your-subscription-id/resourceGroups/your-resource-group/overview
+
+API Endpoints:
+──────────────
+main: https://example-api865cb.azure-api.net
+```
+
 ## Stack Configuration
 
 ```yaml title:nitric.[stack ID].yaml
