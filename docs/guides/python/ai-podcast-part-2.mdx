@@ -124,6 +124,7 @@ audio_job = gen_audio_job.allow("submit")
 async def do_gen_script(ctx: JobContext):
     prompt = ctx.req.data["prompt"]
     title = ctx.req.data["title"]
+    preset = ctx.req.data["preset"]
 
     print('generating script')
 
@@ -155,6 +156,7 @@ async def do_gen_script(ctx: JobContext):
     await audio_job.submit({
         "text": text_response,
         "file": title,
+        "preset": preset,
     })
 
 Nitric.run()
@@ -298,18 +300,19 @@ async def submit_audio(ctx: HttpContext):
 
     await generate_audio.submit({"file": name, "model_id": model_id, "text": body.decode('utf-8'), "preset": preset})
 
-# !diff(1:12) +
+# !diff(1:13) +
 # Generate a full podcast from script to audio
 @main_api.post("/podcast/:title")
 async def submit_script(ctx: HttpContext):
   title = ctx.req.params["title"]
+  preset = ctx.req.query.get("preset", default_voice_preset)
   body = ctx.req.data
 
   if body is None:
     ctx.res.status = 400
     return
 
-  await generate_podcast.submit({"title": title, "prompt": body.decode('utf-8')})
+  await generate_podcast.submit({"title": title, "prompt": body.decode('utf-8'), "preset": preset})
 
 Nitric.run()
 ```
