@@ -379,17 +379,17 @@ Finally, we need to tell Nitric to use these files to create the script service.
 name: ai-podcast
 services:
   - match: services/*.py
-    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R uv run $SERVICE_PATH
     runtime: python
 batch-services:
   # !diff -
   - match: batches/*.py
   # !diff(1:6) +
   - match: batches/podcast.py
-    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R uv run $SERVICE_PATH
     runtime: torch
   - match: batches/script.py
-    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R uv run $SERVICE_PATH
     runtime: llama
 
 runtimes:
