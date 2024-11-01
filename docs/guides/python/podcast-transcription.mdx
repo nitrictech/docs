@@ -1,0 +1,246 @@
+---
+description: Use the Nitric framework to build a service for transcribing podcasts
+tags:
+  - API
+  - AI & Machine Learning
+languages:
+  - python
+---
+
+# Transcribing Podcasts using OpenAI Whisper
+
+## Prerequisites
+
+- [uv](https://docs.astral.sh/uv/#getting-started) - for Python dependency management
+- The [Nitric CLI](/get-started/installation)
+- _(optional)_ An [AWS](https://aws.amazon.com) account
+
+## Getting started
+
+We'll start by creating a new project using Nitric's python starter template.
+
+```bash
+nitric new podcast-transcription py-starter
+cd podcast-transcription
+```
+
+Next, let's install our base dependencies, then add the `openai-whisper` library.
+
+```bash
+# Install the base dependencies
+uv sync
+# Add hugginface hub dependencies
+uv add openai-whisper
+```
+
+<Note>
+  We add the extra dependencies to the 'ml' optional dependencies to keep them
+  separate since they can be quite large. This lets us just install them in the
+  containers that need them.
+</Note>
+
+## Define our resources
+
+```python
+from nitric.resources import job, bucket, api
+
+main_api = api("main")
+
+transcribe_job = job("transcribe")
+
+podcast_bucket = bucket("podcasts")
+transcript_bucket = bucket("transcripts")
+```
+
+## Add our resources service
+
+```python
+import requests
+
+from src.resources import main_api, transcript_bucket, podcast_bucket, transcribe_job
+from nitric.application import Nitric
+from nitric.resources import BucketNotificationContext
+from nitric.context import HttpContext
+
+writeable_podcast_bucket = podcast_bucket.allow("write")
+readable_transcript_bucket = transcript_bucket.allow("read")
+submittable_transcribe_job = transcribe_job.allow("submit")
+
+@main_api.get("/podcast/:name")
+async def get_podcast(ctx: HttpContext):
+    name = ctx.req.params['name']
+
+    transcript = await readable_transcript_bucket.file(name).read()
+
+    ctx.res.body = transcript
+
+    return ctx
+
+@main_api.post("/podcast/:name")
+async def add_podcast(ctx: HttpContext):
+    name = ctx.req.params['name']
+
+    upload_url = await writeable_podcast_bucket.file(name).upload_url()
+
+    resp = requests.post(upload_url, data=ctx.req.data)
+    if resp.status_code >= 200 and resp.status_code < 300:
+        ctx.res.status = resp.status_code
+        ctx.res.body = resp.text
+
+    return ctx
+
+
+@writeable_podcast_bucket.on("write", "*")
+async def on_add_podcast(ctx: BucketNotificationContext):
+    await submittable_transcribe_job.submit({ "podcast_name": ctx.req.key })
+
+    return ctx
+
+
+Nitric.run()
+```
+
+## Add Transcribe Batch Job
+
+```python
+import whisper
+from src.resources import transcribe_job, transcript_bucket, podcast_bucket
+from nitric.context import JobContext
+from nitric.application import Nitric
+
+writeable_transcript_bucket = transcript_bucket.allow("write")
+readable_podcast_bucket = podcast_bucket.allow("read")
+
+@transcribe_job(cpus=1, memory=1024, gpus=0)
+async def transcribe_podcast(ctx: JobContext):
+  podcast_name = ctx.req.data["podcast_name"]
+  print(f"Transcribing: {podcast_name}")
+
+  podcast = await readable_podcast_bucket.file(podcast_name).read()
+
+  with open("local-podcast", "wb") as f:
+    f.write(podcast)
+
+  model = whisper.load_model("turbo")
+  result = model.transcribe("local-podcast", verbose=True, fp16=False)
+
+  transcript = result["text"].encode()
+
+  print("Finished transcoding... Writing to Bucket")
+  await writeable_transcript_bucket.file(f"{podcast_name}-transcript.txt").write(transcript)
+
+  return ctx
+
+Nitric.run()
+```
+
+## Deployment Dockerfiles
+
+```docker
+# The python version must match the version in .python-version
+FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim AS builder
+
+ARG HANDLER
+ENV HANDLER=${HANDLER}
+
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
+WORKDIR /app
+RUN --mount=type=cache,target=/root/.cache/uv \
+  --mount=type=bind,source=uv.lock,target=uv.lock \
+  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+  uv sync --frozen -v --no-install-project --extra ml --no-dev --no-python-downloads
+COPY . /app
+RUN --mount=type=cache,target=/root/.cache/uv \
+  uv sync --frozen -v --no-dev --extra ml --no-python-downloads
+
+# Torch dockerfile
+# Used for torch runtime based nitric batch services
+# Don't need to include the CUDA runtime as the nvidia pypi dep already ships with it
+FROM nvcr.io/nvidia/driver:550-5.15.0-1065-nvidia-ubuntu22.04
+
+ARG HANDLER
+
+ENV HANDLER=${HANDLER}
+ENV PYTHONUNBUFFERED=TRUE
+ENV PYTHONPATH="."
+ENV NVIDIA_DRIVER_CAPABILITIES=all
+ENV NVIDIA_REQUIRE_CUDA="cuda>=8.0"
+
+RUN apt-get update -y && \
+  apt-get install -y software-properties-common ffmpeg && \
+  add-apt-repository ppa:deadsnakes/ppa && \
+  apt-get update -y && \
+  apt-get install -y python3.11 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11
+
+# Copy the application from the builder
+COPY --from=builder --chown=app:app /app /app
+WORKDIR /app
+
+# Place executables in the environment at the front of the path
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Run the service using the path to the handler
+ENTRYPOINT python -u $HANDLER
+```
+
+```text
+.mypy_cache/
+.nitric/
+.venv/
+nitric.yaml
+README.md
+```
+
+### Requesting a G instance quota increase
+
+Most AWS accounts **will not** have access to on-demand GPU instances (G
+Instances), if you'd like to run models using a GPU you'll need to request a quota increase for G instances.
+
+If you prefer not to use a GPU you can set `gpus=0` in the `@gen_audio_job` decorator in `batches/transcribe.py`.
+
+<Note>
+  **Important:** If the gpus value in `batches/transcribe.py` exceeds the number
+  of available GPUs in your AWS account, the job will never start. If you want
+  to run without a GPU, make sure to set `gpus=0` in the `@transcribe_podcast`
+  decorator. This is just a quirk of how AWS Batch works.
+</Note>
+
+If you want to use a GPU you'll need to request a quota increase for G instances in AWS.
+
+To request a quota increase for G instances in AWS you can follow these steps:
+
+1. Go to the [AWS Service Quotas for EC2](https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas) page.
+2. Find/Search for **All G and VT Spot Instance Requests**
+3. Click **Request quota increase**
+4. Choose an appropriate value, e.g. 4, 8 or 16 depending on your needs
+
+<img
+  src="/docs/images/guides/ai-podcast/part-1/g-instance-quota-increase.png"
+  style={{ maxWidth: 500, width: '100%', border: '1px solid #e5e7eb' }}
+  alt="screen shot of requesting a G instance quota increase on AWS"
+/>
+
+Once you've requested the quota increase it may take time for AWS to approve it.
+
+### Deploy the project
+
+Once the above is complete, we can deploy the project to the cloud using:
+
+```bash
+nitric up
+```
+
+<Note>
+  The initial deployment may take time due to the size of the python/Nvidia
+  driver and CUDA runtime dependencies.
+</Note>
+
+Once the project is deployed you can try out some transcriptions, just add a podcast to the bucket and the bucket notification will be triggered.
+
+<Note>
+Running the project in the cloud will incur costs. Make sure to monitor your usage and shut down the project if you're done with it.
+
+Running on g5.xlarge from testing this project will cost ~$0.05/minute of audio you generate. Based on standard EC2 pricing for US regions.
+
+</Note>
