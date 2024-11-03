@@ -58,7 +58,7 @@ We'll also add [bpy](https://docs.blender.org/api/current/info_overview.html#pyt
 uv add bpy==4.2.0
 ```
 
-We'll organise our project structure like so:
+We'll organize our project structure like so:
 
 ```text
 +--src/
@@ -140,7 +140,7 @@ async def get_image(ctx: HttpContext):
 Nitric.run()
 ```
 
-The final route will be for adding a `.blend` file for rendering as well as the render settings for the scene. This will add the contents of the request to a file in the blend bucket. Writing directly to a bucket is limited to 4MB, to avoid this we use an upload URL to increase the limit to 5GB.
+The final route will be for adding a `.blend` file for rendering as well as the render settings for the scene. This will add the contents of the request to a file in the blend bucket. Writing directly to a bucket is limited to 4 MB, to avoid this we use an upload URL to increase the limit to 5 GB.
 
 ```python title:src/services/main.py
 # !collapse(1:23) collapsed
@@ -788,7 +788,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 ENTRYPOINT python -u $HANDLER
 ```
 
-Add two dockerignore files to help optimise the size of the image. These will be `docker/python.dockerignore` and `docker/blender.dockerignore`.
+Add two dockerignore files to help optimize the size of the image. These will be `docker/python.dockerignore` and `docker/blender.dockerignore`.
 
 ```text
 .mypy_cache/
