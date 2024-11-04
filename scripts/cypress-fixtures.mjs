@@ -3,7 +3,7 @@ import fs from 'fs/promises'
 import { XMLParser } from 'fast-xml-parser'
 const parser = new XMLParser()
 
-import { allDocs } from '../.contentlayer/generated/index.mjs'
+import { allDocuments } from '../.contentlayer/generated/index.mjs'
 import basePages from '../src/assets/sitemap.json' with { type: 'json' }
 
 const FIXTURE_PATH = 'cypress/fixtures/pages.json'
@@ -14,7 +14,7 @@ async function run() {
   try {
     const staticPages = basePages.map((page) => `/docs${page}`)
 
-    const docPages = allDocs.map((doc) => {
+    const docPages = allDocuments.map((doc) => {
       return !doc.slug ? '/docs' : `/docs/${doc.slug}`
     })
 

@@ -4,13 +4,14 @@ import React from 'react'
 import { GuideItem } from './GuideItem'
 import { cn } from '@/lib/utils'
 import useParams from '@/hooks/useParams'
-import { allGuides } from '@/content'
+import type { Guide } from '@/content'
 
 interface Props {
   className?: string
+  allGuides: Guide[]
 }
 
-const GuideList: React.FC<Props> = ({ className }) => {
+const GuideList: React.FC<Props> = ({ className, allGuides }) => {
   const { searchParams } = useParams()
   const selectedTags = searchParams?.get('tags')?.split(',') || []
   const selectedLangs = searchParams?.get('langs')?.split(',') || []

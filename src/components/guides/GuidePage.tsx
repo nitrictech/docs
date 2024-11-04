@@ -3,6 +3,7 @@ import React, { Suspense } from 'react'
 import { GuideFilters } from './GuideFilters'
 import GuideList from './GuideList'
 import GuideMobileFilters from './GuideMobileFilters'
+import { allGuides } from '@/content'
 
 interface Props {
   allTags: string[]
@@ -23,7 +24,10 @@ const GuidePage: React.FC<Props> = ({ allTags }) => {
         <GuideMobileFilters allTags={allTags} />
       </div>
       <Suspense>
-        <GuideList className="relative mx-2 my-4 w-full sm:px-8 lg:my-10" />
+        <GuideList
+          allGuides={allGuides}
+          className="relative mx-2 my-4 w-full sm:px-8 lg:my-10"
+        />
       </Suspense>
     </div>
   )
