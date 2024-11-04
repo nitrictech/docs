@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useId } from 'react'
+import React, { useEffect, useId } from 'react'
 import { Collapsible, CollapsibleTrigger } from '../ui/collapsible'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils'
@@ -36,9 +36,16 @@ const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
 
   const { title, items, icon: Icon } = group
 
-  const isActive = checkIfActive(items, pathname)
+  const [isOpen, setIsOpen] = React.useState(checkIfActive(items, pathname))
 
-  const [isOpen, setIsOpen] = React.useState(isActive)
+  useEffect(() => {
+    const isActive = checkIfActive(items, pathname)
+
+    // only open if the group is active
+    if (isActive) {
+      setIsOpen(isActive)
+    }
+  }, [pathname])
 
   return (
     <Collapsible
