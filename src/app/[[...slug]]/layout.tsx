@@ -1,7 +1,7 @@
 import { Prose } from '@/components/Prose'
 
 import React from 'react'
-import { allDocs } from '@/content'
+import { allDocuments, Guide, isType } from '@/content'
 import DocToc from '@/components/layout/DocToC'
 import { Button } from '@/components/ui/button'
 import { GitHubIcon } from '@/components/icons/GitHubIcon'
@@ -17,19 +17,19 @@ export default function DocLayout({
   params: { slug: string[] }
 }) {
   const slug = params.slug ? decodeURI(params.slug.join('/')) : ''
-  const doc = allDocs.find((p) => p.slug === slug)
+  const doc = allDocuments.find((p) => p.slug === slug)
 
   if (!doc) {
     return <>{children}</>
   }
 
-  const startSteps = doc.start_steps && (
+  const startSteps = isType('Guide') && (doc as Guide).start_steps && (
     <Code
       hideBashPanel
       codeblock={{
         lang: 'bash',
         meta: '',
-        value: doc.start_steps?.raw,
+        value: (doc as Guide).start_steps?.raw || '',
       }}
     />
   )

@@ -1,6 +1,6 @@
 import { navigation } from '@/config'
 import { NavEntry, NavItem } from '@/config/types'
-import { Doc } from '@/content'
+import { DocumentTypes } from '@/content'
 
 interface NavItemWithBreadcrumb extends NavItem {
   breadcrumbParentItem?: NavEntry
@@ -38,7 +38,7 @@ const flatten = (
 }
 
 // This function should return an object that contains the current nav item, the previous nav item, and the next nav item.
-export function getNavInfo(doc: Doc): NavInfo {
+export function getNavInfo(doc: DocumentTypes): NavInfo {
   const slug = doc.slug ? `/${doc.slug}` : '/'
 
   const flattenedNav = flatten(navigation)

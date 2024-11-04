@@ -1,6 +1,6 @@
 'use client'
 
-import type { Doc } from '@/content'
+import type { Doc, Guide } from '@/content'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { DocTracingBeam } from './DocTracingBeam'
@@ -19,7 +19,7 @@ const DocToC = ({
   doc,
   startSteps,
 }: {
-  doc: Doc
+  doc: Doc | Guide
   startSteps?: React.JSX.Element | undefined
 }) => {
   const initial = 14

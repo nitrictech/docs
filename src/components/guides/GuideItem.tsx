@@ -1,4 +1,4 @@
-import type { Doc } from '@/content'
+import type { Guide } from '@/content'
 import React from 'react'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
@@ -6,7 +6,7 @@ import { LanguageIcon } from '../icons/LanguageIcon'
 import { Language } from '@/lib/constants'
 
 interface Props {
-  guide: Doc
+  guide: Guide
   featured?: boolean
 }
 

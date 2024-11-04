@@ -1,4 +1,4 @@
-import { allDocs } from '@/content'
+import { allDocuments } from '@/content'
 import staticPaths from '@/assets/sitemap.json'
 import { BASE_URL } from '@/lib/constants'
 
@@ -22,7 +22,7 @@ export async function GET() {
     priority: 0.7,
   }))
 
-  const docPages: SitemapItem[] = allDocs.map((page) => ({
+  const docPages: SitemapItem[] = allDocuments.map((page) => ({
     loc: page.slug === '' ? URL : `${URL}/${page.slug}`,
     lastmod: new Date(page.lastModified).toISOString(),
     changefreq: 'daily',

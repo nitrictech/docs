@@ -2,21 +2,20 @@
 
 import React from 'react'
 import { GuideItem } from './GuideItem'
-import { Doc } from '@/content'
 import { cn } from '@/lib/utils'
 import useParams from '@/hooks/useParams'
+import { allGuides } from '@/content'
 
 interface Props {
-  guides: Doc[]
   className?: string
 }
 
-const GuideList: React.FC<Props> = ({ className, guides }) => {
+const GuideList: React.FC<Props> = ({ className }) => {
   const { searchParams } = useParams()
   const selectedTags = searchParams?.get('tags')?.split(',') || []
   const selectedLangs = searchParams?.get('langs')?.split(',') || []
 
-  const filteredGuides = guides
+  const filteredGuides = allGuides
     .filter((guide) => {
       let include = true
 
