@@ -269,6 +269,9 @@ async def do_download_audio_model(ctx: MessageContext):
 @main_api.post("/download-model")
 async def download_audio(ctx: HttpContext):
     model_id = ctx.req.query.get("model", audio_model_id)
+
+    if isinstance(model_id, list):
+        model_id = model_id[0]
     # asynchronously download the model
     await download_audio_model.publish({ "model_id": model_id })
 
@@ -331,7 +334,8 @@ FROM ghcr.io/astral-sh/uv:python3.11-bookworm AS builder
 
 ARG HANDLER
 ENV HANDLER=${HANDLER}
-
+# Set flags for common execution environment
+ENV CMAKE_ARGS="-DLLAMA_NATIVE=OFF -DGGML_NATIVE=OFF -DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS -DGGML_AVX512=OFF -DGGML_AVX512_VNNI=OFF -DGGML_AVX512_VBMI=OFF -DGGML_AVX512_BF16=OFF"
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
 WORKDIR /app
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -376,6 +380,16 @@ nitric.yaml
 nitric.*.yaml
 README.md
 model.zip
+```
+
+## Update our .env file
+
+We'll change some of the environment variables in our `.env` file to factor in the extra init time it will take to start our LLM job:
+
+```sh title:.env
+PYTHONPATH=.
+# diff +
+WORKER_TIMEOUT=300
 ```
 
 Finally, we need to tell Nitric to use these files to create the script service. We can do this by updating the `nitric.yaml` file:

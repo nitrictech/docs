@@ -382,6 +382,9 @@ async def do_download_audio_model(ctx: MessageContext):
 @main_api.post("/download-model")
 async def download_audio(ctx: HttpContext):
     model_id = ctx.req.query.get("model", audio_model_id)
+
+    if isinstance(model_id, list):
+        model_id = model_id[0]
     # asynchronously download the model
     await download_audio_model.publish({ "model_id": model_id })
 
@@ -662,7 +665,7 @@ nitric stack new test aws
 This will generate a nitric stack file called `test` which defines how we want to deploy a stack to AWS. We can update this stack file with settings to configure our batch service and the AWS Compute environment it will run in.
 
 ```yaml title: nitric.test.yaml
-provider: nitric/aws@1.14.2
+provider: nitric/aws@1.15.4
 # The target aws region to deploy to
 # See available regions:
 # https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
