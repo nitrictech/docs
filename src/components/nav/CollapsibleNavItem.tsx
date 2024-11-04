@@ -41,7 +41,8 @@ const CollapsibleNavItem: React.FC<Props> = ({ group, className }) => {
   useEffect(() => {
     const isActive = checkIfActive(items, pathname)
 
-    if (isActive !== isOpen) {
+    // only open if the group is active
+    if (isActive) {
       setIsOpen(isActive)
     }
   }, [pathname])
