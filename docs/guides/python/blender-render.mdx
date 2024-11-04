@@ -52,10 +52,10 @@ We can then resolve our dependencies.
 uv sync
 ```
 
-We'll also add [bpy](https://docs.blender.org/api/current/info_overview.html#python-in-blender) as a dependency. This is the API that will interact with the Blender environment for setting up and rendering our scenes. The version of `bpy` should match the version of Blender you intend on using.
+We'll also add [bpy](https://docs.blender.org/api/current/info_overview.html#python-in-blender) as an optional dependency. This is the API that will interact with the Blender environment for setting up and rendering our scenes. The version of `bpy` should match the version of Blender you intend on using.
 
 ```bash
-uv add bpy==4.2.0
+uv add bpy==4.2.0 --optional ml
 ```
 
 We'll organize our project structure like so:
