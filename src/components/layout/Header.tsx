@@ -16,17 +16,26 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { cn } from '@/lib/utils'
 import GitHubStarCount from '../GitHubStarCount'
 import { GitHubIcon } from '../icons/GitHubIcon'
+import { usePathname } from 'next/navigation'
 
 function TopLevelNavItem({
   className,
+  parentHref,
   ...props
-}: ComponentPropsWithoutRef<typeof Link>) {
+}: ComponentPropsWithoutRef<typeof Link> & { parentHref?: string }) {
+  const pathname = usePathname()
+
+  const isActive = parentHref
+    ? pathname.startsWith(parentHref)
+    : pathname === props.href
+
   return (
     <li>
       <Link
         {...props}
         className={cn(
           'text-sm font-semibold leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
+          isActive && 'text-zinc-900 dark:text-white',
           className,
         )}
       />
@@ -73,9 +82,7 @@ export const Header = forwardRef<
       <Link href="/" aria-label="Home" className="hidden lg:block">
         <Logo className="h-6" />
       </Link>
-      <div className="hidden lg:block">
-        <Search />
-      </div>
+
       <div className="flex items-center gap-5 lg:hidden">
         <MobileNavigation />
         <Link href="/" aria-label="Home">
@@ -83,15 +90,18 @@ export const Header = forwardRef<
         </Link>
       </div>
       <div className="flex items-center gap-5">
-        <nav className="hidden md:block">
+        <nav className="hidden lg:block">
           <ul role="list" className="flex items-center gap-8">
             <TopLevelNavItem
-              href={'https://nitric.io'}
-              target="_blank"
-              rel="noreferrer noopener"
+              parentHref="/get-started/foundations"
+              href="/get-started/foundations/why-nitric"
             >
-              Nitric.io
+              Foundations
             </TopLevelNavItem>
+            <TopLevelNavItem href="/guides">Guides</TopLevelNavItem>
+            <li>
+              <Search />
+            </li>
 
             <TopLevelNavItem
               className="group flex items-center"
