@@ -84,7 +84,8 @@ const Featured = defineNestedType(() => ({
   fields: {
     image: {
       type: 'string',
-      description: 'The featured image of the post, not the same as og image',
+      description:
+        'The featured image of the post, not the same as og image. Use 1024x1024 with transparent background.',
       required: true,
     },
     image_alt: {
