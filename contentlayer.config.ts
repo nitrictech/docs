@@ -103,7 +103,12 @@ const Guide = defineDocumentType(() => ({
     published_at: {
       type: 'date',
       description: 'The date the guide was published',
-      required: false,
+      required: true,
+    },
+    updated_at: {
+      type: 'date',
+      description:
+        'The date the guide was last updated, will be set to published_at if not set',
     },
     featured: {
       type: 'nested',

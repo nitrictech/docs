@@ -65,7 +65,9 @@ export default function GuidesPage() {
           </BreadcrumbList>
         </Breadcrumb>
         <Heading level={1}>Guides</Heading>
-        <GuidesFeatured />
+        <div className="xl:mr-6">
+          <GuidesFeatured />
+        </div>
       </div>
       <div className="-mx-2 border-t px-4 sm:-mx-6 lg:-mx-8">
         <div className="mx-auto max-w-7xl px-4">

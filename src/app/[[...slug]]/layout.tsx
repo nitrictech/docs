@@ -60,7 +60,11 @@ export default function DocLayout({
           </div>
           <div className="text-2xs text-muted-foreground">
             Last updated on{' '}
-            {new Date(doc.lastModified).toLocaleDateString('en-US', {
+            {new Date(
+              doc.type === 'Guide'
+                ? doc.updated_at || doc.published_at
+                : doc.lastModified,
+            ).toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',
               year: 'numeric',
