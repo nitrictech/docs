@@ -26,7 +26,7 @@ const GuidePage: React.FC<Props> = ({ allTags }) => {
       <Suspense>
         <GuideList
           allGuides={allGuides}
-          className="relative mx-2 my-4 w-full sm:px-8 lg:my-10"
+          className="relative mx-2 my-4 w-full sm:px-8 lg:mb-8"
         />
       </Suspense>
     </div>

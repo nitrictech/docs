@@ -13,11 +13,7 @@ const GuidesFeatured: React.FC = ({ take = 3 }: { take?: number }) => {
   const featuredGuides = allGuides
     .filter((guide): guide is RequiredFeaturedGuide => !!guide.featured)
     .sort((a, b) => {
-      if (a.published_at && b.published_at) {
-        return a.published_at > b.published_at ? -1 : 1
-      }
-
-      return 0
+      return a.published_at > b.published_at ? -1 : 1
     })
     .slice(0, take)
 
@@ -30,7 +26,7 @@ const GuidesFeatured: React.FC = ({ take = 3 }: { take?: number }) => {
         {featuredGuides.map((guide) => (
           <article
             key={guide.slug}
-            className="group relative isolate flex flex-col justify-end overflow-hidden rounded-lg bg-zinc-900 px-8 pb-8 pt-48"
+            className="group relative isolate flex flex-col justify-end overflow-hidden rounded-lg bg-zinc-900 px-8 pb-8 pt-60"
           >
             <Image
               alt={guide.featured.image_alt}
@@ -40,16 +36,24 @@ const GuidesFeatured: React.FC = ({ take = 3 }: { take?: number }) => {
               priority
               className="absolute inset-0 -z-10 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-primary-300/50 via-secondary-400/30 to-primary-500/40 dark:from-primary-700/50 dark:via-secondary-800/40 dark:to-primary-900/50" />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-primary-400/60 via-secondary-400/30 to-primary-500/40 dark:from-primary-800/60 dark:via-secondary-800/20 dark:to-primary-900/50" />
             <div className="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-primary-500/10 dark:ring-primary-900/10" />
-
-            <h3 className="mt-3 text-lg/6 font-semibold tracking-wide text-white">
+            <time
+              dateTime={guide.published_at}
+              className="absolute left-0 top-0 m-4 text-2xs text-zinc-300 dark:text-muted-foreground"
+            >
+              {new Date(guide.published_at).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+              })}
+            </time>
+            <h3 className="mt-4 text-lg/6 font-semibold tracking-wide text-white">
               <Link href={`/${guide.slug}`}>
                 <span className="absolute inset-0" />
                 {guide.title}
               </Link>
             </h3>
-            <p className="mt-1 text-base leading-5 text-white dark:text-muted-foreground">
+            <p className="mt-1 text-sm leading-5 text-white dark:text-muted-foreground">
               {guide.description}
             </p>
             <ArrowUpRightIcon

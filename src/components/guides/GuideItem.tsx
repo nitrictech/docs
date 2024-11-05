@@ -21,6 +21,16 @@ export const GuideItem: React.FC<Props> = ({ guide, featured }) => {
     >
       <div className="flex flex-col gap-y-4">
         <div>
+          <time
+            dateTime={guide.published_at}
+            className="absolute right-0 top-0 m-3 text-2xs text-muted-foreground"
+          >
+            {new Date(guide.published_at).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+          </time>
           <p
             className={cn(
               'font-display text-xl font-semibold',
