@@ -172,11 +172,11 @@ We'll then create our Job and set the required memory to `12000`. This is a safe
 
 | Size   | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
 | ------ | ---------- | ------------------ | ------------------ | ------------- | -------------- |
-| tiny   | 39 M       | tiny.en            | tiny               | ~1 GB         | ~32x           |
-| base   | 74 M       | base.en            | base               | ~1 GB         | ~16x           |
-| small  | 244 M      | small.en           | small              | ~2 GB         | ~6x            |
-| medium | 769 M      | medium.en          | medium             | ~5 GB         | ~2x            |
-| large  | 1550 M     | N/A                | large              | ~10 GB        | 1x             |
+| tiny   | 39 M       | tiny.en            | tiny               | `~1 GB `      | `~32x `        |
+| base   | 74 M       | base.en            | base               | `~1 GB`       | `~16x`         |
+| small  | 244 M      | small.en           | small              | `~2 GB`       | `~6x`          |
+| medium | 769 M      | medium.en          | medium             | `~5 GB`       | `~2x`          |
+| large  | 1550 M     | N/A                | large              | `~10 GB`      | `1x`           |
 
 ```python title:src/job/transcribe.py
 # !collapse(1:7) collapsed
@@ -222,7 +222,7 @@ async def transcribe_podcast(ctx: JobContext):
 Nitric.run()
 ```
 
-We'll then load our model and transcribe the audio. This is where we can choose the model based on balancing speed, size, and accuracy. We can turn off FP16 with `fp16=False` which will use FP32 instead. This will depend on what is supported on your CPU when testing locally, however, FP16 and FP32 are supported on Lambda.
+We'll then load our model and transcribe the audio. This is where we can choose the model based on balancing speed, size, and accuracy. We can turn off `FP16` with `fp16=False` which will use `FP32` instead. This will depend on what is supported on your CPU when testing locally, however, `FP16` and `FP32` are supported on Lambda.
 
 ```python title:src/job/transcribe.py
 # !collapse(1:7) collapsed
@@ -492,6 +492,6 @@ You can destroy the project once it is finished using `nitric down`.
 
 ## Summary
 
-In this guide, we've created a podcast transcription service using OpenAI Whisper and Nitric's Python SDK. We showed how to use batch jobs to run long-running workloads and connect these jobs to buckets to store generated transcripts. We also demonstrated how to expose buckets using simple CRUD routes on a cloud API. Finally, we were able to create dockerfiles with GPU support to optimise the generation speeds on the cloud.
+In this guide, we've created a podcast transcription service using OpenAI Whisper and Nitric's Python SDK. We showed how to use batch jobs to run long-running workloads and connect these jobs to buckets to store generated transcripts. We also demonstrated how to expose buckets using simple CRUD routes on a cloud API. Finally, we were able to create dockerfiles with GPU support to optimize the generation speeds on the cloud.
 
 For more information and advanced usage, refer to the [Nitric documentation](/docs).
