@@ -21,24 +21,27 @@ export const GuideItem: React.FC<Props> = ({ guide, featured }) => {
     >
       <div className="flex flex-col gap-y-4">
         <div>
-          <time
-            dateTime={guide.published_at}
-            className="absolute right-0 top-0 m-3 text-2xs text-muted-foreground"
-          >
-            {new Date(guide.published_at).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-            })}
-          </time>
-          <p
-            className={cn(
-              'font-display text-xl font-semibold',
-              featured ? 'lg:text-2xl xl:text-3xl' : '',
-            )}
-          >
-            {guide.title}
-          </p>
+          <div className="flex items-start justify-between gap-x-1">
+            <p
+              className={cn(
+                'font-display text-xl font-semibold',
+                featured ? 'lg:text-2xl xl:text-3xl' : '',
+              )}
+            >
+              {guide.title}
+            </p>
+            <time
+              dateTime={guide.published_at}
+              className="text-nowrap text-2xs text-muted-foreground"
+            >
+              {new Date(guide.published_at).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })}
+            </time>
+          </div>
+
           <p
             className={cn(
               'text-md mt-3 text-base text-foreground dark:text-foreground-light',
@@ -50,11 +53,11 @@ export const GuideItem: React.FC<Props> = ({ guide, featured }) => {
         </div>
         <div className="flex">
           {guide.tags?.length ? (
-            <div className="flex items-center gap-x-2">
+            <div className="flex flex-wrap items-center gap-2">
               {guide.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center rounded-md border bg-zinc-600/10 px-2.5 py-0.5 text-xs font-semibold text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="items-center rounded-md border bg-zinc-600/10 px-2.5 py-0.5 text-xs font-semibold text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 >
                   {tag}
                 </span>
