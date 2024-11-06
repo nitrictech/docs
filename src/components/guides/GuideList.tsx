@@ -12,6 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select'
+import { Label } from '../ui/label'
+import { Input } from '../ui/input'
 
 interface Props {
   className?: string
@@ -23,6 +25,7 @@ const GuideList: React.FC<Props> = ({ className, allGuides }) => {
   const sortBy = searchParams?.get('sort') || 'published_date'
   const selectedTags = searchParams?.get('tags')?.split(',') || []
   const selectedLangs = searchParams?.get('langs')?.split(',') || []
+  const query = searchParams?.get('q') || ''
 
   const filteredGuides = useMemo(() => {
     return allGuides
@@ -33,6 +36,15 @@ const GuideList: React.FC<Props> = ({ className, allGuides }) => {
           include = selectedLangs.some((lang) =>
             guide.languages?.includes(lang),
           )
+        }
+
+        if (query.trim()) {
+          include =
+            include &&
+            (guide.title.toLowerCase().includes(query.toLowerCase()) ||
+              (guide.description || '')
+                .toLowerCase()
+                .includes(query.toLowerCase()))
         }
 
         if (!selectedTags.length) return include
@@ -52,43 +64,66 @@ const GuideList: React.FC<Props> = ({ className, allGuides }) => {
           ? b.title.localeCompare(a.title)
           : a.title.localeCompare(b.title)
       })
-  }, [allGuides, selectedTags, selectedLangs, sortBy])
+  }, [allGuides, selectedTags, selectedLangs, sortBy, query])
 
-  return filteredGuides.length === 0 ? (
-    <div className={className}>
-      <p className="text-lg">
-        No guides found. Please try selecting different filters.
-      </p>
-    </div>
-  ) : (
+  // Handle input change and pass the input value directly
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setParams('q', e.target.value)
+  }
+
+  return (
     <div className={cn('flex flex-col gap-4', className)}>
-      <Select
-        value={sortBy}
-        onValueChange={(val) => {
-          // This is necessary to fix a ui update delay causing 200ms lag
-          setTimeout(() => setParams('sort', val), 0)
-        }}
-      >
-        <SelectTrigger
-          aria-label="Sort options"
-          className="ml-auto max-w-52 bg-white/5 text-xs font-medium ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:text-zinc-400 dark:hover:bg-white/5 md:flex"
+      <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
+        <div className="w-full sm:w-52">
+          <Label htmlFor="search-guides" className="sr-only">
+            Email
+          </Label>
+          <Input
+            className="w-full bg-white/5 text-xs font-medium ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:text-zinc-400 dark:hover:bg-white/5"
+            type="search"
+            id="search-guides"
+            value={query}
+            onChange={handleChange}
+            placeholder="Search guides"
+          />
+        </div>
+        <Select
+          value={sortBy}
+          onValueChange={(val) => {
+            // This is necessary to fix a ui update delay causing 200ms lag
+            setTimeout(() => setParams('sort', val), 0)
+          }}
         >
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent position="item-aligned">
-          <SelectItem value="published_date">Sort by Date Published</SelectItem>
-          <SelectItem value="alpha">Sort Alphabetically (A-Z)</SelectItem>
-          <SelectItem value="alpha-reverse">
-            Sort Alphabetically (Z-A)
-          </SelectItem>
-        </SelectContent>
-      </Select>
+          <SelectTrigger
+            aria-label="Sort options"
+            className="w-full bg-white/5 text-xs font-medium ring-1 ring-inset ring-zinc-300/10 hover:bg-white/7.5 dark:bg-white/2.5 dark:text-zinc-400 dark:hover:bg-white/5 sm:flex sm:max-w-52"
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent position="item-aligned">
+            <SelectItem value="published_date">
+              Sort by Date Published
+            </SelectItem>
+            <SelectItem value="alpha">Sort Alphabetically (A-Z)</SelectItem>
+            <SelectItem value="alpha-reverse">
+              Sort Alphabetically (Z-A)
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <ul className={'space-y-4'}>
-        {filteredGuides.map((guide) => (
-          <li key={guide.slug}>
-            <GuideItem guide={guide} />
+        {filteredGuides.length === 0 ? (
+          <li className="text-lg">
+            No guides found. Please try selecting different filters.
           </li>
-        ))}
+        ) : (
+          filteredGuides.map((guide) => (
+            <li key={guide.slug}>
+              <GuideItem guide={guide} />
+            </li>
+          ))
+        )}
       </ul>
     </div>
   )
