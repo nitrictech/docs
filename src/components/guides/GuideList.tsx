@@ -46,12 +46,6 @@ const GuideList: React.FC<Props> = ({ className, allGuides }) => {
             new Date(a.published_at).getTime()
 
           return dateDiff !== 0 ? dateDiff : a.title.localeCompare(b.title)
-        } else if (sortBy === 'last_updated') {
-          const dateDiff =
-            new Date(b.updated_at || b.published_at).getTime() -
-            new Date(a.updated_at || a.published_at).getTime()
-
-          return dateDiff !== 0 ? dateDiff : a.title.localeCompare(b.title)
         }
 
         return sortBy === 'alpha-reverse'
@@ -83,7 +77,6 @@ const GuideList: React.FC<Props> = ({ className, allGuides }) => {
         </SelectTrigger>
         <SelectContent position="item-aligned">
           <SelectItem value="published_date">Sort by Date Published</SelectItem>
-          <SelectItem value="last_updated">Sort by Last Updated</SelectItem>
           <SelectItem value="alpha">Sort Alphabetically (A-Z)</SelectItem>
           <SelectItem value="alpha-reverse">
             Sort Alphabetically (Z-A)
