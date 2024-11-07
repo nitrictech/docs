@@ -5,6 +5,8 @@ tags:
   - AI & Machine Learning
 languages:
   - python
+published_at: 2024-11-07
+updated_at: 2024-11-07
 ---
 
 # Use Cloud GPUs for rendering your Blender projects
@@ -29,9 +31,12 @@ Here's a final render that was done using cloud GPUs:
 
 ## Prerequisites
 
+This guide may require you have basic knowledge on how Blender works, and the access to or ability to create Blender scenes for testing.
+
 - [UV](https://docs.astral.sh/uv/) - for dependency management
 - The [Nitric CLI](/get-started/installation)
 - An [AWS](https://aws.amazon.com) or [Google Cloud](https://cloud.google.com) account (_your choice_)
+- [Blender](https://www.blender.org/download/) - for creating your Blender scenes
 
 ## Getting started
 
@@ -171,29 +176,29 @@ async def get_render(ctx: HttpContext):
 
   return ctx
 
-  @main_api.put("/:blend")
-  async def write_render(ctx: HttpContext):
-    blend_scene_key = ctx.req.params["blend"]
+@main_api.put("/:blend")
+async def write_render(ctx: HttpContext):
+  blend_scene_key = ctx.req.params["blend"]
 
-    # Write the blend scene rendering settings
-    raw_metadata = {
-      "file_format": str(ctx.req.query.get('file_format', ['PNG'])[0]),
-      "fps": int(ctx.req.query.get('fps', [0])[0]),
-      "device": str(ctx.req.query.get('device', ['GPU'])[0]),
-      "engine": str(ctx.req.query.get('engine', ['CYCLES'])[0]),
-      "animate": bool(ctx.req.query.get('animate', [False])[0]),
-    }
-    metadata = bytes(json.dumps(raw_metadata), encoding="utf-8")
+  # Write the blend scene rendering settings
+  raw_metadata = {
+    "file_format": str(ctx.req.query.get('file_format', ['PNG'])[0]),
+    "fps": int(ctx.req.query.get('fps', [0])[0]),
+    "device": str(ctx.req.query.get('device', ['GPU'])[0]),
+    "engine": str(ctx.req.query.get('engine', ['CYCLES'])[0]),
+    "animate": bool(ctx.req.query.get('animate', [False])[0]),
+  }
+  metadata = bytes(json.dumps(raw_metadata), encoding="utf-8")
 
-    await readable_writeable_blend_bucket.file(f"metadata-{blend_scene_key}.json").write(metadata)
+  await readable_writeable_blend_bucket.file(f"metadata-{blend_scene_key}.json").write(metadata)
 
-    # Write the blend scene to the bucket using an upload URL
-    blend_upload_url = await readable_writeable_blend_bucket.file(f"blend-{blend_scene_key}.blend").upload_url()
+  # Write the blend scene to the bucket using an upload URL
+  blend_upload_url = await readable_writeable_blend_bucket.file(f"blend-{blend_scene_key}.blend").upload_url()
 
-    ctx.res.headers["Location"] = blend_upload_url
-    ctx.res.status = 307
+  ctx.res.headers["Location"] = blend_upload_url
+  ctx.res.status = 307
 
-    return ctx
+  return ctx
 
   Nitric.run()
 ```
@@ -204,50 +209,50 @@ We will add a storage listener which will be triggered by files being added to t
 # !collapse(1:46) collapsed
 import json
 
-  from nitric.application import Nitric
-  from nitric.context import HttpContext
-  from nitric.resources import BucketNotificationContext
+from nitric.application import Nitric
+from nitric.context import HttpContext
+from nitric.resources import BucketNotificationContext
 
-  from common.resources import rendered_bucket, main_api, blend_bucket, renderer_job
+from common.resources import rendered_bucket, main_api, blend_bucket, renderer_job
 
-  readable_rendered_bucket = rendered_bucket.allow("read")
-  readable_writeable_blend_bucket = blend_bucket.allow("write", "read")
-  submittable_renderer_job = renderer_job.allow("submit")
+readable_rendered_bucket = rendered_bucket.allow("read")
+readable_writeable_blend_bucket = blend_bucket.allow("write", "read")
+submittable_renderer_job = renderer_job.allow("submit")
 
-  @main_api.get("/render/:file")
-  async def get_render(ctx: HttpContext):
-    file_name = ctx.req.params['file']
+@main_api.get("/render/:file")
+async def get_render(ctx: HttpContext):
+  file_name = ctx.req.params['file']
 
-    download_url = await readable_writeable_blend_bucket.file(file_name).download_url(3600)
+  download_url = await readable_writeable_blend_bucket.file(file_name).download_url(3600)
 
-    ctx.res.headers["Location"] = download_url
-    ctx.res.status = 303
+  ctx.res.headers["Location"] = download_url
+  ctx.res.status = 303
 
-    return ctx
+  return ctx
 
-  @main_api.put("/:blend")
-  async def write_render(ctx: HttpContext):
-    blend_scene_key = ctx.req.params["blend"]
+@main_api.put("/:blend")
+async def write_render(ctx: HttpContext):
+  blend_scene_key = ctx.req.params["blend"]
 
-    # Write the blend scene rendering settings
-    raw_metadata = {
-      "file_format": str(ctx.req.query.get('file_format', ['PNG'])[0]),
-      "fps": int(ctx.req.query.get('fps', [0])[0]),
-      "device": str(ctx.req.query.get('device', ['GPU'])[0]),
-      "engine": str(ctx.req.query.get('engine', ['CYCLES'])[0]),
-      "animate": bool(ctx.req.query.get('animate', [False])[0]),
-    }
-    metadata = bytes(json.dumps(raw_metadata), encoding="utf-8")
+  # Write the blend scene rendering settings
+  raw_metadata = {
+    "file_format": str(ctx.req.query.get('file_format', ['PNG'])[0]),
+    "fps": int(ctx.req.query.get('fps', [0])[0]),
+    "device": str(ctx.req.query.get('device', ['GPU'])[0]),
+    "engine": str(ctx.req.query.get('engine', ['CYCLES'])[0]),
+    "animate": bool(ctx.req.query.get('animate', [False])[0]),
+  }
+  metadata = bytes(json.dumps(raw_metadata), encoding="utf-8")
 
-    await readable_writeable_blend_bucket.file(f"metadata-{blend_scene_key}.json").write(metadata)
+  await readable_writeable_blend_bucket.file(f"metadata-{blend_scene_key}.json").write(metadata)
 
-    # Write the blend scene to the bucket using an upload URL
-    blend_upload_url = await readable_writeable_blend_bucket.file(f"blend-{blend_scene_key}.blend").upload_url()
+  # Write the blend scene to the bucket using an upload URL
+  blend_upload_url = await readable_writeable_blend_bucket.file(f"blend-{blend_scene_key}.blend").upload_url()
 
-    ctx.res.headers["Location"] = blend_upload_url
-    ctx.res.status = 307
+  ctx.res.headers["Location"] = blend_upload_url
+  ctx.res.status = 307
 
-    return ctx
+  return ctx
 
 @blend_bucket.on("write", "blend-")
 async def on_written_image(ctx: BucketNotificationContext):
@@ -813,21 +818,21 @@ We'll also need to add `batch-services` as a preview feature.
 ```yaml title:nitric.yaml
 # !collapse(1:17) collapsed
 name: blender-render
-  services:
-    - match: services/*.py
-      start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
-      runtime: python
+services:
+  - match: services/*.py
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    runtime: python
 
-  batch-services:
-    - match: batches/*.py
-      start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
-      runtime: blender
+batch-services:
+  - match: batches/*.py
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    runtime: blender
 
-  runtimes:
-    blender:
-      dockerfile: blender.dockerfile
-    python:
-      dockerfile: python.dockerfile
+runtimes:
+  blender:
+    dockerfile: blender.dockerfile
+  python:
+    dockerfile: python.dockerfile
 
 preview:
   - batch-services
