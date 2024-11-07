@@ -272,6 +272,12 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/docs/installation',
+        destination: '/docs/get-started/installation',
+        basePath: false,
+        permanent: true,
+      },
+      {
         source: '/docs/guides/getting-started/installation',
         destination: '/docs/get-started/installation',
         basePath: false,
