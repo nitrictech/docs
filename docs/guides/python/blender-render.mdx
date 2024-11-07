@@ -3,6 +3,11 @@ description: Use the Nitric framework to build a service for rendering Blender s
 tags:
   - API
   - AI & Machine Learning
+image: /docs/images/guides/blender-render/featured.png
+image_alt: 'AI Podcast Part 1 Banner'
+featured:
+  image: /docs/images/guides/blender-render/featured.png
+  image_alt: 'AI Podcast Part 1 featured image'
 languages:
   - python
 published_at: 2024-11-07
@@ -11,7 +16,7 @@ updated_at: 2024-11-07
 
 # Use Cloud GPUs for rendering your Blender projects
 
-This example shows how you can create a remote Blender rendering application using Blender's Python interface.
+This example shows how you can create a remote [Blender](https://www.blender.org/) rendering application using Blender's Python interface.
 
 By using the cloud you can render your Blender scenes on infrastructure that scales and with CPU or GPU resources you might not have access to locally.
 
@@ -200,7 +205,7 @@ async def write_render(ctx: HttpContext):
 
   return ctx
 
-  Nitric.run()
+Nitric.run()
 ```
 
 We will add a storage listener which will be triggered by files being added to the `blend_bucket`. This is so we can trigger the rendering job when the rendering metadata and the `.blend` file are added to the bucket. By making this start from the listener instead of the API, we can set up workflows where rendering could be triggered from adding files to buckets manually.
@@ -846,13 +851,19 @@ We can test our application locally using:
 nitric run
 ```
 
-You can then use any HTTP client capable of sending binary data with the request, like the Nitric [local dashboard](/get-started/foundations/projects/local-development#local-dashboard).
+We can then use any HTTP client capable of sending binary data with the request, like the Nitric [local dashboard](/get-started/foundations/projects/local-development#local-dashboard). Start by making a request using a static `.blend` scene:
 
 ```bash
 curl --request PUT --data-binary "@cube.blend" http://localhost:4001/cube
 ```
 
-To render an animation:
+We can then use the following request to render an animation. We have modified the render settings by setting
+
+- animate: true
+- device: GPU
+- engine: CYCLES
+- fps: 30
+- file_format: FFMPEG
 
 ```bash
 curl --request PUT --data-binary "@animation.blend" "http://localhost:4001/animation?animate=true&device=GPU&engine=CYCLES&fps=30&file_format=FFMPEG"
