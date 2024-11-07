@@ -81,7 +81,7 @@ We'll organize our project structure like so:
 
 ## Creating the resources
 
-We'll start by creating a file to define our Nitric resources. For this project we'll need an API, Batch Job, and two buckets, one for the `.blend` files and one for the resulting renders. The API will interface with the buckets, while the Batch Job will handle the long-running renders.
+We'll start by creating a file to define our Nitric resources. For this project, we'll need an API, a batch job, and two buckets: one for the .blend files and another for the resulting renders. The API will interact with the buckets, while the batch job will handle the long-running render tasks.
 
 ```python title:common/resources.py
 from nitric.resources import api, job, bucket
@@ -352,7 +352,7 @@ async def render_image(ctx: JobContext):
     return ctx
 
   # load the file from a bucket to a local file
-  blend_file = await readable_blend_bucket.file(f"{blend_key}.blend").read()
+  blend_file = await readable_blend_bucket.file(f"blend-{blend_key}.blend").read()
 
   with open("input", "wb") as f:
     f.write(blend_file)
@@ -397,7 +397,7 @@ async def render_image(ctx: JobContext):
     return ctx
 
   # load the file from a bucket to a local file
-  blend_file = await readable_blend_bucket.file(f"{blend_key}.blend").read()
+  blend_file = await readable_blend_bucket.file(f"blend-{blend_key}.blend").read()
 
   with open("input", "wb") as f:
     f.write(blend_file)
@@ -452,7 +452,7 @@ async def render_image(ctx: JobContext):
     return ctx
 
   # load the file from a bucket to a local file
-  blend_file = await readable_blend_bucket.file(f"{blend_key}.blend").read()
+  blend_file = await readable_blend_bucket.file(f"blend-{blend_key}.blend").read()
 
   with open("input", "wb") as f:
     f.write(blend_file)
@@ -512,7 +512,7 @@ async def render_image(ctx: JobContext):
     return ctx
 
   # load the file from a bucket to a local file
-  blend_file = await readable_blend_bucket.file(f"{blend_key}.blend").read()
+  blend_file = await readable_blend_bucket.file(f"blend-{blend_key}.blend").read()
 
   with open("input", "wb") as f:
     f.write(blend_file)
