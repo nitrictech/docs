@@ -79,6 +79,18 @@ function SmallPrint() {
           >
             Support
           </Link>
+          <Link
+            href={'/get-started/foundations/why-nitric'}
+            className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
+          >
+            Foundations
+          </Link>
+          <Link
+            href={'/guides'}
+            className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
+          >
+            Guides
+          </Link>
         </div>
         <div className="flex gap-4">
           <SocialLink href="https://x.com/nitric_io" icon={XIcon}>

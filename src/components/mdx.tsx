@@ -1,10 +1,6 @@
 import Link from 'next/link'
 import clsx from 'clsx'
 import { Table } from '@/components/ui/table'
-import { Tag } from './Tag'
-import { Button } from './ui/button'
-import { MinusCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
 
 export {
   TableHead as th,

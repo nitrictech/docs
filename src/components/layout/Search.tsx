@@ -58,12 +58,12 @@ export function Search() {
     <>
       <button
         type="button"
-        className="lg:w-92 group hidden h-6 w-6 items-center justify-center sm:justify-start md:h-auto md:w-80 md:flex-none md:rounded-lg md:py-1 md:pl-4 md:pr-3.5 md:text-sm md:ring-1 md:ring-zinc-200 md:hover:ring-zinc-300 dark:md:bg-zinc-800/70 dark:md:ring-inset dark:md:ring-white/5 dark:md:hover:bg-zinc-700/40 dark:md:hover:ring-zinc-500 lg:flex"
+        className="lg:w-92 group hidden h-6 w-6 items-center justify-center sm:justify-start md:h-auto md:w-52 md:flex-none md:rounded-lg md:py-1 md:pl-4 md:pr-3.5 md:text-sm md:ring-1 md:ring-zinc-200 md:hover:ring-zinc-300 dark:md:bg-zinc-800/70 dark:md:ring-inset dark:md:ring-white/5 dark:md:hover:bg-zinc-700/40 dark:md:hover:ring-zinc-500 lg:flex"
         onClick={onOpen}
       >
         <SearchIcon className="h-5 w-5 flex-none fill-zinc-400 group-hover:fill-zinc-500 dark:fill-zinc-500 md:group-hover:fill-zinc-400" />
         <span className="sr-only transition-colors dark:group-hover:text-white md:not-sr-only md:ml-2 md:text-zinc-500 md:dark:text-zinc-400">
-          Search documentation
+          Search
         </span>
         {modifierKey && (
           <kbd className="ml-auto hidden font-medium text-zinc-400 dark:text-zinc-500 md:block">

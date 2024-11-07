@@ -7,12 +7,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from './ui/breadcrumb'
-import { Doc } from '@/content'
+import { Doc, Guide } from '@/content'
 import { getNavInfo, NavInfo } from '@/lib/getNavInfo'
 import Link from 'next/link'
 
 interface Props {
-  doc: Doc
+  doc: Doc | Guide
   className?: string
 }
 

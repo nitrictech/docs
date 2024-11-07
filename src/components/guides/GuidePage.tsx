@@ -1,18 +1,15 @@
-import { Doc } from '@/content'
 import React, { Suspense } from 'react'
 
 import { GuideFilters } from './GuideFilters'
 import GuideList from './GuideList'
-import { Button } from '../ui/button'
-import { AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline'
 import GuideMobileFilters from './GuideMobileFilters'
+import { allGuides } from '@/content'
 
 interface Props {
-  guides: Doc[]
   allTags: string[]
 }
 
-const GuidePage: React.FC<Props> = ({ guides, allTags }) => {
+const GuidePage: React.FC<Props> = ({ allTags }) => {
   return (
     <div className="gap-x-4 lg:grid lg:grid-cols-[280px,1fr]">
       <div className="hidden border-r pb-10 lg:block">
@@ -28,8 +25,8 @@ const GuidePage: React.FC<Props> = ({ guides, allTags }) => {
       </div>
       <Suspense>
         <GuideList
-          guides={guides}
-          className="relative mx-2 my-4 w-full sm:px-8 lg:my-10"
+          allGuides={allGuides}
+          className="relative mx-2 my-4 w-full sm:px-8 lg:mb-8"
         />
       </Suspense>
     </div>

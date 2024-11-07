@@ -1,4 +1,5 @@
 import GuidePage from '@/components/guides/GuidePage'
+import GuidesFeatured from '@/components/guides/GuidesFeatured'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Heading } from '@/components/ui/heading'
-import { allDocs } from '@/content'
+import { allGuides } from '@/content'
 import { BASE_URL } from '@/lib/constants'
 import Link from 'next/link'
 import { Metadata } from 'next/types'
@@ -34,8 +35,6 @@ export const metadata: Metadata = {
 }
 
 export default function GuidesPage() {
-  const allGuides = allDocs.filter((doc) => doc.slug.startsWith('guides/'))
-
   const allTags = allGuides
     .reduce((acc: string[], guide) => {
       if (guide.tags) {
@@ -66,10 +65,13 @@ export default function GuidesPage() {
           </BreadcrumbList>
         </Breadcrumb>
         <Heading level={1}>Guides</Heading>
+        <div className="xl:mr-6">
+          <GuidesFeatured />
+        </div>
       </div>
       <div className="-mx-2 border-t px-4 sm:-mx-6 lg:-mx-8">
         <div className="mx-auto max-w-7xl px-4">
-          <GuidePage guides={allGuides} allTags={allTags} />
+          <GuidePage allTags={allTags} />
         </div>
       </div>
     </>
