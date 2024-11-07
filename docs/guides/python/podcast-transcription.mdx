@@ -35,7 +35,7 @@ Next, let's install our base dependencies, then add the `openai-whisper` library
 # Install the base dependencies
 uv sync
 # Add OpenAI whisper dependency
-uv add openai-whisper --optional ml
+uv add openai-whisper librosa numpy --optional ml
 ```
 
 <Note>
@@ -110,19 +110,19 @@ submittable_transcribe_job = transcribe_job.allow("submit")
 
 @main_api.get("/podcast/:name")
 async def get_podcast(ctx: HttpContext):
-    name = ctx.req.params['name']
+  name = ctx.req.params['name']
 
-    download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
+  download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
 
-    ctx.res.headers["Location"] = download_url
-    ctx.res.status = 303
+  ctx.res.headers["Location"] = download_url
+  ctx.res.status = 303
 
-    return ctx
+  return ctx
 
 Nitric.run()
 ```
 
-We will add a storage listener which will be triggered by files being added to the `podcast_bucket`.
+We will then add a route to get an upload URL for the bucket. We will do this via a URL as it circumvents the size limits of requests to the API Gateway.
 
 ```python title:services/api.py
 # !collapse(1:18) collapsed
@@ -134,38 +134,125 @@ from nitric.context import HttpContext
 readable_transcript_bucket = transcript_bucket.allow("read")
 submittable_transcribe_job = transcribe_job.allow("submit")
 
-@main_api.get("/transcript/:name")
+@main_api.get("/podcast/:name")
 async def get_podcast(ctx: HttpContext):
-    name = ctx.req.params['name']
+  name = ctx.req.params['name']
 
-    download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
+  download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
 
-    ctx.res.headers["Location"] = download_url
-    ctx.res.status = 303
+  ctx.res.headers["Location"] = download_url
+  ctx.res.status = 303
 
-    return ctx
+  return ctx
 
-@podcast_bucket.on("write", "*")
-async def on_add_podcast(ctx: BucketNotificationContext):
-    await submittable_transcribe_job.submit({ "podcast_name": ctx.req.key })
+@main_api.get("/audio-upload-url/:name")
+async def get_audio_upload_url(ctx: HttpContext):
+  name = ctx.req.params['name']
 
-    return ctx
+  upload_url = await writable_podcast_bucket.file(name).upload_url()
+
+  ctx.res.body = upload_url
 
 Nitric.run()
 ```
 
+We will add a storage listener which will be triggered by files being added to the `podcast_bucket`.
+
+```python title:services/api.py
+# !collapse(1:26) collapsed
+from common.resources import main_api, transcript_bucket, podcast_bucket, transcribe_job
+from nitric.application import Nitric
+from nitric.resources import BucketNotificationContext
+from nitric.context import HttpContext
+
+readable_transcript_bucket = transcript_bucket.allow("read")
+submittable_transcribe_job = transcribe_job.allow("submit")
+
+@main_api.get("/transcript/:name")
+async def get_podcast(ctx: HttpContext):
+  name = ctx.req.params['name']
+
+  download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
+
+  ctx.res.headers["Location"] = download_url
+  ctx.res.status = 303
+
+  return ctx
+
+@main_api.get("/podcast/:name")
+async def get_podcast(ctx: HttpContext):
+  name = ctx.req.params['name']
+
+  download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
+
+  ctx.res.headers["Location"] = download_url
+  ctx.res.status = 303
+
+  return ctx
+
+@podcast_bucket.on("write", "*")
+async def on_add_podcast(ctx: BucketNotificationContext):
+  await submittable_transcribe_job.submit({ "podcast_name": ctx.req.key })
+
+  return ctx
+
+Nitric.run()
+```
+
+## Downloading our model
+
+We can download our model and embed it into our container to reduce the start up time of our transcription. We'll create a script which can be triggered using `uv run download_model.py --model_name turbo`.
+
+```python title:download_model.py
+from whisper import _MODELS, _download
+import argparse
+import os
+
+default = os.path.join(os.path.expanduser("~"), ".cache")
+download_root = os.path.join(os.getenv("XDG_CACHE_HOME", default), "whisper")
+
+def download_whisper_model(model_name="base"):
+  print("downloading model...")
+  # if we have the original download go to the default whisper cache
+  model = _download(_MODELS[model_name], root=download_root, in_memory=True)
+
+  # make sure the ./model directory exists
+  os.makedirs("./.model", exist_ok=True)
+
+  # write the model to disk
+  save_path = f"./.model/model.pt"
+  with open(save_path, "wb") as f:
+    f.write(model)
+
+  print(f"Model '{model_name}' has been downloaded and saved to './model/model.pt'.")
+
+if __name__ == "__main__":
+  parser = argparse.ArgumentParser(description="Download a Whisper model.")
+  parser.add_argument("--model_name", type=str, default="base", help="Name of the model to download.")
+
+  args = parser.parse_args()
+
+  download_whisper_model(model_name=args.model_name)
+```
+
 ## Add Transcribe Batch Job
 
-Start by adding our imports and adding permissions to the resources we defined earlier.
+Start by adding our imports and adding permissions to the resources we defined earlier. We'll also get the location of the model set as an environment variable, defaulting to `./.model/model.pt`.
 
 ```python title:batches/transcribe.py
 import whisper
+import io
+import numpy as np
+import os
+import librosa
 from common.resources import transcribe_job, transcript_bucket, podcast_bucket
 from nitric.context import JobContext
 from nitric.application import Nitric
 
 writeable_transcript_bucket = transcript_bucket.allow("write")
 readable_podcast_bucket = podcast_bucket.allow("read")
+
+MODEL = os.environ.get("MODEL", "./.model/model.pt")
 
 Nitric.run()
 ```
@@ -181,14 +268,20 @@ We'll then create our Job and set the required memory to `12000`. This is a safe
 | large  | 1550 M     | N/A                | large              | `~10 GB`      | `1x`           |
 
 ```python title:batches/transcribe.py
-# !collapse(1:7) collapsed
+# !collapse(1:13) collapsed
 import whisper
+import io
+import numpy as np
+import os
+import librosa
 from common.resources import transcribe_job, transcript_bucket, podcast_bucket
 from nitric.context import JobContext
 from nitric.application import Nitric
 
 writeable_transcript_bucket = transcript_bucket.allow("write")
 readable_podcast_bucket = podcast_bucket.allow("read")
+
+MODEL = os.environ.get("MODEL", "./.model/model.pt")
 
 @transcribe_job(cpus=1, memory=12000, gpus=0)
 async def transcribe_podcast(ctx: JobContext):
@@ -197,17 +290,23 @@ async def transcribe_podcast(ctx: JobContext):
 Nitric.run()
 ```
 
-We'll then read the audio file that is referenced in the `JobContext` data that was sent with the submit request. We'll write the podcast to a local file so that the model can read from it.
+We'll then read the audio file that is referenced in the `JobContext` data that was sent with the submit request. We'll load these bytes into a variable as a floating point time series using `librosa` so that it can be converted to a `numpy` array for use by the `whisper`.
 
 ```python title:batches/transcribe.py
-# !collapse(1:7) collapsed
+# !collapse(1:13) collapsed
 import whisper
+import io
+import numpy as np
+import os
+import librosa
 from common.resources import transcribe_job, transcript_bucket, podcast_bucket
 from nitric.context import JobContext
 from nitric.application import Nitric
 
 writeable_transcript_bucket = transcript_bucket.allow("write")
 readable_podcast_bucket = podcast_bucket.allow("read")
+
+MODEL = os.environ.get("MODEL", "./.model/model.pt")
 
 @transcribe_job(cpus=1, memory=12000, gpus=0)
 async def transcribe_podcast(ctx: JobContext):
@@ -216,19 +315,25 @@ async def transcribe_podcast(ctx: JobContext):
 
   podcast = await readable_podcast_bucket.file(podcast_name).read()
 
-  with open("local-podcast", "wb") as f:
-    f.write(podcast)
+  podcast_io = io.BytesIO(podcast)
+
+  y, sr = librosa.load(podcast_io)
+  audio_array = np.array(y)
 
   return ctx
 
 Nitric.run()
 ```
 
-We'll then load our model and transcribe the audio. This is where we can choose the model based on balancing speed, size, and accuracy. We can turn off `FP16` with `fp16=False` which will use `FP32` instead. This will depend on what is supported on your CPU when testing locally, however, `FP16` and `FP32` are supported on Lambda.
+We'll then load our model and transcribe the audio. We can turn off `FP16` with `fp16=False` which will use `FP32` instead. This will depend on what is supported on your CPU when testing locally, however, `FP16` and `FP32` are supported on Lambda.
 
 ```python title:batches/transcribe.py
-# !collapse(1:7) collapsed
+# !collapse(1:13) collapsed
 import whisper
+import io
+import numpy as np
+import os
+import librosa
 from common.resources import transcribe_job, transcript_bucket, podcast_bucket
 from nitric.context import JobContext
 from nitric.application import Nitric
@@ -236,19 +341,23 @@ from nitric.application import Nitric
 writeable_transcript_bucket = transcript_bucket.allow("write")
 readable_podcast_bucket = podcast_bucket.allow("read")
 
+MODEL = os.environ.get("MODEL", "./.model/model.pt")
+
 @transcribe_job(cpus=1, memory=12000, gpus=0)
-# !collapse(1:9) collapsed
+# !collapse(1:10) collapsed
 async def transcribe_podcast(ctx: JobContext):
   podcast_name = ctx.req.data["podcast_name"]
   print(f"Transcribing: {podcast_name}")
 
   podcast = await readable_podcast_bucket.file(podcast_name).read()
 
-  with open("local-podcast", "wb") as f:
-    f.write(podcast)
+  podcast_io = io.BytesIO(podcast)
 
-  model = whisper.load_model("turbo")
-  result = model.transcribe("local-podcast", verbose=True, fp16=False)
+  y, sr = librosa.load(podcast_io)
+  audio_array = np.array(y)
+
+  model = whisper.load_model(MODEL)
+  result = model.transcribe(audio_array, verbose=True, fp16=False)
 
   return ctx
 
@@ -258,8 +367,12 @@ Nitric.run()
 Finally, we'll take the outputted transcript and write that to the transcript bucket. This transcript is stored in `result["text"]`.
 
 ```python title:batches/transcribe.py
-# !collapse(1:7) collapsed
+# !collapse(1:13) collapsed
 import whisper
+import io
+import numpy as np
+import os
+import librosa
 from common.resources import transcribe_job, transcript_bucket, podcast_bucket
 from nitric.context import JobContext
 from nitric.application import Nitric
@@ -267,26 +380,31 @@ from nitric.application import Nitric
 writeable_transcript_bucket = transcript_bucket.allow("write")
 readable_podcast_bucket = podcast_bucket.allow("read")
 
+MODEL = os.environ.get("MODEL", "./.model/model.pt")
+
 @transcribe_job(cpus=1, memory=12000, gpus=0)
-# !collapse(1:12) collapsed
+# !collapse(1:13) collapsed
 async def transcribe_podcast(ctx: JobContext):
   podcast_name = ctx.req.data["podcast_name"]
   print(f"Transcribing: {podcast_name}")
 
   podcast = await readable_podcast_bucket.file(podcast_name).read()
 
-  with open("local-podcast", "wb") as f:
-    f.write(podcast)
+  podcast_io = io.BytesIO(podcast)
 
-  model = whisper.load_model("turbo")
-  result = model.transcribe("local-podcast", verbose=True, fp16=False)
+  y, sr = librosa.load(podcast_io)
+  audio_array = np.array(y)
 
-    transcript = result["text"].encode()
+  model = whisper.load_model(MODEL)
+  result = model.transcribe(audio_array, verbose=True, fp16=False)
 
-    print("Finished transcoding... Writing to Bucket")
-    await writeable_transcript_bucket.file(f"{podcast_name}-transcript.txt").write(transcript)
+  transcript = result["text"].encode()
 
-    return ctx
+  print("Finished transcoding... Writing to Bucket")
+  await writeable_transcript_bucket.file(f"{podcast_name}-transcript.txt").write(transcript)
+  print("Done!")
+
+  return ctx
 
 Nitric.run()
 ```
@@ -403,6 +521,19 @@ We'll add a `dockerignore` to help reduce the size of the Docker Image that is b
 .mypy_cache/
 .nitric/
 .venv/
+nitric-spec.json
+nitric.yaml
+README.md
+```
+
+And add `./model` to the python docker ignore.
+
+```text tile:python.dockerignore
+.mypy_cache/
+.nitric/
+.venv/
+.model/
+nitric-spec.json
 nitric.yaml
 README.md
 ```
