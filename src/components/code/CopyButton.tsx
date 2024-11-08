@@ -4,12 +4,40 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { ClipboardIcon } from '../icons/ClipboardIcon'
 import { cn } from '@/lib/utils'
+import { CodeAnnotation } from 'codehike/code'
+
+// remove - diff annotations from the code
+const cleanCode = (code: string, annotations: CodeAnnotation[]) => {
+  if (!annotations.length) return code
+
+  const lines = code.split('\n')
+
+  // Sort annotations by fromLineNumber in descending order to avoid conflicts
+  const sortedAnnotations = annotations
+    .filter((a) => 'fromLineNumber' in a)
+    .sort((a, b) => b.fromLineNumber - a.fromLineNumber)
+
+  for (const annotation of sortedAnnotations) {
+    if (annotation.query === '-' && annotation.name === 'diff') {
+      const { fromLineNumber, toLineNumber } = annotation
+      const start = fromLineNumber - 1
+      const end = toLineNumber
+
+      // Remove the lines in the range [start, end)
+      lines.splice(start, end - start)
+    }
+  }
+
+  return lines.join('\n')
+}
 
 export function CopyButton({
   code,
+  annotations,
   className,
 }: {
   code: string
+  annotations: CodeAnnotation[]
   className?: string
 }) {
   const [copyCount, setCopyCount] = useState(0)
@@ -36,9 +64,11 @@ export function CopyButton({
         className,
       )}
       onClick={() => {
-        window.navigator.clipboard.writeText(code).then(() => {
-          setCopyCount((count) => count + 1)
-        })
+        window.navigator.clipboard
+          .writeText(cleanCode(code, annotations))
+          .then(() => {
+            setCopyCount((count) => count + 1)
+          })
       }}
     >
       <span
