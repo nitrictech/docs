@@ -91,25 +91,17 @@ import (
 )
 
 func main() {
-	api, err := nitric.NewApi("public")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	api := nitric.NewApi("public")
 
 	// ✅ This declaration will work
-	bucket, err := nitric.NewBucket("files").Allow(nitric.BucketRead)
+	bucket := nitric.NewBucket("files").Allow(nitric.BucketRead)
 
 	api.Get("/files/:name", func(ctx *apis.Ctx) {
 		// ❌ This declaration won't work, since it's in a callback that's only called at runtime.
-		badBucket, err := nitric.NewBucket("wont-work").Allow(nitric.BucketRead)
+		badBucket := nitric.NewBucket("wont-work").Allow(nitric.BucketRead)
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("Service has started")
+	nitric.Run()
 }
 ```
 
@@ -202,14 +194,14 @@ import (
 )
 
 func main() {
-	api, err := nitric.NewApi("public")
+	api := nitric.NewApi("public")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 
-	bucket, err := nitric.NewBucket("files").Allow(nitric.BucketRead)
+	bucket := nitric.NewBucket("files").Allow(nitric.BucketRead)
 
 	// ❌ This access will not work
 	fileContents, _ := bucket.Read(context.TODO(), "example.txt")
@@ -219,9 +211,7 @@ func main() {
 		fileContents, _ := bucket.Read(context.TODO(), "example.txt")
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -389,10 +379,7 @@ var PublicApi nitric.Api
 var UpdateTopic nitric.SubscribableTopic
 
 func init() {
-	publicApi, err := nitric.NewApi("public")
-	if err != nil {
-		panic(err)
-	}
+	publicApi := nitric.NewApi("public")
 
 	PublicApi = publicApi
 
@@ -424,9 +411,7 @@ func main() {
 		})
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -445,11 +430,7 @@ func main() {
 		println("got the message")
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Println("Updates service has started")
+	nitric.Run()
 }
 ```
 
@@ -644,9 +625,7 @@ func main() {
 		// do something with the file
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 
@@ -666,9 +645,7 @@ func main() {
 		// do something with the file
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 

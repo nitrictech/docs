@@ -337,11 +337,7 @@ import (
 )
 
 func main() {
-	api, err := nitric.NewApi("main")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	api := nitric.NewApi("main")
 
 	api.Get("/hello/:name", func(ctx *apis.Ctx) {
 		name := ctx.Request.PathParams()["name"]
@@ -353,9 +349,7 @@ func main() {
 		ctx.Response.Body = []byte(fmt.Sprintf("Goodbye %s", name))
 	})
 
-	if err := nitric.Run(); err != nil {
-		fmt.Println(err)
-	}
+	nitric.Run()
 }
 ```
 

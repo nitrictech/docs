@@ -54,10 +54,7 @@ import (
 )
 
 func main() {
-  bucket, err := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
-  if err != nil {
-    return
-  }
+  bucket := nitric.NewBucket("bucket-name").Allow(nitric.BucketRead)
 
   downloadUrl, err := bucket.File("cat.png").DownloadUrl(context.TODO(), "cat.png", storage.WithPresignUrlExpiry(time.Minute*5))
   if err != nil {
@@ -80,15 +77,9 @@ import (
 )
 
 func main() {
-  api, err := nitric.NewApi("main")
-  if err != nil {
-    return
-  }
+  api := nitric.NewApi("main")
 
-  bucket, err := nitric.NewBucket("images").Allow(nitric.BucketRead)
-  if err != nil {
-    return
-  }
+  bucket := nitric.NewBucket("images").Allow(nitric.BucketRead)
 
   api.Get("/images/:id", func(ctx *apis.Ctx) {
     id := ctx.Request.PathParams()["id"]
