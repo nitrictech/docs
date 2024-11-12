@@ -33,11 +33,17 @@ cd podcast-transcription
 
 Next, let's install our base dependencies, then add the `openai-whisper` library as an optional dependency.
 
+<Note>
+  We are adding `numba==0.60` as `librosa` is currently forcing an outdated
+  version. This may be removed in the future pending [this
+  issue](https://github.com/librosa/librosa/issues/1883)
+</Note>
+
 ```bash
 # Install the base dependencies
 uv sync
 # Add OpenAI whisper dependency
-uv add openai-whisper librosa numpy --optional ml
+uv add openai-whisper librosa numpy numba==0.60 --optional ml
 ```
 
 <Note>
@@ -82,9 +88,9 @@ podcast_bucket = bucket("podcasts")
 transcript_bucket = bucket("transcripts")
 ```
 
-## Add our transcription
+## Add our transcription services
 
-Now that we have defined resources, we can import our API and add some routes to access the buckets. Start by importing the resources and adding permissions to the resources.
+Now that we have defined resources, we can import our API and add some routes to access the buckets as well as a storage listener that is triggered by new podcasts added to a bucket.
 
 ```python title:services/api.py
 from common.resources import main_api, transcript_bucket, podcast_bucket, transcribe_job
@@ -95,105 +101,40 @@ from nitric.context import HttpContext
 readable_transcript_bucket = transcript_bucket.allow("read")
 submittable_transcribe_job = transcribe_job.allow("submit")
 
-Nitric.run()
-```
-
-We'll then write a route for getting a file from the transcription bucket. These will get a signed download url and redirect the user to this url for downloading the text content.
-
-```python title:services/api.py
-# !collapse(1:7) collapsed
-from common.resources import main_api, transcript_bucket, podcast_bucket, transcribe_job
-from nitric.application import Nitric
-from nitric.resources import BucketNotificationContext
-from nitric.context import HttpContext
-
-readable_transcript_bucket = transcript_bucket.allow("read")
-submittable_transcribe_job = transcribe_job.allow("submit")
-
-@main_api.get("/podcast/:name")
-async def get_podcast(ctx: HttpContext):
-  name = ctx.req.params['name']
-
-  download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
-
-  ctx.res.headers["Location"] = download_url
-  ctx.res.status = 303
-
-  return ctx
-
-Nitric.run()
-```
-
-We will then add a route to get an upload URL for the bucket. We will do this via a URL as it circumvents the size limits of requests to the API Gateway.
-
-```python title:services/api.py
-# !collapse(1:18) collapsed
-from common.resources import main_api, transcript_bucket, podcast_bucket, transcribe_job
-from nitric.application import Nitric
-from nitric.resources import BucketNotificationContext
-from nitric.context import HttpContext
-
-readable_transcript_bucket = transcript_bucket.allow("read")
-submittable_transcribe_job = transcribe_job.allow("submit")
-
-@main_api.get("/podcast/:name")
-async def get_podcast(ctx: HttpContext):
-  name = ctx.req.params['name']
-
-  download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
-
-  ctx.res.headers["Location"] = download_url
-  ctx.res.status = 303
-
-  return ctx
-
-@main_api.get("/audio-upload-url/:name")
-async def get_audio_upload_url(ctx: HttpContext):
-  name = ctx.req.params['name']
-
-  upload_url = await writable_podcast_bucket.file(name).upload_url()
-
-  ctx.res.body = upload_url
-
-Nitric.run()
-```
-
-We will add a storage listener which will be triggered by files being added to the `podcast_bucket`.
-
-```python title:services/api.py
-# !collapse(1:26) collapsed
-from common.resources import main_api, transcript_bucket, podcast_bucket, transcribe_job
-from nitric.application import Nitric
-from nitric.resources import BucketNotificationContext
-from nitric.context import HttpContext
-
-readable_transcript_bucket = transcript_bucket.allow("read")
-submittable_transcribe_job = transcribe_job.allow("submit")
-
+# Get a podcast transcript from the bucket
+# !collapse(1:12) collapsed
 @main_api.get("/transcript/:name")
 async def get_podcast(ctx: HttpContext):
   name = ctx.req.params['name']
 
+  # Get a URL to download our transcript
   download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
 
+  # Redirect the user to the download URL
   ctx.res.headers["Location"] = download_url
   ctx.res.status = 303
 
   return ctx
 
+# Get a URL for uploading podcasts to the buckets
+# !collapse(1:11) collapsed
 @main_api.get("/podcast/:name")
 async def get_podcast(ctx: HttpContext):
   name = ctx.req.params['name']
 
-  download_url = await readable_transcript_bucket.file(f"{name}-transcript.txt").download_url()
+  # Get a URL to upload a podcast
+  upload_url = await writable_podcast_bucket.file(name).upload_url()
 
-  ctx.res.headers["Location"] = download_url
-  ctx.res.status = 303
+  # Return the upload URL
+  ctx.res.body = upload_url
 
   return ctx
 
+# Trigger a bucket notification on any write notifications to the podcast bucket
+# !collapse(1:6) collapsed
 @podcast_bucket.on("write", "*")
 async def on_add_podcast(ctx: BucketNotificationContext):
+  # Submit a job request to the transcription job for the newly written podcast
   await submittable_transcribe_job.submit({ "podcast_name": ctx.req.key })
 
   return ctx
@@ -239,27 +180,7 @@ if __name__ == "__main__":
 
 ## Add Transcribe Batch Job
 
-Start by adding our imports and adding permissions to the resources we defined earlier. We'll also get the location of the model set as an environment variable, defaulting to `./.model/model.pt`.
-
-```python title:batches/transcribe.py
-import whisper
-import io
-import numpy as np
-import os
-import librosa
-from common.resources import transcribe_job, transcript_bucket, podcast_bucket
-from nitric.context import JobContext
-from nitric.application import Nitric
-
-writeable_transcript_bucket = transcript_bucket.allow("write")
-readable_podcast_bucket = podcast_bucket.allow("read")
-
-MODEL = os.environ.get("MODEL", "./.model/model.pt")
-
-Nitric.run()
-```
-
-We'll then create our Job and set the required memory to `12000`. This is a safe amount if you're using anything less than the large model. You can see the memory requirements for each of the model sizes below.
+For the job, we'll be setting the memory to 12000. If you're using anything less than the large model this should be safe. You can see the memory requirements for each of the model sizes below.
 
 | Size   | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
 | ------ | ---------- | ------------------ | ------------------ | ------------- | -------------- |
@@ -269,8 +190,9 @@ We'll then create our Job and set the required memory to `12000`. This is a safe
 | medium | 769 M      | medium.en          | medium             | `~5 GB`       | `~2x`          |
 | large  | 1550 M     | N/A                | large              | `~10 GB`      | `1x`           |
 
+We can create our job using the following code:
+
 ```python title:batches/transcribe.py
-# !collapse(1:13) collapsed
 import whisper
 import io
 import numpy as np
@@ -280,34 +202,12 @@ from common.resources import transcribe_job, transcript_bucket, podcast_bucket
 from nitric.context import JobContext
 from nitric.application import Nitric
 
+# Set permissions for the transcript bucket for writing
 writeable_transcript_bucket = transcript_bucket.allow("write")
+# Set permissions for the podcast bucket for reading
 readable_podcast_bucket = podcast_bucket.allow("read")
 
-MODEL = os.environ.get("MODEL", "./.model/model.pt")
-
-@transcribe_job(cpus=1, memory=12000, gpus=0)
-async def transcribe_podcast(ctx: JobContext):
-  return ctx
-
-Nitric.run()
-```
-
-We'll then read the audio file that is referenced in the `JobContext` data that was sent with the submit request. We'll load these bytes into a variable as a floating point time series using `librosa` so that it can be converted to a `numpy` array for use by the `whisper`.
-
-```python title:batches/transcribe.py
-# !collapse(1:13) collapsed
-import whisper
-import io
-import numpy as np
-import os
-import librosa
-from common.resources import transcribe_job, transcript_bucket, podcast_bucket
-from nitric.context import JobContext
-from nitric.application import Nitric
-
-writeable_transcript_bucket = transcript_bucket.allow("write")
-readable_podcast_bucket = podcast_bucket.allow("read")
-
+# Get the location of the model
 MODEL = os.environ.get("MODEL", "./.model/model.pt")
 
 @transcribe_job(cpus=1, memory=12000, gpus=0)
@@ -315,91 +215,23 @@ async def transcribe_podcast(ctx: JobContext):
   podcast_name = ctx.req.data["podcast_name"]
   print(f"Transcribing: {podcast_name}")
 
+  # Read the bytes from the podcast that was uploaded to the bucket
   podcast = await readable_podcast_bucket.file(podcast_name).read()
 
+  # Convert the audio bytes into a numpy array for the models consumption
   podcast_io = io.BytesIO(podcast)
-
   y, sr = librosa.load(podcast_io)
   audio_array = np.array(y)
 
-  return ctx
-
-Nitric.run()
-```
-
-We'll then load our model and transcribe the audio. We can turn off `FP16` with `fp16=False` which will use `FP32` instead. This will depend on what is supported on your CPU when testing locally, however, `FP16` and `FP32` are supported on Lambda.
-
-```python title:batches/transcribe.py
-# !collapse(1:13) collapsed
-import whisper
-import io
-import numpy as np
-import os
-import librosa
-from common.resources import transcribe_job, transcript_bucket, podcast_bucket
-from nitric.context import JobContext
-from nitric.application import Nitric
-
-writeable_transcript_bucket = transcript_bucket.allow("write")
-readable_podcast_bucket = podcast_bucket.allow("read")
-
-MODEL = os.environ.get("MODEL", "./.model/model.pt")
-
-@transcribe_job(cpus=1, memory=12000, gpus=0)
-# !collapse(1:10) collapsed
-async def transcribe_podcast(ctx: JobContext):
-  podcast_name = ctx.req.data["podcast_name"]
-  print(f"Transcribing: {podcast_name}")
-
-  podcast = await readable_podcast_bucket.file(podcast_name).read()
-
-  podcast_io = io.BytesIO(podcast)
-
-  y, sr = librosa.load(podcast_io)
-  audio_array = np.array(y)
-
+  # Load the local whisper model
   model = whisper.load_model(MODEL)
+
+  # Transcribe the model and make the output verbose
+  # We can turn off `FP16` with `fp16=False` which will use `FP32` instead.
+  # This will depend on what is supported on your CPU when testing locally, however, `FP16` and `FP32` are supported on Lambda.
   result = model.transcribe(audio_array, verbose=True, fp16=False)
 
-  return ctx
-
-Nitric.run()
-```
-
-Finally, we'll take the outputted transcript and write that to the transcript bucket. This transcript is stored in `result["text"]`.
-
-```python title:batches/transcribe.py
-# !collapse(1:13) collapsed
-import whisper
-import io
-import numpy as np
-import os
-import librosa
-from common.resources import transcribe_job, transcript_bucket, podcast_bucket
-from nitric.context import JobContext
-from nitric.application import Nitric
-
-writeable_transcript_bucket = transcript_bucket.allow("write")
-readable_podcast_bucket = podcast_bucket.allow("read")
-
-MODEL = os.environ.get("MODEL", "./.model/model.pt")
-
-@transcribe_job(cpus=1, memory=12000, gpus=0)
-# !collapse(1:13) collapsed
-async def transcribe_podcast(ctx: JobContext):
-  podcast_name = ctx.req.data["podcast_name"]
-  print(f"Transcribing: {podcast_name}")
-
-  podcast = await readable_podcast_bucket.file(podcast_name).read()
-
-  podcast_io = io.BytesIO(podcast)
-
-  y, sr = librosa.load(podcast_io)
-  audio_array = np.array(y)
-
-  model = whisper.load_model(MODEL)
-  result = model.transcribe(audio_array, verbose=True, fp16=False)
-
+  # Take the outputted transcript and write that to the transcript bucket
   transcript = result["text"].encode()
 
   print("Finished transcoding... Writing to Bucket")
@@ -413,45 +245,29 @@ Nitric.run()
 
 ## Deployment Dockerfiles
 
-With our code complete, we can write a dockerfile that our batch job will run in. Start with the base image that copies our application code and resolves the dependencies using `uv`.
+With our code complete, we can write a dockerfile that our batch job will run in. It's split into 3 main sections, with 2 stages.
+
+1. The base image that copies our application code and resolves the dependencies using `uv`.
+2. The next stage is to build upon our base with another image with Nvidia drivers. It sets environment variables to enable GPU use and download Python 3.11 with apt.
+3. Get our application from the base image and run our application.
 
 ```docker title:transcribe.dockerfile
-# The python version must match the version in .python-version
+# !collapse(1:13) collapsed
 FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim AS builder
 
 ARG HANDLER
 ENV HANDLER=${HANDLER}
 
-ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
 WORKDIR /app
+
+# Get Python dependencies
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
+COPY uv.lock pyproject.toml /app/
 RUN --mount=type=cache,target=/root/.cache/uv \
-  --mount=type=bind,source=uv.lock,target=uv.lock \
-  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
   uv sync --frozen -v --no-install-project --extra ml --no-dev --no-python-downloads
 COPY . /app
-RUN --mount=type=cache,target=/root/.cache/uv \
-  uv sync --frozen -v --no-dev --extra ml --no-python-downloads
-```
 
-The next stage is to build upon our base with another image with Nvidia drivers. We'll set some environment variables to enable GPU use and download Python 3.11 with apt.
-
-```docker title:transcribe.dockerfile
-# !collapse(1:14) collapsed
-FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim AS builder
-
-ARG HANDLER
-ENV HANDLER=${HANDLER}
-
-ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
-WORKDIR /app
-RUN --mount=type=cache,target=/root/.cache/uv \
-  --mount=type=bind,source=uv.lock,target=uv.lock \
-  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-  uv sync --frozen -v --no-install-project --extra ml --no-dev --no-python-downloads
-COPY . /app
-RUN --mount=type=cache,target=/root/.cache/uv \
-  uv sync --frozen -v --no-dev --extra ml --no-python-downloads
-
+# !collapse(1:19) collapsed
 FROM nvcr.io/nvidia/driver:550-5.15.0-1065-nvidia-ubuntu22.04
 
 ARG HANDLER
@@ -459,46 +275,12 @@ ARG HANDLER
 ENV HANDLER=${HANDLER}
 ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONPATH="."
+
+# Set which NVIDIA drivers will be mounted in the container
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 ENV NVIDIA_REQUIRE_CUDA="cuda>=8.0"
 
-RUN apt-get update -y && \
-  apt-get install -y software-properties-common ffmpeg && \
-  add-apt-repository ppa:deadsnakes/ppa && \
-  apt-get update -y && \
-  apt-get install -y python3.11 && \
-  ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11
-```
-
-Finally, we'll get our application from the base image and run our application.
-
-```docker title:transcribe.dockerfile
-# !collapse(1:31) collapsed
-FROM ghcr.io/astral-sh/uv:python3.11-bookworm-slim AS builder
-
-ARG HANDLER
-ENV HANDLER=${HANDLER}
-
-ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
-WORKDIR /app
-RUN --mount=type=cache,target=/root/.cache/uv \
-  --mount=type=bind,source=uv.lock,target=uv.lock \
-  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-  uv sync --frozen -v --no-install-project --extra ml --no-dev --no-python-downloads
-COPY . /app
-RUN --mount=type=cache,target=/root/.cache/uv \
-  uv sync --frozen -v --no-dev --extra ml --no-python-downloads
-
-FROM nvcr.io/nvidia/driver:550-5.15.0-1065-nvidia-ubuntu22.04
-
-ARG HANDLER
-
-ENV HANDLER=${HANDLER}
-ENV PYTHONUNBUFFERED=TRUE
-ENV PYTHONPATH="."
-ENV NVIDIA_DRIVER_CAPABILITIES=all
-ENV NVIDIA_REQUIRE_CUDA="cuda>=8.0"
-
+# Add Python 3.11 and FFMPEG
 RUN apt-get update -y && \
   apt-get install -y software-properties-common ffmpeg && \
   add-apt-repository ppa:deadsnakes/ppa && \
@@ -506,8 +288,8 @@ RUN apt-get update -y && \
   apt-get install -y python3.11 && \
   ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11
 
-# Copy the application from the builder
-COPY --from=builder --chown=app:app /app /app
+# !collapse(1:8) collapsed
+COPY --from=builder /app /app
 WORKDIR /app
 
 # Place executables in the environment at the front of the path
@@ -540,19 +322,19 @@ nitric.yaml
 README.md
 ```
 
-Finally, we can update the project file to point our batch job to our new dockerfile.
+Finally, we can update the project file to point our batch job to our new dockerfile. We also want to add the `batch-services` to our enabled preview features.
 
 ```yaml title:nitric.yaml
 name: podcast-transcription
 services:
-  - match: services/api.py
-    runtime: python
+  - match: services/*.py
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    runtime: python
 
 batch-services:
-  - match: batches/transcribe.py
-    runtime: transcribe
+  - match: batches/*.py
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    runtime: transcribe
 
 runtimes:
   python:
@@ -609,13 +391,6 @@ nitric up
 </Note>
 
 Once the project is deployed you can try out some transcriptions, just add a podcast to the bucket and the bucket notification will be triggered.
-
-<Note>
-Running the project in the cloud will incur costs. Make sure to monitor your usage and shut down the project if you're done with it.
-
-Running on g5.xlarge from testing this project will cost ~$0.05/minute of transcription. Based on standard EC2 pricing for US regions.
-
-</Note>
 
 You can destroy the project once it is finished using `nitric down`.
 
