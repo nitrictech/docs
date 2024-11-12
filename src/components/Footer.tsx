@@ -61,36 +61,38 @@ function SocialLink({
 function SmallPrint() {
   return (
     <div className="flex flex-col gap-10 border-t border-zinc-900/5 pt-8 dark:border-white/5">
-      <div className="flex flex-col items-center justify-between gap-5 sm:flex-row">
+      <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
         <div className="flex gap-4">
           <p className="text-xs text-zinc-500 dark:text-zinc-300">
             &copy; {new Date().getFullYear()} Nitric Inc.
           </p>
-          <span className="text-xs text-zinc-500">—</span>
-          <Link
-            href={'/misc/contributions'}
-            className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
-          >
-            Contributions
-          </Link>
-          <Link
-            href={'/misc/support'}
-            className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
-          >
-            Support
-          </Link>
-          <Link
-            href={'/get-started/foundations/why-nitric'}
-            className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
-          >
-            Foundations
-          </Link>
-          <Link
-            href={'/guides'}
-            className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
-          >
-            Guides
-          </Link>
+          <span className="hidden text-xs text-zinc-500 sm:block">—</span>
+          <div className="grid grid-cols-2 gap-4 sm:flex">
+            <Link
+              href={'/misc/contributions'}
+              className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
+            >
+              Contributions
+            </Link>
+            <Link
+              href={'/misc/support'}
+              className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
+            >
+              Support
+            </Link>
+            <Link
+              href={'/get-started/foundations/why-nitric'}
+              className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
+            >
+              Foundations
+            </Link>
+            <Link
+              href={'/guides'}
+              className="text-xs text-zinc-600 hover:underline dark:text-zinc-400"
+            >
+              Guides
+            </Link>
+          </div>
         </div>
         <div className="flex gap-4">
           <SocialLink href="https://x.com/nitric_io" icon={XIcon}>
