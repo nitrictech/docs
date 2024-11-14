@@ -19,3 +19,7 @@ jobs:
         env:
           POSTGRES_PRISMA_URL: ${{ secrets.POSTGRES_PRISMA_URL }}
           POSTGRES_URL_NON_POOLING: ${{ secrets.POSTGRES_URL_NON_POOLING }}
+      # Trigger the deployment of the main website for guide updates
+      - name: Trigger main website build
+        run: |
+          curl -X POST ${{ secrets.MAIN_WEBSITE_DEPLOY_URL }}
