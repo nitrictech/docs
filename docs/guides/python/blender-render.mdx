@@ -633,13 +633,14 @@ RUN --mount=type=cache,target=/var/cache/apt/archives \
   add-apt-repository ppa:deadsnakes/ppa && \
   apt-get install -y python3.11 && \
   ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 && \
-  rm -rf /var/lib/apt/lists/*
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python
 ```
 
 We'll then download blender using the `ADD` command, downloading and extracting the file into the `/app` directory so it can be used by our job application.
 
 ```dockerfile title:blender.dockerfile
-# !collapse(1:49) collapsed
+# !collapse(1:51) collapsed
 FROM ghcr.io/astral-sh/uv:python3.11-bookworm AS builder
 
 ARG HANDLER
@@ -688,7 +689,8 @@ RUN --mount=type=cache,target=/var/cache/apt/archives \
   add-apt-repository ppa:deadsnakes/ppa && \
   apt-get install -y python3.11 && \
   ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 && \
-  rm -rf /var/lib/apt/lists/*
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python
 
   # Blender variables used for specifying the blender version
   ARG BLENDER_OS="linux-x64"
@@ -706,7 +708,7 @@ RUN --mount=type=cache,target=/var/cache/apt/archives \
 Finally, we'll make sure we add our code from the base image and set the entrypoint as the python code.
 
 ```dockerfile title:blender.dockerfile
-# !collapse(1:61) collapsed
+# !collapse(1:63) collapsed
 FROM ghcr.io/astral-sh/uv:python3.11-bookworm AS builder
 
 ARG HANDLER
@@ -755,7 +757,8 @@ RUN --mount=type=cache,target=/var/cache/apt/archives \
   add-apt-repository ppa:deadsnakes/ppa && \
   apt-get install -y python3.11 && \
   ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 && \
-  rm -rf /var/lib/apt/lists/*
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python
 
 # Blender variables used for specifying the blender version
 ARG BLENDER_OS="linux-x64"
