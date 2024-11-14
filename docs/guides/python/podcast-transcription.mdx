@@ -5,8 +5,11 @@ tags:
   - AI & Machine Learning
 languages:
   - python
-published_at: 2024-11-07
-updated_at: 2024-11-07
+featured:
+  image: /docs/images/guides/podcast-transcription/featured.png
+  image_alt: 'Podcast Transcription featured image'
+published_at: 2024-11-15
+updated_at: 2024-11-15
 ---
 
 # Transcribing Podcasts using OpenAI Whisper
@@ -286,7 +289,9 @@ RUN apt-get update -y && \
   add-apt-repository ppa:deadsnakes/ppa && \
   apt-get update -y && \
   apt-get install -y python3.11 && \
-  ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python
 
 # !collapse(1:8) collapsed
 COPY --from=builder /app /app
@@ -346,12 +351,40 @@ preview:
   - batch-services
 ```
 
+### Testing the project
+
+Before deploying our project, we can test that it works as expected locally. You can do this using `nitric start` or if you'd prefer to run the program in containers use `nitric run`. Either way you can test the transcription by first uploading an audio file to the podcast bucket.
+
+<Note>
+  You can find most free podcasts for download by searching for it on
+  [Podbay](https://podbay.fm/).
+</Note>
+
+You can upload the podcast directly to the bucket using the [local dashboard](/get-started/foundations/projects/local-development#local-dashboard) or use the API to do it instead. If you want to use the API, start by getting the upload URL for the bucket.
+
+```bash
+curl http://localhost:4002/podcast/serial
+http://localhost:55736/write/eyJhbGciOi...
+```
+
+We'll then use the URL to put our data binary. I've stored the podcast as `serial.mp3`.
+
+```bash
+curl -X PUT --data-binary @"serial.mp3" http://localhost:55736/write/eyJhbGciOi...
+```
+
+Once that's done, the batch job will be triggered so you can just sit back and watch the transcription logs. When it finishes you can download the transcription from the bucket using the following cURL request.
+
+```bash
+curl -sL http://localhost:4002/transcript/serial
+```
+
 ### Requesting a G instance quota increase
 
 Most AWS accounts **will not** have access to on-demand GPU instances (G
 Instances), if you'd like to run models using a GPU you'll need to request a quota increase for G instances.
 
-If you prefer not to use a GPU you can set `gpus=0` in the `@transcribe_podcast` decorator in `batches/transcribe.py`.
+If you prefer not to use a GPU you can set `gpus=0` in the `@transcribe_podcast` decorator in `batches/transcribe.py`. The model runs pretty well on CPU, so a GPU is not entirely necessary.
 
 <Note>
   **Important:** If the gpus value in `batches/transcribe.py` exceeds the number
