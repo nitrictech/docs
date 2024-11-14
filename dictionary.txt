@@ -97,6 +97,9 @@ subcollections
 subcollection
 supertest
 localhost
+renderer
+bpy
+CUDA
 http
 BYO
 TLDR
