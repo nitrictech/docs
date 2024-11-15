@@ -102,6 +102,7 @@ from nitric.resources import BucketNotificationContext
 from nitric.context import HttpContext
 
 readable_transcript_bucket = transcript_bucket.allow("read")
+writable_podcast_bucket = podcast_bucket.allow("write")
 submittable_transcribe_job = transcribe_job.allow("submit")
 
 # Get a podcast transcript from the bucket
@@ -333,12 +334,12 @@ Finally, we can update the project file to point our batch job to our new docker
 name: podcast-transcription
 services:
   - match: services/*.py
-    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R uv run $SERVICE_PATH
     runtime: python
 
 batch-services:
   - match: batches/*.py
-    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R uv run $SERVICE_PATH
     runtime: transcribe
 
 runtimes:
