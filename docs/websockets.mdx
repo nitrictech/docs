@@ -170,7 +170,7 @@ socket.on('disconnect', async (ctx) => {
 ```
 
 ```python !!
-from nitric.resources import websocket
+from nitric.resources import websocket, kv
 from nitric.application import Nitric
 
 socket = websocket("socket")
@@ -331,7 +331,7 @@ socket.on('message', async (ctx) => {
 ```
 
 ```python !!
-from nitric.resources import websocket
+from nitric.resources import websocket, kv
 from nitric.application import Nitric
 
 socket = websocket("socket")
