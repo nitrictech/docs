@@ -12,13 +12,16 @@ const formatStarCount = (count: number) => {
   if (count >= 1000000) {
     return (count / 1000000).toFixed(1).replace(/\.0$/, '') + 'M'
   } else if (count >= 1000) {
-    return (count / 1000).toFixed(1).replace(/\.0$/, '') + 'k'
+    const rounded = Math.round(count / 100) / 10 // Round to the nearest decimal
+    return rounded.toFixed(1).replace(/\.0$/, '') + 'k'
   }
-  return count
+  return count.toString()
 }
 
-const GitHubStarCount = ({ className }: { className?: string }) => {
-  const [starCount, setStarCount] = useState(1100)
+const DEFAULT_STAR_COUNT = 1150
+
+const GitHubStarCount = ({ className }: { className: string }) => {
+  const [starCount, setStarCount] = useState(DEFAULT_STAR_COUNT)
 
   useEffect(() => {
     const fetchStarCount = async () => {
@@ -27,11 +30,12 @@ const GitHubStarCount = ({ className }: { className?: string }) => {
         const cachedTimestamp = localStorage.getItem(STAR_COUNT_TIMESTAMP_KEY)
         const currentTime = new Date().getTime()
 
-        // Check if cached data exists and is still valid
         if (
           cachedStarCount &&
           cachedTimestamp &&
-          currentTime - parseInt(cachedTimestamp) < CACHE_DURATION
+          currentTime - parseInt(cachedTimestamp) < CACHE_DURATION &&
+          // Ensure cached value is at least the new default value
+          parseInt(cachedStarCount) >= DEFAULT_STAR_COUNT
         ) {
           setStarCount(JSON.parse(cachedStarCount))
         } else {
