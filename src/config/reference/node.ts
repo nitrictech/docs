@@ -68,6 +68,23 @@ export const NodeReference: NavGroup = {
       ],
     },
     {
+      title: 'Batch',
+      items: [
+        {
+          title: 'job()',
+          href: '/reference/nodejs/batch/job',
+        },
+        {
+          title: 'job.handler()',
+          href: '/reference/nodejs/batch/job-handler',
+        },
+        {
+          title: 'job.submit()',
+          href: '/reference/nodejs/batch/job-submit',
+        },
+      ],
+    },
+    {
       title: 'HTTP',
       items: [
         {

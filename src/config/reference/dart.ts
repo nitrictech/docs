@@ -72,6 +72,23 @@ export const DartReference: NavGroup = {
       ],
     },
     {
+      title: 'Batch',
+      items: [
+        {
+          title: 'job()',
+          href: '/reference/dart/batch/job',
+        },
+        {
+          title: 'job.handler()',
+          href: '/reference/dart/batch/job-handler',
+        },
+        {
+          title: 'job.submit()',
+          href: '/reference/dart/batch/job-submit',
+        },
+      ],
+    },
+    {
       title: 'Key Value Stores',
       items: [
         {

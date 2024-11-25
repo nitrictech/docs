@@ -48,6 +48,23 @@ export const PyReference: NavGroup = {
       ],
     },
     {
+      title: 'Batch',
+      items: [
+        {
+          title: 'job()',
+          href: '/reference/python/batch/job',
+        },
+        {
+          title: 'job.handler()',
+          href: '/reference/python/batch/job-handler',
+        },
+        {
+          title: 'job.submit()',
+          href: '/reference/python/batch/job-submit',
+        },
+      ],
+    },
+    {
       title: 'Key Value Stores',
       items: [
         {
@@ -69,19 +86,6 @@ export const PyReference: NavGroup = {
         {
           title: 'kv.keys()',
           href: '/reference/python/keyvalue/keyvalue-keys',
-        },
-      ],
-    },
-    {
-      title: 'Sql',
-      items: [
-        {
-          title: 'sql()',
-          href: '/reference/python/sql/sql',
-        },
-        {
-          title: 'sql.connection_string()',
-          href: '/reference/python/sql/sql-connection-string',
         },
       ],
     },
@@ -182,6 +186,19 @@ export const PyReference: NavGroup = {
         {
           title: 'file.upload_url()',
           href: '/reference/python/storage/bucket-file-uploadurl',
+        },
+      ],
+    },
+    {
+      title: 'SQL',
+      items: [
+        {
+          title: 'sql()',
+          href: '/reference/python/sql/sql',
+        },
+        {
+          title: 'sql.connection_string()',
+          href: '/reference/python/sql/sql-connection-string',
         },
       ],
     },
