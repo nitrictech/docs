@@ -35,6 +35,10 @@ export const GoReference: NavGroup = {
           href: '/reference/go/secrets/secret',
         },
         {
+          title: 'NewSqlDatabase()',
+          href: '/reference/go/sql/sql',
+        },
+        {
           title: 'NewBucket()',
           href: '/reference/go/storage/bucket',
         },
@@ -212,6 +216,15 @@ export const GoReference: NavGroup = {
         {
           title: 'Bucket.UploadUrl()',
           href: '/reference/go/storage/bucket-uploadurl',
+        },
+      ],
+    },
+    {
+      title: 'SQL',
+      items: [
+        {
+          title: 'SqlDatabase.ConnectionString()',
+          href: '/reference/go/sql/sql-connection-string',
         },
       ],
     },

@@ -1,0 +1,45 @@
+---
+description: "Reference for Nitric's Go library - Returns the connection string for a SQL database at runtime."
+---
+
+# Go - SqlDatabase.ConnectionString()
+
+Returns the connection string for a SQL database at runtime.
+
+```go
+import (
+  "context"
+
+  "github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+  db := nitric.NewSqlDatabase("my-database")
+
+  // Should be called at runtime, such as in a service handler
+  connStr, _ := db.ConnectionString(context.TODO())
+
+  nitric.Run()
+}
+```
+
+## Examples
+
+### Return a connection string
+
+```go
+import (
+  "context"
+
+  "github.com/nitrictech/go-sdk/nitric"
+)
+
+func main() {
+  db := nitric.NewSqlDatabase("my-database")
+
+  // Should be called at runtime, such as in a service handler
+  connStr, _ := db.ConnectionString(context.TODO())
+
+  nitric.Run()
+}
+```
