@@ -19,6 +19,10 @@ export const GoReference: NavGroup = {
           href: '/reference/go/api/api',
         },
         {
+          title: 'NewJob()',
+          href: '/reference/go/batch/job',
+        },
+        {
           title: 'NewKv()',
           href: '/reference/go/keyvalue/keyvalue',
         },
@@ -98,6 +102,19 @@ export const GoReference: NavGroup = {
         {
           title: 'Api.Route.Patch()',
           href: '/reference/go/api/api-route-patch',
+        },
+      ],
+    },
+    {
+      title: 'Batch',
+      items: [
+        {
+          title: 'Job.Handler()',
+          href: '/reference/go/batch/job-handler',
+        },
+        {
+          title: 'Job.Submit()',
+          href: '/reference/go/batch/job-submit',
         },
       ],
     },
