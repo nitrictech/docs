@@ -44,7 +44,10 @@ export const collapseTrigger: AnnotationHandler = {
   name: 'CollapseTrigger',
   onlyIfAnnotated: true,
   AnnotatedLine: ({ annotation, ...props }) => (
-    <CollapsibleTrigger className="group contents">
+    <CollapsibleTrigger
+      className="group contents"
+      aria-label="Toggle show code"
+    >
       <InnerLine merge={props} data={{ icon }} />
     </CollapsibleTrigger>
   ),
