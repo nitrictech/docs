@@ -1,0 +1,207 @@
+---
+description: Instrument your Nitric application with Datadog for monitoring.
+tags:
+  - Monitoring
+  - AWS
+languages:
+  - typescript
+  - javascript
+published_at: 2024-11-26
+---
+
+# Instrumenting your Nitric application with Datadog
+
+This guide walks you through the steps to instrument your Nitric app with Datadog without changing any application code.
+Once you're done, you'll be able to monitor your application from Datadog's dashboard.
+
+<img
+  src="/docs/images/guides/aws-datadog-monitoring/datadog-dashboard.png"
+  style={{ maxWidth: 800, width: '100%' }}
+  alt="Screenshot of Datadog dashboard showing metrics"
+/>
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/en/download/)
+- The [Nitric CLI](/get-started/installation)
+- An account with [Datadog](https://www.datadoghq.com/)
+- An account with [AWS](https://aws.amazon.com/)
+
+## Getting started
+
+Begin by creating a new project using the Nitric TypeScript template and installing dependencies:
+
+```bash
+nitric new my-api ts-starter
+cd my-api
+npm install
+```
+
+## Add Datadog libraries to your container image
+
+Nitric applications deploy as containerized applications, you'll need to include the Datadog Lambda and tracing libraries in your container image:
+
+```bash
+npm install datadog-lambda-js dd-trace
+```
+
+## Add the Datadog Lambda extension
+
+To enable Datadog monitoring, add the Datadog Lambda Extension to your container image by modifying your `node.dockerfile`. Add the following lines to the end of your dockerfile, just before you define your entrypoint `ENTRYPOINT ["node", "lib/index.js"]`.
+
+1. **Fetch and copy the Datadog Lambda Extension**  
+   Retrieve the Lambda Extension from Amazon's Elastic Container Registry (ECR) and copy its contents into the `/opt/` directory of your image. This extension runs as a sidecar process, collecting and forwarding telemetry data to Datadog.
+
+   ```dockerfile
+   COPY --from=public.ecr.aws/datadog/lambda-extension:latest-alpine /opt/. /opt/
+   ```
+
+2. **Remove the default Datadog handler file**  
+   The default `handler.js` file from `datadog-lambda-js` might contain unnecessary boilerplate functionality.
+
+   ```dockerfile
+   RUN rm node_modules/datadog-lambda-js/dist/handler.js
+   ```
+
+3. **Define the container's entry point**  
+   Configure the Lambda runtime to use the specialized `handler.handler` file as the entry point:
+
+   ```dockerfile
+   CMD ["node_modules/datadog-lambda-js/dist/handler.handler"]
+   ```
+
+### Final dockerfile
+
+Here's your complete `node.dockerfile`:
+
+```dockerfile title:node.dockerfile
+# syntax=docker/dockerfile:1
+FROM node:22.4.1-alpine as build
+
+ARG HANDLER
+
+# Python and make are required by certain native package build processes in NPM packages.
+RUN --mount=type=cache,sharing=locked,target=/etc/apk/cache \
+    apk --update-cache add git g++ make py3-pip
+
+RUN yarn global add typescript @vercel/ncc
+
+WORKDIR /usr/app
+
+COPY package.json *.lock *-lock.json ./
+
+RUN yarn import || echo ""
+
+RUN --mount=type=cache,sharing=locked,target=/tmp/.yarn_cache \
+    set -ex && \
+    yarn install --production --prefer-offline --frozen-lockfile --cache-folder /tmp/.yarn_cache
+
+RUN test -f tsconfig.json || echo "{\"compilerOptions\":{\"esModuleInterop\":true,\"target\":\"es2015\",\"moduleResolution\":\"node\"}}" > tsconfig.json
+
+COPY . .
+
+RUN --mount=type=cache,target=/tmp/ncc-cache \
+    ncc build ${HANDLER} -o lib/ -t
+
+FROM node:22.4.1-alpine as final
+
+RUN apk update && \
+    apk add --no-cache ca-certificates && \
+    update-ca-certificates
+
+WORKDIR /usr/app
+
+COPY . .
+
+COPY --from=build /usr/app/node_modules/ ./node_modules/
+COPY --from=build /usr/app/lib/ ./lib/
+
+# !diff +
+# Add Datadog Lambda Extension
+# !diff +
+COPY --from=public.ecr.aws/datadog/lambda-extension:latest-alpine /opt/. /opt/
+# !diff +
+
+# !diff +
+# Remove default Datadog handler
+# !diff +
+RUN rm node_modules/datadog-lambda-js/dist/handler.js
+# !diff +
+
+# !diff +
+# Define the entry point
+# !diff +
+CMD ["node_modules/datadog-lambda-js/dist/handler.handler"]
+
+ENTRYPOINT ["node", "lib/index.js"]
+```
+
+## Configure environment variables
+
+Create an `.env` file in the root directory of your project and add/update the following variables.
+
+```yaml title:.env
+DD_API_KEY=your-datadog-api-key
+DD_LOG_LEVEL=info
+DD_SERVICE=my-api
+DD_ENV=aws-dev-environment
+DD_SITE=datadoghq.com
+DD_VERSION=0.0.1
+AWS_LAMBDA_EXEC_WRAPPER=/opt/datadog_wrapper
+```
+
+These variables allow Datadog to group and categorize your application so that you can use filters in the dashboard.
+
+<Note>
+  Your Datadog API key should be stored securely. For testing purposes, this
+  example uses `DD_API_KEY`. In production, consider using
+  `DD_API_KEY_SECRET_ARN` with an AWS Secrets Manager ARN.
+</Note>
+
+## Deploy to AWS
+
+To deploy the application to AWS, create a `stack` and configure the `AWS Pulumi` provider:
+
+```bash
+nitric stack new dev
+```
+
+Edit the `nitric.dev.yaml` file to set your target AWS region:
+
+```yaml title:nitric.dev.yaml
+provider: nitric/aws@1.15.6
+region: us-east-1
+```
+
+Deploy your application with:
+
+```bash
+nitric up
+```
+
+<Note>
+  Cloud deployments may incur costs. While many resources are available under
+  free-tier pricing, consider the deployment costs carefully.
+</Note>
+
+## View Metrics in Datadog
+
+You'll need to run your application a few times to gather logs/metrics.
+
+```
+curl https://XXXXXXXXXX.execute-api.us-east-1.amazonaws.com/hello/datadog
+```
+
+Then log in to your [Datadog account](https://app.datadoghq.com/functions) and navigate to the serverless functions dashboard. You should see logs, traces, and custom metrics collected from your application.
+
+<img
+  src="/docs/images/guides/aws-datadog-monitoring/datadog-dashboard.png"
+  style={{ maxWidth: 800, width: '100%' }}
+  alt="Screenshot of Datadog dashboard showing metrics"
+/>
+
+<Note>
+  You'll need to create an AWS integration, follow the wizard at
+  https://app.datadoghq.com/integrations which will help you connect your AWS
+  Account to Datadog and provision the appropriate IAM.
+</Note>
