@@ -47,28 +47,13 @@ npm install datadog-lambda-js dd-trace
 
 ## Add the Datadog Lambda extension
 
-To enable Datadog monitoring, add the Datadog Lambda Extension to your container image by modifying your `node.dockerfile`. Add the following lines to the end of your dockerfile, just before you define your entrypoint `ENTRYPOINT ["node", "lib/index.js"]`.
+To enable Datadog monitoring, add the Datadog Lambda Extension to your container image by modifying your `node.dockerfile`. Add the following lines to the end of the final stage.
 
-1. **Fetch and copy the Datadog Lambda Extension**  
-   Retrieve the Lambda Extension from Amazon's Elastic Container Registry (ECR) and copy its contents into the `/opt/` directory of your image. This extension runs as a sidecar process, collecting and forwarding telemetry data to Datadog.
+Retrieve the Lambda Extension from Amazon's Elastic Container Registry (ECR) and copy its contents into the `/opt/` directory of your image. This extension runs as a sidecar process, collecting and forwarding telemetry data to Datadog.
 
-   ```dockerfile
-   COPY --from=public.ecr.aws/datadog/lambda-extension:latest-alpine /opt/. /opt/
-   ```
-
-2. **Remove the default Datadog handler file**  
-   The default `handler.js` file from `datadog-lambda-js` might contain unnecessary boilerplate functionality.
-
-   ```dockerfile
-   RUN rm node_modules/datadog-lambda-js/dist/handler.js
-   ```
-
-3. **Define the container's entry point**  
-   Configure the Lambda runtime to use the specialized `handler.handler` file as the entry point:
-
-   ```dockerfile
-   CMD ["node_modules/datadog-lambda-js/dist/handler.handler"]
-   ```
+```dockerfile
+COPY --from=public.ecr.aws/datadog/lambda-extension:latest-alpine /opt/. /opt/
+```
 
 ### Final dockerfile
 
@@ -122,17 +107,6 @@ COPY --from=build /usr/app/lib/ ./lib/
 COPY --from=public.ecr.aws/datadog/lambda-extension:latest-alpine /opt/. /opt/
 # !diff +
 
-# !diff +
-# Remove default Datadog handler
-# !diff +
-RUN rm node_modules/datadog-lambda-js/dist/handler.js
-# !diff +
-
-# !diff +
-# Define the entry point
-# !diff +
-CMD ["node_modules/datadog-lambda-js/dist/handler.handler"]
-
 ENTRYPOINT ["node", "lib/index.js"]
 ```
 
@@ -180,7 +154,7 @@ nitric up
 ```
 
 <Note>
-  Cloud deployments may incur costs. While many resources are available under
+  Datadog services and Cloud deployments may incur costs. While many resources are available under
   free-tier pricing, consider the deployment costs carefully.
 </Note>
 
