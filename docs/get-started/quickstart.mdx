@@ -117,14 +117,14 @@ npm install
 ```bash Python
 cd hello-world
 
-pipenv install --dev
+uv sync
 ```
 
 <Note>
-  We recommend using [Pipenv](https://pipenv.pypa.io/en/latest/) for dependency
-  management and virtual environments. It's included it in our python templates
-  by default. Installation instructions:
-  https://pipenv.pypa.io/en/latest/installation/#preferred-installation-of-pipenv
+  We use `uv` by default in our base py-starter template. If you would prefer to use another dependency manager we also have a template for `pipenv`.
+
+If there are other dependency managers you would like to see supported, please let us know in out [github issues](github.com/nitrictech/nitric/issues).
+
 </Note>
 
 </TabItem>
