@@ -131,7 +131,7 @@ async def list_planets(ctx):
 
 @galaxy_api.post("/planets")
 async def create_planet(ctx):
-  create_planet(ctx.req.json())
+  create_planet(ctx.req.json)
   ctx.res.status = 201
 ```
 
