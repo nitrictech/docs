@@ -585,9 +585,9 @@ ENV NVIDIA_REQUIRE_CUDA="cuda>=8.0"
 RUN apt-get update -y && \
   apt-get install -y software-properties-common && \
   add-apt-repository ppa:deadsnakes/ppa && \
-  apt-get update -y && \
   apt-get install -y python3.11 && \
   ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3 && \
   ln -sf /usr/bin/python3.11 /usr/local/bin/python
 
 # Copy the application from the builder
