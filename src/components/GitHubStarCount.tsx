@@ -1,7 +1,8 @@
 'use client'
 
+import { getStarGazers } from '@/lib/stargazers'
 import clsx from 'clsx'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 const STAR_COUNT_KEY = 'nitric_github_star_count'
 const STAR_COUNT_TIMESTAMP_KEY = 'nitric_github_star_count_timestamp'
@@ -18,10 +19,16 @@ const formatStarCount = (count: number) => {
   return count.toString()
 }
 
-const DEFAULT_STAR_COUNT = 1150
+interface GitHubStarCountProps {
+  className: string
+  defaultStarCount: number
+}
 
-const GitHubStarCount = ({ className }: { className: string }) => {
-  const [starCount, setStarCount] = useState(DEFAULT_STAR_COUNT)
+const GitHubStarCount: FC<GitHubStarCountProps> = ({
+  className,
+  defaultStarCount,
+}) => {
+  const [starCount, setStarCount] = useState(defaultStarCount)
 
   useEffect(() => {
     const fetchStarCount = async () => {
@@ -35,7 +42,7 @@ const GitHubStarCount = ({ className }: { className: string }) => {
           cachedTimestamp &&
           currentTime - parseInt(cachedTimestamp) < CACHE_DURATION &&
           // Ensure cached value is at least the new default value
-          parseInt(cachedStarCount) >= DEFAULT_STAR_COUNT
+          parseInt(cachedStarCount) >= defaultStarCount
         ) {
           setStarCount(JSON.parse(cachedStarCount))
         } else {
