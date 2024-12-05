@@ -328,7 +328,7 @@ import os
 import zipfile
 import requests
 
-models = models_bucket.allow('write')
+models = models_bucket.allow('write', 'read')
 generate_audio = gen_audio_job.allow('submit')
 download_audio_model = download_audio_model_topic.allow("publish")
 
@@ -560,6 +560,7 @@ ENV HANDLER=${HANDLER}
 
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONPATH=.
 WORKDIR /app
+COPY uv.lock pyproject.toml /app/
 RUN --mount=type=cache,target=/root/.cache/uv \
   --mount=type=bind,source=uv.lock,target=uv.lock \
   --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
@@ -584,9 +585,10 @@ ENV NVIDIA_REQUIRE_CUDA="cuda>=8.0"
 RUN apt-get update -y && \
   apt-get install -y software-properties-common && \
   add-apt-repository ppa:deadsnakes/ppa && \
-  apt-get update -y && \
   apt-get install -y python3.11 && \
-  ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python3 && \
+  ln -sf /usr/bin/python3.11 /usr/local/bin/python
 
 # Copy the application from the builder
 COPY --from=builder --chown=app:app /app /app
@@ -712,7 +714,7 @@ If you want to use a GPU you'll need to request a quota increase for G instances
 To request a quota increase for G instances in AWS you can follow these steps:
 
 1. Go to the [AWS Service Quotas for EC2](https://console.aws.amazon.com/servicequotas/home/services/ec2/quotas) page.
-2. Find/Search for **All G and VT Spot Instance Requests**
+2. Find/Search for **Running On-Demand G and VT instances**
 3. Click **Request quota increase**
 4. Choose an appropriate value, e.g. 4, 8 or 16 depending on your needs
 
