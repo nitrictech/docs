@@ -70,7 +70,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
     },
     alternates: {
-      canonical: url,
+      canonical: doc.canonical_url ? doc.canonical_url : url,
     },
   }
 }
