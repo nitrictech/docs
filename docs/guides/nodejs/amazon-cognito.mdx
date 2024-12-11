@@ -8,7 +8,7 @@ languages:
   - typescript
   - javascript
 published_at: 2023-10-09
-updated_at: 2024-05-15
+updated_at: 2024-12-11
 ---
 
 # Securing APIs with Amazon Cognito
@@ -42,14 +42,16 @@ In this new Nitric project there will be an example API with a single `GET: /hel
 
 <TabItem label="TypeScript">
 
-```typescript !! title:services/hello.ts
+```typescript title:services/api.ts
 import { api } from '@nitric/sdk'
 
-const helloApi = api('main')
+const mainApi = api('main')
 
-helloApi.get('/hello/:name', async (ctx) => {
+mainApi.get('/hello/:name', async (ctx) => {
   const { name } = ctx.req.params
+
   ctx.res.body = `Hello ${name}`
+
   return ctx
 })
 ```
@@ -58,14 +60,16 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 <TabItem label="JavaScript">
 
-```javascript !! title:services/hello.js
+```javascript title:services/api.js
 import { api } from '@nitric/sdk'
 
-const helloApi = api('main')
+const mainApi = api('main')
 
-helloApi.get('/hello/:name', async (ctx) => {
+mainApi.get('/hello/:name', async (ctx) => {
   const { name } = ctx.req.params
+
   ctx.res.body = `Hello ${name}`
+
   return ctx
 })
 ```
@@ -78,30 +82,32 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 [Nitric APIs](/apis#api-security) allow initial token authentication to be performed by the API Gateways of various cloud providers, such as AWS API Gateway. When configured correctly this will ensure unauthenticated requests are rejected before reaching your application code.
 
-To add this API Gateway authentication we need to create a `security definition` and then apply that definition to specific routes or the entire API. Here we'll update the `main` API by adding a new security definition named `cognito`.
+To add this API Gateway authentication we need to create a `security definition` and then apply that definition to specific routes or the entire API. Here we'll update the `main` API by adding a new security definition named `cognito`. This will apply to all routes in the API.
 
 <Tabs syncKey="lang-node">
 
 <TabItem label="TypeScript">
 
-```typescript !! title:services/hello.ts
-import { api } from '@nitric/sdk'
+```typescript title:services/api.ts
+import { api, oidcRule } from '@nitric/sdk'
 
-const helloApi = api('main', {
-  // declare security definition named 'cognito'.
-  securityDefinitions: {
-    cognito: {
-      kind: 'jwt',
-      issuer:
-        'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
-      audiences: ['<app-client-id>'],
-    },
-  },
+const defaultSecurityRule = oidcRule({
+  name: 'cognito',
+  issuer:
+    'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
+  audiences: ['<app-client-id>'],
 })
 
-helloApi.get('/hello/:name', async (ctx) => {
+const mainApi = api('main', {
+  // apply the security definition to all routes in this API.
+  security: [defaultSecurityRule()],
+})
+
+mainApi.get('/hello/:name', async (ctx) => {
   const { name } = ctx.req.params
+
   ctx.res.body = `Hello ${name}`
+
   return ctx
 })
 ```
@@ -110,24 +116,26 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 <TabItem label="JavaScript">
 
-```javascript !! title:services/hello.js
-import { api } from '@nitric/sdk'
+```javascript title:services/api.js
+import { api, oidcRule } from '@nitric/sdk'
 
-const helloApi = api('main', {
-  // declare security definition named 'cognito'.
-  securityDefinitions: {
-    cognito: {
-      kind: 'jwt',
-      issuer:
-        'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
-      audiences: ['<app-client-id>'],
-    },
-  },
+const defaultSecurityRule = oidcRule({
+  name: 'cognito',
+  issuer:
+    'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
+  audiences: ['<app-client-id>'],
 })
 
-helloApi.get('/hello/:name', async (ctx) => {
+const mainApi = api('main', {
+  // apply the security definition to all routes in this API.
+  security: [defaultSecurityRule()],
+})
+
+mainApi.get('/hello/:name', async (ctx) => {
   const { name } = ctx.req.params
+
   ctx.res.body = `Hello ${name}`
+
   return ctx
 })
 ```
@@ -140,74 +148,6 @@ helloApi.get('/hello/:name', async (ctx) => {
   You will need to update the `region`, `user-pool-id` and `app-client-id`
   values to match your values from Amazon Cognito.
 </Note>
-
-Next, we need to ensure this security definition is applied, otherwise it won't be enforced. APIs can have multiple security definitions applied at different levels or to different routes. For example, you might have one security definition for external users and another for administrators/internal users.
-
-In this example we'll apply the security at the API level, ensuring all routes require authentication.
-
-<Tabs syncKey="lang-node">
-
-<TabItem label="TypeScript">
-
-```typescript !! title:services/hello.ts
-import { api } from '@nitric/sdk'
-
-const helloApi = api('main', {
-  // declare security definition named 'cognito'.
-  securityDefinitions: {
-    cognito: {
-      kind: 'jwt',
-      issuer:
-        'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
-      audiences: ['<app-client-id>'],
-    },
-  },
-  // apply the 'cognito' security definition to all routes in this API.
-  security: {
-    cognito: [],
-  },
-})
-
-helloApi.get('/hello/:name', async (ctx) => {
-  const { name } = ctx.req.params
-  ctx.res.body = `Hello ${name}`
-  return ctx
-})
-```
-
-</TabItem>
-
-<TabItem label="JavaScript">
-
-```javascript !! title:services/hello.js
-import { api } from '@nitric/sdk'
-
-const helloApi = api('main', {
-  // declare security definition named 'cognito'.
-  securityDefinitions: {
-    cognito: {
-      kind: 'jwt',
-      issuer:
-        'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
-      audiences: ['<app-client-id>'],
-    },
-  },
-  // apply the 'cognito' security definition to all routes in this API.
-  security: {
-    cognito: [],
-  },
-})
-
-helloApi.get('/hello/:name', async (ctx) => {
-  const { name } = ctx.req.params
-  ctx.res.body = `Hello ${name}`
-  return ctx
-})
-```
-
-</TabItem>
-
-</Tabs>
 
 <Note>
   It's worth noting that these security definitions are *not* enforced when
@@ -231,8 +171,8 @@ In the example below we're simply checking whether the user is a member of a par
 
 <TabItem label="TypeScript">
 
-```typescript !! title:services/hello.ts
-import { api, HttpContext, HttpMiddleware } from '@nitric/sdk'
+```typescript title:services/api.ts
+import { api, HttpContext, HttpMiddleware, oidcRule } from '@nitric/sdk'
 import * as jwt from 'jsonwebtoken'
 
 interface AccessToken {
@@ -255,6 +195,8 @@ const authorizeAuthors: HttpMiddleware = (ctx: AuthContext, next) => {
     : ctx.req.headers['authorization']
   const token = authHeader?.split(' ')[1]
 
+  // If no token is present, deny access.
+  // There should be a token as the security rules would be checked first, but this is a good practice.
   if (!token) {
     ctx.res.status = 401
     ctx.res.body = 'Unauthorized'
@@ -264,8 +206,11 @@ const authorizeAuthors: HttpMiddleware = (ctx: AuthContext, next) => {
   // It's valuable to validate the token's shape, skipped here for brevity.
   ctx.user = jwt.decode(token) as AccessToken
 
-  // Ensure the user is a member of the "authors" cognito group
-  if (!ctx.user['cognito:groups'].includes('authors')) {
+  // If the user is not a member of any groups or not an "author", deny access
+  if (
+    !ctx.user['cognito:groups'] ||
+    !ctx.user['cognito:groups'].includes('authors')
+  ) {
     ctx.res.status = 401
     ctx.res.body = 'Unauthorized'
     return ctx
@@ -274,24 +219,19 @@ const authorizeAuthors: HttpMiddleware = (ctx: AuthContext, next) => {
   return next(ctx)
 }
 
-const helloApi = api('main', {
-  // declare security definition named 'cognito'.
-  securityDefinitions: {
-    cognito: {
-      kind: 'jwt',
-      issuer:
-        'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
-      audiences: ['<app-client-id>'],
-    },
-  },
-  // apply the 'cognito' security definition to all routes in this API.
-  security: {
-    cognito: [],
-  },
+const defaultSecurityRule = oidcRule({
+  name: 'cognito',
+  issuer:
+    'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
+  audiences: ['<app-client-id>'],
+})
+
+const mainApi = api('main', {
+  security: [defaultSecurityRule()],
   middleware: [authorizeAuthors],
 })
 
-helloApi.get('/hello/:name', async (ctx: AuthContext) => {
+mainApi.get('/hello/:name', async (ctx: AuthContext) => {
   const { name } = ctx.req.params
   ctx.res.body = `Hello ${name}, you're group memberships include: ${ctx.user[
     'cognito:groups'
@@ -304,8 +244,8 @@ helloApi.get('/hello/:name', async (ctx: AuthContext) => {
 
 <TabItem label="JavaScript">
 
-```javascript !! title:services/hello.js
-import { api, HttpContext } from '@nitric/sdk'
+```javascript title:services/api.js
+import { api, oidcRule } from '@nitric/sdk'
 import * as jwt from 'jsonwebtoken'
 
 /**
@@ -320,17 +260,22 @@ const authorizeAuthors = (ctx, next) => {
     : ctx.req.headers['authorization']
   const token = authHeader?.split(' ')[1]
 
+  // If no token is present, deny access.
+  // There should be a token as the security rules would be checked first, but this is a good practice.
   if (!token) {
     ctx.res.status = 401
     ctx.res.body = 'Unauthorized'
     return ctx
   }
 
-  // It's valuable to check the token's shape, skipped here for brevity.
+  // It's valuable to validate the token's shape, skipped here for brevity.
   ctx.user = jwt.decode(token)
 
-  // Ensure the user is a member of the "authors" cognito group
-  if (!ctx.user['cognito:groups'].includes('authors')) {
+  // If the user is not a member of any groups or not an "author", deny access
+  if (
+    !ctx.user['cognito:groups'] ||
+    !ctx.user['cognito:groups'].includes('authors')
+  ) {
     ctx.res.status = 401
     ctx.res.body = 'Unauthorized'
     return ctx
@@ -339,24 +284,19 @@ const authorizeAuthors = (ctx, next) => {
   return next(ctx)
 }
 
-const helloApi = api('main', {
-  // declare security definition named 'cognito'.
-  securityDefinitions: {
-    cognito: {
-      kind: 'jwt',
-      issuer:
-        'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
-      audiences: ['<app-client-id>'],
-    },
-  },
-  // apply the 'cognito' security definition to all routes in this API.
-  security: {
-    cognito: [],
-  },
+const defaultSecurityRule = oidcRule({
+  name: 'cognito',
+  issuer:
+    'https://cognito-idp.<region>.amazonaws.com/<user-pool-id>/.well-known/openid-configuration',
+  audiences: ['<app-client-id>'],
+})
+
+const mainApi = api('main', {
+  security: [defaultSecurityRule()],
   middleware: [authorizeAuthors],
 })
 
-helloApi.get('/hello/:name', async (ctx) => {
+mainApi.get('/hello/:name', async (ctx) => {
   const { name } = ctx.req.params
   ctx.res.body = `Hello ${name}, you're group memberships include: ${ctx.user[
     'cognito:groups'
