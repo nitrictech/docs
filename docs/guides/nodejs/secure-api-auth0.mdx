@@ -6,7 +6,7 @@ languages:
   - typescript
   - javascript
 published_at: 2022-05-23
-updated_at: 2024-10-11
+updated_at: 2024-12-11
 ---
 
 # Securing your API with Auth0
@@ -56,14 +56,14 @@ Second we'll get the `issuer` for our API, this will be our Auth0 environment en
 
 ![get audience value](/docs/images/guides/auth0/auth0-get-issuer.png)
 
-In our new Nitric service you will have the following in the `hello.ts` file
+In our new Nitric service you will have the following in the `api.ts` file
 
-```typescript
+```typescript title:services/api.ts
 import { api } from '@nitric/sdk'
 
-const helloApi = api('main')
+const mainApi = api('main')
 
-helloApi.get('/hello/:name', async (ctx) => {
+mainApi.get('/hello/:name', async (ctx) => {
   const { name } = ctx.req.params
 
   ctx.res.body = `Hello ${name}`
@@ -74,27 +74,22 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 To secure our API we will need to import the `jwt` function from the Nitric SDK and configure our API gateway with the values we got from Auth0 in the above steps.
 
-```typescript
-import { api, jwt } from '@nitric/sdk'
+```typescript title:services/api.ts
+import { api, oidcRule } from '@nitric/sdk'
 
-const helloApi = api('main', {
-  // define security for this API
-  securityDefinitions: {
-    user: jwt({
-      issuer: 'https://your-auth0-app.region.auth0.com', // 👀 your issuer value goes here
-      audiences: ['testing'], // 👀 your audience value goes here
-    }),
-  },
-
-  security: {
-    // Apply the above security to the entire API, note the string matches the above key
-    user: [
-      // NOTE: The array option here is to specify required scopes, for simplicity we'll leave this blank for now
-    ],
-  },
+// define security for this API
+const defaultSecurityRule = oidcRule({
+  name: 'auth0',
+  issuer:
+    'https://your-auth0-app.region.auth0.com/.well-known/openid-configuration', // 👀 your issuer value goes here  audience: "api://default",
+  audiences: ['testing'], // 👀 your audience value goes here
 })
 
-helloApi.get('/hello/:name', async (ctx) => {
+const mainApi = api('main', {
+  security: [defaultSecurityRule()],
+})
+
+mainApi.get('/hello/:name', async (ctx) => {
   const { name } = ctx.req.params
 
   ctx.res.body = `Hello ${name}`
@@ -105,13 +100,13 @@ helloApi.get('/hello/:name', async (ctx) => {
 
 ## Testing the Security Definition
 
-To test our security we will need to deploy our application to a cloud that Nitric supports (security rules are currently not enforced when using `nitric run` for local development).
+To test our security we will need to deploy our application to a cloud that Nitric supports (security rules are currently not enforced for local development).
 
 If you don't have a stack already defined we'll create one with `nitric stack new`.
 
 Run `nitric stack new` and follow the prompts to create a new stack.
 
-Then run `nitric up` to deploy your application.
+Configure your stack, then run `nitric up` to deploy your application.
 
 We can check to see if our application is secure by calling it without an `Authorization` header
 
@@ -133,4 +128,4 @@ curl -H "Authorization: Bearer <INSERT_TOKEN>" <INSERT_API_GATEWAY>/hello/world
 
 Which should return `Hello world`.
 
-And that's all it takes to secure your Nitric APIs with Auth0 🎉. For more detailed information on available options for securing your APIs check out our [API docs](https://nitric.io/docs).
+And that's all it takes to secure your Nitric APIs with Auth0 🎉. For more detailed information on available options for securing your APIs check out our [API docs](/apis#api-security).
