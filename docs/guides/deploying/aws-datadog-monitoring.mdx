@@ -6,7 +6,7 @@ tags:
 languages:
   - typescript
   - javascript
-published_at: 2024-11-26
+published_at: 2024-12-13
 ---
 
 # Instrumenting your Nitric application with Datadog
@@ -26,6 +26,13 @@ Once you're done, you'll be able to monitor your application from Datadog's dash
 - The [Nitric CLI](/get-started/installation)
 - An account with [Datadog](https://www.datadoghq.com/)
 - An account with [AWS](https://aws.amazon.com/)
+
+<Note>
+  Datadog services and Cloud deployments incur costs. Many resources are
+  available under free-tier pricing, however, requests using the AWS API are
+  performed on every region by default by monitoring tools. You are responsible
+  for any costs you incur with Datadog or with AWS.
+</Note>
 
 ## Getting started
 
@@ -154,8 +161,9 @@ nitric up
 ```
 
 <Note>
-  Datadog services and Cloud deployments may incur costs. While many resources are available under
-  free-tier pricing, consider the deployment costs carefully.
+  Datadog services and Cloud deployments may incur costs. While many resources
+  are available under free-tier pricing, consider the deployment costs
+  carefully.
 </Note>
 
 ## View Metrics in Datadog

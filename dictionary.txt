@@ -37,6 +37,7 @@ args
 async
 aws
 backend
+checkov
 codebase
 composable
 config
