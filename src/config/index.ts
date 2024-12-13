@@ -58,6 +58,7 @@ export const navigation: NavEntry[] = [
               {
                 title: 'Overview',
                 href: '/get-started/foundations/projects',
+                breadcrumbRoot: true,
               },
               {
                 title: 'Configuration',
@@ -71,6 +72,7 @@ export const navigation: NavEntry[] = [
               {
                 title: 'Overview',
                 href: '/get-started/foundations/infrastructure',
+                breadcrumbRoot: true,
               },
               {
                 title: 'Services',
@@ -162,6 +164,7 @@ export const navigation: NavEntry[] = [
           {
             title: 'Overview',
             href: '/providers/pulumi',
+            breadcrumbRoot: true,
           },
           {
             title: 'AWS',
@@ -187,6 +190,7 @@ export const navigation: NavEntry[] = [
           {
             title: 'Overview',
             href: '/providers/terraform',
+            breadcrumbRoot: true,
           },
           {
             title: 'AWS',
@@ -207,6 +211,7 @@ export const navigation: NavEntry[] = [
           {
             title: 'Overview',
             href: '/providers/custom',
+            breadcrumbRoot: true,
           },
           {
             title: 'Provider Extension',
