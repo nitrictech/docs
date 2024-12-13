@@ -702,3 +702,7 @@ await Future.wait(messages.map((message) async {
 It's common to ask when to use a queue or a topic. From a publisher's point of view, both queues and topics are almost identical. The difference is primarily on the receiver/subscriber side. Topics push new messages to their subscribers, immediately spinning up workers to process them, while queues rely on the receiver to ask for new messages to process.
 
 For these reasons, we usually default to Topics. Queues are more suitable for batch workloads or situations where there are occasional surges of requests that can be processed at a later time.
+
+## Cloud Service Mapping
+
+Each cloud provider comes with a set of default services used when deploying resources. You can find the full list of these default cloud services in the [Deploy documentation: Default Cloud Services](/providers#default-cloud-services).
