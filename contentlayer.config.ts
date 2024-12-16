@@ -35,6 +35,10 @@ const baseFields: FieldDefs = {
     type: 'boolean',
     description: 'Disable the github edit button',
   },
+  canonical_url: {
+    type: 'string',
+    description: 'The canonical url of the doc, if different from the url',
+  },
 }
 
 const computedFields: ComputedFields = {
