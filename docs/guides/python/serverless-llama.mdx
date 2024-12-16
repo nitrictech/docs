@@ -235,6 +235,15 @@ config:
       ephemeral-storage: 1024
 ```
 
+<Note>
+  Nitric defaults aim to keep you within your free-tier limits. In this example,
+  we recommend increasing memory and ephemeral values to allow the llama model
+  to load correctly, therefore running this sample project will likely incur
+  more costs than a Nitric guide using the defaults. You are responsible for
+  staying within the limits of the free tier or any costs associated with
+  deployment.
+</Note>
+
 Since we'll use Nitric's default Pulumi AWS Provider make sure you're setup to deploy using that provider. You can find more information on how to set up the AWS provider in the [Nitric AWS Provider documentation](/providers/pulumi/aws).
 
 <Note>
