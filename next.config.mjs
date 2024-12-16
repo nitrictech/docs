@@ -524,7 +524,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/docs/reference/providers/pulumi/aws/configuration',
+        source: '/docs/providers/pulumi/aws/configuration',
         destination: '/docs/providers/pulumi/aws#stack-configuration',
         basePath: false,
         permanent: true,
