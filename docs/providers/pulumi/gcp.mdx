@@ -57,6 +57,37 @@ Download & install the [latest CLI release](https://cloud.google.com/sdk/install
 
 For Google Cloud to allow deployments, a billing account must be [created and attached](https://console.cloud.google.com/billing) to the project you deploy to.
 
+## Importing Existing Resources
+
+The Nitric team is working to expand the list of resources that can be imported. Currently, only the following resources are supported:
+
+- [Secrets](/secrets)
+
+<Note>
+  Only resources in the same GCP project as specified by gcp-project-id are
+  currently supported.
+</Note>
+
+### Secrets
+
+To import a secret, you will need to know the secret's unique name. You can find the name of a secret in the Google Cloud Secret Manager in the browser or by using the gcloud CLI.
+
+First add the secret to your project as you usually would if it wasn't imported. Then add the secret to the `import` section of your stack file. Here's an example of how to import a secret:
+
+```javascript
+import { secret } from "@nitric/sdk
+
+const mySecret = secret("credentials").allow("access");
+```
+
+```yaml
+import:
+  secrets:
+    credentials: existing-secret
+```
+
+Need to import another resource type or have another question? Chat with us on [Discord](https://nitric.io/chat) or [open an issue](https://github.com/nitrictech/nitric/issues) on GitHub.
+
 ## Stack Configuration
 
 ```yaml title:nitric.[stack ID].yaml
