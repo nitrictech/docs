@@ -518,6 +518,12 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/docs/providers/pulumi/aws/imports',
+        destination: '/docs/providers/pulumi/aws#importing-existing-resources',
+        basePath: false,
+        permanent: true,
+      },
+      {
         source: '/docs/reference/providers/aws/configuration',
         destination: '/docs/providers/pulumi/aws#stack-configuration',
         basePath: false,
