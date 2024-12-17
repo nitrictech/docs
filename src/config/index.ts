@@ -23,7 +23,7 @@ import { NodeReference } from './reference/node'
 import { PyReference } from './reference/python'
 import { DartReference } from './reference/dart'
 import { GoReference } from './reference/go'
-import { FaAws } from 'react-icons/fa'
+import { FaAws, FaSitemap } from 'react-icons/fa'
 
 export const navigation: NavEntry[] = [
   {
@@ -58,6 +58,7 @@ export const navigation: NavEntry[] = [
               {
                 title: 'Overview',
                 href: '/get-started/foundations/projects',
+                breadcrumbRoot: true,
               },
               {
                 title: 'Configuration',
@@ -71,6 +72,7 @@ export const navigation: NavEntry[] = [
               {
                 title: 'Overview',
                 href: '/get-started/foundations/infrastructure',
+                breadcrumbRoot: true,
               },
               {
                 title: 'Services',
@@ -162,6 +164,7 @@ export const navigation: NavEntry[] = [
           {
             title: 'Overview',
             href: '/providers/pulumi',
+            breadcrumbRoot: true,
           },
           {
             title: 'AWS',
@@ -187,6 +190,7 @@ export const navigation: NavEntry[] = [
           {
             title: 'Overview',
             href: '/providers/terraform',
+            breadcrumbRoot: true,
           },
           {
             title: 'AWS',
@@ -201,12 +205,142 @@ export const navigation: NavEntry[] = [
         ],
       },
       {
+        title: 'Service Mappings',
+        icon: FaSitemap,
+        items: [
+          {
+            title: 'AWS',
+            items: [
+              {
+                title: 'APIs',
+                href: '/providers/mappings/aws/apis',
+              },
+              {
+                title: 'Batch',
+                href: '/providers/mappings/aws/batch',
+              },
+              {
+                title: 'Schedules',
+                href: '/providers/mappings/aws/schedules',
+              },
+              {
+                title: 'Websockets',
+                href: '/providers/mappings/aws/websockets',
+              },
+              {
+                title: 'Storage',
+                href: '/providers/mappings/aws/storage',
+              },
+              {
+                title: 'Key/Value Stores',
+                href: '/providers/mappings/aws/keyvalue',
+              },
+              {
+                title: 'SQL Databases',
+                href: '/providers/mappings/aws/sql',
+              },
+              {
+                title: 'Topics',
+                href: '/providers/mappings/aws/topics',
+              },
+              {
+                title: 'Queues',
+                href: '/providers/mappings/aws/queues',
+              },
+              {
+                title: 'Secrets',
+                href: '/providers/mappings/aws/secrets',
+              },
+            ],
+          },
+          {
+            title: 'Azure',
+            items: [
+              {
+                title: 'APIs',
+                href: '/providers/mappings/azure/apis',
+              },
+              {
+                title: 'Schedules',
+                href: '/providers/mappings/azure/schedules',
+              },
+              {
+                title: 'Storage',
+                href: '/providers/mappings/azure/storage',
+              },
+              {
+                title: 'Key/Value Stores',
+                href: '/providers/mappings/azure/keyvalue',
+              },
+              {
+                title: 'SQL Databases',
+                href: '/providers/mappings/azure/sql',
+              },
+              {
+                title: 'Topics',
+                href: '/providers/mappings/azure/topics',
+              },
+              {
+                title: 'Queues',
+                href: '/providers/mappings/azure/queues',
+              },
+              {
+                title: 'Secrets',
+                href: '/providers/mappings/azure/secrets',
+              },
+            ],
+          },
+          {
+            title: 'Google Cloud',
+            items: [
+              {
+                title: 'APIs',
+                href: '/providers/mappings/gcp/apis',
+              },
+              {
+                title: 'Batch',
+                href: '/providers/mappings/gcp/batch',
+              },
+              {
+                title: 'Schedules',
+                href: '/providers/mappings/gcp/schedules',
+              },
+              {
+                title: 'Storage',
+                href: '/providers/mappings/gcp/storage',
+              },
+              {
+                title: 'Key/Value Stores',
+                href: '/providers/mappings/gcp/keyvalue',
+              },
+              {
+                title: 'SQL Databases',
+                href: '/providers/mappings/gcp/sql',
+              },
+              {
+                title: 'Topics',
+                href: '/providers/mappings/gcp/topics',
+              },
+              {
+                title: 'Queues',
+                href: '/providers/mappings/gcp/queues',
+              },
+              {
+                title: 'Secrets',
+                href: '/providers/mappings/gcp/secrets',
+              },
+            ],
+          },
+        ],
+      },
+      {
         title: 'Custom',
         icon: CodeBracketIcon,
         items: [
           {
             title: 'Overview',
             href: '/providers/custom',
+            breadcrumbRoot: true,
           },
           {
             title: 'Provider Extension',

@@ -477,6 +477,34 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       },
+      ...[
+        'apis',
+        'keyvalue',
+        'queues',
+        'topics',
+        'schedules',
+        'secrets',
+        'storage',
+      ].flatMap((page) => [
+        {
+          source: `/docs/providers/pulumi/aws/${page}`,
+          destination: `/docs/providers/mappings/aws/${page}`,
+          basePath: false,
+          permanent: true,
+        },
+        {
+          source: `/docs/providers/pulumi/azure/${page}`,
+          destination: `/docs/providers/mappings/azure/${page}`,
+          basePath: false,
+          permanent: true,
+        },
+        {
+          source: `/docs/providers/pulumi/gcp/${page}`,
+          destination: `/docs/providers/mappings/gcp/${page}`,
+          basePath: false,
+          permanent: true,
+        },
+      ]),
       {
         source: '/docs/reference/providers',
         destination: '/docs/providers',
@@ -491,6 +519,12 @@ const nextConfig = {
       },
       {
         source: '/docs/reference/providers/aws/configuration',
+        destination: '/docs/providers/pulumi/aws#stack-configuration',
+        basePath: false,
+        permanent: true,
+      },
+      {
+        source: '/docs/providers/pulumi/aws/configuration',
         destination: '/docs/providers/pulumi/aws#stack-configuration',
         basePath: false,
         permanent: true,
