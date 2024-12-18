@@ -3,7 +3,7 @@ description: Deploy to AWS, Google Cloud or Microsoft Azure using GitHub Actions
 tags:
   - CI/CD
 published_at: 2023-12-21
-updated_at: 2024-08-20
+updated_at: 2024-12-18
 ---
 
 # Deployment Automation with GitHub Actions and Nitric
@@ -22,7 +22,7 @@ This guide will demonstrate how Nitric can be used, along with [GitHub Actions](
    Ensure you have a Nitric project ready to deploy. If you haven’t set up a project yet, refer to our [quickstart guide](/get-started/quickstart).
 
 2. **Add a GitHub Actions Workflow File**<br />
-   Create a YAML file in a `.github/` folder at the root of your project to configure the deployment automation steps. You can name the file according to your preference; for our examples, we use `deploy-aws.yaml`, `deploy-azure.yaml`, and `deploy-gcp.yaml`.
+   Create a YAML file in a `.github/workflows/` folder at the root of your project to configure the deployment automation steps. You can name the file according to your preference; for our examples, we use `deploy-aws.yaml`, `deploy-azure.yaml`, and `deploy-gcp.yaml`.
 
 Here’s example content for each cloud provider:
 
@@ -30,7 +30,7 @@ Here’s example content for each cloud provider:
 
 <TabItem label="AWS">
 
-```yaml title:.github/deploy-aws.yaml
+```yaml title:.github/workflows/deploy-aws.yaml
 name: Example Nitric AWS Deployment
 
 # Triggers for the workflow
@@ -94,7 +94,7 @@ jobs:
 
 <TabItem label="Azure">
 
-```yaml title:.github/deploy-azure.yaml
+```yaml title:.github/workflows/deploy-azure.yaml
 name: Example Nitric Azure Deployment
 
 # Triggers for the workflow
@@ -175,7 +175,7 @@ jobs:
 
 <TabItem label="Google Cloud">
 
-```yaml title:.github/deploy-gcp.yaml
+```yaml title:.github/workflows/deploy-gcp.yaml
 name: Example Nitric GCP Deployment
 
 # Triggers for the workflow
