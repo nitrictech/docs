@@ -76,21 +76,48 @@ We'll organize our project structure like so:
 
 ## Setting up our LLM
 
-We'll define a `ModelParamters` class which will have parameters used throughout our application. By putting it in a class, it means it will lazily load the llm and [embed model](https://docs.llamaindex.ai/en/stable/module_guides/models/embeddings/) so that it doesn't slow down other modules that don't require everything to be initialised. At this point we can also create a prompt template for prompts with our query engine. It will just sanitize some of the hallucinations so that if the model does not know an answer it won't pretend like it does.
+We'll define a `ModelParameters` class which will have parameters used throughout our application. By putting it in a class, it means it will lazily load the llm, [embed model](https://docs.llamaindex.ai/en/stable/module_guides/models/embeddings/), and tokenizer so that it doesn't slow down other modules that don't require everything to be initialised. At this point we can also create a prompt template for prompts with our query engine. It will just sanitize some of the hallucinations so that if the model does not know an answer it won't pretend like it does. We'll also define two functions that will convert a prompt or message into the required Llama 3.1 format.
 
 ```python title:common/model_parameters.py
 import os
 
-from llama_index.core import ChatPromptTemplate
+from transformers import AutoTokenizer
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 
+# Convert the messages into Llama 3.1 format
+def messages_to_prompt(messages):
+  prompt = ""
+  for message in messages:
+      if message.role == 'system':
+        prompt += f"<|system|>\n{message.content}</s>\n"
+      elif message.role == 'user':
+        prompt += f"<|user|>\n{message.content}</s>\n"
+      elif message.role == 'assistant':
+        prompt += f"<|assistant|>\n{message.content}</s>\n"
+
+  # ensure we start with a system prompt, insert blank if needed
+  if not prompt.startswith("<|system|>\n"):
+      prompt = "<|system|>\n</s>\n" + prompt
+
+  # add final assistant prompt
+  prompt = prompt + "<|assistant|>\n"
+
+  return prompt
+
+# Convert the completed prompt into Llama 3.1 format
+def completion_to_prompt(completion):
+  return f"<|system|>\n</s>\n<|user|>\n{completion}</s>\n<|assistant|>\n"
+
 class ModelParameters:
   # Lazily loaded llm
-  llm = None
+  _llm = None
 
   # Lazily loaded embed model
-  embed_model: HuggingFaceEmbedding = None
+  _embed_model: HuggingFaceEmbedding = None
+
+  # Lazily loaded tokenizer
+  _tokenizer = None
 
   # Set the location that we will persist our embeds
   persist_dir = "./models/query_engine_db"
@@ -102,23 +129,12 @@ class ModelParameters:
   llm_cache_folder = "./models/llm_cache"
 
   # Create the prompt query templates to sanitise hallucinations
-  prompt_template = ChatPromptTemplate.from_messages([
-    (
-      "system",
-      "If the context is not useful, respond with 'I'm not sure'.",
-    ),
-    (
-      "user",
-      (
-        "Context information is below.\n"
-        "---------------------\n"
-        "{context_str}\n"
-        "---------------------\n"
-        "Given the context information and not prior knowledge "
-        "answer the question: {query_str}\n."
-      )
-    ),
-  ])
+  prompt_template = (
+    "Context information is below. If the context is not useful, respond with 'I'm not sure'. "
+    "Given the context information and not prior knowledge answer the prompt.\n"
+    "{context_str}\n"
+  )
+
 
   def __init__(self):
     # Lazily load the locally stored Llama model
@@ -133,9 +149,17 @@ class ModelParameters:
     if self._llm is None:
       print("Initializing Llama CPP Model...")
       self._llm = LlamaCPP(
-        model_url=None,
         model_path=f"{self.llm_cache_folder}/Llama-3.2-1B-Instruct-Q4_K_M.gguf",
         temperature=0.7,
+        # Increase for longer responses
+        max_new_tokens=512,
+        context_window=3900,
+        generate_kwargs={},
+        # set to at least 1 to use GPU
+        model_kwargs={"n_gpu_layers": 1},
+        # transform inputs into Llama3.1 format
+        messages_to_prompt=messages_to_prompt,
+        completion_to_prompt=completion_to_prompt,
         verbose=False,
       )
     return self._llm
@@ -149,11 +173,20 @@ class ModelParameters:
         cache_folder=self.embed_cache_folder
       )
     return self._embed_model
+
+  @property
+  def tokenizer(self):
+    if self._tokenizer is None:
+      print("Initializing Tokenizer")
+      self._tokenizer = AutoTokenizer.from_pretrained(
+        "pcuenq/Llama-3.2-1B-Instruct-tokenizer"
+      ).encode
+    return self._tokenizer
 ```
 
 ## Building a Query Engine
 
-The next step is where we embed our context into the LLM. For this example we will embed the Nitric documentation. It's open-source on [GitHub](https://github.com/nitrictech/docs), so we can clone it into our project.
+The next step is where we embed our context into the LLM. For this example we will embed the Nitric documentation. It's open-source on [GitHub](https://github.com/nitrictech/docs), so we can clone it into our project. You can use any documentation for this step.
 
 ```bash
 git clone https://github.com/nitrictech/docs.git nitric-docs
@@ -289,19 +322,28 @@ We'll then create our subscriber which will respond to the publish requests.
 import os
 
 from common.model_parameters import ModelParameters
-from common.resources import chat_topic, socket
+from common.resources import chat_topic, socket, connections
 
 from nitric.context import MessageContext
 from nitric.application import Nitric
 from llama_index.core import StorageContext, load_index_from_storage, Settings
+from llama_index.core.llms import MessageRole, ChatMessage
+from llama_index.core.chat_engine import ContextChatEngine
+
+read_write_connections = connections.allow("get", "set")
 
 @chat_topic.subscribe()
 async def query_model(ctx: MessageContext) -> str:
   params = ModelParameters()
-  prompt = ctx.req.data.get("prompt")
 
   Settings.llm = params.llm
   Settings.embed_model = params.embed_model
+  Settings.tokenizer = params.tokenizer
+
+  connection_id = ctx.req.data.get("connection_id")
+  prompt = ctx.req.data.get("prompt")
+
+  connection_metadata = await read_write_connections.get(connection_id)
 
   # Get the model from the stored local context
   if os.path.exists(ModelParameters.persist_dir):
@@ -314,24 +356,53 @@ async def query_model(ctx: MessageContext) -> str:
     ctx.res.success = False
     return ctx
 
-  # Get the query engine from the index, and use the prompt template for santisation.
-  query_engine = index.as_query_engine(
-    streaming=False,
+  # Create a list of chat messages from the chat history
+  chat_history = []
+  for chat in connection_metadata.get("context"):
+    chat_history.append(
+      ChatMessage(
+        role=chat.get("role"),
+        content=chat.get("content")
+      )
+    )
+
+  # Create the chat engine
+  retriever = index.as_retriever(
     similarity_top_k=4,
-    text_qa_template=params.prompt_template
   )
 
-  print(f"Querying model: \"{prompt}\"")
+  chat_engine = ContextChatEngine.from_defaults(
+    retriever=retriever,
+    chat_history=chat_history,
+    context_template=params.prompt_template,
+    streaming=False,
+  )
 
   # Query the model
-  query_resp = query_engine.query(prompt)
+  assistant_response = chat_engine.chat(f"{prompt}")
 
-  print(f"Response: {query_resp}")
+  print(f"Response: {assistant_response}")
 
-  # Send a response back to the socket
+  # Send the response to the socket connection
   await socket.send(
-    ctx.req.data.get("connection_id"),
-    query_resp.response.encode("utf-8")
+    connection_id,
+    assistant_response.response.encode("utf-8")
+  )
+
+  # Add the context to th connections store
+  await read_write_connections.set(connection_id, {
+      "context": [
+        *connection_metadata.get("context"),
+        {
+          "role": MessageRole.USER,
+          "content": prompt,
+        },
+        {
+          "role": MessageRole.ASSISTANT,
+          "content": assistant_response.response
+        }
+      ]
+    }
   )
 
   return ctx
