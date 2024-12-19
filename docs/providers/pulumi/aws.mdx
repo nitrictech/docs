@@ -55,7 +55,7 @@ You can create an Access Key by logging into the [AWS console](https://aws.amazo
   for full details on credentials and configuration.
 </Note>
 
-## Locating deployed resources
+## Locating Deployed Resources
 
 This Nitric AWS provider creates a resource tag manager group and tags all possible resources to be referenced by this group. You can locate resources using the [AWS Console](https://console.aws.amazon.com/).
 
@@ -87,6 +87,66 @@ API Endpoints:
 ──────────────
 main: https://example.execute-api.us-east-2.amazonaws.com
 ```
+
+## Importing Existing Resources
+
+The Nitric team is working to expand the list of resources that can be imported. Currently, only the following resources are supported:
+
+- [Secrets](/secrets)
+- [Buckets](/storage)
+
+<Note>
+  Currently, only resources in the same AWS account and region as the Nitric project 
+  are supported.
+</Note>
+
+### Buckets
+
+To import an S3 bucket, you will need to know the bucket's name or ARN. You can find the ARN of an S3 bucket in the AWS console or by using the AWS CLI.
+
+First, add the bucket to your project as you usually would if it wasn't imported. Then add the bucket to the `import` section of your stack file. Here's an example of how to import an S3 bucket:
+
+```javascript
+import { bucket } from '@nitric/sdk'
+
+const images = bucket('images').allow('read', 'write', 'delete')
+```
+
+```yaml
+import:
+  buckets:
+    images: arn:aws:s3:::images-bucket-example
+```
+
+<Note>
+  Either the bucket's name or ARN can be used to import the bucket. The ARN is
+  recommended as it is less likely to have a conflict during lookup.
+</Note>
+
+### Secrets
+
+To import a secret, you will need to know the secret's ARN. You can find the ARN of a secret in the AWS console or by using the AWS CLI.
+
+First, add the secret to your project as you usually would if it wasn't imported. Then add the secret to the `import` section of your stack file. Here's an example of how to import a secret:
+
+```javascript
+import { secret } from "@nitric/sdk
+
+const mySecret = secret("credentials").allow("access");
+```
+
+```yaml
+import:
+  secrets:
+    credentials: arn:aws:secretsmanager:us-east-1:123456789012:secret:my-secret
+```
+
+<Note>
+  Unlike some other imported resources, secret imports require the ARN to be used. 
+  Providing only the secret's name will be invalid.
+</Note>
+
+Need to import another resource type or have another question? Chat with us on [Discord](https://nitric.io/chat) or [open an issue](https://github.com/nitrictech/nitric/issues) on GitHub.
 
 ## Stack Configuration
 
