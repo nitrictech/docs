@@ -188,9 +188,9 @@ Imports are stack specific, meaning that you can import resources into a specifi
 
 When deploying a stack that has imported resources, the resources will not be created. Instead, Nitric will use the referenced resources from the stack file. If the resources can't be located or accessed, the deployment will fail.
 
-Nitric attempts to make the minimum changes needed to the imported resources to make them compatible with the Nitric project. Since nitric standard providers uses custom tags for resource location the resources will have these tags added during deployment. Additionally, Nitric will add the necessary permissions to the resources to allow the Nitric project to access them, just like it would with resources it creates.
+Nitric attempts to make the minimum changes needed to the imported resources to make them compatible with the Nitric project. Since Nitric standard providers use custom tags for resource location, the resources will have these tags added during deployment. Additionally, Nitric will add the necessary permissions to the resources to allow the Nitric project to access them, just like it would with resources it creates.
 
-The tags created are extremely unlikely to conflict with existing tags. For example, with the AWS standard provider, an S3 bucket will have these two tags created `x-nitric-{project}-{stack}-{randomId}-type` and `x-nitric-{project}-{stack}-{randomId}-name`. The type tag identified the type of nitric resource, and the name tag is the name of the resource in the Nitric project.
+The tags created are extremely unlikely to conflict with existing tags. For example, with the AWS standard provider, an S3 bucket will have these two tags created `x-nitric-{project}-{stack}-{randomId}-type` and `x-nitric-{project}-{stack}-{randomId}-name`. The type tag identifies the type of Nitric resource, and the name tag is the name of the resource in the Nitric project.
 
 ### What happens during `nitric down`
 
