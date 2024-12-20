@@ -108,4 +108,6 @@ export { Tabs, TabItem } from '@/components/tabs/Tabs'
 
 export { CodeTabs } from '@/components/code/CodeTabs'
 
+export { Mermaid } from 'mdx-mermaid/Mermaid'
+
 // see if we need to remove these
