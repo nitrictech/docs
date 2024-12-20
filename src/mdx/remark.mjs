@@ -11,11 +11,13 @@ export const remarkPlugins = [
       output: 'svg',
       mermaid: {
         theme: 'base',
+        // TODO: Relocate theme config
         themeVariables: {
-          primaryColor: '#ff0000',
-          secondaryColor: '#00ff00',
+          primaryColor: '#242037',
+          lineColor: '#cad3f5',
+          secondaryColor: '#42424a',
           tertiaryColor: '#0000ff',
-          textColor: '#000000',
+          primaryTextColor: '#cad3f5',
           fontSize: '14px',
           fontFamily: 'Fira Code, monospace',
         },
