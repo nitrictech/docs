@@ -12,9 +12,12 @@ Nitric has built-in support for web apps and HTTP API development. The `api` res
 graph LR;
     classDef default line-height:1.2;
 
-    A[Api]-->B[Service A];
-    A-->C[Service B];
+    A(Admin Api)-->B(Service A);
+    A-->C(Service B);
+    D(Public Api)-->B(Service A)
 ```
+
+> An API can route to many nitric services, and services can handle many APIs.
 
 ## Creating APIs
 
