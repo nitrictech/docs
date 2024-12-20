@@ -1,0 +1,6 @@
+svg[id^='mermaid-svg-'] {
+  display: block;
+  /* width: 100%; */
+  margin: auto;
+  /* padding: 0; */
+}
