@@ -6,6 +6,16 @@ description: 'Building HTTP APIs with Nitric'
 
 Nitric has built-in support for web apps and HTTP API development. The `api` resource allows you to create APIs in your applications, including routing, middleware and request handlers.
 
+## Architecture
+
+```mermaid
+graph LR;
+    classDef default line-height:1.2;
+
+    A[Api]-->B[Service A];
+    A-->C[Service B];
+```
+
 ## Creating APIs
 
 Nitric allows you define named APIs, each with their own routes, middleware, handlers and security.
