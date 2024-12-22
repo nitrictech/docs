@@ -12,6 +12,22 @@ Nitric provides support for serverless websockets. This feature allows you to co
   https://github.com/nitrictech/nitric/issues
 </Note>
 
+## Architecture
+
+```mermaid
+graph LR;
+    classDef default line-height:1.2;
+    classDef edgeLabel line-height:1.2;
+
+    A(Websocket Gateway)-- on connect -->B(Connection Handler Service);
+    A -- on disconnect --> B;
+    A -- on message --> C(Message Handler Service);
+    C -- send message --> A;
+    D(Batch Service) -- send message --> A;
+```
+
+A `Service` can both receive and send messages to a `Websocket`, `Batch Services` may only send message to a `Websocket`.
+
 ## Listening for events
 
 There are three events that must be defined to deploy a valid websocket implementation. These are `connect`, `disconnect` and `message`.

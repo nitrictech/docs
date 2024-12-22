@@ -14,6 +14,20 @@ A topic is a named resource where events can be published. They can be thought o
 
 Topics are often the first choice for communication between services, since they offer stateless, scalable and highly decoupled communication.
 
+### Architecture
+
+```mermaid
+graph LR;
+    classDef default line-height:1.2;
+    classDef edgeLabel line-height:1.2;
+
+    A(Topic)-- on message -->B(Message Service);
+    C(Publisher Service) -- publish message --> A;
+    D(Publisher Batch Service) -- publish message --> A;
+```
+
+`Services` can both publish and subscribe to topics. `Batch Services` may only publish messages.
+
 ### Subscriptions
 
 A subscription is a binding between a topic and a service. You can think of it as a channel that notifies your services when something new arrives on the topic.

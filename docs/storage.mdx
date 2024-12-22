@@ -6,6 +6,20 @@ description: 'Working with files and storage in Nitric'
 
 Nitric provides storage support for securely storing and retrieving large files in the cloud.
 
+## Architecture
+
+```mermaid
+graph LR;
+    classDef default line-height:1.2;
+    classDef edgeLabel line-height:1.2;
+
+    A(Bucket)-- on write -->B(Bucket Handler Service);
+    C(Bucket File Service) -- read/write/delete files --> A;
+    D(Image Processing Batch Service) -- read/write/delete files --> A;
+```
+
+A `Service` can both interact file files in a `Bucket` and receive notifications when files are written or deleted. A `Batch Service` can only interact with files on a bucket but cannot subscribe to file changes.
+
 ## Definitions
 
 ### Files

@@ -3,6 +3,7 @@ import { Inter, Sora, JetBrains_Mono } from 'next/font/google'
 
 import { Providers } from '@/app/providers'
 
+import '@/styles/mermaid.css'
 import '@/styles/tailwind.css'
 import clsx from 'clsx'
 import Fathom from './Fathom'
