@@ -84,6 +84,8 @@ roadmap
 scaffolded
 scalable
 serverless
+shortener
+struct
 transcoding
 triages
 undeploy
