@@ -87,6 +87,7 @@
     "zustand": "^4.3.2"
   },
   "devDependencies": {
+    "chrome-aws-lambda": "^10.1.0",
     "cypress": "^13.15.0",
     "cypress-axe": "^1.5.0",
     "eslint": "^8.56.0",
@@ -97,6 +98,7 @@
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "prisma": "^5.20.0",
+    "puppeteer-core": "^23.11.1",
     "remark-frontmatter": "^5.0.0",
     "sharp": "0.33.1",
     "spellchecker-cli": "^6.2.0"

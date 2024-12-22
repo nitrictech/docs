@@ -1326,6 +1326,20 @@
     unbzip2-stream "^1.4.3"
     yargs "^17.7.2"
 
+"@puppeteer/browsers@2.6.1":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@puppeteer/browsers/-/browsers-2.6.1.tgz#d75aec5010cae377c5e4742bf5e4f62a79c21315"
+  integrity sha512-aBSREisdsGH890S2rQqK82qmQYU3uFpSH8wcZWHgHzl3LfzsxAKbLNiAG9mO8v1Y0UICBeClICxPJvyr0rcuxg==
+  dependencies:
+    debug "^4.4.0"
+    extract-zip "^2.0.1"
+    progress "^2.0.3"
+    proxy-agent "^6.5.0"
+    semver "^7.6.3"
+    tar-fs "^3.0.6"
+    unbzip2-stream "^1.4.3"
+    yargs "^17.7.2"
+
 "@radix-ui/number@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@radix-ui/number/-/number-1.1.0.tgz#1e95610461a09cdf8bb05c152e76ca1278d5da46"
@@ -2920,6 +2934,21 @@ chokidar@^3.5.3:
   optionalDependencies:
     fsevents "~2.3.2"
 
+chrome-aws-lambda@^10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/chrome-aws-lambda/-/chrome-aws-lambda-10.1.0.tgz#ac43b4cdfc1fbb2275c62effada560858099501e"
+  integrity sha512-NZQVf+J4kqG4sVhRm3WNmOfzY0OtTSm+S8rg77pwePa9RCYHzhnzRs8YvNI6L9tALIW6RpmefWiPURt3vURXcw==
+  dependencies:
+    lambdafs "^2.0.3"
+
+chromium-bidi@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/chromium-bidi/-/chromium-bidi-0.11.0.tgz#9c3c42ee7b42d8448e9fce8d649dc8bfbcc31153"
+  integrity sha512-6CJWHkNRoyZyjV9Rwv2lYONZf1Xm0IuDyNq97nwSsxxP3wf5Bwy15K5rOvVKMtJ127jJBmxFUanSAOjgFRxgrA==
+  dependencies:
+    mitt "3.0.1"
+    zod "3.23.8"
+
 chromium-bidi@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/chromium-bidi/-/chromium-bidi-0.6.3.tgz#363fe1ca6b9c6122b9f1b2a47f9449ecf712f755"
@@ -3757,6 +3786,11 @@ devtools-protocol@0.0.1312386:
   version "0.0.1312386"
   resolved "https://registry.yarnpkg.com/devtools-protocol/-/devtools-protocol-0.0.1312386.tgz#5ab824d6f1669ec6c6eb0fba047e73601d969052"
   integrity sha512-DPnhUXvmvKT2dFA/j7B+riVLUt9Q6RKJlcppojL5CoRywJJKLDYnRlw0gTFKfgDPHP5E04UoB71SxoJlVZy8FA==
+
+devtools-protocol@0.0.1367902:
+  version "0.0.1367902"
+  resolved "https://registry.yarnpkg.com/devtools-protocol/-/devtools-protocol-0.0.1367902.tgz#7333bfc4466c5a54a4c6de48a9dfbcb4b811660c"
+  integrity sha512-XxtPuC3PGakY6PD7dG66/o8KwJ/LkH2/EKe19Dcw58w53dv4/vSQEkn/SzuyhHE2q4zPgCkxQBxus3VV4ql+Pg==
 
 dictionary-en-au@^2.3.0:
   version "2.4.0"
@@ -5871,6 +5905,13 @@ kolorist@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/kolorist/-/kolorist-1.8.0.tgz#edddbbbc7894bc13302cdf740af6374d4a04743c"
   integrity sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==
+
+lambdafs@^2.0.3:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/lambdafs/-/lambdafs-2.1.1.tgz#4bf8d3037b6c61bbb4a22ab05c73ee47964c25ed"
+  integrity sha512-x5k8JcoJWkWLvCVBzrl4pzvkEHSgSBqFjg3Dpsc4AcTMq7oUMym4cL/gRTZ6VM4mUMY+M0dIbQ+V1c1tsqqanQ==
+  dependencies:
+    tar-fs "^2.1.1"
 
 langium@3.0.0:
   version "3.0.0"
@@ -8002,7 +8043,7 @@ protobufjs@^7.2.3, protobufjs@^7.2.5:
     "@types/node" ">=13.7.0"
     long "^5.0.0"
 
-proxy-agent@^6.4.0:
+proxy-agent@^6.4.0, proxy-agent@^6.5.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/proxy-agent/-/proxy-agent-6.5.0.tgz#9e49acba8e4ee234aacb539f89ed9c23d02f232d"
   integrity sha512-TmatMXdr2KlRiA2CyDu8GqR8EjahTG3aY3nXjdzFyoZbmB8hrBsTyMezhULIXKnC0jpfjlmiZ3+EaCzoInSu/A==
@@ -8053,6 +8094,18 @@ puppeteer-core@22.15.0:
     chromium-bidi "0.6.3"
     debug "^4.3.6"
     devtools-protocol "0.0.1312386"
+    ws "^8.18.0"
+
+puppeteer-core@^23.11.1:
+  version "23.11.1"
+  resolved "https://registry.yarnpkg.com/puppeteer-core/-/puppeteer-core-23.11.1.tgz#3e064de11b3cb3a2df1a8060ff2d05b41be583db"
+  integrity sha512-3HZ2/7hdDKZvZQ7dhhITOUg4/wOrDRjyK2ZBllRB0ZCOi9u0cwq1ACHDjBB+nX+7+kltHjQvBRdeY7+W0T+7Gg==
+  dependencies:
+    "@puppeteer/browsers" "2.6.1"
+    chromium-bidi "0.11.0"
+    debug "^4.4.0"
+    devtools-protocol "0.0.1367902"
+    typed-query-selector "^2.12.0"
     ws "^8.18.0"
 
 puppeteer@^22.15.0:
@@ -9217,7 +9270,7 @@ tapable@^2.2.0:
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.2.1.tgz#1967a73ef4060a82f12ab96af86d52fdb76eeca0"
   integrity sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==
 
-tar-fs@^3.0.6:
+tar-fs@*, tar-fs@^3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/tar-fs/-/tar-fs-3.0.6.tgz#eaccd3a67d5672f09ca8e8f9c3d2b89fa173f217"
   integrity sha512-iokBDQQkUyeXhgPYaZxmczGPhnhXZ0CmrqI+MOb/WFGS9DW5wnfrLgtjUJBvz50vQ3qfRwJ62QVoCFu8mPVu5w==
@@ -9447,6 +9500,11 @@ typed-array-length@^1.0.6:
     has-proto "^1.0.3"
     is-typed-array "^1.1.13"
     possible-typed-array-names "^1.0.0"
+
+typed-query-selector@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/typed-query-selector/-/typed-query-selector-2.12.0.tgz#92b65dbc0a42655fccf4aeb1a08b1dddce8af5f2"
+  integrity sha512-SbklCd1F0EiZOyPiW192rrHZzZ5sBijB6xM+cpmrwDqObvdtunOHHIk9fCGsoK5JVIYXoyEp4iEdE3upFH3PAg==
 
 typescript@^5.3.3:
   version "5.6.2"
