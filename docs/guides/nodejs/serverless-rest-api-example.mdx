@@ -25,11 +25,11 @@ The API will provide the following routes:
 
 There is also an extended section of the guide that adds file operations using a Nitric [bucket](/storage) to store and retrieve profile pictures. The extension adds these routes to the API:
 
-| **Method** | **Route**                    | **Description**                   |
-| ---------- | ---------------------------- | --------------------------------- |
-| `GET`      | /profiles/[id]/image/upload  | Get a profile image upload URL    |
-| `GET`      | profiles/[id]/image/download | Get a profile image download URL  |
-| `GET`      | profiles/[id]/image/view     | View the image that is downloaded |
+| **Method** | **Route**                     | **Description**                   |
+| ---------- | ----------------------------- | --------------------------------- |
+| `GET`      | /profiles/[id]/image/upload   | Get a profile image upload URL    |
+| `GET`      | /profiles/[id]/image/download | Get a profile image download URL  |
+| `GET`      | /profiles/[id]/image/view     | View the image that is downloaded |
 
 ## Prerequisites
 
@@ -88,15 +88,23 @@ npm install uuid
 
 Applications built with Nitric can contain many APIs, let's start by adding one to this project to serve as the public endpoint. Create a file named `profiles.ts` in the services directory and add the following code to that file.
 
-```javascript title:services/profiles.ts
+```typescript title:services/profiles.ts
 import { api, kv } from '@nitric/sdk'
 import { v4 as uuid } from 'uuid'
+
+// Define a profile interface
+interface Profile {
+  id: string
+  name: string
+  age: number
+  homeTown: string
+}
 
 // Create an API named 'public'
 const profileApi = api('public')
 
-// Define a key value store named 'profiles', then request getting and setting permissions.
-const profiles = kv('profiles').allow('get', 'set')
+// Define a key value store named 'profiles', then request get, set and delete permissions
+const profiles = kv<Profile>('profiles').allow('get', 'set', 'delete')
 ```
 
 Here we're creating an API named `public` and key value store named `profiles`, then requesting get and set permissions which allows our function to access the key value store.
@@ -110,33 +118,6 @@ Here we're creating an API named `public` and key value store named `profiles`, 
   AWS or FireStore on Google Cloud.
 </Note>
 
-We will need some helper functions to serialize and deserialize our profiles for the keyvalue store.
-
-```javascript title:services/profiles.ts
-// Helper function to get current profiles
-async function getProfiles() {
-  try {
-    const serializedList = await profiles.get('profiles')
-    return serializedList && serializedList['ids']
-      ? JSON.parse(serializedList['ids'])
-      : []
-  } catch (error) {
-    await profiles.set('profiles', { ids: [] })
-    return []
-  }
-}
-
-// Helper function to update profiles list
-async function updateProfiles(profileList) {
-  try {
-    const updatedSerializedList = JSON.stringify(profileList)
-    await profiles.set('profiles', { ids: updatedSerializedList })
-  } catch (error) {
-    console.error('Error updating profiles:', error)
-  }
-}
-```
-
 ### Create profiles with POST
 
 Next we will add features that allow our API consumers to work with profile data.
@@ -146,41 +127,45 @@ Next we will add features that allow our API consumers to work with profile data
   prefer. For simplicity we'll group them together in this guide.
 </Note>
 
-```javascript title:services/profiles.ts
+```typescript title:services/profiles.ts
 profileApi.post('/profiles', async (ctx) => {
-  let id = uuid()
+  const id = uuid()
   const { name, age, homeTown } = ctx.req.json()
 
-  const profileList = await getProfiles()
-  profileList.push({
-    id,
-    name,
-    age,
-    homeTown,
-  })
-  await updateProfiles(profileList)
+  try {
+    // Create a new profile
+    await profiles.set(id, {
+      id,
+      name,
+      age,
+      homeTown,
+    })
 
-  // Set a JSON HTTP response
-  ctx.res.json({
-    msg: `Profile with id ${id} created.`,
-  })
+    // Set a JSON HTTP response
+    ctx.res.json({
+      msg: `Profile with id ${id} created.`,
+    })
+  } catch (error) {
+    ctx.res.status = 500
+    ctx.res.json({
+      msg: `Failed to create profile.`,
+    })
+  }
 })
 ```
 
 ### Retrieve a profile with GET
 
-```javascript title:services/profiles.ts
+```typescript title:services/profiles.ts
 profileApi.get('/profiles/:id', async (ctx) => {
   const { id } = ctx.req.params
 
   try {
-    const profileList = await getProfiles()
-    const profile = profileList.find((profile) => profile.id === id)
-    if (profile != undefined) {
-      ctx.res.json(profile)
-    } else {
-      throw new Error()
-    }
+    // Get a profile by id
+    const profile = await profiles.get(id)
+
+    // Set a JSON HTTP response
+    ctx.res.json(profile)
   } catch (error) {
     ctx.res.status = 404
     ctx.res.json({
@@ -192,16 +177,47 @@ profileApi.get('/profiles/:id', async (ctx) => {
 
 ### Remove a profile with DELETE
 
-```javascript title:services/profiles.ts
+```typescript title:services/profiles.ts
 profileApi.delete('/profiles/:id', async (ctx) => {
   const { id } = ctx.req.params
+
   try {
-    const profileList = await getProfiles()
-    await updateProfiles(profileList.filter((profile) => profile.id !== id))
+    // Delete a profile by id
+    await profiles.delete(id)
+
+    // Set a JSON HTTP response
+    ctx.res.json({
+      msg: `Profile with id ${id} deleted.`,
+    })
   } catch (error) {
     ctx.res.status = 404
     ctx.res.json({
       msg: `Profile with id ${id} not found.`,
+    })
+  }
+})
+```
+
+### List all profiles with GET
+
+```typescript title:services/profiles.ts
+profileApi.get('/profiles', async (ctx) => {
+  try {
+    const profilesList = []
+    // Get a profile by id
+    const keys = profiles.keys()
+
+    for await (const key of keys) {
+      const profile = await profiles.get(key)
+      profilesList.push(profile)
+    }
+
+    // Set a JSON HTTP response
+    ctx.res.json(profilesList)
+  } catch (error) {
+    ctx.res.status = 404
+    ctx.res.json({
+      msg: `Profiles not found.`,
     })
   }
 })
@@ -237,6 +253,12 @@ curl --location --request POST 'http://localhost:4001/profiles' \
 
 ```bash
 curl --location --request GET 'http://localhost:4001/profiles/[id]'
+```
+
+### Fetch All Profiles
+
+```bash
+curl --location --request GET 'http://localhost:4001/profiles'
 ```
 
 ### Delete Profile
@@ -288,20 +310,23 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 
 Define a bucket named `profilesImg` with reading/writing permissions.
 
-```javascript
+```typescript
+import { bucket } from '@nitric/sdk'
+
 const profilesImg = bucket('profilesImg').allow('read', 'write')
 ```
 
 ### Get a URL to upload a profile image
 
-```javascript
+```typescript
 profileApi.get('/profiles/:id/image/upload', async (ctx) => {
-  const id = ctx.req.params['id']
+  const { id } = ctx.req.params
 
   // Return a signed upload URL, which provides temporary access to upload a file.
   const photoUrl = await profilesImg
     .file(`images/${id}/photo.png`)
     .getUploadUrl()
+
   ctx.res.json({
     url: photoUrl,
   })
@@ -312,12 +337,13 @@ profileApi.get('/profiles/:id/image/upload', async (ctx) => {
 
 ```typescript
 profileApi.get('/profiles/:id/image/download', async (ctx) => {
-  const id = ctx.req.params['id']
+  const { id } = ctx.req.params
 
   // Return a signed download URL, which provides temporary access to download a file.
   const photoUrl = await profilesImg
     .file(`images/${id}/photo.png`)
     .getDownloadUrl()
+
   ctx.res.json({
     url: photoUrl,
   })
@@ -334,12 +360,13 @@ profileApi.get('/profiles/:id/image/view', async (ctx) => {
   const photoUrl = await profilesImg
     .file(`images/${id}/photo.png`)
     .getDownloadUrl()
+
   ctx.res.status = 303
   ctx.res.headers['Location'] = [photoUrl]
 })
 ```
 
-#### Test the extended API
+### Test the extended API
 
 Update all values in brackets `[]` and change the URL to your deployed URL if you're testing on the cloud.
 
