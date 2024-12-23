@@ -8,7 +8,7 @@ languages:
   - typescript
   - javascript
 published_at: 2023-06-16
-updated_at: 2024-05-15
+updated_at: 2024-12-24
 ---
 
 # Building a REST API with Nitric
@@ -279,6 +279,17 @@ Next, we'll need to create a `stack`. Stacks represent deployed instances of an 
 
 ```bash
 nitric stack new dev
+```
+
+Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region, let's use `us-east-1`.
+
+```yaml
+# The nitric provider to use
+provider: nitric/aws@latest
+# The target aws region to deploy to
+# See available regions:
+# https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
+region: us-east-1
 ```
 
 ### AWS
