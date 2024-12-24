@@ -69,7 +69,7 @@ README.md
 
 As we will be generating IDs for each profile, add the uuid dependency by adding it to your `pubspec.yaml`.
 
-```yaml
+```bash
 dart pub add uuid
 ```
 
@@ -77,7 +77,7 @@ dart pub add uuid
 
 Applications built with Nitric can contain many APIs, let's start by adding one to this project to serve as the public endpoint.
 
-```dart
+```dart title:services/api.dart
 import 'package:nitric_sdk/nitric.dart';
 
 import 'package:uuid/uuid.dart';
@@ -116,7 +116,7 @@ Let's start adding features that allow our API consumers to work with profile da
   prefer. For simplicity we'll group them together in this guide.
 </Note>
 
-```dart
+```dart title:services/api.dart
 profileApi.post("/profiles", (ctx) async {
   final uuid = Uuid();
 
@@ -136,7 +136,7 @@ profileApi.post("/profiles", (ctx) async {
 
 ### Retrieve a profile with GET
 
-```dart
+```dart title:services/api.dart
 profileApi.get("/profiles/:id", (ctx) async {
   final id = ctx.req.pathParams["id"]!;
 
@@ -156,7 +156,7 @@ profileApi.get("/profiles/:id", (ctx) async {
 
 ### Remove a profile with DELETE
 
-```dart
+```dart title:services/api.dart
 profileApi.delete("/profiles/:id", (ctx) async {
   final id = ctx.req.pathParams["id"]!;
 
@@ -235,7 +235,7 @@ nitric stack new dev aws
 
 Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region, let's use `us-east-1`.
 
-```yaml
+```yaml title:nitric.dev.yaml
 # The nitric provider to use
 provider: nitric/aws@latest
 # The target aws region to deploy to
@@ -273,13 +273,13 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 
 Define a bucket named `profilesImg` with reading/writing permissions.
 
-```dart
+```dart title:services/api.dart
 final profilesImg = Nitric.bucket("profilesImg").allow([BucketPermission.read, BucketPermission.write]);
 ```
 
 ### Get a URL to upload a profile image
 
-```dart
+```dart title:services/api.dart
 profileApi.get("/profiles/:id/image/upload", (ctx) async {
   final id = ctx.req.pathParams["id"];
 
@@ -294,7 +294,7 @@ profileApi.get("/profiles/:id/image/upload", (ctx) async {
 
 ### Get a URL to download a profile image
 
-```dart
+```dart title:services/api.dart
 profileApi.get("/profiles/:id/image/download", (ctx) async {
   final id = ctx.req.pathParams["id"];
 
@@ -309,7 +309,7 @@ profileApi.get("/profiles/:id/image/download", (ctx) async {
 
 You can also return a redirect response that takes the HTTP client directly to the photo URL.
 
-```dart
+```dart title:services/api.dart
 profileApi.get("/profiles/:id/image/view", (ctx) async {
   final id = ctx.req.pathParams["id"];
 
