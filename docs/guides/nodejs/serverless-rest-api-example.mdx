@@ -310,7 +310,7 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 
 Define a bucket named `profilesImg` with reading/writing permissions.
 
-```typescript
+```typescript title:services/profiles.ts
 import { bucket } from '@nitric/sdk'
 
 const profilesImg = bucket('profilesImg').allow('read', 'write')
@@ -318,7 +318,7 @@ const profilesImg = bucket('profilesImg').allow('read', 'write')
 
 ### Get a URL to upload a profile image
 
-```typescript
+```typescript title:services/profiles.ts
 profileApi.get('/profiles/:id/image/upload', async (ctx) => {
   const { id } = ctx.req.params
 
@@ -335,7 +335,7 @@ profileApi.get('/profiles/:id/image/upload', async (ctx) => {
 
 ### Get a URL to download a profile image
 
-```typescript
+```typescript title:services/profiles.ts
 profileApi.get('/profiles/:id/image/download', async (ctx) => {
   const { id } = ctx.req.params
 
