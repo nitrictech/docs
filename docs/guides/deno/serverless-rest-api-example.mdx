@@ -1,19 +1,17 @@
 ---
-description: Use the Nitric framework to easily build and deploy Node.js REST APIs for AWS, Azure or GCP
-title_seo: Building your first API with Node.js and Nitric
+description: Use the Nitric framework to easily build and deploy Deno REST APIs for AWS, Azure, or GCP
+title_seo: Building your first API with Deno and Nitric
 tags:
   - API
   - Key Value Store
 languages:
   - typescript
-  - javascript
-published_at: 2023-06-16
-updated_at: 2024-05-15
+published_at: 2024-12-24
 ---
 
-# Building a REST API with Nitric
+# Building a REST API with Nitric and Deno
 
-This guide will show you how to build a serverless REST API with the Nitric framework using Node.js. The example API enables getting, setting and editing basic user profile information using a Nitric [key value store](/keyvalue) to store user data. Once the API is created we'll test it locally, then optionally deploy it to a cloud of your choice.
+This guide will show you how to build a serverless REST API with the Nitric framework using [Deno](https://deno.com/). The example API enables getting, setting, and editing basic user profile information using a Nitric [key value store](/keyvalue) to store user data. Once the API is created, we'll test it locally, then optionally deploy it to a cloud provider of your choice.
 
 The API will provide the following routes:
 
@@ -31,18 +29,25 @@ There is also an extended section of the guide that adds file operations using a
 | `GET`      | /profiles/[id]/image/download | Get a profile image download URL  |
 | `GET`      | /profiles/[id]/image/view     | View the image that is downloaded |
 
+---
+
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/en/download/)
-- The [Nitric CLI](/get-started/installation)
+Ensure you have the following installed:
+
+- [Deno](https://docs.deno.com/runtime/getting_started/installation/)
+- [Nitric CLI](https://nitric.io/docs/installation)
+- A supported code editor like VS Code with the [Deno extension](https://docs.deno.com/runtime/reference/vscode/) installed.
 - _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account
+
+---
 
 ## Getting started
 
 Let's start by creating a new project from a Nitric TypeScript template, this will provide a base to start building the API.
 
 ```bash
-nitric new my-profile-api ts-starter
+nitric new my-profile-api ts-starter-deno
 ```
 
 Next, open the project in your editor of choice.
@@ -53,20 +58,21 @@ cd my-profile-api
 
 Make sure all dependencies are resolved:
 
-Using NPM:
-
 ```bash
-npm install
+deno install
 ```
 
 The scaffolded project should have the following structure:
 
 ```text
 services/
-├── hello.ts
+├── api.ts
 node_modules/
-nitric.yaml
+deno.dockerfile
+deno.dockerfile.dockerignore
+deno.json
 package.json
+nitric.yaml
 README.md
 ```
 
@@ -83,14 +89,14 @@ If everything's working you can now delete all files in the `services/` folder, 
 This example uses UUIDs to create unique IDs to store profiles against, let's start by adding a library to help with that:
 
 ```bash
-npm install uuid
+deno install npm:uuid
 ```
 
 Applications built with Nitric can contain many APIs, let's start by adding one to this project to serve as the public endpoint. Create a file named `profiles.ts` in the services directory and add the following code to that file.
 
 ```typescript title:services/profiles.ts
-import { api, kv } from '@nitric/sdk'
-import { v4 as uuid } from 'uuid'
+import { api, kv } from 'npm:@nitric/sdk'
+import { v4 as uuid } from 'npm:uuid'
 
 // Define a profile interface
 interface Profile {
@@ -281,6 +287,17 @@ Next, we'll need to create a `stack`. Stacks represent deployed instances of an 
 nitric stack new dev
 ```
 
+Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region, let's use `us-east-1`.
+
+```yaml title:nitric.dev.yaml
+# The nitric provider to use
+provider: nitric/aws@latest
+# The target aws region to deploy to
+# See available regions:
+# https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
+region: us-east-1
+```
+
 ### AWS
 
 <Note>
@@ -311,7 +328,7 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 Define a bucket named `profilesImg` with reading/writing permissions.
 
 ```typescript title:services/profiles.ts
-import { bucket } from '@nitric/sdk'
+import { bucket } from 'npm:@nitric/sdk'
 
 const profilesImg = bucket('profilesImg').allow('read', 'write')
 ```
@@ -352,7 +369,7 @@ profileApi.get('/profiles/:id/image/download', async (ctx) => {
 
 You can also return a redirect response that takes the HTTP client directly to the photo URL.
 
-```typescript
+```typescript title:services/profiles.ts
 profileApi.get('/profiles/:id/image/view', async (ctx) => {
   const { id } = ctx.req.params
 
