@@ -459,7 +459,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
   uv sync --extra ml --frozen --no-dev --no-python-downloads
 ```
 
-We will also add a `HF_HOME` environment variable in the `.env` file to make sure our hugging face cache is in a readable/writable directory on the cloud. For Lambda, the /tmp dfirectory is the best place to store these types of caches that require reading and writing.
+We will also add a `HF_HOME` environment variable in the `.env` file to make sure our hugging face cache is in a readable/writable directory on the cloud. For Lambda, the `/tmp` directory is the best place to store these types of caches that require reading and writing.
 
 ```text title:.env
 PYTHONPATH=.
