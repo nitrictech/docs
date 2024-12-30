@@ -78,7 +78,7 @@ code word_generator
 
 Let's start by building out the backend. This will be an API with a route dedicated to getting a list of all the favorites and a route to toggle a favorite on or off. These favorites will be stored in a [key value store](/keyvalue). To create a Nitric project add the `nitric.yaml` to the Flutter template project.
 
-```yaml {{ label: "nitric.yaml" }}
+```yaml title:nitric.yaml
 name: word_generator
 services:
   - match: lib/services/*.dart
@@ -1414,7 +1414,7 @@ nitric stack new dev aws
 
 You'll then need to edit the `nitric.dev.yaml` file to add a region.
 
-```yaml {{ label: "nitric.dev.yaml" }}
+```yaml title:nitric.dev.yaml
 provider: nitric/aws@1.11.1
 region: us-east-1
 ```
@@ -1428,7 +1428,7 @@ Because we've mixed Flutter and Dart dependencies, we need to use a [custom cont
   Flutter application, this step is unnecessary.
 </Note>
 
-```yaml {{ label: "nitric.yaml" }}
+```yaml title:nitric.yaml
 name: word_generator
 services:
   - match: lib/services/*.dart
@@ -1442,7 +1442,7 @@ runtimes:
 
 Create the Dockerfile at the same path as your runtime specifies. This Dockerfile is fairly straightforward, taking its
 
-```dockerfile {{ label: "docker/flutter.dockerfile" }}
+```dockerfile title:docker/flutter.dockerfile
 FROM dart:stable AS build
 
 # The Nitric CLI will provide the HANDLER arg with the location of our service
@@ -1487,7 +1487,7 @@ ENTRYPOINT ["/app/bin/main"]
 
 We can also add a `.dockerignore` to optimize our image further:
 
-```txt {{ label: "docker/flutter.dockerignore" }}
+```txt title:docker/flutter.dockerignore
 build
 test
 

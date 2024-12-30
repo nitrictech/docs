@@ -6,17 +6,15 @@ languages:
   - typescript
   - javascript
 published_at: 2022-10-13
-updated_at: 2024-06-14
+updated_at: 2024-12-30
 ---
 
 # BYO Database
 
-Nitric currently has out of the box **preview** support for [SQL databases](/sql) with AWS, however Nitric allows you to use whatever tooling and ORMs you prefer for directly interfacing with your database. Our recommendation for local development is to set up a container that runs alongside your Nitric processes. For a production environment, you can use any of the database services for your preferred cloud:
+Nitric currently has out of the box **preview** support for [PostgreSQL databases](/sql), however Nitric allows you to use whatever tooling and ORMs you prefer for directly interfacing with your database. If you want to use a database that isn't managed by Nitric, we have the following recommendations:
 
-<Note>
-  You can track the support for relational databases
-  [here](https://github.com/nitrictech/roadmap/issues/30).
-</Note>
+- For local development is to set up a container that runs alongside your Nitric processes.
+- For a production environment, you can use any of the database services for your preferred cloud:
 
 |            | AWS                                                                         | GCP                                                                                  | Azure                                                                                   |
 | ---------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
@@ -50,7 +48,7 @@ await client.connect()
 
 To start, make sure you have a `.env` file containing your environment variables.
 
-```
+```text title:.env
 POSTGRES_USER=root
 POSTGRES_PASSWORD=root
 POSTGRES_DB=my-database
@@ -58,7 +56,7 @@ POSTGRES_DB=my-database
 
 You can then create a docker compose file to simplify running your docker container each time.
 
-```yaml {{ label: "docker-compose.yml" }}
+```yaml title:docker-compose.yml
 version: '3.6'
 services:
   postgres:
@@ -75,7 +73,7 @@ services:
 
 You can add a script to your `package.json` which will run the docker compose file.
 
-```json {{ label: "package.json" }}
+```json title:package.json
 "scripts": {
   "db": "docker compose up --wait"
 }
@@ -115,7 +113,7 @@ con.connect(function (err) {
 
 You can then create a docker compose file to simplify running your docker container each time.
 
-```yaml {{ label: "docker-compose.yml" }}
+```yaml title:docker-compose.yml
 version: '3.6'
 services:
   mysql:
@@ -133,7 +131,7 @@ services:
 
 You can add a script to your `package.json` which will run the docker compose file.
 
-```json {{ label: "package.json" }}
+```json title:package.json
 "scripts": {
   "db": "docker compose up --wait"
 }
@@ -165,7 +163,7 @@ await client.connect()
 
 You can then create a docker compose file to simplify running your docker container each time.
 
-```yaml {{ label: "docker-compose.yml" }}
+```yaml title:docker-compose.yml
 version: '3.6'
 services:
   mongodb:
@@ -182,7 +180,7 @@ services:
 
 You can add a script to your `package.json` which will run the docker compose file.
 
-```json {{ label: "package.json" }}
+```json title:package.json
 "scripts": {
   "db": "docker compose up --wait"
 }

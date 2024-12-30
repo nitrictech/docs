@@ -120,7 +120,7 @@ type NitricPulumiProvider interface {
 
 Before you override any of the methods, you'll need to create a provider interface.
 
-```go {{ label: "deploy/deploy.go" }}
+```go title:deploy/deploy.go
 import (
 	"github.com/nitrictech/nitric/cloud/common/deploy"
 	"github.com/nitrictech/nitric/cloud/common/deploy/provider"
@@ -148,7 +148,7 @@ func NewNitricCustomPulumiProvider() *NitricCustomPulumiProvider {
 
 The `Init` method is used to initialize the provider with the required attributes. This method is called before any of the resource creation and is not a part of the Pulumi context. This is where you will validate stack files attributes and add them into the provider. Below is some boilerplate code for the `Init` method and a helper method for converting stack attributes to a configuration object.
 
-```go {{ label: "deploy/deploy.go" }}
+```go title:deploy/deploy.go
 import (
 	...
 
@@ -179,7 +179,7 @@ var err error
 
 ```
 
-```go {{ label: "deploy/config.go" }}
+```go title:deploy/config.go
 package deploy
 
 import "github.com/mitchellh/mapstructure"
@@ -205,7 +205,7 @@ func ConfigFromAttributes(attributes map[string]interface{}) (*CustomConfig, err
 
 The `Pre` method is called before any resources are created, but after the pulumi context has been established. This is where global pulumi resources that must be created before all other resources can be created. This is where a unique stack id can be created, as well as global resources like resource groups or service accounts.
 
-```go {{ label: "deploy/deploy.go"}}
+```go title:deploy/deploy.go"}}
 import (
 	...
 	"github.com/nitrictech/nitric/cloud/common/deploy/pulumix"
@@ -247,7 +247,7 @@ func (a *NitricCustomPulumiProvider) Pre(ctx *pulumi.Context, resources []*pulum
 
 The `Config` method is where you can create the Pulumi ConfigMap with provider specific information. Below the pulumi config map is used to set the Pulumi Docker version. For the AWS provider it is used to set the region. The use case will be highly dependent on what pulumi provider you are using.
 
-```go {{ label: "deploy/deploy.go" }}
+```go title:deploy/deploy.go
 import (
 	...
 	"github.com/pulumi/pulumi/sdk/v3/go/auto"
@@ -311,7 +311,7 @@ func (*NitricDefaultOrder) Order(resources []*deploymentspb.Resource) []*deploym
 
 The `Post` method is called after all resources have been created, but before the pulumi context has been concluded. This is where you can put cleanup if required.
 
-```go {{ label: "deploy/deploy.go" }}
+```go title:deploy/deploy.go
 func (a *NitricCustomPulumiProvider) Post(ctx *pulumi.Context) error {
 	return nil
 }
@@ -321,7 +321,7 @@ func (a *NitricCustomPulumiProvider) Post(ctx *pulumi.Context) error {
 
 The `Result` method is the last to be called. This is where you can get any output information from the resources (like generated API endpoints) and return them as `stdout`.
 
-```go {{ label: "deploy/deploy.go" }}
+```go title:deploy/deploy.go
 func (a *NitricCustomPulumiProvider) Result(ctx *pulumi.Context) (pulumi.StringOutput, error) {
 	outputs := []interface{}{}
 
@@ -356,7 +356,7 @@ Each of the resource methods are where you can implement the custom deployment c
 
 Below is the stub for an unimplemented bucket resource.
 
-```go {{ label: "deploy/bucket.go" }}
+```go title:deploy/bucket.go
 import (
 	deploymentspb "github.com/nitrictech/nitric/core/pkg/proto/deployments/v1"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -369,7 +369,7 @@ func (n *NitricCustomPulumiProvider) Bucket(ctx *pulumi.Context, parent pulumi.R
 
 For example, if you wanted your implementation to use a bucket with the Digital Ocean Pulumi provider, it would look like this:
 
-```go {{ label: "deploy/bucket.go" }}
+```go title:deploy/bucket.go
 import (
 	deploymentspb "github.com/nitrictech/nitric/core/pkg/proto/deployments/v1"
 	"github.com/pulumi/pulumi-digitalocean/sdk/v4/go/digitalocean"
@@ -395,7 +395,7 @@ func (a *NitricDOPulumiProvider) Bucket(ctx *pulumi.Context, parent pulumi.Resou
 
 Below is how we would change the provider interface to add references to the Bucket.
 
-```go {{ label: "deploy/deploy.go" }}
+```go title:deploy/deploy.go
 import (
 	"github.com/nitrictech/nitric/cloud/common/deploy"
 	"github.com/nitrictech/nitric/cloud/common/deploy/provider"
@@ -427,7 +427,7 @@ The most complicated resource to create is the `Service` resource. This is becau
   [here](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploy/service.go).
 </Note>
 
-```go {{ label: "deploy/service.go" }}
+```go title:deploy/service.go
 package deploy
 
 import (
@@ -543,7 +543,7 @@ If you have been using the [custom provider skeleton](https://github.com/nitrict
 
 The implementation details for each of the runtime resources will be highly dependent on what provider you are using. For example, if you are using S3 as your Bucket implementation, your runtime provider will use a S3 client. An example of a S3 implementation is shown here:
 
-```go {{ label: "runtime/storage/storage.go"}}
+```go title:runtime/storage/storage.go"}}
 package storage
 
 import (
@@ -631,7 +631,7 @@ The first step is creating the runtime entrypoint file. This sets up which plugi
 
 <Note>The Nitric runtime server is referred to as the `membrane`.</Note>
 
-```go {{ label: "cmd/runtime/main.go"}}
+```go title:cmd/runtime/main.go"}}
 package main
 
 import (
@@ -701,7 +701,7 @@ func main() {
 
 We'll then create the deployment provider which will embed the runtime provider. We create the custom provider and use `provider.NewPulumiProviderServer` to wrap the provider so it can be used as a deployment gRPC server. `providerStack.Start()` starts the gRPC server.
 
-```go {{ label: "cmd/deploy/main.go"}}
+```go title:cmd/deploy/main.go"}}
 package main
 
 import (
@@ -732,7 +732,7 @@ func main() {
 
 We then need a way use our provider with Nitric projects. The following `makefile` has default scripts to build our runtime binary and our deployment binary, as well as a script `make install` to put in the provider directory. The `go build` output files match the binaries we were embedding into our `cmd` files earlier.
 
-```makefile {{ label: "makefile" }}
+```makefile title:makefile
 binaries: deploybin
 
 # build runtime binary
@@ -771,7 +771,7 @@ This will build the runtime provider and the deployment provider, packaging them
 
 To use the custom provider you can use the following stack configuration file. If you added any additional attribute config, this is where it will go.
 
-```yaml {{ label: "nitric.xxxx.yaml"}}
+```yaml title:nitric.xxxx.yaml"}}
 provider: custom/extension@0.0.1
 region: us-east-1
 ```

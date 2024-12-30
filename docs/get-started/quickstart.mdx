@@ -94,7 +94,7 @@ Navigate to the new project directory and install the dependencies:
 
 <TabItem label="TypeScript">
 
-```bash TypeScript
+```bash
 cd hello-world
 
 npm install
@@ -104,7 +104,7 @@ npm install
 
 <TabItem label="JavaScript">
 
-```bash JavaScript
+```bash
 cd hello-world
 
 npm install
@@ -114,7 +114,7 @@ npm install
 
 <TabItem label="Python">
 
-```bash Python
+```bash
 cd hello-world
 
 uv sync
@@ -131,7 +131,7 @@ If there are other dependency managers you would like to see supported, please l
 
 <TabItem label="Go">
 
-```bash Go
+```bash
 cd hello-world
 
 go mod tidy
@@ -141,7 +141,7 @@ go mod tidy
 
 <TabItem label="Dart">
 
-```bash Dart
+```bash
 cd hello-world
 
 dart pub get
@@ -157,7 +157,7 @@ Your project should now look like this:
 
 <TabItem label="TypeScript">
 
-```txt TypeScript
+```txt
 +--services/
 |  +-- api.ts
 +--node_modules/
@@ -172,7 +172,7 @@ Your project should now look like this:
 
 <TabItem label="JavaScript">
 
-```txt JavaScript
+```txt
 +--services/
 |  +-- api.js
 +--node_modules/
@@ -187,7 +187,7 @@ Your project should now look like this:
 
 <TabItem label="Python">
 
-```txt Python
+```txt
 +--services/
 |  +-- api.py
 +--.env
@@ -204,7 +204,7 @@ Your project should now look like this:
 
 <TabItem label="Go">
 
-```txt Go
+```txt
 +--services/hello/
 |  +-- main.go
 +--go.mod
@@ -218,7 +218,7 @@ Your project should now look like this:
 
 <TabItem label="Dart">
 
-```txt Dart
+```txt
 +--services/
 |  +-- api.dart
 +--analysis_options.yaml
@@ -270,7 +270,7 @@ Start by opening the `hello` service in your editor and adding a new route to th
 
 <CodeSwitcher tabs>
 
-```typescript title:services/api.ts
+```typescript !! title:services/api.ts
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -289,7 +289,7 @@ helloApi.get('/goodbye/:name', async (ctx) => {
 })
 ```
 
-```javascript title:services/api.js
+```javascript !! title:services/api.js
 import { api } from '@nitric/sdk'
 
 const helloApi = api('main')
@@ -308,7 +308,7 @@ helloApi.get('/goodbye/:name', async (ctx) => {
 })
 ```
 
-```python title:services/api.py
+```python !! title:services/api.py
 from nitric.resources import api
 from nitric.application import Nitric
 
@@ -357,7 +357,7 @@ func main() {
 }
 ```
 
-```dart title:services/api.dart
+```dart !! title:services/api.dart
 import 'package:nitric_sdk/nitric.dart';
 
 void main() {

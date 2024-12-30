@@ -40,7 +40,7 @@ Once you've gone through the account creation and verification, you'll arrive at
 
 The messenger class acts as a helper wrapper for sending text messages. It accepts the account SID and the auth token and creates a client. This client is then used in the single method `send` which accepts a text message object and creates it.
 
-```typescript {{ label: "common/messenger.ts" }}
+```typescript title:common/messenger.ts
 import twilio, { Twilio } from 'twilio'
 
 class Messenger {
@@ -73,7 +73,7 @@ npm install twilio
 
 For the API we will have a single POST route `send`. This done by creating an API resource using the Nitric SDK and defining a new route.
 
-```typescript {{ label: "services/text.ts" }}
+```typescript title:services/text.ts
 import { api } from '@nitric/sdk'
 
 const textApi = api('text')
@@ -97,7 +97,7 @@ TWILIO_PHONE_NUMBER=+1234567890
 
 The `dotenv.config` call will load the variables from the `.env` file into the `process.env` object. You can then use the variables to construct the messenger.
 
-```typescript {{ label: "services/text.ts" }}
+```typescript title:services/text.ts
 import { api } from '@nitric/sdk'
 import Messenger from '../common/messenger'
 
@@ -140,7 +140,7 @@ Secondly, convert this data to an SMS object:
 
 Finally, putting all these components all together, we get a functional text messaging endpoint ready for testing:
 
-```typescript {{ label: "services/text.ts" }}
+```typescript title:services/text.ts
 textApi.post('/send', async (ctx) => {
   const messenger = new Messenger(twilioAccountSID, twilioAuthToken)
 
