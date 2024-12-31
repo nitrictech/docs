@@ -607,7 +607,7 @@ We'll also add a dockerignore file to try and keep the image size down.
 touch torch.dockerfile.dockerignore
 ```
 
-```gitignore title: torch.dockerfile.dockerignore
+```text title: torch.dockerfile.dockerignore
 .mypy_cache/
 .nitric/
 .venv/
@@ -620,7 +620,7 @@ model.zip
 
 We'll also need to update the `python.dockerfile` to ignore the `.model` directory.
 
-```gitignore title: python.dockerfile.dockerignore
+```text title: python.dockerfile.dockerignore
 .mypy_cache/
 .nitric/
 .venv/

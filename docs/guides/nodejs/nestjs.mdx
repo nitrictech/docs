@@ -47,7 +47,7 @@ This will create a src directory with the Nest application code and a test file.
 
 Within our src directory we want to replace the base App controller code with a Profile controller.
 
-```typescript {{ label: 'profile/profile.controller.ts' }}
+```typescript title:profile/profile.controller.ts
 import { Controller, Get } from '@nestjs/common'
 import { ProfileService } from './profile.service'
 
@@ -64,7 +64,7 @@ export class ProfileController {
 
 Then update the App service with the Profile service.
 
-```typescript {{ label: 'profile/profile.service.ts' }}
+```typescript title:profile/profile.service.ts
 import { Injectable } from '@nestjs/common'
 
 @Injectable()
@@ -77,7 +77,7 @@ export class ProfileService {
 
 We will then need to update the imports for the base App module. We will keep this as the AppModule as its going to act as the entrypoint to our application.
 
-```typescript {{ label: 'app.module.ts' }}
+```typescript title:app.module.ts
 import { Module } from '@nestjs/common'
 import { ProfileController } from './profile/profile.controller'
 import { ProfileService } from './profile/profile.service'
@@ -100,7 +100,7 @@ yarn add @nitric/sdk
 
 Firstly, we will define our profiles [key value store](/keyvalue) and a Profile type at the top of our `ProfileService` file. The key value store will have permissions for getting, setting, and deleting as we will be using all those features for our Profile service.
 
-```typescript {{ label: 'profile/profile.service.ts' }}
+```typescript title:profile/profile.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { kv } from '@nitric/sdk';
 
@@ -124,7 +124,7 @@ export class ProfileService {
 
 We can then create some handlers for creating profiles. This will accept a create profile request and return the newly created profile.
 
-```typescript {{ label: 'profile/profile.service.ts' }}
+```typescript title:profile/profile.service.ts
 @Injectable()
 export class ProfileService {
   async createProfile(createProfileReq: Omit<Profile, 'id'>): Promise<Profile> {
@@ -141,7 +141,7 @@ export class ProfileService {
 
 Our next handler will be getting an individual profile by its `id`. This will accept an `id` and will return either the found profile or throw a not found exception.
 
-```typescript {{ label: 'profile/profile.service.ts' }}
+```typescript title:profile/profile.service.ts
 @Injectable()
 export class ProfileService {
   ...
@@ -160,7 +160,7 @@ export class ProfileService {
 
 The final handler we will write is for deleting an individual profile by its `id`.
 
-```typescript {{ label: 'profile/profile.service.ts' }}
+```typescript title:profile/profile.service.ts
 @Injectable()
 export class ProfileService {
   ...
@@ -190,7 +190,7 @@ We then want to add the `http` type to our main function, and pass in the Nest.j
   set.
 </Note>
 
-```typescript {{ label: 'app.module.ts' }}
+```typescript title:app.module.ts
 import { http } from '@nitric/sdk'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
@@ -207,7 +207,7 @@ http(bootstrap)
 
 Now that the service is built, we can use the `ProfileService` with our `ProfileController` routing. This involves correctly extracting the parameters from the request object to then pass into the services.
 
-```typescript {{ label: 'profile/profile.controller.ts' }}
+```typescript title:profile/profile.controller.ts
 import { Controller, Get, Post, Delete, Param, Req } from '@nestjs/common'
 import { Profile, ProfileService } from './profile.service'
 import { Request } from 'express'

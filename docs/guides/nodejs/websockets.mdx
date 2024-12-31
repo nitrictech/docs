@@ -60,7 +60,7 @@ In this structure you'll notice the `services` folder. By default, this is where
 
 Let's update our `hello.ts` file with some websocket code to get started.
 
-```typescript {{ label: 'services/hello.ts' }}
+```typescript title:services/hello.ts
 import { websocket } from '@nitric/sdk'
 const socket = websocket('example-websocket')
 
@@ -100,7 +100,7 @@ To do this we'll need to add some connection management.
 
 You can update the `hello.ts` file like so:
 
-```typescript {{ label: 'services/hello.ts' }}
+```typescript title:services/hello.ts
 import { websocket, kv } from '@nitric/sdk'
 
 // Initialize KV store for connections and a WebSocket
@@ -159,14 +159,14 @@ nitric stack new
 
 This command will create a file named `nitric.dev.yaml`, with contents like this:
 
-```yaml {{ label: 'nitric.dev.yaml' }}
+```yaml title:nitric.dev.yaml
 provider: nitric/aws@1.1.0
 region: us-east-1
 ```
 
 With the stack file in place we can run the deployment:
 
-```bash {{ label: 'terminal' }}
+```bash
 nitric up
 ```
 

@@ -114,7 +114,7 @@ This gives you a new prisma schema in a folder called `prisma` and a new `.env` 
 
 Overwrite the contents of `prisma.schema` with the schema below. We'll use this to initialize our database.
 
-```prisma {{ label: "prisma/schema.prisma" }}
+```prisma title:prisma/schema.prisma
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -168,7 +168,7 @@ npx prisma generate
 
 Finally, let's make it easy to import an instance of the prisma client by creating the file `prisma/index.ts` and adding this code:
 
-```typescript {{ label: 'prisma/index.ts' }}
+```typescript title:prisma/index.ts
 import { PrismaClient } from './client'
 
 export * from './client'
@@ -217,7 +217,7 @@ Apps built with Nitric define their resources in code, you can write this in the
 
 First, let's declare an API gateway. Create a new file called `apis.ts` in a new folder called `resources` and this code:
 
-```typescript {{ label: "resources/apis.ts" }}
+```typescript title:resources/apis.ts
 import { api } from '@nitric/sdk'
 
 export const memeApi = api('meme')
@@ -227,7 +227,7 @@ This creates a new `api` resource with the name "meme" and exports it as a resou
 
 Next, let's also create some buckets to store our meme image files. Create a new file called `buckets.ts` under `resources` and populate it with the following:
 
-```typescript {{ label: "resources/buckets.ts" }}
+```typescript title:resources/buckets.ts
 import { bucket } from '@nitric/sdk'
 
 export const templates = bucket('templates')
@@ -242,7 +242,7 @@ Now that the resources are declared, let's create the first service. This servic
 
 In the `/services` directory create a new file called `templates.ts` and populate it with the following code:
 
-```typescript {{ label: "services/templates.ts" }}
+```typescript title:services/templates.ts
 import Jimp from 'jimp'
 import prisma, { MemeTemplate, TextPosition } from '../prisma'
 import { memeApi } from '../resources/apis'
@@ -317,7 +317,7 @@ The incoming `context` object _(which has been destructured into `req` and `res`
 
 Similar to the `templates` example, we'll create another new file `services/memes.ts`, with the code below:
 
-```typescript {{ label: "services/memes.ts" }}
+```typescript title:services/memes.ts
 import Jimp from 'jimp'
 import prisma, { Meme } from '../prisma'
 import { memes, templates } from '../resources/buckets'
