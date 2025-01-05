@@ -53,10 +53,10 @@ You can go ahead and open this new project in your editor of choice. You should 
 └── yarn.lock
 ```
 
-In this structure you'll notice the `servuces` folder. By default, this is where Nitric expects the entrypoint code for your application. However, that's just a convention, we can change that to anything else that suits our needs.
+In this structure you'll notice the `services` folder. By default, this is where Nitric expects the entrypoint code for your application. However, that's just a convention, we can change that to anything else that suits our needs.
 Now, let's add some Fastify code to get things started.
 
-```javascript title:services/app.js
+```javascript title:services/api.js
 import Fastify from 'fastify'
 import { http } from '@nitric/sdk'
 
@@ -94,9 +94,9 @@ Hello World!
 
 With everything working so far, now is a good time to see how we can add new resources to the Fastify app using Nitric. In this example, let's add a pub/sub topic which allows us to perform work in the background, but still respond quickly via the HTTP API.
 
-You can update the `app.js` file like so:
+You can update the `api.js` file like so:
 
-```javascript title:services/app.js
+```javascript title:services/api.js
 import Fastify from 'fastify'
 import { http, topic } from '@nitric/sdk'
 
