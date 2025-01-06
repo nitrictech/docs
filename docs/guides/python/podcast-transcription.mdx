@@ -9,7 +9,7 @@ featured:
   image: /docs/images/guides/podcast-transcription/featured.png
   image_alt: 'Podcast Transcription featured image'
 published_at: 2024-11-15
-updated_at: 2024-11-15
+updated_at: 2025-01-06
 ---
 
 # Transcribing Podcasts using OpenAI Whisper
@@ -352,7 +352,7 @@ preview:
   - batch-services
 ```
 
-### Testing the project
+## Testing the project
 
 Before deploying our project, we can test that it works as expected locally. You can do this using `nitric start` or if you'd prefer to run the program in containers use `nitric run`. Either way you can test the transcription by first uploading an audio file to the podcast bucket.
 
@@ -380,7 +380,7 @@ Once that's done, the batch job will be triggered so you can just sit back and w
 curl -sL http://localhost:4002/transcript/serial
 ```
 
-### Requesting a G instance quota increase
+## Requesting a G instance quota increase
 
 Most AWS accounts **will not** have access to on-demand GPU instances (G
 Instances), if you'd like to run models using a GPU you'll need to request a quota increase for G instances.
@@ -411,9 +411,31 @@ To request a quota increase for G instances in AWS you can follow these steps:
 
 Once you've requested the quota increase it may take time for AWS to approve it.
 
-### Deploy the project
+## Deploy the project
 
-Once the above is complete, we can deploy the project to the cloud using:
+At this point, you can deploy what you've built to any of the supported cloud providers. In this example we'll deploy to AWS. Start by setting up your credentials and configuration for the [nitric/aws provider](/providers/pulumi/aws).
+
+Next, we'll need to create a stack file (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
+
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
+
+```bash
+nitric stack new dev aws
+```
+
+Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
+
+```yaml title:nitric.dev.yaml
+provider: nitric/aws@latest
+region: us-east-1
+```
+
+<Note>
+  You are responsible for staying within the limits of the free tier or any
+  costs associated with deployment.
+</Note>
+
+Let's try deploying the stack with the `up` command:
 
 ```bash
 nitric up
@@ -426,7 +448,11 @@ nitric up
 
 Once the project is deployed you can try out some transcriptions, just add a podcast to the bucket and the bucket notification will be triggered.
 
-You can destroy the project once it is finished using `nitric down`.
+To tear down your application from the cloud, use the `down` command:
+
+```bash
+nitric down
+```
 
 ## Summary
 

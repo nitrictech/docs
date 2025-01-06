@@ -1,0 +1,40 @@
+---
+description: Using Stable Diffusion 3.5 on serverless infrastructure on AWS with Nitric
+tags:
+  - API
+  - AI & Machine Learning
+languages:
+  - python
+image: /docs/images/guides/stable-diffusion/banner.png
+image_alt: 'Stable diffusion guide banner'
+featured:
+  image: /docs/images/guides/stable-diffusion/featured.png
+  image_alt: 'Stable diffusion guide featured image'
+published_at: 2024-12-16
+---
+
+# Stable Diffusion 3.5 on serverless infrastructure like AWS Lambda
+
+This guide will demonstrate using Stable Diffusion 3.5 on serverless infrastructure.
+
+## Prerequisites
+
+- [uv](https://docs.astral.sh/uv/#getting-started) - for Python dependency management
+- The [Nitric CLI](/get-started/installation)
+- _(optional)_ An [AWS](https://aws.amazon.com) account
+
+## Project setup
+
+Let's start by creating a new project using Nitric's python starter template.
+
+```bash
+nitric new stable-diffusion py-starter
+cd stable-diffusion
+```
+
+Next, let's install the base dependencies, then add the extra dependencies we need specifically for loading the language model.
+
+```bash
+# Install the base dependencies
+uv sync
+```

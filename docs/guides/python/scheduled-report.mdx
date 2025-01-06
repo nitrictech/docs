@@ -8,7 +8,7 @@ tags:
 languages:
   - python
 published_at: 2024-04-16
-updated_at: 2024-12-27
+updated_at: 2025-01-06
 ---
 
 # Generate a report with Google Sheets and share it with Google Drive
@@ -180,7 +180,7 @@ nitric start
 
 At this point, you can deploy what you've built to any of the supported cloud providers. In this example we'll deploy to AWS. Start by setting up your credentials and configuration for the [nitric/aws provider](/providers/pulumi/aws).
 
-Next, we'll need to create a `stack file` (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
+Next, we'll need to create a stack file (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
 
 The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
@@ -190,7 +190,10 @@ nitric stack new dev aws
 
 Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
 
-### AWS
+```yaml title:nitric.dev.yaml
+provider: nitric/aws@latest
+region: us-east-1
+```
 
 <Note>
   You are responsible for staying within the limits of the free tier or any
@@ -203,7 +206,7 @@ Let's try deploying the stack with the `up` command:
 nitric up
 ```
 
-When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your WebSocket application.
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your application.
 
 To tear down your application from the cloud, use the `down` command:
 

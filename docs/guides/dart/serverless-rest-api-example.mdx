@@ -7,7 +7,7 @@ tags:
 languages:
   - dart
 published_at: 2024-04-24
-updated_at: 2024-12-24
+updated_at: 2025-01-06
 ---
 
 # Building a REST API with Nitric
@@ -154,6 +154,25 @@ profileApi.get("/profiles/:id", (ctx) async {
 });
 ```
 
+### Retrieve all profiles with GET
+
+```dart title:services/api.dart
+profileApi.get("/profiles", (ctx) async {
+  List<Map<String, dynamic>> profilesList = [];
+  final profilesIds = await profiles.keys();
+
+  await for (final id in profilesIds) {
+    final profile = await profiles.get(id);
+    profilesList.add(profile);
+  }
+
+  ctx.res.body = jsonEncode(profilesList);
+  ctx.res.headers["Content-Type"] = ["application/json"];
+
+  return ctx;
+});
+```
+
 ### Remove a profile with DELETE
 
 ```dart title:services/api.dart
@@ -243,8 +262,6 @@ provider: nitric/aws@latest
 # https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
 region: us-east-1
 ```
-
-### AWS
 
 <Note>
   Cloud deployments incur costs and while most of these resource are available

@@ -8,7 +8,7 @@ languages:
   - typescript
   - javascript
 published_at: 2023-06-16
-updated_at: 2024-12-24
+updated_at: 2025-01-06
 ---
 
 # Building a REST API with Nitric
@@ -19,6 +19,7 @@ The API will provide the following routes:
 
 | **Method** | **Route**      | **Description**                  |
 | ---------- | -------------- | -------------------------------- |
+| `GET`      | /profiles      | Get all profiles                 |
 | `GET`      | /profiles/[id] | Get a specific profile by its Id |
 | `POST`     | /profiles      | Create a new profile             |
 | `DELETE`   | /profiles/[id] | Delete a profile                 |
@@ -63,7 +64,7 @@ The scaffolded project should have the following structure:
 
 ```text
 services/
-├── hello.ts
+├── api.ts
 node_modules/
 nitric.yaml
 package.json
@@ -76,8 +77,6 @@ You can test the project to verify everything is working as expected:
 nitric start
 ```
 
-If everything's working you can now delete all files in the `services/` folder, we'll create new services in this guide.
-
 ## Building the API
 
 This example uses UUIDs to create unique IDs to store profiles against, let's start by adding a library to help with that:
@@ -86,9 +85,9 @@ This example uses UUIDs to create unique IDs to store profiles against, let's st
 npm install uuid
 ```
 
-Applications built with Nitric can contain many APIs, let's start by adding one to this project to serve as the public endpoint. Create a file named `profiles.ts` in the services directory and add the following code to that file.
+Applications built with Nitric can contain many APIs, let's start by adding an API and a key value store to this project to serve as the public endpoint.
 
-```typescript title:services/profiles.ts
+```typescript title:services/api.ts
 import { api, kv } from '@nitric/sdk'
 import { v4 as uuid } from 'uuid'
 
@@ -127,7 +126,7 @@ Next we will add features that allow our API consumers to work with profile data
   prefer. For simplicity we'll group them together in this guide.
 </Note>
 
-```typescript title:services/profiles.ts
+```typescript title:services/api.ts
 profileApi.post('/profiles', async (ctx) => {
   const id = uuid()
   const { name, age, homeTown } = ctx.req.json()
@@ -156,7 +155,7 @@ profileApi.post('/profiles', async (ctx) => {
 
 ### Retrieve a profile with GET
 
-```typescript title:services/profiles.ts
+```typescript title:services/api.ts
 profileApi.get('/profiles/:id', async (ctx) => {
   const { id } = ctx.req.params
 
@@ -177,7 +176,7 @@ profileApi.get('/profiles/:id', async (ctx) => {
 
 ### Remove a profile with DELETE
 
-```typescript title:services/profiles.ts
+```typescript title:services/api.ts
 profileApi.delete('/profiles/:id', async (ctx) => {
   const { id } = ctx.req.params
 
@@ -200,26 +199,18 @@ profileApi.delete('/profiles/:id', async (ctx) => {
 
 ### List all profiles with GET
 
-```typescript title:services/profiles.ts
+```typescript title:services/api.ts
 profileApi.get('/profiles', async (ctx) => {
-  try {
-    const profilesList = []
-    // Get a profile by id
-    const keys = profiles.keys()
+  const profilesList = []
+  const keys = profiles.keys()
 
-    for await (const key of keys) {
-      const profile = await profiles.get(key)
-      profilesList.push(profile)
-    }
-
-    // Set a JSON HTTP response
-    ctx.res.json(profilesList)
-  } catch (error) {
-    ctx.res.status = 404
-    ctx.res.json({
-      msg: `Profiles not found.`,
-    })
+  for await (const key of keys) {
+    const profile = await profiles.get(key)
+    profilesList.push(profile)
   }
+
+  // Set a JSON HTTP response
+  ctx.res.json(profilesList)
 })
 ```
 
@@ -278,12 +269,12 @@ At this point, you can deploy the application to any supported cloud provider. S
 Next, we'll need to create a `stack`. Stacks represent deployed instances of an application, including the target provider and other details such as the deployment region. You'll usually define separate stacks for each environment such as development, testing and production.
 
 ```bash
-nitric stack new dev
+nitric stack new dev aws
 ```
 
 Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region, let's use `us-east-1`.
 
-```yaml
+```yaml title:nitric.dev.yaml
 # The nitric provider to use
 provider: nitric/aws@latest
 # The target aws region to deploy to
@@ -291,8 +282,6 @@ provider: nitric/aws@latest
 # https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
 region: us-east-1
 ```
-
-### AWS
 
 <Note>
   Cloud deployments incur costs and while most of these resource are available
@@ -321,7 +310,7 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 
 Define a bucket named `profilesImg` with reading/writing permissions.
 
-```typescript title:services/profiles.ts
+```typescript title:services/api.ts
 import { bucket } from '@nitric/sdk'
 
 const profilesImg = bucket('profilesImg').allow('read', 'write')
@@ -329,7 +318,7 @@ const profilesImg = bucket('profilesImg').allow('read', 'write')
 
 ### Get a URL to upload a profile image
 
-```typescript title:services/profiles.ts
+```typescript title:services/api.ts
 profileApi.get('/profiles/:id/image/upload', async (ctx) => {
   const { id } = ctx.req.params
 
@@ -346,7 +335,7 @@ profileApi.get('/profiles/:id/image/upload', async (ctx) => {
 
 ### Get a URL to download a profile image
 
-```typescript title:services/profiles.ts
+```typescript title:services/api.ts
 profileApi.get('/profiles/:id/image/download', async (ctx) => {
   const { id } = ctx.req.params
 
@@ -363,7 +352,7 @@ profileApi.get('/profiles/:id/image/download', async (ctx) => {
 
 You can also return a redirect response that takes the HTTP client directly to the photo URL.
 
-```typescript
+```typescript title:services/api.ts
 profileApi.get('/profiles/:id/image/view', async (ctx) => {
   const { id } = ctx.req.params
 
