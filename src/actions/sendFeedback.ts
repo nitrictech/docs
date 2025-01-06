@@ -17,6 +17,11 @@ export async function sendFeedback(prevState: any, formData: FormData) {
     return { message: 'Not available on production' }
   }
 
+  // validate url and user agent
+  if (!ua || !url.toString().startsWith('/docs')) {
+    return { message: 'invalid' }
+  }
+
   // validate answer
   if (!['yes', 'no', 'feedback'].includes(answer?.toString())) {
     return { message: 'invalid' }
