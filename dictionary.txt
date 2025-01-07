@@ -37,6 +37,7 @@ args
 async
 aws
 backend
+checkov
 codebase
 composable
 config
@@ -252,6 +253,8 @@ Trivy's
 KMS
 deployable
 VMs
+json
+KMS
 [0-9]+px
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
