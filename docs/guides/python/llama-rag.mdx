@@ -76,7 +76,7 @@ We'll organize our project structure like so:
 
 ## Setting up our LLM
 
-We'll define a `ModelParameters` class which will have parameters used throughout our application. By putting it in a class, it means it will lazily load the LLM, [embed model](https://docs.llamaindex.ai/en/stable/module_guides/models/embeddings/), and tokenizer so that it doesn't slow down other modules that don't require everything to be initialized. At this point we can also create a prompt template for prompts with our query engine. It will just sanitize some of the hallucinations so that if the model does not know an answer it won't pretend like it does. We'll also define two functions that will convert a prompt or message into the required Llama 3.2 format.
+We'll define a `ModelParameters` class which will have parameters used throughout our application. By putting it in a class, it means it will lazily load the LLM, [embed model](https://docs.llamaindex.ai/en/stable/module_guides/models/embeddings/), and tokenizer so that it doesn't slow down other modules that don't require everything to be initialized. At this point we can also create a prompt template for prompts with our query engine. It will sanitize some of the hallucinations so that if the model does not know an answer it won't pretend like it does. We'll also define two functions that will convert a prompt or message into the required Llama 3.2 format.
 
 ```python title:common/model_parameters.py
 import os
@@ -525,7 +525,7 @@ config:
       # We add more storage to the lambda function, so it can store the model
       ephemeral-storage: 1024
 ```
-
+<Note>When you set ephemeral storage above the default 512 MB, there may be additional charges based on the amount of storage and how long your function runs.</Note>
 We can then deploy using the following command:
 
 ```bash
