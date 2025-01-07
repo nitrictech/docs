@@ -37,6 +37,7 @@ args
 async
 aws
 backend
+checkov
 codebase
 composable
 config
@@ -242,6 +243,8 @@ quantized
 VPC
 trivy
 Trivy's
+KMS
+json
 KMS
 [0-9]+px
 ^.+[-:_]\w+$
