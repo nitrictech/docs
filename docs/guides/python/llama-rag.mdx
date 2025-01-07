@@ -525,7 +525,13 @@ config:
       # We add more storage to the lambda function, so it can store the model
       ephemeral-storage: 1024
 ```
-<Note>When you set ephemeral storage above the default 512 MB, there may be additional charges based on the amount of storage and how long your function runs.</Note>
+
+<Note>
+  When you set ephemeral storage above the default 512 MB, there may be
+  additional charges based on the amount of storage and how long your function
+  runs.
+</Note>
+
 We can then deploy using the following command:
 
 ```bash
