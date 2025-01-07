@@ -1,0 +1,106 @@
+---
+description: Use checkov for static analysis of a Nitric project deployed with Terraform
+tags:
+  - Terraform
+  - Testing
+published_at: 2025-01-09
+---
+
+# Static analysis of Terraform with Checkov
+
+This guide will walk you through generating a report with [Checkov](https://www.checkov.io/) from a Nitric project.
+
+## How Checkov works
+
+[Checkov](https://www.checkov.io/) is a static code analysis tool for scanning infrastructure as code (IaC) files for misconfigurations that may lead to security or compliance problems.
+
+This guide assumes that you have already [installed Checkov](https://www.checkov.io/1.Welcome/Quick%20Start.html#install-checkov-from-pypi) by following their installation guide.
+
+## What we'll be doing
+
+1. Create and set up your application.
+2. Deploying to AWS with a Terraform provider.
+3. Run Checkov.
+
+## Create and set up your application
+
+Checkov can be used with any Nitric project that you intend to deploy with Terraform. We'll be using a basic starter template in this guide, however, you can use your own Nitric project or an [example project](https://github.com/nitrictech/examples).
+
+Let's start by creating a new project from a Nitric template, this will provide a base to start building the API.
+
+```typescript
+nitric new my-profile-api ts-starter
+```
+
+Next, open the project in your editor of choice and make sure all dependencies are resolved:
+
+Using NPM:
+
+```bash
+npm install
+```
+
+You can test the project to verify everything is working as expected:
+
+```bash
+nitric start
+```
+
+## Deploying to AWS with a Terraform provider
+
+To deploy your application with Terraform you'll need to use Nitric's Terraform providers. You can learn more about using Nitric with Terraform here.
+
+```bash
+nitric stack new dev aws-tf
+```
+
+Update this newly created stack file to include your target region:
+
+```yaml title:nitric.dev.yaml
+# The nitric provider to use
+provider: nitric/awstf@1.11.6
+
+# The target aws region to deploy to
+region: us-east-2
+```
+
+The Nitric Terraform providers are currently in preview, to enable them you'll need to enable beta-providers in your Nitric project. You can do this by adding the following to your project's nitric.yaml file:
+
+```yaml title:nitric.yaml
+preview:
+  - beta-providers
+```
+
+Once you've created your stack file, you can generate the Terraform code by running the following command:
+
+```bash
+nitric up
+```
+
+This will generate Terraform code which can deploy your application. The output will be in a folder named cdktf.out by default.
+
+## Run checkov
+
+Use the Terraform CLI to generate a terraform plan expressed in a json file and then run Checkov on this file.
+
+```bash
+cd cdktf.out/stacks/my-profile-api-dev
+
+terraform init
+terraform plan --out tfplan.binary
+terraform show -json tfplan.binary | jq > tfplan.json
+
+checkov -f tfplan.json
+```
+
+## Analysing the results
+
+Checkov comes with some great default checks, however, they do need to be aligned with the requirements of your application.
+
+Here is an example:
+
+The Checkov policy ‘CKV_AWS_136‘ checks specifically for SSE-KMS using a customer-managed KMS key (or at least AWS-managed KMS key). Thus, Checkov will fail if it doesn’t see a KMS key reference, even though your ECR repository is still encrypted by SSE-S3 automatically.
+
+This finding might not always be relevant because, by default, Amazon ECR encrypts container images at rest using Amazon S3 server-side encryption (SSE-S3). That means your images are always encrypted, even if you don’t explicitly configure a KMS key.
+
+If you have any concerns, please don't hesitate to [reach out](https://discord.com/invite/Webemece5C).
