@@ -124,6 +124,20 @@ export class ProfileService {
 
 We can then create some handlers for creating profiles. This will accept a create profile request and return the newly created profile.
 
+Install the `uuid` package to generate unique ids for the profiles.
+
+```bash
+yarn add uuid
+```
+
+Add the import to the top of the file.
+
+```typescript title:profile/profile.service.ts
+import { v4 as uuidv4 } from 'uuid'
+```
+
+Then add the handler changes.
+
 ```typescript title:profile/profile.service.ts
 @Injectable()
 export class ProfileService {
@@ -179,7 +193,7 @@ To run the application locally using Nitric, and to eventually deploy the applic
 name: nest-x-nitric
 services:
   - match: src/main.ts
-    start: yarn dev
+    start: yarn start
 ```
 
 We then want to add the `http` type to our main function, and pass in the Nest.js application. The `http` wrapper will use the `bootstrap` function when starting the application and pass it the port.
