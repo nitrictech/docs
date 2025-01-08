@@ -66,7 +66,7 @@ region: us-east-2
 
 The Nitric Terraform providers are currently in preview. To enable them, you'll need to enable beta-providers in your Nitric project. You can do this by adding the following to your project's `nitric.yaml` file:
 
-```yaml title=nitric.yaml
+```yaml title:nitric.yaml
 preview:
   - beta-providers
 ```
@@ -92,4 +92,4 @@ trivy config .
 
 Trivy comes with a variety of checks for common security and misconfiguration issues. Some findings might not always be relevant to your deployment scenario. For example, if Trivy flags a missing KMS key reference for encryption, it might be because your ECR repository is already encrypted by default with SSE-S3, and you haven’t explicitly configured a KMS key. In such cases, it’s worth reviewing the findings to see if they apply to your use case.
 
-If you have any concerns, please don't hesitate to [reach out](https://discord.com/invite/Webemece5C).
+If you have any concerns, please don't hesitate to [reach out](https://nitric.io/chat).
