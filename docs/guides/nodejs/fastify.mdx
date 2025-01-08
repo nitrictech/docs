@@ -68,13 +68,21 @@ fastify.get('/', (request, reply) => {
   reply.send('Hello World!')
 })
 
-http(fastify)
+async function bootstrap(port: number) {
+  const address = await fastify.listen({ port })
+
+  console.log(`Server listening on ${address}`)
+
+  return fastify.server
+}
+
+http(bootstrap)
 ```
 
 <Note>
-  If you're familiar with Fastify you'll notice this example doesn't call
-  `fastify.listen`. The Nitric `http` function takes care of that, as well as
-  binding the application to the correct port in each environment.
+  The `http` function is a Nitric helper that allows you to bootstrap your
+  Fastify application with Nitric. Here we're passing the port number as an
+  argument to the `fastify.listen` function and returning the server instance.
 </Note>
 
 At this point we're ready to start testing locally.
@@ -111,14 +119,14 @@ fastify.get('/', async (request, reply) => {
 })
 
 async function bootstrap(port: number) {
-  await fastify.listen({ port })
+  const address = await fastify.listen({ port })
+
+  console.log(`Server listening on ${address}`)
 
   return fastify.server
 }
 
-http(bootstrap, () => {
-  console.log(`Application started`)
-})
+http(bootstrap)
 ```
 
 We'll also add a new function to do the background work:
