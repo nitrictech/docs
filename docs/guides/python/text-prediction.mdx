@@ -5,7 +5,7 @@ tags:
 languages:
   - python
 published_at: 2022-12-20
-updated_at: 2024-10-17
+updated_at: 2025-01-06
 ---
 
 # Building serverless text prediction from training to deployment
@@ -16,7 +16,7 @@ We'll be making a simple text based prediction model based off of the book Pride
 
 ## Prerequisites
 
-- [Pipenv](https://pypi.org/project/pipenv/) - for simplified dependency management
+- [uv](https://docs.astral.sh/uv/#getting-started) - for Python dependency management
 - The [Nitric CLI](/get-started/installation)
 - _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account
 
@@ -25,7 +25,7 @@ We'll be making a simple text based prediction model based off of the book Pride
 We'll start by creating a new project for our API.
 
 ```bash
-nitric new prediction-api py-starter-pipenv
+nitric new prediction-api py-starter
 ```
 
 Next, open the project in your editor of choice.
@@ -34,10 +34,10 @@ Next, open the project in your editor of choice.
 cd prediction-api
 ```
 
-Make sure all dependencies are resolved using Pipenv:
+Make sure all dependencies are resolved using `uv`:
 
 ```bash
-pipenv install --dev
+uv sync
 ```
 
 ## Exploring our data
@@ -50,7 +50,7 @@ To start we can manually remove the headers and footers. The header starts with 
 
 We can then either manually remove the section headers, or do it programmatically.
 
-```python
+```python title:prediction/preprocess.py
 def remove_section_headers(lines: list[str]):
   section = False
   new_lines = []
@@ -67,7 +67,7 @@ def remove_section_headers(lines: list[str]):
 
 Removing the chapters.
 
-```python
+```python title:prediction/preprocess.py
 import re
 
 def remove_chapters(data: str):
@@ -76,7 +76,7 @@ def remove_chapters(data: str):
 
 Remove contractions.
 
-```python
+```python title:prediction/preprocess.py
 def remove_contractions(data: str) -> str:
   return (data.
     replace("shan't", "shall not").
@@ -91,7 +91,7 @@ def remove_contractions(data: str) -> str:
 
 Remove punctuation.
 
-```python
+```python title:prediction/preprocess.py
 import string
 
 def remove_punctuation(data: str) -> str:
@@ -101,12 +101,12 @@ def remove_punctuation(data: str) -> str:
 Convert to numbers using num2words. This will mean we have to install it.
 
 ```bash
-pipenv install num2words
+uv add num2words
 ```
 
 We can then write our convert numbers function.
 
-```python
+```python title:prediction/preprocess.py
 from num2words import num2words
 
 def convert_numbers(data: str) -> str:
@@ -121,7 +121,7 @@ def convert_numbers(data: str) -> str:
 
 Putting it all together we can get our cleaned data.
 
-```python
+```python title:prediction/preprocess.py
 # Open text data and read it into array
 file = open("data.txt", "r")
 lines = []
@@ -144,12 +144,12 @@ with open('clean_data.txt', 'w') as f:
 Before we are done, we will want to tokenize the data so that it can be processed by the model. After it's fit to the text, we will save it so we can use it later. To tokenize the data, we will use keras' pre-processing module. For this we require the keras module.
 
 ```bash
-pipenv install keras
+uv add keras
 ```
 
 We can then create and fit the tokenizer to the text. We will initialize the Out of Vocabulary (OOV) token as `<oov>`.
 
-```python
+```python title:prediction/preprocess.py
 import pickle
 from keras.preprocessing.text import Tokenizer
 
@@ -168,7 +168,7 @@ To train the model, we will be using a Bi-Directional Long-Short Term Memory Rec
 
 Start by loading the tokenizer from the pre-processing stage.
 
-```python
+```python title:prediction/training.py
 import pickle
 
 with open('tokenizer.pickle', 'rb') as handle:
@@ -178,12 +178,12 @@ with open('tokenizer.pickle', 'rb') as handle:
 We can then create all the input sequences to train our model. This works by getting every 6 word combination in the text. First add numpy as a dependency.
 
 ```bash
-pipenv install numpy
+uv add numpy
 ```
 
 Then we'll write the function to create the input sequences from the data.
 
-```python
+```python title:prediction/training.py
 import numpy as np
 from keras.utils import pad_sequences
 
@@ -204,7 +204,7 @@ def create_input_sequences(data: list[str], n_gram_size=6):
 
 We'll then split the input sequences into labels, training, and testing data.
 
-```python
+```python title:prediction/training.py
 from keras.utils import to_categorical, pad_sequences
 from sklearn.model_selection import train_test_split
 
@@ -220,7 +220,7 @@ def create_training_data(input_sequences):
 
 The next part is fitting, compiling, and training the model. We will use the X training data and y training data, as well as the sizes of our data. We are using an ADAM optimizer, a reduce learning rate on plateau callback, and a save model on checkpoint callback.
 
-```python
+```python title:prediction/training.py
 # Create callbacks
 checkpoint = ModelCheckpoint("model.h5", monitor='loss', verbose=1, save_best_only=True, mode='auto')
 
@@ -232,7 +232,7 @@ optimizer = Adam(learning_rate=0.01)
 
 Then we will add layers to the sequential model.
 
-```python
+```python title:prediction/training.py
 # Create model
 model = Sequential()
 model.add(Embedding(total_words, 100, input_length=max_sequence_len-1))
@@ -244,7 +244,7 @@ model.summary()
 
 Putting it all together and compiling the model using the training data.
 
-```python
+```python title:prediction/training.py
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Embedding, Bidirectional
 from keras.optimizers import Adam
@@ -281,7 +281,7 @@ def train_model(X_train, y_train, total_words, max_sequence_len):
 
 With all the services defined, we can train our model with the cleaned data.
 
-```python
+```python title:prediction/training.py
 data = open('clean_data.txt', 'r').read().split(' ')
 total_words = len(tokenizer.word_index) + 1
 
@@ -295,9 +295,9 @@ The model checkpoint save callback will save the model as `model.h5`. We will th
 
 ## Predicting text
 
-Starting with the `hello.py` file, we will first load the model and tokenizer. This is done with dynamic imports so that it will reduce the cold start time when its deployed.
+Starting with the `api.py` file, we will first load the model and tokenizer. This is done with dynamic imports so that it will reduce the cold start time when its deployed.
 
-```python
+```python title:services/api.py
 import pickle
 import importlib
 
@@ -323,7 +323,7 @@ def load_model():
 
 Once the model is loaded, we can write a function to predict the next 3 most likely words. This uses the tokenizer to create the same token list that was used to train the model. We can then get a prediction of all the most likely words, which we will reduce down to 3. We'll then get the actual word from the map of tokens by finding the word in the dictionary. The tokenizer word index is in the from `{ "word": token_num }`, e.g. `{ "the": 1, "and": 2 }`. The predictions we receive will be an array of the token numbers.
 
-```python
+```python title:prediction/training.py
 # Predict text based on a set of seed text
 # Returns a list of 3 top choices for the next word
 def predict_text(seed_text: str) -> list[str]:
@@ -361,7 +361,7 @@ def predict_text(seed_text: str) -> list[str]:
 
 Using the predictive text function, we can create our API. First we will make sure that the necessary modules are imported.
 
-```python
+```python title:prediction/training.py
 from nitric.resources import api
 from nitric.application import Nitric
 from nitric.context import HttpContext
@@ -369,7 +369,7 @@ from nitric.context import HttpContext
 
 We will then define the API and our first route.
 
-```python
+```python title:prediction/training.py
 mainApi = api("main")
 
 @mainApi.get("/prediction")
@@ -381,7 +381,7 @@ Nitric.run()
 
 Within this function block we want to define the code that is run on a request. We will accept the prompt to predict from via the query parameters. This will mean requests are in the form: `/predictions?prompt=where should I`.
 
-```python
+```python title:prediction/training.py
 @mainApi.get("/prediction")
 async def create_prediction(ctx: HttpContext) -> None:
   prompt = ctx.req.query.get("prompt")
@@ -396,7 +396,7 @@ Nitric.run()
 
 With the users prompt we can then do the prediction and return to the user the prediction.
 
-```python
+```python title:prediction/training.py
 @mainApi.get("/prediction")
 async def create_prediction(ctx: HttpContext) -> None:
   ...
@@ -426,37 +426,40 @@ What should I ['have', 'think', 'say']
 
 ## Deploy to the cloud
 
-Setup your credentials and any other cloud specific configuration:
+At this point, you can deploy what you've built to any of the supported cloud providers. In this example we'll deploy to AWS. Start by setting up your credentials and configuration for the [nitric/aws provider](/providers/pulumi/aws).
 
-- [AWS](/providers/pulumi/aws)
-- [Azure](/providers/pulumi/azure)
-- [GCP](/providers/pulumi/gcp)
+Next, we'll need to create a `stack file` (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
 
-Create your stack. This is an environment configuration file for the cloud provider for which your project will be deployed.
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
 ```bash
-nitric stack new
+nitric stack new dev aws
 ```
 
-This project will run perfectly fine with a default memory configuration of 512 MB. However, to get instant predictions we will amend the memory to be 1 GB. In the newly created stack file we want to add some config.
+This project will run perfectly fine with a default memory configuration of 512 MB. However, to get instant predictions we will amend the memory to be 1 GB. Edit the stack file `nitric.dev.yaml` and set your preferred AWS region and memory configuration.
 
-```yaml
-name: dev
-provider: gcp
-region: us-west2
-project: gcp-project-123456
+```yaml title:nitric.dev.yaml
+provider: nitric/awsp@latest
+region: us-east-1
 config:
-  default:
+  lambda:
     memory: 1024
 ```
 
-You can then deploy using the following command:
+<Note>
+  You are responsible for staying within the limits of the free tier or any
+  costs associated with deployment.
+</Note>
+
+Let's try deploying the stack with the `up` command:
 
 ```bash
 nitric up
 ```
 
-To undeploy run the following command:
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your application.
+
+To tear down your application from the cloud, use the `down` command:
 
 ```bash
 nitric down

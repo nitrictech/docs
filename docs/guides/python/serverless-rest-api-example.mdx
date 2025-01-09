@@ -7,7 +7,7 @@ tags:
 languages:
   - python
 published_at: 2022-09-11
-updated_at: 2024-10-17
+updated_at: 2025-01-06
 ---
 
 # Building your first API with Nitric
@@ -19,10 +19,10 @@ updated_at: 2024-10-17
 
 | **Method** | **Route**      | **Description**                  |
 | ---------- | -------------- | -------------------------------- |
+| `GET`      | /profiles/     | Get all profiles                 |
 | `GET`      | /profiles/[id] | Get a specific profile by its Id |
 | `POST`     | /profiles      | Create a new profile             |
 | `DELETE`   | /profiles/[id] | Delete a profile                 |
-| `PUT`      | /profiles/[id] | Update a profile                 |
 
 3. Run locally for testing
 4. Deploy to a cloud of your choice
@@ -45,29 +45,33 @@ updated_at: 2024-10-17
 We'll start by creating a new project for our API.
 
 ```bash
-nitric new my-profile-api py-starter-pipenv
+nitric new my-profile-api py-starter
 ```
 
 Next, open the project in your editor of choice.
 
 ```bash
-> cd my-profile-api
+cd my-profile-api
 ```
 
-Make sure all dependencies are resolved using Pipenv:
+Make sure all dependencies are resolved using `uv`:
 
 ```bash
-pipenv install --dev
+uv sync
 ```
 
 The scaffolded project should have the following structure:
 
 ```text
++--.venv/
 +--services/
-|  +-- hello.py
+|  +-- api.py
++--.env
++--.gitignore
 +--nitric.yaml
-+--Pipfile
-+--Pipfile.lock
++--.pythonversion
++--pythonproject.toml
++--uv.lock
 +--README.md
 ```
 
@@ -77,13 +81,18 @@ Start the Nitric server to emulate cloud services on your machine:
 nitric start
 ```
 
-If everything is working as expected you can now delete all files in the `services/` folder, we'll create new services in this guide.
-
 ## Building the Profile API
 
-Let's start building our profiles API. Create a file named 'profiles.py' in the services directory and add the following:
+This example uses UUIDs to create unique IDs to store profiles against, let's start by adding a library to help with that:
 
-```python
+```bash
+uv add uuid
+```
+
+Applications built with Nitric can contain many APIs, let's start by adding an API and a key value store to this project to serve as the public endpoint.
+
+```python title:services/api.py
+import json
 from uuid import uuid4
 
 from nitric.resources import api, kv, bucket
@@ -94,7 +103,7 @@ from nitric.context import HttpContext
 profile_api = api("public")
 
 # Access profile key value store with permissions
-profiles = kv('profiles').allow('get', 'set')
+profiles = kv('profiles').allow('get', 'set', 'delete')
 
 Nitric.run()
 ```
@@ -106,7 +115,10 @@ Here we're creating:
 
 From here, let's add some features to that service that allow us to work with profiles.
 
-> _Note:_ You could separate some or all of these request handlers their own services if you prefer. For simplicity we'll group them together in this guide.
+<Note>
+  You could separate some or all of these request handlers their own services if
+  you prefer. For simplicity we'll group them together in this guide.
+</Note>
 
 ### Create profiles with POST
 
@@ -123,6 +135,21 @@ async def create_profile(ctx: HttpContext) -> None:
   ctx.res.body = { 'msg': f'Profile with id {pid} created.'}
 ```
 
+### Retrieve all profiles with GET
+
+```python
+@profile_api.get("/profiles")
+async def get_all_profile(ctx: HttpContext) -> None:
+  profile_list = []
+
+  async for id in profiles.keys():
+    d = await profiles.get(id)
+    profile_list.append(d)
+
+  ctx.res.body = json.dumps(profile_list)
+  ctx.res.headers['Content-Type'] = 'application/json'
+```
+
 ### Retrieve a profile with GET
 
 ```python
@@ -131,7 +158,7 @@ async def get_profile(ctx: HttpContext) -> None:
   pid = ctx.req.params['id']
   d = await profiles.get(pid)
 
-  ctx.res.body = f"{d}"
+  ctx.res.body = json.dumps(d)
   ctx.res.headers['Content-Type'] = 'application/json'
 ```
 
@@ -186,6 +213,12 @@ curl --location --request POST 'http://localhost:4001/profiles' \
 curl --location --request GET 'http://localhost:4001/profiles/[id]'
 ```
 
+### Fetch all Profiles
+
+```bash
+curl --location --request GET 'http://localhost:4001/profiles'
+```
+
 ### Delete Profile
 
 ```bash
@@ -194,38 +227,35 @@ curl --location --request DELETE 'http://localhost:4001/profiles/[id]'
 
 ## Deploy to the cloud
 
-At this point, you can deploy what you've built to any of the supported cloud providers. To do this start by setting up your credentials and any configuration for the cloud you prefer:
+At this point, you can deploy what you've built to any of the supported cloud providers. In this example we'll deploy to AWS. Start by setting up your credentials and configuration for the [nitric/aws provider](/providers/pulumi/aws).
 
-- [AWS](/providers/pulumi/aws)
-- [Azure](/providers/pulumi/azure)
-- [GCP](/providers/pulumi/gcp)
+Next, we'll need to create a stack file (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
 
-Next, we'll need to create a `stack`. A stack represents a deployed instance of an application, which is a collection of resources defined in your project. You might want separate stacks for each environment, such as stacks for `dev`, `test` and `prod`. For now, let's start by creating a `dev` stack.
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
 ```bash
-nitric stack new
+nitric stack new dev aws
 ```
 
-```
-? What should we name this stack? dev
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
-```
+Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
 
-### AWS
+```yaml title:nitric.dev.yaml
+provider: nitric/aws@latest
+region: us-east-1
+```
 
 <Note>
   You are responsible for staying within the limits of the free tier or any
   costs associated with deployment.
 </Note>
 
-We called our stack `dev`, let's try deploying it with the `up` command
+Let's try deploying the stack with the `up` command:
 
 ```bash
 nitric up
 ```
 
-When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API.
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your application.
 
 To tear down your application from the cloud, use the `down` command:
 
@@ -244,8 +274,6 @@ Define a bucket named `profilesImg` with reading/writing permissions
 ```python
 photos = bucket("photos").allow('read','write')
 ```
-
-> Earlier versions of the Nitric SDK used 'reading', 'writing', etc. permissions. The latest version uses 'read', 'write', etc.
 
 Add imports for time and date so that we can set up caching/expiry headers
 

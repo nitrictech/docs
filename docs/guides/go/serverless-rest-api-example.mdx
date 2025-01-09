@@ -7,7 +7,7 @@ tags:
 languages:
   - go
 published_at: 2023-08-11
-updated_at: 2024-10-03
+updated_at: 2025-01-06
 ---
 
 # Building your first API with Nitric
@@ -67,7 +67,6 @@ The scaffolded project should have the following structure:
 +--services/
 |  +-- hello/
 |      +-- main.go
-|  ...
 +--nitric.yaml
 +--go.mod
 +--go.sum
@@ -82,13 +81,11 @@ You can test the project to verify everything is working as expected:
 nitric start
 ```
 
-If everything is working as expected you can now delete all files/folders in the `services/` folder, we'll create new services in this guide.
-
 ## Building the Profile API
 
-Let's begin by setting up the Profiles API. First, create a new folder called `profiles` within the services directory. Inside this folder, add a file named `main.go`, and include the following code:
+Applications built with Nitric can contain many APIs, let's start by adding an API and a key value store to this project to serve as the public endpoint.
 
-```go
+```go title:services/hello/main.go
 import (
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/keyvalue"
@@ -118,7 +115,7 @@ From here, let's add some features to that function that allow us to work with p
 
 ### Create profiles with POST
 
-```go
+```go title:services/hello/main.go
 profilesApi.Post("/profiles", func(ctx *apis.Ctx) error {
   id := uuid.New().String()
 
@@ -140,7 +137,7 @@ profilesApi.Post("/profiles", func(ctx *apis.Ctx) error {
 
 ### Retrieve a profile with GET
 
-```go
+```go title:services/hello/main.go
 profilesApi.Get("/profiles/:id", func(ctx *apis.Ctx) {
   id := ctx.Request.PathParams()["id"]
 
@@ -158,7 +155,7 @@ profilesApi.Get("/profiles/:id", func(ctx *apis.Ctx) {
 
 ### List all profiles with GET
 
-```go
+```go title:services/hello/main.go
 profilesApi.Get("/profiles", func(ctx *apis.Ctx) error {
   keys, err := profiles.Keys(context.TODO())
   if err != nil {
@@ -183,7 +180,7 @@ profilesApi.Get("/profiles", func(ctx *apis.Ctx) error {
 
 ### Remove a profile with DELETE
 
-```go
+```go title:services/hello/main.go
 profilesApi.Delete("/profiles/:id", func(ctx *apis.Ctx) {
   id := ctx.Request.PathParams()["id"]
 
@@ -263,9 +260,19 @@ nitric stack new dev aws
 
 Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region, let's use `us-east-1`.
 
-### AWS
+```yaml
+# The nitric provider to use
+provider: nitric/aws@latest
+# The target aws region to deploy to
+# See available regions:
+# https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
+region: us-east-1
+```
 
-Note: You are responsible for staying within the limits of the free tier or any costs associated with deployment.
+<Note>
+  Cloud deployments incur costs and while most of these resource are available
+  with free tier pricing you should consider the costs of the deployment.
+</Note>
 
 We called our stack `dev`, let's try deploying it with the `up` command
 
@@ -289,13 +296,13 @@ If you want to go a bit deeper and create some other resources with Nitric, why 
 
 Define a bucket named `profileImages` with read/write permissions
 
-```go
+```go title:services/hello/main.go
 profileImages := nitric.NewBucket("profileImages").Allow(storage.BucketRead, storage.BucketWrite)
 ```
 
 ### Get a URL to upload a profile image
 
-```go
+```go title:services/hello/main.go
 profilesApi.Get("/profiles/:id/image/upload", func(ctx *apis.Ctx) error {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
@@ -313,7 +320,7 @@ profilesApi.Get("/profiles/:id/image/upload", func(ctx *apis.Ctx) error {
 
 ### Get a URL to download a profile image
 
-```go
+```go title:services/hello/main.go
 profilesApi.Get("/profiles/:id/image/download", func(ctx *apis.Ctx) error {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)
@@ -331,7 +338,7 @@ profilesApi.Get("/profiles/:id/image/download", func(ctx *apis.Ctx) error {
 
 You can also directly redirect to the photo URL.
 
-```go
+```go title:services/hello/main.go
 profilesApi.Get("/profiles/:id/image/view", func(ctx *apis.Ctx) error {
   id := ctx.Request.PathParams()["id"]
   photoId := fmt.Sprintf("images/%s/photo.png", id)

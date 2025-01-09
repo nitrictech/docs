@@ -8,7 +8,7 @@ tags:
 languages:
   - python
 published_at: 2024-04-16
-updated_at: 2024-10-17
+updated_at: 2025-01-06
 ---
 
 # Generate a report with Google Sheets and share it with Google Drive
@@ -21,7 +21,7 @@ We'll create a scheduled service which will run on a daily basis to create and s
 ## Prerequisites
 
 - The [Nitric CLI](/get-started/installation)
-- [Pipenv](https://pypi.org/project/pipenv/) - for simplified dependency management
+- [uv](https://docs.astral.sh/uv/#getting-started) - for Python dependency management
 - A [Google Cloud](https://cloud.google.com) account with Sheets and Drive APIs enabled.
 - Credentials for a Google service account.
 
@@ -30,9 +30,8 @@ We'll create a scheduled service which will run on a daily basis to create and s
 First, we'll create a new nitric project and install the necessary Python packages.
 
 ```bash
-nitric new reports py-starter-pipenv
-pipenv install google-auth google-api-python-client
-pipenv install --dev
+nitric new reports py-starter
+uv add google-auth google-api-python-client
 ```
 
 You can now delete all files in the `services/` folder, we'll create new services in this guide.
@@ -160,7 +159,7 @@ Nitric.run()
 
 We can now set environment variables with the values needed for the scheduled reporting to run. Create a file named `.env` in the root of your project and set the variables below, substituting the correct values for your setup.
 
-```bash
+```text title:.env
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/your/service-account-file.json
 ADMIN_EMAIL=admin@example.com
 ```
@@ -179,25 +178,37 @@ nitric start
 
 ## Deploy to the cloud
 
-Without creating a separate IaC project, we can immediately deploy our application to the cloud. To do this start by setting up credentials and any configuration for the cloud you prefer:
+At this point, you can deploy what you've built to any of the supported cloud providers. In this example we'll deploy to AWS. Start by setting up your credentials and configuration for the [nitric/aws provider](/providers/pulumi/aws).
 
-- [AWS](/providers/pulumi/aws)
-- [Azure](/providers/pulumi/azure)
-- [GCP](/providers/pulumi/gcp)
+Next, we'll need to create a stack file (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
 
-To do this, we'll need to create a `stack`. A stack represents a deployed instance of an application, which is a collection of resources defined in the project.
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
 ```bash
-nitric stack new
+nitric stack new dev aws
 ```
 
-Let's try deploying it with the `up` command
+Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
+
+```yaml title:nitric.dev.yaml
+provider: nitric/aws@latest
+region: us-east-1
+```
+
+<Note>
+  You are responsible for staying within the limits of the free tier or any
+  costs associated with deployment.
+</Note>
+
+Let's try deploying the stack with the `up` command:
 
 ```bash
 nitric up
 ```
 
-To tear down the application from the cloud, use the `down` command:
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your application.
+
+To tear down your application from the cloud, use the `down` command:
 
 ```bash
 nitric down

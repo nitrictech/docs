@@ -7,7 +7,7 @@ languages:
   - typescript
   - javascript
 published_at: 2022-11-17
-updated_at: 2024-03-18
+updated_at: 2024-12-27
 ---
 
 # Building a GraphQL API with Nitric
@@ -56,7 +56,7 @@ The scaffolded project should have the following structure:
 
 ```text
 +--services/
-|  +-- hello.ts
+|  +-- api.ts
 +--node_modules/
 |  ...
 +--nitric.yaml
@@ -67,16 +67,8 @@ The scaffolded project should have the following structure:
 You can test the project to verify everything is working as expected:
 
 ```bash
-npm run dev
+nitric start
 ```
-
-<Note>
-  The `dev` script starts the Nitric Server using `nitric start`, which provides
-  local interfaces to emulate cloud resources, then runs your services and
-  allows them to connect.
-</Note>
-
-If everything is working as expected you can now delete all files in the `services/` folder, we'll create new services in this guide.
 
 ## Build the GraphQL Schema
 
@@ -89,10 +81,9 @@ npm install graphql
 npm install uuid
 ```
 
-Create a new file named 'graphql.ts' in the services folder.
 We can then import `buildSchema`, and write out the schema.
 
-```typescript
+```typescript title:services/api.ts
 import { graphql, buildSchema } from 'graphql'
 import { v4 as uuid } from 'uuid'
 
@@ -123,7 +114,7 @@ const schema = buildSchema(`
 
 We will also define a few types to mirror the schema definition.
 
-```typescript
+```typescript title:services/api.ts
 interface Profile {
   pid: string
   name: string
@@ -138,7 +129,7 @@ type ProfileInput = Omit<Profile, 'pid'>
 
 Lets define a KV resource for the resolvers get/set data from with some helper functions for serialization.
 
-```typescript
+```typescript title:services/api.ts
 import { kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('get', 'set')
@@ -171,7 +162,7 @@ async function updateProfiles(profileList) {
 
 We can create a resolver object for use by the graphql handler.
 
-```typescript
+```typescript title:services/api.ts
 const resolvers = {
   createProfile,
   fetchProfiles,
@@ -185,7 +176,7 @@ We can then use the KV resource within these services. Each resolver will receiv
 
 ## Create a profile
 
-```typescript
+```typescript title:services/api.ts
 const createProfile = async ({ profile }): Promise<Profile> => {
   const profileList = await getProfiles()
   profile.pid = uuid()
@@ -197,7 +188,7 @@ const createProfile = async ({ profile }): Promise<Profile> => {
 
 ## Get all profiles
 
-```typescript
+```typescript title:services/api.ts
 const fetchProfiles = async (): Promise<Profile[]> => {
   return await getProfiles()
 }
@@ -205,7 +196,7 @@ const fetchProfiles = async (): Promise<Profile[]> => {
 
 ## Get a profile by its ID
 
-```typescript
+```typescript title:services/api.ts
 const fetchProfile = async ({ pid }): Promise<Profile> => {
   const profileList = await getProfiles()
   const profile = profileList.find((profile) => profile.pid === pid)
@@ -219,7 +210,7 @@ We'll define an api to put our handler in. This api will only have one endpoint,
 
 Update the imports to include api and declare the api.
 
-```typescript
+```typescript title:services/api.ts
 import { api, kv } from '@nitric/sdk'
 
 const profileApi = api('public')
@@ -227,7 +218,7 @@ const profileApi = api('public')
 
 Then add the api handler.
 
-```typescript
+```typescript title:services/api.ts
 import { graphql, buildSchema } from 'graphql'
 
 profileApi.post('/', async (ctx) => {
@@ -249,17 +240,10 @@ Now that you have an API defined with a handler for the GraphQL requests, it's t
 Test out your application with the following command:
 
 ```bash
-npm run dev
+nitric start
 ```
 
-<Note>
-  The `dev` script in the template starts the Nitric Server using `nitric start`
-  and runs your services.
-</Note>
-
 Once it starts, the application will be able to receive requests via the API port.
-
-Pressing `ctrl + a + k` will end the application.
 
 ## GraphQL Queries
 
@@ -370,31 +354,34 @@ curl --location -X POST \
 
 ## Deploy to the cloud
 
-Setup your credentials and any other cloud specific configuration:
+At this point, you can deploy what you've built to any of the supported cloud providers. In this example we'll deploy to AWS. Start by setting up your credentials and configuration for the [nitric/aws provider](/providers/pulumi/aws).
 
-- [AWS](/providers/pulumi/aws)
-- [Azure](/providers/pulumi/azure)
-- [GCP](/providers/pulumi/gcp)
+Next, we'll need to create a `stack file` (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
 
-Create a stack - a collection of resources identified in your project which will be deployed.
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
 ```bash
-nitric stack new
+nitric stack new dev aws
 ```
 
-```
-? What should we name this stack? dev
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
-```
+Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
 
-You can then deploy using the following command:
+### AWS
+
+<Note>
+  You are responsible for staying within the limits of the free tier or any
+  costs associated with deployment.
+</Note>
+
+Let's try deploying the stack with the `up` command:
 
 ```bash
 nitric up
 ```
 
-To undeploy run the following command:
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your WebSocket application.
+
+To tear down your application from the cloud, use the `down` command:
 
 ```bash
 nitric down

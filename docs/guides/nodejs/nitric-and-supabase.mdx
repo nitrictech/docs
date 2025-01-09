@@ -137,7 +137,7 @@ With those steps complete, your project should look like this:
 
 Open `services/welcome.js` in your editor and replace the file contents with this:
 
-```javascript {{ label: 'services/welcome.js' }}
+```javascript title:services/welcome.js
 import 'dotenv/config'
 import sendgrid from '@sendgrid/mail'
 import { api } from '@nitric/sdk'
@@ -181,13 +181,13 @@ Let's breakdown what the code above is doing.
 
 First, we import `dotenv/config` so that environment variables are automatically loaded from `.env` files.
 
-```javascript {{ label: 'services/welcome.js' }}
+```javascript title:services/welcome.js
 import 'dotenv/config'
 ```
 
 Next, we setup the SendGrid client by providing it with an API key stored in the `SENDGRID_API_KEY` environment variable, which we'll create later. We also retrieve the sender email address from the `SENDGRID_SENDER` variable, which is used as the _from_ email address.
 
-```javascript {{ label: 'services/welcome.js' }}
+```javascript title:services/welcome.js
 import sendgrid from '@sendgrid/mail'
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
@@ -196,7 +196,7 @@ const sender = process.env.SENDGRID_SENDER
 
 After that, we create a new Nitric API and set it up with handler for _POST_ requests to `/welcome`. This handler checks for an API key in the request headers, which helps make sure that only _our_ Supabase project can make these requests. Then, it pulls the user emails address and name from the `record` object in the POST request body and uses those values to send the user an email.
 
-```javascript {{ label: 'services/welcome.js' }}
+```javascript title:services/welcome.js
 import { api } from '@nitric/sdk'
 
 const payApi = api('notifications')

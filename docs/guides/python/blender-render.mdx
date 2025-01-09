@@ -11,6 +11,7 @@ featured:
 languages:
   - python
 published_at: 2024-11-13
+updated_at: 2025-01-06
 ---
 
 # Use Cloud GPUs for rendering your Blender projects
@@ -879,11 +880,16 @@ Next, we'll need to create a stack file (deployment target). A stack is a deploy
 
 The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
-```
+```bash
 nitric stack new dev aws
 ```
 
 Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
+
+```yaml title:nitric.dev.yaml
+provider: nitric/aws@latest
+region: us-east-1
+```
 
 <Note>
   You are responsible for staying within the limits of the free tier or any

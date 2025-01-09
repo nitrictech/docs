@@ -71,7 +71,7 @@ npm install stripe
 
 We will also add a utils file for our stripe object and some environment variables. We'll put ours in `common/utils.ts`
 
-```ts {{ label: 'common/utils.ts' }}
+```ts title:common/utils.ts
 import Stripe from 'stripe'
 import dotenv from 'dotenv'
 
@@ -104,7 +104,7 @@ We'll first create a handler for creating checkout sessions. We will define a `P
 
 There is also an optional choice for a success and cancel url for where to redirect the user after the checkout has been completed.
 
-```typescript {{ label: 'services/hello.ts' }}
+```typescript title:services/hello.ts
 import { api } from '@nitric/sdk'
 import { stripe } from '../common/utils'
 
@@ -143,7 +143,7 @@ Creating a webhook that connects to stripe means that you can have reactive logi
 
 This route is simple, but quite long. We will break it down, but here is the full example:
 
-```typescript {{ label: 'services/hello.ts' }}
+```typescript title:services/hello.ts
 import { api } from '@nitric/sdk';
 import Stripe from 'stripe';
 import { stripe, stripeWebhookSecret } from '../common/utils';
@@ -198,7 +198,7 @@ const handleOrder = (session: Stripe.Event.Data) => {
 
 The first step is to verify that the event signature is correct, thus validating that the event came from Stripe. We extract the stripe-signature from the request headers, then compare the signature against our Stripe webhook secret. The webhook secret comes from the environment variables and can be set when we start testing. We use the `stripe.webhooks.constructEvent` function for doing this comparison. It will throw an error if it runs into an error.
 
-```typescript {{ label: 'services/hello.ts' }}
+```typescript title:services/hello.ts
 const buf = Buffer.from(ctx.req.data)
 const sig = ctx.req.headers['stripe-signature']
 let event: Stripe.Event
@@ -218,7 +218,7 @@ try {
 
 After the event is constructed, we can write the logic to handle it based on the type. This will compare the event type in a switch statement. In this case, we only have the event type `checkout.session.completed`, but this is where you would put further event handling features.
 
-```typescript {{ label: 'services/hello.ts' }}
+```typescript title:services/hello.ts
 try {
   switch (event.type) {
     case 'checkout.session.completed':
