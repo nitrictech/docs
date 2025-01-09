@@ -1,0 +1,92 @@
+---
+description: 'C4 Nitric High-Level Architecture'
+tags:
+  - C4
+published_at: 2024-07-25
+---
+
+# Nitric High-Level Architecture
+
+Nitric allows your team to work together to build an application:
+
+- **Developer**: Writes application code with built-in support for APIs, file storage (bucket), secrets, key‑value store, and RDS, leveraging the Nitric SDK.
+- **Operations**: Customize, extend or use Nitric's generated IaC (Terraform or Pulumi) to provision and manage the resources that the developer needs for their application.
+- **SRE**: Configure environment/region/policy specific details, they also are heavily involved in overseeing that the Terraform modules themselves adhere to governance standards.
+
+The roles above may overlap depending on your organization structure, for example, it is not abnormal Developers to assume all roles, or for Operations and SRE responsibilities to be handled by the same team.
+
+```mermaid
+flowchart TD
+    Developer[Developer]
+    Operations[Operations]
+    SRE[Site Reliablility Engineer]
+    App[Nitric App - 'nitric up']
+    Repo[Code Repository]
+
+    API[API Gateway]
+    Bucket[Bucket - AWS S3]
+    Secrets[Secrets - AWS Secrets Manager\n]
+    KVStore[Key-Value Store - AWS DynamoDB]
+    RDS[Relational Database - AWS RDS/Aurora]
+    Other[Other resources]
+
+    SRE -->|Deployment Config| Repo
+    Developer -->|Code| Repo
+    Operations -->|Extend/Customize Terraform| Repo
+    Repo-->App
+
+    App -->|Exposes REST/HTTP Routes| API
+    App -->|Stores/Retrieves Files| Bucket
+    App -->|Manages Sensitive Data| Secrets
+    App -->|Reads/Writes Data| KVStore
+    App -->|Executes SQL Queries| RDS
+    App -->|1..n|Other
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+Nitric applications can have any number of APIs, Secrets, Buckets etc. Providers can also be extended to further support new resources, many which will work across all cloud providers and some that are cloud specific.
+
+## Example: Handling HTTP requests.
+
+Interaction with services that have been exposed as HTTP routes within an API gateway, Scheduled tasks, Event subscriptions, WebSocket handlers and more.
+
+```mermaid
+flowchart TD
+    %% Actors
+    Browser[Client Browser]
+
+    %% Nitric Application Containers
+    API[HTTP API - API Gateway]
+    Service[GET Route]
+    Service2[POST Route]
+    Service3[...]
+
+    %% Backend Services / Resources
+    Bucket[AWS S3 Bucket]
+    Secrets[AWS Secrets Manager]
+    KVStore[AWS DynamoDB - Key-Value Store]
+    RDS[AWS RDS/Aurora]
+
+    %% Interactions
+    Browser -->|Sends HTTP Request| API
+    API -->|Triggers Service| Service
+    API -->|Triggers Service| Service2
+    API -->|Triggers Service| Service3
+    Service -->|Manage/Uploads/Downloads files| Bucket
+    Service -->|Retrieves credentials/config data| Secrets
+    Service -->|Reads/Writes key data| KVStore
+    Service -->|Queries/Updates relational data| RDS
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+- The **Client Browser** sends an HTTP request to the **API Gateway**.
+- The **API Gateway** acts as a proxy, forwarding the request to the appropriate **Services**.
+- The **Services** process the request by coordinating with different backend services, this is done through :
+  - They interact with one or more **AWS S3 Bucket** to manage files.
+  - They retrieve credentials or configuration from **AWS Secrets Manager**.
+  - They use **AWS DynamoDB** for fast key-value operations.
+  - They query or update structured data in **AWS RDS/Aurora**.
