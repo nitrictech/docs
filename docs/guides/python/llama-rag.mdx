@@ -276,10 +276,11 @@ uv run model_utilities.py
 Let's create our resources in a common file so that it can be imported to the subscriber and chat modules. We'll create a websocket which will interface with the user for prompts and create a topic to handle the backend query engine. The websocket will trigger the topic on a prompt message, which will trigger the subscriber to handle the prompt. Once the subscriber is finished it will send a response to the socket. It is done this way with the topic so that the websocket doesn't time out after 30 seconds, as most queries will take longer than that to process.
 
 ```python title:common/resources.py
-from nitric.resources import websocket, topic
+from nitric.resources import websocket, topic, kv
 
 socket = websocket("socket")
 chat_topic = topic("chat")
+connections = kv("connections")
 ```
 
 ## Use the resources for querying the model
@@ -287,22 +288,29 @@ chat_topic = topic("chat")
 With our LLM downloaded and given the context documentation for querying, we can use our websocket to handle prompts. The main piece of logic here is publishing to the chat topic
 
 ```python title:services/chat.py
-from common.resources import socket, chat_topic
+from common.resources import socket, chat_topic, connections
 
 from nitric.context import WebsocketContext
 from nitric.application import Nitric
 
 publishable_chat_topic = chat_topic.allow("publish")
+write_delete_connections = connections.allow("set", "delete")
 
 @socket.on("connect")
 async def on_connect(ctx):
   # handle connections
+  await write_delete_connections.set(ctx.req.connection_id, {
+    "context": []
+  })
+
   print(f"socket connected with {ctx.req.connection_id}")
   return ctx
 
 @socket.on("disconnect")
 async def on_disconnect(ctx):
   # handle disconnections
+  await write_delete_connections.delete(ctx.req.connection_id)
+
   print(f"socket disconnected with {ctx.req.connection_id}")
   return ctx
 
