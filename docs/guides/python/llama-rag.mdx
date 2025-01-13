@@ -431,7 +431,7 @@ Nitric is a cloud-agnostic framework designed to aid developers in building full
 
 ## Get ready for deployment
 
-Now that its tested locally, we can get our project ready for containerization. The default python dockerfile uses `python3.11-bookworm-slim` as its basic container image, which doesn't have the right dependencies to load the Llama model. So, we'll start by creating a new python Dockerfile which uses python3.11-bookworm (the non-slim version) instead. We'll keep the default dockerfile for our `chat` service but use the new Dockerfile for the `subscriber` service.
+Now that its tested locally, we can get our project ready for containerization. The default python dockerfile uses `python3.11-bookworm-slim` as its basic container image, which doesn't have the right dependencies to load the Llama model. So, we'll start by creating a new python Dockerfile which uses python3.11-bookworm (the non-slim version) instead. We'll keep the default dockerfile for our `chat` service but use the new Dockerfile for the `subscriber` service. Let's copy the contents of the `python.dockerfile` into `model.dockerfile` and make the following changes:
 
 Update line 2:
 
