@@ -55,6 +55,109 @@ You can create an Access Key by logging into the [AWS console](https://aws.amazo
   for full details on credentials and configuration.
 </Note>
 
+### Minimum Required Permissions
+
+Below is an AWS policy that represents the minimum set of permissions required to deploy all available resources in the nitric AWS provider.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "NitricDeployment",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetRole",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:PassRole",
+        "iam:ListRolePolicies",
+        "iam:ListAttachedRolePolicies",
+        "iam:ListInstanceProfilesForRole",
+        "iam:ListPolicyVersions",
+        "iam:GetPolicy",
+        "iam:GetRolePolicy",
+        "iam:DeleteRolePolicy",
+        "iam:GetPolicyVersion",
+        "iam:CreatePolicy",
+        "iam:DeletePolicy",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:PutRolePolicy",
+        "sns:CreateTopic",
+        "sns:DeleteTopic",
+        "sns:Subscribe",
+        "sns:Unsubscribe",
+        "apigateway:POST",
+        "apigateway:DELETE",
+        "lambda:CreateFunction",
+        "lambda:DeleteFunction",
+        "lambda:GetFunction",
+        "lambda:TagResource",
+        "lambda:DeleteFunction",
+        "lambda:ListVersionsByFunction",
+        "sqs:CreateQueue",
+        "sqs:DeleteQueue",
+        "ec2:CreateVpc",
+        "ec2:DeleteVpc",
+        "ec2:CreateSubnet",
+        "ec2:DeleteSubnet",
+        "ec2:CreateSecurityGroup",
+        "ec2:DeleteSecurityGroup",
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:AuthorizeSecurityGroupEgress",
+        "ec2:RevokeSecurityGroupIngress",
+        "ec2:RevokeSecurityGroupEgress",
+        "ecr:BatchGetImage",
+        "ecr:BatchDeleteImage",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:CreateRepository",
+        "ecr:DeleteRepository",
+        "ecr:DescribeRepositories",
+        "ecr:DescribeImages",
+        "ecr:GetAuthorizationToken",
+        "ecr:ListTagsForResource",
+        "ecr:ListImages",
+        "ecr:PutImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload",
+        "ecr:GetRepositoryPolicy",
+        "ecr:SetRepositoryPolicy",
+        "rds:CreateDBCluster",
+        "rds:DeleteDBCluster",
+        "rds:CreateDBInstance",
+        "rds:DeleteDBInstance",
+        "resource-groups:CreateGroup",
+        "resource-groups:DeleteGroup",
+        "resource-groups:GetGroup",
+        "resource-groups:GetGroupQuery",
+        "resource-groups:GetGroupConfiguration",
+        "resource-groups:GetTags",
+        "events:PutRule",
+        "events:DeleteRule",
+        "events:PutTargets",
+        "events:RemoveTargets",
+        "s3:CreateBucket",
+        "s3:DeleteBucket",
+        "s3:PutBucketNotification",
+        "s3:GetBucketNotification",
+        "dynamodb:CreateTable",
+        "dynamodb:DeleteTable",
+        "ssm:DescribeParameters",
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:PutParameter",
+        "ssm:DeleteParameter",
+        "ssm:ListTagsForResource"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
 ## Locating Deployed Resources
 
 This Nitric AWS provider creates a resource tag manager group and tags all possible resources to be referenced by this group. You can locate resources using the [AWS Console](https://console.aws.amazon.com/).
@@ -96,8 +199,8 @@ The Nitric team is working to expand the list of resources that can be imported.
 - [Buckets](/storage)
 
 <Note>
-  Currently, only resources in the same AWS account and region as the Nitric project 
-  are supported.
+  Currently, only resources in the same AWS account and region as the Nitric
+  project are supported.
 </Note>
 
 ### Buckets
@@ -142,8 +245,8 @@ import:
 ```
 
 <Note>
-  Unlike some other imported resources, secret imports require the ARN to be used. 
-  Providing only the secret's name will be invalid.
+  Unlike some other imported resources, secret imports require the ARN to be
+  used. Providing only the secret's name will be invalid.
 </Note>
 
 Need to import another resource type or have another question? Chat with us on [Discord](https://nitric.io/chat) or [open an issue](https://github.com/nitrictech/nitric/issues) on GitHub.
