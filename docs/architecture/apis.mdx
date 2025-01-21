@@ -1,0 +1,133 @@
+---
+description: 'Nitric API'
+---
+
+# APIS
+
+## 1. System Context
+
+**Developers** use Nitric to declare APIs and routes within their application.
+
+- App code uses the [API resource](/apis) through defined endpoints.
+- Developers define API specifications and implement backend logic to handle HTTP requests.
+
+**Operations** use default or overridden Terraform modules to provision the necessary resources for their target cloud.
+
+<details>
+  <summary>Example AWS Provider</summary>
+
+- **AWS API Gateway v2** serves as the HTTP API management service.
+- **AWS Lambda** functions are deployed to handle API requests.
+- **AWS IAM** (implicitly assumed) provides roles and policies for secure interaction between API Gateway and Lambda functions.
+- **AWS ACM** manages TLS certificates for custom domain names.
+
+```mermaid
+flowchart TD
+    Developer["Developer"]
+    Operations["Operations"]
+    App["nitric up"]
+    APIGateway["AWS API Gateway v2<br>(HTTP API)"]
+    Lambda["AWS Lambda Functions"]
+    IAM["AWS IAM"]
+    ACM["AWS ACM<br>(Certificates)"]
+
+    Developer -->|Define API| App
+    Operations -->|Terraform| App
+    App -->|Create API Gateway| APIGateway
+    App -->|Deploy Lambda Functions| Lambda
+    App -->|Configure Permissions| IAM
+    APIGateway -->|Invoke| Lambda
+    ACM -->|Provide Certificates| APIGateway
+    IAM -->|Manage Access| APIGateway
+    App -->ACM
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+</details>
+<details>
+  <summary>Example GCP Provider</summary>
+
+- **Google API Gateway** serves as the HTTP API management service, routing requests to backend services.
+- **Google Cloud Run** services are deployed to handle API requests with serverless execution.
+- **Google IAM** provides roles and policies to secure interactions between API Gateway, Cloud Run, and other GCP services.
+- **Certificates** (Google-managed or custom) ensure secure HTTPS communication for custom domain names.
+- **Google Service Account** is created and configured to allow API Gateway to invoke the Cloud Run backend securely.
+
+```mermaid
+flowchart TD
+    Developer["Developer"]
+    Operations["Operations"]
+    App["nitric up"]
+    APIGateway["Google API Gateway"]
+    CloudRun["Google Cloud Run"]
+    IAM["Google IAM"]
+    Certificates["Certificates<br>(Google Managed or Custom)"]
+    ServiceAccount["Google Service Account"]
+
+    Developer -->|Define API| App
+    Operations -->|Terraform| App
+    App -->|Create API Gateway| APIGateway
+    App -->|Deploy Cloud Run Services| CloudRun
+    App -->|Configure Permissions| IAM
+    APIGateway -->|Invoke| CloudRun
+    Certificates -->|Provide Certificates| APIGateway
+    IAM -->|Manage Access| APIGateway
+    App -->ServiceAccount
+    App -->Certificates
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+</details>
+
+## 2. Sequence
+
+```mermaid
+sequenceDiagram
+    participant Client as Client
+    participant NitricSDK as Nitric SDK
+    participant NitricRuntime as Nitric Runtime
+    participant APIGateway as API Gateway
+    participant Worker as App Worker
+
+    Client->>NitricSDK: Send HTTP API request
+    NitricSDK->>NitricRuntime: Forward API request
+    NitricRuntime->>APIGateway: Register API routes (during deployment)
+
+    APIGateway->>NitricRuntime: Route incoming request
+    NitricRuntime->>Worker: Forward request to application logic
+    Worker-->>NitricRuntime: Process request and return response
+    NitricRuntime-->>APIGateway: Respond with result
+    APIGateway-->>Client: Return API response
+```
+
+## 3. Component
+
+### API Module
+
+- Dynamically creates and manages API gateways to expose application functionality through HTTP endpoints and routes.
+- Configures API properties, including protocol type, API specifications (e.g., OpenAPI), and metadata for identification and lifecycle management.
+- Provisions and associates backend integrations with API routes, supporting multiple targets such as serverless functions, containers, or application services.
+- Automates the setup of custom domain names with secure certificates, abstracting provider-specific configurations for HTTPS communication.
+- Grants least privilege permissions to enable secure communication between the API gateway and backend services, ensuring robust security practices.
+- Supports versioning and staging of APIs, enabling seamless updates and rollbacks without disrupting existing deployments.
+- Abstracts the complexities of cloud-native API gateway services, providing a unified interface for developing and deploying HTTP APIs across different providers.
+
+## 4. Code
+
+**Developers** write application code that uses the [API resource](/apis) from the SDK, configures the api and implement HTTP routes and middleware.
+
+SDK Reference by language -
+
+- [NodeJS SDK](/reference/nodejs/api/api)
+- [Python SDK](/reference/python/api/api)
+- [GO SDK](/reference/go/api/api)
+- [Dart SDK](/reference/dart/api/api)
+
+**Operations** will use or extend the Nitric Terraform reference modules:
+
+- [AWS API Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/api/main.tf)
+- [GCP API Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/api/main.tf)

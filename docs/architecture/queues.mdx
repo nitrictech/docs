@@ -1,0 +1,117 @@
+---
+description: 'Nitric Queue'
+---
+
+# Messaging - Queues
+
+## 1. System Context
+
+**Developers** use Nitric to declare message queues within their application.
+
+- App code uses the [Queue resource](/messaging#queues) from the Nitric SDK.
+- Developers configure queues and implement application logic to send and receive messages.
+
+**Operations** use default or overridden Terraform modules to provision the necessary resources for their target cloud.
+
+<details>
+  <summary>Example AWS Provider</summary>
+
+- **AWS SQS** serves as the message queuing service.
+- **AWS IAM** provides roles and policies for secure access to SQS queues.
+
+```mermaid
+flowchart TD
+    Developer["Developer"]
+    Operations["Operations"]
+    App["nitric up"]
+    SQSQueue["AWS SQS Queue"]
+    Lambda["AWS Lambda Functions"]
+    IAM["AWS IAM"]
+
+    Developer -->|Code| App
+    Operations -->|Terraform| App
+    App -->|Create SQS Queue| SQSQueue
+    Lambda -->|Access SQS Queue| SQSQueue
+    App -->|Provide Access| IAM
+    IAM -->SQSQueue
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+</details>
+<details>
+  <summary>Example GCP Provider</summary>
+
+- **Google Pub/Sub Topic** serves as the message queuing service.
+- **Google Pub/Sub Subscription** emulates a queue by creating a pull subscription for the topic.
+
+```mermaid
+flowchart TD
+    Developer["Developer"]
+    Operations["Operations"]
+    App["nitric up"]
+    PubSubTopic["Google Pub/Sub Topic"]
+    PubSubSubscription["Google Pub/Sub Subscription"]
+
+    Developer -->|Code| App
+    Operations -->|Terraform| App
+    App -->|Create Pub/Sub Topic| PubSubTopic
+    PubSubSubscription -->|Pull Messages| PubSubTopic
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+</details>
+
+## 2. Sequence
+
+```mermaid
+sequenceDiagram
+    participant Client as Client
+    participant NitricSDK as Nitric SDK
+    participant NitricRuntime as Nitric Runtime
+    participant QueueService as Cloud Queue Service (e.g., AWS SQS, GCP Pub/Sub)
+
+    Client->>NitricSDK: Send or receive message from queue
+    NitricSDK->>NitricRuntime: Forward queue API call
+    NitricRuntime->>QueueService: Perform queue operation (e.g., enqueue, dequeue)
+
+    alt Successful Operation
+        QueueService-->>NitricRuntime: Return result (e.g., message or success status)
+        NitricRuntime-->>NitricSDK: Return result
+        NitricSDK-->>Client: Return result to client
+    else Failure
+        QueueService-->>NitricRuntime: Return error
+        NitricRuntime-->>NitricSDK: Forward error
+        NitricSDK-->>Client: Return error response
+    end
+```
+
+## 3. Component
+
+### Queue Module
+
+- Ensures the deployment of a scalable, provider-agnostic message queue with a consistent naming convention for seamless integration.
+- Configures metadata or tags for resource identification, governance, and management.
+- Implements secure access by dynamically assigning permissions to applications or services, enforcing the principle of least privilege.
+- Supports configurable event-driven workflows, enabling the integration of producer-consumer patterns and worker pipelines.
+- Provides dynamic configurations to handle varying workloads and queue-specific parameters such as message retention, delivery delay, and dead-letter queues.
+- Abstracts the underlying queuing infrastructure, allowing developers and operations teams to focus on messaging logic rather than provider-specific APIs.
+
+## 4. Code
+
+**Developers** write application code that uses the [Queue resource](/messaging#queues) from the SDK, configures the secret, and implements the application logic to access and manage secrets.
+
+SDK Reference by language -
+
+- [NodeJS SDK](/reference/nodejs/queues/queue)
+- [Python SDK](/reference/python/queues/queue)
+- [GO SDK](/reference/go/queues/queue)
+- [Dart SDK](/reference/dart/queues/queue)
+
+**Operations** will use or extend the Nitric Terraform reference modules:
+
+- [AWS Queue Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/queue/main.tf)
+- [GCP Queue Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/queue/main.tf)

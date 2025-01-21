@@ -1,0 +1,231 @@
+---
+description: 'Architecture Overview'
+---
+
+# Architecture Overview
+
+Nitric allows your team to work together to build an application:
+
+- **Developer**: Writes application code with built-in support for APIs, file storage (bucket), secrets, key/value store, and RDS, leveraging the Nitric SDK.
+- **Operations**: Customize, extend or use Nitric's generated IaC (Terraform or Pulumi) to provision and manage the resources that the developer needs for their application.
+- **SRE**: Configure environment/region/policy specific details, they also are heavily involved in overseeing that the Terraform modules themselves adhere to governance standards.
+- **Nitric**: Automatically generates a specification for resource declarations and fulfills them by orchestrating a cloud deployment using IaC modules and container images tailored to the runtime requirements of the application code. While many of examples focus on AWS as the target cloud, Nitric's flexibility allows providers to support any cloud environment or even multiple clouds simultaneously.
+
+The roles above may overlap depending on your organization structure, for example, it is not abnormal Developers to assume all roles, or for Operations and SRE responsibilities to be handled by the same team.
+
+```mermaid
+flowchart TD
+    Developer[Developer]
+    Operations[Operations]
+    SRE[Site Reliablility Engineer]
+    App[Deployed Application]
+    CLI[Nitric CLI - 'nitric up']
+    Provider[Nitric Provider]
+    Container[Container Images]
+
+    API[API Gateway]
+    Bucket[Bucket]
+    Secrets[Secrets]
+    KVStore[Key/Value Store]
+    RDS[Relational Database]
+    Other[Other Resources]
+
+    SRE -->|Deployment Config| CLI
+    Developer -->|Code| CLI
+    Operations -->|Extend/Customize IaC Modules| Provider
+    CLI -->|Resource Specification| Provider
+    CLI -->|Build| Container
+    Provider -->App
+    Container -->Provider
+
+    App -->|Exposes REST/HTTP Routes| API
+    App -->|Stores/Retrieves Files| Bucket
+    App -->|Manages Sensitive Data| Secrets
+    App -->|Reads/Writes Data| KVStore
+    App -->|Executes SQL Queries| RDS
+    App -->|1..n|Other
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+Nitric applications can have any number of APIs, Secrets, Buckets etc. Providers can also be extended to further support new resources, many which will work across all cloud providers and some that are cloud specific.
+
+Interact seamlessly with services exposed through HTTP routes in an API gateway, as scheduled tasks, via event subscriptions, through WebSocket handlers, and more.
+
+## Example: Handling HTTP requests
+
+```mermaid
+flowchart TD
+    %% Actors
+    Browser[Client Browser]
+
+    %% Nitric Application Containers
+    API[HTTP API - API Gateway]
+    Service[GET Route]
+    Service2[POST Route]
+    Service3[Other Services/APIs]
+
+    %% Backend Services / Resources
+    Bucket[Storage Bucket]
+    Secrets[Secrets Manager]
+    KVStore[Key/Value Store]
+    RDS[Relational Database Service]
+
+    %% Interactions
+    Browser -->|Sends HTTP Request| API
+    API -->|Triggers Service| Service
+    API -->|Triggers Service| Service2
+    API -->Service3
+    Service -->|Manage/Uploads/Downloads files| Bucket
+    Service -->|Retrieves credentials/config data| Secrets
+    Service -->|Reads/Writes key data| KVStore
+    Service -->|Queries/Updates relational data| RDS
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+- The **Client Browser** sends an HTTP request to the **API Gateway**.
+- The **API Gateway** acts as a proxy, forwarding the request to the appropriate **Services**.
+- The **Services** process the request by coordinating with different resources like buckets, secrets, key/value store etc.
+
+## Example: Handling Websockets
+
+```mermaid
+flowchart TD
+    %% Actors
+    Browser[Websocket Client]
+
+    %% Nitric Application Containers (WebSocket Handlers)
+    WS[WebSocket API]
+    Conn[onConnection Handler]
+    Msg[onMessage Handler]
+    Disc[onDisconnect Handler]
+
+    %% Backend Services / Resources
+    Bucket[Storage Bucket]
+    KVStore[Key-Value Store]
+    More[...]
+
+    %% Interactions
+    Browser -->|Opens/Closes WebSocket Connection| WS
+    WS -->|Triggers onConnection event| Conn
+    Browser -->|Sends Message| WS
+    WS -->|Triggers onMessage event| Msg
+    WS -->|Triggers onDisconnect event| Disc
+
+    %% Backend Interactions for onMessage
+    Msg -->|Manages/Uploads/Downloads files| Bucket
+    Msg -->|Reads/Writes key data| KVStore
+    Msg -->|Other services/APIs| More
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+- The **Client Browser** opens a WebSocket connection.
+- The **WebSocket** handles the connection lifecycle:
+  - When the connection opens, it triggers the onConnect service.
+  - Once the connection is established, messages from the client trigger the onMessage service.
+  - When the connection closes, it triggers the onDisconnect service.
+- The **onMessage**, **onConnect** and **onDisconnect** handlers:
+  - Interact with other cloud resources e.g. Buckets, KeyValue stores and APIs.
+
+## Example: Sharing resources
+
+Deploy multiple APIs and other entrypoints into an application that can access shared resources.
+
+```mermaid
+flowchart TD
+    %% Actors
+    Browser[Client Browser]
+
+    %% Nitric Application Containers (APIs)
+    API_Read[HTTP API - Read API Gateway]
+    API_Write[HTTP API - Write API Gateway]
+
+    Other[Other Resources]
+
+    %% Services for respective API routes
+    ReadService[GET Route]
+    WriteService[POST Route]
+
+    %% Backend Services / Resources
+    Bucket[AWS S3 Bucket]
+    RDS[AWS RDS/Aurora]
+
+    %% Interactions from the client to each API
+    Browser -->|Sends HTTP Request| API_Read
+    Browser -->|Sends HTTP Request| API_Write
+
+    %% API triggers to their respective services
+    API_Read -->|Triggers Service| ReadService
+    API_Write -->|Triggers Service| WriteService
+
+    %% Common backend resource interactions from the read service
+    ReadService -->|Retrieves files| Bucket
+    ReadService -->|Queries data| RDS
+
+    %% Common backend resource interactions from the write service
+    WriteService -->|Uploads files| Bucket
+    WriteService -->|Updates data| RDS
+    WriteService -->Other
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+- The **Client Browser** sends HTTP requests to the **API Gateways**.
+- **API Gateways** and their respective service handlers are established with least privileges:
+  - The Read API Gateway invokes the GET Route Service, which is granted read-only permissions.
+  - The Write API Gateway invokes the POST Route Service, which is granted write-only permissions.
+
+## Example: Multiple entry points
+
+A Nitric application can have multiple entry points, such as an **HTTP API Gateway**, a **Scheduled Event**, and a **WebSocket API** all sharing the same resources.
+
+```mermaid
+flowchart TD
+
+    Browser[Client Browser]
+    WSClient[WebSocket Client]
+    Scheduled[Scheduled Event]
+
+    API_Read[HTTP API - Read]
+    API_Write[HTTP API - Write]
+    WS_API[WebSocket API]
+
+    ReadService[GET Route]
+    WriteService[POST Route]
+    ScheduledJob[Scheduled Task]
+
+    Bucket[AWS S3 Bucket]
+    RDS[AWS RDS/Aurora]
+    Other[Other Shared Resources]
+
+    Browser -->|HTTP Request| API_Read
+    Browser -->|HTTP Request| API_Write
+    WSClient <-->|Bi-directional messages| WS_API
+
+    Scheduled -->|Triggers| ScheduledJob
+
+    API_Read -->|Invokes| ReadService
+    API_Write -->|Invokes| WriteService
+    WS_API -->|Invokes| WriteService
+    WS_API -->|Invokes| ReadService
+
+    ReadService -->|Query| Bucket
+    ReadService -->|Query| RDS
+
+    WriteService -->|Write/Upload| Bucket
+    WriteService -->|Create/Update| RDS
+
+    ScheduledJob -->|Read| Bucket
+    ScheduledJob -->|Read/Query| RDS
+    ScheduledJob --> Other
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+- **Backend resources** (e.g. Key/Value Store, Bucket, RDS) are shared and accessed with **least-privilege** access from each service.

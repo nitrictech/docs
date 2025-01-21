@@ -236,6 +236,13 @@ EC2
 .jpg
 .pdf
 preflight
+lifecycle
+NodeJS
+priviledge
+APIS
+TLS
+SRE
+ACM
 nav
 MacOS
 quantized

@@ -98,6 +98,71 @@ export const navigation: NavEntry[] = [
           },
         ],
       },
+      {
+        title: 'Archictecture',
+        items: [
+          {
+            title: 'Overview',
+            href: '/architecture',
+          },
+          {
+            title: 'Services',
+            icon: GlobeAltIcon,
+            href: '/architecture/services',
+          },
+          {
+            title: 'APIs',
+            icon: GlobeAltIcon,
+            href: '/architecture/apis',
+          },
+          {
+            title: 'Schedules',
+            icon: ClockIcon,
+            href: '/architecture/schedules',
+          },
+          {
+            title: 'Websockets',
+            icon: CursorArrowRippleIcon,
+            href: '/architecture/websockets',
+          },
+          {
+            title: 'Storage',
+            icon: DocumentDuplicateIcon,
+            href: '/architecture/buckets',
+          },
+          {
+            title: 'Key/Value Stores',
+            icon: ArchiveBoxIcon,
+            href: '/architecture/keyvalue',
+          },
+          {
+            title: 'Async Messaging',
+            items: [
+              {
+                title: 'Queues',
+                icon: MegaphoneIcon,
+                href: '/architecture/queues',
+              },
+              {
+                title: 'Topics',
+                icon: MegaphoneIcon,
+                href: '/architecture/topics',
+              },
+            ],
+          },
+          {
+            title: 'SQL Databases',
+            icon: CircleStackIcon,
+            href: '/architecture/sql',
+          },
+
+          {
+            title: 'Secrets',
+            icon: LockClosedIcon,
+            href: '/architecture/secrets',
+          },
+        ],
+      },
     ],
   },
   {

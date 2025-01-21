@@ -1,0 +1,136 @@
+---
+description: 'Nitric Topic'
+---
+
+# Messaging - Topics
+
+## 1. System Context
+
+**Developers** use Nitric to declare topics to enable event-driven communication within their application.
+
+- App code interacts with the [Topic resource](/messaging#topics) through defined topics and subscriptions.
+- Developers configure topics and implement application logic to publish and consume messages.
+
+**Operations** use default or overridden Terraform modules to provision the necessary resources for their target cloud.
+
+<details>
+  <summary>Example AWS Provider</summary>
+  
+- **AWS SNS (Simple Notification Service)** serves as the messaging and event notification service.
+- **AWS Lambda** functions are subscribed to SNS topics to process incoming messages.
+- **AWS IAM** manages roles and policies for secure access to SNS topics and Lambda functions.
+- **AWS Step Functions** make it possible to delay or schedule notifications, batch jobs, or any process that requires a timed pause before continuing with a task.
+
+```mermaid
+flowchart TD
+    Developer["Developer"]
+    Operations["Operations"]
+    App["nitric up"]
+    SNSTopic["AWS SNS Topic"]
+    Lambda["AWS Lambda Functions"]
+    IAM["AWS IAM"]
+    StepFunctions["AWS Step Functions"]
+
+    Developer -->|Code| App
+    Operations -->|Terraform| App
+    App -->|Create SNS Topic| SNSTopic
+    App -->|Configure Subscriptions| SNSTopic
+    App -->|Publish Messages| StepFunctions
+    SNSTopic -->|Invoke Lambda| Lambda
+    App -->|Manage Permissions| IAM
+    StepFunctions -->|Delayed Messages| SNSTopic
+    IAM -->SNSTopic
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+</details>
+<details>
+  <summary>Example GCP Provider</summary>
+
+- **Google Pub/Sub** serves as the messaging and event notification service.
+- **Google Cloud Run** services are subscribed to Pub/Sub topics to process incoming messages.
+- **Google IAM** manages roles and policies for secure access to Pub/Sub topics and Cloud Run services.
+- **Retry Policy and Push Configuration** ensure reliable delivery and handling of messages to Cloud Run services.
+
+```mermaid
+flowchart TD
+    Developer["Developer"]
+    Operations["Operations"]
+    App["nitric up"]
+    PubSubTopic["Google Pub/Sub Topic"]
+    CloudRun["Google Cloud Run Services"]
+    IAM["Google IAM"]
+    RetryConfig["Retry Policy & Push Config"]
+
+    Developer -->|Code| App
+    Operations -->|Terraform| App
+    App -->|Create Pub/Sub Topic| PubSubTopic
+    App -->|Configure Subscriptions| PubSubTopic
+    App -->|Publish Messages| RetryConfig
+    PubSubTopic -->|Push to Services| CloudRun
+    App -->|Manage Permissions| IAM
+    RetryConfig -->|Retry Delivery| PubSubTopic
+    IAM -->PubSubTopic
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+</details>
+
+## 2. Sequence
+
+```mermaid
+sequenceDiagram
+    participant Client as Client
+    participant NitricSDK as Nitric SDK
+    participant NitricRuntime as Nitric Runtime
+    participant TopicService as Cloud Topic Service (e.g., AWS SNS, GCP Pub/Sub)
+    participant Subscriber as Subscriber (e.g., Queue, Function)
+
+    Client->>NitricSDK: Publish message to topic
+    NitricSDK->>NitricRuntime: Forward topic API call
+    NitricRuntime->>TopicService: Publish message to topic
+
+    alt Successful Publish
+        TopicService-->>NitricRuntime: Confirm message delivery
+        NitricRuntime-->>NitricSDK: Return success confirmation
+        NitricSDK-->>Client: Return success to client
+        TopicService->>Subscriber: Distribute message to subscribers
+        Subscriber-->>TopicService: Acknowledge receipt of message
+    else Publish Failure
+        TopicService-->>NitricRuntime: Return error
+        NitricRuntime-->>NitricSDK: Forward error
+        NitricSDK-->>Client: Return error response
+    end
+```
+
+## 3. Component
+
+### Topic Module
+
+- Dynamically creates unique topics for messaging and event-driven communication, ensuring consistent naming and avoiding conflicts.
+- Configures metadata or tags for resource identification, governance, and lifecycle management.
+- Supports subscribing various endpoints (e.g., functions, services, queues) to the topic, enabling scalable publish-subscribe patterns.
+- Automates the assignment of permissions to ensure secure publishing and subscription handling, following the principle of least privilege.
+- Provides configurable retry policies and message delivery options to ensure reliable and fault-tolerant communication between services.
+- Abstracts the underlying cloud messaging infrastructure, offering a unified interface for event-driven architectures across different providers.
+- Optionally integrates with workflows or scheduling systems for advanced scenarios like delayed notifications or batched processing.
+
+## 4. Code
+
+**Developers** write application code that imports and declares the [Topic resource](/messaging#topics) from the SDK, and implements the application logic to publish and subscribe to topics.
+
+SDK Reference by language -
+
+- [NodeJS SDK](/reference/nodejs/topic/topic)
+- [Python SDK](/reference/python/topic/topic)
+- [GO SDK](/reference/go/topic/topic)
+- [Dart SDK](/reference/dart/topic/topic)
+
+**Operations** will use or extend the Nitric Terraform reference modules:
+
+- [AWS Topic Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/topic/main.tf)
+- [GCP Topic Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/topic/main.tf)

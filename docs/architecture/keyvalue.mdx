@@ -1,0 +1,120 @@
+---
+description: 'Nitric Key/Value Store'
+---
+
+# Key/Value Stores
+
+## 1. System Context
+
+**Developers** use Nitric to declare key/value stores within their application.
+
+- App code uses the [Key/Value resource](/keyvalue) from the Nitric SDK.
+- Developers configure key/value stores and implement application logic to securely access and manipulate data.
+
+**Operations** use default or overridden Terraform modules to provision the necessary resources for their target cloud.
+
+<details>
+  <summary>Example AWS Provider</summary>
+
+- **AWS DynamoDB** serves as the key/value store backend.
+- **AWS IAM** provides roles and policies for secure access to DynamoDB tables.
+
+```mermaid
+flowchart TD
+    Developer["Developer"]
+    Operations["Operations"]
+    App["nitric up"]
+    DynamoDB["AWS DynamoDB<br>(Key/Value Store)"]
+    Lambda["AWS Lambda Functions"]
+    IAM["AWS IAM"]
+
+    Developer -->|Code| App
+    Operations -->|Terraform| App
+    App -->|Create DynamoDB| DynamoDB
+    Lambda -->|Store/Retrieve Data| DynamoDB
+    App -->|Provide Access| IAM
+    IAM -->DynamoDB
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+</details>
+<details>
+  <summary>Example GCP Provider</summary>
+
+- **Google Firestore** serves as the key/value store backend.
+- **Google IAM** provides roles and policies for secure access to Firestore.
+
+```mermaid
+flowchart TD
+    Developer["Developer"]
+    Operations["Operations"]
+    App["nitric up"]
+    Firestore["Google Firestore<br>(Key/Value Store)"]
+    CloudFunctions["Google Cloud Functions"]
+    IAM["Google IAM"]
+
+    Developer -->|Code| App
+    Operations -->|Terraform| App
+    App -->|Create Firestore| Firestore
+    CloudFunctions -->|Store/Retrieve Data| Firestore
+    App -->|Provide Access| IAM
+    IAM -->Firestore
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+</details>
+
+## 2. Sequence
+
+```mermaid
+sequenceDiagram
+    participant Client as Client
+    participant NitricSDK as Nitric SDK
+    participant NitricRuntime as Nitric Runtime
+    participant DynamoDB as DynamoDB
+
+    Client->>NitricSDK: Request to set/get/delete a key-value
+    NitricSDK->>NitricRuntime: Forward API call with key, value, or operation
+    NitricRuntime->>DynamoDB: Perform operation (GetItem, PutItem, DeleteItem, Scan)
+
+    alt Successful Operation
+        DynamoDB-->>NitricRuntime: Return result (e.g., value, success status)
+        NitricRuntime-->>NitricSDK: Return result
+        NitricSDK-->>Client: Return result to client
+    else Failure
+        DynamoDB-->>NitricRuntime: Return error (e.g., AccessDenied, NotFound)
+        NitricRuntime-->>NitricSDK: Forward error
+        NitricSDK-->>Client: Return error response
+    end
+```
+
+## 3. Component
+
+### Key/Value Store Module
+
+- Ensures unique identification of key-value stores by using a standardized naming convention or randomly generated identifiers.
+- Supports the definition of attributes, partition keys, and optional sort keys to optimize data organization and querying.
+- Provides scalable and cost-efficient storage configurations suitable for variable workloads.
+- Enables dynamic access control by assigning permissions to applications or services based on predefined roles and policies, ensuring least privilege access.
+- Offers support for event-driven workflows, allowing integration with notification systems or functions triggered by changes in the store.
+- Abstracts the underlying key-value storage implementation, enabling consistent developer and operations experience across different cloud providers.
+
+## 4. Code
+
+**Developers** write application code that uses the [Key/Value resource](/keyvalue) from the SDK, configures the secret, and implements the application logic to access and manage secrets.
+
+SDK Reference by language -
+
+- [NodeJS SDK](/reference/nodejs/keyvalue/keyvalue)
+- [Python SDK](/reference/python/keyvalue/keyvalue)
+- [GO SDK](/reference/go/keyvalue/keyvalue)
+- [Dart SDK](/reference/dart/keyvalue/keyvalue)
+
+**Operations** will use or extend the Nitric Terraform reference modules:
+
+- [AWS Key/Value Store Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/keyvalue/main.tf)
+- [GCP Key/Value Store Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/keyvalue/main.tf)
