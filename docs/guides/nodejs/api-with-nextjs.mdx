@@ -392,37 +392,43 @@ Pressing `ctrl + a + k` will end the application.
 
 ## Deploy to the cloud
 
-### Deploy the Nitric API
+At this point, you can deploy what you've built to any of the supported cloud providers. In this example we'll deploy to AWS. Start by setting up your credentials and configuration for the [nitric/aws provider](/providers/pulumi/aws).
 
-Setup credentials and cloud specific configuration:
+Next, we'll need to create a `stack file` (deployment target). A stack is a deployed instance of an application. You might want separate stacks for each environment, such as stacks for `dev`, `test`, and `prod`. For now, let's start by creating a file for the `dev` stack.
 
-- [AWS](/providers/pulumi/aws)
-- [Azure](/providers/pulumi/azure)
-- [GCP](/providers/pulumi/gcp)
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
-Create a stack, which is a deployment target for your application.
-
-```
-nitric stack new
+```bash
+nitric stack new dev aws
 ```
 
-```
-? What should we name this stack? todo
-? Which provider do you want to deploy with? aws
-? Which region should the stack deploy to? us-east-1
+Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
+
+```yaml title:nitric.dev.yaml
+# The nitric provider to use
+provider: nitric/aws@latest
+# The target AWS region to deploy to
+# See available regions:
+# https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
+region: us-east-2
 ```
 
-Then, you can deploy with the `up` command.
+<Note>
+  You are responsible for staying within the limits of the free tier or any
+  costs associated with deployment.
+</Note>
 
-```
+Let's try deploying the stack with the `up` command:
+
+```bash
 nitric up
 ```
 
-When the deployment is complete, go to the relevant cloud console to see and interact with the API.
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your application.
 
-To undeploy run the `down` command:
+To tear down your application from the cloud, use the `down` command:
 
-```
+```bash
 nitric down
 ```
 

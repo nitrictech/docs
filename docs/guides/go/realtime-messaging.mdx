@@ -283,7 +283,14 @@ nitric stack new dev aws
 
 Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
 
-### AWS
+```yaml title:nitric.dev.yaml
+# The nitric provider to use
+provider: nitric/aws@latest
+# The target AWS region to deploy to
+# See available regions:
+# https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
+region: us-east-2
+```
 
 <Note>
   You are responsible for staying within the limits of the free tier or any
