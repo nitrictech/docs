@@ -46,8 +46,9 @@ You can go ahead and open this new project in your editor of choice. You should 
 ├── node_modules
 │   ├── ...
 ├── .gitignore
-├── index.js
 ├── nitric.yaml
+├── node.dockerfile
+├── node.dockerfile.dockerignore
 ├── package.json
 ├── README.md
 └── yarn.lock
@@ -168,40 +169,40 @@ At this point, we can stop the running application and try to deploy it to a clo
 
 This is where the true value of Nitric shines. You don't need to perform any manual cloud deployment activities or add solutions like Terraform to get this project into your cloud environment, Nitric takes care of that for you.
 
-To perform the deployment we'll create a `stack`, stacks give Nitric the config needed for a specific cloud instance of this project, such as the provider and region.
+To perform the deployment we'll create a `stack`, stacks give Nitric the configuration needed for a specific cloud instance of this project, such as the provider and region.
 
-The new stack command can help you create the stack by following prompts.
+The `stack new` command below will create a stack named `dev` that uses the `aws` provider.
 
 ```bash
-nitric stack new
+nitric stack new dev aws
 ```
 
-This command will create a file named `nitric.dev.yaml`, with contents like this:
+Edit the stack file `nitric.dev.yaml` and set your preferred AWS region, for example `us-east-1`.
 
 ```yaml title:nitric.dev.yaml
-provider: nitric/aws@1.1.0
-region: us-east-1
+# The nitric provider to use
+provider: nitric/aws@latest
+# The target AWS region to deploy to
+# See available regions:
+# https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
+region: us-east-2
 ```
 
-With the stack file in place we can run the deployment:
+<Note>
+  You are responsible for staying within the limits of the free tier or any
+  costs associated with deployment.
+</Note>
+
+Let's try deploying the stack with the `up` command:
 
 ```bash
 nitric up
 ```
 
-Go ahead and test your new Fastify+Nitric app in the cloud, you can start with the API Gateway URL returned by the `up` command.
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your application.
 
-<Note>
-  When you're done with the cloud deployment you can tear it down using the
-  `nitric down` command.
-</Note>
+To tear down your application from the cloud, use the `down` command:
 
-## What next?
-
-Now that you have the basics down, try exploring other Nitric resources available to enhance your app.
-
-- [Key Value Store](/keyvalue)
-- [Schedules](/schedules)
-- [Storage](/storage)
-- [Messages](/messaging)
-- [Secrets](/secrets)
+```bash
+nitric down
+```
