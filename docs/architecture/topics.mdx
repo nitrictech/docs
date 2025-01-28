@@ -6,12 +6,12 @@ description: 'Nitric Topic'
 
 ## 1. System Context
 
-**Developers** use Nitric to declare topics to enable event-driven communication within their application.
+**Developers** use Nitric to define required topics to enable event-driven communication within their application.
 
 - App code interacts with the [Topic resource](/messaging#topics) through defined topics and subscriptions.
-- Developers configure topics and implement application logic to publish and consume messages.
+- Developers define topics their application requires and implement application logic to publish or subscribe to messages.
 
-**Operations** use default or overridden Terraform modules to provision the necessary resources for their target cloud.
+**Operations** use default or overridden IaC (e.g Terraform modules) to provision the necessary resources for their target cloud.
 
 <details>
   <summary>Example AWS Provider</summary>

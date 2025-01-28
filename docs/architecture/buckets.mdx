@@ -2,25 +2,25 @@
 description: 'C4 Buckets'
 ---
 
-# Storage - Buckets
+# Storage (Buckets/Object Storage)
 
 ## 1. System Context
 
-**Developers** use Nitric to declare buckets within their application.
+**Developers** use Nitric to define required buckets within their application.
 
 - App code uses the [Bucket resource](/storage) from the Nitric SDK.
-- Developers configure buckets and implement application logic to securely access and manipulate bucket data.
-- Developers request the level of access they require for the bucket in their application logic e.g. read, write, delete.
-- Developers can implement handlers for on events such as read, write or delete.
+- Developers define buckets their application requires and implement logic to securely store/retrieve/delete files.
+- Developers _request_ the level of access they require for the bucket in their application logic e.g. read, write, delete.
+- Developers can implement handlers for file change events such as write or delete.
 
-**Operations** use default or overridden Terraform modules to provision the necessary resources for their target cloud.
+**Operations** use default or overridden IaC (e.g Terraform modules) to provision the necessary resources for their target cloud.
 
 <details>
   <summary>Example AWS Provider</summary>
 
 - **AWS S3** serves as the storage backend.
 - **AWS Lambda** functions are used to process events triggered by S3.
-- **AWS IAM** provides roles and policies for secure access to S3 buckets and Lambda functions, enforcing least priviledge access based on the developers request.
+- **AWS IAM** provides roles and policies for secure access to S3 buckets and Lambda functions, enforcing least privilege access based on the developers request.
 
 ```mermaid
 flowchart TD
@@ -113,8 +113,8 @@ sequenceDiagram
 
 - Ensures storage buckets have unique names by appending a randomly generated identifier. This avoids naming conflicts and aligns with best practices for globally accessible cloud resources.
 - Supports the addition of metadata tags for resource identification, management, and tracking, enabling better governance.
-- Configures storage bucket notifications to trigger functions or message queues based on specified events (e.g., object creation, update, or deletion).
-- Implements least privilege access by dynamically assigning permissions to functions or services that interact with the storage bucket.
+- Configures storage bucket notifications to trigger functions or message queues based on specified events (e.g., object update or deletion).
+- Implements least privilege access by only assigning requested permissions to functions or services that interact with the storage bucket.
 - Uses templates or dynamic blocks to handle multiple notification targets, allowing scalability and flexibility for different workflows.
 
 ## 4. Code

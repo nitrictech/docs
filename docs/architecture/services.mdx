@@ -6,12 +6,12 @@ description: 'Service Deployment'
 
 ## 1. System Context
 
-**Developers** use Nitric to deploy services or functions within their application.
+**Developers** use Nitric to create services or functions within their application.
 
 - Application code is written in files that matches the pattern(s) in the nitric.yaml config file.
 - The **Nitric CLI** builds container images for their Lambda functions and push them to a container registry.
 
-**Operations** use default or overridden Terraform modules to provision the necessary resources for their target cloud.
+**Operations** use default or overridden IaC (e.g Terraform modules) to provision the necessary resources for their target cloud.
 
 <details>
   <summary>Example AWS Provider</summary>

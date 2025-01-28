@@ -6,12 +6,12 @@ description: 'Nitric Key/Value Store'
 
 ## 1. System Context
 
-**Developers** use Nitric to declare key/value stores within their application.
+**Developers** use Nitric to define required key/value stores within their application.
 
 - App code uses the [Key/Value resource](/keyvalue) from the Nitric SDK.
-- Developers configure key/value stores and implement application logic to securely access and manipulate data.
+- Developers define key/value stores their application requires and implement logic to securely read/write/delete values with unique keys.
 
-**Operations** use default or overridden Terraform modules to provision the necessary resources for their target cloud.
+**Operations** use default or overridden IaC (e.g Terraform modules) to provision the necessary resources for their target cloud.
 
 <details>
   <summary>Example AWS Provider</summary>

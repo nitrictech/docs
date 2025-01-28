@@ -6,12 +6,12 @@ description: 'Nitric Queue'
 
 ## 1. System Context
 
-**Developers** use Nitric to declare message queues within their application.
+**Developers** use Nitric to define required message queues within their application.
 
 - App code uses the [Queue resource](/messaging#queues) from the Nitric SDK.
-- Developers configure queues and implement application logic to send and receive messages.
+- Developers define queues their application requires and implement application logic to send or receive messages.
 
-**Operations** use default or overridden Terraform modules to provision the necessary resources for their target cloud.
+**Operations** use default or overridden IaC (e.g Terraform modules) to provision the necessary resources for their target cloud.
 
 <details>
   <summary>Example AWS Provider</summary>
