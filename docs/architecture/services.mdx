@@ -81,27 +81,49 @@ classDef edgeLabel line-height:2;
 
 General-purpose workers that handle tasks like processing queues, topics, or schedules. Services abstract the runtime’s ability to route tasks and events to application-defined logic.
 
+### API & Event-Driven Communication
+
 ```mermaid
 flowchart TD
     A[Service] -->|Manages API calls| B[APIs]
-    A -->|Schedules tasks| C[Schedules]
-    A -->|Handles key-value operations| D[KeyValue]
-    A -->|Manages file storage| E[Storage]
     A -->|Queues messages| F[Queues]
     A -->|Broadcasts messages to subscribers| G[Topics]
-    A -->|Manages secrets securely| H[Secrets]
-    A -->|Interacts with relational databases| I[SQL Databases]
     A -->|Handles WebSocket connections| J[WebSockets]
 
     B -->|Routes HTTP requests| K[Cloud API Gateway]
-    C -->|Triggers periodic tasks| L[Cloud Scheduler]
-    D -->|Stores/retrieves key-value pairs| M[Cloud KeyValue Store]
-    E -->|Stores/retrieves files| N[Cloud Object Storage]
     F -->|Processes message queues| O[Cloud Queue Service]
     G -->|Distributes messages to subscribers| P[Cloud Pub/Sub]
+    J -->|Facilitates real-time communication| S[WebSocket Gateway]
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+### Data Storage & Management
+
+```mermaid
+flowchart TD
+    A[Service] -->|Handles key-value operations| D[KeyValue]
+    A -->|Manages file storage| E[Storage]
+    A -->|Manages secrets securely| H[Secrets]
+    A -->|Interacts with relational databases| I[SQL Databases]
+
+    D -->|Stores/retrieves key-value pairs| M[Cloud KeyValue Store]
+    E -->|Stores/retrieves files| N[Cloud Object Storage]
     H -->|Stores/retrieves secrets| Q[Cloud Secret Manager]
     I -->|Executes SQL queries| R[Relational Database]
-    J -->|Facilitates real-time communication| S[WebSocket Gateway]
+
+classDef default line-height:1;
+classDef edgeLabel line-height:2;
+```
+
+### Task Execution & Scheduling
+
+```mermaid
+flowchart TD
+    A[Service] -->|Schedules tasks| C[Schedules]
+
+    C -->|Triggers periodic tasks| L[Cloud Scheduler]
 
 classDef default line-height:1;
 classDef edgeLabel line-height:2;
@@ -123,6 +145,8 @@ classDef edgeLabel line-height:2;
 
 **Developers** write application code that implements handlers for the [api](/apis), [bucket](/buckets), [websocket](/websockets), [topic](/topics), [schedule](/schedule) resources. This code is written in files that matches the pattern(s) in the nitric.yaml file.
 
+### Nitric service configuration - nitric.yaml
+
 ```json
 name: service-name
 services:
@@ -131,6 +155,8 @@ services:
       type: ""
       start: npm run dev:services $SERVICE_PATH
 ```
+
+### HTTP Route Handler
 
 ```typescript
 import { api } from '@nitric/sdk'
@@ -143,6 +169,8 @@ customerRoute.get((ctx) => {
   ctx.res.json(responseBody)
 })
 ```
+
+### Bucket On Read/Write/Delete Handler
 
 ```typescript
 import { bucket } from '@nitric/sdk'
