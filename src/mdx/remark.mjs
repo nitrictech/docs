@@ -13,13 +13,15 @@ export const remarkPlugins = [
         theme: 'base',
         // TODO: Relocate theme config
         themeVariables: {
-          primaryColor: '#242037',
-          lineColor: '#cad3f5',
-          secondaryColor: '#42424a',
+          background: 'white',
+          primaryColor: '#F9F3FF',
+          primaryBorderColor: 'var(--secondary-300)',
+          lineColor: '#000000',
+          secondaryColor: '#ffffff',
           tertiaryColor: '#0000ff',
-          primaryTextColor: '#cad3f5',
-          fontSize: '14px',
-          fontFamily: 'Fira Code, monospace',
+          primaryTextColor: '#000000',
+          fontSize: '24px', // use with styles in mermaid.css, this zooms out the diagram
+          fontFamily: 'var(--font-jetbrains-mono), monospace',
         },
       },
     },

@@ -1,6 +1,13 @@
 svg[id^='mermaid-svg-'] {
-  display: block;
-  /* width: 100%; */
-  margin: auto;
-  /* padding: 0; */
+  @apply mx-auto block rounded-lg bg-white p-4;
+}
+
+svg[id^='mermaid-svg-'] .nodeLabel,
+svg[id^='mermaid-svg-'] .edgeLabel,
+svg[id^='mermaid-svg-'] tspan {
+  @apply text-base;
+}
+
+svg[id^='mermaid-svg-'] .edgeLabel {
+  @apply py-1;
 }
