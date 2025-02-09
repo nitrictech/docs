@@ -86,23 +86,60 @@ classDef edgeLabel line-height:2;
 
 ## 2. Sequence
 
+### Build Sequence
+
+Here is the sequence of events that occur when a developer registers an API with Nitric, including the registration of routes, security, and middleware.
+
 ```mermaid
 sequenceDiagram
-    participant Client as Client
-    participant NitricSDK as Nitric SDK
-    participant NitricRuntime as Nitric Runtime
-    participant APIGateway as API Gateway
-    participant Worker as App Worker
+  participant Worker as App Worker(s)
+  participant SDK as Nitric SDK
+  participant Nitric as Nitric CLI
+  participant Provider as Nitric Provider
+  participant IAC as IaC
 
-    Client->>NitricSDK: Send HTTP API request
-    NitricSDK->>NitricRuntime: Forward API request
-    NitricRuntime->>APIGateway: Register API routes (during deployment)
+  Worker->>SDK: Register API(s)
+  SDK->>Nitric: Register API(s)
 
-    APIGateway->>NitricRuntime: Route incoming request
-    NitricRuntime->>Worker: Forward request to application logic
-    Worker-->>NitricRuntime: Process request and return response
-    NitricRuntime-->>APIGateway: Respond with result
-    APIGateway-->>Client: Return API response
+  opt Authentication
+    Worker->>SDK: Register Security
+    SDK->>Nitric: Register Security
+  end
+
+  Worker->>SDK: Register Route Callback(s)
+  SDK->>Nitric: Register Route(s)
+  Worker->>SDK: Register Middleware(s)
+
+  Nitric->>Nitric: Generate OpenAPI Spec
+  Nitric->>Provider: Forward Nitric Spec
+  Provider->>IAC: Provision API Gateway
+```
+
+### Runtime Sequence
+
+Here is the sequence of events that occur at runtime when a client makes an HTTP request to an API registered and deployed using Nitric.
+
+```mermaid
+sequenceDiagram
+  participant Client as Client
+  participant APIGateway as API Gateway
+  participant Auth as Auth Provider
+  participant Nitric as Nitric Runtime
+  participant SDK as Nitric SDK
+  participant Worker as App Worker
+
+  Client->>APIGateway: HTTP Request
+  opt Authentication
+    APIGateway->>Auth: Verify Token
+    APIGateway-->>Client: Unauthorized
+  end
+  APIGateway->>Nitric: Forward Request
+  Nitric->>Nitric: Convert Request Format
+  Nitric->>SDK: Route HTTP Event
+  SDK->>Worker: Execute Route Callback
+
+  Worker->>Worker: Process Request
+  Worker-->>Client: Response
 ```
 
 ## 3. Component
