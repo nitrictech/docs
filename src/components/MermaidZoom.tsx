@@ -19,13 +19,24 @@ const MermaidZoom: React.FC<MermaidZoomProps> = (props) => (
       {({ zoomIn, zoomOut, resetTransform }) => (
         <React.Fragment>
           <div className="absolute right-2 top-2 z-10 space-x-1">
-            <Button variant="outline" size="icon" onClick={() => zoomIn()}>
+            <Button
+              aria-label="Zoom In"
+              variant="outline"
+              size="icon"
+              onClick={() => zoomIn()}
+            >
               <MagnifyingGlassPlusIcon className="size-5" />
             </Button>
-            <Button variant="outline" size="icon" onClick={() => zoomOut()}>
+            <Button
+              aria-label="Zoom Out"
+              variant="outline"
+              size="icon"
+              onClick={() => zoomOut()}
+            >
               <MagnifyingGlassMinusIcon className="size-5" />
             </Button>
             <Button
+              aria-label="Reset Zoom"
               variant="outline"
               size="icon"
               onClick={() => resetTransform()}
