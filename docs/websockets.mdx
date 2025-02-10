@@ -6,27 +6,13 @@ description: 'Connect and manage websockets with Nitric'
 
 Nitric provides support for serverless websockets. This feature allows you to connect client applications to your Nitric services using websocket gateways such as AWS APIGateway.
 
+If you're interested in the architecture, provisioning, or deployment steps, they can be found [here](/architecture/websockets).
+
 <Note>
   Projects with websockets will only be deployable to AWS at the moment. If you
   require support for additional clouds let us know:
   https://github.com/nitrictech/nitric/issues
 </Note>
-
-## Architecture
-
-```mermaid
-graph LR;
-    classDef default line-height:1.2;
-    classDef edgeLabel line-height:1.2;
-
-    A(Websocket Gateway)-- on connect -->B(Connection Handler Service);
-    A -- on disconnect --> B;
-    A -- on message --> C(Message Handler Service);
-    C -- send message --> A;
-    D(Batch Service) -- send message --> A;
-```
-
-A `Service` can both receive and send messages to a `Websocket`, `Batch Services` may only send message to a `Websocket`.
 
 ## Listening for events
 
