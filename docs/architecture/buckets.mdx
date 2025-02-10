@@ -85,26 +85,49 @@ classDef edgeLabel line-height:2;
 
 ## 2. Sequence
 
+### Build Sequence
+
+Below is a sequence diagram showing the sequence of events that occur when a developer registers a bucket with Nitric. Including, optionally registering event handlers for file change events.
+
 ```mermaid
 sequenceDiagram
-    participant Client as Client
-    participant NitricSDK as Nitric SDK
-    participant NitricRuntime as Nitric Runtime
-    participant CloudStorage as Cloud Storage (e.g., S3, GCS)
+    participant Worker as App Worker(s)
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric CLI
+    participant Provider as Nitric Provider
+    participant IAC as IaC
 
-    Client->>NitricSDK: Perform storage operation (e.g., write, read, delete)
-    NitricSDK->>NitricRuntime: Forward storage API call
-    NitricRuntime->>CloudStorage: Execute storage operation
+    Worker->>SDK: Register Bucket
+    SDK->>Nitric: Register Bucket
 
-    alt Successful Operation
-        CloudStorage-->>NitricRuntime: Return result (e.g., data or success status)
-        NitricRuntime-->>NitricSDK: Return result
-        NitricSDK-->>Client: Return result to client
-    else Failure
-        CloudStorage-->>NitricRuntime: Return error
-        NitricRuntime-->>NitricSDK: Forward error
-        NitricSDK-->>Client: Return error response
+    opt Notifications
+      Worker->>SDK: Register Event Callback
+      SDK->>Nitric: Register Event Handler
     end
+
+    Nitric->>Provider: Forward Nitric Spec
+    Provider->>IAC: Provision Bucket
+
+    opt Notifications
+      Provider->>IAC: Provision Event Rule(s)
+    end
+```
+
+### Runtime Sequence
+
+Below is a sequence diagram showing the runtime flow of a storage operation in a Nitric application, using the Nitric SDK. The SDK forwards the request to the Nitric runtime, which converts the request and forwards it to the cloud storage API. The plugin nature of the Nitric runtime allows for seamless integration with different cloud providers.
+
+```mermaid
+sequenceDiagram
+    participant Client as App Code
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric Runtime
+    participant CloudAPI as Cloud Storage (e.g. S3)
+
+    Client->>SDK: Read
+    SDK->>Nitric: Forward Request
+    Nitric->>Nitric: Convert Request
+    Nitric->>CloudAPI: Storage API Request
 ```
 
 ## 3. Component
