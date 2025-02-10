@@ -70,26 +70,43 @@ classDef edgeLabel line-height:2;
 
 ## 2. Sequence
 
+### Build Sequence
+
+Below is a sequence diagram showing the sequence of events when a developer registers a Key/Value store with Nitric.
+
 ```mermaid
 sequenceDiagram
-    participant Client as Client
-    participant NitricSDK as Nitric SDK
-    participant NitricRuntime as Nitric Runtime
-    participant DynamoDB as DynamoDB
+    participant Worker as App Worker(s)
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric CLI
+    participant Provider as Nitric Provider
+    participant IAC as IaC
 
-    Client->>NitricSDK: Request to set/get/delete a key-value
-    NitricSDK->>NitricRuntime: Forward API call with key, value, or operation
-    NitricRuntime->>DynamoDB: Perform operation (GetItem, PutItem, DeleteItem, Scan)
+    Worker->>SDK: Register Key/Value Store
+    Worker->>SDK: Register Access Requirements
+    SDK->>Nitric: Register Key/Value Store
+    SDK->>Nitric: Register Access Requirements
 
-    alt Successful Operation
-        DynamoDB-->>NitricRuntime: Return result (e.g., value, success status)
-        NitricRuntime-->>NitricSDK: Return result
-        NitricSDK-->>Client: Return result to client
-    else Failure
-        DynamoDB-->>NitricRuntime: Return error (e.g., AccessDenied, NotFound)
-        NitricRuntime-->>NitricSDK: Forward error
-        NitricSDK-->>Client: Return error response
-    end
+    Nitric->>Provider: Forward Nitric Spec
+    Provider->>IAC: Provision Key/Value Store
+    Provider->>IAC: Provision IAM
+```
+
+### Runtime Sequence
+
+Below is a sequence diagram showing the runtime flow of a key/value store operation using Nitric. The example shows a Get operation, which reads a value by its key.
+
+```mermaid
+sequenceDiagram
+    participant Client as App Code
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric Runtime
+    participant CloudAPI as Document DB
+
+    Client->>SDK: Get(key)
+    SDK->>Nitric: Forward Request
+    Nitric->>Nitric: Convert Request
+    Nitric->>CloudAPI: Key/Value API Request
 ```
 
 ## 3. Component

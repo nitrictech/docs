@@ -98,7 +98,9 @@ sequenceDiagram
     participant IAC as IaC
 
     Worker->>SDK: Register Bucket
+    Worker->>SDK: Register Access Requirements
     SDK->>Nitric: Register Bucket
+    SDK->>Nitric: Register Access Requirements
 
     opt Notifications
       Worker->>SDK: Register Event Callback
@@ -107,9 +109,11 @@ sequenceDiagram
 
     Nitric->>Provider: Forward Nitric Spec
     Provider->>IAC: Provision Bucket
+    Provider->>IAC: Provision IAM
 
     opt Notifications
       Provider->>IAC: Provision Event Rule(s)
+      Provider->>IAC: Provision IAM
     end
 ```
 
