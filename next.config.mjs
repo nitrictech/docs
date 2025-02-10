@@ -626,6 +626,12 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       })),
+      {
+        source: '/docs/reference/python/schedules/schedule',
+        destination: '/docs/reference/python/schedule/schedule',
+        basePath: false,
+        permanent: true,
+      },
     ]
   },
   async headers() {

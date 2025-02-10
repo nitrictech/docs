@@ -143,17 +143,17 @@ classDef edgeLabel line-height:2;
 
 ## 4. Code
 
-**Developers** write application code that implements handlers for the [api](/apis), [bucket](/buckets), [websocket](/websockets), [topic](/topics), [schedule](/schedule) resources. This code is written in files that matches the pattern(s) in the nitric.yaml file.
+**Developers** write application code that implements handlers for the [api](/apis), [storage](/storage), [websocket](/websockets), [topic](/topics), [schedule](/schedule) resources. This code is written in files that matches the pattern(s) in the nitric.yaml file.
 
 ### Nitric service configuration - nitric.yaml
 
-```json
+```yaml
 name: service-name
 services:
-    - match: services/*.ts
-      runtime: ""
-      type: ""
-      start: npm run dev:services $SERVICE_PATH
+  - match: services/*.ts
+    runtime: ''
+    type: ''
+    start: npm run dev:services $SERVICE_PATH
 ```
 
 ### HTTP Route Handler
@@ -187,5 +187,5 @@ assets.on('delete', '*', (ctx) => {
 
 **Operations** will use or extend the Nitric Terraform reference modules:
 
-- [AWS Services Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/service/main.tf)
-- [GCP Services Terrform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/service/main.tf)
+- [AWS Services Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/service/main.tf)
+- [GCP Services Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/service/main.tf)
