@@ -52,28 +52,46 @@ classDef edgeLabel line-height:2;
 
 </details>
 
-## 2. Sequence Diagram (Level 2)
+## 2. Sequence
+
+### Build Sequence
+
+Below is the sequence of events that occur when a developer registers a SQL database with Nitric.
 
 ```mermaid
 sequenceDiagram
-    participant Client as Client
-    participant NitricSDK as Nitric SDK
-    participant NitricRuntime as Nitric Runtime
-    participant SQLDatabase as SQL Database (e.g., PostgreSQL, MySQL)
+    participant Worker as App Worker(s)
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric CLI
+    participant Provider as Nitric Provider <br> (plugin)
+    participant IAC as IaC <br> (e.g. Terraform)
 
-    Client->>NitricSDK: Perform SQL operation (e.g., query, insert, update)
-    NitricSDK->>NitricRuntime: Forward SQL API call
-    NitricRuntime->>SQLDatabase: Execute SQL operation
+    Worker->>SDK: Register SQL Database
+    SDK->>Nitric: Register SQL Database
 
-    alt Successful Operation
-        SQLDatabase-->>NitricRuntime: Return result (e.g., query data or success status)
-        NitricRuntime-->>NitricSDK: Return result
-        NitricSDK-->>Client: Return result to client
-    else Failure
-        SQLDatabase-->>NitricRuntime: Return error
-        NitricRuntime-->>NitricSDK: Forward error
-        NitricSDK-->>Client: Return error response
-    end
+    Nitric->>Provider: Forward Nitric Spec
+    Provider->>IAC: Provision Database Cluster
+    Provider->>IAC: Provision Database Instance
+    Provider->>IAC: Provision IAM
+```
+
+### Runtime Sequence
+
+Below is the runtime flow of a database operation in a Nitric application, using the Nitric SDK. The SDK provides access to the connection details for the SQL database. All database operations are performed as usual, without any additional Nitric-specific steps.
+
+```mermaid
+sequenceDiagram
+    participant Client as App Code
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric Runtime <br> (plugin)
+    participant CloudAPI as Cloud DMBS <br> (e.g. AWS RDS)
+
+    Client->>SDK: connectionString()
+    SDK->>Nitric: Forward Request
+    Nitric->>Nitric: Convert Request
+    Nitric->>CloudAPI: Retrieve Connection String
+
+    Client->>CloudAPI: Execute SQL Query
 ```
 
 ## 3. Component

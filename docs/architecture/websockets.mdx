@@ -47,31 +47,66 @@ classDef edgeLabel line-height:2;
 
 ## 2. Sequence
 
+### Build Sequence
+
+Here is the sequence of events that occur when a developer registers an Websocket API with Nitric, including the registration of handlers for connection, message, and disconnection events.
+
+```mermaid
+sequenceDiagram
+  participant Worker as App Worker(s)
+  participant SDK as Nitric SDK
+  participant Nitric as Nitric CLI
+  participant Provider as Nitric Provider <br> (plugin)
+  participant IAC as IaC <br> (e.g. Terraform)
+
+  Worker->>SDK: Register Websocket(s)
+  SDK->>Nitric: Register Websocket(s)
+
+  Worker->>SDK: Register Connection Handler
+  SDK->>Nitric: Register Connection Handler
+  Worker->>SDK: Register Message Handler
+  SDK->>Nitric: Register Message Handler
+  Worker->>SDK: Register Disconnection Handler
+  SDK->>Nitric: Register Disconnection Handler
+
+  Nitric->>Provider: Forward Nitric Spec
+  Provider->>IAC: Provision Websocket API
+  Provider->>IAC: Provision IAM
+```
+
+### Runtime Sequence
+
+Here is the sequence of events that occur at runtime when a websocket connection is established, messages are sent and received, and the connection is closed.
+
 ```mermaid
 sequenceDiagram
     participant Client as Client
+    participant WSGateway as WebSocket Gateway <br> (e.g. AWS API Gateway)
+    participant NitricRuntime as Nitric Runtime <br> (plugin)
     participant NitricSDK as Nitric SDK
-    participant NitricRuntime as Nitric Runtime
-    participant WebSocketGateway as Cloud WebSocket Gateway (e.g., AWS API Gateway, GCP WebSocket Gateway)
+    participant App as App Code
 
-    Client->>NitricSDK: Connect to WebSocket endpoint
-    NitricSDK->>NitricRuntime: Forward connection request
-    NitricRuntime->>WebSocketGateway: Establish WebSocket connection
+    Client->>WSGateway: Connect to ws:// endpoint
+    WSGateway->>NitricRuntime: Forward Connection Event
+    NitricRuntime->>NitricSDK: Connection Callback
 
     loop Real-Time Communication
-        Client->>NitricSDK: Send or receive WebSocket message
-        NitricSDK->>NitricRuntime: Forward message
-        NitricRuntime->>WebSocketGateway: Relay message
-        WebSocketGateway-->>NitricRuntime: Forward response or broadcast message
-        NitricRuntime-->>NitricSDK: Relay message to the client
-        NitricSDK-->>Client: Deliver message
+        alt Client Message
+          Client->>WSGateway: Send WS Message
+          WSGateway->>NitricRuntime: Forward Message
+          NitricRuntime->>NitricSDK: Forward Message
+          NitricSDK->>App: Message Callback
+        else Server Message
+          App->>NitricSDK: Send WS Message
+          NitricSDK->>NitricRuntime: Forward Message
+          NitricRuntime->>WSGateway: Forward Message
+          WSGateway->>Client: Deliver Message
+        end
     end
 
-    alt Disconnect
-        Client->>NitricSDK: Disconnect from WebSocket
-        NitricSDK->>NitricRuntime: Notify runtime
-        NitricRuntime->>WebSocketGateway: Close WebSocket connection
-    end
+    Client->>WSGateway: Disconnect
+    WSGateway->>NitricRuntime: Forward Disconnection Event
+    NitricRuntime->>NitricSDK: Disconnection Callback
 ```
 
 ## 3. Component
