@@ -94,8 +94,8 @@ sequenceDiagram
     participant Worker as App Worker(s)
     participant SDK as Nitric SDK
     participant Nitric as Nitric CLI
-    participant Provider as Nitric Provider
-    participant IAC as IaC
+    participant Provider as Nitric Provider <br> (plugin)
+    participant IAC as IaC <br> (e.g. Terraform)
 
     Worker->>SDK: Register Bucket
     Worker->>SDK: Register Access Requirements
@@ -125,10 +125,10 @@ Below is a sequence diagram showing the runtime flow of a storage operation in a
 sequenceDiagram
     participant Client as App Code
     participant SDK as Nitric SDK
-    participant Nitric as Nitric Runtime
-    participant CloudAPI as Cloud Storage (e.g. S3)
+    participant Nitric as Nitric Runtime <br> (plugin)
+    participant CloudAPI as Cloud Storage <br> (e.g. AWS S3)
 
-    Client->>SDK: Read
+    Client->>SDK: Read()
     SDK->>Nitric: Forward Request
     Nitric->>Nitric: Convert Request
     Nitric->>CloudAPI: Storage API Request

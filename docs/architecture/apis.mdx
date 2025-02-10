@@ -95,8 +95,8 @@ sequenceDiagram
   participant Worker as App Worker(s)
   participant SDK as Nitric SDK
   participant Nitric as Nitric CLI
-  participant Provider as Nitric Provider
-  participant IAC as IaC
+  participant Provider as Nitric Provider <br> (plugin)
+  participant IAC as IaC <br> (e.g. Terraform)
 
   Worker->>SDK: Register API(s)
   SDK->>Nitric: Register API(s)
@@ -122,9 +122,9 @@ Here is the sequence of events that occur at runtime when a client makes an HTTP
 ```mermaid
 sequenceDiagram
   participant Client as Client
-  participant APIGateway as API Gateway
+  participant APIGateway as API Gateway <br> (e.g. AWS API Gateway)
   participant Auth as Auth Provider
-  participant Nitric as Nitric Runtime
+  participant Nitric as Nitric Runtime <br> (plugin)
   participant SDK as Nitric SDK
   participant Worker as App Worker
 

@@ -67,26 +67,43 @@ classDef edgeLabel line-height:2;
 
 ## 2. Sequence
 
+### Build Sequence
+
+Below is a sequence diagram showing the sequence of events when a developer registers a Queue with Nitric. This is the process that occurs when using the `nitric up` command.
+
 ```mermaid
 sequenceDiagram
-    participant Client as Client
-    participant NitricSDK as Nitric SDK
-    participant NitricRuntime as Nitric Runtime
-    participant QueueService as Cloud Queue Service (e.g., AWS SQS, GCP Pub/Sub)
+    participant Worker as App Worker(s)
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric CLI
+    participant Provider as Nitric Provider
+    participant IAC as IaC
 
-    Client->>NitricSDK: Send or receive message from queue
-    NitricSDK->>NitricRuntime: Forward queue API call
-    NitricRuntime->>QueueService: Perform queue operation (e.g., enqueue, dequeue)
+    Worker->>SDK: Register Queue
+    Worker->>SDK: Register Access Requirements
+    SDK->>Nitric: Register Queue
+    SDK->>Nitric: Register Access Requirements
 
-    alt Successful Operation
-        QueueService-->>NitricRuntime: Return result (e.g., message or success status)
-        NitricRuntime-->>NitricSDK: Return result
-        NitricSDK-->>Client: Return result to client
-    else Failure
-        QueueService-->>NitricRuntime: Return error
-        NitricRuntime-->>NitricSDK: Forward error
-        NitricSDK-->>Client: Return error response
-    end
+    Nitric->>Provider: Forward Nitric Spec
+    Provider->>IAC: Provision Queue
+    Provider->>IAC: Provision IAM
+```
+
+### Runtime Sequence
+
+Below is the runtime flow when performing operations on a Queue using Nitric, such as enqueueing or dequeueing messages. The example shows an Enqueue operation, which sends a message to the queue.
+
+```mermaid
+sequenceDiagram
+    participant Client as App Code
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric Runtime <br> (plugin)
+    participant CloudAPI as Document DB <br> (e.g. AWS SQS)
+
+    Client->>SDK: Enqueue(message)
+    SDK->>Nitric: Forward Request
+    Nitric->>Nitric: Convert Request
+    Nitric->>CloudAPI: Queue API Request
 ```
 
 ## 3. Component

@@ -82,28 +82,59 @@ classDef edgeLabel line-height:2;
 
 ## 2. Sequence
 
+### Build Sequence
+
+Below is a sequence diagram showing the sequence of events when a developer registers a Topic with Nitric and optionally registers Subscribers. This is the process that occurs when using the `nitric up` command.
+
 ```mermaid
 sequenceDiagram
-    participant Client as Client
-    participant NitricSDK as Nitric SDK
-    participant NitricRuntime as Nitric Runtime
-    participant TopicService as Cloud Topic Service (e.g., AWS SNS, GCP Pub/Sub)
-    participant Subscriber as Subscriber (e.g., Queue, Function)
+    participant Worker as App Worker(s)
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric CLI
+    participant Provider as Nitric Provider <br> (plugin)
+    participant IAC as IaC <br> (e.g. Terraform)
 
-    Client->>NitricSDK: Publish message to topic
-    NitricSDK->>NitricRuntime: Forward topic API call
-    NitricRuntime->>TopicService: Publish message to topic
+    Worker->>SDK: Register Queue
+    Worker->>SDK: Register Access Requirements
+    SDK->>Nitric: Register Queue
+    SDK->>Nitric: Register Access Requirements
 
-    alt Successful Publish
-        TopicService-->>NitricRuntime: Confirm message delivery
-        NitricRuntime-->>NitricSDK: Return success confirmation
-        NitricSDK-->>Client: Return success to client
-        TopicService->>Subscriber: Distribute message to subscribers
-        Subscriber-->>TopicService: Acknowledge receipt of message
-    else Publish Failure
-        TopicService-->>NitricRuntime: Return error
-        NitricRuntime-->>NitricSDK: Forward error
-        NitricSDK-->>Client: Return error response
+    opt Subscribers
+      Worker->>SDK: Register Subscriber Callback
+      SDK->>Nitric: Register Subscriber
+    end
+
+    Nitric->>Provider: Forward Nitric Spec
+    Provider->>IAC: Provision Queue
+    Provider->>IAC: Provision IAM
+
+    opt Notifications
+      Provider->>IAC: Provision Event Rule(s)
+      Provider->>IAC: Provision IAM
+    end
+```
+
+### Runtime Sequence
+
+Below is the runtime flow when performing operations on a Topic using Nitric, such as publishing or subscribing to messages. The example shows both publish and subscribe operations, which send or receive messages to/from the topic.
+
+```mermaid
+sequenceDiagram
+    participant Client as App Code
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric Runtime <br> (plugin)
+    participant CloudAPI as Message Broker <br> (e.g. AWS SNS)
+
+    alt Publisher
+        Client->>SDK: Publish(message)
+        SDK->>Nitric: Forward Request
+        Nitric->>Nitric: Convert Request
+        Nitric->>CloudAPI: Topic API Request
+    else Subscriber
+        CloudAPI->>Nitric: Message
+        Nitric->>Nitric: Convert Message
+        Nitric->>SDK: Forward Message
+        SDK->>Client: Subscription Callback
     end
 ```
 
