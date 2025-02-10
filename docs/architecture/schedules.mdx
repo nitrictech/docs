@@ -74,22 +74,45 @@ classDef edgeLabel line-height:2;
 
 ## 2. Sequence
 
+Below is the sequence of events that occur when a developer registers a schedule and a callback function with Nitric.
+
 ```mermaid
 sequenceDiagram
-    participant Developer as Developer
-    participant NitricSDK as Nitric SDK
-    participant NitricRuntime as Nitric Runtime
-    participant Scheduler as Cloud Scheduler
-    participant Worker as Application Worker
+    participant Worker as App Worker(s)
+    participant SDK as Nitric SDK
+    participant Nitric as Nitric CLI
+    participant Provider as Nitric Provider <br> (plugin)
+    participant IAC as IaC <br> (e.g. Terraform)
 
-    Developer->>NitricSDK: Define schedule (e.g., CRON job)
-    NitricSDK->>NitricRuntime: Deploy schedule configuration
-    NitricRuntime->>Scheduler: Create schedule in cloud scheduler
+    Worker->>SDK: Register Schedule
+    Worker->>SDK: Register Schedule Callback
+    SDK->>Nitric: Register Schedule
 
-    Scheduler->>NitricRuntime: Trigger scheduled task (e.g., CRON event)
-    NitricRuntime->>Worker: Forward scheduled event with payload
-    Worker-->>NitricRuntime: Process task and return result
-    NitricRuntime-->>Scheduler: Confirm execution (success or error)
+    Nitric->>Provider: Forward Nitric Spec
+
+    opt Convert CRON
+      Provider->>Provider: Convert CRON / Rate Format
+    end
+
+    Provider->>IAC: Provision Schedule
+    Provider->>IAC: Provision IAM
+```
+
+### Runtime Sequence
+
+Below is the runtime flow of a schedule service triggering a Nitric service and executing the application logic in the schedule callback.
+
+```mermaid
+sequenceDiagram
+    participant CloudAPI as Cloud Schedule <br> (e.g. CloudWatch)
+    participant Nitric as Nitric Runtime <br> (plugin)
+    participant SDK as Nitric SDK
+    participant Client as App Code
+
+    CloudAPI->>Nitric: Scheduled Event
+    Nitric->>Nitric: Convert Format
+    Nitric->>SDK: Forward Event
+    SDK->>Client: Execute Callback
 ```
 
 ## 3. Component

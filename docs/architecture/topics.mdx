@@ -112,6 +112,10 @@ sequenceDiagram
       Provider->>IAC: Provision Event Rule(s)
       Provider->>IAC: Provision IAM
     end
+
+    opt Delayed Messaging
+      Provider->>IAC: Provision Delayed Messaging
+    end
 ```
 
 ### Runtime Sequence
@@ -129,7 +133,7 @@ sequenceDiagram
         Client->>SDK: Publish(message)
         SDK->>Nitric: Forward Request
         Nitric->>Nitric: Convert Request
-        Nitric->>CloudAPI: Topic API Request
+        Nitric->>CloudAPI: Send Message to Topic
     else Subscriber
         CloudAPI->>Nitric: Message
         Nitric->>Nitric: Convert Message
