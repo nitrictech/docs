@@ -16,7 +16,7 @@ interface MermaidZoomProps extends React.ComponentPropsWithoutRef<'svg'> {}
 const MermaidZoom: React.FC<MermaidZoomProps> = (props) => (
   <div className="relative flex items-center justify-center">
     <TransformWrapper centerOnInit initialScale={0.9} minScale={0.75}>
-      {({ zoomIn, zoomOut, resetTransform, instance }) => (
+      {({ zoomIn, zoomOut, resetTransform }) => (
         <React.Fragment>
           <div className="absolute right-2 top-2 z-10 space-x-1">
             <Button variant="outline" size="icon" onClick={() => zoomIn()}>
@@ -35,7 +35,7 @@ const MermaidZoom: React.FC<MermaidZoomProps> = (props) => (
           </div>
           <TransformComponent
             wrapperClass="bg-white rounded-lg !w-full cursor-move"
-            contentClass={'!w-full !h-full'}
+            contentClass="!w-full !h-full"
           >
             <svg
               {...props}
