@@ -1,7 +1,3 @@
-svg[id^='mermaid-svg-'] {
-  @apply mx-auto block rounded-lg bg-white p-4;
-}
-
 svg[id^='mermaid-svg-'] .nodeLabel,
 svg[id^='mermaid-svg-'] .edgeLabel,
 svg[id^='mermaid-svg-'] tspan {
