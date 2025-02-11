@@ -27,6 +27,8 @@ const IGNORED_URLS = [
   'https://www.gutenberg.org/cache/epub/42671/pg42671.txt',
   'https://stackoverflow.com/help/minimal-reproducible-example',
   'https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks',
+  'https://jwt.io',
+  'https://portal.azure.com',
 ]
 
 const isExternalUrl = (url: string) => {
