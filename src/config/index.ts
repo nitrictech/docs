@@ -99,7 +99,7 @@ export const navigation: NavEntry[] = [
         ],
       },
       {
-        title: 'Archictecture',
+        title: 'Architecture',
         items: [
           {
             title: 'Overview',

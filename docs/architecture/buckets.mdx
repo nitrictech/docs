@@ -61,7 +61,7 @@ flowchart TD
     PubSubTopic["Google Pub/Sub Topic"]
     PubSubSubscription["Google Pub/Sub Subscription"]
     IAM["Google IAM"]
-    Lambda["AWS Lambda Functions"]
+    CloudRun["Google Cloud Run Functions"]
 
 
     Developer -->|Code| App
@@ -70,11 +70,11 @@ flowchart TD
     App -->|Configure Notifications| GCSBucket
     IAM -->|Allow Pub/Sub Publishing| PubSubTopic
     PubSubTopic -->|Publish Events| PubSubSubscription
-    PubSubSubscription -->|Deliver Notifications| Lambda
+    PubSubSubscription -->|Deliver Notifications| CloudRun
     App -->|Provide Access| IAM
     IAM -->GCSBucket
     IAM -->PubSubTopic
-    Lambda -->|Store/Retrieve Data/Trigger onEvents| GCSBucket
+    CloudRun -->|Store/Retrieve Data/Trigger onEvents| GCSBucket
 
 
 classDef default line-height:1;
