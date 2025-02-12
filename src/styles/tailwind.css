@@ -104,3 +104,13 @@
 .md-content-header:hover > a {
   @apply opacity-100;
 }
+
+/* style summary and details elements */
+
+summary {
+  @apply cursor-pointer;
+}
+
+summary::marker {
+  @apply text-xl text-secondary-300;
+}
