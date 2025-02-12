@@ -166,7 +166,12 @@ SDK Reference by language:
 - [Go SDK](/reference/go/api/api)
 - [Dart SDK](/reference/dart/api/api)
 
-**Operations** will use or extend the Nitric Terraform reference modules:
+**Operations** will use or extend the Nitric infrastructure modules, including both Terraform and Pulumi:
 
-- [AWS API Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/api/main.tf)
-- [GCP API Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/api/main.tf)
+- Terraform Modules:
+  - [AWS API Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/api/main.tf)
+  - [GCP API Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/api/main.tf)
+- Pulumi Modules:
+  - [AWS API Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploy/api.go)
+  - [GCP API Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploy/api.go)
+  - [Azure API Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/azure/deploy/api.go)

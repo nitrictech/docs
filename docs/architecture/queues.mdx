@@ -128,7 +128,12 @@ SDK Reference by language -
 - [Go SDK](/reference/go/queues/queue)
 - [Dart SDK](/reference/dart/queues/queue)
 
-**Operations** will use or extend the Nitric Terraform reference modules:
+**Operations** will use or extend the Nitric infrastructure modules, including both Terraform and Pulumi:
 
-- [AWS Queue Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/queue/main.tf)
-- [GCP Queue Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/queue/main.tf)
+- Terraform modules:
+  - [AWS Queue Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/queue/main.tf)
+  - [GCP Queue Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/queue/main.tf)
+- Pulumi modules:
+  - [AWS Queue Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploy/queue.go)
+  - [GCP Queue Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploy/queue.go)
+  - [Azure Queue Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/azure/deploy/queue.go)

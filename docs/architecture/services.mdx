@@ -397,7 +397,12 @@ void main() {
 
 </CodeSwitcher>
 
-**Operations** will use or extend the Nitric Terraform reference modules:
+**Operations** will use or extend the Nitric infrastructure modules, including both Terraform and Pulumi:
 
-- [AWS Services Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/service/main.tf)
-- [GCP Services Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/service/main.tf)
+- Terraform Modules:
+  - [AWS Services Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/service/main.tf)
+  - [GCP Services Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/service/main.tf)
+- Pulumi Modules:
+  - [AWS Services Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploy/service.go)
+  - [GCP Services Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploy/service.go)
+  - [Azure Services Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/azure/deploy/service.go)

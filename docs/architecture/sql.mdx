@@ -117,6 +117,11 @@ SDK Reference by language -
 - [Go SDK](/reference/go/sql/sql)
 - [Dart SDK](/reference/dart/sql/sql)
 
-**Operations** will use or extend the Nitric Terraform reference modules:
+**Operations** will use or extend the Nitric infrastructure modules, including both Terraform and Pulumi:
 
-- [AWS SQL Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/sql/main.tf)
+- Terraform Modules:
+  - [AWS SQL Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/sql/main.tf)
+- Pulumi Modules:
+  - [AWS SQL Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploy/sql.go)
+  - [GCP SQL Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploy/sql.go)
+  - [Azure SQL Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/azure/deploy/sql.go)

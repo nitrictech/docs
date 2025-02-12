@@ -155,7 +155,12 @@ SDK Reference by language -
 - [Go SDK](/reference/go/storage/bucket)
 - [Dart SDK](/reference/dart/storage/bucket)
 
-**Operations** will use or extend the Nitric Terraform reference modules:
+**Operations** will use or extend the Nitric infrastructure modules, including both Terraform and Pulumi:
 
-- [AWS Storage Bucket Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/bucket/main.tf)
-- [GCP Storage Bucket Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/bucket/main.tf)
+- Terraform Modules:
+  - [AWS Storage Bucket Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/bucket/main.tf)
+  - [GCP Storage Bucket Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/bucket/main.tf)
+- Pulumi Modules:
+  - [AWS Storage Bucket Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploy/bucket.go)
+  - [GCP Storage Bucket Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploy/bucket.go)
+  - [Azure Storage Bucket Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/azure/deploy/bucket.go)

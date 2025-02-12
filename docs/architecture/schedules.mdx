@@ -137,7 +137,12 @@ SDK Reference by language -
 - [Go SDK](/reference/go/schedule/schedule)
 - [Dart SDK](/reference/dart/schedule/schedule)
 
-**Operations** will use or extend the Nitric Terraform reference modules:
+**Operations** will use or extend the Nitric infrastructure modules, including both Terraform and Pulumi:
 
-- [AWS Schedule Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/schedule/main.tf)
-- [GCP Schedule Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/schedule/main.tf)
+- Terraform Modules:
+  - [AWS Schedule Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/schedule/main.tf)
+  - [GCP Schedule Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/schedule/main.tf)
+- Pulumi Modules:
+  - [AWS Schedule Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploy/schedule.go)
+  - [GCP Schedule Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploy/schedule.go)
+  - [Azure Schedule Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/azure/deploy/schedule.go)

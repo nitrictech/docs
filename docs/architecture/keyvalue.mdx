@@ -131,8 +131,14 @@ SDK Reference by language -
 - [Go SDK](/reference/go/keyvalue/keyvalue)
 - [Dart SDK](/reference/dart/keyvalue/keyvalue)
 
-**Operations** will use or extend the Nitric Terraform reference modules:
+**Operations** will use or extend the Nitric infrastructure modules, including both Terraform and Pulumi:
 
-- [AWS Key/Value Store Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/keyvalue/main.tf)
-- [GCP Key/Value Store Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/keyvalue)
-  - KeyValue stores are created at runtime in GCP, so no Terraform module is required.
+- Terraform modules:
+  - [AWS Key/Value Store Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploytf/.nitric/modules/keyvalue/main.tf)
+  - [GCP Key/Value Store Terraform Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploytf/.nitric/modules/keyvalue)
+    - KeyValue stores are created at runtime in GCP, so no Terraform module is required.
+- Pulumi modules:
+  - [AWS Key/Value Store Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/aws/deploy/keyvalue.go)
+  - [GCP Key/Value Store Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/gcp/deploy/keyvalue.go)
+    - KeyValue stores are created at runtime in GCP, so no Pulumi module is required.
+  - [Azure Key/Value Store Pulumi Module](https://github.com/nitrictech/nitric/blob/main/cloud/azure/deploy/keyvalue.go)
