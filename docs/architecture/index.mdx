@@ -126,9 +126,9 @@ classDef edgeLabel line-height:2;
 
 - The **Client Browser** opens a WebSocket connection.
 - The **WebSocket** handles the connection lifecycle:
-  - When the connection opens, it triggers the onConnect service.
-  - Once the connection is established, messages from the client trigger the onMessage service.
-  - When the connection closes, it triggers the onDisconnect service.
+  - When the connection opens, it triggers the **onConnect** service.
+  - Once the connection is established, messages from the client trigger the **onMessage** service.
+  - When the connection closes, it triggers the **onDisconnect** service.
 - The **onMessage**, **onConnect** and **onDisconnect** handlers:
   - Interact with other cloud resources e.g. Buckets, KeyValue stores and APIs.
 
