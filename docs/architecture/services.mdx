@@ -22,8 +22,8 @@ An application can have a single service handling the entire application, or man
 <details>
   <summary>Example AWS Provider</summary>
 
-- **AWS ECR (Elastic Container Registry)** stores container images for Lambda functions.
-- **AWS Lambda** runs serverless functions based on the container images.
+- **AWS ECR (Elastic Container Registry)** stores a container image for each Nitric service.
+- **AWS Lambda** runs containers based on the images from ECR.
 - **AWS IAM** manages roles and policies for secure access to AWS resources.
 - **Docker** or **Podman** is used to build and tag container images before pushing them to ECR.
 
