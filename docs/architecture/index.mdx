@@ -9,9 +9,9 @@ Nitric allows your team to work together to build an application:
 - **Developer**: Writes application code with built-in support for APIs, file storage (bucket), secrets, key/value store, and RDS, leveraging the Nitric SDK.
 - **Operations**: Customize, extend or use Nitric's generated IaC (Terraform or Pulumi) to provision and manage the resources that the developer needs for their application.
 - **SRE**: Configure environment/region/policy specific details, they also are heavily involved in overseeing that the Terraform modules themselves adhere to governance standards.
-- **Nitric**: Automatically generates a specification for resource declarations and fulfills them by orchestrating a cloud deployment using IaC modules and container images tailored to the runtime requirements of the application code. While many of examples focus on AWS as the target cloud, Nitric's flexibility allows providers to support any cloud environment or even multiple clouds simultaneously.
+- **Nitric**: Automatically generates a specification for resource declarations and fulfills them by orchestrating a cloud deployment using IaC modules and container images tailored to the runtime requirements of the application code. While many examples focus on AWS as the target cloud, Nitric's flexibility allows providers to support any cloud environment or even multiple clouds simultaneously.
 
-The roles above may overlap depending on your organization structure, for example, it is not abnormal Developers to assume all roles, or for Operations and SRE responsibilities to be handled by the same team.
+The roles above may overlap depending on your organization structure, for example, it is not abnormal for Developers to assume all roles, or for Operations and SRE responsibilities to be handled by the same team.
 
 ```mermaid
 flowchart TD
@@ -49,7 +49,7 @@ classDef default line-height:1;
 classDef edgeLabel line-height:2;
 ```
 
-Nitric applications can have any number of APIs, Secrets, Buckets etc. Providers can also be extended to further support new resources, many which will work across all cloud providers and some that are cloud specific.
+Nitric applications can have any number of APIs, Secrets, Buckets etc. Providers can also be extended to further support new resources, many of which will work across all cloud providers and some that are cloud specific.
 
 Interact seamlessly with services exposed through HTTP routes in an API gateway, as scheduled tasks, via event subscriptions, through WebSocket handlers, and more.
 
