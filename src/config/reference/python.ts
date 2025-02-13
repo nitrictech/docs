@@ -207,7 +207,7 @@ export const PyReference: NavGroup = {
       items: [
         {
           title: 'schedule()',
-          href: '/reference/python/schedules/schedule',
+          href: '/reference/python/schedule/schedule',
         },
       ],
     },

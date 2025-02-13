@@ -1,6 +1,5 @@
 'use client'
 
-import { getStarGazers } from '@/lib/stargazers'
 import clsx from 'clsx'
 import React, { FC, useEffect, useState } from 'react'
 

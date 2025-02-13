@@ -14,6 +14,8 @@ A topic is a named resource where events can be published. They can be thought o
 
 Topics are often the first choice for communication between services, since they offer stateless, scalable and highly decoupled communication.
 
+If you're interested in the architecture, provisioning, or deployment steps, they can be found [here](/architecture/topics).
+
 ### Subscriptions
 
 A subscription is a binding between a topic and a service. You can think of it as a channel that notifies your services when something new arrives on the topic.
@@ -363,6 +365,8 @@ You can read more about idempotent subscribers and patterns to handle it [here](
 Queues are another option for asynchronous messaging. Unlike [topics](#topics), messages sent to a queue won't automatically trigger services to process them. Instead, services dequeue message by requesting them.
 
 This makes queues ideal for batch workloads, often paired with [schedules](/schedules).
+
+If you're interested in the architecture, provisioning, or deployment steps, they can be found [here](/architecture/queues).
 
 <Note>
   Queue disambiguation: Some systems and cloud providers use the term "queue" to

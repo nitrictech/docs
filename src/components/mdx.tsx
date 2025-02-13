@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import clsx from 'clsx'
 import { Table } from '@/components/ui/table'
+import MermaidZoom from './MermaidZoom'
 
 export {
   TableHead as th,
@@ -107,5 +108,17 @@ export { ImportCode } from '@/components/code/ImportCode'
 export { Tabs, TabItem } from '@/components/tabs/Tabs'
 
 export { CodeTabs } from '@/components/code/CodeTabs'
+
+export { Mermaid } from 'mdx-mermaid/Mermaid'
+
+export const svg = (props: React.ComponentPropsWithoutRef<'svg'>) => {
+  const { id } = props
+
+  if (id?.startsWith('mermaid-svg')) {
+    return <MermaidZoom {...props} />
+  }
+
+  return <svg {...props} />
+}
 
 // see if we need to remove these

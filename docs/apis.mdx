@@ -6,6 +6,8 @@ description: 'Building HTTP APIs with Nitric'
 
 Nitric has built-in support for web apps and HTTP API development. The `api` resource allows you to create APIs in your applications, including routing, middleware and request handlers.
 
+If you're interested in the architecture, provisioning, or deployment steps, they can be found [here](/architecture/apis).
+
 ## Creating APIs
 
 Nitric allows you define named APIs, each with their own routes, middleware, handlers and security.
@@ -332,7 +334,7 @@ APIs can include security definitions for OIDC-compatible providers such as [Aut
 
 APIs can be configured to automatically authenticate and allow or reject incoming requests. A `securityDefinitions` object can be provided, which _defines_ the authentication requirements that can later be enforced by the API.
 
-The security definition describes the kind of authentication to perform and the configuration required to perform it. For a [JWT](https://jwt.io/) this configuration includes the JWT issuer and audiences.
+The security definition describes the kind of authentication to perform and the configuration required to perform it. For a [JWT](https://jwt.io) this configuration includes the JWT issuer and audiences.
 
 <Note>
   Security definitions only define **available** security requirements for an
