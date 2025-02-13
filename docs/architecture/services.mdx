@@ -2,6 +2,12 @@
 description: 'Learn how Nitric enables developers to deploy and manage containerized services using AWS, GCP, and other clouds, with integrated container registries, serverless functions, and IaC tools like Terraform and Pulumi.'
 ---
 
+In Nitric a **service** is a deployable unit of code, typically this is a single container image, that can be deployed to a cloud provider. Services can be deployed as serverless functions, long-running containers or potentially on VMs or other compute resources. All of Nitric's standard deployment providers deploy services as containers on serverless platforms by default.
+
+In many way services are the core building block of Nitric applications, they are the unit of code that is deployed and run in the cloud. Services can be written in any language that can be compiled to a container image, and can be deployed to any cloud provider that Nitric supports. They're responsible for handling API requests, processing messages, and executing tasks, among other things. Most other resources in Nitric are designed to be declared by services, or interact with them in some way.
+
+An application can have a single service handling the entire application, or many services working together to provide a more complex application. Services can be written in different languages, even within the same application.
+
 # Service Deployment
 
 ## 1. System Context
