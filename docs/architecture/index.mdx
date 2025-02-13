@@ -6,22 +6,31 @@ description: "Learn about Nitric's architecture and how developers, operations t
 
 Nitric allows your team to work together to build an application:
 
-- **Developer**: Writes application code with built-in support for APIs, file storage (bucket), secrets, key/value store, and RDS, leveraging the Nitric SDK.
-- **Operations**: Customize, extend or use Nitric's generated IaC (Terraform or Pulumi) to provision and manage the resources that the developer needs for their application.
-- **SRE**: Configure environment/region/policy specific details, they also are heavily involved in overseeing that the Terraform modules themselves adhere to governance standards.
-- **Nitric**: Automatically generates a specification for resource declarations and fulfills them by orchestrating a cloud deployment using IaC modules and container images tailored to the runtime requirements of the application code. While many examples focus on AWS as the target cloud, Nitric's flexibility allows providers to support any cloud environment or even multiple clouds simultaneously.
+- **Developers**: Writes application code with built-in support for APIs, storage (bucket), secrets, key/value store, SQL databases and other cloud resources, leveraging the Nitric SDK.
+- **Automation Engineers**: Customize, extend or use Nitric's generated IaC (Terraform or Pulumi) to provision and manage the resources needed to support applications.
+- **Operations**: Configure environment/region/policy specific details, they also are heavily involved in overseeing that the Terraform, Pulumi or other IaC modules adhere to governance standards.
 
-The roles above may overlap depending on your organization structure, for example, it is not abnormal for Developers to assume all roles, or for Operations and SRE responsibilities to be handled by the same team.
+<Note>
+  These roles are only representative, they often overlap or further divide
+  depending on team structure. For example, it's not unusual in smaller teams
+  for Developers to assume all roles, or for Automation and Operations to be
+  handled by the same team.
+</Note>
+
+**Nitric** interacts with code to generate a specification of the resources required by each application. It then uses one or more IaC/cloud-specific plugins to turn those requirements into Infrastructure-as-Code (e.g. Terraform) or fully automate cloud deployments, which fully satisfy all of the applications infrastructure requirements. Effectively, Nitric is a cloud-agnostic way to define and deploy cloud applications, which automates the transition from code to cloud resources.
+
+While many Nitric examples focus on AWS, Nitric's flexibility allows plugins (providers) to support any cloud or on-prem environment, even multiple clouds simultaneously if that's required.
 
 ```mermaid
 flowchart TD
     Developer[Developer]
+    Automation[Automation Engineer]
     Operations[Operations]
-    SRE[Site Reliablility Engineer]
     App[Deployed Application]
     CLI[Nitric CLI - 'nitric up']
     Provider[Nitric Provider]
     Container[Container Images]
+    NitricSpec[Nitric Specification]
 
     API[API Gateway]
     Bucket[Bucket]
@@ -30,13 +39,14 @@ flowchart TD
     RDS[Relational Database]
     Other[Other Resources]
 
-    SRE -->|Deployment Config| CLI
+    Operations -->|Deployment Config| CLI
     Developer -->|Code| CLI
-    Operations -->|Extend/Customize IaC Modules| Provider
-    CLI -->|Resource Specification| Provider
+    Automation -->|Extend/Customize IaC Modules| Provider
+    CLI -->|Generate| NitricSpec
     CLI -->|Build| Container
     Provider -->App
     Container -->Provider
+    NitricSpec -->Provider
 
     App -->|Exposes REST/HTTP Routes| API
     App -->|Stores/Retrieves Files| Bucket
@@ -77,10 +87,10 @@ flowchart TD
     API -->|Triggers Service| Service
     API -->|Triggers Service| Service2
     API -->Service3
-    Service -->|Manage/Uploads/Downloads files| Bucket
-    Service -->|Retrieves credentials/config data| Secrets
-    Service -->|Reads/Writes key data| KVStore
-    Service -->|Queries/Updates relational data| RDS
+    Service -->|Read/Write| Bucket
+    Service -->|Access| Secrets
+    Service -->|Read/Write| KVStore
+    Service -->|Execute Queries| RDS
 
 classDef default line-height:1;
 classDef edgeLabel line-height:2;
@@ -99,9 +109,9 @@ flowchart TD
 
     %% Nitric Application Containers (WebSocket Handlers)
     WS[WebSocket API]
-    Conn[onConnection Handler]
-    Msg[onMessage Handler]
-    Disc[onDisconnect Handler]
+    Conn[onConnection Callback]
+    Msg[onMessage Callback]
+    Disc[onDisconnect Callback]
 
     %% Backend Services / Resources
     Bucket[Storage Bucket]
@@ -109,123 +119,116 @@ flowchart TD
     More[...]
 
     %% Interactions
-    Browser -->|Opens/Closes WebSocket Connection| WS
-    WS -->|Triggers onConnection event| Conn
-    Browser -->|Sends Message| WS
-    WS -->|Triggers onMessage event| Msg
-    WS -->|Triggers onDisconnect event| Disc
+    Browser -->|Connect| WS
+    Browser <-->|Message| WS
+    Browser -->|Disconnect| WS
+    WS -->|Connect| Conn
+    WS <-->|Message| Msg
+    WS -->|Disconnect| Disc
 
     %% Backend Interactions for onMessage
-    Msg -->|Manages/Uploads/Downloads files| Bucket
-    Msg -->|Reads/Writes key data| KVStore
+    Msg -->|Read/Write| Bucket
+    Msg -->|Read/Write| KVStore
     Msg -->|Other services/APIs| More
 
 classDef default line-height:1;
 classDef edgeLabel line-height:2;
 ```
 
-- The **Client Browser** opens a WebSocket connection.
-- The **WebSocket** handles the connection lifecycle:
-  - When the connection opens, it triggers the **onConnect** service.
-  - Once the connection is established, messages from the client trigger the **onMessage** service.
-  - When the connection closes, it triggers the **onDisconnect** service.
-- The **onMessage**, **onConnect** and **onDisconnect** handlers:
+- The **Client** opens a WebSocket connection.
+- The **WebSocket API** handles the connection lifecycle:
+  - When the connection opens, it triggers the **onConnect** callback function.
+  - Once the connection is established, messages from the client trigger the **onMessage** callback function.
+  - When the connection closes, it triggers the **onDisconnect** callback function.
+- The **onMessage**, **onConnect** and **onDisconnect** callbacks:
+  - Are contained within one or more Services, accepting events from the WebSocket API.
   - Interact with other cloud resources e.g. Buckets, KeyValue stores and APIs.
 
 ## Example: Sharing resources
 
-Deploy multiple APIs and other entrypoints into an application that can access shared resources.
+Deploy multiple services, behind shared API Gateways and interact with other shared resources.
 
 ```mermaid
 flowchart TD
     %% Actors
-    Browser[Client Browser]
+    Client1[Alice]
+    Client2[Bob]
 
     %% Nitric Application Containers (APIs)
-    API_Read[HTTP API - Read API Gateway]
-    API_Write[HTTP API - Write API Gateway]
-
-    Other[Other Resources]
+    Api[api.example.com]
 
     %% Services for respective API routes
-    ReadService[GET Route]
-    WriteService[POST Route]
+    UserSrv[Orders Service]
+    AdminSrv[Orders Mgmt Service]
 
     %% Backend Services / Resources
-    Bucket[AWS S3 Bucket]
-    RDS[AWS RDS/Aurora]
+    Bucket[Invoices Bucket]
 
     %% Interactions from the client to each API
-    Browser -->|Sends HTTP Request| API_Read
-    Browser -->|Sends HTTP Request| API_Write
+    Client1 -->|HTTP Request| Api
+    Client2 -->|HTTP Request| Api
 
     %% API triggers to their respective services
-    API_Read -->|Triggers Service| ReadService
-    API_Write -->|Triggers Service| WriteService
+    Api -->|GET: /orders| UserSrv
+    Api -->|PUT: /users/1/orders/2| AdminSrv
 
     %% Common backend resource interactions from the read service
-    ReadService -->|Retrieves files| Bucket
-    ReadService -->|Queries data| RDS
+    UserSrv -->|Read| Bucket
 
     %% Common backend resource interactions from the write service
-    WriteService -->|Uploads files| Bucket
-    WriteService -->|Updates data| RDS
-    WriteService -->Other
+    AdminSrv -->|Read/Write| Bucket
 classDef default line-height:1;
 classDef edgeLabel line-height:2;
 ```
 
-- The **Client Browser** sends HTTP requests to the **API Gateways**.
-- **API Gateways** and their respective service handlers are established with least privileges:
-  - The Read API Gateway invokes the GET Route Service, which is granted read-only permissions.
-  - The Write API Gateway invokes the POST Route Service, which is granted write-only permissions.
+- **Client Browsers** send HTTP requests to a shared **API Gateway**, which routes requests to the appropriate service.
+- The **API Gateway's** respective route handlers (services) are established with least privileges:
+  - The `Orders Service`, can be restricted to read-only permissions to the Invoices Bucket.
+  - The `Orders Management Service`, is instead granted both read and write permissions to the Invoices Bucket.
 
 ## Example: Multiple entry points
 
-A Nitric application can have multiple entry points, such as an **HTTP API Gateway**, a **Scheduled Event**, and a **WebSocket API** all sharing the same resources.
+A Nitric application can also have multiple entry points, such as multiple **HTTP API Gateways** and a **Schedule**, all sharing specific common resources.
 
 ```mermaid
 flowchart TD
+    %% Actors
+    Client1[Alice]
+    Client2[Bob]
+    Schedule[Archive Orders]
 
-    Browser[Client Browser]
-    WSClient[WebSocket Client]
-    Scheduled[Scheduled Event]
+    %% Nitric Application Containers (APIs)
+    UserApi[public.api.example.com]
+    AdminApi[internal.api.example.com]
 
-    API_Read[HTTP API - Read]
-    API_Write[HTTP API - Write]
-    WS_API[WebSocket API]
+    %% Services for respective API routes
+    UserSrv[Orders Service]
+    AdminSrv[Orders Mgmt Service]
+    ArchiveSrv[Archive Service]
 
-    ReadService[GET Route]
-    WriteService[POST Route]
-    ScheduledJob[Scheduled Task]
+    %% Backend Services / Resources
+    Bucket[Invoices Bucket]
+    Bucket2[Archive Bucket]
 
-    Bucket[AWS S3 Bucket]
-    RDS[AWS RDS/Aurora]
-    Other[Other Shared Resources]
+    %% Interactions from the client to each API
+    Client1 -->|HTTP Request| UserApi
+    Client2 -->|HTTP Request| AdminApi
+    Schedule -->|3am daily| ArchiveSrv
 
-    Browser -->|HTTP Request| API_Read
-    Browser -->|HTTP Request| API_Write
-    WSClient <-->|Bi-directional messages| WS_API
+    %% API triggers to their respective services
+    UserApi -->|GET: /orders| UserSrv
+    AdminApi -->|PUT: /users/1/orders/2| AdminSrv
 
-    Scheduled -->|Triggers| ScheduledJob
-
-    API_Read -->|Invokes| ReadService
-    API_Write -->|Invokes| WriteService
-    WS_API -->|Invokes| WriteService
-    WS_API -->|Invokes| ReadService
-
-    ReadService -->|Query| Bucket
-    ReadService -->|Query| RDS
-
-    WriteService -->|Write/Upload| Bucket
-    WriteService -->|Create/Update| RDS
-
-    ScheduledJob -->|Read| Bucket
-    ScheduledJob -->|Read/Query| RDS
-    ScheduledJob --> Other
-
+    UserSrv -->|Read| Bucket
+    AdminSrv -->|Read/Write| Bucket
+    ArchiveSrv -->|Read/Delete| Bucket
+    ArchiveSrv -->|Write| Bucket2
 classDef default line-height:1;
 classDef edgeLabel line-height:2;
 ```
 
-- **Backend resources** (e.g. Key/Value Store, Bucket, RDS) are shared and accessed with **least-privilege** access from each service.
+- **Client Browsers** send HTTP requests to different **API Gateways**, which route requests to the appropriate service.
+- The **API Gateway's** respective route handlers (services) are established with least privileges:
+  - The `Orders Service`, can be restricted to read-only permissions to the Invoices Bucket.
+  - The `Orders Management Service`, is instead granted both read and write permissions to the Invoices Bucket.
+- A **Schedule** triggers the `Archive Service` to read and delete from the Invoices Bucket and write to the Archive Bucket.
