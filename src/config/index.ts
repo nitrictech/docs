@@ -12,18 +12,13 @@ import {
   BeakerIcon,
   DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline'
-import {
-  SiGooglecloud,
-  SiMicrosoftazure,
-  SiPulumi,
-  SiTerraform,
-} from 'react-icons/si'
+import { SiPulumi, SiTerraform } from 'react-icons/si'
 import { NavEntry } from './types'
 import { NodeReference } from './reference/node'
 import { PyReference } from './reference/python'
 import { DartReference } from './reference/dart'
 import { GoReference } from './reference/go'
-import { FaAws, FaSitemap } from 'react-icons/fa'
+import { FaSitemap } from 'react-icons/fa'
 
 export const navigation: NavEntry[] = [
   {
@@ -233,17 +228,14 @@ export const navigation: NavEntry[] = [
           },
           {
             title: 'AWS',
-            icon: FaAws,
             href: '/providers/pulumi/aws',
           },
           {
             title: 'Google Cloud',
-            icon: SiGooglecloud,
             href: '/providers/pulumi/gcp',
           },
           {
             title: 'Azure',
-            icon: SiMicrosoftazure,
             href: '/providers/pulumi/azure',
           },
         ],
@@ -259,12 +251,10 @@ export const navigation: NavEntry[] = [
           },
           {
             title: 'AWS',
-            icon: FaAws,
             href: '/providers/terraform/aws',
           },
           {
             title: 'Google Cloud',
-            icon: SiGooglecloud,
             href: '/providers/terraform/gcp',
           },
         ],
