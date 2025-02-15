@@ -31,8 +31,8 @@
   --docsearch-emphasis-color: theme('colors.white');
   --docsearch-logo-color: theme('colors.zinc.300');
   --docsearch-modal-background: theme('colors.gray.800');
-  --docsearch-modal-shadow: 0 0 0 1px theme('colors.zinc.700'),
-    theme('boxShadow.xl');
+  --docsearch-modal-shadow:
+    0 0 0 1px theme('colors.zinc.700'), theme('boxShadow.xl');
   --docsearch-hit-color: theme('colors.zinc.300');
   --docsearch-hit-active-color: theme('colors.primary.300');
   --docsearch-hit-active-background: rgb(51 65 85 / 0.3);
