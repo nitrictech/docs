@@ -11,6 +11,7 @@ import {
   CodeBracketIcon,
   BeakerIcon,
   DocumentDuplicateIcon,
+  WindowIcon,
 } from '@heroicons/react/24/outline'
 import { SiPulumi, SiTerraform } from 'react-icons/si'
 import { NavEntry } from './types'
@@ -121,6 +122,10 @@ export const navigation: NavEntry[] = [
             href: '/architecture/websockets',
           },
           {
+            title: 'Websites',
+            href: '/architecture/websites',
+          },
+          {
             title: 'Storage',
             icon: DocumentDuplicateIcon,
             href: '/architecture/buckets',
@@ -182,6 +187,11 @@ export const navigation: NavEntry[] = [
         title: 'Websockets',
         icon: CursorArrowRippleIcon,
         href: '/websockets',
+      },
+      {
+        title: 'Websites',
+        icon: WindowIcon,
+        href: '/websites',
       },
       {
         title: 'Storage',
