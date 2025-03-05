@@ -94,6 +94,33 @@ websites:
       url: http://localhost:4323
 ```
 
+## Conflicting Routes
+
+If you have conflicting routes between your API and website or between multiple sub-sites, you can configure the `path` for each website to avoid conflicts.
+
+### Reserved Paths
+
+The following paths are reserved for use by the Nitric framework and cannot be used as website paths:
+
+- `/api` used to rewrite API requests
+
+## API Routes
+
+Nitric automatically serves your API under the `/api` path. You can access your API routes at `https://<your-site>/api/<your-api>/<your-route>`.
+
+By serving your API under the same domain as your website, you avoid CORS issues and can use relative paths to access your API.
+
+Here is an example of calling an API route from your website:
+
+```javascript
+async function fetchData() {
+  // due to apis being served from the same domain thanks to rewrites, no CORS is required
+  const response = await fetch('/api/main/hello')
+  const data = await response.json()
+  console.log(data)
+}
+```
+
 ## Configuration
 
 Here is a breakdown of the configuration options:

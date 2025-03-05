@@ -127,7 +127,7 @@ websites:
 ```javascript
 async function fetchData() {
   // due to apis being served from the same domain thanks to rewrites, no CORS is required
-  const response = await fetch('/api/hello')
+  const response = await fetch('/api/main/hello')
   const data = await response.json()
   console.log(data)
 }
