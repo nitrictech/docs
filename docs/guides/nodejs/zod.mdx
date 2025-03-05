@@ -12,7 +12,7 @@ updated_at: 2025-03-05
 
 # A Unified Approach to validation across APIs, Queues & Jobs with Zod
 
-On frontend applications validation can help users enter data in the correct format this stops them from providing empty values, invalid emails, or other common input mistakes.
+Validation can help users enter data in the correct format when interacting with front-end applications. This prevents them from providing empty values, invalid emails, or other common input mistakes.
 
 Once data leaves the browser we still need to ensure that the data remains valid:
 
@@ -23,7 +23,7 @@ Cloud applications don’t just receive requests from web forms. Data comes from
 
 Server-side validation is critical—not just for security, but for maintaining data integrity across the system.
 
-With Zod, we can define strict validation rules once and enforce them across APIs, events, and background jobs.
+With [Zod](https://zod.dev/), we can define strict validation rules once and enforce them across APIs, events, and background jobs.
 
 ## Defining a validation schema with Zod
 
@@ -39,11 +39,6 @@ const userSchema = z.object({
 })
 ```
 
-### Breaking it down:
-
-- `name` must be a string and at least 2 characters long. If it's too short, an error message is returned.
-- `email` must follow a valid email format, and Zod will automatically enforce this validation.
-- `age` must be a number and at least 18. If the value is below this threshold, an error message is returned.
 
 This schema ensures that any user data passed into the application follows these strict rules.
 
