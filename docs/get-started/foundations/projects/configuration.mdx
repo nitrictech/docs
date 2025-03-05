@@ -234,3 +234,61 @@ runtimes:
     args:
       GO_VERSION: 1.16
 ```
+
+### `websites` (optional)
+
+A list of [website](/websites) types that make up your project. Websites are used to serve static files and assets.
+
+```yaml
+websites:
+  - basedir: ./my-website
+    path: /
+    index: index.html
+    error: 404.html
+    build:
+      command: npm run build
+      output: ./dist
+    dev:
+      command: npm run dev
+      url: http://localhost:4322
+```
+
+#### `basedir`
+
+The base directory to search for website assets. If not provided, the base directory is the root of the project. This is useful when you want to group websites under a specific directory or you're working with a monorepo.
+
+#### `path`
+
+The path to serve the website at. If not provided, the default is `/`. This is useful when you want to serve multiple websites under different paths.
+
+#### `index`
+
+The name of the index file to serve. If not provided, the default is `index.html`.
+
+#### `error`
+
+The name of the error file to serve. If not provided, the default is `404.html`.
+
+#### `build`
+
+A map of build configuration options for the website. This is used to build the website assets before deployment.
+
+##### `command`
+
+The command to build the website assets. This command will be executed in the base directory of the website.
+
+##### `output`
+
+The output directory for the built website assets. This is relative to the base directory of the website.
+
+#### `dev`
+
+A map of development configuration options for the website. This is used to run the website in development mode.
+
+##### `command`
+
+The command to run the website in development mode. This command will be executed in the base directory of the website.
+
+##### `url`
+
+The URL to access the website in development mode. This is used to configure the Nitric CLI to proxy requests to the website during local development.
