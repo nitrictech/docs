@@ -24,6 +24,11 @@ Nitric’s website resource lets you:
 - Deploy to various supported providers with minimal configuration.
 - Use infrastructure from code to keep your environment consistent.
 
+### About API Routes
+
+API route rewrites (under `/api`) are **only enabled if you have at least one website defined** in your project.  
+We are exploring options to allow enabling API routing independently of websites in the future.
+
 ## Enabling Websites
 
 Websites are currently in [Preview](/reference/preview-features). To enable this feature in your project add the following to your `nitric.yaml` file.
@@ -94,23 +99,50 @@ websites:
       url: http://localhost:4323
 ```
 
+## Why Are All Sites Behind a Single Domain?
+
+Currently, Nitric serves all websites behind a single domain to simplify deployment and management. This approach ensures that your API and website can coexist without CORS issues and allows for relative path usage in your frontend code. Additionally, serving all sites behind a single domain can reduce costs associated with managing multiple domains.
+
+At this time, configuring multiple domains for different websites is not supported. However, we understand the need for this feature and may support multiple domains in the future.
+
 ## Conflicting Routes
 
 If you have conflicting routes between your API and website or between multiple sub-sites, you can configure the `path` for each website to avoid conflicts.
+
+### What Happens If There Are Overlapping Paths?
+
+If Nitric detects overlapping paths between websites, an error will be raised during development and deployment.
+
+However, client-side routes (like React Router) are not detected at deployment time — so be careful when designing single-page apps to avoid unexpected overlaps.
 
 ### Reserved Paths
 
 The following paths are reserved for use by the Nitric framework and cannot be used as website paths:
 
-- `/api` used to rewrite API requests
+- `/api` - used to rewrite API requests
+
+We are looking at making the **rewrite path configurable** in the future, so you will have more flexibility in defining your own path structure.
 
 ## API Routes
 
-Nitric automatically serves your API under the `/api` path. You can access your API routes at `https://<your-site>/api/<your-api>/<your-route>`.
+If you have at least **one website enabled**, Nitric automatically serves your API under the `/api` path.
 
-By serving your API under the same domain as your website, you avoid CORS issues and can use relative paths to access your API.
+You can access your API routes at:
 
-Here is an example of calling an API route from your website:
+```bash
+https://<your-cdn-endpoint>/api/<your-api>/<your-route>
+```
+
+### When Are API Routes Enabled?
+
+API route rewrites are **only enabled if you have at least one website defined** in your project.  
+We are exploring options to allow enabling API routing **without requiring a website** in the future.
+
+### Why This Approach?
+
+By serving your API under the same domain as your website, you avoid **CORS issues** and can use **relative paths** to access your API directly from your frontend code.
+
+### Example API Call
 
 ```javascript
 async function fetchData() {
@@ -120,6 +152,17 @@ async function fetchData() {
   console.log(data)
 }
 ```
+
+## Support for Frameworks like Next.js
+
+If you're new to deploying websites with Nitric, you might wonder whether frameworks like **Next.js** will work by default.
+
+- **Built static websites** (where your framework generates static assets, such as HTML, CSS, and JS files) are fully supported.
+- **Server-side rendering (SSR)** and **framework-specific API routes** (like Next.js API routes) are **not currently supported**.
+
+If you are using **Next.js**, you can follow the official guide on [static exports](https://nextjs.org/docs/app/building-your-application/deploying/static-exports) to generate a fully static version of your site.
+
+We are actively exploring options to **support server-side applications**, including frameworks like Next.js, in the future.
 
 ## Configuration
 
