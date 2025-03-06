@@ -8,6 +8,7 @@ Register a handler for HTTP PUT requests to the route.
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
@@ -103,6 +104,7 @@ The PUT request body is accessible from the `ctx.req` object.
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
