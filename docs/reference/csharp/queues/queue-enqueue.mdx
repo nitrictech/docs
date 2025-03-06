@@ -1,0 +1,99 @@
+---
+description: "Reference for Nitric's v0 .NET library - Send tasks to a queue."
+---
+
+# .NET - Queue.Send()
+
+Send tasks to a queue.
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class UserRequest
+{
+    public string UserId { get; set; }
+    public string Message { get; set; }
+}
+
+var batchQueue = Application.Queue<UserRequest>("batch").Allow(QueuePermission.Enqueue);
+
+batchQueue.Enqueue(new UserRequest
+{
+    UserId = "1234",
+    Message = "Hello!"
+});
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="tasks" required type="T | T[]">
+    The task or an array of tasks to send to the queue.
+  </Property>
+</Properties>
+
+## Examples
+
+### Enqueue a task onto a queue
+
+```csharp
+using System.Collections.Generic;
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class UserRequest
+{
+    public string UserId { get; set; }
+    public string Message { get; set; }
+}
+
+var batchQueue = Application.Queue<UserRequest>("batch").Allow(QueuePermission.Enqueue);
+
+batchQueue.Enqueue(new UserRequest
+{
+    UserId = "user_1234",
+    Message = "Hello!"
+});
+
+Application.Run();
+```
+
+### Enqueue multiple tasks onto a queue
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+var batchQueue = Application.Queue("batch").Allow(QueuePermission.Enqueue);
+
+batchQueue.Enqueue(
+    new UserRequest
+    {
+        UserId = "user_1",
+        Message = "Batch Task 1"
+    }, new UserRequest
+    {
+        UserId = "user_2",
+        Message = "Batch Task 2"
+    }
+);
+
+Application.Run();
+```
+
+### Dealing with failures
+
+In rare cases when sending tasks to a queue some tasks might fail to be sent. The response from `send()` will include an array of any tasks that failed to send. You can process this array to retry or log the error.
+
+```csharp
+var failedTasks = await batchQueue.Enqueue(tasks);
+
+failedTasks.ForEach(failedTask => {
+    Console.WriteLine(failedTask.ID);
+});
+
+Nitric.Run();
+```

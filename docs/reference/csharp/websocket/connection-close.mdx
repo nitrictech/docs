@@ -1,0 +1,47 @@
+---
+description: "Reference for Nitric's .NET library - Close a connection to a websocket"
+---
+
+# .NET - Connection.CloseConnection()
+
+Closes a connection to a websocket
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var websocket = Application.Websocket("public");
+
+websocket.Connection("D28BA458-BFF4-404A").CloseConnection();
+
+Application.Run();
+```
+
+## Examples
+
+### Close a connection to the websocket on message
+
+```csharp
+using Nitric.Sdk.Service;
+using Application = Nitric.Sdk.Nitric;
+
+class WebsocketMessage
+{
+    public string Status { get; set; }
+}
+
+var websocket = Application.Websocket("public");
+
+// Broadcast message to all the registered websocket connections
+websocket.On(WebsocketEventType.Message, ctx => {
+    var message = ctx.Req.Message<WebsocketMessage>();
+
+    if (message.Status == "close")
+    {
+        websocket.Connection(ctx.Req.ConnectionId).CloseConnection();
+    }
+
+    return ctx;
+});
+
+Application.Run();
+```

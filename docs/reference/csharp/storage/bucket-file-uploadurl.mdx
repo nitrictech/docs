@@ -1,0 +1,47 @@
+---
+description: "Reference for Nitric's .NET library - Get a upload url for a file from a bucket."
+---
+
+# .NET - Bucket.File.GeUploadUrl()
+
+Create a upload url for a file within a bucket.
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+var assets = Application.Bucket('assets').Allow(BucketPermission.Write);
+
+var logo = assets.File('images/logo.png');
+
+// Create a read-only signed url reference for uploading
+var uploadUrl = logo.GetUploadUrl();
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="expiry" type="int">
+    Seconds until link expiry. Defaults to `600`, Maximum of `604800` (7 days).
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a temporary file upload link for a user
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+var assets = Application.Bucket('assets').Allow(BucketPermission.Write);
+
+var logo = assets.File('images/logo.png');
+
+// Create a read-only signed url reference for uploading
+var uploadUrl = logo.GetUploadUrl();
+
+Application.Run();
+```

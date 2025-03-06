@@ -1,0 +1,43 @@
+---
+description: "Reference for Nitric's .NET library - Submit a batch job request with custom resource requirements"
+---
+
+# .NET - Job.Submit()
+
+Jobs may be submitted from Nitric `services` or other `batches` using the `Submit` method on the job reference. When submitting a job you can provide a payload that will be passed to the job handler function.
+
+```csharp
+using Nitric.Sdk.Resource;
+using System.Collections.Generic;
+using Application = Nitric.Sdk.Nitric;
+
+var analyze = Application.Job<Dictionary<string, string>>("analyze").Allow(JobPermission.Submit);
+
+analyze.Submit(new Dictionary<string, string>() { { "message", "message contents" } });
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="message" required type="T">
+    The data that will be sent to the submit
+  </Property>
+</Properties>
+
+## Examples
+
+### Submit a job request
+
+```csharp
+using Nitric.Sdk.Resource;
+using System.Collections.Generic;
+using Application = Nitric.Sdk.Nitric;
+
+var analyze = Application.Job<Dictionary<string, string>>("analyze").Allow(JobPermission.Submit);
+
+analyze.Submit(new Dictionary<string, string>() { { "message", "message contents" } });
+
+Application.Run();
+```

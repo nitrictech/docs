@@ -1,0 +1,158 @@
+---
+description: "Reference for Nitric's .NET library - Creates a new key value store to get, set, and delete key value pairs."
+---
+
+# .NET - KV()
+
+Creates a new key value store to get, set, and delete key value pairs.
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete);
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The unique name of this key value store within the service. Subsequent calls
+    to `kv` with the same name will return the same object.
+  </Property>
+</Properties>
+
+## Access
+
+All Nitric resources provide access permissions you can use to specify the level of access your service needs to the resource. See here for details about infrastructure [security](/get-started/foundations/infrastructure/security).
+
+### Available permissions:
+
+---
+
+**KeyValueStorePermission.Get**
+
+This permission allows your service to get values from the key value store.
+
+---
+
+**KeyValueStorePermission.Set**
+
+This permission allows your service to set key value pairs in the key value store.
+
+---
+
+**KeyValueStorePermission.Delete**
+
+This permission allows your service to delete key value pairs in the key value store.
+
+---
+
+## Examples
+
+### Create a key value store
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete);
+
+Application.Run();
+```
+
+### Get value from a key value store
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Get);
+
+var profile = profiles.Get("profile-1a2b3c");
+
+Application.Run();
+```
+
+### Set a key in a key value store
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name { get; set; }
+  public int Age { get; set; }
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Set);
+
+profiles.Set("profile-1a2b3c", new Profile() { Name = "John Smith", Age = 21 });
+
+Application.Run();
+```
+
+### Delete a key from a key value store
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Delete);
+
+profiles.Delete("profile-1a2b3c");
+
+Application.Run();
+```
+
+### Get all keys from a key value store
+
+```csharp
+using System;
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete);
+
+var keys = profiles.Keys();
+
+while (await keys.MoveNext())
+{
+	Console.WriteLine(keys.Current);
+}
+
+Application.Run();
+```

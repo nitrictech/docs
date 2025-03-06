@@ -1,0 +1,98 @@
+---
+description: "Reference for Nitric's .NET library - Creates a new Queue to send and receive asynchronous tasks."
+---
+
+# .NET - Queue()
+
+Creates a new Queue to send and receive asynchronous tasks.
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class UserRequest
+{
+    public string UserId { get; set; }
+    public string Message { get; set; }
+}
+
+var batchQueue = Application.Queue<UserRequest>("batchQueue").Allow(QueuePermission.Enqueue);
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" type="string" required>
+    The unique name of this Queue within the app. Subsequent calls to `queue`
+    with the same name will return the same object.
+  </Property>
+</Properties>
+
+## Access
+
+All Nitric resources provide access permissions you can use to specify the level of access your code needs to the resource. See here for details about infrastructure [security](/get-started/foundations/infrastructure/security).
+
+### Available permissions:
+
+---
+
+**QueuePermission.Enqueue**
+
+This permission allows your code to enqueue new tasks to the queue.
+
+---
+
+**QueuePermission.Dequeue**
+
+This permission allows your code to dequeue tasks from the queue.
+
+---
+
+### Notes
+
+In most instances, code should either enqueue to or dequeue from a queue, usually not both.
+
+## Examples
+
+### Create a Queue
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class UserRequest
+{
+    public string UserId { get; set; }
+    public string Message { get; set; }
+}
+
+var batchQueue = Application.Queue<UserRequest>("batchQueue");
+
+Application.Run();
+```
+
+### Dequeue tasks from a queue
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class UserRequest
+{
+    public string UserId { get; set; }
+    public string Message { get; set; }
+}
+
+var batchQueue = Application.Queue<UserRequest>("batchQueue").With(QueuePermission.Dequeue);
+
+var tasks = batchQueue.Dequeue();
+
+Application.Run();
+```
+
+### See also
+
+- [Queue.Dequeue()](./queue-dequeue)
+- [Queue.Enqueue()](./queue-enqueue)

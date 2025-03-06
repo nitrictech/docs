@@ -1,0 +1,50 @@
+---
+description: "Reference for Nitric's .NET library - Create Batch Jobs"
+---
+
+# .NET - Job()
+
+Creates a new Batch Job.
+
+```csharp
+using System.Collections.Generic;
+using Application = Nitric.Sdk.Nitric;
+
+var analyze = Application.Job<Dictionary<string, string>>("analyze");
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The unique name of this Batch Job within the app. Subsequent calls to `Job`
+    with the same name will return the same object.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a Job
+
+```csharp
+using System.Collections.Generic;
+using Application = Nitric.Sdk.Nitric;
+
+var analyze = Application.Job<Dictionary<string, string>>("analyze");
+
+Application.Run();
+```
+
+### Create a Job with permissions to submit jobs
+
+```csharp
+using Nitric.Sdk.Resource;
+using System.Collections.Generic;
+using Application = Nitric.Sdk.Nitric;
+
+var analyze = Application.Job<Dictionary<string, string>>("analyze").Allow(JobPermission.Submit);
+
+Application.Run();
+```

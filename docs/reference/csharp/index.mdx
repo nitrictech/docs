@@ -1,0 +1,33 @@
+---
+description: "Reference for Nitric's .NET library - Using Nitric with .NET"
+---
+
+# Nitric\'s .NET SDK
+
+This SDK reference provides documentation for the functions and methods in Nitric\'s .NET library.
+
+The library provides the ability to define and interact with cloud resources, as well as build application logic like functions/handlers.
+
+## Installation
+
+If you used a Nitric starter template for .NET to scaffold your project, then the `Nitric.Sdk` package will already be included in the dependencies in your `.csproj` file. Using starter templates is the recommended installation option since it ensures the other files and configuration needed are also set up.
+
+However, you can also install the SDK.
+
+```bash
+dotnet add package Nitric.Sdk
+```
+
+## Custom runtime
+
+To successfully run and deploy .NET applications using the Nitric framework, it is necessary to use a custom runtime Dockerfile. This Dockerfile ensures that your .NET application is built and executed within an appropriate environment, taking into account all dependencies and configurations required by Nitric.
+
+### Default Dockerfile
+
+For your convenience, Nitric provides a default Dockerfile specifically tailored for .NET applications. This default Dockerfile is included with the [.NET starter template](https://github.com/nitrictech/examples/tree/main/v1/csharp-starter) available through the Nitric CLI. By using this template, you can quickly set up your development environment and focus on building your application without worrying about Docker configuration.
+
+This Dockerfile provides a solid starting point for deploying .NET applications with Nitric. Feel free to customize it according to your application's needs.
+
+## Source
+
+The source for the SDK is available on [GitHub](https://github.com/nitrictech/dotnet-sdk).
