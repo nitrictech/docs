@@ -7,11 +7,13 @@ description: "Reference for Nitric's Node.js library - Store a key value pair in
 Store a key value pair in a key value store.
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('set')
 
-await profiles.set('profile-1a2b3c', { name: 'John Smith' })
+api('example').get('/', (ctx) => {
+  await profiles.set('profile-1a2b3c', { name: 'John Smith' })
+});
 ```
 
 ## Parameters
@@ -30,9 +32,11 @@ await profiles.set('profile-1a2b3c', { name: 'John Smith' })
 ### Set a key value pair
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('set')
 
-await profiles.set('profile-1a2b3c', { name: 'John Smith' })
+api('example').get('/', (ctx) => {
+  await profiles.set('profile-1a2b3c', { name: 'John Smith' })
+});
 ```

@@ -7,11 +7,13 @@ description: "Reference for Nitric's Node.js library - Get a value from a key va
 Get a value from a key value store.
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('get')
 
-const profile = await profiles.get('profile-1a2b3c')
+api('example').get('/', (ctx) => {
+  const profile = await profiles.get('profile-1a2b3c')
+});
 ```
 
 ## Parameters
@@ -27,9 +29,11 @@ const profile = await profiles.get('profile-1a2b3c')
 ### Get a key value pair
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('get')
 
-const profile = await profiles.get('profile-1a2b3c')
+api('example').get('/', (ctx) => {
+  const profile = await profiles.get('profile-1a2b3c')
+});
 ```

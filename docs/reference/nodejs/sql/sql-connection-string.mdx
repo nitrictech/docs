@@ -7,12 +7,13 @@ description: "Reference for Nitric's Node.js library - Returns the connection st
 Returns the connection string for a SQL database at runtime.
 
 ```javascript
-import { sql } from '@nitric/sdk'
+import { api, sql } from '@nitric/sdk'
 
 const db = sql('my-data')
 
-// Should be called at runtime, such as in a service handler
-const connStr = await db.connectionString()
+api('example').get('/', (ctx) => {
+  const connStr = await db.connectionString()
+});
 ```
 
 ## Examples
@@ -20,12 +21,13 @@ const connStr = await db.connectionString()
 ### Return a connection string
 
 ```javascript
-import { sql } from '@nitric/sdk'
+import { api, sql } from '@nitric/sdk'
 
 const db = sql('my-data')
 
-// Should be called at runtime, such as in a service handler
-const connStr = await db.connectionString()
+api('example').get('/', (ctx) => {
+  const connStr = await db.connectionString()
+});
 ```
 
 ### Connect with Prisma

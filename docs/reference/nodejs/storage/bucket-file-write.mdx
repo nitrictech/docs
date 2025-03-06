@@ -7,13 +7,14 @@ description: "Reference for Nitric's Node.js library - Write a file to a bucket.
 Write a file to a bucket.
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').allow('write')
 
-const logo = assets.file('images/logo.png')
-
-await logo.write(someImageData)
+api('example').get('/', (ctx) => {
+  const logo = assets.file('images/logo.png')
+  await logo.write(someImageData)
+});
 ```
 
 ## Parameters
@@ -29,12 +30,14 @@ await logo.write(someImageData)
 ### Write a file
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').allow('write')
 
-const txt = assets.file('my-text-file.txt')
-const buffer = Buffer.from('My Test File...')
+api('example').get('/', (ctx) => {
+  const txt = assets.file('my-text-file.txt')
+  const buffer = Buffer.from('My Test File...')
 
-await txt.write(buffer)
+  await txt.write(buffer)
+});
 ```

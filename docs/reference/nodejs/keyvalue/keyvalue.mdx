@@ -60,43 +60,51 @@ const profiles = kv('profiles')
 ### Get value from a key value store
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('get')
 
-const profile = await profiles.get('profile-1a2b3c')
+api('example').get('/', (ctx) => {
+  const profile = await profiles.get('profile-1a2b3c')
+});
 ```
 
 ### Set a key in a key value store
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('set')
 
-await profiles.set('profile-1a2b3c', { name: 'John Smith' })
+api('example').get('/', (ctx) => {
+  await profiles.set('profile-1a2b3c', { name: 'John Smith' })
+});
 ```
 
 ### Delete a key from a key value store
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('delete')
 
-profiles.delete('profile-1a2b3c')
+api('example').get('/', (ctx) => {
+  profiles.delete('profile-1a2b3c')
+})
 ```
 
 ### Get all keys from a key value store
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('get')
 
-const keys = profiles.keys()
+api('example').get('/', (ctx) => {
+  const keys = profiles.keys()
 
-for await (const key of keys) {
-  // do something with the key
-}
+  for await (const key of keys) {
+    // do something with the key
+  }
+});
 ```

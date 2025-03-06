@@ -7,15 +7,17 @@ description: "Reference for Nitric's Node.js library - Retrieve all or some of t
 Return an async iterable of keys in the store.
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('get')
 
-const keys = profiles.keys()
+api('example').get('/', (ctx) => {
+  const keys = profiles.keys()
 
-for await (const key of keys) {
+  for await (const key of keys) {
   // do something with the key
-}
+  }
+});
 ```
 
 ## Parameters
@@ -31,27 +33,32 @@ for await (const key of keys) {
 ### Get all keys from a key value store
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('get')
 
-const keys = profiles.keys()
+api('example').get('/', (ctx) => {
+  const keys = profiles.keys()
 
-for await (const key of keys) {
-  // do something with the key
-}
+  for await (const key of keys) {
+    // do something with the key
+  }
+});
 ```
 
 ### Get keys filtered by prefix from a key value store
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('get')
 
-const keys = profiles.keys('subprofile:')
+api('example').get('/', (ctx) => {
 
-for await (const key of keys) {
-  // do something with the key
-}
+  const keys = profiles.keys('subprofile:')
+
+  for await (const key of keys) {
+    // do something with the key
+  }
+});
 ```

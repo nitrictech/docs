@@ -7,11 +7,13 @@ description: "Reference for Nitric's Node.js library - Get a list of file refere
 Get a list of file references for files that exist in the bucket.
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').allow('read')
 
-const files = await assets.files()
+api('example').get('/', (ctx) => {
+  const files = await assets.files()
+});
 ```
 
 ## Examples
@@ -19,12 +21,14 @@ const files = await assets.files()
 Deleting all files in a bucket
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').allow('delete')
 
-const files = await assets.files()
-await Promise.all(files.map(async (file) => await file.delete()))
+api('example').get('/', (ctx) => {
+  const files = await assets.files()
+  await Promise.all(files.map(async (file) => await file.delete()))
+});
 ```
 
 ## Notes

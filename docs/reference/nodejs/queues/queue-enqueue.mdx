@@ -7,11 +7,13 @@ description: "Reference for Nitric's Node.js library - Send messages to a queue.
 Send messages to a queue.
 
 ```javascript
-import { queue } from '@nitric/sdk'
+import { api, queue } from '@nitric/sdk'
 
 const batchQueue = queue('batch').allow('enqueue')
 
-await batchQueue.enqueue({ example: 'value' })
+api('example').get('/', (ctx) => {
+  await batchQueue.enqueue({ example: 'value' })
+});
 ```
 
 ## Parameters
@@ -27,37 +29,40 @@ await batchQueue.enqueue({ example: 'value' })
 ### Send a message to a queue
 
 ```javascript
-import { queue } from '@nitric/sdk'
+import { api, queue } from '@nitric/sdk'
 
 const batchQueue = queue('batch').allow('enqueue')
 
-const item = { message: 'payloads can be any serializable object' }
-
-await batchQueue.enqueue(item)
+api('example').get('/', (ctx) => {
+  const item = { message: 'payloads can be any serializable object' }
+  await batchQueue.enqueue(item)
+});
 ```
 
 ### Send multiple messages to a queue
 
 ```javascript
-import { queue } from '@nitric/sdk'
+import { api, queue } from '@nitric/sdk'
 
 const batchQueue = queue('batch').allow('enqueue')
 
-const items = [
-  {
-    type: 'Email',
-    to: 'hello@example.com',
-    subject: 'Notification',
-    message: 'A notification from Nitric',
-  },
-  {
-    type: 'SMS',
-    to: '+17200000000',
-    message: 'A text message from Nitric',
-  },
-]
+api('example').get('/', (ctx) => {
+  const items = [
+    {
+      type: 'Email',
+      to: 'hello@example.com',
+      subject: 'Notification',
+      message: 'A notification from Nitric',
+    },
+    {
+      type: 'SMS',
+      to: '+17200000000',
+      message: 'A text message from Nitric',
+    },
+  ]
 
-await batchQueue.enqueue(items)
+  await batchQueue.enqueue(items)
+});
 ```
 
 ### Dealing with failures

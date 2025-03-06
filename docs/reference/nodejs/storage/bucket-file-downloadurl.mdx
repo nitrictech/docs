@@ -11,10 +11,12 @@ import { bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').allow('read', 'write')
 
-const logo = assets.file('images/logo.png')
+api('example').get('/', (ctx) => {
+  const logo = assets.file('images/logo.png')
 
-// Create a read-only signed url reference for downloading
-const downloadUrl = await logo.getDownloadUrl()
+  // Create a read-only signed url reference for downloading
+  const downloadUrl = await logo.getDownloadUrl()
+});
 ```
 
 ## Parameters
@@ -36,15 +38,16 @@ const downloadUrl = await logo.getDownloadUrl()
 ### Create a readable link that is valid for the next 5 minutes
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').allow('read')
 
-const logo = assets.file('images/logo.png')
-
-const logoUrl = await logo.getDownloadUrl({
-  expiry: 300,
-})
+api('example').get('/', (ctx) => {
+  const logo = assets.file('images/logo.png')
+  const logoUrl = await logo.getDownloadUrl({
+    expiry: 300,
+  })
+});
 ```
 
 ### Redirect response to an image URL

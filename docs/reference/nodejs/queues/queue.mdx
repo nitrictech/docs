@@ -58,10 +58,12 @@ const batchQueue = queue('batch')
 ### Enqueue messages
 
 ```javascript
-import { queue } from '@nitric/sdk'
+import { api, queue } from '@nitric/sdk'
 
 const payload = {}
-const batchQueue = queue('batch').allow('dequeue')
+const batchQueue = queue('batch').allow('enqueue')
 
-const messages = await batchQueue.enqueue()
+api('example').get('/', (ctx) => {
+  const messages = await batchQueue.enqueue()
+});
 ```

@@ -7,13 +7,15 @@ description: "Reference for Nitric's Node.js library - Publish new events to the
 Publish an event (push based message) to a topic.
 
 ```javascript
-import { topic } from '@nitric/sdk'
+import { api, topic } from '@nitric/sdk'
 
 const updates = topic('updates').allow('publish')
 
-await updates.publish({
-  something: 'amazing happened',
-})
+api('example').get('/', (ctx) => {
+  await updates.publish({
+    something: 'amazing happened',
+  })
+});
 ```
 
 ## Parameters
@@ -39,13 +41,15 @@ await updates.publish({
 Publishing messages to a topic will push a copy of the message to each of the topic's subscribers. By default, delivery occurs without a delay.
 
 ```javascript
-import { topic } from '@nitric/sdk'
+import { api, topic } from '@nitric/sdk'
 
 const updates = topic('updates').allow('publish')
 
-await updates.publish({
-  something: 'amazing happened',
-})
+api('example').get('/', (ctx) => {
+  await updates.publish({
+    something: 'amazing happened',
+  })
+});
 ```
 
 ### Delaying message delivery
@@ -57,10 +61,11 @@ import { topic } from '@nitric/sdk'
 
 const updates = topic('updates').allow('publish')
 
-const event = { example: 'delayed' }
-
-// 10 minute delay
-await updates.publish(event, { delay: 600 })
+api('example').get('/', (ctx) => {
+  const event = { example: 'delayed' }
+  // 10 minute delay
+  await updates.publish(event, { delay: 600 })
+});
 ```
 
 ### Notes

@@ -7,11 +7,13 @@ description: "Reference for Nitric's Node.js library - Delete key from a key val
 Delete key from a key value store.
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('delete')
 
-await profiles.delete('profile-1a2b3c')
+api('example').get('/', (ctx) => {
+  await profiles.delete('profile-1a2b3c')
+});
 ```
 
 ## Parameters
@@ -27,9 +29,11 @@ await profiles.delete('profile-1a2b3c')
 ### Delete a key
 
 ```javascript
-import { kv } from '@nitric/sdk'
+import { api, kv } from '@nitric/sdk'
 
 const profiles = kv('profiles').allow('delete')
 
-await profiles.delete('profile-1a2b3c')
+api('example').get('/', (ctx) => {
+  await profiles.delete('profile-1a2b3c')
+});
 ```

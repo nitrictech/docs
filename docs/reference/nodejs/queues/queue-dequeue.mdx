@@ -7,20 +7,22 @@ description: "Reference for Nitric's Node.js library - Dequeue messages."
 Dequeue messages.
 
 ```javascript
-import { queue } from '@nitric/sdk'
+import { api, queue } from '@nitric/sdk'
 
 const batchQueue = queue('batch').allow('dequeue')
 
-const tasks = await batchQueue.dequeue()
+api('example').get('/', (ctx) => {
+  const tasks = await batchQueue.dequeue()
 
-await Promise.all(
-  tasks.map((task) => {
-    // Work on a task...
+  await Promise.all(
+    tasks.map((task) => {
+      // Work on a task...
 
-    // Complete the task
-    return task.complete()
-  }),
-)
+      // Complete the task
+      return task.complete()
+    }),
+  )
+});
 ```
 
 ## Parameters
@@ -61,18 +63,20 @@ This means calls to dequeue will return between 0 and _depth_ tasks.
 ### Dequeue and complete messages
 
 ```javascript
-import { queue } from '@nitric/sdk'
+import { api, queue } from '@nitric/sdk'
 
 const batchQueue = queue('batch').allow('dequeue')
 
-const tasks = await batchQueue.dequeue(10)
+api('example').get('/', (ctx) => {
+  const tasks = await batchQueue.dequeue(10)
 
-await Promise.all(
-  tasks.map((task) => {
-    // Work on a task...
+  await Promise.all(
+    tasks.map((task) => {
+      // Work on a task...
 
-    // Complete the task
-    return task.complete()
-  }),
-)
+      // Complete the task
+      return task.complete()
+    }),
+  )
+});
 ```

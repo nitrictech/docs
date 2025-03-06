@@ -7,13 +7,14 @@ description: "Reference for Nitric's Node.js library - Read the contents of a fi
 Read the contents of a file from a bucket.
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').allow('read')
 
-const logo = assets.file('images/logo.png')
-
-const logoData = await logo.read()
+api('example').get('/', (ctx) => {
+  const logo = assets.file('images/logo.png')
+  const logoData = await logo.read()
+});
 ```
 
 ## Examples
@@ -21,11 +22,11 @@ const logoData = await logo.read()
 ### Read a file
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').allow('read')
-
-const logo = assets.file('images/logo.png')
-
-const logoData = await logo.read()
+api('example').get('/', (ctx) => {
+  const logo = assets.file('images/logo.png')
+  const logoData = await logo.read()
+});
 ```

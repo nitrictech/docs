@@ -7,26 +7,27 @@ description: "Reference for Nitric's Node.js library - Create a new bucket notif
 Create a new bucket notification trigger when certain files are created or deleted.
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const assets = bucket('assets')
 
 const accessibleAssets = bucket('assets').allow('read')
 
-// The request will contain the name of the file `key` and the type of event `type`
-assets.on('delete', '*', (ctx) => {
-  console.log(`A file named ${ctx.req.key} was deleted`)
-})
+api('example').get('/', (ctx) => {
+  // The request will contain the name of the file `key` and the type of event `type`
+  assets.on('delete', '*', (ctx) => {
+    console.log(`A file named ${ctx.req.key} was deleted`)
+  })
 
-assets.on('write', '/images/cat', (ctx) => {
-  console.log('A cat image was written')
-})
+  assets.on('write', '/images/cat', (ctx) => {
+    console.log('A cat image was written')
+  })
 
-// If `on` is called with a permissioned bucket, a file will also be provided with the request
-accessibleAssets.on('write', '/images/dog', async (ctx) => {
-  const dogImage = await ctx.req.file.read()
-
-  console.log(dogImage)
+  // If `on` is called with a permissioned bucket, a file will also be provided with the request
+  accessibleAssets.on('write', '/images/dog', async (ctx) => {
+    const dogImage = await ctx.req.file.read()
+    console.log(dogImage)
+  })
 })
 ```
 

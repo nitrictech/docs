@@ -7,11 +7,13 @@ description: "Reference for Nitric's Node.js library - Create a reference to a f
 Create a reference to a file within a bucket.
 
 ```javascript
-import { bucket } from '@nitric/sdk'
+import { api, bucket } from '@nitric/sdk'
 
 const assets = bucket('assets').allow('read')
 
-const logo = assets.file('images/logo.png')
+api('example').get('/', (ctx) => {
+  const logo = assets.file('images/logo.png')
+})
 ```
 
 ## Parameters
