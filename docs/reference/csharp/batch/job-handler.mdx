@@ -1,0 +1,89 @@
+---
+description: "Reference for Nitric's .NET library - Register a job handler"
+---
+
+# .NET - Job.Handler()
+
+Job handlers are the code that is run when a job request is submitted. These handlers should be written in a separate file to your services.
+
+```csharp
+using Nitric.Sdk.Resource;
+using System.Collections.Generic;
+using Application = Nitric.Sdk.Nitric;
+
+var analyze = Application.Job<Dictionary<string, string>>("analyze");
+
+analyze.Handler((ctx) =>
+{
+  // Do some work
+  return ctx;
+}, new JobResourceRequirements(cpus: 1, memory: 1024, gpus: 1));
+
+Application.Run();
+```
+
+## Defining Batches
+
+Batches are defined in different files to services and referenced in a project's `nitric.yaml` file. For example:
+
+```yaml
+batch-services:
+  - match: ./batch/**/*.csproj
+    start: dotnet run --project $SERVICE_PATH
+```
+
+## Parameters
+
+<Properties>
+  <Property name="handler" required type="Func<JobContext<T>, JobContext<T>>">
+    One or more middleware services to use as the handler which will run on the
+    defined frequency.
+  </Property>
+  <Property name="requirements" type="JobResourceRequirements" nested>
+    <Property name="Cpus" type="int">
+      The number of CPUs to allocate to the handler
+    </Property>
+    <Property name="Gpus" type="int">
+      The number of GPUs to allocate to the handler
+    </Property>
+    <Property name="Memory" type="int">
+      The amount of memory (MB) to allocate to the handler
+    </Property>
+  </Property>
+</Properties>
+
+## Examples
+
+### Define a job handler with default resource requirements
+
+```csharp
+using System.Collections.Generic;
+using Application = Nitric.Sdk.Nitric;
+
+var analyze = Application.Job<Dictionary<string, string>>('analyze');
+
+analyze.Handler((ctx) => {
+  // Do some work
+  return ctx
+});
+
+Application.Run();
+```
+
+### Create a job handler with custom resource requirements
+
+```csharp
+using Nitric.Sdk.Resource;
+using System.Collections.Generic;
+using Application = Nitric.Sdk.Nitric;
+
+var analyze = Application.Job<Dictionary<string, string>>("analyze");
+
+analyze.Handler((ctx) =>
+{
+  // Do some work
+  return ctx;
+}, new JobResourceRequirements(cpus: 1, memory: 1024, gpus: 1));
+
+Application.Run();
+```
