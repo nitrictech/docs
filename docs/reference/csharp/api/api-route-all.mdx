@@ -8,6 +8,7 @@ Register a single handler for all HTTP Methods (GET, POST, PUT, DELETE, PATCH) o
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
@@ -62,6 +63,7 @@ Application.Run();
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
@@ -118,6 +120,7 @@ For methods that include a request body, such as `POST` and `PUT`, you can acces
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 

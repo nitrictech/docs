@@ -8,6 +8,7 @@ Register a handler for HTTP POST requests to the route.
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
@@ -47,6 +48,7 @@ Application.Run();
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
@@ -103,6 +105,7 @@ The POST request body is accessible from the `ctx.req` object.
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 

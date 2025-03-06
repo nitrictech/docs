@@ -17,7 +17,7 @@ using Application = Nitric.Sdk.Nitric;
 var api = Application.Api("main");
 
 api.Put("/hello/:name", context => {
-  var name = context.Req.PathParams.get("name");
+  var name = context.Req.PathParams["name"];
 
   context.Res.Text($"Updating {name}!");
 
@@ -56,7 +56,7 @@ using Application = Nitric.Sdk.Nitric;
 var api = Application.Api("main");
 
 api.Put("/hello/:name", context => {
-  var name = context.Req.PathParams.get("name");
+  var name = context.Req.PathParams["name"];
 
   context.Res.Text($"Updating {name}!");
 
@@ -109,6 +109,7 @@ The PUT request body is accessible from the `ctx.req` object.
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
 
 var api = Application.Api("main");
 
