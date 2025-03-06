@@ -116,6 +116,7 @@ var api = Application.Api("main");
 api.Put("/hello/:name", context => {
   var body = context.Req.Json<Dictionary<string, string>>();
   // parse, validate and store the request payload...
+  return context;
 });
 
 Application.Run();

@@ -112,6 +112,7 @@ var api = Application.Api("main").Route("/customers");
 route.Patch(context => {
   var body = context.Req.Json<Dictionary<string, string>>();
   // parse, validate and store the request payload...
+  return context;
 });
 
 Application.Run();
