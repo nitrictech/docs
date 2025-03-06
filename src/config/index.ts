@@ -20,6 +20,7 @@ import { PyReference } from './reference/python'
 import { DartReference } from './reference/dart'
 import { GoReference } from './reference/go'
 import { FaSitemap } from 'react-icons/fa'
+import { CSharpReference } from './reference/csharp'
 
 export const navigation: NavEntry[] = [
   {
@@ -446,6 +447,7 @@ export const navigation: NavEntry[] = [
       PyReference,
       GoReference,
       DartReference,
+      CSharpReference,
     ],
   },
   {
