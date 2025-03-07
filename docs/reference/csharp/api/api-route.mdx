@@ -68,24 +68,31 @@ Application.Run();
 ### Create a route with middleware
 
 ```csharp
-using Application = Nitric.Sdk.Application;
+using Nitric.Sdk.Service;
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
 
-var route = Application.Api("main").Route("/customers", (context, next) => {
+var main = Application.Api("main");
+
+var route = main.Route("/customers", new RouteOptions(middleware: new Middleware<HttpContext>[] {
+  (context, next) =>
+  {
     var user = context.Req.PathParams["userId"];
 
     // Validate the user identity
     if (user != "1234")
     {
-        context.Res.Text($"User {user} is unauthorised");
-        context.Res.Status = 403;
+      context.Res.Text($"User {user} is unauthorised");
+      context.Res.Status = 403;
 
-        // Return prematurely to end the middleware chain.
-        return context;
+      // Return prematurely to end the middleware chain.
+      return context;
     }
 
     // Call next to continue the middleware chain.
     return next(context);
-});
+  }
+}));
 
 Application.Run();
 ```

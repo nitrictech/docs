@@ -131,7 +131,7 @@ private WebsocketContext HandleRequest(WebsocketContext ctx, Func<WebsocketConte
 
 var websocket = Application.Websocket("public");
 
-websocket.On(WebsocketNotificationType.Message, ValidateRequest, HandleRequest);
+websocket.On(WebsocketEventType.Message, ValidateRequest, HandleRequest);
 
 Application.Run();
 ```

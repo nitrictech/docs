@@ -12,7 +12,7 @@ using Application = Nitric.Sdk.Nitric;
 
 var assets = Application.Bucket("assets").Allow(BucketPermission.Read, BucketPermission.Write, BucketPermission.Delete);
 
-Nitric.Run();
+Application.Run();
 ```
 
 ## Parameters

@@ -67,11 +67,13 @@ Application.Run();
 When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
 
 ```csharp
+using Nitric.Sdk.Service;
 using Application = Nitric.Sdk.Nitric;
 
 var route = Application.Api("main").Route("/customers/:userId");
 
-route.Put((context, next) => {
+route.Put(new Middleware<HttpContext>[] {
+  (context, next) => {
     var user = context.Req.PathParams["userId"];
 
     // Validate the user identity
@@ -93,7 +95,7 @@ route.Put((context, next) => {
 
     return next(context);
   }
-);
+});
 
 Application.Run();
 ```
