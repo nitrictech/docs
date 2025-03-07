@@ -1,0 +1,45 @@
+---
+description: "Reference for Nitric's .NET library - Write a file to a bucket."
+---
+
+# .NET - Bucket.File.Write()
+
+Write a file to a bucket.
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+var assets = Application.Bucket('assets').Allow(BucketPermission.Read);
+
+var logo = assets.File('images/logo.png');
+
+logo.Write(someImageData);
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="data" required type="byte[]">
+    The data to write to the file.
+  </Property>
+</Properties>
+
+## Examples
+
+### Write a file
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+var assets = Application.Bucket('assets').Allow(BucketPermission.Read);
+
+var logo = assets.File('images/logo.png');
+
+logo.Write(someImageData);
+
+Application.Run();
+```

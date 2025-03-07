@@ -1,0 +1,74 @@
+---
+description: "Reference for Nitric's .NET library - Creates a new Schedule to run a function on a defined frequency."
+---
+
+# .NET - Schedule()
+
+Creates a new Schedule to run a function on a defined frequency.
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+Application.Schedule("send-reminder").Every("3 hours", context =>
+{
+    // do some processing
+    return context;
+});
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="description" type="string" required>
+    The unique name of this Schedule within the app. Subsequent calls to
+    `Schedule` with the same name will return the same object.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a Schedule
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+// Create a schedule that runs every 3 minutes
+Application.Schedule("send-reminder").Every("3 minutes", context =>
+{
+    // do some processing
+    return context;
+});
+
+// Create a schedule that runs every 3 hours
+Application.Schedule("send-reminder").Every("3 hours", context =>
+{
+    // do some processing
+    return context;
+});
+
+// Create a schedule that runs every 3 days
+Application.Schedule("send-reminder").Every("3 days", context =>
+{
+    // do some processing
+    return context;
+});
+
+Application.Run();
+```
+
+### Create a Schedule using Cron expression
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+// Create a schedule that runs every 3 minutes
+Application.Schedule("send-reminder").Cron("3 * * * *", context =>
+{
+    // do some processing
+    return context;
+});
+
+Application.Run();
+```

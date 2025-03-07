@@ -1,0 +1,90 @@
+---
+description: "Reference for Nitric's .NET library - Retrieve all or some of the keys from a value store."
+---
+
+# .NET - Kv.Keys()
+
+Return an async iterable of keys in the store.
+
+```csharp
+using System;
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete);
+
+var keys = profiles.Keys();
+
+while (await keys.MoveNext())
+{
+	Console.WriteLine(keys.Current);
+}
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="prefix" type="string">
+    The prefix to filter keys by, if not provided all keys will be returned.
+  </Property>
+</Properties>
+
+## Examples
+
+### Get all keys from a key value store
+
+```csharp
+using System;
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete);
+
+var keys = profiles.Keys();
+
+while (await keys.MoveNext())
+{
+	Console.WriteLine(keys.Current);
+}
+
+Application.Run();
+```
+
+### Get keys filtered by prefix from a key value store
+
+```csharp
+using System;
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete);
+
+var keys = profiles.Keys("profile-");
+
+while (await keys.MoveNext())
+{
+	Console.WriteLine(keys.Current);
+}
+
+Application.Run();
+```

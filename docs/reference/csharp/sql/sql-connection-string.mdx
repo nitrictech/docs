@@ -1,0 +1,31 @@
+---
+description: "Reference for Nitric's .NET library - Returns the connection string for a SQL database at runtime."
+---
+
+# .NET - Sql.ConnectionString()
+
+Returns the connection string for a SQL database at runtime.
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var db = Application.Sql("my-database", "dockerfile://migrations.dockerfile");
+
+var connStr = db.ConnectionString();
+
+Application.Run();
+```
+
+## Examples
+
+### Return a connection string
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var db = Application.Sql("my-database", "dockerfile://migrations.dockerfile");
+
+var connStr = db.ConnectionString();
+
+Application.Run();
+```
