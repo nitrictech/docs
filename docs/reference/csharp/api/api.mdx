@@ -64,6 +64,7 @@ Application.Run();
 
 ```csharp
 using Application = Nitric.Sdk.Application;
+using Nitric.Sdk.Resource;
 
 private HttpContext ValidateRequest(HttpContext ctx, Func<HttpContext, HttpContext> next)
 {
@@ -84,6 +85,7 @@ If you need to put all the routes in your api below a shared base path, you can 
 
 ```csharp
 using Application = Nitric.Sdk.Application;
+using Nitric.Sdk.Resource;
 
 var api = Application.Api("main", new ApiOptions(
     BaseRoute: "/api/v1"
@@ -97,6 +99,7 @@ Application.Run();
 ```csharp
 using Application = Nitric.Sdk.Nitric;
 using System.Collections.Generic;
+using Nitric.Sdk.Resource;
 
 var secureApi = Application.Api("main", new ApiOptions(
   // You can optionally apply security rules to the entire API
