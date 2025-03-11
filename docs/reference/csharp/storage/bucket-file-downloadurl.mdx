@@ -10,9 +10,9 @@ Create a download url for a file within a bucket.
 using Nitric.Sdk.Resource;
 using Application = Nitric.Sdk.Nitric;
 
-var assets = Application.Bucket('assets').Allow(BucketPermission.Read);
+var assets = Application.Bucket("assets").Allow(BucketPermission.Read);
 
-var logo = assets.File('images/logo.png');
+var logo = assets.File("images/logo.png");
 
 // Create a read-only signed url reference for downloading
 var downloadUrl = logo.GetDownloadUrl();
@@ -36,9 +36,9 @@ Application.Run();
 using Nitric.Sdk.Resource;
 using Application = Nitric.Sdk.Nitric;
 
-var assets = Application.Bucket('assets').Allow(BucketPermission.Read);
+var assets = Application.Bucket("assets").Allow(BucketPermission.Read);
 
-var logo = assets.File('images/logo.png');
+var logo = assets.File("images/logo.png");
 
 // Create a read-only signed url reference for downloading
 var downloadUrl = logo.GetDownloadUrl();
@@ -52,7 +52,7 @@ Application.Run();
 using Nitric.Sdk.Resource;
 using Application = Nitric.Sdk.Nitric;
 
-var images = Application.Bucket('images').Allow(BucketPermission.Read);
+var images = Application.Bucket("images").Allow(BucketPermission.Read);
 var mainApi = Application.Api("main");
 
 mainApi.Get("/images/:id", context => {
