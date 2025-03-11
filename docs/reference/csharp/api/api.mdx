@@ -17,30 +17,44 @@ Application.Run();
 ## Parameters
 
 <Properties>
-  <Property name="name" type="string" required>
+  <Property name="name" required type="string">
     The unique name of this API within the app. Subsequent calls to `api` with
     the same name will return the same object.
   </Property>
-  <Property
-    name="securityDefinitions"
-    type="Dictionary<string, SecurityDefinition>"
-  >
-    Security definitions defined by this API.
-  </Property>
-  <Property name="security" type="Dictionary<string, string[]>">
-    Security rules to apply with scopes to the entire API. Keys must match a
-    `securityDefinition`.
-  </Property>
-  <Property name="SecurityDefinition">
-    A `SecurityDefinition` object is one of the following:
+  <Property name="options" type="object">
+    Additional options when creating the API.
     <Properties nested>
-      <Property name="issuer" type="string">
-        The issuer for the JWT tokens e.g. `https://account.region.auth0.com`.
+      <Property name="basePath" type="string">
+        Base path for all routes in the API.
       </Property>
-      <Property name="audiences" type="string[]">
-        The `aud` that will be applied to JWT tokens from the issuer.
+      <Property
+        name="middleware"
+        type="Middleware<HttpContext>[] or Middleware<HttpContext>"
+      >
+        Middleware to apply to all routes and methods of the API.
+      </Property>
+      <Property name="security" type="OidcOptions[]">
+        Security rules to apply with scopes to the entire API.
       </Property>
     </Properties>
+  </Property>
+</Properties>
+
+### OidcOptions Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    the name of the security definition
+  </Property>
+  <Property name="issuer" required type="string">
+    the issuer for the JWT tokens e.g.{' '}
+    <code>https://account.region.auth0.com</code>
+  </Property>
+  <Property name="audiences" required type="string[]">
+    the <code>aud</code> that will be applied to JWT tokens from the issuer.
+  </Property>
+  <Property name="scopes" required type="string[]">
+    the scopes that will be required to authenticate.
   </Property>
 </Properties>
 
