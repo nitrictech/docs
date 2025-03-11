@@ -63,18 +63,23 @@ Application.Run();
 ### Create an API with universal middleware
 
 ```csharp
-using Application = Nitric.Sdk.Application;
+using Application = Nitric.Sdk.Nitric;
 using Nitric.Sdk.Resource;
-
-private HttpContext ValidateRequest(HttpContext ctx, Func<HttpContext, HttpContext> next)
-{
-    // Validation logic
-    return next(ctx);
-}
+using Nitric.Sdk.Service;
 
 var api = Application.Api("main", new ApiOptions(
-    Middleware: new Middleware<HttpContext>[] { ValidateRequest }
+    middleware: new Middleware<HttpContext>[] {
+        (context, next) => {
+            return next(context);
+        }
+    }
 ));
+
+api.Get("/example", (ctx) =>
+{
+    ctx.Res.Text("Hello World!");
+    return ctx;
+});
 
 Application.Run();
 ```
@@ -84,12 +89,19 @@ Application.Run();
 If you need to put all the routes in your api below a shared base path, you can do that with the `BaseRoute` option. In this example we ensure all routes start with `/api/v1/` before the route specific path.
 
 ```csharp
-using Application = Nitric.Sdk.Application;
+using Application = Nitric.Sdk.Nitric;
 using Nitric.Sdk.Resource;
 
 var api = Application.Api("main", new ApiOptions(
-    BaseRoute: "/api/v1"
+    basePath: "/api/v1"
 ));
+
+// Define API routes
+api.Get("/example", (ctx) =>
+{
+    ctx.Res.Text("Hello World!");
+    return ctx;
+});
 
 Application.Run();
 ```
@@ -98,33 +110,32 @@ Application.Run();
 
 ```csharp
 using Application = Nitric.Sdk.Nitric;
-using System.Collections.Generic;
 using Nitric.Sdk.Resource;
+using System.Collections.Generic;
+
+// Define security configuration
+var securityOptions = new OidcOptions[]
+{
+    new OidcOptions(
+        name: "user",
+        audiences: ["YOUR_AUDIENCES"],
+        issuer: "https://example-issuer.com",
+        // Optionally apply required scopes to this api
+        // in this case users will require the products:read scope to access the API
+        scopes: new string[] { "products:read" }
+    )
+};
 
 var secureApi = Application.Api("main", new ApiOptions(
-  // You can optionally apply security rules to the entire API
-  Security: new Dictionary<string, string[]>
-  {
-    // apply the 'user security definition the whole API'
-    {
-      "user",
-      // Optionally apply required scopes to this api
-      // in this case users will require the products:read scope to access the API
-      new string[] { "products:read" }
-    },
-  },
-  // security requirements for your API are defined here
-  SecurityDefinitions: new Dictionary<string, SecurityDefinition>
-  {
-    // define a security definition called 'user'
-    { "user",
-      new JwtSecurityDefinition(
-        'https://example-issuer.com',
-        new string[] { "YOUR_AUDIENCES" }
-      )
-    }
-  }
+    security: securityOptions
 ));
+
+// Define API routes
+api.Get("/example", (ctx) =>
+{
+    ctx.Res.Text("Hello, Secure World!");
+    return ctx;
+});
 
 Application.Run();
 ```
