@@ -23,7 +23,7 @@ var tasks = batchQueue.Dequeue();
 
 tasks.ForEach(task => {
     // Work on a task...
-    Console.WriteLine($"Request from user {task.Payload.UserId}: {task.Payload.Message}");
+    Console.WriteLine($"Request from user {task.Message.UserId}: {task.Message.Message}");
 
     // Complete the task
     task.Complete();
@@ -86,7 +86,7 @@ var tasks = batchQueue.Dequeue();
 
 tasks.ForEach(task => {
     // Work on a task...
-    Console.WriteLine($"Request from user {task.Payload.UserId}: {task.Payload.Message}");
+    Console.WriteLine($"Request from user {task.Message.UserId}: {task.Message.Message}");
 
     // Complete the task
     task.Complete();
