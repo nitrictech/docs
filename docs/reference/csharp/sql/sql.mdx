@@ -1,0 +1,63 @@
+---
+description: "Reference for Nitric's .NET library - Creates a reference to a SQL database."
+---
+
+# .NET - Sql()
+
+Creates a reference to a SQL database.
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var db = Application.Sql("my-database");
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The unique name of this database within the project.
+  </Property>
+  <Property name="migrations" type="string">
+    Points to the location of migration files, prefixed with `file://`, or a
+    migration dockerfile, prefixed with `dockerfile://`.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a reference to a database
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var db = Application.Sql("my-database");
+
+Application.Run();
+```
+
+### With a migrations directory
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var db = Application.Sql("my-database", "file://migrations/my-database");
+
+Application.Run();
+```
+
+### With a migrations dockerfile
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var db = Application.Sql("my-database", "dockerfile://migrations.dockerfile");
+
+Application.Run();
+```
+
+### See also
+
+- [Sql.ConnectionString()](./sql-connection-string)

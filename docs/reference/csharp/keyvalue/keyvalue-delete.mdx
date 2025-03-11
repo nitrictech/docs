@@ -1,0 +1,53 @@
+---
+description: "Reference for Nitric's .NET library - Delete key from a key value store."
+---
+
+# .NET - Kv.Delete()
+
+Delete key from a key value store.
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Delete);
+
+profiles.Delete("profile-1a2b3c");
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="key" required type="string">
+    The key that references the key value pair that should be deleted.
+  </Property>
+</Properties>
+
+## Examples
+
+### Delete a key
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class Profile
+{
+  public string Name;
+  public int Age;
+}
+
+var profiles = Application.KV<Profile>("profiles").Allow(KeyValueStorePermission.Delete);
+
+profiles.Delete("profile-1a2b3c");
+
+Application.Run();
+```

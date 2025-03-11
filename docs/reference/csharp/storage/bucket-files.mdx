@@ -1,0 +1,39 @@
+---
+description: "Reference for Nitric's .NET library - Get a list of file references for files that exist in the bucket."
+---
+
+# .NET - Bucket.Files()
+
+Get a list of file references for files that exist in the bucket.
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+var assets = Application.Bucket("assets").Allow(BucketPermission.Read);
+
+var files = assets.Files();
+
+Application.Run();
+```
+
+## Examples
+
+Deleting all files in a bucket
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+var assets = Application.Bucket("assets").Allow(BucketPermission.Read);
+
+var files = assets.Files();
+
+files.ForEach(file => file.Delete());
+
+Application.Run();
+```
+
+## Notes
+
+This method returns a list of [File](./bucket-file) references that exist on the bucket.

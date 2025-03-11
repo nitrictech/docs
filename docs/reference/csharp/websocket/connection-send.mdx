@@ -1,0 +1,78 @@
+---
+description: "Reference for Nitric's .NET library - Send a message to the websocket"
+---
+
+# .NET - Websocket.SendMessage()
+
+Send a message from the websocket to a connection.
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var websocket = Application.Websocket("public");
+
+websocket.Connection("D28BA458-BFF4-404A").SendMessage("Hello World");
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="message" required type="string">
+    The message that should be sent to the connection.
+  </Property>
+</Properties>
+
+## Examples
+
+### Broadcasting a message to all connections.
+
+<Note>
+  Do not send messages to a connection during it's `connect` callback, if you
+  need to acknowledge connection, do so by using a [topic](../topic/topic)
+</Note>
+
+```csharp
+using Nitric.Sdk.Service;
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+class OpenConnection
+{
+    public string Id { get; set; }
+}
+
+var websocket = Application.Websocket("public");
+
+var connections = Application.KV<OpenConnection>("connections").Allow(
+    KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete
+);
+
+websocket.On(WebsocketEventType.Connected, ctx =>
+{
+    connections.Set(ctx.Req.ConnectionId, new OpenConnection { Id = ctx.Req.ConnectionId });
+    return ctx;
+});
+
+websocket.On(WebsocketEventType.Disconnected, ctx =>
+{
+    connections.Delete(ctx.Req.ConnectionId);
+    return ctx;
+});
+
+websocket.On(WebsocketEventType.Message, ctx =>
+{
+    var keys = connections.Keys();
+
+    while (keys.MoveNext())
+    {
+        var message = ctx.Req.Message();
+        websocket.Connection(keys.Current).SendMessage(message);
+    }
+
+    return ctx;
+});
+
+Application.Run();
+```
