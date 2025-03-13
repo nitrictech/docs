@@ -15,6 +15,7 @@ export const languages = [
   'python',
   'go',
   'dart',
+  'csharp',
 ] as const
 
 export type Language = (typeof languages)[number]
