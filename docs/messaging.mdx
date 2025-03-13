@@ -191,7 +191,7 @@ user_created_topic = topic("user-created")
 
 @user_created_topic.subscribe()
 async def updates_sub(ctx):
-  email = ctx.req.json['email']
+  email = ctx.req.data['email']
 
   send_welcome_email(email)
 
