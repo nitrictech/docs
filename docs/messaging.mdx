@@ -8,7 +8,7 @@ Nitric provides two common options for scalable, decoupled, asynchronous messagi
 
 In some circumstances messages sent to a _Topic_ may also be called _Events_, while messages sent to a _Queue_ may be called _Tasks_. The structures of these messages are very similar, but the delivery and retry mechanisms are different. It can be helpful to refer to these messages differently to assist in understanding the context in which they are used.
 
-### Topics
+## Topics
 
 A topic is a named resource where events can be published. They can be thought of as a subject that your services are communicating about.
 
@@ -360,7 +360,7 @@ updates.subscribe((ctx) async {
 
 You can read more about idempotent subscribers and patterns to handle it [here](https://microservices.io/post/microservices/patterns/2020/10/16/idempotent-consumer.html).
 
-### Queues
+## Queues
 
 Queues are another option for asynchronous messaging. Unlike [topics](#topics), messages sent to a queue won't automatically trigger services to process them. Instead, services dequeue message by requesting them.
 
