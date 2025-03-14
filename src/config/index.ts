@@ -267,6 +267,10 @@ export const navigation: NavEntry[] = [
             title: 'Google Cloud',
             href: '/providers/terraform/gcp',
           },
+          {
+            title: 'Azure',
+            href: '/providers/terraform/azure',
+          },
         ],
       },
       {
