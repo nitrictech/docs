@@ -23,15 +23,16 @@ export async function CodeSwitcher({
     code.map((codeblock) => highlight(codeblock)),
   )
 
-  const missingLangs = languages.filter(
-    (lang) => !highlighted.some((h) => h.lang === lang),
-  )
+  // TODO: Put this back when csharp references are updated
+  // const missingLangs = languages.filter(
+  //   (lang) => !highlighted.some((h) => h.lang === lang),
+  // )
 
-  if (missingLangs.length) {
-    throw Error(
-      `CodeSwitcher missing languages: ${missingLangs.join(', ')} at: ${highlighted[0].meta || 'unknown'}`,
-    )
-  }
+  // if (missingLangs.length) {
+  //   throw Error(
+  //     `CodeSwitcher missing languages: ${missingLangs.join(', ')} at: ${highlighted[0].meta || 'unknown'}`,
+  //   )
+  // }
 
   if (tabs) {
     const children = highlighted.map((h) => (
