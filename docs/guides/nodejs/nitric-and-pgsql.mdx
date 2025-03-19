@@ -12,9 +12,7 @@ published_at: 2025-03-18
 
 This guide demonstrates how to use PostgreSQL with Nitric's [SQL database](/sql) feature. We will be creating a simple to-do app. The finished source can be found [here](https://github.com/nitrictech/examples/tree/main/v1/nitric-pgsql).
 
-<Note>
-  SQL databases are currently in preview and only support PostgreSQL.
-</Note>
+<Note>SQL databases are currently in preview and only support PostgreSQL.</Note>
 
 ## Create a new Nitric project
 
@@ -22,7 +20,6 @@ The first step is to create a new Nitric TypeScript project using the [Nitric CL
 
 ```bash
 nitric new todo-app ts-starter
-npm install
 ```
 
 ## Enabling SQL databases
@@ -33,8 +30,6 @@ SQL databases are currently in Preview. To enable this feature in your project, 
 preview:
   - sql-databases
 ```
-
-Ensure your CLI is at least `v1.42` and your AWS provider is at least `v1.6.2`.
 
 ## Install PostgreSQL client
 
@@ -72,7 +67,7 @@ export default getClient
 
 Create a migration file to define the `todos` table.
 
-```sql title: 'migrations/1_create_table.up.sql'
+```sql title: migrations/todos/1_create_table.up.sql
 CREATE TABLE IF NOT EXISTS todos (
     id SERIAL PRIMARY KEY,
     text TEXT NOT NULL,
