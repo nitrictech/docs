@@ -11,6 +11,7 @@ const IGNORED_URLS = [
   'googleads.g.doubleclick.net',
   'youtube.com/api',
   'localhost:49152',
+  'localhost:3000',
   'app.supabase.io',
   'podbay.fm',
   'docs.planetscale.com',
