@@ -1,0 +1,309 @@
+---
+description: Use the Nitric framework to easily build and deploy C# REST APIs for AWS, Azure, or GCP
+title_seo: Building your first API with C# and Nitric
+tags:
+  - API
+  - Key Value Store
+languages:
+  - csharp
+published_at: 2023-06-16
+updated_at: 2025-01-06
+---
+
+# Building a REST API with Nitric
+
+This guide will show you how to build a serverless REST API with the Nitric framework using C#. The example API enables getting, setting, and editing basic user profile information using a Nitric [key value store](/keyvalue) to store user data. Once the API is created, we'll test it locally, then optionally deploy it to a cloud of your choice.
+
+The API will provide the following routes:
+
+| **Method** | **Route**      | **Description**                  |
+| ---------- | -------------- | -------------------------------- |
+| `GET`      | /profiles      | Get all profiles                 |
+| `GET`      | /profiles/[id] | Get a specific profile by its Id |
+| `POST`     | /profiles      | Create a new profile             |
+| `DELETE`   | /profiles/[id] | Delete a profile                 |
+
+There is also an extended section of the guide that adds file operations using a Nitric [bucket](/storage) to store and retrieve profile pictures. The extension adds these routes to the API:
+
+| **Method** | **Route**                     | **Description**                   |
+| ---------- | ----------------------------- | --------------------------------- |
+| `GET`      | /profiles/[id]/image/upload   | Get a profile image upload URL    |
+| `GET`      | /profiles/[id]/image/download | Get a profile image download URL  |
+| `GET`      | /profiles/[id]/image/view     | View the image that is downloaded |
+
+## Prerequisites
+
+- [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet)
+- The [Nitric CLI](/get-started/installation)
+- _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com), or [Azure](https://azure.microsoft.com) account
+
+## Getting started
+
+Let's start by creating a new project for our API:
+
+```bash
+nitric new MyProfileApi dotnet-starter
+cd MyProfileApi
+```
+
+The scaffolded project should have the following structure:
+
+```text
+MyProfileApi/
+├── services/Hello
+│   ├── Hello.cs
+│   ├── Hello.csproj
+dotnet.dockerfile
+dontnet.dockerfile.dockerignore
+nitric.yaml
+README.md
+```
+
+## Building the API
+
+Let's start by adding the profile model.
+
+### Define the Profile Model
+
+Create a new file `Main/Profile.cs`:
+
+```csharp title:Main/Profile.cs
+namespace Common;
+public class Profile
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+```
+
+### Define the API
+
+Applications built with Nitric can contain many APIs, let's start by adding an API and a key value store to this project to serve as the public endpoint.
+
+```csharp title:Main/Main.cs
+using Application = Nitric.Sdk.Nitric;
+using Nitric.Sdk.Resource;
+using Nitric.Sdk.Service;
+using System.Collections.Generic;
+using Common;
+using System;
+
+var profiles = Application.KV<Profile>("profiles").Allow(
+    KeyValueStorePermission.Set,
+    KeyValueStorePermission.Get,
+    KeyValueStorePermission.Delete
+);
+
+var api = Application.Api("main");
+```
+
+Here we're creating an API named public and key value store named `profiles`, then requesting get and set permissions which allows our function to access the key value store.
+
+<Note>
+  Resources in Nitric like `api` and `key-value store` represent high-level
+  cloud resources. When your app is deployed Nitric automatically converts these
+  requests into appropriate resources for the specific
+  [provider](/docs/providers). Nitric also takes care of adding the IAM roles,
+  policies, etc. that grant the requested access. For example the `key-value`
+  store resource uses DynamoDB in AWS or FireStore on Google Cloud.
+</Note>
+
+### Create profiles with POST
+
+Next we will add features that allow our API consumers to work with profile data.
+
+<Note>
+  You could separate some or all of these handlers into their own files if you
+  prefer. For simplicity we'll group them together in this guide.
+</Note>
+
+```csharp title:Main/Main.cs
+api.Post("/profiles", ctx =>
+{
+    var profile = ctx.Req.Json<Profile>();
+    var id = Guid.NewGuid().ToString();
+    profiles.Set(id, profile);
+    ctx.Res.Json(new { Message = $"Profile with id {id} created." });
+    return ctx;
+});
+```
+
+### Retrieve a profile with GET
+
+```csharp title:Main/Main.cs
+api.Get("/profiles/:id", ctx =>
+{
+    var id = ctx.Req.PathParams["id"];
+    try
+    {
+        var profile = profiles.Get(id);
+        ctx.Res.Json(profile);
+    }
+    catch (Nitric.Sdk.Common.NotFoundException)
+    {
+        ctx.Res.Status = 404;
+        ctx.Res.Json(new { Message = "Profile not found" });
+    }
+
+    return ctx;
+});
+```
+
+### Remove a profile with DELETE
+
+```csharp title:Main/Main.cs
+api.Delete("/profiles/:id", ctx =>
+{
+    var id = ctx.Req.PathParams["id"];
+    try
+    {
+        profiles.Delete(id);
+        ctx.Res.Json(new { Message = $"Profile with id {id} deleted." });
+    }
+    catch (Nitric.Sdk.Common.NotFoundException)
+    {
+        ctx.Res.Status = 404;
+        ctx.Res.Json(new { Message = "Profile not found" });
+    }
+    return ctx;
+});
+```
+
+### List all profiles with GET
+
+```csharp title:Main/Main.cs
+api.Get("/profiles", ctx =>
+{
+    var keys = profiles.Keys();
+    var profilesList = new List<string>();
+
+    while (keys.MoveNext().GetAwaiter().GetResult())
+    {
+        profilesList.Add(keys.Current);
+    }
+    ctx.Res.Json(profilesList);
+    return ctx;
+});
+```
+
+## Ok, let's run this thing!
+
+Now that you have an API defined with handlers for each of its methods, it's time to test it locally.
+
+```bash
+nitric start
+```
+
+## Test the API
+
+Below are some example requests you can use to test the API. You'll need to update all values in brackets `[]` and change the URL to your deployed URL if you're testing on the cloud.
+
+### Create Profile
+
+```bash
+curl --location --request POST 'http://localhost:4001/profiles' \
+--header 'Content-Type: text/plain' \
+--data-raw '{
+    "name": "Peter Parker",
+    "age": "21",
+    "homeTown" : "Queens"
+}'
+```
+
+### Fetch Profile
+
+```bash
+curl --location --request GET 'http://localhost:4001/profiles/[id]'
+```
+
+### Fetch All Profiles
+
+```bash
+curl --location --request GET 'http://localhost:4001/profiles'
+```
+
+### Delete Profile
+
+```bash
+curl --location --request DELETE 'http://localhost:4001/profiles/[id]'
+```
+
+## Deploy to the cloud
+
+At this point, you can deploy the application to any supported cloud provider. Start by setting up your credentials and any configuration for the cloud you prefer:
+
+- [AWS](/providers/pulumi/aws)
+- [Azure](/providers/pulumi/azure)
+- [Google Cloud](/providers/pulumi/gcp)
+
+Next, we'll need to create a `stack`. Stacks represent deployed instances of an application, including the target provider and other details such as the deployment region. You'll usually define separate stacks for each environment such as development, testing and production.
+
+```bash
+nitric stack new dev aws
+```
+
+Continue by checking your stack file `nitric.dev.yaml` and adding in your preferred region, let's use `us-east-1`.
+
+```yaml title:nitric.dev.yaml
+# The nitric provider to use
+provider: nitric/aws@latest
+# The target aws region to deploy to
+# See available regions:
+# https://docs.aws.amazon.com/general/latest/gr/lambda-service.html
+region: us-east-1
+```
+
+<Note>
+  Cloud deployments incur costs and while most of these resource are available
+  with free tier pricing you should consider the costs of the deployment.
+</Note>
+
+We can deploy our application using the following command:
+
+```bash
+nitric up
+```
+
+When the deployment is complete, go to the relevant cloud console and you'll be able to see and interact with your API. If you'd like to make changes to the API you can apply those changes by re-running the `up` command. Nitric will automatically detect what's changed and just update the relevant cloud resources.
+
+When you're done testing your application you can tear it down from the cloud, use the `down` command:
+
+```bash
+nitric down
+```
+
+## Optional - Add profile image upload/download support
+
+### Access profile buckets with permissions
+
+```csharp title:Main/Main.cs
+var images = Application.Bucket("images").Allow(BucketPermission.Read, BucketPermission.Write);
+```
+
+### Get a URL to upload a profile image
+
+```csharp title:Main/Main.cs
+api.Get("/profiles/:id/image/upload", ctx =>
+{
+    var id = ctx.Req.Params["id"];
+    var url = images.File($"images/{id}/photo.png").GetUploadUrl();
+    ctx.Res.Json(new { Url = url });
+    return ctx;
+});
+```
+
+### Get a URL to download a profile image
+
+```csharp title:Main/Main.cs
+api.Get("/profiles/:id/image/download", ctx =>
+{
+    var id = ctx.Req.Params["id"];
+    var url = images.File($"images/{id}/photo.png").GetDownloadUrl();
+    ctx.Res.Json(new { Url = url });
+    return ctx;
+});
+```
+
+## Wrapping up
+
+With this guide, you've built a simple C# REST API with Nitric, tested it locally, and deployed it to the cloud. You can now expand on this API with additional functionality or integrate it into a larger system!
