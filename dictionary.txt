@@ -255,6 +255,7 @@ deployable
 VMs
 CDN
 subdirectories
+DNSSEC
 AzureTF
 [0-9]+px
 ^.+[-:_]\w+$
