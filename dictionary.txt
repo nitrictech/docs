@@ -258,6 +258,7 @@ deployable
 VMs
 CDN
 subdirectories
+DNSSEC
 AzureTF
 VSCode
 [0-9]+px
