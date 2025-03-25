@@ -6,7 +6,15 @@ tags:
 languages:
   - typescript
   - javascript
-published_at: 2025-03-20
+start_steps: |
+  git clone --depth 1 https://github.com/nitrictech/examples
+  cd examples/v1/nitric-vite-react
+  npm install
+  cd main-website
+  npm install
+  cd ..
+  nitric start
+published_at: 2025-03-26
 ---
 
 # Setting up a React Website calling your Nitric API
