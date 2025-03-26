@@ -137,6 +137,18 @@ apis:
     # provide domains to be used for the api
     description: An Azure API
 
+# Add CDN configuration, required for custom domains for website deployments
+# Available since v1.19.4
+cdn:
+  # The name of the Azure DNS Zone to use when configuring the website DNS
+  zone-name: example.com
+  # The resource group name of the DNS Zone you configured in Azure DNS Zones
+  zone-resource-group: yourzone-rg
+  # A valid domain or subdomain for the DNS Zone to use for the deployed websites endpoint
+  domain-name: app.example.com
+  # Skip CDN cache invalidation during deployments (defaults to false)
+  skip-cache-invalidation: true
+
 # Configure your deployed services
 config:
   # How services without a type will be deployed
@@ -162,6 +174,57 @@ config:
       memory: 1
       min-replicas: 2
       max-replicas: 100
+```
+
+### Websites
+
+When deploying [websites](/websites), Nitric will create a Front Door Endpoint that automatically provides a public URL for your website. This URL is not suitable for production use, and you should configure a custom domain for your website.
+
+The DNS Zone used to configure the custom domain must be created in Azure DNS Zones before deploying with your custom domain configuration.
+
+- Purchase/Register a domain name with your domain registrar of choice.
+- Navigate to https://portal.azure.com/#browse/Microsoft.Network%2FdnsZones in your Azure Portal
+- Click `Create`
+- Select your subscription and resource group (or create a new one)
+- Enter a `Name` of your choice, this should be the domain name you purchased i.e. example.com
+- Click `Review +  Create`
+- Click `Create`
+- Once the DNS Zone is created, click on the `Go to resource` button
+
+Now that the DNS Zone is created, you need to configure your registrar (domain) or existing DNS (subdomain) to point at the new name servers created for the zone.
+
+The configuration details are available on the `Essentials tab` within the `DNS Zone` page. This step is different depending on your chosen domain registrar. Below are some general steps depending on whether your configuring the primary domain or a subdomain.
+
+#### Domain
+
+Your registrar (e.g. Namecheap, GoDaddy, Cloudflare, etc.) will allow you to change the name servers for you domain, sometimes this is called 'Custom DNS'. Add each of the name servers (NS records) from the Registrar setup dialog in the relevant config page for your registrar.
+
+#### Subdomain
+
+If you're configuring a subdomain e.g. app.yourdomain.com, you can simply add the NS records to your existing DNS configuration for the chosen subdomain. Typically, the config will look something like this:
+
+<Note>Substitute your values for `Host` and `Nameserver`</Note>
+
+| Record Type | Host | Nameserver            |
+| ----------- | ---- | --------------------- |
+| NS Record   | app  | ns1-06.azure-dns.com  |
+| NS Record   | app  | ns2-06.azure-dns.net  |
+| NS Record   | app  | ns3-06.azure-dns.org  |
+| NS Record   | app  | ns4-06.azure-dns.info |
+
+### Stack file configuration
+
+Now that you have your DNS Zone created and Nameservers configured you can add the relevant config to your GCP stack file.
+
+```yaml title:nitric.[stack ID].yaml
+# Add to your stack file
+cdn:
+  # The name of the Azure DNS Zone to use when configuring the website DNS
+  zone-name: example.com
+  # The resource group name of the DNS Zone you configured in Azure DNS Zones
+  zone-resource-group: yourzone-rg
+  # A valid domain or subdomain for the DNS Zone to use for the deployed websites endpoint
+  domain-name: app.example.com
 ```
 
 <Note>
