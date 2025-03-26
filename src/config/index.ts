@@ -297,6 +297,10 @@ export const navigation: NavEntry[] = [
                 href: '/providers/mappings/aws/websockets',
               },
               {
+                title: 'Websites',
+                href: '/providers/mappings/aws/websites',
+              },
+              {
                 title: 'Storage',
                 href: '/providers/mappings/aws/storage',
               },
@@ -332,6 +336,10 @@ export const navigation: NavEntry[] = [
               {
                 title: 'Schedules',
                 href: '/providers/mappings/azure/schedules',
+              },
+              {
+                title: 'Websites',
+                href: '/providers/mappings/azure/websites',
               },
               {
                 title: 'Storage',
