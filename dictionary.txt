@@ -37,12 +37,14 @@ args
 async
 aws
 backend
+checkov
 codebase
 composable
 config
 cron
 cryptographically
 css
+Datadog's
 decrypt
 destructured
 dev
