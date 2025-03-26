@@ -12,6 +12,7 @@ const IGNORED_URLS = [
   'youtube.com/api',
   'localhost:49152',
   'localhost:3000',
+  'localhost:5000',
   'app.supabase.io',
   'podbay.fm',
   'docs.planetscale.com',
