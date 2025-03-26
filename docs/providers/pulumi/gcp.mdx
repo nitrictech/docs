@@ -136,6 +136,13 @@ cdn:
   zone-name: yourzone
   # A valid subdomain for the DNS Zone to use for the deployed websites endpoint
   domain-name: app.example.com
+  # The following configuration values are optional
+  # Specify the TTL the CDN sends in the Cache-Control or Expires headers to clients
+  client-ttl: 3600
+  # Specify the TTL for content cached by the CDN when the origin server does not provide any caching directives
+  default-ttl: 604800
+  # Skip CDN cache invalidation during deployments (defaults to false)
+  skip-cache-invalidation: true
 
 # Configure your deployed services
 config:
