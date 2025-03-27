@@ -1,0 +1,100 @@
+---
+description: 'How to debug Nitric Python applications locally'
+tags:
+  - Debugging
+languages:
+  - python
+published_at: 2025-03-27
+updated_at: 2025-03-27
+---
+
+# Debugging
+
+This guide will walk you through seting up local debugging for Nitric applications written in Python.
+
+## Local Debugging with Python
+
+Debugging serverless-style applications can be challenging due to the way functions are triggered by events. For Python, [`debugpy`](https://github.com/microsoft/debugpy) is used to connect a debugger to the service while it runs.
+
+Nitric's local environment behaves as closely as possible to the target cloud environment. While local debugging can help uncover many issues early, unit testing and integration testing are still strongly recommended prior to deploying to production.
+
+### 1. Modify the Python entry point
+
+Add the following lines to the top of the service file (e.g., `main.py`). This starts a debug server that the IDE can attach to.
+
+```python
+import debugpy
+
+host, port = debugpy.listen(("0.0.0.0", 52509))  # Static port for consistent debugging
+print(f"✅ Debugpy is listening on {host}:{port}", flush=True)
+```
+
+> A **static port** (`52509`) is used so the IDE knows which port to connect to. Update the `launch.json` configuration to match this port before starting the debugger.
+
+### 2. Update `nitric.yaml`
+
+Modify the `start` command to include an auto-reloader and ensure Python does not use frozen modules, which can interfere with `debugpy`, E.g.
+
+```yaml
+name: message-board
+services:
+  - basedir: ''
+    match: services/*.py
+    runtime: python
+    start: uv run -- watchmedo auto-restart -p "*.py" --no-restart-on-command-exit -R -- python -Xfrozen_modules=off $SERVICE_PATH
+batch-services: []
+websites: []
+runtimes:
+  python:
+    dockerfile: ./python.dockerfile
+    context: ''
+    args: {}
+```
+
+> This configuration restarts the service on file changes and includes the necessary flags for debugging compatibility.
+
+### 3. Configure `launch.json` in VS Code
+
+VS Code uses a launch.json file to define how it should start or attach to a debugging session. In this case, the debugger doesn't launch the application itself—it attaches to the running service that was started manually from the terminal.
+
+To create or update the launch.json file:
+
+- Open the Run and Debug panel in VS Code (Ctrl+Shift+D or from the sidebar).
+- Click "create a launch.json file" if one doesn't already exist.
+- Choose "Python" when prompted for the environment.
+- Replace the default configuration with the following:
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python Debugger: Remote Attach",
+      "type": "debugpy",
+      "request": "attach",
+      "connect": {
+        "host": "localhost",
+        "port": 52509
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}",
+          "remoteRoot": "."
+        }
+      ]
+    }
+  ]
+}
+```
+
+> Ensure the `port` matches the value used in the `debugpy.listen()` call. If the port changes in the code, update it here as well.
+
+### 4. Running the debugger
+
+Start your nitric service with `nitric start` and start the debugger.
+
+![vscode](/docs/images/guides/python-debugging/debugger.png)
+
+In the Terminal, both the Nitric runtime output and the debugpy listener output will be visible, including the active debug port.
+
+In this example, a breakpoint has been hit on line 16 of `message_api.py`, within an HTTP handler for the `/messages` endpoint.
