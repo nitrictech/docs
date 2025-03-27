@@ -383,6 +383,10 @@ export const navigation: NavEntry[] = [
                 href: '/providers/mappings/gcp/schedules',
               },
               {
+                title: 'Websites',
+                href: '/providers/mappings/gcp/websites',
+              },
+              {
                 title: 'Storage',
                 href: '/providers/mappings/gcp/storage',
               },
