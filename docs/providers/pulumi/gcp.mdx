@@ -129,6 +129,21 @@ apis:
     # provide domains to be used for the api
     description: An Azure API
 
+# Add CDN configuration, required for websites deployments
+# Available since v1.20.0
+cdn:
+  # The name of the Google Cloud DNS Zone to use when configuring the website DNS
+  zone-name: yourzone
+  # A valid subdomain for the DNS Zone to use for the deployed websites endpoint
+  domain-name: app.example.com
+  # The following configuration values are optional
+  # Specify the TTL the CDN sends in the Cache-Control or Expires headers to clients
+  client-ttl: 3600
+  # Specify the TTL for content cached by the CDN when the origin server does not provide any caching directives
+  default-ttl: 604800
+  # Skip CDN cache invalidation during deployments (defaults to false)
+  skip-cache-invalidation: true
+
 # Configure your deployed services
 config:
   # How services without a type will be deployed
@@ -160,6 +175,60 @@ config:
       min-instances: 2
       max-instances: 100
       concurrency: 1000
+```
+
+### Websites
+
+When deploying [websites](/websites), Google Cloud CDN doesn't automatically provide DNS names for deployed sites, so a DNS name must be provided. To do this you'll need to register a new domain name (or use one you already own), then configure the domain (or a subdomain) so that it uses the Google Name Servers (using a Google Cloud DNS Zone).
+
+The DNS Zone in Google will then allow Nitric to create DNS records that route traffic to the CDN. Here are the steps:
+
+- Purchase/Register a domain name with your domain registrar of choice.
+- Navigate to https://console.cloud.google.com/net-services/dns/zones in your GCP Project
+- Click `CREATE ZONE`
+- Leave `Public` selected
+- Enter a `Zone name`, and `Description` of your choice
+- Enter your domain name (or subdomain) in the `DNS name` field
+- Optionally enable DNSSEC
+- Click `CREATE`
+
+Now that the DNS Zone is created, you need to configure your registrar (domain) or existing DNS (subdomain) to point at the new name servers created for the zone.
+
+The configuration detail are available on the `Zone details` page by clicking `REGISTRAR SETUP`. This step is different depending on your chosen domain registrar. Below are some general steps depending on whether your configuring the primary domain or a subdomain.
+
+#### Domain
+
+Your registrar (e.g. Namecheap, GoDaddy, Cloudflare, etc.) will allow you to change the name servers for you domain, sometimes this is called 'Custom DNS'. Add each of the name servers (NS records) from the Registrar setup dialog in the relevant config page for your registrar.
+
+#### Subdomain
+
+If you're configuring a subdomain e.g. app.yourdomain.com, you can simply add the NS records to your existing DNS configuration for the chosen subdomain. Typically, the config will look something like this:
+
+<Note>Substitute your values for `Host` and `Nameserver`</Note>
+
+| Record Type | Host | Nameserver                    |
+| ----------- | ---- | ----------------------------- |
+| NS Record   | app  | ns-cloud-a1.googledomains.com |
+| NS Record   | app  | ns-cloud-a2.googledomains.com |
+| NS Record   | app  | ns-cloud-a3.googledomains.com |
+| NS Record   | app  | ns-cloud-a4.googledomains.com |
+
+<Note>
+  If you enabled DNSSEC for the zone you will also need to create the relevant
+  DS record
+</Note>
+
+### Stack file configuration
+
+Now that you have your DNS Zone created and Nameservers configured you can add the relevant config to your GCP stack file.
+
+```yaml title:nitric.[stack ID].yaml
+# Add to your stack file
+cdn:
+  # The name of the DNS Zone you configured in Google Cloud DNS
+  zone-name: yourzone
+  # The domain name or subdomain you want to use for your website (any valid subdomain for the zone is permitted)
+  domain-name: app.example.com
 ```
 
 <Note>
