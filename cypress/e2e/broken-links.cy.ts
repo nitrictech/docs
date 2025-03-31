@@ -31,6 +31,14 @@ const IGNORED_URLS = [
   'https://portal.azure.com',
 ]
 
+const rootBaseUrl = Cypress.config('baseUrl')
+
+const isInternalUrl = (url: string) => {
+  // check against the base url
+  // and check if the url does not contain a file extension
+  return url.startsWith(rootBaseUrl) && !url.includes('.')
+}
+
 const isExternalUrl = (url: string) => {
   return !url.includes('localhost')
 }
@@ -67,14 +75,11 @@ describe('Broken links test suite', () => {
 
       links
         .filter((_i, link) => {
+          const href = link.getAttribute('href')
+          const src = link.getAttribute('src')
+
           return !IGNORED_URLS.some(
-            (l) =>
-              //@ts-ignore
-              (link.getAttribute('href') &&
-                link.getAttribute('href')?.includes(l)) ||
-              //@ts-ignore
-              (link.getAttribute('src') &&
-                link.getAttribute('src').includes(l)),
+            (l) => href?.includes(l) || src?.includes(l),
           )
         })
         .each((link) => {
@@ -87,6 +92,25 @@ describe('Broken links test suite', () => {
             cy.log(`link already checked`)
             expect(VISITED_SUCCESSFUL_LINKS[url]).to.be.true
           } else {
+            // if the link is internal then check the link against the pages fixture (sitemap)
+            if (isInternalUrl(url)) {
+              // clean the url by removing the base url and query params
+              const rootBaseUrlRegex = new RegExp(`^${rootBaseUrl}`)
+              let cleanUrl = url.replace(rootBaseUrlRegex, '')
+              const queryIndex = cleanUrl.indexOf('?')
+              cleanUrl =
+                queryIndex !== -1 ? cleanUrl.slice(0, queryIndex) : cleanUrl
+
+              cy.log(`checking internal link: ${cleanUrl}`)
+              if (!pages.includes(cleanUrl)) {
+                assert.fail(`${cleanUrl} is not part of the pages fixture`)
+              } else {
+                VISITED_SUCCESSFUL_LINKS[url] = true
+              }
+
+              return
+            }
+
             cy.wait(25)
 
             req(url).then((res: Cypress.Response<any>) => {
