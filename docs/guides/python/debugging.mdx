@@ -10,17 +10,15 @@ updated_at: 2025-03-27
 
 # Debugging
 
-This guide will walk you through setting up local debugging for Nitric applications written in Python.
+This guide will walk you through setting up local debugging for Nitric applications written in Python, using VSCode.
 
 ## Local Debugging with Python
 
-Debugging serverless-style applications can be challenging due to the way functions are triggered by events. For Python, [`debugpy`](https://github.com/microsoft/debugpy) is used to connect a debugger to the service while it runs.
-
-Nitric's local environment behaves as closely as possible to the target cloud environment. While local debugging can help uncover many issues early, unit testing and integration testing are still strongly recommended prior to deploying to production.
+Debugging serverless-style applications can be challenging due to the way functions are triggered by events. For Python, we can use [`debugpy`](https://github.com/microsoft/debugpy) to connect a debugger to the service while it runs.
 
 ### 1. Modify the Python entry point
 
-Add the following lines to the top of the service file (e.g., `main.py`). This starts a debug server that the IDE can attach to.
+Add the following lines to the top of the service file (e.g., `services/api.py`). This starts a debug server that the IDE can attach to.
 
 ```python
 import debugpy
