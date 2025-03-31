@@ -121,10 +121,10 @@ mainApi.patch('/todos/:id', async (ctx) => {
 mainApi.patch('/todos/:id/toggle', async (ctx) => {
   const { id } = ctx.req.params
   const client = await getClient()
-  
-  await client.query('UPDATE todos SET done = NOT done WHERE id = $1',
-    [parseInt(id)]
-  );
+
+  await client.query('UPDATE todos SET done = NOT done WHERE id = $1', [
+    parseInt(id),
+  ])
 })
 
 // Delete a todo
@@ -145,15 +145,11 @@ nitric start
 
 Using the dashboard, apply your migrations from the databases tab to initialize your local db.
 
-![Apply migrations](/docs/images/guides/nitric-and-pgsql/migrations.png)
+![Apply migrations](/docs/images/guides/nitric-and-pgsql/step-1.png)
 
 ### Add some todos using the Nitric dashboard
 
-Open the local dashboard at <a target="_blank" href="http://localhost:49152">localhost:49152</a>, then navigate to the `POST /todos` endpoint.
-
-![Add id param for creating a todo](/docs/images/guides/nitric-and-pgsql/step-1.png)
-
-Then add some content to the body of the request, stating the `text` key and value of the todo task and click send.
+Open the local dashboard at <a target="_blank" href="http://localhost:49152">localhost:49152</a>, then navigate to the `POST /todos` endpoint and add some content to the body of the request, stating the `text` key and value of the todo task and click send.
 
 ![Add text content for the todo](/docs/images/guides/nitric-and-pgsql/step-2.png)
 
