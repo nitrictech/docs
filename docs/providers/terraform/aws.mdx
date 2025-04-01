@@ -11,10 +11,9 @@ provider: nitric/awstf@latest
 ```
 
 <Note>
-  The Nitric Terraform AWS Provider is currently in preview, it's not
-  recommended for production deployments. We recommend using the [Pulumi AWS
-  Providers](/providers/pulumi/aws) for production deployments until the
-  Terraform provider is stable.
+  The Nitric Terraform AWS Provider is currently in Preview. We recommend
+  reviewing the generated Terraform before deploying to Production environments,
+  or alternatively using the [Pulumi AWS Providers](/providers/pulumi/aws).
 </Note>
 
 ## Prerequisites
@@ -22,15 +21,6 @@ provider: nitric/awstf@latest
 The **Terraform CLI** is required to deploy the resulting Terraform Stack that Nitric generates. You can find the installation instructions for Terraform in the [Terraform documentation](https://learn.hashicorp.com/tutorials/terraform/install-cli).
 
 The provider is built with the [Cloud Development Kit for Terraform (CDKTF)](https://developer.hashicorp.com/terraform/cdktf). Since CDKTF relies on Node.js, you'll need to have Node.js installed, you can read about the full CDKTF prerequisites in the [CDKTF documentation](https://developer.hashicorp.com/terraform/tutorials/cdktf/cdktf-install#prerequisites).
-
-## Enabling Nitric Terraform Providers
-
-The Nitric Terraform providers are currently in preview, to enable them you'll need to enable `beta-providers` in your Nitric project. You can do this by adding the following to your project's `nitric.yaml` file:
-
-```yaml title:nitric.yaml
-preview:
-  - beta-providers
-```
 
 ## AWS Credentials
 
@@ -83,10 +73,12 @@ Find your stack's resource group in the list and click it:
 <Note>
   Resource groups are conventionally named `<project-name>-<stack-name>`
 
-  In this example the project name is `api-testing` and the stack name is `aws`.
+In this example the project name is `api-testing` and the stack name is `aws`.
+
 </Note>
 
 ![resource group list image](/docs/images/docs/aws-rg-screen.png)
+
 ## Stack Configuration
 
 ```yaml title:nitric.[stack ID].yaml

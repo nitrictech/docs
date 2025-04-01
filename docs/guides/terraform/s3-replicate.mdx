@@ -254,13 +254,6 @@ region: us-east-2
   If you don't have a stack file use `nitric stack new` to create one.
 </Note>
 
-Because the [Terraform providers](/providers/terraform) are in preview, you'll also need to enable `beta-providers` in your Nitric project by adding the following to your project's nitric.yaml file:
-
-```yaml title:nitric.yaml
-preview:
-  - beta-providers
-```
-
 You can generate the Terraform project as usual by running the `nitric up` command:
 
 ```bash
