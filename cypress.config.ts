@@ -17,5 +17,6 @@ export default defineConfig({
         },
       })
     },
+    experimentalMemoryManagement: true,
   },
 })
