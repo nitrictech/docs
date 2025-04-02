@@ -50,7 +50,7 @@ schedule('send-reminder').cron('0 22 * * 1-5', async (ctx) => {
 
 ```python !!
 from nitric.resources import schedule
-from nitric.resources import Nitric
+from nitric.application import Nitric
 
 # Run every 5 minutes
 processor = schedule("process-transactions")
