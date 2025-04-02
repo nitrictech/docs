@@ -79,7 +79,7 @@ import (
 
 func main() {
   // Run every 5 minutes
-  nitric.NewSchedule("process-transactions").Every("5 minutues", func(ctx *schedules.Ctx) {
+  nitric.NewSchedule("process-transactions").Every("5 minutes", func(ctx *schedules.Ctx) {
     fmt.Printf("processing at %s\n", time.Now().Format(time.RFC3339))
   })
   // Run at 22:00 Monday through Friday.
@@ -97,15 +97,13 @@ import 'package:nitric_sdk/nitric.dart';
 // run every 5 minutes
 Nitric.schedule("process-transactions").every("5 minutes", (ctx) async {
   // add code to run here
-  print("processing transaction")
-  return ctx;
+  print("processing transaction");
 });
 
 // Run at 22:00 Monday through Friday
 Nitric.schedule("send-reminder").cron("0 22 * * 1-5", (ctx) async {
   // add code to run here
   print("sending reminder");
-  return ctx;
 });
 ```
 
