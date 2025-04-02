@@ -77,7 +77,13 @@ socket.on('disconnect', async (ctx) => {
 })
 
 const broadcast = async (data) => {
-  const conns = await connections.get('connections')
+  let conns = {}
+  try {
+    conns = await connections.get('connections')
+  } catch (e) {
+    console.log('No connections found')
+    return
+  }
 
   await Promise.all(
     Object.keys(conns).map(async (connectionId) => {
