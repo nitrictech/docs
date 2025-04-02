@@ -110,6 +110,18 @@ adminemail: test@example.com
 
 # Subscription ID to associate deployed services with
 subscription-id: example-subscription-id
+
+# Add CDN configuration, required for custom domains for website deployments
+# Available since v1.23.0
+cdn:
+  # The name of the Azure DNS Zone to use when configuring the website DNS
+  zone-name: example.com
+  # The resource group name of the DNS Zone you configured in Azure DNS Zones
+  zone-resource-group: yourzone-rg
+  # A valid domain or subdomain for the DNS Zone to use for the deployed websites endpoint
+  domain-name: app.example.com
+  # Skip CDN cache invalidation during deployments (defaults to false)
+  skip-cache-invalidation: true
 ```
 
 <Note>

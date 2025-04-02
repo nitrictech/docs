@@ -87,6 +87,21 @@ gcp-project-id: my-gcp-project-id
 # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 schedule-timezone: Australia/Sydney
 
+# Add CDN configuration, required for websites deployments
+# Available since v1.22.0
+cdn:
+  # The name of the Google Cloud DNS Zone to use when configuring the website DNS
+  zone-name: yourzone
+  # A valid subdomain for the DNS Zone to use for the deployed websites endpoint
+  domain-name: app.example.com
+  # The following configuration values are optional
+  # Specify the TTL the CDN sends in the Cache-Control or Expires headers to clients
+  client-ttl: 3600
+  # Specify the TTL for content cached by the CDN when the origin server does not provide any caching directives
+  default-ttl: 604800
+  # Skip CDN cache invalidation during deployments (defaults to false)
+  skip-cache-invalidation: true
+
 # Configure your deployed services
 config:
   # How services without a type will be deployed
