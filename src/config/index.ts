@@ -12,6 +12,7 @@ import {
   BeakerIcon,
   DocumentDuplicateIcon,
   WindowIcon,
+  QueueListIcon,
 } from '@heroicons/react/24/outline'
 import { SiPulumi, SiTerraform } from 'react-icons/si'
 import { NavEntry } from './types'
@@ -209,9 +210,14 @@ export const navigation: NavEntry[] = [
         href: '/sql',
       },
       {
-        title: 'Async Messaging',
+        title: 'Topics',
         icon: MegaphoneIcon,
-        href: '/messaging',
+        href: '/topics',
+      },
+      {
+        title: 'Queues',
+        icon: QueueListIcon,
+        href: '/queues',
       },
       {
         title: 'Secrets',

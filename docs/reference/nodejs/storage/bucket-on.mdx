@@ -29,9 +29,12 @@ assets.on('write', '/images/cat', (ctx) => {
 
 // If `on` is called with a permissioned bucket, a file will also be provided with the request
 accessibleAssets.on('write', '/images/dog', async (ctx) => {
-  const dogImage = await ctx.req.file.read()
-
-  console.log(dogImage)
+  try {
+    const dogImage = await ctx.req.file.read()
+    console.log(dogImage)
+  } catch (error) {
+    console.error('Error reading dog image:', error)
+  }
 })
 ```
 

@@ -99,6 +99,12 @@ const nextConfig = {
         }),
       ),
       {
+        source: '/docs/messaging',
+        destination: '/docs/topics',
+        basePath: false,
+        permanent: true,
+      },
+      {
         source: '/docs/comparison/:slug',
         destination: '/docs/concepts/comparison/:slug',
         basePath: false,
