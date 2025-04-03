@@ -1,0 +1,212 @@
+---
+description: Build and deploy a serverless onboarding workflow using Nitric with TypeScript, featuring API endpoints and background tasks for user notifications.
+title_seo: Serverless User Onboarding with Nitric and TypeScript
+tags:
+  - API
+  - Event
+  - Notification
+languages:
+  - typescript
+published_at: 2025-04-03
+updated_at: 2025-04-03
+---
+
+# User Onboarding with Nitric and TypeScript
+
+This guide shows you how to build a onboarding system using the Nitric framework. The app accepts new user signups via an HTTP API, stores user data, and uses an event-driven background service to send a welcome email.
+
+## API Overview
+
+| **Method** | **Route** | **Description**              |
+| ---------- | --------- | ---------------------------- |
+| `POST`     | /onboard  | Create a new user onboarding |
+
+<Note>
+  An event is dispatched to a background service that simulates sending a
+  welcome email.
+</Note>
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/en/download/)
+- The [Nitric CLI](/get-started/installation)
+- _(optional)_ AWS credentials for cloud deployment
+
+## Project Setup
+
+Create a new project from the TypeScript starter:
+
+```bash
+nitric new user-onboarding ts-starter
+cd user-onboarding
+npm install
+npm install zod
+```
+
+Project structure:
+
+```text
+common/
+├── email.ts
+├── resources.ts
+├── schema.ts
+services/
+├── onboard.ts
+├── notify.ts
+```
+
+## Step 1: Define Resources, Types and Schema
+
+### Schema
+
+```ts title: common/schema.ts
+import { z } from 'zod'
+
+export const UserSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+})
+
+export type User = z.infer<typeof UserSchema>
+```
+
+By using `zod`, we validate the user shape at runtime and infer a type-safe `User` type that ensures downstream handlers work only with well-formed data.
+
+### Types
+
+```ts title: common/email.ts
+import type { User } from './schema'
+
+export const welcomeEmail = (user: User) => ({
+  to: user.email,
+  subject: `Welcome, ${user.name}`,
+  message: `Hi ${user.name}, welcome to our platform!`,
+})
+```
+
+This ensures `welcomeEmail` receives a properly typed user object.
+
+### Resources
+
+```ts title: common/resources.ts
+import { api, kv, topic } from '@nitric/sdk'
+
+export const onboardingApi = api('onboarding')
+export const users = kv('users').allow('get', 'set', 'delete')
+export const userTopicPublisher = topic('user-onboarded').allow('publish')
+export const userTopicSubscriber = topic('user-onboarded').allow('subscribe')
+```
+
+## Step 2: Create the Onboarding API
+
+```ts title: services/onboard.ts
+import { onboardingApi, users, userTopicPublisher } from '../common/resources'
+import { UserSchema } from '../common/schema'
+
+onboardingApi.post('/onboard', async (ctx) => {
+  const result = UserSchema.safeParse(ctx.req.json())
+
+  if (!result.success) {
+    ctx.res.status = 400
+    ctx.res.json({ msg: 'Invalid user payload', errors: result.error.format() })
+    return
+  }
+
+  const user = result.data
+
+  // Add custom onboarding logic here, such as sending a Slack invite,
+  // writing to an analytics stream, or triggering a third-party workflow
+
+  await users.set(user.email, user)
+  await userTopicPublisher.publish(user)
+
+  ctx.res.json({ msg: 'User onboarded!' })
+})
+```
+
+## Step 3: Add the Notification Service
+
+```ts title: services/notify.ts
+import { userTopicSubscriber } from '../common/resources'
+import { welcomeEmail } from '../common/email'
+import { UserSchema } from '../common/schema'
+
+userTopicSubscriber.subscribe(async (ctx) => {
+  const result = UserSchema.safeParse(ctx.req.json())
+
+  if (!result.success) {
+    console.error('Invalid user event payload:', result.error.format())
+    return
+  }
+
+  const user = result.data
+  const email = welcomeEmail(user)
+
+  console.log(`Sending email to ${email.to} with subject: ${email.subject}`)
+  // Add integration to your email provider here
+})
+```
+
+This pattern follows the same validation logic, reusing the schema and types to ensure consistency between services.
+
+## Step 4: Run and Test Locally
+
+```bash
+nitric start
+```
+
+### Test the Onboarding API
+
+You can use the Nitric Dashboard:
+
+![Toggle our todo as done](/docs/images/guides/user-onboarding/testing.png)
+
+If successful, you'll see in your response:
+
+```json
+{
+  "msg": "User onboarded!"
+}
+```
+
+And in your console:
+
+```text
+Sending email to alice@example.com with subject: Welcome, Alice
+```
+
+## Step 5: Deploy to the Cloud
+
+Choose your provider and create a stack:
+
+```bash
+nitric stack new dev aws
+```
+
+Update `nitric.dev.yaml`:
+
+```yaml
+deployment:
+  region: us-east-1
+  provider: nitric/aws@latest
+```
+
+Then deploy:
+
+```bash
+nitric up
+```
+
+Once deployed, repeat your API call with the new endpoint provided by the deployment output.
+
+## Teardown
+
+To remove your stack:
+
+```bash
+nitric down
+```
+
+You're now running a complete, type-safe and runtime-validated onboarding flow with Nitric — eventing, background processing, and local/cloud testing.
+
+You can expand this project by integrating real email delivery, adding input fields like referral codes or organization info, logging to a third-party system, or chaining multiple background tasks using additional topics.
