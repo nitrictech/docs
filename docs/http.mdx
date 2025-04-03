@@ -12,9 +12,18 @@ Nitric supports existing web app and API frameworks, including Express, Koa, Fas
   https://github.com/nitrictech/nitric/issues
 </Note>
 
+## Overview
+
+The HTTP resource is particularly useful when you want to:
+
+- Use existing web frameworks without modification
+- Leverage framework-specific features and middleware
+- Maintain compatibility with existing codebases
+- Deploy traditional web applications to the cloud
+
 ## Connecting existing frameworks
 
-Here are some examples of how to connect your existing API frameworks with Nitric:
+Here are examples of how to connect popular Node.js frameworks with Nitric:
 
 <Tabs>
 
@@ -53,3 +62,21 @@ http(bootstrap)
 </TabItem>
 
 </Tabs>
+
+## Best Practices
+
+1. **Middleware Order**: Place Nitric's `http()` call after all your middleware and route definitions.
+
+2. **Error Handling**: Use your framework's error handling middleware to ensure consistent error responses.
+
+3. **Environment Variables**: Access environment variables through your framework's configuration system.
+
+4. **Logging**: Use your framework's logging system for consistent application logging.
+
+## Cloud Service Mapping
+
+Each cloud provider comes with a set of default services used when deploying resources. You can find the default services for each cloud provider below.
+
+- [AWS](/providers/mappings/aws/http)
+- [Azure](/providers/mappings/azure/http)
+- [Google Cloud](/providers/mappings/gcp/http)
