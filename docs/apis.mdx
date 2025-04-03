@@ -83,9 +83,29 @@ myApi.get("/hello", (ctx) async {
 
 Each API in your application needs a unique name. This name is used to identify the API across your project and in cloud deployments.
 
-```javascript
+<CodeSwitcher tabs>
+
+```javascript !!
 const myApi = api('my-api-name')
 ```
+
+```typescript !!
+const myApi = api('my-api-name')
+```
+
+```python !!
+my_api = api('my-api-name')
+```
+
+```go !!
+myApi := nitric.NewApi("my-api-name")
+```
+
+```dart !!
+final myApi = Nitric.api("my-api-name");
+```
+
+</CodeSwitcher>
 
 ### Request Context
 
@@ -417,6 +437,10 @@ final secureApi = Nitric.api(
 
 You can configure custom domains for your APIs in your stack configuration:
 
+<Tabs>
+
+<TabItem label="AWS">
+
 ```yaml title:nitric.prod.yaml
 provider: nitric/aws@1.1.0
 region: us-east-1
@@ -427,10 +451,30 @@ apis:
       - api.example.com
 ```
 
+</TabItem>
+
+<TabItem label="Azure">
+
+```yaml title:nitric.prod.yaml
+# Currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
+```
+
+</TabItem>
+
+<TabItem label="GCP">
+
+```yaml title:nitric.prod.yaml
+# Currently unsupported - request support here: https://github.com/nitrictech/nitric/issues
+```
+
+</TabItem>
+
+</Tabs>
+
 <Note>
   Custom domains are currently only supported for AWS deployments. See the [AWS
-  Custom Domain Prerequisites](#aws-custom-domain-prerequisites) section for
-  setup details.
+  Custom Domain Setup](/providers/mappings/aws/apis#custom-domain-prerequisites)
+  section for setup details.
 </Note>
 
 ## Project Organization
@@ -439,7 +483,9 @@ apis:
 
 You can split your API routes across multiple services while using the same API resource:
 
-```javascript title:services/users.js
+<CodeSwitcher tabs>
+
+```javascript !! title:services/users.js
 import { api } from '@nitric/sdk'
 
 const myApi = api('my-api')
@@ -449,7 +495,65 @@ myApi.get('/users', async (ctx) => {
 })
 ```
 
-```javascript title:services/products.js
+```typescript !! title:services/users.ts
+import { api } from '@nitric/sdk'
+
+const myApi = api('my-api')
+
+myApi.get('/users', async (ctx) => {
+  // Handle user listing
+})
+```
+
+```python !! title:services/users.py
+from nitric.resources import api
+from nitric.application import Nitric
+
+my_api = api('my-api')
+
+@my_api.get("/users")
+async def list_users(ctx):
+    // Handle user listing
+    pass
+
+Nitric.run()
+```
+
+```go !! title:services/users/main.go
+package main
+
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
+)
+
+func main() {
+  myApi := nitric.NewApi("my-api")
+
+  myApi.Get("/users", func(ctx *apis.Ctx) {
+    // Handle user listing
+  })
+
+  nitric.Run()
+}
+```
+
+```dart !! title:services/users.dart
+import 'package:nitric_sdk/nitric.dart';
+
+final myApi = Nitric.api("my-api");
+
+myApi.get("/users", (ctx) async {
+  // Handle user listing
+  return ctx;
+});
+```
+
+</CodeSwitcher>
+
+<CodeSwitcher tabs>
+
+```javascript !! title:services/products.js
 import { api } from '@nitric/sdk'
 
 const myApi = api('my-api')
@@ -459,25 +563,169 @@ myApi.get('/products', async (ctx) => {
 })
 ```
 
+```typescript !! title:services/products.ts
+import { api } from '@nitric/sdk'
+
+const myApi = api('my-api')
+
+myApi.get('/products', async (ctx) => {
+  // Handle product listing
+})
+```
+
+```python !! title:services/products.py
+from nitric.resources import api
+from nitric.application import Nitric
+
+my_api = api('my-api')
+
+@my_api.get("/products")
+async def list_products(ctx):
+    // Handle product listing
+    pass
+
+Nitric.run()
+```
+
+```go !! title:services/products/main.go
+package main
+
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
+)
+
+func main() {
+  myApi := nitric.NewApi("my-api")
+
+  myApi.Get("/products", func(ctx *apis.Ctx) {
+    // Handle product listing
+  })
+
+  nitric.Run()
+}
+```
+
+```dart !! title:services/products.dart
+import 'package:nitric_sdk/nitric.dart';
+
+final myApi = Nitric.api("my-api");
+
+myApi.get("/products", (ctx) async {
+  // Handle product listing
+  return ctx;
+});
+```
+
+</CodeSwitcher>
+
 ### Shared Resources
 
 For better organization, you can define shared API resources:
 
-```javascript title:resources/api.js
+<CodeSwitcher tabs>
+
+```javascript !! title:resources/api.js
 import { api } from '@nitric/sdk'
 
 export const myApi = api('my-api')
 ```
 
+```typescript !! title:resources/api.ts
+import { api } from '@nitric/sdk'
+
+export const myApi = api('my-api')
+```
+
+```python !! title:resources/api.py
+from nitric.resources import api
+
+my_api = api('my-api')
+```
+
+```go !! title:resources/api/main.go
+package api
+
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
+)
+
+var MyApi apis.Api
+
+func init() {
+  MyApi = nitric.NewApi("my-api")
+}
+```
+
+```dart !! title:resources/api.dart
+import 'package:nitric_sdk/nitric.dart';
+
+final myApi = Nitric.api("my-api");
+```
+
+</CodeSwitcher>
+
 Then import and use them in your services:
 
-```javascript title:services/users.js
+<CodeSwitcher tabs>
+
+```javascript !! title:services/users.js
 import { myApi } from '../resources/api'
 
 myApi.get('/users', async (ctx) => {
   // Handle user listing
 })
 ```
+
+```typescript !! title:services/users.ts
+import { myApi } from '../resources/api'
+
+myApi.get('/users', async (ctx) => {
+  // Handle user listing
+})
+```
+
+```python !! title:services/users.py
+from nitric.application import Nitric
+from resources.api import my_api
+
+@my_api.get("/users")
+async def list_users(ctx):
+    // Handle user listing
+    pass
+
+Nitric.run()
+```
+
+```go !! title:services/users/main.go
+package main
+
+import (
+  "your-project/resources/api"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
+)
+
+func main() {
+  api.MyApi.Get("/users", func(ctx *apis.Ctx) {
+    // Handle user listing
+  })
+
+  nitric.Run()
+}
+```
+
+```dart !! title:services/users.dart
+import '../resources/api.dart';
+
+myApi.get("/users", (ctx) async {
+  // Handle user listing
+  return ctx;
+});
+```
+
+</CodeSwitcher>
 
 ## Cloud Provider Support
 
