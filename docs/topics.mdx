@@ -1,0 +1,269 @@
+---
+description: 'Using Topics for publish/subscribe messaging with Nitric'
+---
+
+# Topics
+
+Topics provide scalable, decoupled, asynchronous messaging between services. When a message is published to a topic, it's immediately pushed to all subscribers, making topics perfect for real-time event processing.
+
+## Quick Start
+
+Here's a minimal example to get you started:
+
+<CodeSwitcher tabs>
+
+```javascript !!
+import { topic } from '@nitric/sdk'
+
+const userCreatedTopic = topic('user-created').allow('publish')
+
+// Publish a message
+await userCreatedTopic.publish({
+  email: 'new.user@example.com',
+})
+
+// Subscribe to messages
+userCreatedTopic.subscribe(async (ctx) => {
+  const { email } = ctx.req.json()
+  console.log(`New user created: ${email}`)
+})
+```
+
+```typescript !!
+import { topic } from '@nitric/sdk'
+
+const userCreatedTopic = topic('user-created').allow('publish')
+
+// Publish a message
+await userCreatedTopic.publish({
+  email: 'new.user@example.com',
+})
+
+// Subscribe to messages
+userCreatedTopic.subscribe(async (ctx) => {
+  const { email } = ctx.req.json()
+  console.log(`New user created: ${email}`)
+})
+```
+
+```python !!
+from nitric.resources import topic
+from nitric.application import Nitric
+
+user_created_topic = topic("user-created").allow("publish")
+
+# Publish a message
+await user_created_topic.publish({
+  "email": "new.user@example.com"
+})
+
+# Subscribe to messages
+@user_created_topic.subscribe()
+async def handle_new_user(ctx):
+  email = ctx.req.data['email']
+  print(f"New user created: {email}")
+
+Nitric.run()
+```
+
+```go !!
+import (
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/topics"
+)
+
+func main() {
+  userCreatedTopic := nitric.NewTopic("user-created").Allow(topics.TopicPublish)
+
+  // Publish a message
+  _ = userCreatedTopic.Publish(context.TODO(), map[string]interface{}{
+    "email": "new.user@example.com",
+  })
+
+  // Subscribe to messages
+  userCreatedTopic.Subscribe(func(ctx *topics.Ctx) {
+    email := ctx.Request.Message()["email"].(string)
+    fmt.Printf("New user created: %s\n", email)
+  })
+
+  nitric.Run()
+}
+```
+
+```dart !!
+import 'package:nitric_sdk/nitric.dart';
+
+final userCreatedTopic = Nitric.topic("user-created").allow([
+  TopicPermission.publish,
+]);
+
+// Publish a message
+await userCreatedTopic.publish({
+  "email": "new.user@example.com"
+});
+
+// Subscribe to messages
+userCreatedTopic.subscribe((ctx) async {
+  final email = ctx.req.message["email"];
+  print("New user created: $email");
+  return ctx;
+});
+```
+
+</CodeSwitcher>
+
+## Core Concepts
+
+### Topics
+
+A topic is a named resource where events can be published. Topics enable real-time communication between services, with messages being pushed to subscribers as soon as they're published.
+
+### Subscriptions
+
+A subscription is a binding between a topic and a service. When a message is published to a topic, all subscribers receive a copy of the message.
+
+### Permissions
+
+Topics require explicit permissions for operations:
+
+- `publish`: Send messages to the topic
+- `subscribe`: Receive messages from the topic
+
+## Common Operations
+
+### Publishing Messages
+
+<CodeSwitcher tabs>
+
+```javascript !!
+const topic = topic('my-topic').allow('publish')
+
+await topic.publish({
+  message: 'Hello subscribers!',
+})
+```
+
+```typescript !!
+const topic = topic('my-topic').allow('publish')
+
+await topic.publish({
+  message: 'Hello subscribers!',
+})
+```
+
+```python !!
+topic = topic("my-topic").allow("publish")
+
+await topic.publish({
+  "message": "Hello subscribers!"
+})
+```
+
+```go !!
+topic := nitric.NewTopic("my-topic").Allow(topics.TopicPublish)
+
+_ = topic.Publish(context.TODO(), map[string]interface{}{
+  "message": "Hello subscribers!",
+})
+```
+
+```dart !!
+final topic = Nitric.topic("my-topic").allow([
+  TopicPermission.publish,
+]);
+
+await topic.publish({
+  "message": "Hello subscribers!"
+});
+```
+
+</CodeSwitcher>
+
+### Subscribing to Messages
+
+<CodeSwitcher tabs>
+
+```javascript !!
+const topic = topic('my-topic')
+
+topic.subscribe(async (ctx) => {
+  const { message } = ctx.req.json()
+  console.log(`Received: ${message}`)
+})
+```
+
+```typescript !!
+const topic = topic('my-topic')
+
+topic.subscribe(async (ctx) => {
+  const { message } = ctx.req.json()
+  console.log(`Received: ${message}`)
+})
+```
+
+```python !!
+topic = topic("my-topic")
+
+@topic.subscribe()
+async def handle_message(ctx):
+  message = ctx.req.data['message']
+  print(f"Received: {message}")
+```
+
+```go !!
+topic := nitric.NewTopic("my-topic")
+
+topic.Subscribe(func(ctx *topics.Ctx) {
+  message := ctx.Request.Message()["message"].(string)
+  fmt.Printf("Received: %s\n", message)
+})
+```
+
+```dart !!
+final topic = Nitric.topic("my-topic");
+
+topic.subscribe((ctx) async {
+  final message = ctx.req.message["message"];
+  print("Received: $message");
+  return ctx;
+});
+```
+
+</CodeSwitcher>
+
+## Cloud Provider Support
+
+Each cloud provider comes with a set of default services used when deploying resources. You can find the default services for each cloud provider below.
+
+<Tabs>
+
+<TabItem label="AWS">
+
+Topics are mapped to SNS in AWS. For more details about the AWS implementation, including configuration options and limitations, see the [AWS Topics documentation](/providers/mappings/aws/topics).
+
+</TabItem>
+
+<TabItem label="Azure">
+
+Topics are mapped to Event Grid in Azure. For more details about the Azure implementation, including configuration options and limitations, see the [Azure Topics documentation](/providers/mappings/azure/topics).
+
+</TabItem>
+
+<TabItem label="GCP">
+
+Topics are mapped to Pub/Sub in Google Cloud. For more details about the GCP implementation, including configuration options and limitations, see the [Google Cloud Topics documentation](/providers/mappings/gcp/topics).
+
+</TabItem>
+
+</Tabs>
+
+<Note>
+  When running locally, topics use a local implementation for development and
+  testing.
+</Note>
+
+<Note>
+  For best practices and patterns when working with topics, including handling
+  message delivery guarantees and idempotency, see our [Async Messaging Patterns
+  Guide](/guides/async-messaging-patterns).
+</Note>
