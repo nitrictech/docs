@@ -37,6 +37,7 @@ args
 async
 aws
 backend
+checkov
 codebase
 composable
 config
@@ -256,6 +257,8 @@ Trivy's
 KMS
 deployable
 VMs
+json
+KMS
 CDN
 subdirectories
 DNSSEC
