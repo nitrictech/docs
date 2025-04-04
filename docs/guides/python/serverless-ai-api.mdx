@@ -93,7 +93,7 @@ Our goal is to create an HTTP endpoint `/summarize` (for example) that accepts s
 
 ```python
 import os
-import openai
+from openai import OpenAI
 from nitric.resources import api
 from nitric.application import Nitric
 from nitric.context import HttpContext
@@ -104,23 +104,31 @@ Here we import `api` to create an API resource, `Nitric` to run the app, and `Ht
 3. **Configure OpenAI API key:** It's best not to hardcode secrets. If you have your OpenAI API key, set it as an environment variable (e.g., create a .env file for the project containing `OPENAI_API_KEY=sk-...`). We can then configure the OpenAI client in code:
 
 ```python
-openai.api_key = os.environ.get("OPENAI_API_KEY")
-if not openai.api_key:
+# Configure OpenAI API key from env
+api_key = os.environ.get("OPENAI_API_KEY")
+if not api_key:
   raise Exception("Please set the OPENAI_API_KEY environment variable")
 ```
 
 This will fetch the API key from your environment. (If you prefer, Nitric also has a built-in **Secrets** feature to securely manage secrets, but for simplicity we'll stick to an env var here.)
 
-4. **Define the API and route handler:** Now, use Nitric to create a POST route for summarization:
+4. **Create the OpenAI client:** Now, use Nitric to create a POST route for summarization:
 
 ```python
-# Create an API named 'main'
+# Create OpenAI client
+client = OpenAI(api_key=api_key)
+```
+
+5. **Define the API and route handler:** Now, use Nitric to create a POST route for summarization:
+
+```python
+# Create a Nitric API named 'main'
 summarize_api = api("main")
 
 @summarize_api.post("/summarize")
 async def summarize_text(ctx: HttpContext) -> None:
   # Extract input text from request (assuming JSON body with a 'text' field)
-  req_data = ctx.req.json  # parses JSON body into a dict
+  req_data = ctx.req.json
   if not req_data or 'text' not in req_data:
     ctx.res.status = 400
     ctx.res.body = {"error": "No text provided for summarization."}
@@ -129,18 +137,20 @@ async def summarize_text(ctx: HttpContext) -> None:
   text_to_summarize = req_data['text']
   # Call OpenAI API to get summary (this is a blocking call, for demo simplicity)
   try:
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[{"role": "user", "content": f"Summarize the following text:\n\n{text_to_summarize}"}],
-      max_tokens=100
+      max_tokens=50
     )
     # Extract the assistant's reply (summary text)
-    summary = response['choices'][0]['message']['content']
+    summary = response.choices[0].message.content
     # Set response
     ctx.res.body = {"summary": summary.strip()}
   except Exception as e:
     ctx.res.status = 500
     ctx.res.body = {"error": str(e)}
+
+Nitric.run()
 ```
 
 Let's break down what's happening:
@@ -167,21 +177,25 @@ That's it for our service code! We have a complete Python backend that will acce
 
 ```python {{ title: services/summarize.py }}
 import os
-import openai
+from openai import OpenAI
 from nitric.resources import api
 from nitric.application import Nitric
 from nitric.context import HttpContext
 
 # Configure OpenAI API key from env
-openai.api_key = os.environ.get("OPENAI_API_KEY")
-if not openai.api_key:
+api_key = os.environ.get("OPENAI_API_KEY")
+if not api_key:
   raise Exception("Please set the OPENAI_API_KEY environment variable")
 
-# Define Nitric API
+# Create OpenAI client
+client = OpenAI(api_key=api_key)
+
+# Create a Nitric API named 'main'
 summarize_api = api("main")
 
 @summarize_api.post("/summarize")
 async def summarize_text(ctx: HttpContext) -> None:
+  # Extract input text from request (assuming JSON body with a 'text' field)
   req_data = ctx.req.json
   if not req_data or 'text' not in req_data:
     ctx.res.status = 400
@@ -189,13 +203,16 @@ async def summarize_text(ctx: HttpContext) -> None:
     return
 
   text_to_summarize = req_data['text']
+  # Call OpenAI API to get summary (this is a blocking call, for demo simplicity)
   try:
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
       model="gpt-3.5-turbo",
       messages=[{"role": "user", "content": f"Summarize the following text:\n\n{text_to_summarize}"}],
-      max_tokens=100
+      max_tokens=50
     )
-    summary = response['choices'][0]['message']['content']
+    # Extract the assistant's reply (summary text)
+    summary = response.choices[0].message.content
+    # Set response
     ctx.res.body = {"summary": summary.strip()}
   except Exception as e:
     ctx.res.status = 500
