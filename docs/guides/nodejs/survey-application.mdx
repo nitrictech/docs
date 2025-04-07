@@ -29,6 +29,7 @@ Under the hood, the system also handles events via topics and handlers for gener
 
 - [Node.js](https://nodejs.org/en/download/)
 - The [Nitric CLI](/get-started/installation)
+- _(optional)_ Your choice of an [AWS](https://aws.amazon.com), [GCP](https://cloud.google.com) or [Azure](https://azure.microsoft.com) account
 
 ## Project Setup
 
@@ -257,6 +258,39 @@ Replace `<timestamp>` with the value returned from the submission.
 Use the URL in the response to retrieve your PDF:
 
 ![Get PDF](/docs/images/guides/survey-application/pdf.png)
+
+## Deploying to AWS
+
+### Create your stack
+
+Create an AWS stack called `aws-staging` for your staging environment.
+
+```bash
+nitric stack new aws-staging aws
+```
+
+Inside the stack file, ensure you set your `region`.
+
+```yaml title:nitric.dev.yaml
+provider: nitric/aws@latest
+region: us-east-2
+```
+
+### Deploy
+
+Deploy to AWS using the `nitric up` command. Ensure you have set up your [AWS credentials](/providers/pulumi/aws#usage) correctly.
+
+```bash
+nitric up
+```
+
+### Tear down
+
+To avoid unwanted costs of running your test app, you can tear down the stack using the `nitric down` command.
+
+```bash
+nitric down
+```
 
 ## Summary
 
