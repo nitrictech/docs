@@ -1,0 +1,235 @@
+---
+description: Create a React frontend that submits data to backend that generates, stores and retrieves receipts.
+title_seo: Build a Frontend for Your Nitric Survey App
+tags:
+  - React
+  - Websites
+  - API
+languages:
+  - javascript
+  - typescript
+published_at: 2025-04-03
+updated_at: 2025-04-03
+---
+
+# Build a Frontend for Your Nitric Survey App with React
+
+In this guide, you’ll build a simple web application using React that connects to the survey backend we created with Nitric.
+
+## What You'll Build
+
+- A form to submit survey responses to the Nitric backend
+- A link to retrieve and view the submitted PDF receipt
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/en/download/)
+- The [Nitric survey backend project](./surveys-application)
+
+## Project Setup
+
+This guide assumes you already have the [survey backend project](./surveys-application).
+
+To add a website frontend, create a new Vite project:
+
+```bash
+npm create vite@latest main-website -- --template react-ts
+cd main-website
+npm install
+cd ..
+```
+
+Next, configure your `nitric.yaml` to enable and configure the website:
+
+```yaml title:nitric.yaml
+name: survey-app
+services:
+  - basedir: ''
+    match: services/*.ts
+    runtime: node
+    start: npm run dev:services $SERVICE_PATH
+batch-services: []
+websites:
+  - basedir: ./main-website
+    error: index.html
+    build:
+      command: npm run build
+      output: dist
+    dev:
+      command: npm run dev -- --port 3000
+      url: http://localhost:3000
+runtimes:
+  node:
+    dockerfile: ./node.dockerfile
+    context: ''
+    args: {}
+preview:
+  - websites
+```
+
+## Connect to the API
+
+Create a new folder `components` inside `main-website/src` and add the following file:
+
+This component collects the user's name, rating, and feedback, then submits the data to the Nitric API.
+
+```tsx title:main-website/src/components/SurveyForm.tsx
+import React, { useState } from 'react'
+
+const SurveyForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    rating: 1,
+    feedback: '',
+  })
+  const [submissionId, setSubmissionId] = useState<string | null>(null)
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+  ;<button
+    onClick={async () => {
+      try {
+        const response = await fetch(`/api/forms/receipts/${submissionId}`)
+        if (!response.ok) {
+          throw new Error('Could not get receipt URL')
+        }
+        const { url } = await response.json()
+        window.location.href = url // behaves like a 303 redirect
+      } catch (err) {
+        console.error(err)
+        alert('Failed to load receipt')
+      }
+    }}
+  >
+    View Receipt
+  </button>
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const response = await fetch('/api/forms/forms/test-survey', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+
+      const data: { id: string } = await response.json()
+      setSubmissionId(data.id)
+      alert('Survey submitted successfully!')
+    } catch (error) {
+      console.error('Error submitting survey:', error)
+      alert('Failed to submit survey.')
+    }
+  }
+
+  return (
+    <div>
+      <h2>Survey</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Rating (1–5):</label>
+          <input
+            type="number"
+            name="rating"
+            value={formData.rating}
+            onChange={handleChange}
+            min="1"
+            max="5"
+            required
+          />
+        </div>
+        <div>
+          <label>Feedback:</label>
+          <textarea
+            name="feedback"
+            value={formData.feedback}
+            onChange={handleChange}
+          />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+
+      {submissionId && (
+        <div>
+          <p>Submission ID: {submissionId}</p>
+          <button
+            onClick={async () => {
+              try {
+                const response = await fetch(
+                  `/api/receipts/receipts/${submissionId}`,
+                )
+                if (!response.ok) {
+                  throw new Error('Could not get receipt URL')
+                }
+                const url = await response.text()
+                window.location.href = url
+              } catch (err) {
+                console.error(err)
+                alert('Failed to load receipt')
+              }
+            }}
+          >
+            View Receipt
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default SurveyForm
+```
+
+### Add the component to your app
+
+Update the following file to use your new form component:
+
+```tsx title:main-website/src/App.tsx
+import React from 'react'
+import SurveyForm from './components/SurveyForm'
+
+function App() {
+  return (
+    <div>
+      <SurveyForm />
+    </div>
+  )
+}
+
+export default App
+```
+
+## Run the Frontend Locally
+
+With your `nitric.yaml` configured correctly and the site added as a Nitric website, you can start both the frontend and backend using:
+
+```bash
+nitric start
+```
+
+This will start the API and the website together, and serve your React frontend from [http://localhost:5000](http://localhost:5000) (confirm the port in the console output).
+
+To test it, visit [http://localhost:5000](http://localhost:5000) in your browser and submit a survey response. You should see a link to view the generated receipt hosted by the backend.
+
+## Conclusion
+
+Serving your React frontend and Nitric backend under the same origin, both locally and in the cloud, eliminates CORS issues and removes the need for headers, complex gateway config, or workarounds.
