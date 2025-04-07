@@ -36,8 +36,13 @@ Before we begin, make sure you have the following:
 - **Nitric CLI** installed - this is the command-line tool to create, run, and deploy Nitric projects. You can install it by following the [installation instructions](/get-started/installation).
 - **uv** or **Pipenv** for managing Python dependencies. The Nitric Python templates use either uv or Pipenv.
 - An **OpenAI API key** if you want to integrate with OpenAI's GPT for summarization.
-- An **AWS account** (or Google Cloud or Azure account) with credentials configured on your machine, if you plan to deploy to the cloud. Nitric will use these credentials to provision resources. (For AWS, having the AWS CLI configured or environment vars set for access keys is enough.)  
-  _🔹 Note:_ You can deploy to any of the three major clouds - Nitric supports all. In this tutorial we'll mention AWS for concreteness, but feel free to use your preferred cloud.
+- An **AWS account** (or Google Cloud or Azure account) with credentials configured on your machine, if you plan to deploy to the cloud. Nitric will use these credentials to provision resources. (For AWS, having the AWS CLI configured or environment vars set for access keys is enough.)
+
+<Note>
+  You can deploy to any of the three major clouds - Nitric supports all. In this
+  tutorial we'll mention AWS for concreteness, but feel free to use your
+  preferred cloud.
+</Note>
 
 ## Project Setup - Your First Nitric App
 
