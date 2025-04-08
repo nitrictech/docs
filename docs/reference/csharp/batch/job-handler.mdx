@@ -18,7 +18,7 @@ using Application = Nitric.Sdk.Nitric;
 
 var analyze = Application.Job<Dictionary<string, string>>("analyze");
 
-analyze.Handler((ctx) =>
+analyze.Handler(async (ctx) =>
 {
   // Do some work
   return ctx;
@@ -67,7 +67,7 @@ using Application = Nitric.Sdk.Nitric;
 
 var analyze = Application.Job<Dictionary<string, string>>('analyze');
 
-analyze.Handler((ctx) => {
+analyze.Handler(async (ctx) => {
   // Do some work
   return ctx
 });
@@ -84,7 +84,7 @@ using Application = Nitric.Sdk.Nitric;
 
 var analyze = Application.Job<Dictionary<string, string>>("analyze");
 
-analyze.Handler((ctx) =>
+analyze.Handler(async (ctx) =>
 {
   // Do some work
   return ctx;

@@ -61,13 +61,13 @@ var images = Application.Bucket("images").Allow(BucketPermission.Read);
 var mainApi = Application.Api("main");
 
 mainApi.Get("/images/:id", context => {
-    var id = context.Req.PathParams["id"];
-    var signedUrl = images.File(id).GetDownloadUrl();
+  var id = context.Req.PathParams["id"];
+  var signedUrl = images.File(id).GetDownloadUrl();
 
-    context.Res.Status = 303;
-    context.Res.Headers["Location"] = new string[] { signedUrl };
+  context.Res.Status = 303;
+  context.Res.Headers["Location"] = new string[] { signedUrl };
 
-    return context;
+  return context;
 });
 
 Application.Run();

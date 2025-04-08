@@ -30,7 +30,7 @@ Application.Run();
     and handlers. See [create a route with path
     params](#create-a-route-with-path-params)
   </Property>
-  <Property name="options" type="object">
+  <Property name="options" type="RouteOptions">
     Additional options when creating the route.
     <Properties nested>
       <Property name="middleware" type="HttpMiddleware or HttpMiddleware[]">
@@ -63,7 +63,7 @@ Route paths can include dynamic parameters. These values will automatically be p
 For example, if you have a customers path and you want to include a `customerId` param you would define the route like this.
 
 ```csharp
-using Application = Nitric.Sdk.Application;
+using Application = Nitric.Sdk.Nitric;
 
 var route = Application.Api("main").Route("/customers/:customerId");
 
@@ -80,22 +80,22 @@ using Application = Nitric.Sdk.Nitric;
 var main = Application.Api("main");
 
 var route = main.Route("/customers", new RouteOptions(middleware: new Middleware<HttpContext>[] {
-  (context, next) =>
+  async (ctx, next) =>
   {
-    var user = context.Req.PathParams["userId"];
+    var user = ctx.Req.PathParams["userId"];
 
     // Validate the user identity
     if (user != "1234")
     {
-      context.Res.Text($"User {user} is unauthorised");
-      context.Res.Status = 403;
+      ctx.Res.Text($"User {user} is unauthorised");
+      ctx.Res.Status = 403;
 
       // Return prematurely to end the middleware chain.
-      return context;
+      return ctx;
     }
 
     // Call next to continue the middleware chain.
-    return next(context);
+    return await next(ctx);
   }
 }));
 

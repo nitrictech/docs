@@ -51,32 +51,32 @@ class OpenConnection
 var websocket = Application.Websocket("public");
 
 var connections = Application.KV<OpenConnection>("connections").Allow(
-    KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete
+  KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete
 );
 
-websocket.On(WebsocketEventType.Connected, ctx =>
+websocket.On(WebsocketEventType.Connected, async (ctx) =>
 {
-    connections.Set(ctx.Req.ConnectionId, new OpenConnection { Id = ctx.Req.ConnectionId });
-    return ctx;
+  connections.Set(ctx.Req.ConnectionId, new OpenConnection { Id = ctx.Req.ConnectionId });
+  return ctx;
 });
 
-websocket.On(WebsocketEventType.Disconnected, ctx =>
+websocket.On(WebsocketEventType.Disconnected, async (ctx) =>
 {
-    connections.Delete(ctx.Req.ConnectionId);
-    return ctx;
+  connections.Delete(ctx.Req.ConnectionId);
+  return ctx;
 });
 
-websocket.On(WebsocketEventType.Message, ctx =>
+websocket.On(WebsocketEventType.Message, async (ctx) =>
 {
-    var keys = connections.Keys();
+  var keys = connections.Keys();
 
-    while (keys.MoveNext())
-    {
-        var message = ctx.Req.Message();
-        websocket.Connection(keys.Current).SendMessage(message);
-    }
+  while (keys.MoveNext())
+  {
+    var message = ctx.Req.Message();
+    websocket.Connection(keys.Current).SendMessage(message);
+  }
 
-    return ctx;
+  return ctx;
 });
 
 Application.Run();

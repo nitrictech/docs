@@ -17,12 +17,12 @@ using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
-route.Post(context => {
-    // Construct a response for all incoming HTTP requests
-    var responseBody = new Dictionary<string, string>();
-    context.Res.Json(responseBody);
+route.Post(async (ctx) => {
+  // Construct a response for all incoming HTTP requests
+  var responseBody = new Dictionary<string, string>();
+  ctx.Res.Json(responseBody);
 
-    return context;
+  return ctx;
 });
 
 Application.Run();
@@ -57,12 +57,12 @@ using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
-route.Post(context => {
-    // Construct a response for all incoming HTTP requests
-    var responseBody = new Dictionary<string, string>();
-    context.Res.Json(responseBody);
+route.Post(async (ctx) => {
+  // Construct a response for all incoming HTTP requests
+  var responseBody = new Dictionary<string, string>();
+  ctx.Res.Json(responseBody);
 
-    return context;
+  return ctx;
 });
 
 Application.Run();
@@ -74,32 +74,32 @@ When multiple functions are provided they will be called as a chain. If one succ
 
 ```csharp
 using Nitric.Sdk.Service;
-using Application = Nitric.Sdk.Application;
+using Application = Nitric.Sdk.Nitric;
 
 var route = Application.Api("main").Route("/customers/:userId");
 
 route.Post(new Middleware<HttpContext>[] {
-  (context, next) => {
-    var user = context.Req.PathParams["userId"];
+  async (ctx, next) => {
+    var user = ctx.Req.PathParams["userId"];
 
     // Validate the user identity
     if (user != "1234")
     {
-        context.Res.Text($"User {user} is unauthorised");
-        context.Res.Status = 403;
+      ctx.Res.Text($"User {user} is unauthorised");
+      ctx.Res.Status = 403;
 
-        // Return prematurely to end the middleware chain.
-        return context;
+      // Return prematurely to end the middleware chain.
+      return ctx;
     }
 
     // Call next to continue the middleware chain.
-    return next(context);
-  }, (context, next) => {
-    var user = context.Req.PathParams["userId"];
+    return await next(ctx);
+  }, async (ctx, next) => {
+    var user = ctx.Req.PathParams["userId"];
 
-    context.Res.Text($"Creating {user}");
+    ctx.Res.Text($"Creating {user}");
 
-    return next(context);
+    return await next(ctx);
   }
 });
 
@@ -116,10 +116,10 @@ using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
-route.Post(context => {
-  var body = context.Req.Json<Dictionary<string, string>>();
+route.Post(async (ctx) => {
+  var body = ctx.Req.Json<Dictionary<string, string>>();
   // parse, validate and store the request payload...
-  return context;
+  return ctx;
 });
 
 Application.Run();

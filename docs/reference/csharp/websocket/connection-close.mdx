@@ -37,7 +37,7 @@ class WebsocketMessage
 var websocket = Application.Websocket("public");
 
 // Broadcast message to all the registered websocket connections
-websocket.On(WebsocketEventType.Message, ctx => {
+websocket.On(WebsocketEventType.Message, async (ctx) => {
     var message = ctx.Req.Message<WebsocketMessage>();
 
     if (message.Status == "close")

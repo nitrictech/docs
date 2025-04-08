@@ -17,12 +17,12 @@ using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
-route.All(context => {
-    // Construct a response for all incoming HTTP requests
-    var responseBody = new Dictionary<string, string>();
-    context.Res.Json(responseBody);
+route.All(async (ctx) => {
+  // Construct a response for all incoming HTTP requests
+  var responseBody = new Dictionary<string, string>();
+  ctx.Res.Json(responseBody);
 
-    return context;
+  return ctx;
 });
 
 Application.Run();
@@ -50,12 +50,12 @@ using Application = Nitric.Sdk.Nitric;
 
 var route = Application.Api("main").Route("/customers");
 
-route.All(context => {
+route.All(async (ctx) => {
   /* handle all requests */
 });
 
 // Don't call `Get()`, `Post()`, etc., they're already handled by `all()`
-route.Get(context => {
+route.Get(async (ctx) => {
   // This handler won't work
 })
 
@@ -72,12 +72,12 @@ using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
-route.All(context => {
+route.All(async (ctx) => {
     // Construct a response for all incoming HTTP requests
     var responseBody = new Dictionary<string, string>();
-    context.Res.Json(responseBody);
+    ctx.Res.Json(responseBody);
 
-    return context;
+    return ctx;
 });
 
 Application.Run();
@@ -94,27 +94,27 @@ using Application = Nitric.Sdk.Nitric;
 var route = Application.Api("main").Route("/customers");
 
 route.All(new Middleware<HttpContext>[] {
-  (context, next) => {
-    var user = context.Req.PathParams["userId"];
+  async (ctx, next) => {
+    var user = ctx.Req.PathParams["userId"];
 
     // Validate the user identity
     if (user != "1234")
     {
-        context.Res.Text($"User {user} is unauthorised");
-        context.Res.Status = 403;
+      ctx.Res.Text($"User {user} is unauthorised");
+      ctx.Res.Status = 403;
 
-        // Return prematurely to end the middleware chain.
-        return context;
+      // Return prematurely to end the middleware chain.
+      return ctx;
     }
 
     // Call next to continue the middleware chain.
-    return next(context);
-  }, (context, next) => {
-    var user = context.Req.PathParams["userId"];
+    return next(ctx);
+  }, async (ctx, next) => {
+    var user = ctx.Req.PathParams["userId"];
 
-    context.Res.Text($"Handling {user}");
+    ctx.Res.Text($"Handling {user}");
 
-    return next(context);
+    return next(ctx);
   }
 });
 
@@ -131,11 +131,34 @@ using System.Collections.Generic;
 
 var route = Application.Api("main").Route("/customers");
 
-route.All(context => {
-  var body = context.Req.Json<Dictionary<string, string>>();
+route.All(async (ctx) => {
+  var body = ctx.Req.Json<Dictionary<string, string>>();
   // parse, validate and store the request payload...
-  return context;
+  return ctx;
 });
 
 Application.Run();
+```
+
+### Error Handling
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+using System.Collections.Generic;
+
+var route = Application.Api("main").Route("/customers");
+
+try {
+  route.All(async (ctx) => {
+    // Construct a response for all incoming HTTP requests
+    var responseBody = new Dictionary<string, string>();
+    ctx.Res.Json(responseBody);
+
+    return ctx;
+  });
+
+  Application.Run();
+} catch (Error err) {
+  // error handling
+}
 ```

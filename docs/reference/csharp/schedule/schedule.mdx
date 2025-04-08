@@ -9,10 +9,10 @@ Creates a new Schedule to run a function on a defined frequency.
 ```csharp
 using Application = Nitric.Sdk.Nitric;
 
-Application.Schedule("send-reminder").Every("3 hours", context =>
+Application.Schedule("send-reminder").Every("3 hours", async (ctx) =>
 {
     // do some processing
-    return context;
+    return ctx;
 });
 
 Application.Run();
@@ -35,24 +35,24 @@ Application.Run();
 using Application = Nitric.Sdk.Nitric;
 
 // Create a schedule that runs every 3 minutes
-Application.Schedule("send-reminder").Every("3 minutes", context =>
+Application.Schedule("send-reminder").Every("3 minutes", async (ctx) =>
 {
     // do some processing
-    return context;
+    return ctx;
 });
 
 // Create a schedule that runs every 3 hours
-Application.Schedule("send-reminder").Every("3 hours", context =>
+Application.Schedule("send-reminder").Every("3 hours", async (ctx) =>
 {
     // do some processing
-    return context;
+    return ctx;
 });
 
 // Create a schedule that runs every 3 days
-Application.Schedule("send-reminder").Every("3 days", context =>
+Application.Schedule("send-reminder").Every("3 days", async (ctx) =>
 {
     // do some processing
-    return context;
+    return ctx;
 });
 
 Application.Run();
@@ -64,10 +64,10 @@ Application.Run();
 using Application = Nitric.Sdk.Nitric;
 
 // Create a schedule that runs every 3 minutes
-Application.Schedule("send-reminder").Cron("3 * * * *", context =>
+Application.Schedule("send-reminder").Cron("3 * * * *", async (ctx) =>
 {
     // do some processing
-    return context;
+    return ctx;
 });
 
 Application.Run();

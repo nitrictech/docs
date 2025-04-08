@@ -54,7 +54,7 @@ Application.Run();
 Messages can be read as literal strings using `ctx.Req.Message()`.
 
 ```csharp
-websocket.On(WebsocketEventType.Message, ctx => {
+websocket.On(WebsocketEventType.Message, async (ctx) => {
     var message = ctx.Req.Message();
 
     Console.WriteLine($"New Message from {ctx.Req.ConnectionId}: {message}");
@@ -72,7 +72,7 @@ class EventUpdate
     public string Content { get; set; }
 }
 
-websocket.On(WebsocketEventType.Message, ctx => {
+websocket.On(WebsocketEventType.Message, async (ctx) => {
     var message = ctx.Req.Message<EventUpdate>();
 
     Console.WriteLine($"Status: {message.Status}, Message: {message.Content}")
@@ -101,13 +101,13 @@ var connections = Application.KV<OpenConnection>("connections").Allow(
     KeyValueStorePermission.Set, KeyValueStorePermission.Get, KeyValueStorePermission.Delete
 );
 
-websocket.On(WebsocketEventType.Connected, ctx =>
+websocket.On(WebsocketEventType.Connected, async (ctx) =>
 {
     connections.Set(ctx.Req.ConnectionId, new OpenConnection { Id = ctx.Req.ConnectionId });
     return ctx;
 });
 
-websocket.On(WebsocketEventType.Disconnected, ctx =>
+websocket.On(WebsocketEventType.Disconnected, async (ctx) =>
 {
     connections.Delete(ctx.Req.ConnectionId);
     return ctx;
@@ -119,24 +119,22 @@ Application.Run();
 ### Chain functions as a single method handler
 
 ```csharp
-using Nitric.Sdk.Service;
 using Application = Nitric.Sdk.Nitric;
-
-private WebsocketContext ValidateRequest(WebsocketContext ctx, Func<WebsocketContext, WebsocketContext> next)
-{
-    // Validate Request
-    return next(ctx);
-}
-
-private WebsocketContext HandleRequest(WebsocketContext ctx, Func<WebsocketContext, WebsocketContext> next)
-{
-    // Handle Request
-    return next(ctx);
-}
+using Nitric.Sdk.Service;
 
 var websocket = Application.Websocket("public");
 
-websocket.On(WebsocketEventType.Message, ValidateRequest, HandleRequest);
+websocket.On(WebsocketEventType.Message, async (ctx, next) =>
+{
+  // Validate Request
+  Console.WriteLine("Validate Request");
+  return await next(ctx);
+}, async (ctx, next) =>
+{
+  // Handle Request
+  Console.WriteLine("Handle Request");
+  return await next(ctx);
+});
 
 Application.Run();
 ```

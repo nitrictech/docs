@@ -26,7 +26,7 @@ Application.Run();
     The unique name of this API within the app. Subsequent calls to `api` with
     the same name will return the same object.
   </Property>
-  <Property name="options" type="object">
+  <Property name="options" type="ApiOptions">
     Additional options when creating the API.
     <Properties nested>
       <Property name="basePath" type="string">
@@ -87,17 +87,17 @@ using Nitric.Sdk.Resource;
 using Nitric.Sdk.Service;
 
 var api = Application.Api("main", new ApiOptions(
-    middleware: new Middleware<HttpContext>[] {
-        (context, next) => {
-            return next(context);
-        }
+  middleware: new Middleware<HttpContext>[] {
+    async (ctx, next) => {
+      return next(ctx);
     }
+  }
 ));
 
-api.Get("/example", (ctx) =>
+api.Get("/example", async (ctx) =>
 {
-    ctx.Res.Text("Hello World!");
-    return ctx;
+  ctx.Res.Text("Hello World!");
+  return ctx;
 });
 
 Application.Run();
@@ -116,10 +116,10 @@ var api = Application.Api("main", new ApiOptions(
 ));
 
 // Define API routes
-api.Get("/example", (ctx) =>
+api.Get("/example", async (ctx) =>
 {
-    ctx.Res.Text("Hello World!");
-    return ctx;
+  ctx.Res.Text("Hello World!");
+  return ctx;
 });
 
 Application.Run();
@@ -135,14 +135,14 @@ using System.Collections.Generic;
 // Define security configuration
 var securityOptions = new OidcOptions[]
 {
-    new OidcOptions(
-        name: "user",
-        audiences: ["YOUR_AUDIENCES"],
-        issuer: "https://example-issuer.com",
-        // Optionally apply required scopes to this api
-        // in this case users will require the products:read scope to access the API
-        scopes: new string[] { "products:read" }
-    )
+  new OidcOptions(
+    name: "user",
+    audiences: ["YOUR_AUDIENCES"],
+    issuer: "https://example-issuer.com",
+    // Optionally apply required scopes to this api
+    // in this case users will require the products:read scope to access the API
+    scopes: new string[] { "products:read" }
+  )
 };
 
 var secureApi = Application.Api("main", new ApiOptions(
@@ -150,10 +150,10 @@ var secureApi = Application.Api("main", new ApiOptions(
 ));
 
 // Define API routes
-api.Get("/example", (ctx) =>
+api.Get("/example", async (ctx) =>
 {
-    ctx.Res.Text("Hello, Secure World!");
-    return ctx;
+  ctx.Res.Text("Hello, Secure World!");
+  return ctx;
 });
 
 Application.Run();

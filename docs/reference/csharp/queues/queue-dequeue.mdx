@@ -2,7 +2,7 @@
 description: "Reference for Nitric's .NET library - Receive tasks from a queue."
 ---
 
-# .NET - Queue.Receive()
+# .NET - Queue.Dequeue()
 
 <Note>
   This is reference documentation for the Nitric .NET SDK. To learn about Queues
@@ -18,8 +18,8 @@ using Application = Nitric.Sdk.Nitric;
 
 class UserRequest
 {
-    public string UserId { get; set; }
-    public string Message { get; set; }
+  public string UserId { get; set; }
+  public string Message { get; set; }
 }
 
 var batchQueue = Application.Queue<UserRequest>("batch").Allow(QueuePermission.Dequeue);
@@ -27,11 +27,11 @@ var batchQueue = Application.Queue<UserRequest>("batch").Allow(QueuePermission.D
 var tasks = batchQueue.Dequeue();
 
 tasks.ForEach(task => {
-    // Work on a task...
-    Console.WriteLine($"Request from user {task.Message.UserId}: {task.Message.Message}");
+  // Work on a task...
+  Console.WriteLine($"Request from user {task.Message.UserId}: {task.Message.Message}");
 
-    // Complete the task
-    task.Complete();
+  // Complete the task
+  task.Complete();
 });
 
 Application.Run();
@@ -81,8 +81,8 @@ using Application = Nitric.Sdk.Nitric;
 
 class UserRequest
 {
-    public string UserId { get; set; }
-    public string Message { get; set; }
+  public string UserId { get; set; }
+  public string Message { get; set; }
 }
 
 var batchQueue = Application.Queue<UserRequest>("batch").Allow(QueuePermission.Dequeue);
@@ -90,11 +90,11 @@ var batchQueue = Application.Queue<UserRequest>("batch").Allow(QueuePermission.D
 var tasks = batchQueue.Dequeue();
 
 tasks.ForEach(task => {
-    // Work on a task...
-    Console.WriteLine($"Request from user {task.Message.UserId}: {task.Message.Message}");
+  // Work on a task...
+  Console.WriteLine($"Request from user {task.Message.UserId}: {task.Message.Message}");
 
-    // Complete the task
-    task.Complete();
+  // Complete the task
+  task.Complete();
 });
 
 Application.Run();

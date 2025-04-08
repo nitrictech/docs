@@ -23,7 +23,7 @@ class EventUpdate
 
 var updates = Application.Topic<EventUpdate>("updates");
 
-updates.Subscribe(ctx => {
+updates.Subscribe(async (ctx) => {
   Console.WriteLine(ctx.Req.Message);
 
   return ctx;
@@ -59,7 +59,7 @@ class EventUpdate
 
 var updates = Application.Topic<EventUpdate>("updates");
 
-updates.Subscribe(ctx => {
+updates.Subscribe(async (ctx) => {
   Console.WriteLine(ctx.Req.Message);
 
   return ctx;
@@ -81,7 +81,7 @@ class EventUpdate
 var updates = Application.Topic<EventUpdate>("updates");
 
 
-updates.Subscribe((ctx, next) =>
+updates.Subscribe(async (ctx, next) =>
   {
     // Validate request
     if (invalidRequest(ctx))
@@ -89,7 +89,7 @@ updates.Subscribe((ctx, next) =>
       return ctx;
     }
     return next(ctx);
-  }, (ctx, next) => {
+  }, async (ctx, next) => {
     // Handle request
     return next(ctx);
   }

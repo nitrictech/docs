@@ -18,7 +18,7 @@ using Application = Nitric.Sdk.Nitric;
 
 var analyze = Application.Job<Dictionary<string, string>>("analyze").Allow(JobPermission.Submit);
 
-analyze.Submit(new Dictionary<string, string>() { { "message", "message contents" } });
+await analyze.Submit(new Dictionary<string, string>() { { "message", "message contents" } });
 
 Application.Run();
 ```
@@ -42,7 +42,7 @@ using Application = Nitric.Sdk.Nitric;
 
 var analyze = Application.Job<Dictionary<string, string>>("analyze").Allow(JobPermission.Submit);
 
-analyze.Submit(new Dictionary<string, string>() { { "message", "message contents" } });
+await analyze.Submit(new Dictionary<string, string>() { { "message", "message contents" } });
 
 Application.Run();
 ```

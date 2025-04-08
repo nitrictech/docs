@@ -21,12 +21,12 @@ using Application = Nitric.Sdk.Nitric;
 
 var api = Application.Api("main");
 
-api.Patch("/hello/:name", context => {
-  var name = context.Req.PathParams["name"];
+api.Patch("/hello/:name", async (ctx) => {
+  var name = ctx.Req.PathParams["name"];
 
-  context.Res.Text($"Patching {name}!");
+  ctx.Res.Text($"Patching {name}!");
 
-  return context;
+  return ctx;
 });
 
 Application.Run();
@@ -60,12 +60,12 @@ using Application = Nitric.Sdk.Nitric;
 
 var api = Application.Api("main");
 
-api.Patch("/hello/:name", context => {
-  var name = context.Req.PathParams["name"];
+api.Patch("/hello/:name", async (ctx) => {
+  var name = ctx.Req.PathParams["name"];
 
-  context.Res.Text($"Patching {name}!");
+  ctx.Res.Text($"Patching {name}!");
 
-  return context;
+  return ctx;
 });
 
 Application.Run();
@@ -83,27 +83,27 @@ var api = Application.Api("main");
 
 api.Patch("/hello/:userId",
   new Middleware<HttpContext>[] {
-    (context, next) => {
-      var user = context.Req.PathParams["userId"];
+    async (ctx, next) => {
+      var user = ctx.Req.PathParams["userId"];
 
       // Validate the user identity
       if (user != "1234")
       {
-          context.Res.Text($"User {user} is unauthorised");
-          context.Res.Status = 403;
+          ctx.Res.Text($"User {user} is unauthorised");
+          ctx.Res.Status = 403;
 
           // Return prematurely to end the middleware chain.
-          return context;
+          return ctx;
       }
 
       // Call next to continue the middleware chain.
-      return next(context);
-    }, (context, next) => {
-      var user = context.Req.PathParams["userId"];
+      return await next(ctx);
+    }, async (ctx, next) => {
+      var user = ctx.Req.PathParams["userId"];
 
-      context.Res.Text($"Patching {user}");
+      ctx.Res.Text($"Patching {user}");
 
-      return next(context);
+      return await next(ctx);
     }
   }
 );
@@ -121,10 +121,10 @@ using System.Collections.Generic;
 
 var api = Application.Api("main");
 
-api.Patch("/hello/:name", context => {
-  var body = context.Req.Json<Dictionary<string, string>>();
+api.Patch("/hello/:name", async (ctx) => {
+  var body = ctx.Req.Json<Dictionary<string, string>>();
   // parse, validate and store the request payload...
-  return context;
+  return ctx;
 });
 
 Application.Run();

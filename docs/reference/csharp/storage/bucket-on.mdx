@@ -22,25 +22,25 @@ var assets = Application.Bucket("assets");
 var accessibleAssets = Application.Bucket("assets").Allow(BucketPermission.Read);
 
 // The request will contain the name of the file `Key` and the type of event `NotificationType`
-assets.On(BlobEventType.Delete, "*", context => {
-  Console.WriteLine("A file named " + context.Req.Key + "was deleted");
+assets.On(BlobEventType.Delete, "*", async (ctx) => {
+  Console.WriteLine("A file named " + ctx.Req.Key + "was deleted");
 
-  return context;
+  return ctx;
 });
 
-assets.On(BlobEventType.Write, "/images/cat", context => {
+assets.On(BlobEventType.Write, "/images/cat", async (ctx) => {
   Console.WriteLine("A cat image was written");
 
-  return context;
+  return ctx;
 });
 
 // If `.On()` is called with a permissioned bucket, a file reference will also be provided with the request
-accessibleAssets.On(BlobEventType.Write, "/images/dog", context => {
-  var dogImage = accessibleAssets.File(context.Req.Key).Read();
+accessibleAssets.On(BlobEventType.Write, "/images/dog", async (ctx) => {
+  var dogImage = accessibleAssets.File(ctx.Req.Key).Read();
 
   Console.WriteLine(dogImage.ToString());
 
-  return context;
+  return ctx;
 });
 
 Application.Run();
