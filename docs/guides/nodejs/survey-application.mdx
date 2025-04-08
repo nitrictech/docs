@@ -41,12 +41,14 @@ cd surveys-backend
 npm install
 ```
 
+You can now delete all files in the services/ folder, we'll create new services in this guide.
+
 ## Add Runtime Type Safety
 
 This project uses:
 
 - [Zod](https://zod.dev/) to define and validate the structure of form submissions.
-- [pdfkit](https://pdfkit.org/) to generate pdfs from html templates.
+- [pdfkit](https://pdfkit.org/) to generate PDFs from html templates.
 
 ### Install Zod
 
@@ -56,7 +58,7 @@ npm install zod pdfkit
 
 ### Define a schema for form submissions
 
-Create a file at `src/forms/form/schema.ts`:
+Create a file at `form/schema.ts`:
 
 ```ts title:src/forms/form/schema.ts
 import { z } from 'zod'
@@ -76,7 +78,7 @@ This schema ensures that any incoming submission contains a valid name, a 1–5 
 
 Create and configure the cloud resources your backend will use, such as storage buckets, queues, and key-value stores.
 
-```ts title:src/resources/resources.ts
+```ts title:resources/resources.ts
 import { bucket, kv, topic } from '@nitric/sdk'
 
 export const output = bucket('receipts').allow('read', 'write')
@@ -89,10 +91,10 @@ export const receipts = topic('form-submitted')
 
 Create an API route that validates and stores form submissions, then triggers further processing.
 
-```ts title:src/services/forms.ts
+```ts title:services/forms.ts
 import { api } from '@nitric/sdk'
 import { submissions, submitted } from '../resources/resources'
-import { SubmissionSchema } from '.../forms/form/schema'
+import { SubmissionSchema } from '../form/schema'
 
 const formApi = api('forms')
 
@@ -118,9 +120,9 @@ formApi.post('/forms/:formId', async (ctx) => {
 
 Listen for submitted events and generate a formatted PDF receipt from the stored data.
 
-```ts title:src/services/pdfs.ts
+```ts title:services/pdfs.ts
 import { receipts, submissions, output } from '../resources/resources'
-import { buildReceipt } from '../forms/form/receipt'
+import { buildReceipt } from '../form/receipt'
 
 receipts.subscribe(async (ctx) => {
   const { id } = ctx.req.json()
@@ -144,7 +146,7 @@ receipts.subscribe(async (ctx) => {
 
 ### Build the PDF Receipt
 
-```ts title:src/forms/form/receipt.ts
+```ts title:form/receipt.ts
 import PDFDocument from 'pdfkit'
 import { Submission } from './schema'
 
@@ -198,7 +200,7 @@ This PDF output is fairly plain, you can enhance it further using layout templat
 
 Simulate or perform delivery of the receipt (e.g. via email or other downstream systems).
 
-```ts title:src/services/deliver.ts
+```ts title:services/deliver.ts
 import { receipts } from '../resources/resources'
 
 receipts.subscribe(async (ctx) => {
@@ -213,7 +215,7 @@ receipts.subscribe(async (ctx) => {
 
 Create an endpoint that returns a download URL for the generated receipt file.
 
-```ts title:src/apis/receipts.ts
+```ts title:services/receipts.ts
 import { api } from '@nitric/sdk'
 import { output } from '../resources/resources'
 
