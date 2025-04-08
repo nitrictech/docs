@@ -92,7 +92,7 @@ Create an API route that validates and stores form submissions, then triggers fu
 ```ts title:src/services/forms.ts
 import { api } from '@nitric/sdk'
 import { submissions, submitted } from '../resources/resources'
-import { SubmissionSchema } from '../form/schema'
+import { SubmissionSchema } from '.../forms/form/schema'
 
 const formApi = api('forms')
 
@@ -120,7 +120,7 @@ Listen for submitted events and generate a formatted PDF receipt from the stored
 
 ```ts title:src/services/pdfs.ts
 import { receipts, submissions, output } from '../resources/resources'
-import { buildReceipt } from '../form/receipt'
+import { buildReceipt } from '../forms/form/receipt'
 
 receipts.subscribe(async (ctx) => {
   const { id } = ctx.req.json()
