@@ -1,0 +1,160 @@
+---
+description: "Reference for Nitric's .NET library - Create APIs with the Nitric C# SDK"
+---
+
+# .NET - Api()
+
+<Note>
+  This is reference documentation for the Nitric .NET SDK. To learn about APIs
+  in Nitric start with the [API docs](/api).
+</Note>
+
+Creates a new HTTP API.
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var api = Application.Api("main");
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    The unique name of this API within the app. Subsequent calls to `api` with
+    the same name will return the same object.
+  </Property>
+  <Property name="options" type="ApiOptions">
+    Additional options when creating the API.
+    <Properties nested>
+      <Property name="basePath" type="string">
+        Base path for all routes in the API.
+      </Property>
+      <Property
+        name="middleware"
+        type="Middleware<HttpContext>[] or Middleware<HttpContext>"
+      >
+        Middleware to apply to all routes and methods of the API.
+      </Property>
+      <Property name="security" type="OidcOptions[]">
+        Security rules to apply with scopes to the entire API.
+      </Property>
+    </Properties>
+  </Property>
+</Properties>
+
+### OidcOptions Parameters
+
+<Properties>
+  <Property name="name" required type="string">
+    the name of the security definition
+  </Property>
+  <Property name="issuer" required type="string">
+    the issuer for the JWT tokens e.g.{' '}
+    <code>https://account.region.auth0.com</code>
+  </Property>
+  <Property name="audiences" required type="string[]">
+    the <code>aud</code> that will be applied to JWT tokens from the issuer.
+  </Property>
+  <Property name="scopes" required type="string[]">
+    the scopes that will be required to authenticate.
+  </Property>
+</Properties>
+
+## Notes
+
+The `middleware` property on the `options` param is useful for applying universal middleware such as CORS headers or Auth, across an entire API from a single place.
+
+## Examples
+
+### Create an API
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var api = Application.Api("main");
+
+Application.Run();
+```
+
+### Create an API with universal middleware
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+using Nitric.Sdk.Resource;
+using Nitric.Sdk.Service;
+
+var api = Application.Api("main", new ApiOptions(
+  middleware: new Middleware<HttpContext>[] {
+    async (ctx, next) => {
+      return next(ctx);
+    }
+  }
+));
+
+api.Get("/example", async (ctx) =>
+{
+  ctx.Res.Text("Hello World!");
+  return ctx;
+});
+
+Application.Run();
+```
+
+### Create an API with a base path
+
+If you need to put all the routes in your api below a shared base path, you can do that with the `BaseRoute` option. In this example we ensure all routes start with `/api/v1/` before the route specific path.
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+using Nitric.Sdk.Resource;
+
+var api = Application.Api("main", new ApiOptions(
+    basePath: "/api/v1"
+));
+
+// Define API routes
+api.Get("/example", async (ctx) =>
+{
+  ctx.Res.Text("Hello World!");
+  return ctx;
+});
+
+Application.Run();
+```
+
+### Apply JWT authentication to an API
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+using Nitric.Sdk.Resource;
+using System.Collections.Generic;
+
+// Define security configuration
+var securityOptions = new OidcOptions[]
+{
+  new OidcOptions(
+    name: "user",
+    audiences: ["YOUR_AUDIENCES"],
+    issuer: "https://example-issuer.com",
+    // Optionally apply required scopes to this api
+    // in this case users will require the products:read scope to access the API
+    scopes: new string[] { "products:read" }
+  )
+};
+
+var secureApi = Application.Api("main", new ApiOptions(
+    security: securityOptions
+));
+
+// Define API routes
+api.Get("/example", async (ctx) =>
+{
+  ctx.Res.Text("Hello, Secure World!");
+  return ctx;
+});
+
+Application.Run();
+```

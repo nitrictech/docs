@@ -1,0 +1,42 @@
+---
+description: "Reference for Nitric's .NET library - Read the contents of a file from a bucket."
+---
+
+# .NET - Bucket.File.Read()
+
+<Note>
+  This is reference documentation for the Nitric .NET SDK. To learn about
+  Buckets and Storage in Nitric start with the [Storage docs](/storage).
+</Note>
+
+Read the contents of a file from a bucket.
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+var assets = Application.Bucket("assets").Allow(BucketPermission.Read);
+
+var logo = assets.File("images/logo.png");
+
+var logoData = logo.Read();
+
+Application.Run();
+```
+
+## Examples
+
+### Read a file
+
+```csharp
+using Nitric.Sdk.Resource;
+using Application = Nitric.Sdk.Nitric;
+
+var assets = Application.Bucket("assets").Allow(BucketPermission.Read);
+
+var logo = assets.File("images/logo.png");
+
+var logoData = logo.Read();
+
+Application.Run();
+```

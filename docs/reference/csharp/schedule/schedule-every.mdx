@@ -1,0 +1,92 @@
+---
+description: "Reference for Nitric's .NET library - Sets the frequency and one or many handlers to be triggered."
+---
+
+# .NET - Schedule.Every()
+
+Sets the frequency and one or many handlers to be triggered.
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+Application.Schedule("send-reminder").Every("3 hours", async (ctx) =>
+{
+  // do some processing
+  return ctx;
+});
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="rate" type="string" required>
+    The rate to run the schedule, e.g. '7 days'. All rates accept a number and a
+    frequency. Valid frequencies are 'days', 'hours' or 'minutes'.
+  </Property>
+  <Property
+    name="middleware"
+    type="Func<IntervalContext, IntervalContext> or List<Middleware<IntervalContext>"
+    required
+  >
+    One or more middleware functions to use as the handler which will run on
+    defined frequency.
+  </Property>
+</Properties>
+
+## Examples
+
+### Create a Schedule to run every 3 minutes
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+Application.Schedule("send-reminder").Every("3 minutes", async (ctx) =>
+{
+  // do some processing
+  return ctx;
+});
+
+Application.Run();
+```
+
+### Create a Schedule with multiple middleware/handlers
+
+```csharp title:Middlewares.cs
+using System;
+using System.Threading.Tasks;
+using Nitric.Sdk.Service;
+
+namespace Common;
+
+class Middlewares
+{
+  // Create a middleware to handle report generation
+  public static async Task<IntervalContext> GenerateReport(IntervalContext ctx, Func<IntervalContext, Task<IntervalContext>> next)
+  {
+    Console.WriteLine("generate report");
+    // Code to generate a report
+    return await next(ctx);
+  }
+
+  // Create a middleware to handle notifications
+  public static async Task<IntervalContext> SendNotification(IntervalContext ctx, Func<IntervalContext, Task<IntervalContext>> next)
+  {
+    Console.WriteLine("sending notification");
+
+    // Code to send a notification
+    return await next(ctx);
+  }
+}
+```
+
+```csharp title:Application.cs
+using Application = Nitric.Sdk.Nitric;
+using Common;
+
+// Create a schedule that runs every 7 days
+Application.Schedule("send-reminder").Every("7 days", Middlewares.GenerateReport, Middlewares.SendNotification);
+
+Application.Run();
+```
