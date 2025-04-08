@@ -110,7 +110,7 @@ const SurveyForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      const response = await fetch('/api/forms/forms/test-survey', {
+      const response = await fetch('/api/forms/forms/feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
