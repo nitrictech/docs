@@ -63,16 +63,26 @@ Create a file at `form/schema.ts`:
 ```ts title:src/forms/form/schema.ts
 import { z } from 'zod'
 
-export const SubmissionSchema = z.object({
+export const feedbackSchema = z.object({
   name: z.string(),
   rating: z.number().min(1).max(5),
   feedback: z.string().optional(),
 })
 
-export type Submission = z.infer<typeof SubmissionSchema>
+export const rsvpSchema = z.object({
+  name: z.string(),
+  attending: z.boolean(),
+  guests: z.number().int().min(0),
+})
+
+export const formSchemas: Record<string, z.ZodObject<any>> = {
+  feedback: feedbackSchema,
+  rsvp: rsvpSchema,
+}
 ```
 
-This schema ensures that any incoming submission contains a valid name, a 1–5 rating, and optional feedback.
+Feedback Schema: Validates that submissions include a name (string), a rating (number between 1 and 5), and optional feedback (string).
+RSVP Schema: Validates that submissions include a name (string), an attending status (boolean), and the number of guests (non-negative integer).
 
 ## Step 1: Define Resources
 
@@ -94,18 +104,28 @@ Create an API route that validates and stores form submissions, then triggers fu
 ```ts title:services/forms.ts
 import { api } from '@nitric/sdk'
 import { submissions, submitted } from '../resources/resources'
-import { SubmissionSchema } from '../form/schema'
+import { formSchemas } from '../form/schema'
 
 const formApi = api('forms')
 
 formApi.post('/forms/:formId', async (ctx) => {
   const formId = ctx.req.params.formId
-  const parsed = SubmissionSchema.safeParse(ctx.req.json())
+  const schema = formSchemas[formId]
+
+  if (!schema) {
+    ctx.res.status = 400
+    ctx.res.json({ msg: `Unknown formId: ${formId}` })
+    return
+  }
+
+  const parsed = schema.safeParse(ctx.req.json())
+
   if (!parsed.success) {
     ctx.res.status = 400
     ctx.res.json({ msg: 'Invalid submission', errors: parsed.error.format() })
     return
   }
+
   const data = parsed.data
   const id = `${formId}-${Date.now()}`
 
@@ -125,7 +145,7 @@ import { receipts, submissions, output } from '../resources/resources'
 import { buildReceipt } from '../form/receipt'
 
 receipts.subscribe(async (ctx) => {
-  const { id } = ctx.req.json()
+  const { id, formId } = ctx.req.json()
   const submission = await submissions.get(id)
 
   if (!submission) {
@@ -134,7 +154,7 @@ receipts.subscribe(async (ctx) => {
   }
 
   // Build the PDF buffer from the submission data
-  const buffer = await buildReceipt(submission)
+  const buffer = await buildReceipt(submission, formId)
 
   // Store the PDF file in the bucket
   const file = output.file(`${id}.pdf`)
@@ -148,45 +168,66 @@ receipts.subscribe(async (ctx) => {
 
 ```ts title:form/receipt.ts
 import PDFDocument from 'pdfkit'
-import { Submission } from './schema'
+import { feedbackSchema, rsvpSchema } from './schema'
+import { z } from 'zod'
 
-export const buildReceipt = async (data: Submission) => {
+type FeedbackSubmission = z.infer<typeof feedbackSchema>
+type RsvpSubmission = z.infer<typeof rsvpSchema>
+
+export const buildReceipt = async (
+  data: any,
+  formId: string,
+): Promise<Buffer> => {
   const receipt = new PDFDocument({ bufferPages: true })
 
   const doneWriting = new Promise<Buffer>((resolve) => {
     const buffers: Uint8Array[] = []
 
-    // Collect PDF output in memory as chunks
     receipt.on('data', buffers.push.bind(buffers))
     receipt.on('end', () => {
       const pdfData = Buffer.concat(buffers)
       resolve(pdfData)
     })
 
-    const { name, rating, feedback } = data
-
-    // Write header
     receipt.font('Times-Roman').fontSize(20).text('Survey - Receipt', 100, 100)
-
-    // Write section title
     receipt
       .font('Times-Roman')
       .fontSize(16)
-      .text('Primary Applicant Details', 100, 150)
+      .text('Submission Details', 100, 150)
 
-    // Write submission details
-    receipt
-      .font('Times-Roman')
-      .fontSize(12)
-      .text(
-        `Name: ${name}
+    if (formId === 'feedback') {
+      const { name, rating, feedback } = data as FeedbackSubmission
+
+      receipt
+        .font('Times-Roman')
+        .fontSize(12)
+        .text(
+          `Name: ${name}
 Rating: ${rating}
 Feedback: ${feedback || 'N/A'}`,
-        100,
-        175,
-      )
+          100,
+          175,
+        )
+    } else if (formId === 'rsvp') {
+      const { name, attending, guests } = data as RsvpSubmission
 
-    // Finalize the PDF
+      receipt
+        .font('Times-Roman')
+        .fontSize(12)
+        .text(
+          `Name: ${name}
+Attending: ${attending ? 'Yes' : 'No'}
+Guests: ${guests}`,
+          100,
+          175,
+        )
+    } else {
+      receipt
+        .font('Times-Roman')
+        .fontSize(12)
+        .text('Unknown form type. No details available.', 100, 175)
+    }
+
     receipt.end()
   })
 
@@ -206,7 +247,7 @@ import { receipts } from '../resources/resources'
 receipts.subscribe(async (ctx) => {
   const { id } = ctx.req.json()
 
-  // Handle delivery or hook into a real email/SaaS integration
+  // Simulate delivery or hook into a real email/SaaS integration
   console.log(`Delivering receipt for submission: ${id}`)
 })
 ```
@@ -239,6 +280,8 @@ nitric start
 
 Use the dashboard to submit your survey data -
 
+Form ID: feedback
+
 ```json
 {
   "name": "Jane",
@@ -247,9 +290,24 @@ Use the dashboard to submit your survey data -
 }
 ```
 
+Form ID: rsvp
+
+```json
+{
+  "name": "Jane",
+  "attending": true,
+  "guests": 5
+}
+```
+
 ![Submit Form](/docs/images/guides/survey-application/submit.png)
 
 You should see messages in your console for PDF generation and delivery.
+
+```bash
+Delivering receipt for submission: rsvp-1744131025791
+Receipt stored for rsvp-1744131025791
+```
 
 ### Get a Receipt
 
