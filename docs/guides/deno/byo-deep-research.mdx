@@ -28,6 +28,63 @@ Before diving into the implementation, let's understand why local testing is val
 6. **Quick Iteration**: Test the entire pipeline without API costs
 7. **Prompt Development**: Iterate quickly on prompts and logic using smaller models
 
+## Project Setup and Dependencies
+
+Before we start implementing our research system, let's set up the project and install the necessary dependencies:
+
+1. **Create a new Nitric project**:
+
+   ```bash
+   # Install Nitric CLI if you haven't already
+   npm install -g @nitric/cli
+
+   # Create a new Nitric project
+   nitric new deep-research
+   cd deep-research
+   ```
+
+2. **Configure dependencies in deno.json**:
+
+   Create or update the `deno.json` file in your project root:
+
+   ```json title:deno.json
+   {
+     "imports": {
+       "@nitric/sdk": "npm:@nitric/sdk",
+       "openai": "npm:openai",
+       "duck-duck-scrape": "npm:duck-duck-scrape",
+       "cheerio": "npm:cheerio",
+       "turndown": "npm:turndown"
+     },
+     "tasks": {
+       "start": "deno run --allow-net --allow-env --allow-read main.ts"
+     }
+   }
+   ```
+
+3. **Install dependencies**:
+
+   ```bash
+   # Install dependencies using Deno
+   deno install
+   ```
+
+4. **Project structure**:
+
+   ```
+   deep-research/
+   ├── deno.json                 # Deno configuration and dependencies
+   ├── .env                      # Environment variables
+   ├── utils/
+   │   └── search.ts             # Search functionality
+   ├── prompts/
+   │   ├── query.ts              # Query generation prompt
+   │   ├── summarizer.ts         # Content summarization prompt
+   │   └── reflect.ts            # Research reflection prompt
+   └── services/
+       └── api.ts                # Main API implementation
+   ```
+
 ## The Architecture
 
 Our research system will be built as a Nitric API with several key components:
@@ -91,7 +148,7 @@ The LLM integration handles the "Summarization" and "Reflection" steps:
 The system can be configured to use different LLM providers through environment variables:
 
 ```typescript title:services/api.ts
-import openai from 'npm:openai'
+import { OpenAI } from 'openai'
 
 // Configuration from environment variables
 const LLM_CONFIG = {
@@ -100,7 +157,7 @@ const LLM_CONFIG = {
   model: Deno.env.get('LLM_MODEL') || 'llama3.2:3b',
 }
 
-const OAI = new openai({
+const OAI = new OpenAI({
   baseURL: LLM_CONFIG.baseURL,
   apiKey: LLM_CONFIG.apiKey,
 })
@@ -258,8 +315,17 @@ interface ReflectTopicMessage extends ResearchTopicMessage<'reflect'> {
 The system includes HTML cleaning and markdown conversion:
 
 ```typescript title:services/api.ts
+import { load as cheerioLoad } from 'cheerio'
+import { TurndownService } from 'turndown'
+
+// Initialize TurndownService for HTML to Markdown conversion
+const turndownService = new TurndownService({
+  headingStyle: 'atx',
+  codeBlockStyle: 'fenced',
+})
+
 function cleanHtml(html: string): string {
-  const $ = cheerio.load(html)
+  const $ = cheerioLoad(html)
 
   // Remove script and style tags
   $('script, style, noscript, iframe, embed, object').remove()
@@ -292,14 +358,22 @@ function cleanHtml(html: string): string {
 The main API implementation ties everything together:
 
 ```typescript title:services/api.ts
-import { api, topic, bucket } from 'npm:@nitric/sdk'
+import { api, topic, bucket } from '@nitric/sdk'
 import search from '../utils/search.ts'
-import openai from 'npm:openai'
+import { OpenAI } from 'openai'
 import queryPrompt from '../prompts/query.ts'
 import summarizerPrompt from '../prompts/summarizer.ts'
 import reflectionPrompt from '../prompts/reflect.ts'
+import { load as cheerioLoad } from 'cheerio'
+import { TurndownService } from 'turndown'
 
-const OAI = new openai({
+// Initialize TurndownService for HTML to Markdown conversion
+const turndownService = new TurndownService({
+  headingStyle: 'atx',
+  codeBlockStyle: 'fenced',
+})
+
+const OAI = new OpenAI({
   baseURL: 'http://localhost:11434/v1',
   apiKey: 'ollama',
 })
