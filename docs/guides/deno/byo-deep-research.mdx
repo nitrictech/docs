@@ -34,14 +34,14 @@ Before we start implementing our research system, let's set up the project and i
 
 1. **Create a new Nitric project**:
 
-   ```bash
-   # Install Nitric CLI if you haven't already
-   npm install -g @nitric/cli
+If you haven't already install Nitric CLI by following the [official installation guide](https://nitric-docs-git-docs-byo-deep-research-nitrictech.vercel.app/docs/get-started/installation)
 
-   # Create a new Nitric project
-   nitric new deep-research
-   cd deep-research
-   ```
+Then create a new Nitric project with:
+
+```bash
+nitric new deep-research
+cd deep-research
+```
 
 2. **Configure dependencies in deno.json**:
 
@@ -646,7 +646,7 @@ Production deployment is as simple as updating these environment variables:
 
 To test the system locally:
 
-1. **Install and Start Ollama**:
+1. **Install and Start Ollama (optional)**:
 
    First, [install Ollama](https://ollama.ai/) for your operating system.
 
@@ -656,6 +656,8 @@ To test the system locally:
    ollama pull llama2:3b
    ollama serve
    ```
+
+   > You can skip this step if you want to use OpenAI or other hosted solution as your LLM provider.
 
 2. **Configure Environment**:
 
