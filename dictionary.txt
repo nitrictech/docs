@@ -243,6 +243,8 @@ NodeJS
 priviledge
 APIS
 TLS
+HIPAA
+PCI-DSS
 SRE
 ACM
 nav
