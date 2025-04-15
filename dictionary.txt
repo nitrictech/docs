@@ -37,6 +37,7 @@ args
 async
 aws
 backend
+checkov
 codebase
 composable
 config
@@ -245,6 +246,8 @@ debugpy
 vscode
 APIS
 TLS
+HIPAA
+PCI-DSS
 SRE
 ACM
 nav
@@ -256,6 +259,8 @@ Trivy's
 KMS
 deployable
 VMs
+json
+KMS
 CDN
 subdirectories
 DNSSEC
