@@ -78,8 +78,13 @@ const socket = websocket('socket')
 const connections = kv('connections').allow('get', 'set', 'delete')
 
 socket.on('connect', async (ctx) => {
-  const connectionList = await connections.get('connections')
-  await connections..set('connections', [
+  let connectionList = []
+  try {
+    connectionList = await connections.get('connections')
+  } catch (e) {
+    console.log('Creating new connections store')
+  }
+  await connections.set('connections', [
     ...connectionList,
     {
       // store any metadata related to the connection here
@@ -89,10 +94,16 @@ socket.on('connect', async (ctx) => {
 })
 
 socket.on('disconnect', async (ctx) => {
-  const connectionList = await connections.get('connections')
+  let connectionList = []
+  try {
+    connectionList = await connections.get('connections')
+  } catch (e) {
+    console.log('No connections found')
+    return
+  }
   await connections.set(
     'connections',
-    connectionList.filter((c) => c.connectionId === ctx.req.connectionId)
+    connectionList.filter((c) => c.connectionId === ctx.req.connectionId),
   )
 })
 ```
