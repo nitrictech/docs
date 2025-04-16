@@ -237,6 +237,10 @@ EC2
 .mkv
 .jpg
 .pdf
+PDFs
+pdfs
+pdfkit
+html
 preflight
 lifecycle
 NodeJS
