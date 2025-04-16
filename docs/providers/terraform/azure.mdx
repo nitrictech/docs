@@ -102,6 +102,11 @@ provider: nitric/azuretf@latest
 # https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/?products=container-apps
 region: my-azure-stack-region
 
+# Deploy into an existing resource group
+# Available since v1.25.1
+# ⚠️ Changing this property post-deployment is a destructive operation
+resource-group: my-azure-resource-group
+
 # Org to associate deployed API Management services with
 org: example-org
 
