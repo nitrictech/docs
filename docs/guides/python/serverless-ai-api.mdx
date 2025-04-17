@@ -37,7 +37,7 @@ Now, let's get our tools ready and dive in.
 
 Before we begin, make sure you have the following:
 
-- **Python 3.8+** installed on your system (the latest 3.x is fine). Basic familiarity with Python is assumed.
+- **Python 3.11+** installed on your system (the latest 3.x is fine). Basic familiarity with Python is assumed.
 - **Nitric CLI** installed - this is the command-line tool to create, run, and deploy Nitric projects. You can install it by following the [installation instructions](/get-started/installation).
 - **uv** or **Pipenv** for managing Python dependencies. The Nitric Python templates use either uv or Pipenv.
 - An **OpenAI API key** if you want to integrate with OpenAI's GPT for summarization.
@@ -87,7 +87,7 @@ my-summarizer/
 
 The `services/api.py` is a sample service that Nitric created (a simple “Hello, World” HTTP endpoint). We'll replace this with our own code. The `nitric.yaml` config by default tells Nitric to treat any `*.py` in `services/` as a service and what runtime to use. We'll keep the config mostly default.
 
-4. **(Optional) Verify the template works:** You can test the starter project right away by running `nitric start` inside the project. This spins up Nitric's local development server. Check the terminal output - you should see that an API endpoint (perhaps `/hello/:name`) is available locally at some port (like 4001). For now, stop the server (Ctrl+C) - we're going to write our own service next.
+4. **(Optional) Verify the template works:** You can test the starter project right away by running `nitric start` inside the project. This spins up Nitric's local development server. Check the terminal output - you should see that an API endpoint is available locally at some port (like 4001). For now, stop the server (Ctrl+C) - we're going to write our own service next.
 
 With the project set up, let's start coding our API.
 
@@ -287,7 +287,7 @@ _(You can name the stack as you like, e.g., “dev-stack” or “prod-stack”.
 
 The CLI will prompt you a cloud provider (choose “AWS” for this tutorial, or GCP/Azure if you prefer),
 
-This command creates a stack configuration file (for example, `stacks/prod-stack.yaml`) in your project. Open this file - you'll see it lists the chosen provider and region, and some default config for how to deploy your services. Nitric has already made best-practice choices (like naming conventions, runtime settings, etc.) which you can tweak if needed. Ensure the region is set correctly for your account.
+This command creates a stack configuration file (for example, `prod-stack.yaml`) in your project. Open this file - you'll see it lists the chosen provider, an empty region key, and some default config for how to deploy your services. Nitric has already made best-practice choices (like naming conventions, runtime settings, etc.) which you can tweak if needed. Ensure the region is set correctly for your account.
 
 **2. Deploy the stack:** Now the magic moment. Run:
 
@@ -295,7 +295,7 @@ This command creates a stack configuration file (for example, `stacks/prod-stack
 nitric up
 ```
 
-This tells Nitric to deploy (“up”) the stack we just created. The CLI will now translate your application into cloud resources and deploy them. Under the hood, Nitric uses cloud IaC providers (like Pulumi or Terraform) to create the infra from your code definitions, but you don't have to write any of that yourself. It will automatically set up everything: an HTTP endpoint (API Gateway or equivalent), a cloud function to run your `summarize_text` code, and any needed permissions (IAM roles, etc.).
+This tells Nitric to deploy (“up”) the stack we just created. The CLI will now translate your application into cloud resources and deploy them. Under the hood, Nitric uses cloud IaC providers (like Pulumi or Terraform) to create the infra from your code definitions, but you don't have to write any of that yourself. It will automatically set up everything: an HTTP endpoint (API Gateway or equivalent), a cloud function to run your `summarize_text` code, and any required permissions (IAM roles, etc.).
 
 You'll see a progress log in the console. The first deployment may take a few minutes as it's creating cloud resources. Once complete, Nitric will output the **endpoint URL** for your API. It might look something like:
 
@@ -305,7 +305,7 @@ https://xxxxxx.execute-api.us-east-1.amazonaws.com
 
 (The exact format depends on the cloud - for AWS, it uses API Gateway; for others, a similar endpoint will be provided.
 
-**3. Test the live endpoint:** Time to test our deployed function on the cloud! You can use curl again, but now replace the localhost URL with the one given by Nitric. For example:
+**3. Test the live endpoint:** Time to test our deployed function on the cloud! You can use `curl` again, but now replace the localhost URL with the one given by Nitric. For example:
 
 ```bash
 curl -X POST https://<<your-api-url>>/summarize \
