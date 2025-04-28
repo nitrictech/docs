@@ -632,6 +632,12 @@ const nextConfig = {
         basePath: false,
         permanent: true,
       },
+      {
+        source: '/docs/misc/comparison/winglang',
+        destination: '/docs/',
+        basePath: false,
+        permanent: true,
+      },
     ]
   },
   async headers() {
