@@ -314,7 +314,7 @@ interface ReflectTopicMessage extends ResearchTopicMessage<'reflect'> {
 
 ### 5. Content Processing
 
-We'll also include [turndown](https://github.com/domchristie/turndown) and [cheerio](https://github.com/cheeriojs/cheerio) to clean the HTML content and convert it to markdown. To be more easily interpretable by the LLM.
+We'll also include [turndown](https://github.com/domchristie/turndown) and [cheerio](https://github.com/cheeriojs/cheerio) to clean the HTML content and convert it to markdown. Making it easier to interpret by the LLM.
 
 ```typescript title:services/api.ts
 import { load as cheerioLoad } from 'cheerio'
@@ -689,7 +689,8 @@ ollama serve
 ```
 
 <Note>
-  You can skip this step if you want to use OpenAI or other hosted solution as your LLM provider.
+  You can skip this step if you want to use OpenAI or other hosted solution as
+  your LLM provider.
 </Note>
 
 2. **Configure Environment**:
@@ -722,7 +723,12 @@ curl -X POST http://localhost:4001/query \
 
 The system will begin its research process, and you can monitor the progress in the Nitric development server logs.
 
-<Note>Local testing with smaller models may produce different results compared to production models, but the workflow and functionality will remain the same. This allows you to iterate quickly on your implementation without incurring API costs.</Note>
+<Note>
+  Local testing with smaller models may produce different results compared to
+  production models, but the workflow and functionality will remain the same.
+  This allows you to iterate quickly on your implementation without incurring
+  API costs.
+</Note>
 
 ## Conclusion
 
