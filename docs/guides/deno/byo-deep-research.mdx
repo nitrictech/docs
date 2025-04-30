@@ -32,9 +32,9 @@ Before diving into the implementation, let's understand why local testing is val
 
 Before we start implementing our research system, let's set up the project and install the necessary dependencies:
 
-1. **Create a new Nitric project**:
+### 1. **Create a new Nitric project**:
 
-If you haven't already install Nitric CLI by following the [official installation guide](https://nitric-docs-git-docs-byo-deep-research-nitrictech.vercel.app/docs/get-started/installation)
+If you haven't already, install Nitric CLI by following the [official installation guide](https://nitric-docs-git-docs-byo-deep-research-nitrictech.vercel.app/docs/get-started/installation)
 
 Then create a new Nitric project with:
 
@@ -45,29 +45,29 @@ cd deep-research
 
 2. **Configure dependencies in deno.json**:
 
-   Create or update the `deno.json` file in your project root:
+Create or update the `deno.json` file in your project root:
 
-   ```json title:deno.json
-   {
-     "imports": {
-       "@nitric/sdk": "npm:@nitric/sdk",
-       "openai": "npm:openai",
-       "duck-duck-scrape": "npm:duck-duck-scrape",
-       "cheerio": "npm:cheerio",
-       "turndown": "npm:turndown"
-     },
-     "tasks": {
-       "start": "deno run --allow-net --allow-env --allow-read main.ts"
-     }
-   }
-   ```
+```json title:deno.json
+{
+  "imports": {
+    "@nitric/sdk": "npm:@nitric/sdk",
+    "openai": "npm:openai",
+    "duck-duck-scrape": "npm:duck-duck-scrape",
+    "cheerio": "npm:cheerio",
+    "turndown": "npm:turndown"
+  },
+  "tasks": {
+    "start": "deno run --allow-net --allow-env --allow-read main.ts"
+  }
+}
+```
 
 3. **Install dependencies**:
 
-   ```bash
-   # Install dependencies using Deno
-   deno install
-   ```
+```bash
+# Install dependencies using Deno
+deno install
+```
 
 4. **Project structure**:
 
@@ -143,7 +143,7 @@ export default async (query: string) => {
 
 ### 2. Configurable LLM Integration
 
-The LLM integration handles the "Summarization" and "Reflection" steps:
+The LLM integration handles the "Summarization", "Reflection", and "Iteration" steps:
 
 - Summarization: Condense findings
 - Reflection: Identify knowledge gaps
@@ -268,8 +268,8 @@ Provide only the follow-up query in your response, if there are no follow-up que
 
 These prompts work together to create a research system that:
 
-- Generate search queries from topics
-- Find relevant content using the duckduckgo search API
+- Generates search queries from topics
+- Finds relevant content using the duckduckgo search API
 - Cleans and converts content to simple markdown
 - Summarizes findings
 - Attempts to identify knowledge gaps
@@ -681,48 +681,48 @@ To test the system locally:
 
 1. **Install and Start Ollama (optional)**:
 
-   First, [install Ollama](https://ollama.ai/) for your operating system.
+First, [install Ollama](https://ollama.ai/) for your operating system.
 
-   Then pull and start the model:
+Then pull and start the model:
 
-   ```bash
-   ollama pull llama2:3b
-   ollama serve
-   ```
+```bash
+ollama pull llama2:3b
+ollama serve
+```
 
-   > You can skip this step if you want to use OpenAI or other hosted solution as your LLM provider.
+> You can skip this step if you want to use OpenAI or other hosted solution as your LLM provider.
 
 2. **Configure Environment**:
 
-   Create a `.env` file with local testing configuration:
+Create a `.env` file with local testing configuration:
 
-   ```bash
-   LLM_BASE_URL=http://localhost:11434/v1
-   LLM_API_KEY=ollama
-   LLM_MODEL=llama2:3b
-   MAX_ITERATIONS=3
-   SEARCH_RESULTS=3
-   ```
+```bash
+LLM_BASE_URL=http://localhost:11434/v1
+LLM_API_KEY=ollama
+LLM_MODEL=llama2:3b
+MAX_ITERATIONS=3
+SEARCH_RESULTS=3
+```
 
 3. **Start the Local Development Server**:
 
-   ```bash
-   nitric start
-   ```
+```bash
+nitric start
+```
 
 4. **Test the API**:
 
-   Send a POST request to start research:
+Send a POST request to start research:
 
-   ```bash
-   curl -X POST http://localhost:4001/query \
-     -H "Content-Type: text/plain" \
-     -d "quantum computing basics"
-   ```
+```bash
+curl -X POST http://localhost:4001/query \
+  -H "Content-Type: text/plain" \
+  -d "quantum computing basics"
+```
 
-   The system will begin its research process, and you can monitor the progress in the Nitric development server logs.
+The system will begin its research process, and you can monitor the progress in the Nitric development server logs.
 
-Note: Local testing with smaller models may produce different results compared to production models, but the workflow and functionality will remain the same. This allows you to iterate quickly on your implementation without incurring API costs.
+<Note>Local testing with smaller models may produce different results compared to production models, but the workflow and functionality will remain the same. This allows you to iterate quickly on your implementation without incurring API costs.</Note>
 
 ## Conclusion
 
