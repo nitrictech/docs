@@ -314,7 +314,7 @@ interface ReflectTopicMessage extends ResearchTopicMessage<'reflect'> {
 
 ### 5. Content Processing
 
-The system includes HTML cleaning and markdown conversion:
+We'll also include [turndown](https://github.com/domchristie/turndown) and [cheerio](https://github.com/cheeriojs/cheerio) to clean the HTML content and convert it to markdown. To be more easily interpretable by the LLM.
 
 ```typescript title:services/api.ts
 import { load as cheerioLoad } from 'cheerio'
