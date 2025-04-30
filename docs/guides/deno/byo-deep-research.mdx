@@ -172,11 +172,11 @@ const OAI = new OpenAI({
 // LLM_MODEL=llama3.2:3b                    # For local testing
 ```
 
-### Prompt Templates
+### 3. Prompt Templates
 
 The system uses three types of LLM calls, each with its own prompt template:
 
-1. **Query Generation** (`queryPrompt`): Generates search queries based on the research topic
+#### 1. **Query Generation** (`queryPrompt`): Generates search queries based on the research topic
 
 ```typescript title:prompts/query.ts
 export default (date: string, topic: string) => `
@@ -209,7 +209,7 @@ Provide your response only in JSON format:
 `
 ```
 
-2. **Content Summarization** (`summarizerPrompt`): Summarizes content in the context of research topics
+#### 2. **Content Summarization** (`summarizerPrompt`): Summarizes content in the context of research topics
 
 ```typescript title:prompts/summarizer.ts
 export default (topics: string[]) => `<GOAL>
@@ -237,12 +237,12 @@ When EXTENDING an existing summary:
 - Start directly with the updated summary, without preamble or titles. Do not use XML tags in the output.
 </FORMATTING>
 
-<Task>
+<TASK>
 Think carefully about the provided Context first. Then generate a summary of the context to address the User Input.
-</Task>`
+</TASK>`
 ```
 
-3. **Research Reflection** (`reflectionPrompt`): Analyzes current research to identify knowledge gaps
+#### 3. **Research Reflection** (`reflectionPrompt`): Analyzes current research to identify knowledge gaps
 
 ```typescript title:prompts/reflect.ts
 export default (topics: string[]) => `
@@ -273,7 +273,7 @@ These prompts work together to create a research system that:
 - Attempts to identify knowledge gaps
 - Continues research if required
 
-### 3. Topic-based Research Pipeline
+### 4. Topic-based Research Pipeline
 
 The system uses a topic-based approach to conduct research, with different message types for each stage of the process:
 
@@ -312,7 +312,7 @@ interface ReflectTopicMessage extends ResearchTopicMessage<'reflect'> {
 }
 ```
 
-### 4. Content Processing
+### 5. Content Processing
 
 The system includes HTML cleaning and markdown conversion:
 
@@ -355,7 +355,7 @@ function cleanHtml(html: string): string {
 }
 ```
 
-### 5. The Nitric API Implementation
+### 6. The Nitric API Implementation
 
 The main API implementation ties everything together:
 
