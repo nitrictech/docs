@@ -69,6 +69,39 @@ websites:
       url: http://localhost:4322
 ```
 
+### Alternative: Using the Nitric CLI
+
+You can also add a website to your project using the Nitric CLI's `add website` command:
+
+```bash
+nitric add website
+```
+
+This will walk you through an interactive process to:
+
+- Name your website
+- Select a tool/framework (currently supports [Astro](https://astro.build/), [Vite](https://vite.dev/), and [Hugo](https://gohugo.io/))
+- Configure the website's base URL path and dev server port
+
+You can also specify the website name and tool directly:
+
+```bash
+# For Astro
+nitric add website my-site astro
+
+# For Vite
+nitric add website my-site vite
+
+# For Hugo
+nitric add website my-site hugo
+```
+
+The command will automatically:
+
+1. Create a new website project using the framework's official package manager commands
+2. Add the necessary configuration to your `nitric.yaml` file
+3. Set up the build and development commands using the framework's native tools
+
 ### 3. Start your website locally
 
 Run `nitric start` to start your website locally. This will use the `dev` configuration, which proxies requests to your local development server.
