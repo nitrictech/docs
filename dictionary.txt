@@ -262,11 +262,13 @@ VMs
 json
 KMS
 CDN
+turndown
 subdirectories
 DNSSEC
 AzureTF
 VSCode
 https
+duckduckgo
 [0-9]+px
 ^.+[-:_]\w+$
 [a-z]+([A-Z0-9]|[A-Z0-9]\w+)
