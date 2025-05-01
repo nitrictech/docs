@@ -96,8 +96,8 @@ The Nitric team is working to expand the list of resources that can be imported.
 - [Buckets](/storage)
 
 <Note>
-  Currently, only resources in the same AWS account and region as the Nitric project 
-  are supported.
+  Currently, only resources in the same AWS account and region as the Nitric
+  project are supported.
 </Note>
 
 ### Buckets
@@ -142,8 +142,8 @@ import:
 ```
 
 <Note>
-  Unlike some other imported resources, secret imports require the ARN to be used. 
-  Providing only the secret's name will be invalid.
+  Unlike some other imported resources, secret imports require the ARN to be
+  used. Providing only the secret's name will be invalid.
 </Note>
 
 Need to import another resource type or have another question? Chat with us on [Discord](https://nitric.io/chat) or [open an issue](https://github.com/nitrictech/nitric/issues) on GitHub.
@@ -190,6 +190,13 @@ apis:
       - api.example.com
     description: An AWS API
 
+# Apply configuration for nitric websites
+cdn:
+  # A valid domain or subdomain for the CloudFront Distribution to use for the deployed websites endpoint
+  domain: cdn.example.com
+  # Skip CDN cache invalidation during deployments (defaults to false)
+  skip-cache-invalidation: true
+
 # Configure your deployed services
 config:
   # How services without a type will be deployed
@@ -227,6 +234,41 @@ config:
       timeout: 60
       provisioned-concurrency: 1
 ```
+
+### Websites
+
+When deploying [websites](/websites), Nitric will create a CloudFront Distribution that automatically provides a public URL for your website. This URL is not suitable for production use, and you should configure a custom domain for your website.
+
+The Hosted Zone used to configure the custom domain must be created in Route53 before deploying your CloudFront distribution with a custom domain configuration.
+
+- Purchase/Register a domain name with your domain registrar of choice.
+- Navigate to https://us-east-1.console.aws.amazon.com/route53/v2/hostedzones in your Azure Portal
+- Click `Create hosted zone`
+- Enter a `Domain name` of your choice, this should be the domain name you purchased i.e. example.com
+- Select Public Hosted Zone
+- Click `Create hosted zone`
+- Once the Hosted Zone is created, click on the `Go to resource` button
+
+Now that the Hosted Zone is created, you need to configure your registrar (domain) or existing DNS (subdomain) to point at the new name servers created for the zone.
+
+The configuration details are available on the `Records` tab within the `Hosted Zone` page. This step is different depending on your chosen domain registrar. Below are some general steps depending on whether your configuring the primary domain or a subdomain.
+
+#### Domain
+
+Your registrar (e.g. Namecheap, GoDaddy, Cloudflare, etc.) will allow you to change the name servers for you domain, sometimes this is called 'Custom DNS'. Add each of the name servers (NS records) from the Registrar setup dialog in the relevant config page for your registrar.
+
+#### Subdomain
+
+If you're configuring a subdomain e.g. app.yourdomain.com, you can simply add the NS records to your existing DNS configuration for the chosen subdomain. Typically, the config will look something like this:
+
+<Note>Substitute your values for `Nameserver`</Note>
+
+| Record Type | Nameserver              |
+| ----------- | ----------------------- |
+| NS Record   | ns-001.awsdns-60.net.   |
+| NS Record   | ns-002.awsdns-49.co.uk. |
+| NS Record   | ns-003.awsdns-24.org.   |
+| NS Record   | ns-004.awsdns-34.com.   |
 
 <Note>
   Missing something? Let us know by raising an issue in
