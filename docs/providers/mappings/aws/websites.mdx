@@ -20,5 +20,5 @@ The following resources are created when deploying Websites to AWS:
 During deployment the Nitric CLI creates a bucket for your website assets and a CloudFront distribution to serve them:
 
 - The declared website is created in S3
-- A CloudFront distribution is created to serve your website and rewrite all APIs to `/api/{apiName}` using CloudFront Functions
+- A CloudFront distribution is created to serve your website and rewrite all APIs to `/api/{apiName}` and websocket routes to `/ws/{websocketName}` using CloudFront Functions
 - Cache invalidation is automatic based on changed files
