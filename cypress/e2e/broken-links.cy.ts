@@ -7,6 +7,12 @@ const REDIRECT_CODES = [301, 302, 304, 307, 308]
 // other non standard codes, like 999 from linkedin
 const OTHER_CODES = [999]
 
+// URLs that we accept 429s for
+const ACCEPTED_RATE_LIMITED_URLS = [
+  'https://github.com/nitrictech/nitric',
+  // Add more URLs here as needed
+]
+
 const IGNORED_URLS = [
   'googleads.g.doubleclick.net',
   'youtube.com/api',
@@ -36,16 +42,47 @@ const IGNORED_URLS = [
 const rootBaseUrl = Cypress.config('baseUrl')
 
 const isInternalUrl = (url: string) => {
-  // check against the base url
-  // and check if the url does not contain a file extension
-  return url.startsWith(rootBaseUrl) && !url.includes('.')
+  return (
+    url.startsWith(rootBaseUrl) || url.startsWith('./') || url.startsWith('../')
+  )
+}
+
+const getCleanInternalUrl = (url: string, currentPage: string) => {
+  if (url.startsWith(rootBaseUrl)) {
+    return url.replace(rootBaseUrl, '')
+  }
+
+  // Handle relative paths
+  if (url.startsWith('./') || url.startsWith('../')) {
+    // Get the directory of the current page
+    const currentDir = currentPage.substring(
+      0,
+      currentPage.lastIndexOf('/') + 1,
+    )
+    // Resolve the relative path
+    const fullPath = new URL(url, `${rootBaseUrl}${currentDir}`).pathname
+    return fullPath.replace(rootBaseUrl, '')
+  }
+
+  return url
 }
 
 const isExternalUrl = (url: string) => {
   return !url.includes('localhost')
 }
 
-const req = (url: string, retryCount = 0, followRedirect = false): any => {
+const isAcceptedRateLimitedUrl = (url: string) => {
+  return ACCEPTED_RATE_LIMITED_URLS.some((acceptedUrl) =>
+    url.startsWith(acceptedUrl),
+  )
+}
+
+const req = (
+  url: string,
+  retryCount = 0,
+  followRedirect = false,
+  visitedLinks: Record<string, boolean> = {},
+): any => {
   return cy
     .request({
       url,
@@ -54,11 +91,34 @@ const req = (url: string, retryCount = 0, followRedirect = false): any => {
       gzip: false,
     })
     .then((resp) => {
-      // retry on timeout and too many requests
-      if ([408, 429].includes(resp.status) && retryCount < 3) {
-        cy.log(`request ${url} timed out, retrying again...`)
-        cy.wait(500)
-        return req(url, retryCount + 1)
+      // Handle rate limiting (429) with exponential backoff
+      if (resp.status === 429 && retryCount < 3) {
+        const retryAfter = resp.headers['retry-after']
+          ? parseInt(
+              Array.isArray(resp.headers['retry-after'])
+                ? resp.headers['retry-after'][0]
+                : resp.headers['retry-after'],
+            )
+          : null
+        const waitTime = retryAfter
+          ? retryAfter * 1000
+          : Math.min(500 * Math.pow(2, retryCount), 5000)
+
+        cy.log(
+          `Rate limited for ${url}, waiting ${waitTime}ms before retry ${retryCount + 1}/3`,
+        )
+        cy.wait(waitTime)
+        return req(url, retryCount + 1, followRedirect, visitedLinks)
+      }
+
+      // Handle timeouts with exponential backoff
+      if (resp.status === 408 && retryCount < 3) {
+        const waitTime = Math.min(200 * Math.pow(2, retryCount), 2000)
+        cy.log(
+          `Request timeout for ${url}, waiting ${waitTime}ms before retry ${retryCount + 1}/3`,
+        )
+        cy.wait(waitTime)
+        return req(url, retryCount + 1, followRedirect, visitedLinks)
       }
 
       return resp
@@ -67,6 +127,7 @@ const req = (url: string, retryCount = 0, followRedirect = false): any => {
 
 describe('Broken links test suite', () => {
   const VISITED_SUCCESSFUL_LINKS = {}
+  const BATCH_SIZE = 10 // Process links in batches of 10
 
   pages.forEach((page) => {
     it(`Should visit page ${page} and check all links`, () => {
@@ -84,61 +145,103 @@ describe('Broken links test suite', () => {
             (l) => href?.includes(l) || src?.includes(l),
           )
         })
-        .each((link) => {
-          cy.log(`link: ${link[0].textContent}`)
-          const baseUrl = link.prop('href') || link.prop('src')
+        .then(($links) => {
+          const linkPromises = []
+          const linksToCheck = []
 
-          const url = baseUrl.split('#')[0]
-
-          if (VISITED_SUCCESSFUL_LINKS[url]) {
-            cy.log(`link already checked`)
-            expect(VISITED_SUCCESSFUL_LINKS[url]).to.be.true
-          } else {
-            // if the link is internal then check the link against the pages fixture (sitemap)
-            if (isInternalUrl(url)) {
-              // clean the url by removing the base url and query params
-              const rootBaseUrlRegex = new RegExp(`^${rootBaseUrl}`)
-              let cleanUrl = url.replace(rootBaseUrlRegex, '')
-              const queryIndex = cleanUrl.indexOf('?')
-              cleanUrl =
-                queryIndex !== -1 ? cleanUrl.slice(0, queryIndex) : cleanUrl
-
-              cy.log(`checking internal link: ${cleanUrl}`)
-              if (!pages.includes(cleanUrl)) {
-                assert.fail(`${cleanUrl} is not part of the pages fixture`)
-              } else {
-                VISITED_SUCCESSFUL_LINKS[url] = true
-              }
-
+          $links.each((_i, link) => {
+            const baseUrl =
+              link.getAttribute('href') || link.getAttribute('src')
+            if (!baseUrl) {
+              cy.log('Skipping link with no href/src:', link)
               return
             }
 
-            cy.wait(25)
+            // Skip if the URL is just a hash fragment
+            if (baseUrl.startsWith('#')) {
+              cy.log('Skipping hash fragment:', baseUrl)
+              return
+            }
 
-            req(url).then((res: Cypress.Response<any>) => {
-              let acceptableCodes = CORRECT_CODES
-              if (REDIRECT_CODES.includes(res.status) && !isExternalUrl(url)) {
-                assert.fail(
-                  `${url} returned ${res.status} to ${res.headers['location']}`,
-                )
-              } else {
-                acceptableCodes = [
-                  ...CORRECT_CODES,
-                  ...REDIRECT_CODES,
-                  ...OTHER_CODES,
-                ]
+            const url = baseUrl.split('#')[0]
+            if (!url) {
+              cy.log('Skipping empty URL from:', baseUrl)
+              return
+            }
+
+            if (VISITED_SUCCESSFUL_LINKS[url]) {
+              cy.log(`Skipping already checked link: ${url}`)
+              return
+            }
+
+            linksToCheck.push(url)
+          })
+
+          // Process links in batches
+          for (let i = 0; i < linksToCheck.length; i += BATCH_SIZE) {
+            const batch = linksToCheck.slice(i, i + BATCH_SIZE)
+            const batchPromises = batch.map((url) => {
+              if (!url) {
+                cy.log('Skipping empty URL in batch')
+                return Promise.resolve()
               }
 
-              if (acceptableCodes.includes(res.status)) {
+              if (isInternalUrl(url)) {
+                const cleanUrl = getCleanInternalUrl(url, page)
+                if (!pages.includes(cleanUrl)) {
+                  assert.fail(`${cleanUrl} is not part of the pages fixture`)
+                }
                 VISITED_SUCCESSFUL_LINKS[url] = true
+                return Promise.resolve()
               }
 
-              expect(res.status).oneOf(
-                acceptableCodes,
-                `${url} returned ${res.status}`,
+              return req(url, 0, false, VISITED_SUCCESSFUL_LINKS).then(
+                (res: Cypress.Response<any>) => {
+                  let acceptableCodes = CORRECT_CODES
+                  if (
+                    REDIRECT_CODES.includes(res.status) &&
+                    !isExternalUrl(url)
+                  ) {
+                    assert.fail(
+                      `${url} returned ${res.status} to ${res.headers['location']}`,
+                    )
+                  } else if (res.status === 429) {
+                    // After all retries, if we still get a 429, only mark as successful for accepted URLs
+                    if (isAcceptedRateLimitedUrl(url)) {
+                      cy.log(
+                        `Rate limited for accepted URL ${url} after all retries, marking as successful`,
+                      )
+                      VISITED_SUCCESSFUL_LINKS[url] = true
+                      return
+                    } else {
+                      assert.fail(
+                        `${url} returned 429 (Rate Limited) and is not in the accepted list`,
+                      )
+                    }
+                  } else {
+                    acceptableCodes = [
+                      ...CORRECT_CODES,
+                      ...REDIRECT_CODES,
+                      ...OTHER_CODES,
+                    ]
+                  }
+
+                  if (acceptableCodes.includes(res.status)) {
+                    VISITED_SUCCESSFUL_LINKS[url] = true
+                  }
+
+                  expect(res.status).oneOf(
+                    acceptableCodes,
+                    `${url} returned ${res.status}`,
+                  )
+                },
               )
             })
+
+            linkPromises.push(Promise.all(batchPromises))
           }
+
+          return Promise.all(linkPromises)
         })
     })
   })
