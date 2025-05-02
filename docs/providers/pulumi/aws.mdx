@@ -96,8 +96,8 @@ The Nitric team is working to expand the list of resources that can be imported.
 - [Buckets](/storage)
 
 <Note>
-  Currently, only resources in the same AWS account and region as the Nitric project 
-  are supported.
+  Currently, only resources in the same AWS account and region as the Nitric
+  project are supported.
 </Note>
 
 ### Buckets
@@ -142,8 +142,8 @@ import:
 ```
 
 <Note>
-  Unlike some other imported resources, secret imports require the ARN to be used. 
-  Providing only the secret's name will be invalid.
+  Unlike some other imported resources, secret imports require the ARN to be
+  used. Providing only the secret's name will be invalid.
 </Note>
 
 Need to import another resource type or have another question? Chat with us on [Discord](https://nitric.io/chat) or [open an issue](https://github.com/nitrictech/nitric/issues) on GitHub.
@@ -167,7 +167,6 @@ region: my-aws-stack-region
 schedule-timezone: Australia/Sydney # Available since v0.27.0
 
 # Import existing AWS Resources
-# Currently only secrets are supported
 # Available since v0.28.0
 import:
   # A name ARN map of buckets, where the name matches the nitric name of the bucket you would like to import

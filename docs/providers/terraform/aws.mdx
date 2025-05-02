@@ -79,6 +79,43 @@ In this example the project name is `api-testing` and the stack name is `aws`.
 
 ![resource group list image](/docs/images/docs/aws-rg-screen.png)
 
+
+## Importing Existing Resources
+
+The Nitric team is working to expand the list of resources that can be imported. Currently, only the following resources are supported:
+
+- [Secrets](/secrets)
+
+<Note>
+  Currently, only resources in the same AWS account and region as the Nitric project 
+  are supported.
+</Note>
+
+### Secrets
+
+To import a secret, you will need to know the secret's ARN. You can find the ARN of a secret in the AWS console or by using the AWS CLI.
+
+First, add the secret to your project as you usually would if it wasn't imported. Then add the secret to the `import` section of your stack file. Here's an example of how to import a secret:
+
+```javascript
+import { secret } from "@nitric/sdk
+
+const mySecret = secret("credentials").allow("access");
+```
+
+```yaml
+import:
+  secrets:
+    credentials: arn:aws:secretsmanager:us-east-1:123456789012:secret:my-secret
+```
+
+<Note>
+  Unlike some other imported resources, secret imports require the ARN to be used. 
+  Providing only the secret's name will be invalid.
+</Note>
+
+Need to import another resource type or have another question? Chat with us on [Discord](https://nitric.io/chat) or [open an issue](https://github.com/nitrictech/nitric/issues) on GitHub.
+
 ## Stack Configuration
 
 ```yaml title:nitric.[stack ID].yaml
@@ -95,8 +132,14 @@ region: my-aws-stack-region
 # Optional outdir
 # outdir: ./tf-output
 
-# config:
-# Config (same as base AWS provider except for VPC/Secret imports)
+# Import existing AWS Resources
+# Currently only secrets are supported
+import:
+  # A name ARN map of secrets, where the name matches the nitric name of the secret you would like to import
+  secrets:
+    # In typescript this would import the provided secret reference for a secret declared as
+    # const mySecret = secret('my-secret');
+    my-secret: arn:aws:secretsmanager:us-east-1:123456789012:secret:my-secret
 
 # The timezone that deployed schedules will run with
 # Format is in tz identifiers:
