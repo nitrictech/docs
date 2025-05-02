@@ -10,7 +10,7 @@ description: 'Learn how Nitric provisions and manages websites with Terraform an
 
 - App code uses the [Website resource](/websites) defined in `nitric.yaml` to specify the websites and their configurations.
 - Developers can configure base path, index pages, error pages, and other settings in their `nitric.yaml` file.
-- When a website is defined, a single CDN endpoint is automatically created to serve the website content globally, including APIs as proxies.
+- When a website is defined, a single CDN endpoint is automatically created to serve the website content globally, including APIs and websockets as proxies.
 
 **Operations** use default or overridden IaC (e.g., Terraform modules) to provision the necessary resources for their target cloud.
 
@@ -34,6 +34,7 @@ flowchart TD
     NitricUp -->|Create CDN| CloudFront
     CloudFront -->|Serve Static Files| S3
     CloudFront -->|Rewrite /api/* to API| Rewrite
+    CloudFront -->|Rewrite /ws/* to Websocket| Rewrite
 
 classDef default line-height:1;
 classDef edgeLabel line-height:2;
@@ -59,6 +60,7 @@ flowchart TD
     NitricUp -->|Create CDN| FrontDoor
     FrontDoor -->|Serve Static Files| Storage
     FrontDoor -->|Rewrite /api/* to API| Rewrite
+    FrontDoor -->|Rewrite /ws/* to Websocket| Rewrite
 
 classDef default line-height:1;
 classDef edgeLabel line-height:2;
@@ -122,15 +124,25 @@ websites:
       url: http://localhost:4322
 ```
 
-### Access an API from the website frontend
+### Access an API or Websocket from the website frontend
 
 ```javascript
+// API Example
 async function fetchData() {
   // due to apis being served from the same domain thanks to rewrites, no CORS is required
   const response = await fetch('/api/main/hello')
   const data = await response.json()
   console.log(data)
 }
+
+// Websocket Example
+const ws = new WebSocket('/ws/chat')
+
+ws.onmessage = (event) => {
+  console.log(event.data)
+}
+
+ws.send('Hello, server!')
 ```
 
 **Operations** will use or extend the Nitric infrastructure modules, including both Terraform and Pulumi:
