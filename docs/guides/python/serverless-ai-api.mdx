@@ -101,7 +101,7 @@ Our goal is to create an HTTP endpoint `/summarize` (for example) that accepts s
 
 2. **Import Nitric and dependencies:** We'll need Nitric's API utilities and the OpenAI library (for AI). Make sure you add `openai` to your dependencies (`uv add openai`). Then, in `summarize.py`:
 
-```python
+```python title:services/summarize.py
 import os
 from openai import OpenAI
 from nitric.resources import api
@@ -113,7 +113,7 @@ Here we import `api` to create an API resource, `Nitric` to run the app, and `Ht
 
 3. **Configure OpenAI API key:** It's best not to hardcode secrets. If you have your OpenAI API key, set it as an environment variable (e.g., create a .env file for the project containing `OPENAI_API_KEY=sk-...`). We can then configure the OpenAI client in code:
 
-```python
+```python title:services/summarize.py
 # Configure OpenAI API key from env
 api_key = os.environ.get("OPENAI_API_KEY")
 if not api_key:
@@ -122,9 +122,9 @@ if not api_key:
 
 This will fetch the API key from your environment. (If you prefer, Nitric also has a built-in **Secrets** feature to securely manage secrets, but for simplicity we'll stick to an env var here.)
 
-4. **Create the OpenAI client:** Now, use Nitric to create a POST route for summarization:
+4. **Create the OpenAI client:** Initialise the `OpenAI` client using the fetched API key.
 
-```python
+```python title:services/summarize.py
 # Create OpenAI client
 # This could be a local model during development if you have Ollama or similar installed.
 # For example, if you have Ollama running locally, you could use:
@@ -134,7 +134,7 @@ client = OpenAI(api_key=api_key)
 
 5. **Define the API and route handler:** Now, use Nitric to create a POST route for summarization:
 
-```python
+```python title:services/summarize.py
 # Create a Nitric API named 'main'
 summarize_api = api("main")
 
@@ -165,7 +165,6 @@ async def summarize_text(ctx: HttpContext) -> None:
     ctx.res.status = 500
     ctx.res.body = {"error": str(e)}
 
-Nitric.run()
 ```
 
 Let's break down what's happening:
@@ -182,7 +181,7 @@ _A note on async:_ We defined the handler as `async def`. The Nitric framework s
 
 5. **Finalize the Nitric app run:** After defining all your routes and handlers in the file, make sure to add:
 
-```python
+```python title:services/summarize.py
 Nitric.run()
 ```
 
@@ -190,7 +189,7 @@ This call tells Nitric to start the application (it will scan for all defined se
 
 That's it for our service code! We have a complete Python backend that will accept text and return an AI-generated summary. The entire `summarize.py` file should look like this (for reference):
 
-```python {{ title: services/summarize.py }}
+```python title:services/summarize.py
 import os
 from openai import OpenAI
 from nitric.resources import api
@@ -318,7 +317,7 @@ curl -X POST https://<<your-api-url>>/summarize \
   -d '{"text": "OpenAI API integration with serverless functions is very powerful, allowing applications to leverage AI without managing infrastructure."}'
 ```
 
-_(Make sure to put your actual endpoint URL in place of `<<your-api-url>>`._
+_Make sure to put your actual endpoint URL in place of `<<your-api-url>>`._
 
 You should get a JSON response with a summary, similar to what you saw locally. Congratulations - your AI-powered summarization service is now live on the internet, running completely on serverless infrastructure! 🎉
 
@@ -348,6 +347,6 @@ All of this was done without needing to be AWS experts or know how to set up API
 - Add other Nitric resources: need a [database](/sql) or [key-value store](/keyvalue) to cache results? Nitric offers `sql()` and `kv()` resources that can be used similarly to how we defined the API. Want to trigger actions on a schedule (cron jobs) or handle file storage in the cloud? Nitric has primitives for [schedules](/schedules), [buckets](/storage) (object storage), [queues](/messaging#queues), pub-sub [topics](/messaging#topics), and more - all accessible through simple code constructs, and all cloud-agnostic. (For example, you could schedule a daily job to fetch some data and summarize it, using Nitric's `schedule` resource.)
 - Deploy to another cloud: Try deploying the same app to Azure or GCP. It should be as easy as creating a new stack for that provider. This can be a great way to learn differences in cloud offerings without changing your code - Nitric will map your API to the equivalent service (e.g., Azure Container Apps + API Management, or GCP Cloud Run + API Gateway).
 
-As you continue exploring, check out the official Nitric documentation and examples for deeper dives. The [Nitric docs site](https://nitric.io/docs) has guides on all resource types and features (for instance, how to use **Queues/Topics for event-driven patterns**, or how to secure your API with auth). There's also a community [Discord](https://nitric.io/chat) and more examples on GitHub if you run into questions.
+As you continue exploring, check out the official Nitric documentation and examples for deeper dives. The [Nitric docs site](https://nitric.io/docs) has guides on all resource types and features (for instance, how to use **Queues/Topics for event-driven patterns**, or how to secure your API with auth). There's also a community [Discord](https://nitric.io/chat) and more [examples](https://github.com/nitrictech/examples) on GitHub if you want inspiration.
 
 We hope this tutorial showed you that modern cloud development doesn't have to be intimidating. Using Nitric, you offloaded the undifferentiated heavy lifting of cloud setup and got straight to building something useful. Happy coding, and may all your deployments be this smooth! 🚀
