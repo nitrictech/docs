@@ -138,33 +138,7 @@ formApi.post('/forms/:formId', async (ctx) => {
 
 ## Step 3: Generate PDF Receipts
 
-Listen for submitted events and generate a formatted PDF receipt from the stored data.
-
-```ts title:services/pdfs.ts
-import { receipts, submissions, output } from '../resources/resources'
-import { buildReceipt } from '../form/receipt'
-
-receipts.subscribe(async (ctx) => {
-  const { id, formId } = ctx.req.json()
-  const submission = await submissions.get(id)
-
-  if (!submission) {
-    console.error(`No submission found for ID: ${id}`)
-    return
-  }
-
-  // Build the PDF buffer from the submission data
-  const buffer = await buildReceipt(submission, formId)
-
-  // Store the PDF file in the bucket
-  const file = output.file(`${id}.pdf`)
-  await file.write(buffer)
-
-  console.log(`Receipt stored for ${id}`)
-})
-```
-
-### Build the PDF Receipt
+Build a PDF receipt from the submission data using `pdfkit`.
 
 ```ts title:form/receipt.ts
 import PDFDocument from 'pdfkit'
@@ -233,6 +207,32 @@ Guests: ${guests}`,
 
   return await doneWriting
 }
+```
+
+Listen for submitted events and generate a formatted PDF receipt from the stored data.
+
+```ts title:services/pdfs.ts
+import { receipts, submissions, output } from '../resources/resources'
+import { buildReceipt } from '../form/receipt'
+
+receipts.subscribe(async (ctx) => {
+  const { id, formId } = ctx.req.json()
+  const submission = await submissions.get(id)
+
+  if (!submission) {
+    console.error(`No submission found for ID: ${id}`)
+    return
+  }
+
+  // Build the PDF buffer from the submission data
+  const buffer = await buildReceipt(submission, formId)
+
+  // Store the PDF file in the bucket
+  const file = output.file(`${id}.pdf`)
+  await file.write(buffer)
+
+  console.log(`Receipt stored for ${id}`)
+})
 ```
 
 This PDF output is fairly plain, you can enhance it further using layout templates or branding.
