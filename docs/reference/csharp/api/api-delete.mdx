@@ -1,0 +1,131 @@
+---
+description: "Reference for Nitric's .NET library - Register an API route and set a specific HTTP DELETE handler on that route."
+---
+
+# .NET - Api.Delete()
+
+<Note>
+  This is reference documentation for the Nitric .NET SDK. To learn about APIs
+  in Nitric start with the [API docs](/api).
+</Note>
+
+Register an API route and set a specific HTTP DELETE handler on that route.
+
+<Note>
+  This method is a convenient short version of
+  [Api().Route().Delete()](./api-route-delete)
+</Note>
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var api = Application.Api("main");
+
+api.Delete("/hello/:name", async (ctx) => {
+  var name = ctx.Req.PathParams["name"];
+
+  ctx.Res.Text($"Deleting {name}!");
+
+  return ctx;
+});
+
+Application.Run();
+```
+
+## Parameters
+
+<Properties>
+  <Property name="match" type="string" required>
+    The path matcher to use for the route. Matchers accept path parameters in
+    the form of a colon prefixed string. The string provided will be used as
+    that path parameter's name when calling middleware and handlers. See [create
+    a route with path params](#create-a-route-with-path-params)
+  </Property>
+  <Property
+    name="...middleware"
+    type="Middleware&lt;HttpContext&gt; or Func&lt;HttpContext, HttpContext&gt;"
+    required
+  >
+    One or more middleware functions to use as the handler for HTTP requests.
+    Handlers can be sync or async.
+  </Property>
+</Properties>
+
+## Examples
+
+### Register a handler for DELETE requests
+
+```csharp
+using Application = Nitric.Sdk.Nitric;
+
+var api = Application.Api("main");
+
+api.Delete("/hello/:name", async (ctx) => {
+  var name = ctx.Req.PathParams["name"];
+
+  ctx.Res.Text($"Deleting {name}!");
+
+  return ctx;
+});
+
+Application.Run();
+```
+
+### Chain functions as a single method handler
+
+When multiple functions are provided they will be called as a chain. If one succeeds, it will move on to the next. This allows middleware to be composed into more complex handlers.
+
+```csharp
+using Nitric.Sdk.Service;
+using Application = Nitric.Sdk.Nitric;
+
+var api = Application.Api("main");
+
+api.Delete("/hello/:userId",
+  new Middleware<HttpContext>[] {
+    async (ctx, next) => {
+      var user = ctx.Req.PathParams["userId"];
+
+      // Validate the user identity
+      if (user != "1234")
+      {
+          ctx.Res.Text($"User {user} is unauthorised");
+          ctx.Res.Status = 403;
+
+          // Return prematurely to end the middleware chain.
+          return ctx;
+      }
+
+      // Call next to continue the middleware chain.
+      return await next(ctx);
+    }, async (ctx, next) => {
+      var user = ctx.Req.PathParams["userId"];
+
+      ctx.Res.Text($"Deleting {user}");
+
+      return await next(ctx);
+    }
+  }
+);
+
+Application.Run();
+```
+
+### Access the request body
+
+The DELETE request body is accessible from the `context.Req` object.
+
+```csharp
+using System.Collections.Generic;
+using Application = Nitric.Sdk.Nitric;
+
+var api = Application.Api("main");
+
+api.Delete("/hello/:name", async (ctx) => {
+  var body = ctx.Req.Json<Dictionary<string, string>>();
+  // parse, validate and store the request payload...
+  return ctx;
+});
+
+Application.Run();
+```
