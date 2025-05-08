@@ -276,8 +276,6 @@ GPT
 ChatGPT
 OpenAI
 OpenAI's
-serverlessly
-deps
 uv
 [0-9]+px
 ^.+[-:_]\w+$

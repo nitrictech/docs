@@ -49,7 +49,7 @@ Before we begin, make sure you have the following:
   preferred cloud.
 </Note>
 
-## Project Setup - Your First Nitric App
+## Project Setup
 
 Nitric projects have a simple structure: your code (services, functions, etc.) lives in a directory (by default called `services/`), and a `nitric.yaml` config file describes high-level settings (like which files are services and what runtime to use). We'll use the Nitric CLI to scaffold a new project:
 
@@ -63,14 +63,14 @@ This will create a new folder `my-summarizer` with a Python starter template. (Y
 
 If none of the templates suit your needs, you can always create your own.
 
-2. **Install dependencies:** Navigate into the project and install the requirements. The template uses Pipenv, so you can do:
+2. **Install dependencies:** Navigate into the project and install the requirements. The template uses uv, so you can do:
 
 ```bash
 cd my-summarizer
 uv sync
 ```
 
-This will install Nitric's Python SDK (and any other deps). If you used a different template, change this step to install dependencies accordingly.
+This will install Nitric's Python SDK (and any other dependencies). If you used a different template, change this step to install dependencies accordingly.
 
 3. **Explore the scaffold:** The generated project should have a structure like:
 
@@ -126,6 +126,9 @@ This will fetch the API key from your environment. (If you prefer, Nitric also h
 
 ```python
 # Create OpenAI client
+# This could be a local model during development if you have Ollama or similar installed.
+# For example, if you have Ollama running locally, you could use:
+# client = OpenAI(model="ollama", , base_url="http://localhost:11434/v1")
 client = OpenAI(api_key=api_key)
 ```
 
@@ -148,6 +151,8 @@ async def summarize_text(ctx: HttpContext) -> None:
   # Call OpenAI API to get summary (this is a blocking call, for demo simplicity)
   try:
     response = client.chat.completions.create(
+      # This model could be replaced with another of your choice.
+      # Using tools like Ollama, it could even be a local model.
       model="gpt-3.5-turbo",
       messages=[{"role": "user", "content": f"Summarize the following text:\n\n{text_to_summarize}"}],
       max_tokens=50
@@ -315,7 +320,7 @@ curl -X POST https://<<your-api-url>>/summarize \
 
 _(Make sure to put your actual endpoint URL in place of `<<your-api-url>>`._
 
-You should get a JSON response with a summary, similar to what you saw locally. Congratulations - your AI-powered summarization service is now live on the internet, running serverlessly! 🎉
+You should get a JSON response with a summary, similar to what you saw locally. Congratulations - your AI-powered summarization service is now live on the internet, running completely on serverless infrastructure! 🎉
 
 A few things to appreciate here:
 
