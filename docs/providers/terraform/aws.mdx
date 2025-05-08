@@ -155,6 +155,13 @@ apis:
     domains:
       - api.example.com
 
+# Apply configuration for nitric websites
+cdn:
+  # A valid domain or subdomain for the CloudFront Distribution to use for the deployed websites endpoint
+  domain: cdn.example.com
+  # Skip CDN cache invalidation during deployments (defaults to false)
+  skip-cache-invalidation: true
+
 # Configure your deployed services
 config:
   # How services without a type will be deployed
