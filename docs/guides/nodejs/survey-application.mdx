@@ -41,7 +41,7 @@ cd surveys-backend
 npm install
 ```
 
-You can now delete all files in the services/ folder, we'll create new services in this guide.
+You can now delete all files in the `services/` folder, we'll create new services in this guide.
 
 ## Add Runtime Type Safety
 
@@ -91,9 +91,8 @@ Create and configure the cloud resources your backend will use, such as storage 
 ```ts title:resources/resources.ts
 import { bucket, kv, topic } from '@nitric/sdk'
 
-export const output = bucket('receipts').allow('read', 'write')
-export const submissions = kv('submissions').allow('set', 'get')
-export const submitted = topic('form-submitted').allow('publish')
+export const output = bucket('receipts')
+export const submissions = kv('submissions')
 export const receipts = topic('form-submitted')
 ```
 
@@ -103,10 +102,12 @@ Create an API route that validates and stores form submissions, then triggers fu
 
 ```ts title:services/forms.ts
 import { api } from '@nitric/sdk'
-import { submissions, submitted } from '../resources/resources'
+import { submissions, receipts } from '../resources/resources'
 import { formSchemas } from '../form/schema'
 
 const formApi = api('forms')
+const formSubmissions = submissions.allow('set')
+const submittableReceipts = receipts.allow('publish')
 
 formApi.post('/forms/:formId', async (ctx) => {
   const formId = ctx.req.params.formId
@@ -129,8 +130,8 @@ formApi.post('/forms/:formId', async (ctx) => {
   const data = parsed.data
   const id = `${formId}-${Date.now()}`
 
-  await submissions.set(id, data)
-  await submitted.publish({ id, formId })
+  await formSubmissions.set(id, data)
+  await submittableReceipts.publish({ id, formId })
 
   ctx.res.json({ msg: 'Submission received', id })
 })
@@ -212,12 +213,15 @@ Guests: ${guests}`,
 Listen for submitted events and generate a formatted PDF receipt from the stored data.
 
 ```ts title:services/pdfs.ts
-import { receipts, submissions, output } from '../resources/resources'
+import { submissions, receipts, output } from '../resources/resources'
 import { buildReceipt } from '../form/receipt'
+
+const formSubmissions = submissions.allow('get')
+const writeableOutput = output.allow('write')
 
 receipts.subscribe(async (ctx) => {
   const { id, formId } = ctx.req.json()
-  const submission = await submissions.get(id)
+  const submission = await formSubmissions.get(id)
 
   if (!submission) {
     console.error(`No submission found for ID: ${id}`)
@@ -228,7 +232,7 @@ receipts.subscribe(async (ctx) => {
   const buffer = await buildReceipt(submission, formId)
 
   // Store the PDF file in the bucket
-  const file = output.file(`${id}.pdf`)
+  const file = writeableOutput.file(`${id}.pdf`)
   await file.write(buffer)
 
   console.log(`Receipt stored for ${id}`)
@@ -261,10 +265,11 @@ import { api } from '@nitric/sdk'
 import { output } from '../resources/resources'
 
 const receiptApi = api('receipts')
+const readableOutput = output.allow('read')
 
 receiptApi.get('/receipts/:id', async (ctx) => {
   const id = ctx.req.params.id
-  const file = output.file(`${id}.pdf`)
+  const file = readableOutput.file(`${id}.pdf`)
   const url = await file.getDownloadUrl()
   ctx.res.body = url
 })

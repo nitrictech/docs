@@ -14,7 +14,7 @@ updated_at: 2025-05-08
 
 # Build a Frontend for Your Nitric Survey App with React
 
-In this guide, you’ll build a simple web application using React that connects to the survey backend we created with Nitric.
+In this guide, you'll build a simple web application using React that connects to the survey backend we created with Nitric.
 
 ## What You'll Build
 
@@ -42,7 +42,9 @@ cd ..
 Next, configure your `nitric.yaml` to enable and configure the website:
 
 <Note>
-Along with the website configuration, you will need to add the `preview` key to your `nitric.yaml`, as website support is currently a preview feature and subject to change.
+  Along with the website configuration, you will need to add the `preview` key
+  to your `nitric.yaml`, as website support is currently a preview feature and
+  subject to change.
 </Note>
 
 ```yaml title:nitric.yaml
@@ -149,7 +151,7 @@ const SurveyForm = () => {
         </label>
 
         <label>
-          Rating (1–5):
+          Rating (1-5):
           <input
             type="number"
             name="rating"
@@ -241,6 +243,7 @@ region: us-east-2
 ```
 
 ## Deploy
+
 Deploy to AWS using the `nitric up` command. Ensure you have set up your [AWS credentials](/providers/pulumi/aws#usage) correctly.
 
 ```bash
