@@ -27,7 +27,7 @@ const main = api('main')
 
 main.get('/hello/:name', async ({ req, res }) => {
   const { name } = req.params
-  ctx.res.body = `Hello ${name}`
+  res.body = `Hello ${name}`
 })
 ```
 
@@ -38,7 +38,7 @@ const main = api('main')
 
 main.get('/hello/:name', async ({ req, res }) => {
   const { name } = req.params
-  ctx.res.body = `Hello ${name}`
+  res.body = `Hello ${name}`
 })
 ```
 
@@ -61,6 +61,7 @@ Nitric.run()
 // !collapse(1:5) collapsed
 import (
   "context"
+  "fmt"
 
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/apis"
