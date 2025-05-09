@@ -159,12 +159,15 @@ However, client-side routes (like React Router) are not detected at deployment t
 The following paths are reserved for use by the Nitric framework and cannot be used as website paths:
 
 - `/api` - used to rewrite API requests
+- `/ws` - used to rewrite websocket requests
 
 We are looking at making the **rewrite path configurable** in the future, so you will have more flexibility in defining your own path structure.
 
-## API Routes
+## API and Websocket Routes
 
-If you have at least **one website enabled**, Nitric automatically serves your API under the `/api` path.
+When you have at least **one website enabled**, Nitric automatically serves your API under the `/api` path and websocket routes under the `/ws` path.
+
+### Accessing Routes
 
 You can access your API routes at:
 
@@ -172,24 +175,42 @@ You can access your API routes at:
 https://<your-cdn-endpoint>/api/<your-api>/<your-route>
 ```
 
-### When Are API Routes Enabled?
+And connect to websocket routes at:
 
-API route rewrites are **only enabled if you have at least one website defined** in your project.  
-We are exploring options to allow enabling API routing **without requiring a website** in the future.
+```bash
+https://<your-cdn-endpoint>/ws/<your-websocket>
+```
+
+### When Are Routes Enabled?
+
+Both API and websocket route rewrites are **only enabled if you have at least one website defined** in your project.  
+We are exploring options to allow enabling these routes **without requiring a website** in the future.
 
 ### Why This Approach?
 
-By serving your API under the same domain as your website, you avoid **CORS issues** and can use **relative paths** to access your API directly from your frontend code.
+By serving your API and websocket routes under the same domain as your website, you avoid **CORS issues** and can use **relative paths** to access your routes directly from your frontend code.
 
-### Example API Call
+### Example Usage
+
+Here's how to use both API and websocket routes in your frontend code:
 
 ```javascript
+// API Example
 async function fetchData() {
   // due to apis being served from the same domain thanks to rewrites, no CORS is required
   const response = await fetch('/api/main/hello')
   const data = await response.json()
   console.log(data)
 }
+
+// Websocket Example with a websocket named `chat`
+const ws = new WebSocket('/ws/chat')
+
+ws.onmessage = (event) => {
+  console.log(event.data)
+}
+
+ws.send('Hello, server!')
 ```
 
 ## Support for Frameworks like Next.js
