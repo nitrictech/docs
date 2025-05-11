@@ -32,5 +32,10 @@ const assets = bucket('assets').allow('read')
 
 const logo = assets.file('images/logo.png')
 
-const logoData = await logo.read()
+try {
+  const logoData = await logo.read()
+  console.log('Logo data:', logoData)
+} catch (error) {
+  console.error('Error reading logo:', error)
+}
 ```

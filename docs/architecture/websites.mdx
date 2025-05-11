@@ -51,14 +51,14 @@ classDef edgeLabel line-height:2;
 flowchart TD
     Developer["Developer"]
     NitricUp["nitric up"]
-    Storage["Azure Storage"]
+    BlobStorage["Azure Blob Storage"]
     FrontDoor["Azure Front Door"]
     Rewrite["Azure API Management"]
 
     Developer -->|Deploy| NitricUp
-    NitricUp -->|Upload Assets| Storage
+    NitricUp -->|Upload Assets| BlobStorage
     NitricUp -->|Create CDN| FrontDoor
-    FrontDoor -->|Serve Static Files| Storage
+    FrontDoor -->|Serve Static Files| BlobStorage
     FrontDoor -->|Rewrite /api/* to API| Rewrite
     FrontDoor -->|Rewrite /ws/* to Websocket| Rewrite
 

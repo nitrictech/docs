@@ -17,8 +17,16 @@ import { bucket } from '@nitric/sdk'
 const assets = bucket('assets').allow('write')
 
 const logo = assets.file('images/logo.png')
+const imageData = new Uint8Array([
+  /* image data */
+])
 
-await logo.write(someImageData)
+try {
+  await logo.write(imageData)
+  console.log('Logo written successfully')
+} catch (error) {
+  console.error('Error writing logo:', error)
+}
 ```
 
 ## Parameters
@@ -41,5 +49,10 @@ const assets = bucket('assets').allow('write')
 const txt = assets.file('my-text-file.txt')
 const buffer = Buffer.from('My Test File...')
 
-await txt.write(buffer)
+try {
+  await txt.write(buffer)
+  console.log('Text file written successfully')
+} catch (error) {
+  console.error('Error writing text file:', error)
+}
 ```
