@@ -2,7 +2,7 @@
 
 <p align="center"><a href="https://nitric.io" target="_blank"><img src="https://raw.githubusercontent.com/nitrictech/nitric/main/docs/assets/nitric-logo.svg" height="120"></a></p>
 
-> **This repository has been archived. The documentation has been moved to the main Nitric repository.**
+> **This repository has been archived. The documentation has been moved to the [main Nitric repository](https://github.com/nitrictech/nitric).**
 
 ## Documentation Location
 
