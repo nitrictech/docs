@@ -1,0 +1,899 @@
+---
+description: 'Common patterns for building reliable asynchronous messaging systems with Nitric'
+tags:
+  - Messaging
+  - Topics
+  - Queues
+languages:
+  - typescript
+  - python
+  - go
+  - dart
+published_at: 2025-04-01
+updated_at: 2025-04-01
+---
+
+# Async Messaging Patterns
+
+This guide covers common patterns and best practices for working with asynchronous messaging in Nitric, including topics and queues.
+
+## Message Delivery Guarantees
+
+### At-Least-Once Delivery
+
+Topics and queues in Nitric provide at-least-once delivery guarantees. This means that a message may be delivered more than once, which is important to consider when designing your message processing logic.
+
+### Idempotency
+
+To handle potential duplicate messages, you should design your message processing to be idempotent. Here's an example of how to implement idempotency:
+
+<CodeSwitcher tabs>
+
+```javascript !!
+import { queue } from '@nitric/sdk'
+
+const orderQueue = queue('orders').allow('enqueue', 'dequeue')
+
+// Add a unique ID to each message
+await orderQueue.enqueue({
+  id: 'order-123',
+  data: {
+    /* order details */
+  },
+})
+
+// Process messages with idempotency check
+const messages = await orderQueue.dequeue(10)
+for (const message of messages) {
+  const orderId = message.id
+  // Check if order was already processed
+  if (!(await isOrderProcessed(orderId))) {
+    await processOrder(message.data)
+    await markOrderProcessed(orderId)
+  }
+  await message.complete()
+}
+```
+
+```typescript !!
+import { queue } from '@nitric/sdk'
+
+const orderQueue = queue('orders').allow('enqueue', 'dequeue')
+
+// Add a unique ID to each message
+await orderQueue.enqueue({
+  id: 'order-123',
+  data: {
+    /* order details */
+  },
+})
+
+// Process messages with idempotency check
+const messages = await orderQueue.dequeue(10)
+for (const message of messages) {
+  const orderId = message.id
+  // Check if order was already processed
+  if (!(await isOrderProcessed(orderId))) {
+    await processOrder(message.data)
+    await markOrderProcessed(orderId)
+  }
+  await message.complete()
+}
+```
+
+```python !!
+from nitric.resources import queue
+
+order_queue = queue("orders").allow("enqueue", "dequeue")
+
+// Add a unique ID to each message
+await order_queue.enqueue({
+  "id": "order-123",
+  "data": { /* order details */ }
+})
+
+// Process messages with idempotency check
+messages = await order_queue.dequeue(10)
+for message in messages:
+  order_id = message.id
+  // Check if order was already processed
+  if not await is_order_processed(order_id):
+    await process_order(message.data)
+    await mark_order_processed(order_id)
+  await message.complete()
+```
+
+```go !!
+import (
+  "context"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
+)
+
+func main() {
+  orderQueue := nitric.NewQueue("orders").Allow(queues.QueueEnqueue, queues.QueueDequeue)
+
+  // Add a unique ID to each message
+  _ = orderQueue.Enqueue(context.TODO(), []map[string]interface{}{
+    {
+      "id": "order-123",
+      "data": map[string]interface{}{ /* order details */ },
+    },
+  })
+
+  // Process messages with idempotency check
+  messages, _ := orderQueue.Dequeue(context.TODO(), 10)
+  for _, message := range messages {
+    orderID := message.Message()["id"].(string)
+    // Check if order was already processed
+    if !isOrderProcessed(context.TODO(), orderID) {
+      processOrder(context.TODO(), message.Message()["data"])
+      markOrderProcessed(context.TODO(), orderID)
+    }
+    message.Complete(context.TODO())
+  }
+}
+```
+
+```dart !!
+import 'package:nitric_sdk/nitric.dart';
+
+final orderQueue = Nitric.queue("orders").allow([
+  QueuePermission.enqueue,
+  QueuePermission.dequeue,
+]);
+
+// Add a unique ID to each message
+await orderQueue.enqueue([{
+  "id": "order-123",
+  "data": { /* order details */ }
+}]);
+
+// Process messages with idempotency check
+final messages = await orderQueue.dequeue(10);
+await Future.wait(messages.map((message) async {
+  final orderId = message.id;
+  // Check if order was already processed
+  if (!await isOrderProcessed(orderId)) {
+    await processOrder(message.data);
+    await markOrderProcessed(orderId);
+  }
+  await message.complete();
+}));
+```
+
+</CodeSwitcher>
+
+## Outbox Pattern
+
+The Outbox Pattern is a reliable way to ensure messages are published when they're part of a database transaction. It works by storing messages in a database table (the "outbox") as part of the transaction, then publishing them after the transaction commits.
+
+First, create a migration file for the outbox table:
+
+```sql
+-- migrations/orders/1_create_outbox.up.sql
+CREATE TABLE IF NOT EXISTS outbox (
+  id SERIAL PRIMARY KEY,
+  topic VARCHAR(255) NOT NULL,
+  message JSONB NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  published_at TIMESTAMP WITH TIME ZONE
+);
+```
+
+Here's an example of implementing the Outbox Pattern with Nitric's SQL resource:
+
+<CodeSwitcher tabs>
+
+```javascript !!
+import { sql, topic, api, schedule } from '@nitric/sdk'
+import { Pool } from 'pg'
+
+// Create the database with migrations
+const db = sql('orders', {
+  migrations: 'file://migrations/orders',
+})
+
+// Create the topic for publishing
+const orderTopic = topic('orders').allow('publish')
+
+// Create the API
+const ordersApi = api('orders')
+
+// Function to create an order and publish a message in a transaction
+async function createOrder(orderData) {
+  const connStr = await db.connectionString()
+  const pool = new Pool({ connectionString: connStr })
+
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+
+    // Insert the order into the orders table
+    await client.query('INSERT INTO orders (data) VALUES ($1) RETURNING id', [
+      orderData,
+    ])
+
+    // Insert the message into the outbox
+    await client.query('INSERT INTO outbox (topic, message) VALUES ($1, $2)', [
+      'orders',
+      JSON.stringify({
+        type: 'order.created',
+        data: orderData,
+      }),
+    ])
+
+    await client.query('COMMIT')
+  } catch (error) {
+    await client.query('ROLLBACK')
+    throw error
+  } finally {
+    client.release()
+    await pool.end()
+  }
+}
+
+// API endpoint to create orders
+ordersApi.post('/orders', async ({ req, res }) => {
+  try {
+    await createOrder(req.json())
+    res.json({ success: true })
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
+// Schedule to publish messages from the outbox
+const publishSchedule = schedule('publish-outbox').every(
+  '1 minute',
+  async () => {
+    const connStr = await db.connectionString()
+    const pool = new Pool({ connectionString: connStr })
+
+    try {
+      const result = await pool.query(`
+      SELECT id, topic, message 
+      FROM outbox 
+      WHERE published_at IS NULL 
+      ORDER BY created_at ASC
+    `)
+
+      for (const msg of result.rows) {
+        try {
+          // Publish the message
+          await orderTopic.publish(msg.message)
+
+          // Mark as published
+          await pool.query(
+            'UPDATE outbox SET published_at = CURRENT_TIMESTAMP WHERE id = $1',
+            [msg.id],
+          )
+        } catch (error) {
+          console.error('Failed to publish message:', error)
+          // Message will be retried on next run
+        }
+      }
+    } finally {
+      await pool.end()
+    }
+  },
+)
+```
+
+```typescript !!
+import { sql, topic, api, schedule } from '@nitric/sdk'
+import { Pool } from 'pg'
+
+// Create the database with migrations
+const db = sql('orders', {
+  migrations: 'file://migrations/orders',
+})
+
+// Create the topic for publishing
+const orderTopic = topic('orders').allow('publish')
+
+// Create the API
+const ordersApi = api('orders')
+
+// Function to create an order and publish a message in a transaction
+async function createOrder(orderData: OrderData) {
+  const connStr = await db.connectionString()
+  const pool = new Pool({ connectionString: connStr })
+
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+
+    // Insert the order into the orders table
+    await client.query('INSERT INTO orders (data) VALUES ($1) RETURNING id', [
+      orderData,
+    ])
+
+    // Insert the message into the outbox
+    await client.query('INSERT INTO outbox (topic, message) VALUES ($1, $2)', [
+      'orders',
+      JSON.stringify({
+        type: 'order.created',
+        data: orderData,
+      }),
+    ])
+
+    await client.query('COMMIT')
+  } catch (error) {
+    await client.query('ROLLBACK')
+    throw error
+  } finally {
+    client.release()
+    await pool.end()
+  }
+}
+
+// API endpoint to create orders
+ordersApi.post('/orders', async ({ req, res }) => {
+  try {
+    await createOrder(req.json())
+    res.json({ success: true })
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
+// Schedule to publish messages from the outbox
+const publishSchedule = schedule('publish-outbox').every(
+  '1 minute',
+  async () => {
+    const connStr = await db.connectionString()
+    const pool = new Pool({ connectionString: connStr })
+
+    try {
+      const result = await pool.query(`
+      SELECT id, topic, message 
+      FROM outbox 
+      WHERE published_at IS NULL 
+      ORDER BY created_at ASC
+    `)
+
+      for (const msg of result.rows) {
+        try {
+          // Publish the message
+          await orderTopic.publish(msg.message)
+
+          // Mark as published
+          await pool.query(
+            'UPDATE outbox SET published_at = CURRENT_TIMESTAMP WHERE id = $1',
+            [msg.id],
+          )
+        } catch (error) {
+          console.error('Failed to publish message:', error)
+          // Message will be retried on next run
+        }
+      }
+    } finally {
+      await pool.end()
+    }
+  },
+)
+```
+
+```python !!
+from nitric.resources import sql, topic, api, schedule
+import psycopg2
+from psycopg2.extras import RealDictCursor
+
+# Create the database with migrations
+db = sql("orders", migrations="file://migrations/orders")
+
+# Create the topic for publishing
+order_topic = topic("orders").allow("publish")
+
+# Create the API
+orders_api = api("orders")
+
+# Function to create an order and publish a message in a transaction
+async def create_order(order_data):
+    conn_str = await db.connection_string()
+    conn = psycopg2.connect(conn_str)
+    try:
+        with conn.cursor() as cur:
+            cur.execute("BEGIN")
+
+            # Insert the order into the orders table
+            cur.execute(
+                "INSERT INTO orders (data) VALUES (%s) RETURNING id",
+                [order_data]
+            )
+
+            # Insert the message into the outbox
+            cur.execute(
+                "INSERT INTO outbox (topic, message) VALUES (%s, %s)",
+                ["orders", {
+                    "type": "order.created",
+                    "data": order_data
+                }]
+            )
+
+            cur.execute("COMMIT")
+    except Exception as error:
+        cur.execute("ROLLBACK")
+        raise error
+    finally:
+        conn.close()
+
+# API endpoint to create orders
+@orders_api.post("/orders")
+async def handle_create_order(req):
+    try:
+        await create_order(req.json)
+        return {"success": True}
+    except Exception as error:
+        return {"error": str(error)}, 500
+
+# Schedule to publish messages from the outbox
+publish_schedule = schedule("publish-outbox").every("1 minute", async () => {
+    conn_str = await db.connection_string()
+    conn = psycopg2.connect(conn_str, cursor_factory=RealDictCursor)
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT id, topic, message
+                FROM outbox
+                WHERE published_at IS NULL
+                ORDER BY created_at ASC
+            """)
+
+            for msg in cur.fetchall():
+                try:
+                    # Publish the message
+                    await order_topic.publish(msg["message"])
+
+                    # Mark as published
+                    cur.execute(
+                        "UPDATE outbox SET published_at = CURRENT_TIMESTAMP WHERE id = %s",
+                        [msg["id"]]
+                    )
+                except Exception as error:
+                    print(f"Failed to publish message: {error}")
+                    # Message will be retried on next run
+    finally:
+        conn.close()
+})
+```
+
+```go !!
+import (
+  "context"
+  "database/sql"
+  "encoding/json"
+  _ "github.com/lib/pq"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/sql"
+  "github.com/nitrictech/go-sdk/nitric/topics"
+  "github.com/nitrictech/go-sdk/nitric/apis"
+  "github.com/nitrictech/go-sdk/nitric/schedules"
+)
+
+func main() {
+  // Create the database with migrations
+  db := nitric.NewSqlDatabase("orders", sql.WithMigrationsPath("file://migrations/orders"))
+
+  // Create the topic for publishing
+  orderTopic := nitric.NewTopic("orders").Allow(topics.TopicPublish)
+
+  // Create the API
+  ordersApi := nitric.NewApi("orders")
+
+  // Function to create an order and publish a message in a transaction
+  func createOrder(ctx context.Context, orderData map[string]interface{}) error {
+    connStr, err := db.ConnectionString(ctx)
+    if err != nil {
+      return err
+    }
+
+    db, err := sql.Open("postgres", connStr)
+    if err != nil {
+      return err
+    }
+    defer db.Close()
+
+    tx, err := db.BeginTx(ctx, nil)
+    if err != nil {
+      return err
+    }
+    defer tx.Rollback()
+
+    // Insert the order into the orders table
+    _, err = tx.ExecContext(ctx,
+      "INSERT INTO orders (data) VALUES ($1) RETURNING id",
+      orderData,
+    )
+    if err != nil {
+      return err
+    }
+
+    // Prepare the message
+    message := map[string]interface{}{
+      "type": "order.created",
+      "data": orderData,
+    }
+    messageJSON, err := json.Marshal(message)
+    if err != nil {
+      return err
+    }
+
+    // Insert the message into the outbox
+    _, err = tx.ExecContext(ctx,
+      "INSERT INTO outbox (topic, message) VALUES ($1, $2)",
+      "orders", messageJSON,
+    )
+    if err != nil {
+      return err
+    }
+
+    return tx.Commit()
+  }
+
+  // API endpoint to create orders
+  ordersApi.Post("/orders", func(ctx context.Context, req *apis.HttpRequest) (*apis.HttpResponse, error) {
+    var orderData map[string]interface{}
+    if err := json.Unmarshal(req.Body, &orderData); err != nil {
+      return &apis.HttpResponse{
+        Status: 400,
+        Body:   []byte(`{"error": "Invalid request body"}`),
+      }, nil
+    }
+
+    if err := createOrder(ctx, orderData); err != nil {
+      return &apis.HttpResponse{
+        Status: 500,
+        Body:   []byte(`{"error": "` + err.Error() + `"}`),
+      }, nil
+    }
+
+    return &apis.HttpResponse{
+      Status: 200,
+      Body:   []byte(`{"success": true}`),
+    }, nil
+  })
+
+  // Schedule to publish messages from the outbox
+  publishSchedule := nitric.NewSchedule("publish-outbox").Every("1 minute", func(ctx context.Context) error {
+    connStr, err := db.ConnectionString(ctx)
+    if err != nil {
+      return err
+    }
+
+    db, err := sql.Open("postgres", connStr)
+    if err != nil {
+      return err
+    }
+    defer db.Close()
+
+    rows, err := db.QueryContext(ctx, `
+      SELECT id, topic, message
+      FROM outbox
+      WHERE published_at IS NULL
+      ORDER BY created_at ASC
+    `)
+    if err != nil {
+      return err
+    }
+    defer rows.Close()
+
+    for rows.Next() {
+      var id int
+      var topic string
+      var message []byte
+      if err := rows.Scan(&id, &topic, &message); err != nil {
+        return err
+      }
+
+      try {
+        // Publish the message
+        if err := orderTopic.Publish(ctx, message); err != nil {
+          return err
+        }
+
+        // Mark as published
+        _, err = db.ExecContext(ctx,
+          "UPDATE outbox SET published_at = CURRENT_TIMESTAMP WHERE id = $1",
+          id,
+        )
+        if err != nil {
+          return err
+        }
+      } catch (error) {
+        fmt.Printf("Failed to publish message: %v\n", error)
+        // Message will be retried on next run
+      }
+    }
+    return rows.Err()
+  })
+}
+```
+
+```dart !!
+import 'package:nitric_sdk/nitric.dart';
+import 'package:postgres/postgres.dart';
+
+// Create the database with migrations
+final db = Nitric.sql("orders",
+  migrations: "file://migrations/orders"
+);
+
+// Create the topic for publishing
+final orderTopic = Nitric.topic("orders").allow([
+  TopicPermission.publish,
+]);
+
+// Create the API
+final ordersApi = Nitric.api("orders");
+
+// Function to create an order and publish a message in a transaction
+Future<void> createOrder(Map<String, dynamic> orderData) async {
+  final connStr = await db.connectionString();
+  final conn = await Connection.open(Uri.parse(connStr));
+
+  try {
+    await conn.execute('BEGIN');
+
+    // Insert the order into the orders table
+    await conn.execute(
+      "INSERT INTO orders (data) VALUES (\$1) RETURNING id",
+      [orderData],
+    );
+
+    // Insert the message into the outbox
+    await conn.execute(
+      "INSERT INTO outbox (topic, message) VALUES (\$1, \$2)",
+      ["orders", {
+        "type": "order.created",
+        "data": orderData,
+      }],
+    );
+
+    await conn.execute('COMMIT');
+  } catch (error) {
+    await conn.execute('ROLLBACK');
+    rethrow;
+  } finally {
+    await conn.close();
+  }
+}
+
+// API endpoint to create orders
+ordersApi.post("/orders", (req) async {
+  try {
+    await createOrder(req.json);
+    return Response.json({"success": true});
+  } catch (error) {
+    return Response.json({"error": error.toString()}, status: 500);
+  }
+});
+
+// Schedule to publish messages from the outbox
+final publishSchedule = Nitric.schedule("publish-outbox").every("1 minute", () async {
+  final connStr = await db.connectionString();
+  final conn = await Connection.open(Uri.parse(connStr));
+
+  try {
+    final results = await conn.execute("""
+      SELECT id, topic, message
+      FROM outbox
+      WHERE published_at IS NULL
+      ORDER BY created_at ASC
+    """);
+
+    for (final row in results) {
+      try {
+        // Publish the message
+        await orderTopic.publish(row[2]);
+
+        // Mark as published
+        await conn.execute(
+          "UPDATE outbox SET published_at = CURRENT_TIMESTAMP WHERE id = \$1",
+          [row[0]],
+        );
+      } catch (error) {
+        print("Failed to publish message: $error");
+        // Message will be retried on next run
+      }
+    }
+  } finally {
+    await conn.close();
+  }
+});
+```
+
+</CodeSwitcher>
+
+<Note>
+  The Outbox Pattern is particularly useful when you need to ensure that
+  messages are published as part of a database transaction. The background
+  worker is implemented as a Nitric schedule that runs every minute to publish
+  messages from the outbox table.
+</Note>
+
+## Error Handling
+
+### Dead Letter Queues
+
+For queues, you can implement a dead letter queue (DLQ) to handle messages that fail processing after multiple attempts:
+
+<Note>
+  Dead letter queues may become a native feature of Nitric in the future. If you
+  need this functionality, please let us know by voting or commenting on the
+  [GitHub issue](https://github.com/nitrictech/roadmap/issues/14).
+</Note>
+
+<CodeSwitcher tabs>
+
+```javascript !!
+import { queue } from '@nitric/sdk'
+
+const mainQueue = queue('orders').allow('enqueue', 'dequeue')
+const dlq = queue('orders-dlq').allow('enqueue')
+
+// Process messages with retry logic
+const messages = await mainQueue.dequeue(10)
+for (const message of messages) {
+  try {
+    await processOrder(message.data)
+    await message.complete()
+  } catch (error) {
+    // Move failed message to DLQ after max retries
+    if (message.retryCount >= 3) {
+      await dlq.enqueue({
+        originalMessage: message.data,
+        error: error.message,
+      })
+      await message.complete()
+    }
+  }
+}
+```
+
+```typescript !!
+import { queue } from '@nitric/sdk'
+
+const mainQueue = queue('orders').allow('enqueue', 'dequeue')
+const dlq = queue('orders-dlq').allow('enqueue')
+
+// Process messages with retry logic
+const messages = await mainQueue.dequeue(10)
+for (const message of messages) {
+  try {
+    await processOrder(message.data)
+    await message.complete()
+  } catch (error) {
+    // Move failed message to DLQ after max retries
+    if (message.retryCount >= 3) {
+      await dlq.enqueue({
+        originalMessage: message.data,
+        error: error.message,
+      })
+      await message.complete()
+    }
+  }
+}
+```
+
+```python !!
+from nitric.resources import queue
+
+main_queue = queue("orders").allow("enqueue", "dequeue")
+dlq = queue("orders-dlq").allow("enqueue")
+
+// Process messages with retry logic
+messages = await main_queue.dequeue(10)
+for message in messages:
+  try:
+    await process_order(message.data)
+    await message.complete()
+  except Exception as error:
+    # Move failed message to DLQ after max retries
+    if message.retry_count >= 3:
+      await dlq.enqueue({
+        "original_message": message.data,
+        "error": str(error)
+      })
+      await message.complete()
+```
+
+```go !!
+import (
+  "context"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
+)
+
+func main() {
+  mainQueue := nitric.NewQueue("orders").Allow(queues.QueueEnqueue, queues.QueueDequeue)
+  dlq := nitric.NewQueue("orders-dlq").Allow(queues.QueueEnqueue)
+
+  // Process messages with retry logic
+  messages, _ := mainQueue.Dequeue(context.TODO(), 10)
+  for _, message := range messages {
+    if err := processOrder(context.TODO(), message.Message()["data"]); err != nil {
+      // Move failed message to DLQ after max retries
+      if message.RetryCount() >= 3 {
+        _ = dlq.Enqueue(context.TODO(), []map[string]interface{}{
+          {
+            "original_message": message.Message()["data"],
+            "error":          err.Error(),
+          },
+        })
+      }
+    }
+    message.Complete(context.TODO())
+  }
+}
+```
+
+```dart !!
+import 'package:nitric_sdk/nitric.dart';
+
+final mainQueue = Nitric.queue("orders").allow([
+  QueuePermission.enqueue,
+  QueuePermission.dequeue,
+]);
+final dlq = Nitric.queue("orders-dlq").allow([
+  QueuePermission.enqueue,
+]);
+
+// Process messages with retry logic
+final messages = await mainQueue.dequeue(10);
+await Future.wait(messages.map((message) async {
+  try {
+    await processOrder(message.data);
+    await message.complete();
+  } catch (error) {
+    // Move failed message to DLQ after max retries
+    if (message.retryCount >= 3) {
+      await dlq.enqueue([{
+        "original_message": message.data,
+        "error": error.toString()
+      }]);
+      await message.complete();
+    }
+  }
+}));
+```
+
+</CodeSwitcher>
+
+## Best Practices
+
+1. **Message Size**: Keep messages small and focused. Large messages can impact performance and increase costs.
+
+2. **Batch Operations**: When possible, use batch operations for better performance:
+
+   - Batch enqueue messages
+   - Process multiple messages in a single dequeue operation
+
+3. **Error Handling**: Implement proper error handling and retry logic:
+
+   - Use dead letter queues for failed messages
+   - Implement exponential backoff for retries
+   - Log errors for monitoring and debugging
+
+4. **Monitoring**: Set up monitoring for your queues and topics:
+
+   - Track message processing times
+   - Monitor error rates
+   - Set up alerts for queue depth
+
+5. **Security**: Follow security best practices:
+
+   - Use minimal required permissions
+   - Encrypt sensitive data in messages
+   - Validate message content
+
+6. **Testing**: Test your message processing logic thoroughly:
+   - Test with duplicate messages
+   - Test error scenarios
+   - Test with different message sizes and types
+
+<Note>
+  The implementation details of these patterns may vary depending on your cloud
+  provider. See the provider-specific documentation for more details.
+</Note>

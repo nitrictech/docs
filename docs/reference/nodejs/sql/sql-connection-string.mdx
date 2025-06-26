@@ -30,7 +30,12 @@ import { sql } from '@nitric/sdk'
 const db = sql('my-data')
 
 // Should be called at runtime, such as in a service handler
-const connStr = await db.connectionString()
+try {
+  const connStr = await db.connectionString()
+  console.log('Database connection string:', connStr)
+} catch (error) {
+  console.error('Error getting connection string:', error)
+}
 ```
 
 ### Connect with Prisma

@@ -1,0 +1,326 @@
+---
+description: 'Using Queues for pull-based messaging with Nitric'
+---
+
+# Queues
+
+Queues provide scalable, decoupled, asynchronous messaging between services. Unlike topics, messages in queues are pulled by consumers rather than pushed, making queues perfect for batch processing and handling workload spikes.
+
+## Quick Start
+
+Here's a minimal example to get you started:
+
+<CodeSwitcher tabs>
+
+```javascript !!
+import { queue } from '@nitric/sdk'
+
+const taskQueue = queue('tasks').allow('enqueue', 'dequeue')
+
+// Send a message to the queue
+await taskQueue.enqueue({
+  task: 'process-data',
+  data: {
+    /* ... */
+  },
+})
+
+// Process messages from the queue
+const messages = await taskQueue.dequeue(10)
+for (const message of messages) {
+  console.log(`Processing: ${message.task}`)
+  await message.complete()
+}
+```
+
+```typescript !!
+import { queue } from '@nitric/sdk'
+
+const taskQueue = queue('tasks').allow('enqueue', 'dequeue')
+
+// Send a message to the queue
+await taskQueue.enqueue({
+  task: 'process-data',
+  data: {
+    /* ... */
+  },
+})
+
+// Process messages from the queue
+const messages = await taskQueue.dequeue(10)
+for (const message of messages) {
+  console.log(`Processing: ${message.task}`)
+  await message.complete()
+}
+```
+
+```python !!
+from nitric.resources import queue
+from nitric.application import Nitric
+
+task_queue = queue("tasks").allow("enqueue", "dequeue")
+
+# Send a message to the queue
+await task_queue.enqueue({
+  "task": "process-data",
+  "data": { /* ... */ }
+})
+
+# Process messages from the queue
+messages = await task_queue.dequeue(10)
+for message in messages:
+  print(f"Processing: {message.task}")
+  await message.complete()
+
+Nitric.run()
+```
+
+```go !!
+import (
+  "context"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/queues"
+)
+
+func main() {
+  taskQueue := nitric.NewQueue("tasks").Allow(queues.QueueEnqueue, queues.QueueDequeue)
+
+  // Send a message to the queue
+  _ = taskQueue.Enqueue(context.TODO(), []map[string]interface{}{
+    {
+      "task": "process-data",
+      "data": map[string]interface{}{ /* ... */ },
+    },
+  })
+
+  // Process messages from the queue
+  messages, _ := taskQueue.Dequeue(context.TODO(), 10)
+  for _, message := range messages {
+    task := message.Message()["task"].(string)
+    fmt.Printf("Processing: %s\n", task)
+    message.Complete(context.TODO())
+  }
+
+  nitric.Run()
+}
+```
+
+```dart !!
+import 'package:nitric_sdk/nitric.dart';
+
+final taskQueue = Nitric.queue("tasks").allow([
+  QueuePermission.enqueue,
+  QueuePermission.dequeue,
+]);
+
+// Send a message to the queue
+await taskQueue.enqueue([{
+  "task": "process-data",
+  "data": { /* ... */ }
+}]);
+
+// Process messages from the queue
+final messages = await taskQueue.dequeue(10);
+await Future.wait(messages.map((message) async {
+  print("Processing: ${message.task}");
+  await message.complete();
+}));
+```
+
+</CodeSwitcher>
+
+## Core Concepts
+
+### Queues
+
+A queue is a named resource where messages can be sent and retrieved. Unlike topics, messages in queues are pulled by consumers rather than pushed, making queues ideal for batch processing and handling workload spikes.
+
+### Message Leasing
+
+When messages are dequeued, they are temporarily hidden from other consumers through a leasing mechanism. This prevents multiple consumers from processing the same message simultaneously.
+
+### Permissions
+
+Queues require explicit permissions for operations:
+
+- `enqueue`: Send messages to the queue
+- `dequeue`: Retrieve messages from the queue
+
+## Common Operations
+
+### Sending Messages
+
+<CodeSwitcher tabs>
+
+```javascript !!
+const queue = queue('my-queue').allow('enqueue')
+
+// Send a single message
+await queue.enqueue({
+  message: 'Hello consumer!',
+})
+
+// Send multiple messages
+await queue.enqueue([{ message: 'Task 1' }, { message: 'Task 2' }])
+```
+
+```typescript !!
+const queue = queue('my-queue').allow('enqueue')
+
+// Send a single message
+await queue.enqueue({
+  message: 'Hello consumer!',
+})
+
+// Send multiple messages
+await queue.enqueue([{ message: 'Task 1' }, { message: 'Task 2' }])
+```
+
+```python !!
+queue = queue("my-queue").allow("enqueue")
+
+# Send a single message
+await queue.enqueue({
+  "message": "Hello consumer!"
+})
+
+# Send multiple messages
+await queue.enqueue([
+  { "message": "Task 1" },
+  { "message": "Task 2" }
+])
+```
+
+```go !!
+queue := nitric.NewQueue("my-queue").Allow(queues.QueueEnqueue)
+
+// Send a single message
+_ = queue.Enqueue(context.TODO(), []map[string]interface{}{
+  {"message": "Hello consumer!"},
+})
+
+// Send multiple messages
+_ = queue.Enqueue(context.TODO(), []map[string]interface{}{
+  {"message": "Task 1"},
+  {"message": "Task 2"},
+})
+```
+
+```dart !!
+final queue = Nitric.queue("my-queue").allow([
+  QueuePermission.enqueue,
+]);
+
+// Send a single message
+await queue.enqueue([{
+  "message": "Hello consumer!"
+}]);
+
+// Send multiple messages
+await queue.enqueue([
+  { "message": "Task 1" },
+  { "message": "Task 2" }
+]);
+```
+
+</CodeSwitcher>
+
+### Processing Messages
+
+<CodeSwitcher tabs>
+
+```javascript !!
+const queue = queue('my-queue').allow('dequeue')
+
+// Dequeue and process messages
+const messages = await queue.dequeue(10)
+for (const message of messages) {
+  console.log(`Processing: ${message.message}`)
+  await message.complete()
+}
+```
+
+```typescript !!
+const queue = queue('my-queue').allow('dequeue')
+
+// Dequeue and process messages
+const messages = await queue.dequeue(10)
+for (const message of messages) {
+  console.log(`Processing: ${message.message}`)
+  await message.complete()
+}
+```
+
+```python !!
+queue = queue("my-queue").allow("dequeue")
+
+// Dequeue and process messages
+messages = await queue.dequeue(10)
+for message in messages:
+  print(f"Processing: {message.message}")
+  await message.complete()
+```
+
+```go !!
+queue := nitric.NewQueue("my-queue").Allow(queues.QueueDequeue)
+
+// Dequeue and process messages
+messages, _ := queue.Dequeue(context.TODO(), 10)
+for _, message := range messages {
+  msg := message.Message()["message"].(string)
+  fmt.Printf("Processing: %s\n", msg)
+  message.Complete(context.TODO())
+}
+```
+
+```dart !!
+final queue = Nitric.queue("my-queue").allow([
+  QueuePermission.dequeue,
+]);
+
+// Dequeue and process messages
+final messages = await queue.dequeue(10);
+await Future.wait(messages.map((message) async {
+  print("Processing: ${message.message}");
+  await message.complete();
+}));
+```
+
+</CodeSwitcher>
+
+## Cloud Provider Support
+
+Each cloud provider comes with a set of default services used when deploying resources. You can find the default services for each cloud provider below.
+
+<Tabs>
+
+<TabItem label="AWS">
+
+Queues are mapped to SQS in AWS. For more details about the AWS implementation, including configuration options and limitations, see the [AWS Queues documentation](/providers/mappings/aws/queues).
+
+</TabItem>
+
+<TabItem label="Azure">
+
+Queues are mapped to Service Bus in Azure. For more details about the Azure implementation, including configuration options and limitations, see the [Azure Queues documentation](/providers/mappings/azure/queues).
+
+</TabItem>
+
+<TabItem label="GCP">
+
+Queues are mapped to Cloud Pub/Sub in Google Cloud. For more details about the GCP implementation, including configuration options and limitations, see the [Google Cloud Queues documentation](/providers/mappings/gcp/queues).
+
+</TabItem>
+
+</Tabs>
+
+<Note>
+  When running locally, queues use a local implementation for development and
+  testing.
+</Note>
+
+<Note>
+  For best practices and patterns when working with queues, including handling
+  message delivery guarantees and idempotency, see our [Async Messaging Patterns
+  Guide](/guides/async-messaging-patterns).
+</Note>

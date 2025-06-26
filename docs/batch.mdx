@@ -1,45 +1,62 @@
 ---
-description: Running AI & Batch workloads with Nitric
+description: 'Running AI & Batch workloads with Nitric'
 ---
 
 # Batch
 
-Nitric provides functionality that allows you to run large-scale jobs in parallel across multiple virtual machines or compute resources. Unlike Nitric Services, which respond to real-time events (APIs, Schedules, etc.), Batch is intended to efficiently handle tasks that can be processed in batches, which means they don't need to run in real time but can be executed asynchronously. Batches can include tasks that require a lot of computing power, or access to GPU resources, such as machine learning model training, image processing, video transcoding, data processing, and data analysis.
+Nitric provides functionality that allows you to run large-scale jobs in parallel across multiple virtual machines or compute resources. Unlike Nitric Services, which respond to real-time events (APIs, Schedules, etc.), Batch is intended to efficiently handle tasks that can be processed in batches, which means they don't need to run in real time but can be executed asynchronously.
 
 <Note>
-  Batches are currently in [Preview](/reference/preview-features) and are
+  Batch services are currently in [Preview](/reference/preview-features) and are
   currently only available in the following languages: JavaScript, Python, Go,
   and Dart, using the nitric/aws@1.14.0, nitric/gcp@1.14.0 or later.
 </Note>
 
-Nitric Batch is designed to be used in conjunction with Nitric Services, allowing you to run long-running, computationally intensive tasks in parallel with your real-time services. This allows you to build complex applications that can handle both real-time and batch processing workloads.
+## Overview
 
-Batches are deployed to cloud services such as [AWS Batch](https://aws.amazon.com/batch/), [Azure Batch](https://azure.microsoft.com/en-au/products/batch), and [Google Cloud Batch](https://cloud.google.com/batch/docs). Nitric abstracts the underlying cloud provider, allowing you to run your batch jobs on any of the supported cloud providers without having to worry about the specifics of each provider.
+Batch is designed for workloads that:
+
+- Require significant computing resources (CPU, memory, GPU)
+- Can be processed asynchronously
+- Need to run in parallel across multiple machines
+- Don't require real-time responses
+
+Common use cases include:
+
+- Machine learning model training
+- Image and video processing
+- Data analysis and transformation
+- Large-scale data processing
+- Scientific computing
 
 ## Enabling Batches
 
-Batches are currently in [Preview](/reference/preview-features). To enable this feature in your project add the following to your `nitric.yaml` file
+Batches are currently in [Preview](/reference/preview-features). To enable this feature in your project add the following to your `nitric.yaml` file:
 
 ```yaml
 preview:
   - batch-services
 ```
 
-## Definitions
+## Core Concepts
 
 ### Batch
 
-A Batch is similar to a Nitric Service, but it's intended for work with a definitive start and a finish. Where a service is designed to be reactive, a batch is designed to be proactive and run a series of jobs in parallel.
+A Batch is similar to a Nitric Service, but it's intended for work with a definitive start and finish. Where a service is designed to be reactive, a batch is designed to be proactive and run a series of jobs in parallel.
 
-### Job Definitions
+### Job Definition
 
-A Job Definition describes a type of work to be done by a Nitric `Batch`
+A Job Definition describes a type of work to be done by a Nitric `Batch`. It includes:
+
+- The handler function to execute
+- Resource requirements (CPU, memory, GPU)
+- Environment variables and configuration
 
 ### Job
 
-A Job is an instance of a Job Definition that is running within a `Batch`, Jobs can be started from other Nitric Services or Batches.
+A Job is an instance of a Job Definition that is running within a `Batch`. Jobs can be started from other Nitric Services or Batches.
 
-## Limitations of Batches
+## Limitations
 
 Jobs are designed to be long running HPC workloads and can take some time to spin up. They are not designed with reactivity in mind and are not suitable for responding to events from cloud resources.
 
@@ -79,6 +96,8 @@ const analyze = job('analyze')
 analyze.handler(
   async (ctx) => {
     // Do some work
+    console.log('Processing job:', ctx.jobName)
+    console.log('Job payload:', ctx.data)
   },
   { cpus: 1, memory: 1024, gpus: 0 },
 )
@@ -93,6 +112,8 @@ const analyze = job('analyze')
 analyze.handler(
   async (ctx: JobContext) => {
     // Do some work
+    console.log('Processing job:', ctx.jobName)
+    console.log('Job payload:', ctx.data)
   },
   { cpus: 1, memory: 1024, gpus: 0 },
 )
@@ -105,17 +126,18 @@ from nitric.context import JobContext
 
 analyze = job("analyze")
 
-# Create the callback function that will run when a job is submitted
+// Create the callback function that will run when a job is submitted
 @analyze(cpus=1, memory=1024, gpus=0)
-async def generate_image(ctx: None):
-    # Do some work
-
+async def generate_image(ctx: JobContext):
+    print(f"Processing job: {ctx.jobName}")
+    print(f"Job payload: {ctx.data}")
 
 Nitric.run()
 ```
 
 ```go !!
 import (
+  "fmt"
   "github.com/nitrictech/go-sdk/nitric"
   "github.com/nitrictech/go-sdk/nitric/batch"
 )
@@ -125,7 +147,8 @@ func main() {
 
   // Use `Handler` to register the callback function that will run when a job is submitted
   analyze.Handler(func(ctx *batch.Ctx) {
-    // Do some work
+    fmt.Printf("Processing job: %s\n", ctx.JobName)
+    fmt.Printf("Job payload: %v\n", ctx.Data)
   }, batch.WithCpus(1), batch.WithMemory(1024), batch.WithGpus(0))
 
   nitric.Run()
@@ -139,7 +162,8 @@ void main() {
   final job = Nitric.job("analyze");
 
   job.handler((ctx) async {
-    print("New job submitted for ${ctx.req.jobName}: ${ctx.req.message}");
+    print("Processing job: ${ctx.jobName}");
+    print("Job payload: ${ctx.data}");
 
     return ctx;
   }, opts: JobResourceRequirements(cpus: 1, memory: 1024, gpus: 0));
@@ -162,8 +186,9 @@ const analyze = nitric.job('analyze').allow('submit')
 
 api.post('/submit-job', async (ctx) => {
   await analyze.submit({
-    someKey: 'someValue',
+    data: 'some data to process',
   })
+  return ctx
 })
 ```
 
@@ -175,8 +200,9 @@ const analyze = nitric.job('analyze').allow('submit')
 
 api.post('/submit-job', async (ctx) => {
   await analyze.submit({
-    someKey: 'someValue',
+    data: 'some data to process',
   })
+  return ctx
 })
 ```
 
@@ -189,35 +215,33 @@ public_api = api("public")
 
 @public_api.post("/submit-job")
 async def submit_job(ctx):
-    await analyze.submit(
-      {
-        "someKey": "someValue"
-      }
-    )
+    await analyze.submit({
+      "data": "some data to process"
+    })
+    return ctx
 
 Nitric.run()
 ```
 
 ```go !!
 import (
-	"context"
-
-	"github.com/nitrictech/go-sdk/nitric"
-	"github.com/nitrictech/go-sdk/nitric/apis"
-	"github.com/nitrictech/go-sdk/nitric/batch"
+  "context"
+  "github.com/nitrictech/go-sdk/nitric"
+  "github.com/nitrictech/go-sdk/nitric/apis"
+  "github.com/nitrictech/go-sdk/nitric/batch"
 )
 
 func main() {
-	api := nitric.NewApi("public")
-	analyze := nitric.NewJob("analyze").Allow(batch.JobSubmit)
+  api := nitric.NewApi("public")
+  analyze := nitric.NewJob("analyze").Allow(batch.JobSubmit)
 
-	api.Post("/submit-job", func(ctx *apis.Ctx) {
-		analyze.Submit(context.Background(), map[string]interface{}{
-			"someKey": "someValue",
-		})
-	})
+  api.Post("/submit-job", func(ctx *apis.Ctx) {
+    analyze.Submit(context.Background(), map[string]interface{}{
+      "data": "some data to process"
+    })
+  })
 
-	nitric.Run()
+  nitric.Run()
 }
 ```
 
@@ -228,17 +252,24 @@ void main() {
   final api = Nitric.api("public");
   final analyze = Nitric.job("analyze").allow([JobPermission.submit]);
 
-  api.get("/submit-job", (ctx) async {
-    analyze.submit({
-      "someKey": "someValue"
+  api.post("/submit-job", (ctx) async {
+    await analyze.submit({
+      "data": "some data to process"
     });
-
     return ctx;
   });
 }
 ```
 
 </CodeSwitcher>
+
+## Best Practices
+
+1. **Resource Allocation**: Carefully consider CPU, memory, and GPU requirements for your jobs.
+2. **Error Handling**: Implement robust error handling in job handlers.
+3. **Monitoring**: Set up monitoring for job execution and completion.
+4. **Cost Optimization**: Use appropriate instance types and job durations.
+5. **Job Dependencies**: Consider job dependencies when submitting multiple jobs.
 
 ## Cloud Service Mapping
 
