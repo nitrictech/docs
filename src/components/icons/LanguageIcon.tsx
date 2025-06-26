@@ -6,6 +6,7 @@ import GoColorLogo from './GoLogoColour'
 import DartLogoNoTextColour from './DartLogoNoTextColour'
 import { cn } from '@/lib/utils'
 import type { Language } from '@/lib/constants'
+import DotNetLogoColour from './DotNetColour'
 
 interface LanguageIconProps {
   name: Language
@@ -18,6 +19,7 @@ const icons: Record<Language, React.FC<{ className: string }>> = {
   python: PythonColorLogo,
   go: GoColorLogo,
   dart: DartLogoNoTextColour,
+  csharp: DotNetLogoColour,
 }
 
 export const LanguageIcon: React.FC<LanguageIconProps> = ({
